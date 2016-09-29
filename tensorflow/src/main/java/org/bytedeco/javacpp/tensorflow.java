@@ -1250,8 +1250,8 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileSystemRegistry(Pointer p) { super(p); }
 
-  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") ShapeInferenceFn factory);
-  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") ShapeInferenceFn factory);
+  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
   public native FileSystem Lookup(@StdString BytePointer scheme);
   public native FileSystem Lookup(@StdString String scheme);
   public native @ByVal Status GetRegisteredFileSystemSchemes(
@@ -1394,9 +1394,9 @@ limitations under the License.
   ///
   ///
   public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
-                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") ShapeInferenceFn factory);
+                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
   public native @ByVal Status RegisterFileSystem(@StdString String scheme,
-                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") ShapeInferenceFn factory);
+                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
 
   /** \brief Creates a brand new random access read-only file with the
    *  specified name.
@@ -1650,9 +1650,9 @@ limitations under the License.
   public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
 
   public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
-                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") ShapeInferenceFn factory);
+                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
   public native @ByVal Status RegisterFileSystem(@StdString String scheme,
-                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") ShapeInferenceFn factory);
+                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
 
   public native @Cast("tensorflow::uint64") long NowMicros();
   public native void SleepForMicroseconds(@Cast("tensorflow::int64") long micros);
@@ -11283,6 +11283,7 @@ limitations under the License.
   private native void allocate(@Const @ByRef OpDef def);
 
   public native @ByRef OpDef op_def(); public native OpRegistrationData op_def(OpDef op_def);
+  @MemberSetter public native OpRegistrationData shape_inference_fn(@ByVal ShapeInferenceFn shape_inference_fn);
 }
 
 // Builder class passed to the REGISTER_OP() macro.
@@ -11566,7 +11567,7 @@ limitations under the License.
   public OpRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native void Register(@ByVal @Cast("tensorflow::OpRegistry::OpRegistrationDataFactory*") ShapeInferenceFn op_data_factory);
+  public native void Register(@ByVal @Cast("tensorflow::OpRegistry::OpRegistrationDataFactory*") Fn op_data_factory);
 
   public native @ByVal Status LookUp(@StdString BytePointer op_type_name,
                   @Cast("const tensorflow::OpRegistrationData**") PointerPointer op_reg_data);
@@ -11606,7 +11607,7 @@ limitations under the License.
   // SetWatcher(nullptr);
   // Returns a non-OK status if a non-null watcher is over-written by another
   // non-null watcher.
-  public native @ByVal Status SetWatcher(@Cast("const tensorflow::OpRegistry::Watcher*") @ByRef ShapeInferenceFn watcher);
+  public native @ByVal Status SetWatcher(@Cast("const tensorflow::OpRegistry::Watcher*") @ByRef Fn watcher);
 
   // Process the current list of deferred registrations. Note that calls to
   // Export, LookUp and DebugString would also implicitly process the deferred
@@ -12630,7 +12631,7 @@ limitations under the License.
   // For inputs that take a list of tensors.
 
   // To create inputs in tests, see fake_input.h.
-  public native @ByRef NodeDefBuilder Input(@ByVal @Cast("tensorflow::FakeInputFunctor*") ShapeInferenceFn fake_input);
+  public native @ByRef NodeDefBuilder Input(@ByVal @Cast("tensorflow::FakeInputFunctor*") Fn fake_input);
 
   // Specify that this node must only run after src_node.
   public native @ByRef NodeDefBuilder ControlInput(@StringPiece BytePointer src_node);
@@ -12891,6 +12892,31 @@ limitations under the License.
 // #include <string.h>
 
 // #ifdef SELECTIVE_REGISTRATION
+
+// Experimental selective registration support to reduce binary size.
+//
+// To use selective registration, when building:
+// 1. define SELECTIVE_REGISTRATION, e.g. in gcc by passing
+//    -DSELECTIVE_REGISTRATION to compilation.
+// 2. Provide ops_to_register.h. This file is not included in the repo and must
+//    be placed by the user or a tool where the compiler can find it.  It must
+//    define the constants and functions used in the macros below. The
+//    functions should be defined as valid constexpr functions, so that they are
+//    evaluated at compile time: this is needed to make symbols referenced by
+//    un-registered objects unused, and therefore allow the linker to strip them
+//    out.
+// #include "ops_to_register.h"
+
+// Op kernel classes for which ShouldRegisterOpKernel returns false will not be
+// registered.
+// #define SHOULD_REGISTER_OP_KERNEL(clz)
+//   (strstr(kNecessaryOpKernelClasses, "," clz ",") != nullptr)
+
+// Ops for which ShouldRegisterOp returns false will not be registered.
+// #define SHOULD_REGISTER_OP(op) ShouldRegisterOp(op)
+
+// If kRequiresSymbolicGradients is false, then no gradient ops are registered.
+// #define SHOULD_REGISTER_OP_GRADIENT kRequiresSymbolicGradients
 
 // #else
 // #define SHOULD_REGISTER_OP_KERNEL(filename) true
@@ -13843,6 +13869,3049 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // THIRD_PARTY_TENSORFLOW_CC_FRAMEWORK_CC_OP_GEN_H_
+
+
+// Parsed from tensorflow/cc/ops/array_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_ARRAY_OPS_H_
+// #define TENSORFLOW_CC_OPS_ARRAY_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+
+// Copy a tensor setting everything outside a central band in each innermost matrix
+//
+// to zero.
+//
+// The `band` part is computed as follows:
+// Assume `input` has `k` dimensions `[I, J, K, ..., M, N]`, then the output is a
+// tensor with the same shape where
+//
+// `band[i, j, k, ..., m, n] = in_band(m, n) * input[i, j, k, ..., m, n]`.
+//
+// The indicator function 'in_band(m, n)` is one if
+// `(num_lower < 0 || (m-n) <= num_lower)) &&
+// (num_upper < 0 || (n-m) <= num_upper)`, and zero otherwise.
+//
+// For example:
+//
+// ```prettyprint
+// # if 'input' is [[ 0,  1,  2, 3]
+//                  [-1,  0,  1, 2]
+//                  [-2, -1,  0, 1]
+//                  [-3, -2, -1, 0]],
+//
+// tf.batch_matrix_band_part(input, 1, -1) ==> [[ 0,  1,  2, 3]
+//                                              [-1,  0,  1, 2]
+//                                              [ 0, -1,  0, 1]
+//                                              [ 0,  0, -1, 0]],
+//
+// tf.batch_matrix_band_part(input, 2, 1) ==> [[ 0,  1,  0, 0]
+//                                             [-1,  0,  1, 0]
+//                                             [-2, -1,  0, 1]
+//                                             [ 0, -2, -1, 0]]
+// ```
+//
+// Useful special cases:
+//
+// ```prettyprint
+//  tf.batch_matrix_band_part(input, 0, -1) ==> Upper triangular part.
+//  tf.batch_matrix_band_part(input, -1, 0) ==> Lower triangular part.
+//  tf.batch_matrix_band_part(input, 0, 0) ==> Diagonal.
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Rank `k` tensor.
+// * num_lower: 0-D tensor. Number of subdiagonals to keep. If negative, keep entire
+// lower triangle.
+// * num_upper: 0-D tensor. Number of superdiagonals to keep. If negative, keep
+// entire upper triangle.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchMatrixBandPart extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchMatrixBandPart(Pointer p) { super(p); }
+
+  public BatchMatrixBandPart(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input num_lower,
+                      @ByVal Input num_upper) { super((Pointer)null); allocate(scope, input, num_lower, num_upper); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input num_lower,
+                      @ByVal Input num_upper);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output band(); public native BatchMatrixBandPart band(Output band);
+}
+
+// Returns a batched diagonal tensor with a given batched diagonal values.
+//
+// Given a `diagonal`, this operation returns a tensor with the `diagonal` and
+// everything else padded with zeros. The diagonal is computed as follows:
+//
+// Assume `diagonal` has `k` dimensions `[I, J, K, ..., N]`, then the output is a
+// tensor of rank `k+1` with dimensions [I, J, K, ..., N, N]` where:
+//
+// `output[i, j, k, ..., m, n] = 1{m=n} * diagonal[i, j, k, ..., n]`.
+//
+// For example:
+//
+// ```prettyprint
+// # 'diagonal' is [[1, 2, 3, 4], [5, 6, 7, 8]]
+//
+// and diagonal.shape = (2, 4)
+//
+// tf.batch_matrix_diag(diagonal) ==> [[[1, 0, 0, 0]
+//                                      [0, 2, 0, 0]
+//                                      [0, 0, 3, 0]
+//                                      [0, 0, 0, 4]],
+//                                     [[5, 0, 0, 0]
+//                                      [0, 6, 0, 0]
+//                                      [0, 0, 7, 0]
+//                                      [0, 0, 0, 8]]]
+//
+// which has shape (2, 4, 4)
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * diagonal: Rank `k`, where `k >= 1`.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchMatrixDiag extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchMatrixDiag(Pointer p) { super(p); }
+
+  public BatchMatrixDiag(@Const @ByRef Scope scope, @ByVal Input diagonal) { super((Pointer)null); allocate(scope, diagonal); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input diagonal);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchMatrixDiag output(Output output);
+}
+
+// Returns the batched diagonal part of a batched tensor.
+//
+// This operation returns a tensor with the `diagonal` part
+// of the batched `input`. The `diagonal` part is computed as follows:
+//
+// Assume `input` has `k` dimensions `[I, J, K, ..., N, N]`, then the output is a
+// tensor of rank `k - 1` with dimensions `[I, J, K, ..., N]` where:
+//
+// `diagonal[i, j, k, ..., n] = input[i, j, k, ..., n, n]`.
+//
+// The input must be at least a matrix.
+//
+// For example:
+//
+// ```prettyprint
+// # 'input' is [[[1, 0, 0, 0]
+//                [0, 2, 0, 0]
+//                [0, 0, 3, 0]
+//                [0, 0, 0, 4]],
+//               [[5, 0, 0, 0]
+//                [0, 6, 0, 0]
+//                [0, 0, 7, 0]
+//                [0, 0, 0, 8]]]
+//
+// and input.shape = (2, 4, 4)
+//
+// tf.batch_matrix_diag_part(input) ==> [[1, 2, 3, 4], [5, 6, 7, 8]]
+//
+// which has shape (2, 4)
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Rank `k` tensor where `k >= 2` and the last two dimensions are equal.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchMatrixDiagPart extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchMatrixDiagPart(Pointer p) { super(p); }
+
+  public BatchMatrixDiagPart(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output diagonal(); public native BatchMatrixDiagPart diagonal(Output diagonal);
+}
+
+// Returns a batched matrix tensor with new batched diagonal values.
+//
+// Given `input` and `diagonal`, this operation returns a tensor with the
+// same shape and values as `input`, except for the diagonals of the innermost
+// matrices.  These will be overwritten by the values in `diagonal`.
+// The batched matrices must be square.
+//
+// The output is computed as follows:
+//
+// Assume `input` has `k+1` dimensions `[I, J, K, ..., N, N]` and `diagonal` has
+// `k` dimensions `[I, J, K, ..., N]`.  Then the output is a
+// tensor of rank `k+1` with dimensions [I, J, K, ..., N, N]` where:
+//
+//   * `output[i, j, k, ..., m, n] = diagonal[i, j, k, ..., n]` for `m == n`.
+//   * `output[i, j, k, ..., m, n] = input[i, j, k, ..., m, n]` for `m != n`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Rank `k+1`, where `k >= 1`.
+// * diagonal: Rank `k`, where `k >= 1`.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchMatrixSetDiag extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchMatrixSetDiag(Pointer p) { super(p); }
+
+  public BatchMatrixSetDiag(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input diagonal) { super((Pointer)null); allocate(scope, input, diagonal); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input diagonal);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchMatrixSetDiag output(Output output);
+}
+
+// BatchToSpace for 4-D tensors of type T.
+//
+// Rearranges (permutes) data from batch into blocks of spatial data, followed by
+// cropping. This is the reverse transformation of SpaceToBatch. More specifically,
+// this op outputs a copy of the input tensor where values from the `batch`
+// dimension are moved in spatial blocks to the `height` and `width` dimensions,
+// followed by cropping along the `height` and `width` dimensions.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: 4-D tensor with shape
+// `[batch*block_size*block_size, height_pad/block_size, width_pad/block_size,
+//   depth]`. Note that the batch size of the input tensor must be divisible by
+// `block_size * block_size`.
+// * crops: 2-D tensor of non-negative integers with shape `[2, 2]`. It specifies
+// how many elements to crop from the intermediate result across the spatial
+// dimensions as follows:
+//
+//     crops = [[crop_top, crop_bottom], [crop_left, crop_right]]
+@Namespace("tensorflow::ops") @NoOffset public static class BatchToSpace extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchToSpace(Pointer p) { super(p); }
+
+  public BatchToSpace(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input crops, @Cast("tensorflow::int64") long block_size) { super((Pointer)null); allocate(scope, input, crops, block_size); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input crops, @Cast("tensorflow::int64") long block_size);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchToSpace output(Output output);
+}
+
+// Bitcasts a tensor from one type to another without copying data.
+//
+// Given a tensor `input`, this operation returns a tensor that has the same buffer
+// data as `input` with datatype `type`.
+//
+// If the input datatype `T` is larger than the output datatype `type` then the
+// shape changes from [...] to [..., sizeof(`T`)/sizeof(`type`)].
+//
+// If `T` is smaller than `type`, the operator requires that the rightmost
+// dimension be equal to sizeof(`type`)/sizeof(`T`). The shape then goes from
+// [..., sizeof(`type`)/sizeof(`T`)] to [...].
+//
+// *NOTE*: Bitcast is implemented as a low-level cast, so machines with different
+// endian orderings will give different results.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Bitcast extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Bitcast(Pointer p) { super(p); }
+
+  public Bitcast(@Const @ByRef Scope scope, @ByVal Input input,
+          @Cast("tensorflow::DataType") int type) { super((Pointer)null); allocate(scope, input, type); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+          @Cast("tensorflow::DataType") int type);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Bitcast output(Output output);
+}
+
+// Return the reduction indices for computing gradients of s0 op s1 with broadcast.
+//
+// This is typically used by gradient computations for a broadcasting operation.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class BroadcastGradientArgs extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BroadcastGradientArgs(Pointer p) { super(p); }
+
+  public BroadcastGradientArgs(@Const @ByRef Scope scope,
+                        @ByVal Input s0, @ByVal Input s1) { super((Pointer)null); allocate(scope, s0, s1); }
+  private native void allocate(@Const @ByRef Scope scope,
+                        @ByVal Input s0, @ByVal Input s1);
+
+  public native @ByRef Output r0(); public native BroadcastGradientArgs r0(Output r0);
+  public native @ByRef Output r1(); public native BroadcastGradientArgs r1(Output r1);
+}
+
+// Checks a tensor for NaN and Inf values.
+//
+// When run, reports an `InvalidArgument` error if `tensor` has any values
+// that are not a number (NaN) or infinity (Inf). Otherwise, passes `tensor` as-is.
+//
+// Arguments:
+// * scope: A Scope object
+// * message:
+//     Prefix of the error message.
+@Namespace("tensorflow::ops") @NoOffset public static class CheckNumerics extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CheckNumerics(Pointer p) { super(p); }
+
+  public CheckNumerics(@Const @ByRef Scope scope, @ByVal Input tensor, @StringPiece BytePointer message) { super((Pointer)null); allocate(scope, tensor, message); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input tensor, @StringPiece BytePointer message);
+  public CheckNumerics(@Const @ByRef Scope scope, @ByVal Input tensor, @StringPiece String message) { super((Pointer)null); allocate(scope, tensor, message); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input tensor, @StringPiece String message);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native CheckNumerics output(Output output);
+}
+
+// Concatenates tensors along one dimension.
+//
+// Arguments:
+// * scope: A Scope object
+// * concat_dim: 0-D.  The dimension along which to concatenate.  Must be in the
+// range [0, rank(values)).
+// * values: The `N` Tensors to concatenate. Their ranks and types must match,
+// and their sizes must match in all dimensions except `concat_dim`.
+@Namespace("tensorflow::ops") @NoOffset public static class Concat extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Concat(Pointer p) { super(p); }
+
+  public Concat(@Const @ByRef Scope scope, @ByVal Input concat_dim,
+         @ByVal InputList values) { super((Pointer)null); allocate(scope, concat_dim, values); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input concat_dim,
+         @ByVal InputList values);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Concat output(Output output);
+}
+
+// Computes offsets of concat inputs within its output.
+//
+// For example:
+//
+// ```prettyprint
+// # 'x' is [2, 2, 7]
+// # 'y' is [2, 3, 7]
+// # 'z' is [2, 5, 7]
+// concat_offset(2, [x, y, z]) => [0, 0, 0], [0, 2, 0], [0, 5, 0]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * concat_dim: The dimension along which to concatenate.
+// * shape: The `N` int32 vectors representing shape of tensors being concatenated.
+@Namespace("tensorflow::ops") @NoOffset public static class ConcatOffset extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConcatOffset(Pointer p) { super(p); }
+
+  public ConcatOffset(@Const @ByRef Scope scope, @ByVal Input concat_dim, @ByVal InputList shape) { super((Pointer)null); allocate(scope, concat_dim, shape); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input concat_dim, @ByVal InputList shape);
+  public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
+
+
+  public native @ByRef @Cast("tensorflow::ops::OutputList*") StringVector offset(); public native ConcatOffset offset(StringVector offset);
+}
+
+// Returns a constant tensor.
+//
+// Arguments:
+// * scope: A Scope object
+// * value:
+//     Attr `value` is the tensor to return.
+@Name("tensorflow::ops::Const") @NoOffset public static class ConstOp extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConstOp(Pointer p) { super(p); }
+
+  public ConstOp(@Const @ByRef Scope scope, @Const @ByRef TensorProto value, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, value, dtype); }
+  private native void allocate(@Const @ByRef Scope scope, @Const @ByRef TensorProto value, @Cast("tensorflow::DataType") int dtype);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native ConstOp output(Output output);
+}
+
+// Copy Op.
+//
+// Performs CPU-to-CPU or GPU-to-GPU deep-copying of tensor, depending on the
+// device on which the tensor is allocated.
+//
+// Unlike the CopyHost Op, this op does not have HostMemory constraint on its
+// input or output.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Input tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class Copy extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Copy(Pointer p) { super(p); }
+
+  // Optional attribute setters for Copy :
+  //
+  // TensorName(StringPiece): Defaults to ""
+  //     The name of the input tensor.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+    public native @ByVal Attrs TensorName(@StringPiece String x);
+
+    public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
+  }
+  public Copy(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public Copy(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+  public static native @ByVal Attrs TensorName(@StringPiece String x);
+
+  public native @ByRef Output output(); public native Copy output(Output output);
+}
+
+// Copy Host Op.
+//
+// Performs CPU-to-CPU deep-copying of tensor.
+//
+// Unlike the Copy Op, this op has HostMemory constraint on its input or output.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Input tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class CopyHost extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CopyHost(Pointer p) { super(p); }
+
+  // Optional attribute setters for CopyHost :
+  //
+  // TensorName(StringPiece): Defaults to ""
+  //     The name of the input tensor.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+    public native @ByVal Attrs TensorName(@StringPiece String x);
+
+    public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
+  }
+  public CopyHost(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public CopyHost(@Const @ByRef Scope scope, @ByVal Input input,
+           @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+           @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+  public static native @ByVal Attrs TensorName(@StringPiece String x);
+
+  public native @ByRef Output output(); public native CopyHost output(Output output);
+}
+
+// Debug Identity Op.
+//
+// Provides an identity mapping of the non-Ref type input tensor for debugging.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Input tensor, non-Reference type.
+@Namespace("tensorflow::ops") @NoOffset public static class DebugIdentity extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DebugIdentity(Pointer p) { super(p); }
+
+  // Optional attribute setters for DebugIdentity :
+  //
+  // TensorName(StringPiece): Defaults to ""
+  //     Name of the input tensor.
+  // DebugUrls(const gtl::ArraySlice<string>&): Defaults to []
+  //     List of URLs to debug targets, e.g.,
+  // file:///foo/tfdbg_dump, grpc:://localhost:11011
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+    public native @ByVal Attrs TensorName(@StringPiece String x);
+
+    public native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
+
+    public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
+    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<std::string>*") StringVector debug_urls_(); public native Attrs debug_urls_(StringVector debug_urls_);
+  }
+  public DebugIdentity(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public DebugIdentity(@Const @ByRef Scope scope, @ByVal Input input,
+                @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+                @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+  public static native @ByVal Attrs TensorName(@StringPiece String x);
+  public static native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
+
+  public native @ByRef Output output(); public native DebugIdentity output(Output output);
+}
+
+// Debug NaN Value Counter Op
+//
+// Counts number of NaNs in the input tensor, for debugging.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Input tensor, non-Reference type.
+@Namespace("tensorflow::ops") @NoOffset public static class DebugNanCount extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DebugNanCount(Pointer p) { super(p); }
+
+  // Optional attribute setters for DebugNanCount :
+  //
+  // TensorName(StringPiece): Defaults to ""
+  //     Name of the input tensor.
+  // DebugUrls(const gtl::ArraySlice<string>&): Defaults to []
+  //     List of URLs to debug targets, e.g.,
+  // file:///foo/tfdbg_dump, grpc:://localhost:11011
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+    public native @ByVal Attrs TensorName(@StringPiece String x);
+
+    public native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
+
+    public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
+    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<std::string>*") StringVector debug_urls_(); public native Attrs debug_urls_(StringVector debug_urls_);
+  }
+  public DebugNanCount(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public DebugNanCount(@Const @ByRef Scope scope, @ByVal Input input,
+                @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+                @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs TensorName(@StringPiece BytePointer x);
+  public static native @ByVal Attrs TensorName(@StringPiece String x);
+  public static native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
+
+  public native @ByRef Output output(); public native DebugNanCount output(Output output);
+}
+
+// DepthToSpace for tensors of type T.
+//
+// Rearranges data from depth into blocks of spatial data.
+// This is the reverse transformation of SpaceToDepth. More specifically,
+// this op outputs a copy of the input tensor where values from the `depth`
+// dimension are moved in spatial blocks to the `height` and `width` dimensions.
+// The attr `block_size` indicates the input block size and how the data is moved.
+//
+//   * Chunks of data of size `block_size * block_size` from depth are rearranged
+//     into non-overlapping blocks of size `block_size x block_size`
+//   * The width the output tensor is `input_depth * block_size`, whereas the
+//     height is `input_height * block_size`.
+//   * The depth of the input tensor must be divisible by
+//     `block_size * block_size`.
+//
+// That is, assuming the input is in the shape:
+// `[batch, height, width, depth]`,
+// the shape of the output will be:
+// `[batch, height*block_size, width*block_size, depth/(block_size*block_size)]`
+//
+// This operation requires that the input tensor be of rank 4, and that
+// `block_size` be >=1 and that `block_size * block_size` be a divisor of the
+// input depth.
+//
+// This operation is useful for resizing the activations between convolutions
+// (but keeping all data), e.g. instead of pooling. It is also useful for training
+// purely convolutional models.
+//
+// For example, given this input of shape `[1, 1, 1, 4]`, and a block size of 2:
+//
+// ```prettyprint
+// x = [[[[1, 2, 3, 4]]]]
+//
+// ```
+//
+// This operation will output a tensor of shape `[1, 2, 2, 1]`:
+//
+// ```prettyprint
+//    [[[[1], [2]],
+//      [[3], [4]]]]
+// ```
+//
+// Here, the input has a batch of 1 and each batch element has shape `[1, 1, 4]`,
+// the corresponding output will have 2x2 elements and will have a depth of
+// 1 channel (1 = `4 / (block_size * block_size)`).
+// The output element shape is `[2, 2, 1]`.
+//
+// For an input tensor with larger depth, here of shape `[1, 1, 1, 12]`, e.g.
+//
+// ```prettyprint
+// x = [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]
+// ```
+//
+// This operation, for block size of 2, will return the following tensor of shape
+// `[1, 2, 2, 3]`
+//
+// ```prettyprint
+//    [[[[1, 2, 3], [4, 5, 6]],
+//      [[7, 8, 9], [10, 11, 12]]]]
+//
+// ```
+//
+// Similarly, for the following input of shape `[1 2 2 4]`, and a block size of 2:
+//
+// ```prettyprint
+// x =  [[[[1, 2, 3, 4],
+//        [5, 6, 7, 8]],
+//       [[9, 10, 11, 12],
+//        [13, 14, 15, 16]]]]
+// ```
+//
+// the operator will return the following tensor of shape `[1 4 4 1]`:
+//
+// ```prettyprint
+// x = [[ [1],   [2],  [5],  [6]],
+//      [ [3],   [4],  [7],  [8]],
+//      [ [9],  [10], [13],  [14]],
+//      [ [11], [12], [15],  [16]]]
+//
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * block_size:
+//     The size of the spatial block, same as in Space2Depth.
+@Namespace("tensorflow::ops") @NoOffset public static class DepthToSpace extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DepthToSpace(Pointer p) { super(p); }
+
+  public DepthToSpace(@Const @ByRef Scope scope, @ByVal Input input,
+               @Cast("tensorflow::int64") long block_size) { super((Pointer)null); allocate(scope, input, block_size); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+               @Cast("tensorflow::int64") long block_size);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native DepthToSpace output(Output output);
+}
+
+// Returns a diagonal tensor with a given diagonal values.
+//
+// Given a `diagonal`, this operation returns a tensor with the `diagonal` and
+// everything else padded with zeros. The diagonal is computed as follows:
+//
+// Assume `diagonal` has dimensions [D1,..., Dk], then the output is a tensor of
+// rank 2k with dimensions [D1,..., Dk, D1,..., Dk] where:
+//
+// `output[i1,..., ik, i1,..., ik] = diagonal[i1, ..., ik]` and 0 everywhere else.
+//
+// For example:
+//
+// ```prettyprint
+// # 'diagonal' is [1, 2, 3, 4]
+// tf.diag(diagonal) ==> [[1, 0, 0, 0]
+//                        [0, 2, 0, 0]
+//                        [0, 0, 3, 0]
+//                        [0, 0, 0, 4]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * diagonal: Rank k tensor where k is at most 3.
+@Namespace("tensorflow::ops") @NoOffset public static class Diag extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Diag(Pointer p) { super(p); }
+
+  public Diag(@Const @ByRef Scope scope, @ByVal Input diagonal) { super((Pointer)null); allocate(scope, diagonal); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input diagonal);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Diag output(Output output);
+}
+
+// Returns the diagonal part of the tensor.
+//
+// This operation returns a tensor with the `diagonal` part
+// of the `input`. The `diagonal` part is computed as follows:
+//
+// Assume `input` has dimensions `[D1,..., Dk, D1,..., Dk]`, then the output is a
+// tensor of rank `k` with dimensions `[D1,..., Dk]` where:
+//
+// `diagonal[i1,..., ik] = input[i1, ..., ik, i1,..., ik]`.
+//
+// For example:
+//
+// ```prettyprint
+// # 'input' is [[1, 0, 0, 0]
+//               [0, 2, 0, 0]
+//               [0, 0, 3, 0]
+//               [0, 0, 0, 4]]
+//
+// tf.diag_part(input) ==> [1, 2, 3, 4]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Rank k tensor where k is 2, 4, or 6.
+@Namespace("tensorflow::ops") @NoOffset public static class DiagPart extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DiagPart(Pointer p) { super(p); }
+
+  public DiagPart(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output diagonal(); public native DiagPart diagonal(Output diagonal);
+}
+
+// Computes the (possibly normalized) Levenshtein Edit Distance.
+//
+// The inputs are variable-length sequences provided by SparseTensors
+//   (hypothesis_indices, hypothesis_values, hypothesis_shape)
+// and
+//   (truth_indices, truth_values, truth_shape).
+//
+// The inputs are:
+//
+// Arguments:
+// * scope: A Scope object
+// * hypothesis_indices: The indices of the hypothesis list SparseTensor.
+// This is an N x R int64 matrix.
+// * hypothesis_values: The values of the hypothesis list SparseTensor.
+// This is an N-length vector.
+// * hypothesis_shape: The shape of the hypothesis list SparseTensor.
+// This is an R-length vector.
+// * truth_indices: The indices of the truth list SparseTensor.
+// This is an M x R int64 matrix.
+// * truth_values: The values of the truth list SparseTensor.
+// This is an M-length vector.
+// * truth_shape: truth indices, vector.
+@Namespace("tensorflow::ops") @NoOffset public static class EditDistance extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EditDistance(Pointer p) { super(p); }
+
+  // Optional attribute setters for EditDistance :
+  //
+  // Normalize(bool): Defaults to true
+  //     boolean (if true, edit distances are normalized by length of truth).
+  //
+  // The output is:
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Normalize(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean normalize_(); public native Attrs normalize_(boolean normalize_);
+  }
+  public EditDistance(@Const @ByRef Scope scope, @ByVal Input hypothesis_indices, @ByVal Input hypothesis_values,
+               @ByVal Input hypothesis_shape,
+               @ByVal Input truth_indices, @ByVal Input truth_values, @ByVal Input truth_shape) { super((Pointer)null); allocate(scope, hypothesis_indices, hypothesis_values, hypothesis_shape, truth_indices, truth_values, truth_shape); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input hypothesis_indices, @ByVal Input hypothesis_values,
+               @ByVal Input hypothesis_shape,
+               @ByVal Input truth_indices, @ByVal Input truth_values, @ByVal Input truth_shape);
+  public EditDistance(@Const @ByRef Scope scope, @ByVal Input hypothesis_indices, @ByVal Input hypothesis_values,
+               @ByVal Input hypothesis_shape,
+               @ByVal Input truth_indices, @ByVal Input truth_values, @ByVal Input truth_shape, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, hypothesis_indices, hypothesis_values, hypothesis_shape, truth_indices, truth_values, truth_shape, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input hypothesis_indices, @ByVal Input hypothesis_values,
+               @ByVal Input hypothesis_shape,
+               @ByVal Input truth_indices, @ByVal Input truth_values, @ByVal Input truth_shape, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Normalize(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native EditDistance output(Output output);
+}
+
+// Inserts a dimension of 1 into a tensor's shape.
+//
+// Given a tensor `input`, this operation inserts a dimension of 1 at the
+// dimension index `dim` of `input`'s shape. The dimension index `dim` starts at
+// zero; if you specify a negative number for `dim` it is counted backward from
+// the end.
+//
+// This operation is useful if you want to add a batch dimension to a single
+// element. For example, if you have a single image of shape `[height, width,
+// channels]`, you can make it a batch of 1 image with `expand_dims(image, 0)`,
+// which will make the shape `[1, height, width, channels]`.
+//
+// Other examples:
+//
+// ```prettyprint
+// # 't' is a tensor of shape [2]
+// shape(expand_dims(t, 0)) ==> [1, 2]
+// shape(expand_dims(t, 1)) ==> [2, 1]
+// shape(expand_dims(t, -1)) ==> [2, 1]
+//
+// # 't2' is a tensor of shape [2, 3, 5]
+// shape(expand_dims(t2, 0)) ==> [1, 2, 3, 5]
+// shape(expand_dims(t2, 2)) ==> [2, 3, 1, 5]
+// shape(expand_dims(t2, 3)) ==> [2, 3, 5, 1]
+// ```
+//
+// This operation requires that:
+//
+// `-1-input.dims() <= dim <= input.dims()`
+//
+// This operation is related to `squeeze()`, which removes dimensions of
+// size 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * dim: 0-D (scalar). Specifies the dimension index at which to
+// expand the shape of `input`.
+@Namespace("tensorflow::ops") @NoOffset public static class ExpandDims extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ExpandDims(Pointer p) { super(p); }
+
+  public ExpandDims(@Const @ByRef Scope scope, @ByVal Input input,
+             @ByVal Input dim) { super((Pointer)null); allocate(scope, input, dim); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+             @ByVal Input dim);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native ExpandDims output(Output output);
+}
+
+// Extract `patches` from `images` and put them in the "depth" output dimension.
+//
+// Arguments:
+// * scope: A Scope object
+// * images: 4-D Tensor with shape `[batch, in_rows, in_cols, depth]`.
+// * ksizes:
+//     The size of the sliding window for each dimension of `images`.
+// * strides:
+//     1-D of length 4. How far the centers of two consecutive patches are in
+// the images. Must be: `[1, stride_rows, stride_cols, 1]`.
+// * rates:
+//     1-D of length 4. Must be: `[1, rate_rows, rate_cols, 1]`. This is the
+// input stride, specifying how far two consecutive patch samples are in the
+// input. Equivalent to extracting patches with
+// `patch_sizes_eff = patch_sizes + (patch_sizes - 1) * (rates - 1), followed by
+// subsampling them spatially by a factor of `rates`.
+// * padding:
+//     The type of padding algorithm to use.
+//
+// We specify the size-related attributes as:
+//
+//       ksizes = [1, ksize_rows, ksize_cols, 1]
+//       strides = [1, strides_rows, strides_cols, 1]
+//       rates = [1, rates_rows, rates_cols, 1]
+@Namespace("tensorflow::ops") @NoOffset public static class ExtractImagePatches extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ExtractImagePatches(Pointer p) { super(p); }
+
+  public ExtractImagePatches(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntPointer ksizes, @ArraySlice IntPointer strides, @ArraySlice IntPointer rates, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, images, ksizes, strides, rates, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntPointer ksizes, @ArraySlice IntPointer strides, @ArraySlice IntPointer rates, @StringPiece BytePointer padding);
+  public ExtractImagePatches(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntBuffer ksizes, @ArraySlice IntBuffer strides, @ArraySlice IntBuffer rates, @StringPiece String padding) { super((Pointer)null); allocate(scope, images, ksizes, strides, rates, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntBuffer ksizes, @ArraySlice IntBuffer strides, @ArraySlice IntBuffer rates, @StringPiece String padding);
+  public ExtractImagePatches(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice int[] ksizes, @ArraySlice int[] strides, @ArraySlice int[] rates, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, images, ksizes, strides, rates, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice int[] ksizes, @ArraySlice int[] strides, @ArraySlice int[] rates, @StringPiece BytePointer padding);
+  public ExtractImagePatches(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntPointer ksizes, @ArraySlice IntPointer strides, @ArraySlice IntPointer rates, @StringPiece String padding) { super((Pointer)null); allocate(scope, images, ksizes, strides, rates, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntPointer ksizes, @ArraySlice IntPointer strides, @ArraySlice IntPointer rates, @StringPiece String padding);
+  public ExtractImagePatches(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntBuffer ksizes, @ArraySlice IntBuffer strides, @ArraySlice IntBuffer rates, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, images, ksizes, strides, rates, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice IntBuffer ksizes, @ArraySlice IntBuffer strides, @ArraySlice IntBuffer rates, @StringPiece BytePointer padding);
+  public ExtractImagePatches(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice int[] ksizes, @ArraySlice int[] strides, @ArraySlice int[] rates, @StringPiece String padding) { super((Pointer)null); allocate(scope, images, ksizes, strides, rates, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ArraySlice int[] ksizes, @ArraySlice int[] strides, @ArraySlice int[] rates, @StringPiece String padding);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output patches(); public native ExtractImagePatches patches(Output patches);
+}
+
+// Creates a tensor filled with a scalar value.
+//
+// This operation creates a tensor of shape `dims` and fills it with `value`.
+//
+// For example:
+//
+// ```prettyprint
+// # Output tensor has shape [2, 3].
+// fill([2, 3], 9) ==> [[9, 9, 9]
+//                      [9, 9, 9]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * dims: 1-D. Represents the shape of the output tensor.
+// * value: 0-D (scalar). Value to fill the returned tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class Fill extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Fill(Pointer p) { super(p); }
+
+  public Fill(@Const @ByRef Scope scope, @ByVal Input dims,
+       @ByVal Input value) { super((Pointer)null); allocate(scope, dims, value); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input dims,
+       @ByVal Input value);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Fill output(Output output);
+}
+
+// Gather slices from `params` according to `indices`.
+//
+// `indices` must be an integer tensor of any dimension (usually 0-D or 1-D).
+// Produces an output tensor with shape `indices.shape + params.shape[1:]` where:
+//
+//     # Scalar indices
+//     output[:, ..., :] = params[indices, :, ... :]
+//
+//     # Vector indices
+//     output[i, :, ..., :] = params[indices[i], :, ... :]
+//
+//     # Higher rank indices
+//     output[i, ..., j, :, ... :] = params[indices[i, ..., j], :, ..., :]
+//
+// If `indices` is a permutation and `len(indices) == params.shape[0]` then
+// this operation will permute `params` accordingly.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/Gather.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Gather extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Gather(Pointer p) { super(p); }
+
+  // Optional attribute setters for Gather :
+  //
+  // ValidateIndices(bool): Defaults to true
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs ValidateIndices(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean validate_indices_(); public native Attrs validate_indices_(boolean validate_indices_);
+  }
+  public Gather(@Const @ByRef Scope scope, @ByVal Input params,
+         @ByVal Input indices) { super((Pointer)null); allocate(scope, params, indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input params,
+         @ByVal Input indices);
+  public Gather(@Const @ByRef Scope scope, @ByVal Input params,
+         @ByVal Input indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, params, indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input params,
+         @ByVal Input indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs ValidateIndices(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Gather output(Output output);
+}
+
+// Gather values or slices from `params` according to `indices`.
+//
+// `params` is a Tensor of rank `R` and `indices` is a Tensor of rank `M`.
+//
+// `indices` must be integer tensor, containing indices into `params`.
+// It must be shape `[d_0, ..., d_N, R]` where `0 < R <= M`.
+//
+// The innermost dimension of `indices` (with length `R`) corresponds to
+// indices into elements (if `R = M`) or slices (if `R < M`) along the `N`th
+// dimension of `params`.
+//
+// Produces an output tensor with shape
+//
+//     [d_0, ..., d_{n-1}, params.shape[R], ..., params.shape[M-1]].
+//
+// Some examples below.
+//
+// Simple indexing into a matrix:
+//
+//     indices = [[0, 0], [1, 1]]
+//     params = [['a', 'b'], ['c', 'd']]
+//     output = ['a', 'd']
+//
+// Slice indexing into a matrix:
+//
+//     indices = [[1], [0]]
+//     params = [['a', 'b'], ['c', 'd']]
+//     output = [['c', 'd'], ['a', 'b']]
+//
+// Indexing into a 3-tensor:
+//
+//     indices = [[1]]
+//     params = [[['a0', 'b0'], ['c0', 'd0']],
+//               [['a1', 'b1'], ['c1', 'd1']]]
+//     output = [[['a1', 'b1'], ['c1', 'd1']]]
+//
+//
+//     indices = [[0, 1], [1, 0]]
+//     params = [[['a0', 'b0'], ['c0', 'd0']],
+//               [['a1', 'b1'], ['c1', 'd1']]]
+//     output = [['c0', 'd0'], ['a1', 'b1']]
+//
+//
+//     indices = [[0, 0, 1], [1, 0, 1]]
+//     params = [[['a0', 'b0'], ['c0', 'd0']],
+//               [['a1', 'b1'], ['c1', 'd1']]]
+//     output = ['b0', 'b1']
+//
+// Batched indexing into a matrix:
+//
+//     indices = [[[0, 0]], [[0, 1]]]
+//     params = [['a', 'b'], ['c', 'd']]
+//     output = [['a'], ['b']]
+//
+// Batched slice indexing into a matrix:
+//
+//     indices = [[[1]], [[0]]]
+//     params = [['a', 'b'], ['c', 'd']]
+//     output = [[['c', 'd']], [['a', 'b']]]
+//
+// Batched indexing into a 3-tensor:
+//
+//     indices = [[[1]], [[0]]]
+//     params = [[['a0', 'b0'], ['c0', 'd0']],
+//               [['a1', 'b1'], ['c1', 'd1']]]
+//     output = [[[['a1', 'b1'], ['c1', 'd1']]],
+//               [[['a0', 'b0'], ['c0', 'd0']]]]
+//
+//
+//     indices = [[[0, 1], [1, 0]], [[0, 0], [1, 1]]]
+//     params = [[['a0', 'b0'], ['c0', 'd0']],
+//               [['a1', 'b1'], ['c1', 'd1']]]
+//     output = [[['c0', 'd0'], ['a1', 'b1']],
+//               [['a0', 'b0'], ['c1', 'd1']]]
+//
+//
+//     indices = [[[0, 0, 1], [1, 0, 1]], [[0, 1, 1], [1, 1, 0]]]
+//     params = [[['a0', 'b0'], ['c0', 'd0']],
+//               [['a1', 'b1'], ['c1', 'd1']]]
+//     output = [['b0', 'b1'], ['d0', 'c1']]
+//
+// Arguments:
+// * scope: A Scope object
+// * params: `M-D`.  The tensor from which to gather values.
+// * indices: `(N+1)-D`.  Index tensor having shape `[d_0, ..., d_N, R]`.
+@Namespace("tensorflow::ops") @NoOffset public static class GatherNd extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GatherNd(Pointer p) { super(p); }
+
+  public GatherNd(@Const @ByRef Scope scope, @ByVal Input params,
+           @ByVal Input indices) { super((Pointer)null); allocate(scope, params, indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input params,
+           @ByVal Input indices);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native GatherNd output(Output output);
+}
+
+// Return a tensor with the same shape and contents as the input tensor or value.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Identity extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Identity(Pointer p) { super(p); }
+
+  public Identity(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Identity output(Output output);
+}
+
+// Returns immutable tensor from memory region.
+//
+// The current implementation memmaps the tensor from a file.
+//
+// Arguments:
+// * scope: A Scope object
+// * dtype:
+//     Type of the returned tensor.
+// * shape:
+//     Shape of the returned tensor.
+// * memory_region_name:
+//     Name of readonly memory region used by the tensor, see
+// NewReadOnlyMemoryRegionFromFile in tensorflow::Env.
+@Namespace("tensorflow::ops") @NoOffset public static class ImmutableConst extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ImmutableConst(Pointer p) { super(p); }
+
+  public ImmutableConst(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece BytePointer memory_region_name) { super((Pointer)null); allocate(scope, dtype, shape, memory_region_name); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece BytePointer memory_region_name);
+  public ImmutableConst(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece String memory_region_name) { super((Pointer)null); allocate(scope, dtype, shape, memory_region_name); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece String memory_region_name);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output tensor(); public native ImmutableConst tensor(Output tensor);
+}
+
+// Computes the inverse permutation of a tensor.
+//
+// This operation computes the inverse of an index permutation. It takes a 1-D
+// integer tensor `x`, which represents the indices of a zero-based array, and
+// swaps each value with its index position. In other words, for an output tensor
+// `y` and an input tensor `x`, this operation computes the following:
+//
+// `y[x[i]] = i for i in [0, 1, ..., len(x) - 1]`
+//
+// The values must include 0. There can be no duplicate values or negative values.
+//
+// For example:
+//
+// ```prettyprint
+// # tensor `x` is [3, 4, 0, 2, 1]
+// invert_permutation(x) ==> [2, 4, 3, 0, 1]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * x: 1-D.
+@Namespace("tensorflow::ops") @NoOffset public static class InvertPermutation extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InvertPermutation(Pointer p) { super(p); }
+
+  public InvertPermutation(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native InvertPermutation y(Output y);
+}
+
+// Computes the difference between two lists of numbers or strings.
+//
+// Given a list `x` and a list `y`, this operation returns a list `out` that
+// represents all values that are in `x` but not in `y`. The returned list `out`
+// is sorted in the same order that the numbers appear in `x` (duplicates are
+// preserved). This operation also returns a list `idx` that represents the
+// position of each `out` element in `x`. In other words:
+//
+// `out[i] = x[idx[i]] for i in [0, 1, ..., len(out) - 1]`
+//
+// For example, given this input:
+//
+// ```prettyprint
+// x = [1, 2, 3, 4, 5, 6]
+// y = [1, 3, 5]
+// ```
+//
+// This operation would return:
+//
+// ```prettyprint
+// out ==> [2, 4, 6]
+// idx ==> [1, 3, 5]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * x: 1-D. Values to keep.
+// * y: 1-D. Values to remove.
+@Namespace("tensorflow::ops") @NoOffset public static class ListDiff extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ListDiff(Pointer p) { super(p); }
+
+  public ListDiff(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y);
+
+  public native @ByRef Output out(); public native ListDiff out(Output out);
+  public native @ByRef Output idx(); public native ListDiff idx(Output idx);
+}
+
+// Pads a tensor with mirrored values.
+//
+// This operation pads a `input` with mirrored values according to the `paddings`
+// you specify. `paddings` is an integer tensor with shape `[n, 2]`, where n is
+// the rank of `input`. For each dimension D of `input`, `paddings[D, 0]` indicates
+// how many values to add before the contents of `input` in that dimension, and
+// `paddings[D, 1]` indicates how many values to add after the contents of `input`
+// in that dimension. Both `paddings[D, 0]` and `paddings[D, 1]` must be no greater
+// than `input.dim_size(D)` (or `input.dim_size(D) - 1`) if `copy_border` is true
+// (if false, respectively).
+//
+// The padded size of each dimension D of the output is:
+//
+// `paddings(D, 0) + input.dim_size(D) + paddings(D, 1)`
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[1, 2, 3], [4, 5, 6]].
+// # 'paddings' is [[1, 1]], [2, 2]].
+// # 'mode' is SYMMETRIC.
+// # rank of 't' is 2.
+// pad(t, paddings) ==> [[2, 1, 1, 2, 3, 3, 2]
+//                       [2, 1, 1, 2, 3, 3, 2]
+//                       [5, 4, 4, 5, 6, 6, 5]
+//                       [5, 4, 4, 5, 6, 6, 5]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The input tensor to be padded.
+// * paddings: A two-column matrix specifying the padding sizes. The number of
+// rows must be the same as the rank of `input`.
+// * mode:
+//     Either `REFLECT` or `SYMMETRIC`. In reflect mode the padded regions
+// do not include the borders, while in symmetric mode the padded regions
+// do include the borders. For example, if `input` is `[1, 2, 3]` and `paddings`
+// is `[0, 2]`, then the output is `[1, 2, 3, 2, 1]` in reflect mode, and
+// it is `[1, 2, 3, 3, 2]` in symmetric mode.
+@Namespace("tensorflow::ops") @NoOffset public static class MirrorPad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MirrorPad(Pointer p) { super(p); }
+
+  public MirrorPad(@Const @ByRef Scope scope, @ByVal Input input,
+            @ByVal Input paddings, @StringPiece BytePointer mode) { super((Pointer)null); allocate(scope, input, paddings, mode); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+            @ByVal Input paddings, @StringPiece BytePointer mode);
+  public MirrorPad(@Const @ByRef Scope scope, @ByVal Input input,
+            @ByVal Input paddings, @StringPiece String mode) { super((Pointer)null); allocate(scope, input, paddings, mode); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+            @ByVal Input paddings, @StringPiece String mode);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native MirrorPad output(Output output);
+}
+
+// Gradient op for `MirrorPad` op. This op folds a mirror-padded tensor.
+//
+// This operation folds the padded areas of `input` by `MirrorPad` according to the
+// `paddings` you specify. `paddings` must be the same as `paddings` argument
+// given to the corresponding `MirrorPad` op.
+//
+// The folded size of each dimension D of the output is:
+//
+// `input.dim_size(D) - paddings(D, 0) - paddings(D, 1)`
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[1, 2, 3], [4, 5, 6], [7, 8, 9]].
+// # 'paddings' is [[0, 1]], [0, 1]].
+// # 'mode' is SYMMETRIC.
+// # rank of 't' is 2.
+// pad(t, paddings) ==> [[ 1,  5]
+//                       [11, 28]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The input tensor to be folded.
+// * paddings: A two-column matrix specifying the padding sizes. The number of
+// rows must be the same as the rank of `input`.
+// * mode:
+//     The mode used in the `MirrorPad` op.
+@Namespace("tensorflow::ops") @NoOffset public static class MirrorPadGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MirrorPadGrad(Pointer p) { super(p); }
+
+  public MirrorPadGrad(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input paddings, @StringPiece BytePointer mode) { super((Pointer)null); allocate(scope, input, paddings, mode); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input paddings, @StringPiece BytePointer mode);
+  public MirrorPadGrad(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input paddings, @StringPiece String mode) { super((Pointer)null); allocate(scope, input, paddings, mode); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input paddings, @StringPiece String mode);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native MirrorPadGrad output(Output output);
+}
+
+// Returns a one-hot tensor.
+//
+// The locations represented by indices in `indices` take value `on_value`,
+// while all other locations take value `off_value`.
+//
+// If the input `indices` is rank `N`, the output will have rank `N+1`,
+// The new axis is created at dimension `axis` (default: the new axis is
+// appended at the end).
+//
+// If `indices` is a scalar the output shape will be a vector of length `depth`.
+//
+// If `indices` is a vector of length `features`, the output shape will be:
+// ```
+//   features x depth if axis == -1
+//   depth x features if axis == 0
+// ```
+//
+// If `indices` is a matrix (batch) with shape `[batch, features]`,
+// the output shape will be:
+// ```
+//   batch x features x depth if axis == -1
+//   batch x depth x features if axis == 1
+//   depth x batch x features if axis == 0
+// ```
+//
+//
+// Examples
+// =========
+//
+// Suppose that
+//
+// ```
+//   indices = [0, 2, -1, 1]
+//   depth = 3
+//   on_value = 5.0
+//   off_value = 0.0
+//   axis = -1
+// ```
+//
+// Then output is `[4 x 3]`:
+//
+//     ```output =
+//       [5.0 0.0 0.0]  // one_hot(0)
+//       [0.0 0.0 5.0]  // one_hot(2)
+//       [0.0 0.0 0.0]  // one_hot(-1)
+//       [0.0 5.0 0.0]  // one_hot(1)
+//     ```
+//
+// Suppose that
+//
+// ```
+//   indices = [0, 2, -1, 1]
+//   depth = 3
+//   on_value = 0.0
+//   off_value = 3.0
+//   axis = 0
+// ```
+//
+// Then output is `[3 x 4]`:
+//
+//     ```output =
+//       [0.0 3.0 3.0 3.0]
+//       [3.0 3.0 3.0 0.0]
+//       [3.0 3.0 3.0 3.0]
+//       [3.0 0.0 3.0 3.0]
+//     //  ^                one_hot(0)
+//     //      ^            one_hot(2)
+//     //          ^        one_hot(-1)
+//     //              ^    one_hot(1)
+//     ```
+// Suppose that
+//
+// ```
+//   indices = [[0, 2], [1, -1]]
+//   depth = 3
+//   on_value = 1.0
+//   off_value = 0.0
+//   axis = -1
+// ```
+//
+// Then output is `[2 x 2 x 3]`:
+//
+//     ```output =
+//       [
+//         [1.0, 0.0, 0.0]  // one_hot(0)
+//         [0.0, 0.0, 1.0]  // one_hot(2)
+//       ][
+//         [0.0, 1.0, 0.0]  // one_hot(1)
+//         [0.0, 0.0, 0.0]  // one_hot(-1)
+//       ]```
+//
+// Arguments:
+// * scope: A Scope object
+// * indices: A tensor of indices.
+// * depth: A scalar defining the depth of the one hot dimension.
+// * on_value: A scalar defining the value to fill in output when `indices[j] = i`.
+// * off_value: A scalar defining the value to fill in output when `indices[j] != i`.
+@Namespace("tensorflow::ops") @NoOffset public static class OneHot extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OneHot(Pointer p) { super(p); }
+
+  // Optional attribute setters for OneHot :
+  //
+  // Axis(int64): Defaults to -1
+  //     The axis to fill (default: -1, a new inner-most axis).
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long axis_(); public native Attrs axis_(long axis_);
+  }
+  public OneHot(@Const @ByRef Scope scope, @ByVal Input indices,
+         @ByVal Input depth, @ByVal Input on_value,
+         @ByVal Input off_value) { super((Pointer)null); allocate(scope, indices, depth, on_value, off_value); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input indices,
+         @ByVal Input depth, @ByVal Input on_value,
+         @ByVal Input off_value);
+  public OneHot(@Const @ByRef Scope scope, @ByVal Input indices,
+         @ByVal Input depth, @ByVal Input on_value,
+         @ByVal Input off_value, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, indices, depth, on_value, off_value, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input indices,
+         @ByVal Input depth, @ByVal Input on_value,
+         @ByVal Input off_value, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native OneHot output(Output output);
+}
+
+// Packs a list of `N` rank-`R` tensors into one rank-`(R+1)` tensor.
+//
+// Packs the `N` tensors in `values` into a tensor with rank one higher than each
+// tensor in `values`, by packing them along the `axis` dimension.
+// Given a list of tensors of shape `(A, B, C)`;
+//
+// if `axis == 0` then the `output` tensor will have the shape `(N, A, B, C)`.
+// if `axis == 1` then the `output` tensor will have the shape `(A, N, B, C)`.
+// Etc.
+//
+// For example:
+//
+// ```prettyprint
+// # 'x' is [1, 4]
+// # 'y' is [2, 5]
+// # 'z' is [3, 6]
+// pack([x, y, z]) => [[1, 4], [2, 5], [3, 6]]  # Pack along first dim.
+// pack([x, y, z], axis=1) => [[1, 2, 3], [4, 5, 6]]
+// ```
+//
+// This is the opposite of `unpack`.
+//
+// Arguments:
+// * scope: A Scope object
+// * values: Must be of same shape and type.
+@Namespace("tensorflow::ops") @NoOffset public static class Pack extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Pack(Pointer p) { super(p); }
+
+  // Optional attribute setters for Pack :
+  //
+  // Axis(int64): Defaults to 0
+  //     Dimension along which to pack.  Negative values wrap around, so the
+  // valid range is `[-(R+1), R+1)`.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long axis_(); public native Attrs axis_(long axis_);
+  }
+  public Pack(@Const @ByRef Scope scope, @ByVal InputList values) { super((Pointer)null); allocate(scope, values); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList values);
+  public Pack(@Const @ByRef Scope scope, @ByVal InputList values,
+       @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, values, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList values,
+       @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native Pack output(Output output);
+}
+
+// Pads a tensor with zeros.
+//
+// This operation pads a `input` with zeros according to the `paddings` you
+// specify. `paddings` is an integer tensor with shape `[Dn, 2]`, where n is the
+// rank of `input`. For each dimension D of `input`, `paddings[D, 0]` indicates
+// how many zeros to add before the contents of `input` in that dimension, and
+// `paddings[D, 1]` indicates how many zeros to add after the contents of `input`
+// in that dimension.
+//
+// The padded size of each dimension D of the output is:
+//
+// `paddings(D, 0) + input.dim_size(D) + paddings(D, 1)`
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[1, 1], [2, 2]]
+// # 'paddings' is [[1, 1], [2, 2]]
+// # rank of 't' is 2
+// pad(t, paddings) ==> [[0, 0, 0, 0, 0, 0]
+//                       [0, 0, 1, 1, 0, 0]
+//                       [0, 0, 2, 2, 0, 0]
+//                       [0, 0, 0, 0, 0, 0]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Pad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Pad(Pointer p) { super(p); }
+
+  public Pad(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input paddings) { super((Pointer)null); allocate(scope, input, paddings); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input paddings);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Pad output(Output output);
+}
+
+// A placeholder op for a value that will be fed into the computation.
+//
+// N.B. This operation will fail with an error if it is executed. It is
+// intended as a way to represent a value that will always be fed, and to
+// provide attrs that enable the fed value to be checked at runtime.
+//
+// Arguments:
+// * scope: A Scope object
+// * dtype:
+//     The type of elements in the tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class Placeholder extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Placeholder(Pointer p) { super(p); }
+
+  // Optional attribute setters for Placeholder :
+  //
+  // Shape(TensorShape): Defaults to []
+  //     (Optional) The shape of the tensor. If the shape has 0 dimensions, the
+  // shape is unconstrained.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Shape(@ByVal TensorShape x);
+
+    public native @ByRef TensorShape shape_(); public native Attrs shape_(TensorShape shape_);
+  }
+  public Placeholder(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, dtype); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype);
+  public Placeholder(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, dtype, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Shape(@ByVal TensorShape x);
+
+  public native @ByRef Output output(); public native Placeholder output(Output output);
+}
+
+// A placeholder op that passes though `input` when its output is not fed.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The default value to produce when `output` is not fed.
+// * shape:
+//     The (possibly partial) shape of the tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class PlaceholderWithDefault extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PlaceholderWithDefault(Pointer p) { super(p); }
+
+  public PlaceholderWithDefault(@Const @ByRef Scope scope,
+                         @ByVal Input input, @ByVal TensorShape shape) { super((Pointer)null); allocate(scope, input, shape); }
+  private native void allocate(@Const @ByRef Scope scope,
+                         @ByVal Input input, @ByVal TensorShape shape);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native PlaceholderWithDefault output(Output output);
+}
+
+// Quantizes then dequantizes a tensor.
+//
+// This op simulates the precision loss from the quantized forward pass by:
+// 1. Quantizing the tensor to fixed point numbers, which should match the target
+//    quantization method when it is used in inference.
+// 2. Dequantizing it back to floating point numbers for the following ops, most
+//    likely matmul.
+//
+// There are different ways to quantize. This version does not use the full range
+// of the output type, choosing to elide the lowest possible value for symmetry
+// (e.g., output range is -127 to 127, not -128 to 127 for signed 8 bit
+// quantization), so that 0.0 maps to 0.
+//
+// To perform this op, we first find the range of values in our tensor. The range
+// we use is always centered on 0, so we find m such that
+//
+// 1. m = max(abs(input_min), abs(input_max)) if range_given is true,
+// 2. m = max(max(abs(min_elem(input)), abs(max_elem(input))) otherwise.
+//
+// Our input tensor range is then [-m, m].
+//
+// Next, we choose our fixed-point quantization buckets, [min_fixed, max_fixed].
+// If signed_input is true, this is
+//
+//   [min_fixed, max_fixed ] =
+//       [-(1 << (num_bits - 1) - 1), (1 << (num_bits - 1)) - 1].
+//
+// Otherwise, if signed_input is false, the fixed-point range is
+//
+//   [min_fixed, max_fixed] = [0, (1 << num_bits) - 1].
+//
+// From this we compute our scaling factor, s:
+//
+//   s = (max_fixed - min_fixed) / (2 * m).
+//
+// Now we can quantize and dequantize the elements of our tensor.  An element e
+// is transformed into e':
+//
+//   e' = (e * s).round_to_nearest() / s.
+//
+// Note that we have a different number of buckets in the signed vs. unsigned
+// cases.  For example, if num_bits == 8, we get 254 buckets in the signed case
+// vs. 255 in the unsigned case.
+//
+// For example, suppose num_bits = 8 and m = 1.  Then
+//
+//   [min_fixed, max_fixed] = [-127, 127], and
+//   s = (127 + 127) / 2 = 127.
+//
+// Given the vector {-1, -0.5, 0, 0.3}, this is quantized to
+// {-127, -63, 0, 38}, and dequantized to {-1, -63.0/127, 0, 38.0/127}.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: Tensor to quantize and then dequantize.
+@Namespace("tensorflow::ops") @NoOffset public static class QuantizeAndDequantize extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QuantizeAndDequantize(Pointer p) { super(p); }
+
+  // Optional attribute setters for QuantizeAndDequantize :
+  //
+  // SignedInput(bool): Defaults to true
+  //     If the quantization is signed or unsigned.
+  // NumBits(int64): Defaults to 8
+  //     The bitwidth of the quantization.
+  // RangeGiven(bool): Defaults to false
+  //     If the range is given or should be computed from the tensor.
+  // InputMin(float): Defaults to 0
+  //     If range is given, this is the min of the range.
+  // InputMax(float): Defaults to 0
+  //     If range is given, this is the max of the range.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs SignedInput(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs InputMin(float x);
+
+    public native @ByVal Attrs InputMax(float x);
+
+    public native @Cast("bool") boolean signed_input_(); public native Attrs signed_input_(boolean signed_input_);
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
+    public native @Cast("bool") boolean range_given_(); public native Attrs range_given_(boolean range_given_);
+    public native float input_min_(); public native Attrs input_min_(float input_min_);
+    public native float input_max_(); public native Attrs input_max_(float input_max_);
+  }
+  public QuantizeAndDequantize(@Const @ByRef Scope scope,
+                        @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope,
+                        @ByVal Input input);
+  public QuantizeAndDequantize(@Const @ByRef Scope scope,
+                        @ByVal Input input, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                        @ByVal Input input, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs SignedInput(@Cast("bool") boolean x);
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
+  public static native @ByVal Attrs InputMin(float x);
+  public static native @ByVal Attrs InputMax(float x);
+
+  public native @ByRef Output output(); public native QuantizeAndDequantize output(Output output);
+}
+
+// Returns the rank of a tensor.
+//
+// This operation returns an integer representing the rank of `input`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
+// # shape of tensor 't' is [2, 2, 3]
+// rank(t) ==> 3
+// ```
+//
+// **Note**: The rank of a tensor is not the same as the rank of a matrix. The rank
+// of a tensor is the number of indices required to uniquely select each element
+// of the tensor. Rank is also known as "order", "degree", or "ndims."
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Rank extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Rank(Pointer p) { super(p); }
+
+  public Rank(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Rank output(Output output);
+}
+
+// Return the same ref tensor as the input ref tensor.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class RefIdentity extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefIdentity(Pointer p) { super(p); }
+
+  public RefIdentity(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native RefIdentity output(Output output);
+}
+
+// Reshapes a tensor.
+//
+// Given `tensor`, this operation returns a tensor that has the same values
+// as `tensor` with shape `shape`.
+//
+// If one component of `shape` is the special value -1, the size of that dimension
+// is computed so that the total size remains constant.  In particular, a `shape`
+// of `[-1]` flattens into 1-D.  At most one component of `shape` can be -1.
+//
+// If `shape` is 1-D or higher, then the operation returns a tensor with shape
+// `shape` filled with the values of `tensor`. In this case, the number of elements
+// implied by `shape` must be the same as the number of elements in `tensor`.
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+// # tensor 't' has shape [9]
+// reshape(t, [3, 3]) ==> [[1, 2, 3],
+//                         [4, 5, 6],
+//                         [7, 8, 9]]
+//
+// # tensor 't' is [[[1, 1], [2, 2]],
+// #                [[3, 3], [4, 4]]]
+// # tensor 't' has shape [2, 2, 2]
+// reshape(t, [2, 4]) ==> [[1, 1, 2, 2],
+//                         [3, 3, 4, 4]]
+//
+// # tensor 't' is [[[1, 1, 1],
+// #                 [2, 2, 2]],
+// #                [[3, 3, 3],
+// #                 [4, 4, 4]],
+// #                [[5, 5, 5],
+// #                 [6, 6, 6]]]
+// # tensor 't' has shape [3, 2, 3]
+// # pass '[-1]' to flatten 't'
+// reshape(t, [-1]) ==> [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6]
+//
+// # -1 can also be used to infer the shape
+//
+// # -1 is inferred to be 9:
+// reshape(t, [2, -1]) ==> [[1, 1, 1, 2, 2, 2, 3, 3, 3],
+//                          [4, 4, 4, 5, 5, 5, 6, 6, 6]]
+// # -1 is inferred to be 2:
+// reshape(t, [-1, 9]) ==> [[1, 1, 1, 2, 2, 2, 3, 3, 3],
+//                          [4, 4, 4, 5, 5, 5, 6, 6, 6]]
+// # -1 is inferred to be 3:
+// reshape(t, [ 2, -1, 3]) ==> [[[1, 1, 1],
+//                               [2, 2, 2],
+//                               [3, 3, 3]],
+//                              [[4, 4, 4],
+//                               [5, 5, 5],
+//                               [6, 6, 6]]]
+//
+// # tensor 't' is [7]
+// # shape `[]` reshapes to a scalar
+// reshape(t, []) ==> 7
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * shape: Defines the shape of the output tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class Reshape extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Reshape(Pointer p) { super(p); }
+
+  public Reshape(@Const @ByRef Scope scope, @ByVal Input tensor,
+          @ByVal Input shape) { super((Pointer)null); allocate(scope, tensor, shape); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input tensor,
+          @ByVal Input shape);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Reshape output(Output output);
+}
+
+// Reverses specific dimensions of a tensor.
+//
+// Given a `tensor`, and a `bool` tensor `dims` representing the dimensions
+// of `tensor`, this operation reverses each dimension i of `tensor` where
+// `dims[i]` is `True`.
+//
+// `tensor` can have up to 8 dimensions. The number of dimensions
+// of `tensor` must equal the number of elements in `dims`. In other words:
+//
+// `rank(tensor) = size(dims)`
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 't' is [[[[ 0,  1,  2,  3],
+// #                  [ 4,  5,  6,  7],
+// #                  [ 8,  9, 10, 11]],
+// #                 [[12, 13, 14, 15],
+// #                  [16, 17, 18, 19],
+// #                  [20, 21, 22, 23]]]]
+// # tensor 't' shape is [1, 2, 3, 4]
+//
+// # 'dims' is [False, False, False, True]
+// reverse(t, dims) ==> [[[[ 3,  2,  1,  0],
+//                         [ 7,  6,  5,  4],
+//                         [ 11, 10, 9, 8]],
+//                        [[15, 14, 13, 12],
+//                         [19, 18, 17, 16],
+//                         [23, 22, 21, 20]]]]
+//
+// # 'dims' is [False, True, False, False]
+// reverse(t, dims) ==> [[[[12, 13, 14, 15],
+//                         [16, 17, 18, 19],
+//                         [20, 21, 22, 23]
+//                        [[ 0,  1,  2,  3],
+//                         [ 4,  5,  6,  7],
+//                         [ 8,  9, 10, 11]]]]
+//
+// # 'dims' is [False, False, True, False]
+// reverse(t, dims) ==> [[[[8, 9, 10, 11],
+//                         [4, 5, 6, 7],
+//                         [0, 1, 2, 3]]
+//                        [[20, 21, 22, 23],
+//                         [16, 17, 18, 19],
+//                         [12, 13, 14, 15]]]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * tensor: Up to 8-D.
+// * dims: 1-D. The dimensions to reverse.
+@Namespace("tensorflow::ops") @NoOffset public static class Reverse extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Reverse(Pointer p) { super(p); }
+
+  public Reverse(@Const @ByRef Scope scope, @ByVal Input tensor,
+          @ByVal Input dims) { super((Pointer)null); allocate(scope, tensor, dims); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input tensor,
+          @ByVal Input dims);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Reverse output(Output output);
+}
+
+// Reverses variable length slices.
+//
+// This op first slices `input` along the dimension `batch_dim`, and for each
+// slice `i`, reverses the first `seq_lengths[i]` elements along
+// the dimension `seq_dim`.
+//
+// The elements of `seq_lengths` must obey `seq_lengths[i] < input.dims[seq_dim]`,
+// and `seq_lengths` must be a vector of length `input.dims[batch_dim]`.
+//
+// The output slice `i` along dimension `batch_dim` is then given by input
+// slice `i`, with the first `seq_lengths[i]` slices along dimension
+// `seq_dim` reversed.
+//
+// For example:
+//
+// ```prettyprint
+// # Given this:
+// batch_dim = 0
+// seq_dim = 1
+// input.dims = (4, 8, ...)
+// seq_lengths = [7, 2, 3, 5]
+//
+// # then slices of input are reversed on seq_dim, but only up to seq_lengths:
+// output[0, 0:7, :, ...] = input[0, 7:0:-1, :, ...]
+// output[1, 0:2, :, ...] = input[1, 2:0:-1, :, ...]
+// output[2, 0:3, :, ...] = input[2, 3:0:-1, :, ...]
+// output[3, 0:5, :, ...] = input[3, 5:0:-1, :, ...]
+//
+// # while entries past seq_lens are copied through:
+// output[0, 7:, :, ...] = input[0, 7:, :, ...]
+// output[1, 2:, :, ...] = input[1, 2:, :, ...]
+// output[2, 3:, :, ...] = input[2, 3:, :, ...]
+// output[3, 2:, :, ...] = input[3, 2:, :, ...]
+// ```
+//
+// In contrast, if:
+//
+// ```prettyprint
+// # Given this:
+// batch_dim = 2
+// seq_dim = 0
+// input.dims = (8, ?, 4, ...)
+// seq_lengths = [7, 2, 3, 5]
+//
+// # then slices of input are reversed on seq_dim, but only up to seq_lengths:
+// output[0:7, :, 0, :, ...] = input[7:0:-1, :, 0, :, ...]
+// output[0:2, :, 1, :, ...] = input[2:0:-1, :, 1, :, ...]
+// output[0:3, :, 2, :, ...] = input[3:0:-1, :, 2, :, ...]
+// output[0:5, :, 3, :, ...] = input[5:0:-1, :, 3, :, ...]
+//
+// # while entries past seq_lens are copied through:
+// output[7:, :, 0, :, ...] = input[7:, :, 0, :, ...]
+// output[2:, :, 1, :, ...] = input[2:, :, 1, :, ...]
+// output[3:, :, 2, :, ...] = input[3:, :, 2, :, ...]
+// output[2:, :, 3, :, ...] = input[2:, :, 3, :, ...]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The input to reverse.
+// * seq_lengths: 1-D with length `input.dims(batch_dim)` and
+// `max(seq_lengths) < input.dims(seq_dim)`
+// * seq_dim:
+//     The dimension which is partially reversed.
+@Namespace("tensorflow::ops") @NoOffset public static class ReverseSequence extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ReverseSequence(Pointer p) { super(p); }
+
+  // Optional attribute setters for ReverseSequence :
+  //
+  // BatchDim(int64): Defaults to 0
+  //     The dimension along which reversal is performed.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs BatchDim(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long batch_dim_(); public native Attrs batch_dim_(long batch_dim_);
+  }
+  public ReverseSequence(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input seq_lengths, @Cast("tensorflow::int64") long seq_dim) { super((Pointer)null); allocate(scope, input, seq_lengths, seq_dim); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input seq_lengths, @Cast("tensorflow::int64") long seq_dim);
+  public ReverseSequence(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input seq_lengths, @Cast("tensorflow::int64") long seq_dim,
+                  @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, seq_lengths, seq_dim, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input seq_lengths, @Cast("tensorflow::int64") long seq_dim,
+                  @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs BatchDim(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native ReverseSequence output(Output output);
+}
+
+// Returns the shape of a tensor.
+//
+// This operation returns a 1-D integer tensor representing the shape of `input`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
+// shape(t) ==> [2, 2, 3]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+
+// Returns shape of tensors.
+//
+// This operation returns N 1-D integer tensors representing shape of `input[i]s`.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class ShapeN extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ShapeN(Pointer p) { super(p); }
+
+  public ShapeN(@Const @ByRef Scope scope, @ByVal InputList input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList input);
+  public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
+
+
+  public native @ByRef @Cast("tensorflow::ops::OutputList*") StringVector output(); public native ShapeN output(StringVector output);
+}
+
+// Returns the size of a tensor.
+//
+// This operation returns an integer representing the number of elements in
+// `input`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[[1, 1,, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]]
+// size(t) ==> 12
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Size extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Size(Pointer p) { super(p); }
+
+  public Size(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Size output(Output output);
+}
+
+// Return a slice from 'input'.
+//
+// The output tensor is a tensor with dimensions described by 'size'
+// whose values are extracted from 'input' starting at the offsets in
+// 'begin'.
+//
+// *Requirements*:
+//   0 <= begin[i] <= begin[i] + size[i] <= Di  for i in [0, n)
+//
+// Arguments:
+// * scope: A Scope object
+// * begin: begin[i] specifies the offset into the 'i'th dimension of
+// 'input' to slice from.
+// * size: size[i] specifies the number of elements of the 'i'th dimension
+// of 'input' to slice. If size[i] is -1, all remaining elements in dimension
+// i are included in the slice (i.e. this is equivalent to setting
+// size[i] = input.dim_size(i) - begin[i]).
+@Namespace("tensorflow::ops") @NoOffset public static class Slice extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Slice(Pointer p) { super(p); }
+
+  public Slice(@Const @ByRef Scope scope, @ByVal Input input,
+        @ByVal Input begin, @ByVal Input size) { super((Pointer)null); allocate(scope, input, begin, size); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+        @ByVal Input begin, @ByVal Input size);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Slice output(Output output);
+}
+
+// SpaceToBatch for 4-D tensors of type T.
+//
+// Zero-pads and then rearranges (permutes) blocks of spatial data into batch.
+// More specifically, this op outputs a copy of the input tensor where values from
+// the `height` and `width` dimensions are moved to the `batch` dimension. After
+// the zero-padding, both `height` and `width` of the input must be divisible by the
+// block size.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: 4-D with shape `[batch, height, width, depth]`.
+// * paddings: 2-D tensor of non-negative integers with shape `[2, 2]`. It specifies
+//   the padding of the input with zeros across the spatial dimensions as follows:
+//
+//       paddings = [[pad_top, pad_bottom], [pad_left, pad_right]]
+//
+//   The effective spatial dimensions of the zero-padded input tensor will be:
+//
+//       height_pad = pad_top + height + pad_bottom
+//       width_pad = pad_left + width + pad_right
+//
+// The attr `block_size` must be greater than one. It indicates the block size.
+//
+//   * Non-overlapping blocks of size `block_size x block size` in the height and
+//     width dimensions are rearranged into the batch dimension at each location.
+//   * The batch of the output tensor is `batch * block_size * block_size`.
+//   * Both height_pad and width_pad must be divisible by block_size.
+//
+// The shape of the output will be:
+//
+//     [batch*block_size*block_size, height_pad/block_size, width_pad/block_size,
+//      depth]
+//
+// Some examples:
+//
+// (1) For the following input of shape `[1, 2, 2, 1]` and block_size of 2:
+//
+// ```prettyprint
+// x = [[[[1], [2]], [[3], [4]]]]
+// ```
+//
+// The output tensor has shape `[4, 1, 1, 1]` and value:
+//
+// ```prettyprint
+// [[[[1]]], [[[2]]], [[[3]]], [[[4]]]]
+// ```
+//
+// (2) For the following input of shape `[1, 2, 2, 3]` and block_size of 2:
+//
+// ```prettyprint
+// x = [[[[1, 2, 3], [4, 5, 6]],
+//       [[7, 8, 9], [10, 11, 12]]]]
+// ```
+//
+// The output tensor has shape `[4, 1, 1, 3]` and value:
+//
+// ```prettyprint
+// [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]
+// ```
+//
+// (3) For the following input of shape `[1, 4, 4, 1]` and block_size of 2:
+//
+// ```prettyprint
+// x = [[[[1],   [2],  [3],  [4]],
+//       [[5],   [6],  [7],  [8]],
+//       [[9],  [10], [11],  [12]],
+//       [[13], [14], [15],  [16]]]]
+// ```
+//
+// The output tensor has shape `[4, 2, 2, 1]` and value:
+//
+// ```prettyprint
+// x = [[[[1], [3]], [[5], [7]]],
+//      [[[2], [4]], [[10], [12]]],
+//      [[[5], [7]], [[13], [15]]],
+//      [[[6], [8]], [[14], [16]]]]
+// ```
+//
+// (4) For the following input of shape `[2, 2, 4, 1]` and block_size of 2:
+//
+// ```prettyprint
+// x = [[[[1],   [2],  [3],  [4]],
+//       [[5],   [6],  [7],  [8]]],
+//      [[[9],  [10], [11],  [12]],
+//       [[13], [14], [15],  [16]]]]
+// ```
+//
+// The output tensor has shape `[8, 1, 2, 1]` and value:
+//
+// ```prettyprint
+// x = [[[[1], [3]]], [[[9], [11]]], [[[2], [4]]], [[[10], [12]]],
+//      [[[5], [7]]], [[[13], [15]]], [[[6], [8]]], [[[14], [16]]]]
+// ```
+//
+// Among others, this operation is useful for reducing atrous convolution into
+// regular convolution.
+@Namespace("tensorflow::ops") @NoOffset public static class SpaceToBatch extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SpaceToBatch(Pointer p) { super(p); }
+
+  public SpaceToBatch(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input paddings, @Cast("tensorflow::int64") long block_size) { super((Pointer)null); allocate(scope, input, paddings, block_size); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input paddings, @Cast("tensorflow::int64") long block_size);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SpaceToBatch output(Output output);
+}
+
+// SpaceToDepth for tensors of type T.
+//
+// Rearranges blocks of spatial data, into depth. More specifically,
+// this op outputs a copy of the input tensor where values from the `height`
+// and `width` dimensions are moved to the `depth` dimension.
+// The attr `block_size` indicates the input block size and how the data is moved.
+//
+//   * Non-overlapping blocks of size `block_size x block size` are rearranged
+//     into depth at each location.
+//   * The depth of the output tensor is `input_depth * block_size * block_size`.
+//   * The input tensor's height and width must be divisible by block_size.
+//
+// That is, assuming the input is in the shape:
+// `[batch, height, width, depth]`,
+// the shape of the output will be:
+// `[batch, height/block_size, width/block_size, depth*block_size*block_size]`
+//
+// This operation requires that the input tensor be of rank 4, and that
+// `block_size` be >=1 and a divisor of both the input `height` and `width`.
+//
+// This operation is useful for resizing the activations between convolutions
+// (but keeping all data), e.g. instead of pooling. It is also useful for training
+// purely convolutional models.
+//
+// For example, given this input of shape `[1, 2, 2, 1]`, and block_size of 2:
+//
+// ```prettyprint
+// x = [[[[1], [2]],
+//       [[3], [4]]]]
+// ```
+//
+// This operation will output a tensor of shape `[1, 1, 1, 4]`:
+//
+// ```prettyprint
+// [[[[1, 2, 3, 4]]]]
+// ```
+//
+// Here, the input has a batch of 1 and each batch element has shape `[2, 2, 1]`,
+// the corresponding output will have a single element (i.e. width and height are
+// both 1) and will have a depth of 4 channels (1 * block_size * block_size).
+// The output element shape is `[1, 1, 4]`.
+//
+// For an input tensor with larger depth, here of shape `[1, 2, 2, 3]`, e.g.
+//
+// ```prettyprint
+// x = [[[[1, 2, 3], [4, 5, 6]],
+//       [[7, 8, 9], [10, 11, 12]]]]
+// ```
+//
+// This operation, for block_size of 2, will return the following tensor of shape
+// `[1, 1, 1, 12]`
+//
+// ```prettyprint
+// [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]
+// ```
+//
+// Similarly, for the following input of shape `[1 4 4 1]`, and a block size of 2:
+//
+// ```prettyprint
+// x = [[[[1],   [2],  [5],  [6]],
+//       [[3],   [4],  [7],  [8]],
+//       [[9],  [10], [13],  [14]],
+//       [[11], [12], [15],  [16]]]]
+// ```
+//
+// the operator will return the following tensor of shape `[1 2 2 4]`:
+//
+// ```prettyprint
+// x = [[[[1, 2, 3, 4],
+//        [5, 6, 7, 8]],
+//       [[9, 10, 11, 12],
+//        [13, 14, 15, 16]]]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * block_size:
+//     The size of the spatial block.
+@Namespace("tensorflow::ops") @NoOffset public static class SpaceToDepth extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SpaceToDepth(Pointer p) { super(p); }
+
+  public SpaceToDepth(@Const @ByRef Scope scope, @ByVal Input input,
+               @Cast("tensorflow::int64") long block_size) { super((Pointer)null); allocate(scope, input, block_size); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+               @Cast("tensorflow::int64") long block_size);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SpaceToDepth output(Output output);
+}
+
+// Splits a tensor into `num_split` tensors along one dimension.
+//
+// Arguments:
+// * scope: A Scope object
+// * split_dim: 0-D.  The dimension along which to split.  Must be in the range
+// `[0, rank(value))`.
+// * value: The tensor to split.
+// * num_split:
+//     The number of ways to split.  Must evenly divide
+// `value.shape[split_dim]`.
+@Namespace("tensorflow::ops") @NoOffset public static class Split extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Split(Pointer p) { super(p); }
+
+  public Split(@Const @ByRef Scope scope, @ByVal Input split_dim,
+        @ByVal Input value, @Cast("tensorflow::int64") long num_split) { super((Pointer)null); allocate(scope, split_dim, value, num_split); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input split_dim,
+        @ByVal Input value, @Cast("tensorflow::int64") long num_split);
+  public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
+
+
+  public native @ByRef @Cast("tensorflow::ops::OutputList*") StringVector output(); public native Split output(StringVector output);
+}
+
+// Removes dimensions of size 1 from the shape of a tensor.
+//
+// Given a tensor `input`, this operation returns a tensor of the same type with
+// all dimensions of size 1 removed. If you don't want to remove all size 1
+// dimensions, you can remove specific size 1 dimensions by specifying
+// `squeeze_dims`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+// shape(squeeze(t)) ==> [2, 3]
+// ```
+//
+// Or, to remove specific size 1 dimensions:
+//
+// ```prettyprint
+// # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+// shape(squeeze(t, [2, 4])) ==> [1, 2, 3, 1]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The `input` to squeeze.
+@Namespace("tensorflow::ops") @NoOffset public static class Squeeze extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Squeeze(Pointer p) { super(p); }
+
+  // Optional attribute setters for Squeeze :
+  //
+  // SqueezeDims(const gtl::ArraySlice<int>&): Defaults to []
+  //     If specified, only squeezes the dimensions listed. The dimension
+  // index starts at 0. It is an error to squeeze a dimension that is not 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs SqueezeDims(@ArraySlice IntPointer x);
+    public native @ByVal Attrs SqueezeDims(@ArraySlice IntBuffer x);
+    public native @ByVal Attrs SqueezeDims(@ArraySlice int... x);
+
+    public native @ArraySlice IntPointer squeeze_dims_(); public native Attrs squeeze_dims_(IntPointer squeeze_dims_);
+  }
+  public Squeeze(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public Squeeze(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs SqueezeDims(@ArraySlice IntPointer x);
+  public static native @ByVal Attrs SqueezeDims(@ArraySlice IntBuffer x);
+  public static native @ByVal Attrs SqueezeDims(@ArraySlice int... x);
+
+  public native @ByRef Output output(); public native Squeeze output(Output output);
+}
+
+// Stops gradient computation.
+//
+// When executed in a graph, this op outputs its input tensor as-is.
+//
+// When building ops to compute gradients, this op prevents the contribution of
+// its inputs to be taken into account.  Normally, the gradient generator adds ops
+// to a graph to compute the derivatives of a specified 'loss' by recursively
+// finding out inputs that contributed to its computation.  If you insert this op
+// in the graph it inputs are masked from the gradient generator.  They are not
+// taken into account for computing gradients.
+//
+// This is useful any time you want to compute a value with TensorFlow but need
+// to pretend that the value was a constant. Some examples include:
+//
+// *  The *EM* algorithm where the *M-step* should not involve backpropagation
+//    through the output of the *E-step*.
+// *  Contrastive divergence training of Boltzmann machines where, when
+//    differentiating the energy function, the training must not backpropagate
+//    through the graph that generated the samples from the model.
+// *  Adversarial training, where no backprop should happen through the adversarial
+//    example generation process.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class StopGradient extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StopGradient(Pointer p) { super(p); }
+
+  public StopGradient(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native StopGradient output(Output output);
+}
+
+// Return a strided slice from `input`.
+//
+// The output tensor is a tensor with dimensions implied by `begin`,
+// `end`, and `strides`, whose values are extracted from `begin`.
+//
+// Specifically, the result tensor at index `(i[0], i[1], ..., i[n-1])`
+// will obtain the value `input[begin[0] + i[0] * stride[0], ..., `
+//                             `begin[n-1] + i[n-1] * stride[n-1])]`.
+//
+// *Requirements*:
+//   `0 != strides[i] for i in [0, n)`
+//
+// Arguments:
+// * scope: A Scope object
+// * begin: `begin[i]` specifies the offset into the `i`th dimension of
+// `input` to slice from.
+// * end: `end[i]` specifies the first offset into the `i`th dimension of
+// `input` that will not be extracted. Out or range values are
+// clamped to `[0,dim[i]) if slice[i] > 0` or `[-1,dim[i]-1]`
+// `if slice[i] < 0`
+// * strides: `strides[i]` specifies the increment in the `i`th dimension
+// after extracting a given element. Negative indices will reverse
+// the original order. Out or range values are
+// clamped to `[0,dim[i]) if slice[i]>0` or `[-1,dim[i]-1] if slice[i] < 0`
+@Namespace("tensorflow::ops") @NoOffset public static class StridedSlice extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StridedSlice(Pointer p) { super(p); }
+
+  // Optional attribute setters for StridedSlice :
+  //
+  // BeginMask(int64): Defaults to 0
+  //     a bitmask where a bit i being 1 means to ignore the begin
+  // value and instead use the largest interval possible. At runtime
+  // begin[i] will be replaced with `[0, n-1) if `stride[i] > 0` or
+  // `[-1, n-1]` if `stride[i] < 0`
+  // EndMask(int64): Defaults to 0
+  //     analogous to `begin_mask`
+  // EllipsisMask(int64): Defaults to 0
+  //     a bitmask where bit `i` being 1 means the `i`th
+  // position is actually an ellipsis. One bit at most can be 1.
+  // NewAxisMask(int64): Defaults to 0
+  //     a bitmask where bit `i` being 1 means the `i`th
+  // position creates a dimension in the tensor of length 1. Thus
+  // the total number of elements remain unchanged but the shape
+  // gets a 1 in the appropriate position.
+  // ShrinkAxisMask(int64): Defaults to 0
+  //     a bitmask where bit `i` implies that the `i`th
+  // position should shrink the dimensionality. begin and end
+  // must imply a slice of size 1 in the dimension. For example in
+  // python one might do `foo[:,3,:]` which would result in
+  // `shrink_axis_mask` being 2.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long begin_mask_(); public native Attrs begin_mask_(long begin_mask_);
+    public native @Cast("tensorflow::int64") long end_mask_(); public native Attrs end_mask_(long end_mask_);
+    public native @Cast("tensorflow::int64") long ellipsis_mask_(); public native Attrs ellipsis_mask_(long ellipsis_mask_);
+    public native @Cast("tensorflow::int64") long new_axis_mask_(); public native Attrs new_axis_mask_(long new_axis_mask_);
+    public native @Cast("tensorflow::int64") long shrink_axis_mask_(); public native Attrs shrink_axis_mask_(long shrink_axis_mask_);
+  }
+  public StridedSlice(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input begin, @ByVal Input end,
+               @ByVal Input strides) { super((Pointer)null); allocate(scope, input, begin, end, strides); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input begin, @ByVal Input end,
+               @ByVal Input strides);
+  public StridedSlice(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input begin, @ByVal Input end,
+               @ByVal Input strides, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, begin, end, strides, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+               @ByVal Input begin, @ByVal Input end,
+               @ByVal Input strides, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native StridedSlice output(Output output);
+}
+
+// Returns the gradient of `StridedSlice`.
+//
+// Since `StridedSlice` cuts out pieces of its `input` which is size
+// `shape`, its gradient will have the same shape (which is passed here
+// as `shape`). The gradient will be zero in any element that the slice
+// does not select.
+//
+// Arguments are the same as StridedSliceGrad with the exception that
+// `dy` is the input gradient to be propagated and `shape` is the
+// shape of `StridedSlice`'s `input`.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class StridedSliceGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StridedSliceGrad(Pointer p) { super(p); }
+
+  // Optional attribute setters for StridedSliceGrad :
+  //
+  // BeginMask(int64): Defaults to 0
+  // EndMask(int64): Defaults to 0
+  // EllipsisMask(int64): Defaults to 0
+  // NewAxisMask(int64): Defaults to 0
+  // ShrinkAxisMask(int64): Defaults to 0
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long begin_mask_(); public native Attrs begin_mask_(long begin_mask_);
+    public native @Cast("tensorflow::int64") long end_mask_(); public native Attrs end_mask_(long end_mask_);
+    public native @Cast("tensorflow::int64") long ellipsis_mask_(); public native Attrs ellipsis_mask_(long ellipsis_mask_);
+    public native @Cast("tensorflow::int64") long new_axis_mask_(); public native Attrs new_axis_mask_(long new_axis_mask_);
+    public native @Cast("tensorflow::int64") long shrink_axis_mask_(); public native Attrs shrink_axis_mask_(long shrink_axis_mask_);
+  }
+  public StridedSliceGrad(@Const @ByRef Scope scope, @ByVal Input shape, @ByVal Input begin,
+                   @ByVal Input end, @ByVal Input strides, @ByVal Input dy) { super((Pointer)null); allocate(scope, shape, begin, end, strides, dy); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input shape, @ByVal Input begin,
+                   @ByVal Input end, @ByVal Input strides, @ByVal Input dy);
+  public StridedSliceGrad(@Const @ByRef Scope scope, @ByVal Input shape, @ByVal Input begin,
+                   @ByVal Input end, @ByVal Input strides, @ByVal Input dy, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shape, begin, end, strides, dy, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input shape, @ByVal Input begin,
+                   @ByVal Input end, @ByVal Input strides, @ByVal Input dy, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native StridedSliceGrad output(Output output);
+}
+
+// Constructs a tensor by tiling a given tensor.
+//
+// This operation creates a new tensor by replicating `input` `multiples` times.
+// The output tensor's i'th dimension has `input.dims(i) * multiples[i]` elements,
+// and the values of `input` are replicated `multiples[i]` times along the 'i'th
+// dimension. For example, tiling `[a b c d]` by `[2]` produces
+// `[a b c d a b c d]`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: 1-D or higher.
+// * multiples: 1-D. Length must be the same as the number of dimensions in `input`
+@Namespace("tensorflow::ops") @NoOffset public static class Tile extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Tile(Pointer p) { super(p); }
+
+  public Tile(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input multiples) { super((Pointer)null); allocate(scope, input, multiples); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input multiples);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Tile output(Output output);
+}
+
+// Returns the gradient of `Tile`.
+//
+// DEPRECATED at GraphDef version 3:
+// TileGrad has been replaced with reduce_sum.
+//
+// Since `Tile` takes an input and repeats the input `multiples` times
+// along each dimension, `TileGrad` takes in `multiples` and aggregates
+// each repeated tile of `input` into `output`.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class TileGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TileGrad(Pointer p) { super(p); }
+
+  public TileGrad(@Const @ByRef Scope scope, @ByVal Input input,
+           @ByVal Input multiples) { super((Pointer)null); allocate(scope, input, multiples); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+           @ByVal Input multiples);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native TileGrad output(Output output);
+}
+
+// Shuffle dimensions of x according to a permutation.
+//
+// The output `y` has the same rank as `x`. The shapes of `x` and `y` satisfy:
+//   `y.shape[i] == x.shape[perm[i]] for i in [0, 1, ..., rank(x) - 1]`
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Transpose extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Transpose(Pointer p) { super(p); }
+
+  public Transpose(@Const @ByRef Scope scope, @ByVal Input x,
+            @ByVal Input perm) { super((Pointer)null); allocate(scope, x, perm); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+            @ByVal Input perm);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Transpose y(Output y);
+}
+
+// Finds unique elements in a 1-D tensor.
+//
+// This operation returns a tensor `y` containing all of the unique elements of `x`
+// sorted in the same order that they occur in `x`. This operation also returns a
+// tensor `idx` the same size as `x` that contains the index of each value of `x`
+// in the unique output `y`. In other words:
+//
+// `y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]`
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+// y, idx = unique(x)
+// y ==> [1, 2, 4, 7, 8]
+// idx ==> [0, 0, 1, 2, 2, 2, 3, 4, 4]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * x: 1-D.
+@Namespace("tensorflow::ops") @NoOffset public static class Unique extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Unique(Pointer p) { super(p); }
+
+  public Unique(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+
+  public native @ByRef Output y(); public native Unique y(Output y);
+  public native @ByRef Output idx(); public native Unique idx(Output idx);
+}
+
+// Finds unique elements in a 1-D tensor.
+//
+// This operation returns a tensor `y` containing all of the unique elements of `x`
+// sorted in the same order that they occur in `x`. This operation also returns a
+// tensor `idx` the same size as `x` that contains the index of each value of `x`
+// in the unique output `y`. Finally, it returns a third tensor `count` that
+// contains the count of each element of `y` in `x`. In other words:
+//
+// `y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]`
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+// y, idx, count = unique_with_counts(x)
+// y ==> [1, 2, 4, 7, 8]
+// idx ==> [0, 0, 1, 2, 2, 2, 3, 4, 4]
+// count ==> [2, 1, 3, 1, 2]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * x: 1-D.
+@Namespace("tensorflow::ops") @NoOffset public static class UniqueWithCounts extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UniqueWithCounts(Pointer p) { super(p); }
+
+  public UniqueWithCounts(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+
+  public native @ByRef Output y(); public native UniqueWithCounts y(Output y);
+  public native @ByRef Output idx(); public native UniqueWithCounts idx(Output idx);
+  public native @ByRef Output count(); public native UniqueWithCounts count(Output count);
+}
+
+// Unpacks a given dimension of a rank-`R` tensor into `num` rank-`(R-1)` tensors.
+//
+// Unpacks `num` tensors from `value` by chipping it along the `axis` dimension.
+// For example, given a tensor of shape `(A, B, C, D)`;
+//
+// If `axis == 0` then the i'th tensor in `output` is the slice `value[i, :, :, :]`
+//   and each tensor in `output` will have shape `(B, C, D)`. (Note that the
+//   dimension unpacked along is gone, unlike `split`).
+//
+// If `axis == 1` then the i'th tensor in `output` is the slice `value[:, i, :, :]`
+//   and each tensor in `output` will have shape `(A, C, D)`.
+// Etc.
+//
+// This is the opposite of `pack`.
+//
+// Arguments:
+// * scope: A Scope object
+// * value: 1-D or higher, with `axis` dimension size equal to `num`.
+@Namespace("tensorflow::ops") @NoOffset public static class Unpack extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Unpack(Pointer p) { super(p); }
+
+  // Optional attribute setters for Unpack :
+  //
+  // Axis(int64): Defaults to 0
+  //     Dimension along which to unpack.  Negative values wrap around, so the
+  // valid range is `[-R, R)`.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long axis_(); public native Attrs axis_(long axis_);
+  }
+  public Unpack(@Const @ByRef Scope scope, @ByVal Input value, @Cast("tensorflow::int64") long num) { super((Pointer)null); allocate(scope, value, num); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input value, @Cast("tensorflow::int64") long num);
+  public Unpack(@Const @ByRef Scope scope, @ByVal Input value, @Cast("tensorflow::int64") long num, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, value, num, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input value, @Cast("tensorflow::int64") long num, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
+
+
+  public static native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef @Cast("tensorflow::ops::OutputList*") StringVector output(); public native Unpack output(StringVector output);
+}
+
+// Returns locations of true values in a boolean tensor.
+//
+// This operation returns the coordinates of true elements in `input`. The
+// coordinates are returned in a 2-D tensor where the first dimension (rows)
+// represents the number of true elements, and the second dimension (columns)
+// represents the coordinates of the true elements. Keep in mind, the shape of
+// the output tensor can vary depending on how many true values there are in
+// `input`. Indices are output in row-major order.
+//
+// For example:
+//
+// ```prettyprint
+// # 'input' tensor is [[True, False]
+// #                    [True, False]]
+// # 'input' has two true values, so output has two coordinates.
+// # 'input' has rank of 2, so coordinates have two indices.
+// where(input) ==> [[0, 0],
+//                   [1, 0]]
+//
+// # `input` tensor is [[[True, False]
+// #                     [True, False]]
+// #                    [[False, True]
+// #                     [False, True]]
+// #                    [[False, False]
+// #                     [False, True]]]
+// # 'input' has 5 true values, so output has 5 coordinates.
+// # 'input' has rank of 3, so coordinates have three indices.
+// where(input) ==> [[0, 0, 0],
+//                   [0, 1, 0],
+//                   [1, 0, 1],
+//                   [1, 1, 1],
+//                   [2, 1, 1]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Where extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Where(Pointer p) { super(p); }
+
+  public Where(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output index(); public native Where index(Output index);
+}
+
+// Returns a tensor of zeros with the same shape and type as x.
+//
+// Arguments:
+// * scope: A Scope object
+// * x: a tensor of type T.
+@Namespace("tensorflow::ops") @NoOffset public static class ZerosLike extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZerosLike(Pointer p) { super(p); }
+
+  public ZerosLike(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native ZerosLike y(Output y);
+}
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_ARRAY_OPS_H_
 
 
 // Parsed from tensorflow/cc/ops/data_flow_ops.h
@@ -19580,6 +22649,2956 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_CC_OPS_LOGGING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/math_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_MATH_OPS_H_
+// #define TENSORFLOW_CC_OPS_MATH_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+
+// Computes the absolute value of a tensor.
+//
+// Given a tensor `x`, this operation returns a tensor containing the absolute
+// value of each element in `x`. For example, if x is an input element and y is
+// an output element, this operation computes \\(y = |x|\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Abs extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Abs(Pointer p) { super(p); }
+
+  public Abs(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Abs y(Output y);
+}
+
+// Computes acos of x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Acos extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Acos(Pointer p) { super(p); }
+
+  public Acos(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Acos y(Output y);
+}
+
+// Returns x + y element-wise.
+//
+// *NOTE*: `Add` supports broadcasting. `AddN` does not. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Add extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Add(Pointer p) { super(p); }
+
+  public Add(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Add z(Output z);
+}
+
+// Add all input tensors element wise.
+//
+// Arguments:
+// * scope: A Scope object
+// * inputs: Must all be the same size and shape.
+@Namespace("tensorflow::ops") @NoOffset public static class AddN extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AddN(Pointer p) { super(p); }
+
+  public AddN(@Const @ByRef Scope scope, @ByVal InputList inputs) { super((Pointer)null); allocate(scope, inputs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList inputs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output sum(); public native AddN sum(Output sum);
+}
+
+// Computes the "logical and" of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class All extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public All(Pointer p) { super(p); }
+
+  // Optional attribute setters for All :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public All(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices);
+  public All(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native All output(Output output);
+}
+
+// Computes the "logical or" of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class Any extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Any(Pointer p) { super(p); }
+
+  // Optional attribute setters for Any :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public Any(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices);
+  public Any(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Any output(Output output);
+}
+
+// Returns the index with the largest value across dimensions of a tensor.
+//
+// Arguments:
+// * scope: A Scope object
+// * dimension: int32, 0 <= dimension < rank(input).  Describes which dimension
+// of the input Tensor to reduce across. For vectors, use dimension = 0.
+@Namespace("tensorflow::ops") @NoOffset public static class ArgMax extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ArgMax(Pointer p) { super(p); }
+
+  public ArgMax(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input dimension) { super((Pointer)null); allocate(scope, input, dimension); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input dimension);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native ArgMax output(Output output);
+}
+
+// Returns the index with the smallest value across dimensions of a tensor.
+//
+// Arguments:
+// * scope: A Scope object
+// * dimension: int32, 0 <= dimension < rank(input).  Describes which dimension
+// of the input Tensor to reduce across. For vectors, use dimension = 0.
+@Namespace("tensorflow::ops") @NoOffset public static class ArgMin extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ArgMin(Pointer p) { super(p); }
+
+  public ArgMin(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input dimension) { super((Pointer)null); allocate(scope, input, dimension); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input dimension);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native ArgMin output(Output output);
+}
+
+// Computes asin of x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Asin extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Asin(Pointer p) { super(p); }
+
+  public Asin(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Asin y(Output y);
+}
+
+// Computes atan of x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Atan extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Atan(Pointer p) { super(p); }
+
+  public Atan(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Atan y(Output y);
+}
+
+// Compute the 1-dimensional discrete Fourier Transform over the inner-most
+//
+// dimension of `input`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchFFT extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchFFT(Pointer p) { super(p); }
+
+  public BatchFFT(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchFFT output(Output output);
+}
+
+// Compute the 2-dimensional discrete Fourier Transform over the inner-most
+//
+// 2 dimensions of `input`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchFFT2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchFFT2D(Pointer p) { super(p); }
+
+  public BatchFFT2D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchFFT2D output(Output output);
+}
+
+// Compute the 3-dimensional discrete Fourier Transform over the inner-most 3
+//
+// dimensions of `input`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchFFT3D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchFFT3D(Pointer p) { super(p); }
+
+  public BatchFFT3D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchFFT3D output(Output output);
+}
+
+// Compute the inverse 1-dimensional discrete Fourier Transform over the inner-most
+//
+// dimension of `input`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchIFFT extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchIFFT(Pointer p) { super(p); }
+
+  public BatchIFFT(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchIFFT output(Output output);
+}
+
+// Compute the inverse 2-dimensional discrete Fourier Transform over the inner-most
+//
+// 2 dimensions of `input`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchIFFT2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchIFFT2D(Pointer p) { super(p); }
+
+  public BatchIFFT2D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchIFFT2D output(Output output);
+}
+
+// Compute the inverse 3-dimensional discrete Fourier Transform over the inner-most
+//
+// 3 dimensions of `input`.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchIFFT3D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchIFFT3D(Pointer p) { super(p); }
+
+  public BatchIFFT3D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native BatchIFFT3D output(Output output);
+}
+
+// Multiplies slices of two tensors in batches.
+//
+// Multiplies all slices of `Tensor` `x` and `y` (each slice can be
+// viewed as an element of a batch), and arranges the individual results
+// in a single output tensor of the same batch size. Each of the
+// individual slices can optionally be adjointed (to adjoint a matrix
+// means to transpose and conjugate it) before multiplication by setting
+// the `adj_x` or `adj_y` flag to `True`, which are by default `False`.
+//
+// The input tensors `x` and `y` are 3-D or higher with shape `[..., r_x, c_x]`
+// and `[..., r_y, c_y]`.
+//
+// The output tensor is 3-D or higher with shape `[..., r_o, c_o]`, where:
+//
+//     r_o = c_x if adj_x else r_x
+//     c_o = r_y if adj_y else c_y
+//
+// It is computed as:
+//
+//     output[..., :, :] = matrix(x[..., :, :]) * matrix(y[..., :, :])
+//
+// Arguments:
+// * scope: A Scope object
+// * x: 3-D or higher with shape `[..., r_x, c_x]`.
+// * y: 3-D or higher with shape `[..., r_y, c_y]`.
+@Namespace("tensorflow::ops") @NoOffset public static class BatchMatMul extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BatchMatMul(Pointer p) { super(p); }
+
+  // Optional attribute setters for BatchMatMul :
+  //
+  // AdjX(bool): Defaults to false
+  //     If `True`, adjoint the slices of `x`. Defaults to `False`.
+  // AdjY(bool): Defaults to false
+  //     If `True`, adjoint the slices of `y`. Defaults to `False`.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs AdjX(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs AdjY(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean adj_x_(); public native Attrs adj_x_(boolean adj_x_);
+    public native @Cast("bool") boolean adj_y_(); public native Attrs adj_y_(boolean adj_y_);
+  }
+  public BatchMatMul(@Const @ByRef Scope scope, @ByVal Input x,
+              @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+              @ByVal Input y);
+  public BatchMatMul(@Const @ByRef Scope scope, @ByVal Input x,
+              @ByVal Input y, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, x, y, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+              @ByVal Input y, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs AdjX(@Cast("bool") boolean x);
+  public static native @ByVal Attrs AdjY(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native BatchMatMul output(Output output);
+}
+
+// Cast x of type SrcT to y of DstT.
+//
+// Arguments:
+// * scope: A Scope object
+@Name("tensorflow::ops::Cast") @NoOffset public static class CastOp extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CastOp(Pointer p) { super(p); }
+
+  public CastOp(@Const @ByRef Scope scope, @ByVal Input x, @Cast("tensorflow::DataType") int DstT) { super((Pointer)null); allocate(scope, x, DstT); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x, @Cast("tensorflow::DataType") int DstT);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native CastOp y(Output y);
+}
+
+// Returns element-wise smallest integer in not less than x.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Ceil extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Ceil(Pointer p) { super(p); }
+
+  public Ceil(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Ceil y(Output y);
+}
+
+// Converts two real numbers to a complex number.
+//
+// Given a tensor `real` representing the real part of a complex number, and a
+// tensor `imag` representing the imaginary part of a complex number, this
+// operation returns complex numbers elementwise of the form \\(a + bj\\), where
+// *a* represents the `real` part and *b* represents the `imag` part.
+//
+// The input tensors `real` and `imag` must have the same shape.
+//
+// For example:
+//
+// ```
+// # tensor 'real' is [2.25, 3.25]
+// # tensor `imag` is [4.75, 5.75]
+// tf.complex(real, imag) ==> [[2.25 + 4.75j], [3.25 + 5.75j]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Complex extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Complex(Pointer p) { super(p); }
+
+  // Optional attribute setters for Complex :
+  //
+  // Tout(DataType): Defaults to DT_COMPLEX64
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+    public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
+  }
+  public Complex(@Const @ByRef Scope scope, @ByVal Input real,
+          @ByVal Input imag) { super((Pointer)null); allocate(scope, real, imag); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input real,
+          @ByVal Input imag);
+  public Complex(@Const @ByRef Scope scope, @ByVal Input real,
+          @ByVal Input imag, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, real, imag, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input real,
+          @ByVal Input imag, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+  public native @ByRef Output out(); public native Complex out(Output out);
+}
+
+// Computes the complex absolute value of a tensor.
+//
+// Given a tensor `x` of complex numbers, this operation returns a tensor of type
+// `float` or `double` that is the absolute value of each element in `x`. All
+// elements in `x` must be complex numbers of the form \\(a + bj\\). The absolute
+// value is computed as \\( \sqrt{a^2 + b^2}\\).
+//
+// For example:
+//
+// ```
+// # tensor 'x' is [[-2.25 + 4.75j], [-3.25 + 5.75j]]
+// tf.complex_abs(x) ==> [5.25594902, 6.60492229]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class ComplexAbs extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ComplexAbs(Pointer p) { super(p); }
+
+  // Optional attribute setters for ComplexAbs :
+  //
+  // Tout(DataType): Defaults to DT_FLOAT
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+    public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
+  }
+  public ComplexAbs(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public ComplexAbs(@Const @ByRef Scope scope, @ByVal Input x, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, x, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+  public native @ByRef Output y(); public native ComplexAbs y(Output y);
+}
+
+// Returns the complex conjugate of a complex number.
+//
+// Given a tensor `input` of complex numbers, this operation returns a tensor of
+// complex numbers that are the complex conjugate of each element in `input`. The
+// complex numbers in `input` must be of the form \\(a + bj\\), where *a* is the
+// real part and *b* is the imaginary part.
+//
+// The complex conjugate returned by this operation is of the form \\(a - bj\\).
+//
+// For example:
+//
+// ```
+// # tensor 'input' is [-2.25 + 4.75j, 3.25 + 5.75j]
+// tf.conj(input) ==> [-2.25 - 4.75j, 3.25 - 5.75j]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Conj extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Conj(Pointer p) { super(p); }
+
+  public Conj(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Conj output(Output output);
+}
+
+// Computes cos of x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Cos extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Cos(Pointer p) { super(p); }
+
+  public Cos(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Cos y(Output y);
+}
+
+// Compute the pairwise cross product.
+//
+// `a` and `b` must be the same shape; they can either be simple 3-element vectors,
+// or any shape where the innermost dimension is 3. In the latter case, each pair
+// of corresponding 3-element vectors is cross-multiplied independently.
+//
+// Arguments:
+// * scope: A Scope object
+// * a: A tensor containing 3-element vectors.
+// * b: Another tensor, of same type and shape as `a`.
+@Namespace("tensorflow::ops") @NoOffset public static class Cross extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Cross(Pointer p) { super(p); }
+
+  public Cross(@Const @ByRef Scope scope, @ByVal Input a,
+        @ByVal Input b) { super((Pointer)null); allocate(scope, a, b); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+        @ByVal Input b);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output product(); public native Cross product(Output product);
+}
+
+// Compute the cumulative product of the tensor `x` along `axis`.
+//
+// By default, this op performs an inclusive cumprod, which means that the first
+// element of the input is identical to the first element of the output:
+// ```prettyprint
+// tf.cumprod([a, b, c]) ==> [a, a * b, a * b * c]
+// ```
+//
+// By setting the `exclusive` kwarg to `True`, an exclusive cumprod is
+// performed instead:
+// ```prettyprint
+// tf.cumprod([a, b, c], exclusive=True) ==> [0, a, a * b]
+// ```
+//
+// By setting the `reverse` kwarg to `True`, the cumprod is performed in the
+// opposite direction:
+// ```prettyprint
+// tf.cumprod([a, b, c], reverse=True) ==> [a * b * c, b * c, c]
+// ```
+// This is more efficient than using separate `tf.reverse` ops.
+//
+// The `reverse` and `exclusive` kwargs can also be combined:
+// ```prettyprint
+// tf.cumprod([a, b, c], exclusive=True, reverse=True) ==> [b * c, c, 0]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Cumprod extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Cumprod(Pointer p) { super(p); }
+
+  // Optional attribute setters for Cumprod :
+  //
+  // Exclusive(bool): Defaults to false
+  // Reverse(bool): Defaults to false
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Exclusive(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs Reverse(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean exclusive_(); public native Attrs exclusive_(boolean exclusive_);
+    public native @Cast("bool") boolean reverse_(); public native Attrs reverse_(boolean reverse_);
+  }
+  public Cumprod(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input axis) { super((Pointer)null); allocate(scope, x, axis); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input axis);
+  public Cumprod(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input axis, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, x, axis, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input axis, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Exclusive(@Cast("bool") boolean x);
+  public static native @ByVal Attrs Reverse(@Cast("bool") boolean x);
+
+  public native @ByRef Output out(); public native Cumprod out(Output out);
+}
+
+// Compute the cumulative sum of the tensor `x` along `axis`.
+//
+// By default, this op performs an inclusive cumsum, which means that the first
+// element of the input is identical to the first element of the output:
+// ```prettyprint
+// tf.cumsum([a, b, c]) ==> [a, a + b, a + b + c]
+// ```
+//
+// By setting the `exclusive` kwarg to `True`, an exclusive cumsum is
+// performed instead:
+// ```prettyprint
+// tf.cumsum([a, b, c], exclusive=True) ==> [0, a, a + b]
+// ```
+//
+// By setting the `reverse` kwarg to `True`, the cumsum is performed in the
+// opposite direction:
+// ```prettyprint
+// tf.cumsum([a, b, c], reverse=True) ==> [a + b + c, b + c, c]
+// ```
+// This is more efficient than using separate `tf.reverse` ops.
+//
+// The `reverse` and `exclusive` kwargs can also be combined:
+// ```prettyprint
+// tf.cumsum([a, b, c], exclusive=True, reverse=True) ==> [b + c, c, 0]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Cumsum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Cumsum(Pointer p) { super(p); }
+
+  // Optional attribute setters for Cumsum :
+  //
+  // Exclusive(bool): Defaults to false
+  // Reverse(bool): Defaults to false
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Exclusive(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs Reverse(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean exclusive_(); public native Attrs exclusive_(boolean exclusive_);
+    public native @Cast("bool") boolean reverse_(); public native Attrs reverse_(boolean reverse_);
+  }
+  public Cumsum(@Const @ByRef Scope scope, @ByVal Input x,
+         @ByVal Input axis) { super((Pointer)null); allocate(scope, x, axis); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+         @ByVal Input axis);
+  public Cumsum(@Const @ByRef Scope scope, @ByVal Input x,
+         @ByVal Input axis, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, x, axis, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+         @ByVal Input axis, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Exclusive(@Cast("bool") boolean x);
+  public static native @ByVal Attrs Reverse(@Cast("bool") boolean x);
+
+  public native @ByRef Output out(); public native Cumsum out(Output out);
+}
+
+// Computes Psi, the derivative of Lgamma (the log of the absolute value of
+//
+// `Gamma(x)`), element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Digamma extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Digamma(Pointer p) { super(p); }
+
+  public Digamma(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Digamma y(Output y);
+}
+
+// Returns x / y element-wise.
+//
+// *NOTE*: `Div` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Div extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Div(Pointer p) { super(p); }
+
+  public Div(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Div z(Output z);
+}
+
+// Returns the truth value of (x == y) element-wise.
+//
+// *NOTE*: `Equal` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Equal extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Equal(Pointer p) { super(p); }
+
+  public Equal(@Const @ByRef Scope scope, @ByVal Input x,
+        @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+        @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Equal z(Output z);
+}
+
+// Computes the Gauss error function of `x` element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Erf extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Erf(Pointer p) { super(p); }
+
+  public Erf(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Erf y(Output y);
+}
+
+// Computes the complementary error function of `x` element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Erfc extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Erfc(Pointer p) { super(p); }
+
+  public Erfc(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Erfc y(Output y);
+}
+
+// Computes exponential of x element-wise.  \\(y = e^x\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Exp extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Exp(Pointer p) { super(p); }
+
+  public Exp(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Exp y(Output y);
+}
+
+// Compute the 1-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 vector.
+@Namespace("tensorflow::ops") @NoOffset public static class FFT extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FFT(Pointer p) { super(p); }
+
+  public FFT(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native FFT output(Output output);
+}
+
+// Compute the 2-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 matrix.
+@Namespace("tensorflow::ops") @NoOffset public static class FFT2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FFT2D(Pointer p) { super(p); }
+
+  public FFT2D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native FFT2D output(Output output);
+}
+
+// Compute the 3-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 3-D tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class FFT3D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FFT3D(Pointer p) { super(p); }
+
+  public FFT3D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native FFT3D output(Output output);
+}
+
+// Returns element-wise largest integer not greater than x.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Floor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Floor(Pointer p) { super(p); }
+
+  public Floor(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Floor y(Output y);
+}
+
+// Returns the truth value of (x > y) element-wise.
+//
+// *NOTE*: `Greater` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Greater extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Greater(Pointer p) { super(p); }
+
+  public Greater(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Greater z(Output z);
+}
+
+// Returns the truth value of (x >= y) element-wise.
+//
+// *NOTE*: `GreaterEqual` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class GreaterEqual extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GreaterEqual(Pointer p) { super(p); }
+
+  public GreaterEqual(@Const @ByRef Scope scope, @ByVal Input x,
+               @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+               @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native GreaterEqual z(Output z);
+}
+
+//     .Doc(R"doc(
+//
+// Compute the inverse 1-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 vector.
+@Namespace("tensorflow::ops") @NoOffset public static class IFFT extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IFFT(Pointer p) { super(p); }
+
+  public IFFT(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native IFFT output(Output output);
+}
+
+// Compute the inverse 2-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 matrix.
+@Namespace("tensorflow::ops") @NoOffset public static class IFFT2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IFFT2D(Pointer p) { super(p); }
+
+  public IFFT2D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native IFFT2D output(Output output);
+}
+
+// Compute the inverse 3-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A complex64 3-D tensor.
+@Namespace("tensorflow::ops") @NoOffset public static class IFFT3D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IFFT3D(Pointer p) { super(p); }
+
+  public IFFT3D(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native IFFT3D output(Output output);
+}
+
+// Compute the lower regularized incomplete Gamma function `Q(a, x)`.
+//
+// The lower regularized incomplete Gamma function is defined as:
+//
+// ```
+// P(a, x) = gamma(a, x) / Gamma(x) = 1 - Q(a, x)
+// ```
+// where
+// ```
+// gamma(a, x) = int_{0}^{x} t^{a-1} exp(-t) dt
+// ```
+// is the lower incomplete Gamma function.
+//
+// Note, above `Q(a, x)` (`Igammac`) is the upper regularized complete
+// Gamma function.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Igamma extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Igamma(Pointer p) { super(p); }
+
+  public Igamma(@Const @ByRef Scope scope, @ByVal Input a,
+         @ByVal Input x) { super((Pointer)null); allocate(scope, a, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+         @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Igamma z(Output z);
+}
+
+// Compute the upper regularized incomplete Gamma function `Q(a, x)`.
+//
+// The upper regularized incomplete Gamma function is defined as:
+//
+// ```
+// Q(a, x) = Gamma(a, x) / Gamma(x) = 1 - P(a, x)
+// ```
+// where
+// ```
+// Gamma(a, x) = int_{x}^{\infty} t^{a-1} exp(-t) dt
+// ```
+// is the upper incomplete Gama function.
+//
+// Note, above `P(a, x)` (`Igamma`) is the lower regularized complete
+// Gamma function.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Igammac extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Igammac(Pointer p) { super(p); }
+
+  public Igammac(@Const @ByRef Scope scope, @ByVal Input a,
+          @ByVal Input x) { super((Pointer)null); allocate(scope, a, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+          @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Igammac z(Output z);
+}
+
+// Returns the imaginary part of a complex number.
+//
+// Given a tensor `input` of complex numbers, this operation returns a tensor of
+// type `float` that is the imaginary part of each element in `input`. All
+// elements in `input` must be complex numbers of the form \\(a + bj\\), where *a*
+// is the real part and *b* is the imaginary part returned by this operation.
+//
+// For example:
+//
+// ```
+// # tensor 'input' is [-2.25 + 4.75j, 3.25 + 5.75j]
+// tf.imag(input) ==> [4.75, 5.75]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Imag extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Imag(Pointer p) { super(p); }
+
+  // Optional attribute setters for Imag :
+  //
+  // Tout(DataType): Defaults to DT_FLOAT
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+    public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
+  }
+  public Imag(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public Imag(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+  public native @ByRef Output output(); public native Imag output(Output output);
+}
+
+// Computes the reciprocal of x element-wise.
+//
+// I.e., \\(y = 1 / x\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Inv extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Inv(Pointer p) { super(p); }
+
+  public Inv(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Inv y(Output y);
+}
+
+// Returns which elements of x are finite.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class IsFinite extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IsFinite(Pointer p) { super(p); }
+
+  public IsFinite(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native IsFinite y(Output y);
+}
+
+// Returns which elements of x are Inf.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class IsInf extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IsInf(Pointer p) { super(p); }
+
+  public IsInf(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native IsInf y(Output y);
+}
+
+// Returns which elements of x are NaN.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class IsNan extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IsNan(Pointer p) { super(p); }
+
+  public IsNan(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native IsNan y(Output y);
+}
+
+// Returns the truth value of (x < y) element-wise.
+//
+// *NOTE*: `Less` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Less extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Less(Pointer p) { super(p); }
+
+  public Less(@Const @ByRef Scope scope, @ByVal Input x,
+       @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+       @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Less z(Output z);
+}
+
+// Returns the truth value of (x <= y) element-wise.
+//
+// *NOTE*: `LessEqual` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class LessEqual extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LessEqual(Pointer p) { super(p); }
+
+  public LessEqual(@Const @ByRef Scope scope, @ByVal Input x,
+            @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+            @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native LessEqual z(Output z);
+}
+
+// Computes the log of the absolute value of `Gamma(x)` element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Lgamma extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Lgamma(Pointer p) { super(p); }
+
+  public Lgamma(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Lgamma y(Output y);
+}
+
+// Generates values in an interval.
+//
+// A sequence of `num` evenly-spaced values are generated beginning at `start`.
+// If `num > 1`, the values in the sequence increase by `stop - start / num - 1`,
+// so that the last one is exactly `stop`.
+//
+// For example:
+//
+// ```
+// tf.linspace(10.0, 12.0, 3, name="linspace") => [ 10.0  11.0  12.0]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * start: First entry in the range.
+// * stop: Last entry in the range.
+// * num: Number of values to generate.
+@Namespace("tensorflow::ops") @NoOffset public static class LinSpace extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LinSpace(Pointer p) { super(p); }
+
+  public LinSpace(@Const @ByRef Scope scope, @ByVal Input start,
+           @ByVal Input stop, @ByVal Input num) { super((Pointer)null); allocate(scope, start, stop, num); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input start,
+           @ByVal Input stop, @ByVal Input num);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native LinSpace output(Output output);
+}
+
+// Computes natural logarithm of x element-wise.
+//
+// I.e., \\(y = \log_e x\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Log extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Log(Pointer p) { super(p); }
+
+  public Log(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Log y(Output y);
+}
+
+// Returns the truth value of x AND y element-wise.
+//
+// *NOTE*: `LogicalAnd` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class LogicalAnd extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LogicalAnd(Pointer p) { super(p); }
+
+  public LogicalAnd(@Const @ByRef Scope scope, @ByVal Input x,
+             @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+             @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native LogicalAnd z(Output z);
+}
+
+// Returns the truth value of NOT x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class LogicalNot extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LogicalNot(Pointer p) { super(p); }
+
+  public LogicalNot(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native LogicalNot y(Output y);
+}
+
+// Returns the truth value of x OR y element-wise.
+//
+// *NOTE*: `LogicalOr` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class LogicalOr extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LogicalOr(Pointer p) { super(p); }
+
+  public LogicalOr(@Const @ByRef Scope scope, @ByVal Input x,
+            @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+            @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native LogicalOr z(Output z);
+}
+
+// Multiply the matrix "a" by the matrix "b".
+//
+// The inputs must be two-dimensional matrices and the inner dimension of
+// "a" (after being transposed if transpose_a is true) must match the
+// outer dimension of "b" (after being transposed if transposed_b is
+// true).
+//
+// *Note*: The default kernel implementation for MatMul on GPUs uses
+// cublas.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class MatMul extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MatMul(Pointer p) { super(p); }
+
+  // Optional attribute setters for MatMul :
+  //
+  // TransposeA(bool): Defaults to false
+  //     If true, "a" is transposed before multiplication.
+  // TransposeB(bool): Defaults to false
+  //     If true, "b" is transposed before multiplication.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean transpose_a_(); public native Attrs transpose_a_(boolean transpose_a_);
+    public native @Cast("bool") boolean transpose_b_(); public native Attrs transpose_b_(boolean transpose_b_);
+  }
+  public MatMul(@Const @ByRef Scope scope, @ByVal Input a,
+         @ByVal Input b) { super((Pointer)null); allocate(scope, a, b); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+         @ByVal Input b);
+  public MatMul(@Const @ByRef Scope scope, @ByVal Input a,
+         @ByVal Input b, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, a, b, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+         @ByVal Input b, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
+  public static native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
+
+  public native @ByRef Output product(); public native MatMul product(Output product);
+}
+
+// Computes the maximum of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class Max extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Max(Pointer p) { super(p); }
+
+  // Optional attribute setters for Max :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public Max(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices);
+  public Max(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Max output(Output output);
+}
+
+// Returns the max of x and y (i.e. x > y ? x : y) element-wise.
+//
+// *NOTE*: `Maximum` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Maximum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Maximum(Pointer p) { super(p); }
+
+  public Maximum(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Maximum z(Output z);
+}
+
+// Computes the mean of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class Mean extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Mean(Pointer p) { super(p); }
+
+  // Optional attribute setters for Mean :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public Mean(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices);
+  public Mean(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Mean output(Output output);
+}
+
+// Computes the minimum of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class Min extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Min(Pointer p) { super(p); }
+
+  // Optional attribute setters for Min :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public Min(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices);
+  public Min(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Min output(Output output);
+}
+
+// Returns the min of x and y (i.e. x < y ? x : y) element-wise.
+//
+// *NOTE*: `Minimum` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Minimum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Minimum(Pointer p) { super(p); }
+
+  public Minimum(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+          @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Minimum z(Output z);
+}
+
+// Returns element-wise remainder of division.
+//
+// *NOTE*: `Mod` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Mod extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Mod(Pointer p) { super(p); }
+
+  public Mod(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Mod z(Output z);
+}
+
+// Returns x * y element-wise.
+//
+// *NOTE*: `Mul` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Mul extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Mul(Pointer p) { super(p); }
+
+  public Mul(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Mul z(Output z);
+}
+
+// Computes numerical negative value element-wise.
+//
+// I.e., \\(y = -x\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Neg extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Neg(Pointer p) { super(p); }
+
+  public Neg(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Neg y(Output y);
+}
+
+// Returns the truth value of (x != y) element-wise.
+//
+// *NOTE*: `NotEqual` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class NotEqual extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NotEqual(Pointer p) { super(p); }
+
+  public NotEqual(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native NotEqual z(Output z);
+}
+
+// Compute the polygamma function \\(\psi^{(n)}(x)\\).
+//
+// The polygamma function is defined as:
+//
+// ```
+// \psi^{(n)}(x) = \frac{d^n}{dx^n} \psi(x)
+// ```
+// where \\(\psi(x)\\) is the digamma function.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Polygamma extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Polygamma(Pointer p) { super(p); }
+
+  public Polygamma(@Const @ByRef Scope scope, @ByVal Input a,
+            @ByVal Input x) { super((Pointer)null); allocate(scope, a, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+            @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Polygamma z(Output z);
+}
+
+// Computes the power of one value to another.
+//
+// Given a tensor `x` and a tensor `y`, this operation computes \\(x^y\\) for
+// corresponding elements in `x` and `y`. For example:
+//
+// ```
+// # tensor 'x' is [[2, 2]], [3, 3]]
+// # tensor 'y' is [[8, 16], [2, 3]]
+// tf.pow(x, y) ==> [[256, 65536], [9, 27]]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Pow extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Pow(Pointer p) { super(p); }
+
+  public Pow(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Pow z(Output z);
+}
+
+// Computes the product of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class Prod extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Prod(Pointer p) { super(p); }
+
+  // Optional attribute setters for Prod :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public Prod(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices);
+  public Prod(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+       @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Prod output(Output output);
+}
+
+// Creates a sequence of integers.
+//
+// This operation creates a sequence of integers that begins at `start` and
+// extends by increments of `delta` up to but not including `limit`.
+//
+// For example:
+//
+// ```
+// # 'start' is 3
+// # 'limit' is 18
+// # 'delta' is 3
+// tf.range(start, limit, delta) ==> [3, 6, 9, 12, 15]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * start: 0-D (scalar). First entry in the sequence.
+// * limit: 0-D (scalar). Upper limit of sequence, exclusive.
+// * delta: 0-D (scalar). Optional. Default is 1. Number that increments `start`.
+@Namespace("tensorflow::ops") @NoOffset public static class Range extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Range(Pointer p) { super(p); }
+
+  public Range(@Const @ByRef Scope scope, @ByVal Input start,
+        @ByVal Input limit, @ByVal Input delta) { super((Pointer)null); allocate(scope, start, limit, delta); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input start,
+        @ByVal Input limit, @ByVal Input delta);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Range output(Output output);
+}
+
+// Returns the real part of a complex number.
+//
+// Given a tensor `input` of complex numbers, this operation returns a tensor of
+// type `float` that is the real part of each element in `input`. All elements in
+// `input` must be complex numbers of the form \\(a + bj\\), where *a* is the real
+//  part returned by this operation and *b* is the imaginary part.
+//
+// For example:
+//
+// ```
+// # tensor 'input' is [-2.25 + 4.75j, 3.25 + 5.75j]
+// tf.real(input) ==> [-2.25, 3.25]
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Real extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Real(Pointer p) { super(p); }
+
+  // Optional attribute setters for Real :
+  //
+  // Tout(DataType): Defaults to DT_FLOAT
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+    public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
+  }
+  public Real(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public Real(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
+
+  public native @ByRef Output output(); public native Real output(Output output);
+}
+
+// Computes reciprocal of square root of x element-wise.
+//
+// I.e., \\(y = 1 / \sqrt{x}\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Rsqrt extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Rsqrt(Pointer p) { super(p); }
+
+  public Rsqrt(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Rsqrt y(Output y);
+}
+
+// Computes the maximum along segments of a tensor.
+//
+// Read [the section on Segmentation](../../api_docs/python/math_ops.md#segmentation)
+// for an explanation of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \max_j(data_j)\\) where `max` is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/SegmentMax.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SegmentMax extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SegmentMax(Pointer p) { super(p); }
+
+  public SegmentMax(@Const @ByRef Scope scope, @ByVal Input data,
+             @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+             @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SegmentMax output(Output output);
+}
+
+// Computes the mean along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \frac{\sum_j data_j}{N}\\) where `mean` is
+// over `j` such that `segment_ids[j] == i` and `N` is the total number of
+// values summed.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/SegmentMean.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SegmentMean extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SegmentMean(Pointer p) { super(p); }
+
+  public SegmentMean(@Const @ByRef Scope scope, @ByVal Input data,
+              @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+              @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SegmentMean output(Output output);
+}
+
+// Computes the minimum along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \min_j(data_j)\\) where `min` is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/SegmentMin.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SegmentMin extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SegmentMin(Pointer p) { super(p); }
+
+  public SegmentMin(@Const @ByRef Scope scope, @ByVal Input data,
+             @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+             @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SegmentMin output(Output output);
+}
+
+// Computes the product along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \prod_j data_j\\) where the product is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/SegmentProd.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SegmentProd extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SegmentProd(Pointer p) { super(p); }
+
+  public SegmentProd(@Const @ByRef Scope scope, @ByVal Input data,
+              @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+              @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SegmentProd output(Output output);
+}
+
+// Computes the sum along segments of a tensor.
+//
+// Read [the section on Segmentation](../../api_docs/python/math_ops.md#segmentation)
+// for an explanation of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \sum_j data_j\\) where sum is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/SegmentSum.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SegmentSum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SegmentSum(Pointer p) { super(p); }
+
+  public SegmentSum(@Const @ByRef Scope scope, @ByVal Input data,
+             @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+             @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SegmentSum output(Output output);
+}
+
+// Selects elements from `t` or `e`, depending on `condition`.
+//
+// The `t`, and `e` tensors must all have the same shape,
+// and the output will also have that shape.  The `condition` tensor
+// must be a scalar if `t` and `e` are scalars.  If `t` and `e` are vectors
+// or higher rank, then `condition` must be either a vector with size
+// matching the first dimension of `t`, or must have the same shape as `t`.
+//
+// The `condition` tensor acts as a mask that chooses, based on the value at each
+// element, whether the corresponding element / row in the output should be
+// taken from `t` (if true) or `e` (if false).
+//
+// If `condition` is a vector and `t` and `e` are higher rank matrices, then
+// it chooses which row (outer dimension) to copy from `t` and `e`.
+// If `condition` has the same shape as `t` and `e`, then it chooses which
+// element to copy from `t` and `e`.
+//
+// For example:
+//
+// ```prettyprint
+// # 'condition' tensor is [[True,  False]
+// #                        [False, True]]
+// # 't' is [[1, 2],
+// #         [3, 4]]
+// # 'e' is [[5, 6],
+// #         [7, 8]]
+// select(condition, t, e) ==> [[1, 6],
+//                              [7, 4]]
+//
+//
+// # 'condition' tensor is [True, False]
+// # 't' is [[1, 2],
+// #         [3, 4]]
+// # 'e' is [[5, 6],
+// #         [7, 8]]
+// select(condition, t, e) ==> [[1, 2],
+//                              [7, 8]]
+//
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * t: = A `Tensor` which may have the same shape as `condition`.
+// If `condition` is rank 1, `t` may have higher rank,
+// but its first dimension must match the size of `condition`.
+// * e: = A `Tensor` with the same type and shape as `t`.
+@Namespace("tensorflow::ops") @NoOffset public static class Select extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Select(Pointer p) { super(p); }
+
+  public Select(@Const @ByRef Scope scope, @ByVal Input condition,
+         @ByVal Input t, @ByVal Input e) { super((Pointer)null); allocate(scope, condition, t, e); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input condition,
+         @ByVal Input t, @ByVal Input e);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Select output(Output output);
+}
+
+// Computes sigmoid of `x` element-wise.
+//
+// Specifically, `y = 1 / (1 + exp(-x))`.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Sigmoid extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sigmoid(Pointer p) { super(p); }
+
+  public Sigmoid(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Sigmoid y(Output y);
+}
+
+// Computes the gradient of the sigmoid of `x` wrt its input.
+//
+// Specifically, `grad = dy * y * (1 - y)`, where `y = sigmoid(x)`, and
+// `dy` is the corresponding input gradient.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class SigmoidGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SigmoidGrad(Pointer p) { super(p); }
+
+  public SigmoidGrad(@Const @ByRef Scope scope, @ByVal Input x,
+              @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+              @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native SigmoidGrad z(Output z);
+}
+
+// Returns an element-wise indication of the sign of a number.
+//
+// `y = sign(x) = -1` if `x < 0`; 0 if `x == 0`; 1 if `x > 0`.
+//
+// For complex numbers, `y = sign(x) = x / |x|` if `x != 0`, otherwise `y = 0`.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Sign extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sign(Pointer p) { super(p); }
+
+  public Sign(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Sign y(Output y);
+}
+
+// Computes sin of x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Sin extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sin(Pointer p) { super(p); }
+
+  public Sin(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Sin y(Output y);
+}
+
+// Multiply matrix "a" by matrix "b".
+//
+// The inputs must be two-dimensional matrices and the inner dimension of "a" must
+// match the outer dimension of "b". This op is optimized for the case where at
+// least one of "a" or "b" is sparse. The breakeven for using this versus a dense
+// matrix multiply on one platform was 30% zero values in the sparse matrix.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class SparseMatMul extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseMatMul(Pointer p) { super(p); }
+
+  // Optional attribute setters for SparseMatMul :
+  //
+  // TransposeA(bool): Defaults to false
+  // TransposeB(bool): Defaults to false
+  // AIsSparse(bool): Defaults to false
+  // BIsSparse(bool): Defaults to false
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs AIsSparse(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs BIsSparse(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean transpose_a_(); public native Attrs transpose_a_(boolean transpose_a_);
+    public native @Cast("bool") boolean transpose_b_(); public native Attrs transpose_b_(boolean transpose_b_);
+    public native @Cast("bool") boolean a_is_sparse_(); public native Attrs a_is_sparse_(boolean a_is_sparse_);
+    public native @Cast("bool") boolean b_is_sparse_(); public native Attrs b_is_sparse_(boolean b_is_sparse_);
+  }
+  public SparseMatMul(@Const @ByRef Scope scope, @ByVal Input a,
+               @ByVal Input b) { super((Pointer)null); allocate(scope, a, b); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+               @ByVal Input b);
+  public SparseMatMul(@Const @ByRef Scope scope, @ByVal Input a,
+               @ByVal Input b, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, a, b, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input a,
+               @ByVal Input b, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
+  public static native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
+  public static native @ByVal Attrs AIsSparse(@Cast("bool") boolean x);
+  public static native @ByVal Attrs BIsSparse(@Cast("bool") boolean x);
+
+  public native @ByRef Output product(); public native SparseMatMul product(Output product);
+}
+
+// Computes the mean along sparse segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Like `SegmentMean`, but `segment_ids` can have rank less than `data`'s first
+// dimension, selecting a subset of dimension 0, specified by `indices`.
+//
+// Arguments:
+// * scope: A Scope object
+// * indices: A 1-D tensor. Has same rank as `segment_ids`.
+// * segment_ids: A 1-D tensor. Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SparseSegmentMean extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseSegmentMean(Pointer p) { super(p); }
+
+  public SparseSegmentMean(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input indices,
+                    @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, indices, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input indices,
+                    @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SparseSegmentMean output(Output output);
+}
+
+// Computes gradients for SparseSegmentMean.
+//
+// Returns tensor "output" with same shape as grad, except for dimension 0 whose
+// value is output_dim0.
+//
+// Arguments:
+// * scope: A Scope object
+// * grad: gradient propagated to the SparseSegmentMean op.
+// * indices: indices passed to the corresponding SparseSegmentMean op.
+// * segment_ids: segment_ids passed to the corresponding SparseSegmentMean op.
+// * output_dim0: dimension 0 of "data" passed to SparseSegmentMean op.
+@Namespace("tensorflow::ops") @NoOffset public static class SparseSegmentMeanGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseSegmentMeanGrad(Pointer p) { super(p); }
+
+  public SparseSegmentMeanGrad(@Const @ByRef Scope scope,
+                        @ByVal Input grad, @ByVal Input indices, @ByVal Input segment_ids,
+                        @ByVal Input output_dim0) { super((Pointer)null); allocate(scope, grad, indices, segment_ids, output_dim0); }
+  private native void allocate(@Const @ByRef Scope scope,
+                        @ByVal Input grad, @ByVal Input indices, @ByVal Input segment_ids,
+                        @ByVal Input output_dim0);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SparseSegmentMeanGrad output(Output output);
+}
+
+// Computes the sum along sparse segments of a tensor divided by the sqrt of N.
+//
+// N is the size of the segment being reduced.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Arguments:
+// * scope: A Scope object
+// * indices: A 1-D tensor. Has same rank as `segment_ids`.
+// * segment_ids: A 1-D tensor. Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SparseSegmentSqrtN extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseSegmentSqrtN(Pointer p) { super(p); }
+
+  public SparseSegmentSqrtN(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input indices,
+                     @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, indices, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input indices,
+                     @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SparseSegmentSqrtN output(Output output);
+}
+
+// Computes gradients for SparseSegmentSqrtN.
+//
+// Returns tensor "output" with same shape as grad, except for dimension 0 whose
+// value is output_dim0.
+//
+// Arguments:
+// * scope: A Scope object
+// * grad: gradient propagated to the SparseSegmentSqrtN op.
+// * indices: indices passed to the corresponding SparseSegmentSqrtN op.
+// * segment_ids: segment_ids passed to the corresponding SparseSegmentSqrtN op.
+// * output_dim0: dimension 0 of "data" passed to SparseSegmentSqrtN op.
+@Namespace("tensorflow::ops") @NoOffset public static class SparseSegmentSqrtNGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseSegmentSqrtNGrad(Pointer p) { super(p); }
+
+  public SparseSegmentSqrtNGrad(@Const @ByRef Scope scope,
+                         @ByVal Input grad, @ByVal Input indices, @ByVal Input segment_ids,
+                         @ByVal Input output_dim0) { super((Pointer)null); allocate(scope, grad, indices, segment_ids, output_dim0); }
+  private native void allocate(@Const @ByRef Scope scope,
+                         @ByVal Input grad, @ByVal Input indices, @ByVal Input segment_ids,
+                         @ByVal Input output_dim0);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SparseSegmentSqrtNGrad output(Output output);
+}
+
+// Computes the sum along sparse segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Like `SegmentSum`, but `segment_ids` can have rank less than `data`'s first
+// dimension, selecting a subset of dimension 0, specified by `indices`.
+//
+// For example:
+//
+// ```prettyprint
+// c = tf.constant([[1,2,3,4], [-1,-2,-3,-4], [5,6,7,8]])
+//
+// # Select two rows, one segment.
+// tf.sparse_segment_sum(c, tf.constant([0, 1]), tf.constant([0, 0]))
+//   ==> [[0 0 0 0]]
+//
+// # Select two rows, two segment.
+// tf.sparse_segment_sum(c, tf.constant([0, 1]), tf.constant([0, 1]))
+//   ==> [[ 1  2  3  4]
+//        [-1 -2 -3 -4]]
+//
+// # Select all rows, two segments.
+// tf.sparse_segment_sum(c, tf.constant([0, 1, 2]), tf.constant([0, 0, 1]))
+//   ==> [[0 0 0 0]
+//        [5 6 7 8]]
+//
+// # Which is equivalent to:
+// tf.segment_sum(c, tf.constant([0, 0, 1]))
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+// * indices: A 1-D tensor. Has same rank as `segment_ids`.
+// * segment_ids: A 1-D tensor. Values should be sorted and can be repeated.
+@Namespace("tensorflow::ops") @NoOffset public static class SparseSegmentSum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseSegmentSum(Pointer p) { super(p); }
+
+  public SparseSegmentSum(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input indices,
+                   @ByVal Input segment_ids) { super((Pointer)null); allocate(scope, data, indices, segment_ids); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input indices,
+                   @ByVal Input segment_ids);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native SparseSegmentSum output(Output output);
+}
+
+// Computes square root of x element-wise.
+//
+// I.e., \\(y = \sqrt{x} = x^{1/2}\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Sqrt extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sqrt(Pointer p) { super(p); }
+
+  public Sqrt(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Sqrt y(Output y);
+}
+
+// Computes square of x element-wise.
+//
+// I.e., \\(y = x * x = x^2\\).
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Square extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Square(Pointer p) { super(p); }
+
+  public Square(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Square y(Output y);
+}
+
+// Returns (x - y)(x - y) element-wise.
+//
+// *NOTE*: `SquaredDifference` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class SquaredDifference extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SquaredDifference(Pointer p) { super(p); }
+
+  public SquaredDifference(@Const @ByRef Scope scope, @ByVal Input x,
+                    @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+                    @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native SquaredDifference z(Output z);
+}
+
+// Returns x - y element-wise.
+//
+// *NOTE*: `Sub` supports broadcasting. More about broadcasting
+// [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Sub extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sub(Pointer p) { super(p); }
+
+  public Sub(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+      @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Sub z(Output z);
+}
+
+// Computes the sum of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+@Namespace("tensorflow::ops") @NoOffset public static class Sum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sum(Pointer p) { super(p); }
+
+  // Optional attribute setters for Sum :
+  //
+  // KeepDims(bool): Defaults to false
+  //     If true, retain reduced dimensions with length 1.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
+  }
+  public Sum(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices) { super((Pointer)null); allocate(scope, input, reduction_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices);
+  public Sum(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, reduction_indices, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+      @ByVal Input reduction_indices, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Sum output(Output output);
+}
+
+// Computes tan of x element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Tan extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Tan(Pointer p) { super(p); }
+
+  public Tan(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Tan y(Output y);
+}
+
+// Computes hyperbolic tangent of `x` element-wise.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Tanh extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Tanh(Pointer p) { super(p); }
+
+  public Tanh(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native Tanh y(Output y);
+}
+
+// Computes the gradient for the tanh of `x` wrt its input.
+//
+// Specifically, `grad = dy * (1 - y*y)`, where `y = tanh(x)`, and `dy`
+// is the corresponding input gradient.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class TanhGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TanhGrad(Pointer p) { super(p); }
+
+  public TanhGrad(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native TanhGrad z(Output z);
+}
+
+// Computes the sum along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// `(output[i] = sum_{j...} data[j...]` where the sum is over tuples `j...` such
+// that `segment_ids[j...] == i`.  Unlike `SegmentSum`, `segment_ids`
+// need not be sorted and need not cover all values in the full
+// range of valid values.
+//
+// If the sum is empty for a given segment ID `i`, `output[i] = 0`.
+//
+// `num_segments` should equal the number of distinct segment IDs.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../../images/UnsortedSegmentSum.png" alt>
+// </div>
+//
+// Arguments:
+// * scope: A Scope object
+// * segment_ids: A tensor whose shape is a prefix of `data.shape`.
+@Namespace("tensorflow::ops") @NoOffset public static class UnsortedSegmentSum extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnsortedSegmentSum(Pointer p) { super(p); }
+
+  public UnsortedSegmentSum(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input segment_ids,
+                     @ByVal Input num_segments) { super((Pointer)null); allocate(scope, data, segment_ids, num_segments); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data, @ByVal Input segment_ids,
+                     @ByVal Input num_segments);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native UnsortedSegmentSum output(Output output);
+}
+
+// Compute the Hurwitz zeta function \\(\zeta(x, q)\\).
+//
+// The Hurwitz zeta function is defined as:
+//
+// ```
+// \zeta(x, q) = \sum_{n=0}^{\infty} (q + n)^{-x}
+// ```
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Zeta extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Zeta(Pointer p) { super(p); }
+
+  public Zeta(@Const @ByRef Scope scope, @ByVal Input x,
+       @ByVal Input q) { super((Pointer)null); allocate(scope, x, q); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+       @ByVal Input q);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Zeta z(Output z);
+}
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_MATH_OPS_H_
 
 
 // Parsed from tensorflow/cc/ops/nn_ops.h

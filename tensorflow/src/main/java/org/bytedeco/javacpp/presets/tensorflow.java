@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Adapter;
+import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -111,7 +112,7 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/ops.h",
         "tensorflow/cc/framework/cc_op_gen.h",
         "tensorflow_adapters.h",
-        "tensorflow/cc/ops/const_op.h",
+//        "tensorflow/cc/ops/const_op.h",
         "tensorflow/cc/ops/array_ops.h",
         "tensorflow/cc/ops/data_flow_ops.h",
         "tensorflow/cc/ops/image_ops.h",
@@ -133,11 +134,8 @@ import java.lang.annotation.Target;
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
-               .put(new Info("const_op.h").skip())
-               .put(new Info("math_ops.h").skip())
-               .put(new Info("array_ops.h").skip())
                .put(new Info("TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE",
-                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT").cppTypes().annotations())
+                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
@@ -187,8 +185,6 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
 
-               .put(new Info("tensorflow::Scope").pointerTypes("Scope"))
-               .put(new Info("std::vector<tensorflow::ops::Input>").pointerTypes("InputVector"))
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
                .put(new Info("tensorflow::ops::Cast").pointerTypes("CastOp"))
@@ -206,25 +202,14 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>").pointerTypes("NodeIterRange").define())
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>()").skip())
 
-                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").define())
+               .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").define())
 
                 // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
                .put(new Info("tensorflow::CompositeOpScopes").skip())
 
-                //cannot find symbol
-                //symbol:   class ShapeInferenceFn
-                //location: class org.bytedeco.javacpp.tensorflow.OpRegistrationData
-               .put(new Info("std::function<tensorflow::Status(tensorflow::shape_inference::InferenceContext*)>").pointerTypes("ShapeInferenceFn"))
-               .put(new Info("tensorflow::OpShapeInferenceFn").skip())
-
-                // For some reason the #define this was in got parsed even though its #ifdef guard failed
-                // see "tensorflow/core/framework/selective_registration.h" for more details
-                .put(new Info("SELECTIVE_REGISTRATION").define(false))
-                .put(new Info("SHOULD_REGISTER_OP_GRADIENT").skip())
-
                 // Fixed shape inference
-                .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())
-                .put(new Info("std::vector<const tensorflow::shape_inference::Dimension*>").pointerTypes("ConstDimensionPtrVector").define())
+               .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())
+               .put(new Info("std::vector<const tensorflow::shape_inference::Dimension*>").pointerTypes("ConstDimensionPtrVector").define())
 
                .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
@@ -237,6 +222,9 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
+               .put(new Info("std::function<tensorflow::FileSystem*()>").pointerTypes("FactoryFn"))
+               .put(new Info("tensorflow::OpRegistrationData::shape_inference_fn")
+                       .javaText("@MemberSetter public native OpRegistrationData shape_inference_fn(@ByVal ShapeInferenceFn shape_inference_fn);"))
                .put(new Info("tensorflow::ConstantFoldingOptions::consider")
                        .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
                .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")
@@ -347,22 +335,23 @@ public class tensorflow implements InfoMapper {
         private native void allocate();
         public native @StdString BytePointer call(@Cast("const tensorflow::Edge*") Pointer node);
     }
-//    public static class FactoryFn extends FunctionPointer {
-//        static { Loader.load(); }
-//        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-//        public    FactoryFn(Pointer p) { super(p); }
-//        protected FactoryFn() { allocate(); }
-//        private native void allocate();
-//        public native org.bytedeco.javacpp.tensorflow.FileSystem call();
-//    }
-//
+
+    public static class FactoryFn extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    FactoryFn(Pointer p) { super(p); }
+        protected FactoryFn() { allocate(); }
+        private native void allocate();
+        public native @Cast("tensorflow::FileSystem*") Pointer call();
+    }
+
     public static class ShapeInferenceFn extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    ShapeInferenceFn(Pointer p) { super(p); }
         protected ShapeInferenceFn() { allocate(); }
         private native void allocate();
-        public native org.bytedeco.javacpp.tensorflow.Status call(@Cast("shape_inference::InferenceContext*") Pointer node);
+        public native @ByVal @Cast("tensorflow::Status*") Pointer call(@Cast("shape_inference::InferenceContext*") Pointer node);
     }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
@@ -371,7 +360,7 @@ public class tensorflow implements InfoMapper {
     public @interface ArraySlice { String value() default ""; }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
-    @Target({java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER})
+    @Target({ElementType.METHOD, ElementType.PARAMETER})
     @Adapter("StringPieceAdapter")
     public @interface StringPiece { }
 }
