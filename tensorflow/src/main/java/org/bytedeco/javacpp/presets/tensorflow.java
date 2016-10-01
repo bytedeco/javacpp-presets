@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(value = @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = "NDEBUG", include = {
+@Properties(value = @Platform(value = {"linux-x86", "macosx", "android"}, compiler = "cpp11", define = "NDEBUG", include = {
         "tensorflow/core/platform/default/integral_types.h", "tensorflow/core/framework/numeric_types.h", "tensorflow/core/platform/init_main.h",
         /* "tensorflow/core/platform/default/mutex.h", "tensorflow/core/lib/core/refcount.h", "tensorflow/core/lib/gtl/array_slice.h",
         "tensorflow/core/lib/core/stringpiece.h", */ "tensorflow/core/platform/types.h", "tensorflow/core/platform/mutex.h",
