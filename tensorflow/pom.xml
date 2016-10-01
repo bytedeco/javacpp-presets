@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>0.9.0</tensorflow.version>
+    <tensorflow.version>0.10.0</tensorflow.version>
   </properties>
 
   <dependencies>
@@ -50,7 +50,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
           </includePaths>
           <linkPaths>
-             <linkPath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/cc/</linkPath>
+             <linkPath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/</linkPath>
           </linkPaths>
         </configuration>
       </plugin>
