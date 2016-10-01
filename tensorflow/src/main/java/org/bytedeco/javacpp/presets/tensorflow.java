@@ -112,8 +112,11 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/ops.h",
         "tensorflow/cc/framework/cc_op_gen.h",
         "tensorflow_adapters.h",
+        "tensorflow/cc/ops/standard_ops.h",
         "tensorflow/cc/ops/const_op.h",
         "tensorflow/cc/ops/array_ops.h",
+        "tensorflow/cc/ops/candidate_sampling_ops.h",
+        "tensorflow/cc/ops/control_flow_ops.h",
         "tensorflow/cc/ops/data_flow_ops.h",
         "tensorflow/cc/ops/image_ops.h",
         "tensorflow/cc/ops/io_ops.h",
@@ -121,6 +124,7 @@ import java.lang.annotation.Target;
         "tensorflow/cc/ops/logging_ops.h",
         "tensorflow/cc/ops/math_ops.h",
         "tensorflow/cc/ops/nn_ops.h",
+        "tensorflow/cc/ops/no_op.h",
         "tensorflow/cc/ops/parsing_ops.h",
         "tensorflow/cc/ops/random_ops.h",
         "tensorflow/cc/ops/sparse_ops.h",
@@ -259,9 +263,13 @@ public class tensorflow implements InfoMapper {
 
         infoMap.put(new Info("tensorflow::gtl::ArraySlice").annotations("@ArraySlice"))
                .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
-               .put(new Info("tensorflow::ops::Const(tensorflow::StringPiece, tensorflow::GraphDefBuilder::Options&)")
-                       .javaText("@Namespace(\"tensorflow::ops\") public static native Node Const("
-                               + "@Cast({\"\", \"tensorflow::StringPiece&\"}) @StringPiece String s, @Const @ByRef GraphDefBuilder.Options options);"));
+               .put(new Info("tensorflow::ops::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
+                             "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
+
+        String[] consts = {"unsigned char", "short", "int", "long long", "float", "double", "bool", "std::string", "tensorflow::StringPiece"};
+        for (int i = 0; i < consts.length; i++) {
+            infoMap.put(new Info("tensorflow::ops::Const<" + consts[i] + ">").javaNames("Const"));
+        }
     }
 
     public static class Fn extends FunctionPointer {

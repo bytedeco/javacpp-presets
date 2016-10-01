@@ -13793,11 +13793,28 @@ limitations under the License.
   public Input(@Const @ByRef Output o) { super((Pointer)null); allocate(o); }
   private native void allocate(@Const @ByRef Output o);  // NOLINT(runtime/explicit)
 
-  public Input(@Const @ByRef Initializer init) { super((Pointer)null); allocate(init); }
-  private native void allocate(@Const @ByRef Initializer init);
-
-  public Input(@Const @ByRef Tensor t) { super((Pointer)null); allocate(t); }
-  private native void allocate(@Const @ByRef Tensor t);
+  public Input(@Const @ByRef Input.Initializer init) { super((Pointer)null); allocate(init); }
+  private native void allocate(@Const @ByRef Input.Initializer init);
+  public Input(@ByRef Tensor init) { super((Pointer)null); allocate(init); }
+  private native void allocate(@ByRef Tensor init);
+  public Input(byte init) { super((Pointer)null); allocate(init); }
+  private native void allocate(byte init);
+  public Input(short init) { super((Pointer)null); allocate(init); }
+  private native void allocate(short init);
+  public Input(int init) { super((Pointer)null); allocate(init); }
+  private native void allocate(int init);
+  public Input(long init) { super((Pointer)null); allocate(init); }
+  private native void allocate(long init);
+  public Input(float init) { super((Pointer)null); allocate(init); }
+  private native void allocate(float init);
+  public Input(double init) { super((Pointer)null); allocate(init); }
+  private native void allocate(double init);
+  public Input(boolean init) { super((Pointer)null); allocate(init); }
+  private native void allocate(boolean init);
+  public Input(@StdString String init) { super((Pointer)null); allocate(init); }
+  private native void allocate(@StdString String init);
+  public Input(@StdString BytePointer init) { super((Pointer)null); allocate(init); }
+  private native void allocate(@StdString BytePointer init);
 
   // Constructor specifying a node name, index and datatype. This should only be
   // used for specifying a backward edge, needed by control flow.
@@ -13871,6 +13888,49 @@ limitations under the License.
 // #endif  // THIRD_PARTY_TENSORFLOW_CC_FRAMEWORK_CC_OP_GEN_H_
 
 
+// Parsed from tensorflow/cc/ops/standard_ops.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef THIRD_PARTY_TENSORFLOW_CC_OPS_STANDARD_OPS_H_
+// #define THIRD_PARTY_TENSORFLOW_CC_OPS_STANDARD_OPS_H_
+
+// #include "tensorflow/cc/ops/array_ops.h"
+// #include "tensorflow/cc/ops/candidate_sampling_ops.h"
+// #include "tensorflow/cc/ops/const_op.h"
+// #include "tensorflow/cc/ops/control_flow_ops.h"
+// #include "tensorflow/cc/ops/data_flow_ops.h"
+// #include "tensorflow/cc/ops/image_ops.h"
+// #include "tensorflow/cc/ops/io_ops.h"
+// #include "tensorflow/cc/ops/linalg_ops.h"
+// #include "tensorflow/cc/ops/logging_ops.h"
+// #include "tensorflow/cc/ops/math_ops.h"
+// #include "tensorflow/cc/ops/nn_ops.h"
+// #include "tensorflow/cc/ops/no_op.h"
+// #include "tensorflow/cc/ops/parsing_ops.h"
+// #include "tensorflow/cc/ops/random_ops.h"
+// #include "tensorflow/cc/ops/sparse_ops.h"
+// #include "tensorflow/cc/ops/state_ops.h"
+// #include "tensorflow/cc/ops/string_ops.h"
+// #include "tensorflow/cc/ops/training_ops.h"
+// #include "tensorflow/cc/ops/user_ops.h"
+
+// #endif  // THIRD_PARTY_TENSORFLOW_CC_OPS_STANDARD_OPS_H_
+
+
 // Parsed from tensorflow/cc/ops/const_op.h
 
 /* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
@@ -13896,8 +13956,35 @@ limitations under the License.
 // #include "tensorflow/core/graph/node_builder.h"
 
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Const @ByRef Input.Initializer val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @ByRef Tensor val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, byte val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, short val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, int val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, long val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, float val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, double val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, boolean val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @StdString String val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @StdString BytePointer val);
 
 @Namespace("tensorflow::ops") public static native @ByVal NodeBuilder.NodeOut AsNodeOut(@Const @ByRef Scope scope, @Const @ByRef Input inp);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Cast("const unsigned char") byte v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, short v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, int v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Cast("const long long") long v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, float v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, double v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Cast("const bool") boolean v, @Const @ByVal TensorShape shape);
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @StdString BytePointer v, @Const @ByVal TensorShape shape);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @StdString String v, @Const @ByVal TensorShape shape);
 
 @Namespace("tensorflow::ops") public static native @ByVal NodeOutVector AsNodeOutList(@Const @ByRef Scope scope,
                                                 @Const @ByRef InputList inp);
@@ -16949,6 +17036,1075 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_CC_OPS_ARRAY_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/candidate_sampling_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_CANDIDATE_SAMPLING_OPS_H_
+// #define TENSORFLOW_CC_OPS_CANDIDATE_SAMPLING_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+
+// Generates labels for candidate sampling with a learned unigram distribution.
+//
+// See explanations of candidate sampling and the data formats at
+// go/candidate-sampling.
+//
+// For each batch, this op picks a single set of sampled candidate labels.
+//
+// The advantages of sampling candidates per-batch are simplicity and the
+// possibility of efficient dense matrix multiplication. The disadvantage is that
+// the sampled candidates must be chosen independently of the context and of the
+// true labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: A batch_size * num_true matrix, in which each row contains the
+// IDs of the num_true target_classes in the corresponding original label.
+// * num_true:
+//     Number of true labels per context.
+// * num_sampled:
+//     Number of candidates to produce per batch.
+// * unique:
+//     If unique is true, we sample with rejection, so that all sampled
+// candidates in a batch are unique. This requires some approximation to
+// estimate the post-rejection sampling probabilities.
+@Namespace("tensorflow::ops") @NoOffset public static class AllCandidateSampler extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AllCandidateSampler(Pointer p) { super(p); }
+
+  // Optional attribute setters for AllCandidateSampler :
+  //
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public AllCandidateSampler(@Const @ByRef Scope scope, @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique);
+  public AllCandidateSampler(@Const @ByRef Scope scope, @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output sampled_candidates(); public native AllCandidateSampler sampled_candidates(Output sampled_candidates);
+  public native @ByRef Output true_expected_count(); public native AllCandidateSampler true_expected_count(Output true_expected_count);
+  public native @ByRef Output sampled_expected_count(); public native AllCandidateSampler sampled_expected_count(Output sampled_expected_count);
+}
+
+// Computes the ids of the positions in sampled_candidates that match true_labels.
+//
+// When doing log-odds NCE, the result of this op should be passed through a
+// SparseToDense op, then added to the logits of the sampled candidates. This has
+// the effect of 'removing' the sampled labels that match the true labels by
+// making the classifier sure that they are sampled labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: The true_classes output of UnpackSparseLabels.
+// * sampled_candidates: The sampled_candidates output of CandidateSampler.
+// * num_true:
+//     Number of true labels per context.
+@Namespace("tensorflow::ops") @NoOffset public static class ComputeAccidentalHits extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ComputeAccidentalHits(Pointer p) { super(p); }
+
+  // Optional attribute setters for ComputeAccidentalHits :
+  //
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public ComputeAccidentalHits(@Const @ByRef Scope scope,
+                        @ByVal Input true_classes,
+                        @ByVal Input sampled_candidates, @Cast("tensorflow::int64") long num_true) { super((Pointer)null); allocate(scope, true_classes, sampled_candidates, num_true); }
+  private native void allocate(@Const @ByRef Scope scope,
+                        @ByVal Input true_classes,
+                        @ByVal Input sampled_candidates, @Cast("tensorflow::int64") long num_true);
+  public ComputeAccidentalHits(@Const @ByRef Scope scope,
+                        @ByVal Input true_classes,
+                        @ByVal Input sampled_candidates, @Cast("tensorflow::int64") long num_true, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, sampled_candidates, num_true, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                        @ByVal Input true_classes,
+                        @ByVal Input sampled_candidates, @Cast("tensorflow::int64") long num_true, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output indices(); public native ComputeAccidentalHits indices(Output indices);
+  public native @ByRef Output ids(); public native ComputeAccidentalHits ids(Output ids);
+  public native @ByRef Output weights(); public native ComputeAccidentalHits weights(Output weights);
+}
+
+// Generates labels for candidate sampling with a learned unigram distribution.
+//
+// A unigram sampler could use a fixed unigram distribution read from a
+// file or passed in as an in-memory array instead of building up the distribution
+// from data on the fly. There is also an option to skew the distribution by
+// applying a distortion power to the weights.
+//
+// The vocabulary file should be in CSV-like format, with the last field
+// being the weight associated with the word.
+//
+// For each batch, this op picks a single set of sampled candidate labels.
+//
+// The advantages of sampling candidates per-batch are simplicity and the
+// possibility of efficient dense matrix multiplication. The disadvantage is that
+// the sampled candidates must be chosen independently of the context and of the
+// true labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: A batch_size * num_true matrix, in which each row contains the
+// IDs of the num_true target_classes in the corresponding original label.
+// * num_true:
+//     Number of true labels per context.
+// * num_sampled:
+//     Number of candidates to randomly sample per batch.
+// * unique:
+//     If unique is true, we sample with rejection, so that all sampled
+// candidates in a batch are unique. This requires some approximation to
+// estimate the post-rejection sampling probabilities.
+// * range_max:
+//     The sampler will sample integers from the interval [0, range_max).
+@Namespace("tensorflow::ops") @NoOffset public static class FixedUnigramCandidateSampler extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FixedUnigramCandidateSampler(Pointer p) { super(p); }
+
+  // Optional attribute setters for FixedUnigramCandidateSampler :
+  //
+  // VocabFile(StringPiece): Defaults to ""
+  //     Each valid line in this file (which should have a CSV-like format)
+  // corresponds to a valid word ID. IDs are in sequential order, starting from
+  // num_reserved_ids. The last entry in each line is expected to be a value
+  // corresponding to the count or relative probability. Exactly one of vocab_file
+  // and unigrams needs to be passed to this op.
+  // Distortion(float): Defaults to 1
+  //     The distortion is used to skew the unigram probability distribution.
+  // Each weight is first raised to the distortion's power before adding to the
+  // internal unigram distribution. As a result, distortion = 1.0 gives regular
+  // unigram sampling (as defined by the vocab file), and distortion = 0.0 gives
+  // a uniform distribution.
+  // NumReservedIds(int64): Defaults to 0
+  //     Optionally some reserved IDs can be added in the range [0,
+  // ..., num_reserved_ids) by the users. One use case is that a special unknown
+  // word token is used as ID 0. These IDs will have a sampling probability of 0.
+  // NumShards(int64): Defaults to 1
+  //     A sampler can be used to sample from a subset of the original range
+  // in order to speed up the whole computation through parallelism. This parameter
+  // (together with 'shard') indicates the number of partitions that are being
+  // used in the overall computation.
+  // Shard(int64): Defaults to 0
+  //     A sampler can be used to sample from a subset of the original range
+  // in order to speed up the whole computation through parallelism. This parameter
+  // (together with 'num_shards') indicates the particular partition number of a
+  // sampler op, when partitioning is being used.
+  // Unigrams(const gtl::ArraySlice<float>&): Defaults to []
+  //     A list of unigram counts or probabilities, one per ID in sequential
+  // order. Exactly one of vocab_file and unigrams should be passed to this op.
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs VocabFile(@StringPiece BytePointer x);
+    public native @ByVal Attrs VocabFile(@StringPiece String x);
+
+    public native @ByVal Attrs Distortion(float x);
+
+    public native @ByVal Attrs NumReservedIds(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs NumShards(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Shard(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Unigrams(@ArraySlice FloatPointer x);
+    public native @ByVal Attrs Unigrams(@ArraySlice FloatBuffer x);
+    public native @ByVal Attrs Unigrams(@ArraySlice float... x);
+
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @StringPiece BytePointer vocab_file_(); public native Attrs vocab_file_(BytePointer vocab_file_);
+    public native float distortion_(); public native Attrs distortion_(float distortion_);
+    public native @Cast("tensorflow::int64") long num_reserved_ids_(); public native Attrs num_reserved_ids_(long num_reserved_ids_);
+    public native @Cast("tensorflow::int64") long num_shards_(); public native Attrs num_shards_(long num_shards_);
+    public native @Cast("tensorflow::int64") long shard_(); public native Attrs shard_(long shard_);
+    public native @ArraySlice FloatPointer unigrams_(); public native Attrs unigrams_(FloatPointer unigrams_);
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public FixedUnigramCandidateSampler(@Const @ByRef Scope scope,
+                               @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max); }
+  private native void allocate(@Const @ByRef Scope scope,
+                               @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max);
+  public FixedUnigramCandidateSampler(@Const @ByRef Scope scope,
+                               @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                               @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs VocabFile(@StringPiece BytePointer x);
+  public static native @ByVal Attrs VocabFile(@StringPiece String x);
+  public static native @ByVal Attrs Distortion(float x);
+  public static native @ByVal Attrs NumReservedIds(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NumShards(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Shard(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Unigrams(@ArraySlice FloatPointer x);
+  public static native @ByVal Attrs Unigrams(@ArraySlice FloatBuffer x);
+  public static native @ByVal Attrs Unigrams(@ArraySlice float... x);
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output sampled_candidates(); public native FixedUnigramCandidateSampler sampled_candidates(Output sampled_candidates);
+  public native @ByRef Output true_expected_count(); public native FixedUnigramCandidateSampler true_expected_count(Output true_expected_count);
+  public native @ByRef Output sampled_expected_count(); public native FixedUnigramCandidateSampler sampled_expected_count(Output sampled_expected_count);
+}
+
+// Generates labels for candidate sampling with a learned unigram distribution.
+//
+// See explanations of candidate sampling and the data formats at
+// go/candidate-sampling.
+//
+// For each batch, this op picks a single set of sampled candidate labels.
+//
+// The advantages of sampling candidates per-batch are simplicity and the
+// possibility of efficient dense matrix multiplication. The disadvantage is that
+// the sampled candidates must be chosen independently of the context and of the
+// true labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: A batch_size * num_true matrix, in which each row contains the
+// IDs of the num_true target_classes in the corresponding original label.
+// * num_true:
+//     Number of true labels per context.
+// * num_sampled:
+//     Number of candidates to randomly sample per batch.
+// * unique:
+//     If unique is true, we sample with rejection, so that all sampled
+// candidates in a batch are unique. This requires some approximation to
+// estimate the post-rejection sampling probabilities.
+// * range_max:
+//     The sampler will sample integers from the interval [0, range_max).
+@Namespace("tensorflow::ops") @NoOffset public static class LearnedUnigramCandidateSampler extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LearnedUnigramCandidateSampler(Pointer p) { super(p); }
+
+  // Optional attribute setters for LearnedUnigramCandidateSampler :
+  //
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public LearnedUnigramCandidateSampler(@Const @ByRef Scope scope,
+                                 @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                 @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max);
+  public LearnedUnigramCandidateSampler(@Const @ByRef Scope scope,
+                                 @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                 @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output sampled_candidates(); public native LearnedUnigramCandidateSampler sampled_candidates(Output sampled_candidates);
+  public native @ByRef Output true_expected_count(); public native LearnedUnigramCandidateSampler true_expected_count(Output true_expected_count);
+  public native @ByRef Output sampled_expected_count(); public native LearnedUnigramCandidateSampler sampled_expected_count(Output sampled_expected_count);
+}
+
+// Generates labels for candidate sampling with a log-uniform distribution.
+//
+// See explanations of candidate sampling and the data formats at
+// go/candidate-sampling.
+//
+// For each batch, this op picks a single set of sampled candidate labels.
+//
+// The advantages of sampling candidates per-batch are simplicity and the
+// possibility of efficient dense matrix multiplication. The disadvantage is that
+// the sampled candidates must be chosen independently of the context and of the
+// true labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: A batch_size * num_true matrix, in which each row contains the
+// IDs of the num_true target_classes in the corresponding original label.
+// * num_true:
+//     Number of true labels per context.
+// * num_sampled:
+//     Number of candidates to randomly sample per batch.
+// * unique:
+//     If unique is true, we sample with rejection, so that all sampled
+// candidates in a batch are unique. This requires some approximation to
+// estimate the post-rejection sampling probabilities.
+// * range_max:
+//     The sampler will sample integers from the interval [0, range_max).
+@Namespace("tensorflow::ops") @NoOffset public static class LogUniformCandidateSampler extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LogUniformCandidateSampler(Pointer p) { super(p); }
+
+  // Optional attribute setters for LogUniformCandidateSampler :
+  //
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public LogUniformCandidateSampler(@Const @ByRef Scope scope,
+                             @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max); }
+  private native void allocate(@Const @ByRef Scope scope,
+                             @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max);
+  public LogUniformCandidateSampler(@Const @ByRef Scope scope,
+                             @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                             @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output sampled_candidates(); public native LogUniformCandidateSampler sampled_candidates(Output sampled_candidates);
+  public native @ByRef Output true_expected_count(); public native LogUniformCandidateSampler true_expected_count(Output true_expected_count);
+  public native @ByRef Output sampled_expected_count(); public native LogUniformCandidateSampler sampled_expected_count(Output sampled_expected_count);
+}
+
+// Generates labels for candidate sampling with a learned unigram distribution.
+//
+// See explanations of candidate sampling and the data formats at
+// go/candidate-sampling.
+//
+// For each batch, this op picks a single set of sampled candidate labels.
+//
+// The advantages of sampling candidates per-batch are simplicity and the
+// possibility of efficient dense matrix multiplication. The disadvantage is that
+// the sampled candidates must be chosen independently of the context and of the
+// true labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: A batch_size * num_true matrix, in which each row contains the
+// IDs of the num_true target_classes in the corresponding original label.
+// * num_true:
+//     Number of true labels per context.
+// * num_sampled:
+//     Number of candidates to randomly sample per batch.
+// * unique:
+//     If unique is true, we sample with rejection, so that all sampled
+// candidates in a batch are unique. This requires some approximation to
+// estimate the post-rejection sampling probabilities.
+// * range_max:
+//     The sampler will sample integers from the interval [0, range_max).
+@Namespace("tensorflow::ops") @NoOffset public static class ThreadUnsafeUnigramCandidateSampler extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ThreadUnsafeUnigramCandidateSampler(Pointer p) { super(p); }
+
+  // Optional attribute setters for ThreadUnsafeUnigramCandidateSampler :
+  //
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public ThreadUnsafeUnigramCandidateSampler(@Const @ByRef Scope scope,
+                                      @ByVal Input true_classes,
+                                      @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                      @ByVal Input true_classes,
+                                      @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max);
+  public ThreadUnsafeUnigramCandidateSampler(@Const @ByRef Scope scope,
+                                      @ByVal Input true_classes,
+                                      @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                      @ByVal Input true_classes,
+                                      @Cast("tensorflow::int64") long num_true, @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output sampled_candidates(); public native ThreadUnsafeUnigramCandidateSampler sampled_candidates(Output sampled_candidates);
+  public native @ByRef Output true_expected_count(); public native ThreadUnsafeUnigramCandidateSampler true_expected_count(Output true_expected_count);
+  public native @ByRef Output sampled_expected_count(); public native ThreadUnsafeUnigramCandidateSampler sampled_expected_count(Output sampled_expected_count);
+}
+
+// Generates labels for candidate sampling with a uniform distribution.
+//
+// See explanations of candidate sampling and the data formats at
+// go/candidate-sampling.
+//
+// For each batch, this op picks a single set of sampled candidate labels.
+//
+// The advantages of sampling candidates per-batch are simplicity and the
+// possibility of efficient dense matrix multiplication. The disadvantage is that
+// the sampled candidates must be chosen independently of the context and of the
+// true labels.
+//
+// Arguments:
+// * scope: A Scope object
+// * true_classes: A batch_size * num_true matrix, in which each row contains the
+// IDs of the num_true target_classes in the corresponding original label.
+// * num_true:
+//     Number of true labels per context.
+// * num_sampled:
+//     Number of candidates to randomly sample per batch.
+// * unique:
+//     If unique is true, we sample with rejection, so that all sampled
+// candidates in a batch are unique. This requires some approximation to
+// estimate the post-rejection sampling probabilities.
+// * range_max:
+//     The sampler will sample integers from the interval [0, range_max).
+@Namespace("tensorflow::ops") @NoOffset public static class UniformCandidateSampler extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UniformCandidateSampler(Pointer p) { super(p); }
+
+  // Optional attribute setters for UniformCandidateSampler :
+  //
+  // Seed(int64): Defaults to 0
+  //     If either seed or seed2 are set to be non-zero, the random number
+  // generator is seeded by the given seed.  Otherwise, it is seeded by a
+  // random seed.
+  // Seed2(int64): Defaults to 0
+  //     An second seed to avoid seed collision.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+
+    public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
+    public native @Cast("tensorflow::int64") long seed2_(); public native Attrs seed2_(long seed2_);
+  }
+  public UniformCandidateSampler(@Const @ByRef Scope scope,
+                          @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true,
+                          @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max); }
+  private native void allocate(@Const @ByRef Scope scope,
+                          @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true,
+                          @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max);
+  public UniformCandidateSampler(@Const @ByRef Scope scope,
+                          @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true,
+                          @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, true_classes, num_true, num_sampled, unique, range_max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                          @ByVal Input true_classes, @Cast("tensorflow::int64") long num_true,
+                          @Cast("tensorflow::int64") long num_sampled, @Cast("bool") boolean unique, @Cast("tensorflow::int64") long range_max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output sampled_candidates(); public native UniformCandidateSampler sampled_candidates(Output sampled_candidates);
+  public native @ByRef Output true_expected_count(); public native UniformCandidateSampler true_expected_count(Output true_expected_count);
+  public native @ByRef Output sampled_expected_count(); public native UniformCandidateSampler sampled_expected_count(Output sampled_expected_count);
+}
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_CANDIDATE_SAMPLING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/control_flow_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_CONTROL_FLOW_OPS_H_
+// #define TENSORFLOW_CC_OPS_CONTROL_FLOW_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+
+// Raise a exception to abort the process when called.
+//
+// Returns nothing but an exception.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class Abort extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Abort(Pointer p) { super(p); }
+
+  // Optional attribute setters for Abort :
+  //
+  // ErrorMsg(StringPiece): Defaults to ""
+  //     A string which is the message associated with the exception.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs ErrorMsg(@StringPiece BytePointer x);
+    public native @ByVal Attrs ErrorMsg(@StringPiece String x);
+
+    public native @StringPiece BytePointer error_msg_(); public native Attrs error_msg_(BytePointer error_msg_);
+  }
+  public Abort(@Const @ByRef Scope scope) { super((Pointer)null); allocate(scope); }
+  private native void allocate(@Const @ByRef Scope scope);
+  public Abort(@Const @ByRef Scope scope, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Operation") Operation asOperation();
+
+  public static native @ByVal Attrs ErrorMsg(@StringPiece BytePointer x);
+  public static native @ByVal Attrs ErrorMsg(@StringPiece String x);
+
+  public native @ByRef Operation operation(); public native Abort operation(Operation operation);
+}
+
+// Does nothing. Serves as a control trigger for scheduling.
+//
+// Only useful as a placeholder for control edges.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class ControlTrigger extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ControlTrigger(Pointer p) { super(p); }
+
+  public ControlTrigger(@Const @ByRef Scope scope) { super((Pointer)null); allocate(scope); }
+  private native void allocate(@Const @ByRef Scope scope);
+  public native @ByVal @Name("operator tensorflow::ops::Operation") Operation asOperation();
+
+  public native @ByRef Operation operation(); public native ControlTrigger operation(Operation operation);
+}
+
+// Creates or finds a child frame, and makes `data` available to the child frame.
+//
+// This op is used together with `Exit` to create loops in the graph.
+// The unique `frame_name` is used by the `Executor` to identify frames. If
+// `is_constant` is true, `output` is a constant in the child frame; otherwise
+// it may be changed in the child frame. At most `parallel_iterations` iterations
+// are run in parallel in the child frame.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be made available to the child frame.
+// * frame_name:
+//     The name of the child frame.
+@Namespace("tensorflow::ops") @NoOffset public static class Enter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Enter(Pointer p) { super(p); }
+
+  // Optional attribute setters for Enter :
+  //
+  // IsConstant(bool): Defaults to false
+  //     If true, the output is constant within the child frame.
+  // ParallelIterations(int64): Defaults to 10
+  //     The number of iterations allowed to run in parallel.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs IsConstant(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs ParallelIterations(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("bool") boolean is_constant_(); public native Attrs is_constant_(boolean is_constant_);
+    public native @Cast("tensorflow::int64") long parallel_iterations_(); public native Attrs parallel_iterations_(long parallel_iterations_);
+  }
+  public Enter(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece BytePointer frame_name) { super((Pointer)null); allocate(scope, data, frame_name); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece BytePointer frame_name);
+  public Enter(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece String frame_name) { super((Pointer)null); allocate(scope, data, frame_name); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece String frame_name);
+  public Enter(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece BytePointer frame_name, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, data, frame_name, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece BytePointer frame_name, @Const @ByRef Attrs attrs);
+  public Enter(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece String frame_name, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, data, frame_name, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+        @StringPiece String frame_name, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs IsConstant(@Cast("bool") boolean x);
+  public static native @ByVal Attrs ParallelIterations(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native Enter output(Output output);
+}
+
+// Exits the current frame to its parent frame.
+//
+// Exit makes its input `data` available to the parent frame.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be made available to the parent frame.
+@Namespace("tensorflow::ops") @NoOffset public static class Exit extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Exit(Pointer p) { super(p); }
+
+  public Exit(@Const @ByRef Scope scope, @ByVal Input data) { super((Pointer)null); allocate(scope, data); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Exit output(Output output);
+}
+
+// Forwards the input to the output.
+//
+// This operator represents the loop termination condition used by the
+// "pivot" switches of a loop.
+//
+// Arguments:
+// * scope: A Scope object
+// * input: A boolean scalar, representing the branch predicate of the Switch op.
+@Namespace("tensorflow::ops") @NoOffset public static class LoopCond extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LoopCond(Pointer p) { super(p); }
+
+  public LoopCond(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native LoopCond output(Output output);
+}
+
+// Forwards the value of an available tensor from `inputs` to `output`.
+//
+// `Merge` waits for at least one of the tensors in `inputs` to become available.
+// It is usually combined with `Switch` to implement branching.
+//
+// `Merge` forwards the first tensor for become available to `output`, and sets
+// `value_index` to its index in `inputs`.
+//
+// It is an error if more than one tensor in `inputs` is available.
+//
+// Arguments:
+// * scope: A Scope object
+// * inputs: The input tensors, exactly one of which will become available.
+@Namespace("tensorflow::ops") @NoOffset public static class Merge extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Merge(Pointer p) { super(p); }
+
+  public Merge(@Const @ByRef Scope scope, @ByVal InputList inputs) { super((Pointer)null); allocate(scope, inputs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList inputs);
+
+  public native @ByRef Output output(); public native Merge output(Output output);
+  public native @ByRef Output value_index(); public native Merge value_index(Output value_index);
+}
+
+// Makes its input available to the next iteration.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be made available to the next iteration.
+@Namespace("tensorflow::ops") @NoOffset public static class NextIteration extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NextIteration(Pointer p) { super(p); }
+
+  public NextIteration(@Const @ByRef Scope scope, @ByVal Input data) { super((Pointer)null); allocate(scope, data); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native NextIteration output(Output output);
+}
+
+// Creates or finds a child frame, and makes `data` available to the child frame.
+//
+// The unique `frame_name` is used by the `Executor` to identify frames. If
+// `is_constant` is true, `output` is a constant in the child frame; otherwise
+// it may be changed in the child frame. At most `parallel_iterations` iterations
+// are run in parallel in the child frame.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be made available to the child frame.
+// * frame_name:
+//     The name of the child frame.
+@Namespace("tensorflow::ops") @NoOffset public static class RefEnter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefEnter(Pointer p) { super(p); }
+
+  // Optional attribute setters for RefEnter :
+  //
+  // IsConstant(bool): Defaults to false
+  //     If true, the output is constant within the child frame.
+  // ParallelIterations(int64): Defaults to 10
+  //     The number of iterations allowed to run in parallel.
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    public native @ByVal Attrs IsConstant(@Cast("bool") boolean x);
+
+    public native @ByVal Attrs ParallelIterations(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("bool") boolean is_constant_(); public native Attrs is_constant_(boolean is_constant_);
+    public native @Cast("tensorflow::int64") long parallel_iterations_(); public native Attrs parallel_iterations_(long parallel_iterations_);
+  }
+  public RefEnter(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece BytePointer frame_name) { super((Pointer)null); allocate(scope, data, frame_name); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece BytePointer frame_name);
+  public RefEnter(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece String frame_name) { super((Pointer)null); allocate(scope, data, frame_name); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece String frame_name);
+  public RefEnter(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece BytePointer frame_name, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, data, frame_name, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece BytePointer frame_name, @Const @ByRef Attrs attrs);
+  public RefEnter(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece String frame_name, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, data, frame_name, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+           @StringPiece String frame_name, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs IsConstant(@Cast("bool") boolean x);
+  public static native @ByVal Attrs ParallelIterations(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output output(); public native RefEnter output(Output output);
+}
+
+// Exits the current frame to its parent frame.
+//
+// Exit makes its input `data` available to the parent frame.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be made available to the parent frame.
+@Namespace("tensorflow::ops") @NoOffset public static class RefExit extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefExit(Pointer p) { super(p); }
+
+  public RefExit(@Const @ByRef Scope scope, @ByVal Input data) { super((Pointer)null); allocate(scope, data); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native RefExit output(Output output);
+}
+
+// Forwards the value of an available tensor from `inputs` to `output`.
+//
+// `Merge` waits for at least one of the tensors in `inputs` to become available.
+// It is usually combined with `Switch` to implement branching.
+//
+// `Merge` forwards the first tensor for become available to `output`, and sets
+// `value_index` to its index in `inputs`.
+//
+// It is an error if more than one tensor in `inputs` is available.
+//
+// Arguments:
+// * scope: A Scope object
+// * inputs: The input tensors, exactly one of which will become available.
+@Namespace("tensorflow::ops") @NoOffset public static class RefMerge extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefMerge(Pointer p) { super(p); }
+
+  public RefMerge(@Const @ByRef Scope scope, @ByVal InputList inputs) { super((Pointer)null); allocate(scope, inputs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList inputs);
+
+  public native @ByRef Output output(); public native RefMerge output(Output output);
+  public native @ByRef Output value_index(); public native RefMerge value_index(Output value_index);
+}
+
+// Makes its input available to the next iteration.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be made available to the next iteration.
+@Namespace("tensorflow::ops") @NoOffset public static class RefNextIteration extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefNextIteration(Pointer p) { super(p); }
+
+  public RefNextIteration(@Const @ByRef Scope scope, @ByVal Input data) { super((Pointer)null); allocate(scope, data); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native RefNextIteration output(Output output);
+}
+
+// Forwards the `index`th element of `inputs` to `output`.
+//
+// Arguments:
+// * scope: A Scope object
+// * index: A scalar that determines the input that gets selected.
+// * inputs: A list of ref tensors, one of which will be forwarded to `output`.
+@Namespace("tensorflow::ops") @NoOffset public static class RefSelect extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefSelect(Pointer p) { super(p); }
+
+  public RefSelect(@Const @ByRef Scope scope, @ByVal Input index,
+            @ByVal InputList inputs) { super((Pointer)null); allocate(scope, index, inputs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input index,
+            @ByVal InputList inputs);
+  public native @ByVal @Name("operator tensorflow::ops::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::ops::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native RefSelect output(Output output);
+}
+
+// Forwards the ref tensor `data` to the output port determined by `pred`.
+//
+// If `pred` is true, the `data` input is forwarded to `output_true`. Otherwise,
+// the data goes to `output_false`.
+//
+// See also `Switch` and `Merge`.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The ref tensor to be forwarded to the appropriate output.
+// * pred: A scalar that specifies which output port will receive data.
+@Namespace("tensorflow::ops") @NoOffset public static class RefSwitch extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RefSwitch(Pointer p) { super(p); }
+
+  public RefSwitch(@Const @ByRef Scope scope, @ByVal Input data,
+            @ByVal Input pred) { super((Pointer)null); allocate(scope, data, pred); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+            @ByVal Input pred);
+
+  public native @ByRef Output output_false(); public native RefSwitch output_false(Output output_false);
+  public native @ByRef Output output_true(); public native RefSwitch output_true(Output output_true);
+}
+
+// Forwards `data` to the output port determined by `pred`.
+//
+// If `pred` is true, the `data` input is forwarded to `output_true`. Otherwise,
+// the data goes to `output_false`.
+//
+// See also `RefSwitch` and `Merge`.
+//
+// Arguments:
+// * scope: A Scope object
+// * data: The tensor to be forwarded to the appropriate output.
+// * pred: A scalar that specifies which output port will receive data.
+@Namespace("tensorflow::ops") @NoOffset public static class Switch extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Switch(Pointer p) { super(p); }
+
+  public Switch(@Const @ByRef Scope scope, @ByVal Input data,
+         @ByVal Input pred) { super((Pointer)null); allocate(scope, data, pred); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+         @ByVal Input pred);
+
+  public native @ByRef Output output_false(); public native Switch output_false(Output output_false);
+  public native @ByRef Output output_true(); public native Switch output_true(Output output_true);
+}
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_CONTROL_FLOW_OPS_H_
 
 
 // Parsed from tensorflow/cc/ops/data_flow_ops.h
@@ -28456,6 +29612,44 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_CC_OPS_NN_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/no_op.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_NO_OP_H_
+// #define TENSORFLOW_CC_OPS_NO_OP_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+
+// Does nothing. Only useful as a placeholder for control edges.
+//
+// Arguments:
+// * scope: A Scope object
+@Namespace("tensorflow::ops") @NoOffset public static class NoOp extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NoOp(Pointer p) { super(p); }
+
+  public NoOp(@Const @ByRef Scope scope) { super((Pointer)null); allocate(scope); }
+  private native void allocate(@Const @ByRef Scope scope);
+  public native @ByVal @Name("operator tensorflow::ops::Operation") Operation asOperation();
+
+  public native @ByRef Operation operation(); public native NoOp operation(Operation operation);
+}
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_NO_OP_H_
 
 
 // Parsed from tensorflow/cc/ops/parsing_ops.h

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,7 +22,13 @@
 
 package org.bytedeco.javacpp.helper;
 
+import java.nio.ByteBuffer;
 import java.nio.Buffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.nio.ShortBuffer;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.FloatPointer;
@@ -106,6 +112,21 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTensor extends Pointer implements Indexable {
         static { Loader.load(); }
         public AbstractTensor(Pointer p) { super(p); }
+
+        public static Tensor create(float[]  data, TensorShape shape) { Tensor t = new Tensor(DT_FLOAT,  shape); FloatBuffer  b = t.createBuffer(); b.put(data); return t; }
+        public static Tensor create(double[] data, TensorShape shape) { Tensor t = new Tensor(DT_DOUBLE, shape); DoubleBuffer b = t.createBuffer(); b.put(data); return t; }
+        public static Tensor create(int[]    data, TensorShape shape) { Tensor t = new Tensor(DT_INT32,  shape); IntBuffer    b = t.createBuffer(); b.put(data); return t; }
+        public static Tensor create(short[]  data, TensorShape shape) { Tensor t = new Tensor(DT_INT16,  shape); ShortBuffer  b = t.createBuffer(); b.put(data); return t; }
+        public static Tensor create(byte[]   data, TensorShape shape) { Tensor t = new Tensor(DT_INT8,   shape); ByteBuffer   b = t.createBuffer(); b.put(data); return t; }
+        public static Tensor create(long[]   data, TensorShape shape) { Tensor t = new Tensor(DT_INT64,  shape); LongBuffer   b = t.createBuffer(); b.put(data); return t; }
+        public static Tensor create(String[] data, TensorShape shape) {
+            Tensor t = new Tensor(DT_STRING, shape);
+            StringArray a = t.createStringArray();
+            for (int i = 0; i < a.capacity(); i++) {
+                a.position(i).put(data[i]);
+            }
+            return t;
+        }
 
         public abstract int dtype();
         public abstract int dims();
