@@ -112,7 +112,7 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/ops.h",
         "tensorflow/cc/framework/cc_op_gen.h",
         "tensorflow_adapters.h",
-//        "tensorflow/cc/ops/const_op.h",
+        "tensorflow/cc/ops/const_op.h",
         "tensorflow/cc/ops/array_ops.h",
         "tensorflow/cc/ops/data_flow_ops.h",
         "tensorflow/cc/ops/image_ops.h",
@@ -187,8 +187,8 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
-               .put(new Info("tensorflow::ops::Cast").pointerTypes("CastOp"))
-               .put(new Info("tensorflow::ops::Const").pointerTypes("ConstOp"))
+               .put(new Info("tensorflow::ops::Cast").cppTypes("class tensorflow::ops::Cast").pointerTypes("CastOp"))
+               .put(new Info("tensorflow::ops::Const").cppTypes("class tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>").cast().pointerTypes("StringVector"))

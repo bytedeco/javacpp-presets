@@ -13871,6 +13871,43 @@ limitations under the License.
 // #endif  // THIRD_PARTY_TENSORFLOW_CC_FRAMEWORK_CC_OP_GEN_H_
 
 
+// Parsed from tensorflow/cc/ops/const_op.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef THIRD_PARTY_TENSORFLOW_CC_OPS_CONST_OP_H_
+// #define THIRD_PARTY_TENSORFLOW_CC_OPS_CONST_OP_H_
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/graph/node_builder.h"
+
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Const @ByRef Input.Initializer val);
+
+@Namespace("tensorflow::ops") public static native @ByVal NodeBuilder.NodeOut AsNodeOut(@Const @ByRef Scope scope, @Const @ByRef Input inp);
+
+@Namespace("tensorflow::ops") public static native @ByVal NodeOutVector AsNodeOutList(@Const @ByRef Scope scope,
+                                                @Const @ByRef InputList inp);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // THIRD_PARTY_TENSORFLOW_CC_OPS_CONST_OP_H_
+
+
 // Parsed from tensorflow/cc/ops/array_ops.h
 
 // This file is MACHINE GENERATED! Do not edit.
@@ -14250,7 +14287,7 @@ limitations under the License.
 // * scope: A Scope object
 // * value:
 //     Attr `value` is the tensor to return.
-@Name("tensorflow::ops::Const") @NoOffset public static class ConstOp extends Pointer {
+@Name("class tensorflow::ops::Const") @NoOffset public static class ConstOp extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstOp(Pointer p) { super(p); }
@@ -23144,7 +23181,7 @@ limitations under the License.
 //
 // Arguments:
 // * scope: A Scope object
-@Name("tensorflow::ops::Cast") @NoOffset public static class CastOp extends Pointer {
+@Name("class tensorflow::ops::Cast") @NoOffset public static class CastOp extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CastOp(Pointer p) { super(p); }
