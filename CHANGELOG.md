@@ -1,4 +1,5 @@
 
+ * Enable CUDA in `cppbuild.sh` script for TensorFlow ([issue #294](https://github.com/bytedeco/javacpp-presets/issues/294))
  * Bundle `libgomp.so.1` in JAR files of OpenCV for the sake of some Linux distributions ([issue bytedeco/javacv#436](https://github.com/bytedeco/javacv/issues/436)
  * Fix `linux-armhf` and `linux-ppc64le` builds for all presets ([pull #279](https://github.com/bytedeco/javacpp-presets/pull/279))
  * Fix `libdc1394` not properly linking with `libusb-1.0` on Mac OS X ([issue bytedeco/javacv#501](https://github.com/bytedeco/javacv/issues/501)
@@ -8,7 +9,7 @@
  * Make Caffe work on CPU-only machines ([issue #219](https://github.com/bytedeco/javacpp-presets/issues/219))
  * Fix loading issue with `opencv_face` ([issue bytedeco/javacv#470](https://github.com/bytedeco/javacv/issues/470)
  * Fix presets for CUDA on the `linux-ppc64le` platform
- * Upgrade presets for FFmpeg 3.1.2, x265 2.0, libvpx 1.6.0, CUDA 8.0, cuDNN 5.1, Caffe, TensorFlow 0.9.0
+ * Upgrade presets for FFmpeg 3.1.2, x265 2.0, libvpx 1.6.0, CUDA 8.0, cuDNN 5.1, Caffe, TensorFlow 0.10.0
  * Set default options in `tensorflow/cppbuild.sh` to prevent console reads during build
  * Add `Tensor.createStringArray()` method to access `DT_STRING` data ([issue #249](https://github.com/bytedeco/javacpp-presets/issues/249))
  * Fix Javadoc links for externally referenced classes
