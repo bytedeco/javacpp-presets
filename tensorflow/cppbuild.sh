@@ -28,7 +28,7 @@ cd tensorflow-$TENSORFLOW_VERSION
 case $PLATFORM in
 	android-arm)
         patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
-        export BUILDFLAGS=""
+        export BUILDFLAGS="--crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
         ;;
     linux-x86)
         export CC="/usr/bin/gcc"

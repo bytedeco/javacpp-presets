@@ -1,5 +1,5 @@
 diff --git a/WORKSPACE b/WORKSPACE
-index 61c7773..5f9c296 100644
+index 61c7773..2a21d81 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -9,10 +9,10 @@ workspace(name = "org_tensorflow")
@@ -12,8 +12,45 @@ index 61c7773..5f9c296 100644
 -#    api_level=21)
 +android_ndk_repository(
 +    name="androidndk",
-+    path="/usr/local/Cellar/android-ndk/r12b",
++    path="/usr/local/Cellar/android-ndk/r11c",
 +    api_level=21)
  
  # Please add all new TensorFlow dependencies in workspace.bzl.
  load("//tensorflow:workspace.bzl", "tf_workspace")
+diff --git a/tensorflow/BUILD b/tensorflow/BUILD
+index 7f80bf9..85b0b7e 100644
+--- a/tensorflow/BUILD
++++ b/tensorflow/BUILD
+@@ -165,11 +165,29 @@ cc_binary(
+     ],
+ )
+ 
++
++load("//tensorflow:tensorflow.bzl", "tf_copts")
++
+ cc_binary(
+     name = "libtensorflow_cc.so",
++    copts = tf_copts(),
++    linkopts = [
++        "-landroid",
++        "-ljnigraphics",
++        "-llog",
++        "-lm",
++        "-z defs",
++        "-s",
++        "-ldl",
++        "-Wl,--icf=all",  # Identical Code Folding
++    ],
++    tags = [
++        "manual",
++        "notap",
++    ],
+     linkshared = 1,
++    linkstatic = 1,
+     deps = [
+-        "//tensorflow/cc:cc_ops",
+-        "//tensorflow/core:tensorflow",
++        "//tensorflow/core:android_tensorflow_lib",
+     ],
+ )
+ 

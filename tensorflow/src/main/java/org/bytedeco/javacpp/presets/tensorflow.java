@@ -47,7 +47,7 @@ import java.lang.annotation.Target;
  * @author Samuel Audet
  */
 @Properties(value = @Platform(
-        value = {"linux-x86", "macosx", "android"},
+        value = {"android"},
         compiler = "cpp11",
         define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std"},
         include = {
@@ -80,7 +80,6 @@ import java.lang.annotation.Target;
         "tensorflow/core/framework/tensor_description.pb.h",
         "tensorflow/core/framework/tensor_types.h",
         "tensorflow/core/framework/tensor_shape.h",
-//        "tensorflow/core/framework/tensor_slice.h",
         "tensorflow/core/framework/tensor_util.h",
         "tensorflow/core/framework/tensor_reference.h",
         "tensorflow/core/framework/tensor.h",
@@ -91,7 +90,6 @@ import java.lang.annotation.Target;
         "tensorflow/core/framework/shape_inference.h",
         "tensorflow/core/framework/partial_tensor_shape.h",
         "tensorflow/core/public/session.h",
-        "tensorflow/c/c_api.h",
         "tensorflow/core/framework/op_def.pb.h",
         "tensorflow/core/framework/op_def_builder.h",
         "tensorflow/core/framework/op_def_util.h",
@@ -99,7 +97,6 @@ import java.lang.annotation.Target;
         "tensorflow/core/framework/types.h",
         "tensorflow/core/graph/edgeset.h",
         "tensorflow/core/lib/gtl/iterator_range.h",
-//        "tensorflow/core/lib/gtl/inlined_vector.h",
         "tensorflow/core/graph/graph.h",
         "tensorflow/core/framework/node_def_builder.h",
         "tensorflow/core/framework/node_def_util.h",
@@ -108,26 +105,8 @@ import java.lang.annotation.Target;
         "tensorflow/core/graph/graph_def_builder.h",
         "tensorflow/core/graph/default_device.h",
         "tensorflow/core/graph/graph_constructor.h",
-        "tensorflow/cc/framework/scope.h",
-        "tensorflow/cc/framework/ops.h",
-        "tensorflow/cc/framework/cc_op_gen.h",
-        "tensorflow_adapters.h",
-        "tensorflow/cc/ops/const_op.h",
-        "tensorflow/cc/ops/array_ops.h",
-        "tensorflow/cc/ops/data_flow_ops.h",
-        "tensorflow/cc/ops/image_ops.h",
-        "tensorflow/cc/ops/io_ops.h",
-        "tensorflow/cc/ops/linalg_ops.h",
-        "tensorflow/cc/ops/logging_ops.h",
-        "tensorflow/cc/ops/math_ops.h",
-        "tensorflow/cc/ops/nn_ops.h",
-        "tensorflow/cc/ops/parsing_ops.h",
-        "tensorflow/cc/ops/random_ops.h",
-        "tensorflow/cc/ops/sparse_ops.h",
-        "tensorflow/cc/ops/state_ops.h",
-        "tensorflow/cc/ops/string_ops.h",
-        "tensorflow/cc/ops/training_ops.h",
-        "tensorflow/cc/ops/user_ops.h"},
+        "tensorflow/core/framework/op_def_builder.h",
+        "tensorflow_adapters.h"},
         link = "tensorflow_cc"),
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
@@ -182,20 +161,14 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
                .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
-               .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
 
-               .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
-               .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
-               .put(new Info("tensorflow::ops::Cast").cppTypes("class tensorflow::ops::Cast").pointerTypes("CastOp"))
-               .put(new Info("tensorflow::ops::Const").cppTypes("class tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>").cast().pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>").cast().pointerTypes("TensorShapeVector"))
-               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::ops::NodeOut>")/*.cast()*/.pointerTypes("NodeOutVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Node*>")/*.cast()*/.pointerTypes("NodeVector"))
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NeighborIter>").pointerTypes("NeighborIterRange").define())
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NeighborIter>()").skip())
@@ -334,15 +307,6 @@ public class tensorflow implements InfoMapper {
         protected EdgeLabelFunction() { allocate(); }
         private native void allocate();
         public native @StdString BytePointer call(@Cast("const tensorflow::Edge*") Pointer node);
-    }
-
-    public static class FactoryFn extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    FactoryFn(Pointer p) { super(p); }
-        protected FactoryFn() { allocate(); }
-        private native void allocate();
-        public native @Cast("tensorflow::FileSystem*") Pointer call();
     }
 
     public static class ShapeInferenceFn extends FunctionPointer {
