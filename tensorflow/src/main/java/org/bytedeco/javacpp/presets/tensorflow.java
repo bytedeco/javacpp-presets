@@ -88,6 +88,7 @@ import java.lang.annotation.Target;
         "tensorflow/core/framework/shape_inference.h",
         "tensorflow/core/framework/partial_tensor_shape.h",
         "tensorflow/core/public/session.h",
+        "tensorflow/c/c_api.h",
         "tensorflow/core/framework/op_def.pb.h",
         "tensorflow/core/framework/op_def_util.h",
         "tensorflow/core/framework/op.h",

@@ -9085,6 +9085,1127 @@ limitations under the License.
 // #endif  // TENSORFLOW_PUBLIC_SESSION_H_
 
 
+// Parsed from tensorflow/c/c_api.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_C_C_API_H_
+// #define TENSORFLOW_C_C_API_H_
+
+// #include <stddef.h>
+// #include <stdint.h>
+
+// --------------------------------------------------------------------------
+// C API for TensorFlow.
+//
+// The API leans towards simplicity and uniformity instead of convenience
+// since most usage will be by language specific wrappers.
+//
+// Conventions:
+// * We use the prefix TF_ for everything in the API.
+// * Objects are always passed around as pointers to opaque structs
+//   and these structs are allocated/deallocated via the API.
+// * TF_Status holds error information.  It is an object type
+//   and therefore is passed around as a pointer to an opaque
+//   struct as mentioned above.
+// * Every call that has a TF_Status* argument clears it on success
+//   and fills it with error info on failure.
+//
+// Questions left to address:
+// * Might at some point need a way for callers to provide their own Env.
+// * Maybe add TF_TensorShape that encapsulates dimension info.
+//
+// Design decisions made:
+// * Backing store for tensor memory has an associated deallocation
+//   function.  This deallocation function will point to client code
+//   for tensors populated by the client.  So the client can do things
+//   like shadowing a numpy array.
+// * We do not provide TF_OK since it is not strictly necessary and we
+//   are not optimizing for convenience.
+// * We make assumption that one session has one graph.  This should be
+//   fine since we have the ability to run sub-graphs.
+// * We could allow NULL for some arguments (e.g., NULL options arg).
+//   However since convenience is not a primary goal, we don't do this.
+// * Devices are not in this API.  Instead, they are created/used internally
+//   and the API just provides high level controls over the number of
+//   devices of each type.
+
+// #ifdef __cplusplus
+// #endif
+
+// --------------------------------------------------------------------------
+// TF_DataType holds the type for a scalar value.  E.g., one slot in a tensor.
+// The enum values here are identical to corresponding values in types.proto.
+/** enum TF_DataType */
+public static final int
+  TF_FLOAT = 1,
+  TF_DOUBLE = 2,
+  TF_INT32 = 3,  // Int32 tensors are always in 'host' memory.
+  TF_UINT8 = 4,
+  TF_INT16 = 5,
+  TF_INT8 = 6,
+  TF_STRING = 7,
+  TF_COMPLEX64 = 8,  // Single-precision complex
+  TF_COMPLEX = 8,    // Old identifier kept for API backwards compatibility
+  TF_INT64 = 9,
+  TF_BOOL = 10,
+  TF_QINT8 = 11,     // Quantized int8
+  TF_QUINT8 = 12,    // Quantized uint8
+  TF_QINT32 = 13,    // Quantized int32
+  TF_BFLOAT16 = 14,  // Float32 truncated to 16 bits.  Only for cast ops.
+  TF_QINT16 = 15,    // Quantized int16
+  TF_QUINT16 = 16,   // Quantized uint16
+  TF_UINT16 = 17,
+  TF_COMPLEX128 = 18,  // Double-precision complex
+  TF_HALF = 19;
+
+// --------------------------------------------------------------------------
+// TF_Code holds an error code.  The enum values here are identical to
+// corresponding values in error_codes.proto.
+/** enum TF_Code */
+public static final int
+  TF_OK = 0,
+  TF_CANCELLED = 1,
+  TF_UNKNOWN = 2,
+  TF_INVALID_ARGUMENT = 3,
+  TF_DEADLINE_EXCEEDED = 4,
+  TF_NOT_FOUND = 5,
+  TF_ALREADY_EXISTS = 6,
+  TF_PERMISSION_DENIED = 7,
+  TF_UNAUTHENTICATED = 16,
+  TF_RESOURCE_EXHAUSTED = 8,
+  TF_FAILED_PRECONDITION = 9,
+  TF_ABORTED = 10,
+  TF_OUT_OF_RANGE = 11,
+  TF_UNIMPLEMENTED = 12,
+  TF_INTERNAL = 13,
+  TF_UNAVAILABLE = 14,
+  TF_DATA_LOSS = 15;
+
+// --------------------------------------------------------------------------
+// TF_Status holds error information.  It either has an OK code, or
+// else an error code with an associated error message.
+@Opaque public static class TF_Status extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Status() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Status(Pointer p) { super(p); }
+}
+
+// Return a new status object.
+public static native TF_Status TF_NewStatus();
+
+// Delete a previously created status object.
+public static native void TF_DeleteStatus(TF_Status arg0);
+
+// Record <code, msg> in *s.  Any previous information is lost.
+// A common use is to clear a status: TF_SetStatus(s, TF_OK, "");
+public static native void TF_SetStatus(TF_Status s, @Cast("TF_Code") int code, @Cast("const char*") BytePointer msg);
+public static native void TF_SetStatus(TF_Status s, @Cast("TF_Code") int code, String msg);
+
+// Return the code record in *s.
+public static native @Cast("TF_Code") int TF_GetCode(@Const TF_Status s);
+
+// Return a pointer to the (null-terminated) error message in *s.  The
+// return value points to memory that is only usable until the next
+// mutation to *s.  Always returns an empty string if TF_GetCode(s) is
+// TF_OK.
+public static native @Cast("const char*") BytePointer TF_Message(@Const TF_Status s);
+
+// --------------------------------------------------------------------------
+// TF_Buffer holds a pointer to a block of data and its associated length.
+// Typically, the data consists of a serialized protocol buffer, but other data
+// may also be held in a buffer.
+//
+// By default, TF_Buffer itself does not do any memory management of the
+// pointed-to block.  If need be, users of this struct should specify how to
+// deallocate the block by setting the `data_deallocator` function pointer.
+public static class TF_Buffer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public TF_Buffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TF_Buffer(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Buffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public TF_Buffer position(long position) {
+        return (TF_Buffer)super.position(position);
+    }
+
+  @MemberGetter public native @Const Pointer data();
+  public native @Cast("size_t") long length(); public native TF_Buffer length(long length);
+  public static class Data_deallocator_Pointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Data_deallocator_Pointer_long(Pointer p) { super(p); }
+      protected Data_deallocator_Pointer_long() { allocate(); }
+      private native void allocate();
+      public native void call(Pointer data, @Cast("size_t") long length);
+  }
+  public native Data_deallocator_Pointer_long data_deallocator(); public native TF_Buffer data_deallocator(Data_deallocator_Pointer_long data_deallocator);
+}
+
+// Makes a copy of the input and sets an appropriate deallocator.  Useful for
+// passing in read-only, input protobufs.
+public static native TF_Buffer TF_NewBufferFromString(@Const Pointer proto, @Cast("size_t") long proto_len);
+
+// Useful for passing *out* a protobuf.
+public static native TF_Buffer TF_NewBuffer();
+
+public static native void TF_DeleteBuffer(TF_Buffer arg0);
+
+public static native @ByVal TF_Buffer TF_GetBuffer(TF_Buffer buffer);
+
+// --------------------------------------------------------------------------
+// TF_Tensor holds a multi-dimensional array of elements of a single data type.
+// For all types other than TF_STRING, the data buffer stores elements
+// in row major order.  E.g. if data is treated as a vector of TF_DataType:
+//
+//   element 0:   index (0, ..., 0)
+//   element 1:   index (0, ..., 1)
+//   ...
+//
+// The format for TF_STRING tensors is:
+//   start_offset: array[uint64]
+//   data:         byte[...]
+//
+//   String length is encoded (varint?) starting at data[start_offset[i]]
+//   String contents follow immediately after string length.
+
+@Opaque public static class TF_Tensor extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Tensor() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Tensor(Pointer p) { super(p); }
+}
+
+// Return a new tensor that holds the bytes data[0,len-1].
+//
+// The data will be deallocated by a subsequent call to TF_DeleteTensor via:
+//      (*deallocator)(data, len, deallocator_arg)
+// Clients must provide a custom deallocator function so they can pass in
+// memory managed by something like numpy.
+public static class Deallocator_Pointer_long_Pointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Deallocator_Pointer_long_Pointer(Pointer p) { super(p); }
+    protected Deallocator_Pointer_long_Pointer() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer data, @Cast("size_t") long len,
+                                                   Pointer arg);
+}
+public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongPointer dims, int num_dims,
+                               Pointer data, @Cast("size_t") long len,
+                               Deallocator_Pointer_long_Pointer deallocator,
+                               Pointer deallocator_arg);
+public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongBuffer dims, int num_dims,
+                               Pointer data, @Cast("size_t") long len,
+                               Deallocator_Pointer_long_Pointer deallocator,
+                               Pointer deallocator_arg);
+public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") long[] dims, int num_dims,
+                               Pointer data, @Cast("size_t") long len,
+                               Deallocator_Pointer_long_Pointer deallocator,
+                               Pointer deallocator_arg);
+
+// Destroy a tensor.
+public static native void TF_DeleteTensor(TF_Tensor arg0);
+
+// Return the type of a tensor element.
+public static native @Cast("TF_DataType") int TF_TensorType(@Const TF_Tensor arg0);
+
+// Return the number of dimensions that the tensor has.
+public static native int TF_NumDims(@Const TF_Tensor arg0);
+
+// Return the length of the tensor in the "dim_index" dimension.
+// REQUIRES: 0 <= dim_index < TF_NumDims(tensor)
+public static native @Cast("int64_t") long TF_Dim(@Const TF_Tensor tensor, int dim_index);
+
+// Return the size of the underlying data in bytes.
+public static native @Cast("size_t") long TF_TensorByteSize(@Const TF_Tensor arg0);
+
+// Return a pointer to the underlying data buffer.
+public static native Pointer TF_TensorData(@Const TF_Tensor arg0);
+
+// --------------------------------------------------------------------------
+// TF_SessionOptions holds options that can be passed during session creation.
+@Opaque public static class TF_SessionOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_SessionOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_SessionOptions(Pointer p) { super(p); }
+}
+
+// Return a new options object.
+public static native TF_SessionOptions TF_NewSessionOptions();
+
+// Set the target in TF_SessionOptions.options.
+// target can be empty, a single entry, or a comma separated list of entries.
+// Each entry is in one of the following formats :
+// "local"
+// ip:port
+// host:port
+public static native void TF_SetTarget(TF_SessionOptions options, @Cast("const char*") BytePointer target);
+public static native void TF_SetTarget(TF_SessionOptions options, String target);
+
+// Set the config in TF_SessionOptions.options.
+// config should be a serialized tensorflow.ConfigProto proto.
+// If config was not parsed successfully as a ConfigProto, record the
+// error information in *status.
+public static native void TF_SetConfig(TF_SessionOptions options, @Const Pointer proto,
+                         @Cast("size_t") long proto_len, TF_Status status);
+
+// Destroy an options object.
+public static native void TF_DeleteSessionOptions(TF_SessionOptions arg0);
+
+// TODO(jeff,sanjay):
+// - export functions to set Config fields
+
+// --------------------------------------------------------------------------
+// The new graph construction API, still under development.
+
+// Represents a computation graph.  Graphs may be shared between sessions.
+// Graphs are thread-safe when used as directed below.
+@Opaque public static class TF_Graph extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Graph() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Graph(Pointer p) { super(p); }
+}
+
+// Return a new graph object.
+public static native TF_Graph TF_NewGraph();
+
+// Destroy an options object.  Graph will be deleted once no more
+// TFSessionWithGraph's are referencing it.
+public static native void TF_DeleteGraph(TF_Graph arg0);
+
+// Operation being built. The underlying graph must outlive this.
+@Opaque public static class TF_OperationDescription extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_OperationDescription() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_OperationDescription(Pointer p) { super(p); }
+}
+
+// Operation that has been added to the graph. Valid until the graph is
+// deleted -- in particular adding a new operation to the graph does not
+// invalidate old TF_Operation* pointers.
+@Opaque public static class TF_Operation extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Operation() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Operation(Pointer p) { super(p); }
+}
+
+// Represents a specific input or output of an operation, e.g. to
+// specify the specific output to pass as an input to a new op.
+public static class TF_Port extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public TF_Port() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TF_Port(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Port(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public TF_Port position(long position) {
+        return (TF_Port)super.position(position);
+    }
+
+  public native TF_Operation oper(); public native TF_Port oper(TF_Operation oper);
+  public native int index(); public native TF_Port index(int index);  // Specifies the index of the input or output within oper.
+}
+
+// Operation will only be added to *graph when TF_FinishOperation() is
+// called (assuming TF_FinishOperation() does not return an error).
+// *graph must not be deleted until after TF_FinishOperation() is
+// called.
+public static native TF_OperationDescription TF_NewOperation(TF_Graph graph,
+                                                @Cast("const char*") BytePointer op_type,
+                                                @Cast("const char*") BytePointer oper_name);
+public static native TF_OperationDescription TF_NewOperation(TF_Graph graph,
+                                                String op_type,
+                                                String oper_name);
+
+// Specify the device for `desc`.  Defaults to empty, meaning unconstrained.
+public static native void TF_SetDevice(TF_OperationDescription desc, @Cast("const char*") BytePointer device);
+public static native void TF_SetDevice(TF_OperationDescription desc, String device);
+
+// The calls to TF_AddInput and TF_AddInputList must match (in number,
+// order, and type) the op declaration.  For example, the "Concat" op
+// has registration:
+//   REGISTER_OP("Concat")
+//       .Input("concat_dim: int32")
+//       .Input("values: N * T")
+//       .Output("output: T")
+//       .Attr("N: int >= 2")
+//       .Attr("T: type");
+// that defines two inputs, "concat_dim" and "values" (in that order).
+// You must use TF_AddInput() for the first input (since it takes a
+// single tensor), and TF_AddInputList() for the second input (since
+// it takes a list, even if you were to pass a list with a single
+// tensor), as in:
+//   TF_OperationDescription* desc = TF_NewOperation(graph, "Concat", "c");
+//   TF_Port concat_dim_input = {...};
+//   TF_AddInput(desc, concat_dim_input);
+//   TF_Port values_inputs[5] = {{...}, ..., {...}};
+//   TF_AddInputList(desc, 5, values_inputs);
+
+// For inputs that take a single tensor.
+public static native void TF_AddInput(TF_OperationDescription desc, @ByVal TF_Port input);
+
+// For inputs that take a list of tensors.
+// inputs must point to TF_Port[num_inputs].
+public static native void TF_AddInputList(TF_OperationDescription desc,
+                            @Const TF_Port inputs, int num_inputs);
+
+// Call once per control input to `desc`.
+public static native void TF_AddControlInput(TF_OperationDescription desc,
+                               TF_Operation input);
+
+// Call some TF_SetAttr*() function for every attr that is not
+// inferred from an input and doesn't have a default value you wish to
+// keep.
+
+// `value` must point to a string of length `length` bytes.
+public static native void TF_SetAttrString(TF_OperationDescription desc,
+                             @Cast("const char*") BytePointer attr_name, @Const Pointer value,
+                             int length);
+public static native void TF_SetAttrString(TF_OperationDescription desc,
+                             String attr_name, @Const Pointer value,
+                             int length);
+// `values` and `lengths` both must have lengths `num_values`.
+// `values[i]` must point to a string of length `lengths[i]` bytes.
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 @Cast("const char*") BytePointer attr_name,
+                                 @Cast("const void*const*") PointerPointer values, @Const IntPointer lengths,
+                                 int num_values);
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 @Cast("const char*") BytePointer attr_name,
+                                 @Cast("const void*const*") @ByPtrPtr Pointer values, @Const IntPointer lengths,
+                                 int num_values);
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 String attr_name,
+                                 @Cast("const void*const*") @ByPtrPtr Pointer values, @Const IntBuffer lengths,
+                                 int num_values);
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 @Cast("const char*") BytePointer attr_name,
+                                 @Cast("const void*const*") @ByPtrPtr Pointer values, @Const int[] lengths,
+                                 int num_values);
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 String attr_name,
+                                 @Cast("const void*const*") @ByPtrPtr Pointer values, @Const IntPointer lengths,
+                                 int num_values);
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 @Cast("const char*") BytePointer attr_name,
+                                 @Cast("const void*const*") @ByPtrPtr Pointer values, @Const IntBuffer lengths,
+                                 int num_values);
+public static native void TF_SetAttrStringList(TF_OperationDescription desc,
+                                 String attr_name,
+                                 @Cast("const void*const*") @ByPtrPtr Pointer values, @Const int[] lengths,
+                                 int num_values);
+public static native void TF_SetAttrInt(TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
+                          @Cast("int64_t") long value);
+public static native void TF_SetAttrInt(TF_OperationDescription desc, String attr_name,
+                          @Cast("int64_t") long value);
+public static native void TF_SetAttrIntList(TF_OperationDescription desc,
+                              @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongPointer values,
+                              int num_values);
+public static native void TF_SetAttrIntList(TF_OperationDescription desc,
+                              String attr_name, @Cast("const int64_t*") LongBuffer values,
+                              int num_values);
+public static native void TF_SetAttrIntList(TF_OperationDescription desc,
+                              @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") long[] values,
+                              int num_values);
+public static native void TF_SetAttrIntList(TF_OperationDescription desc,
+                              String attr_name, @Cast("const int64_t*") LongPointer values,
+                              int num_values);
+public static native void TF_SetAttrIntList(TF_OperationDescription desc,
+                              @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongBuffer values,
+                              int num_values);
+public static native void TF_SetAttrIntList(TF_OperationDescription desc,
+                              String attr_name, @Cast("const int64_t*") long[] values,
+                              int num_values);
+public static native void TF_SetAttrFloat(TF_OperationDescription desc,
+                            @Cast("const char*") BytePointer attr_name, float value);
+public static native void TF_SetAttrFloat(TF_OperationDescription desc,
+                            String attr_name, float value);
+public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name, @Const FloatPointer values,
+                                int num_values);
+public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
+                                String attr_name, @Const FloatBuffer values,
+                                int num_values);
+public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name, @Const float[] values,
+                                int num_values);
+public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
+                                String attr_name, @Const FloatPointer values,
+                                int num_values);
+public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name, @Const FloatBuffer values,
+                                int num_values);
+public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
+                                String attr_name, @Const float[] values,
+                                int num_values);
+public static native void TF_SetAttrBool(TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
+                           @Cast("unsigned char") byte value);
+public static native void TF_SetAttrBool(TF_OperationDescription desc, String attr_name,
+                           @Cast("unsigned char") byte value);
+public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
+                               @Cast("const char*") BytePointer attr_name,
+                               @Cast("const unsigned char*") BytePointer values, int num_values);
+public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
+                               String attr_name,
+                               @Cast("const unsigned char*") ByteBuffer values, int num_values);
+public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
+                               @Cast("const char*") BytePointer attr_name,
+                               @Cast("const unsigned char*") byte[] values, int num_values);
+public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
+                               String attr_name,
+                               @Cast("const unsigned char*") BytePointer values, int num_values);
+public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
+                               @Cast("const char*") BytePointer attr_name,
+                               @Cast("const unsigned char*") ByteBuffer values, int num_values);
+public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
+                               String attr_name,
+                               @Cast("const unsigned char*") byte[] values, int num_values);
+public static native void TF_SetAttrType(TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
+                           @Cast("TF_DataType") int value);
+public static native void TF_SetAttrType(TF_OperationDescription desc, String attr_name,
+                           @Cast("TF_DataType") int value);
+public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
+                               @Cast("const char*") BytePointer attr_name, @Cast("const TF_DataType*") IntPointer values,
+                               int num_values);
+public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
+                               String attr_name, @Cast("const TF_DataType*") IntBuffer values,
+                               int num_values);
+public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
+                               @Cast("const char*") BytePointer attr_name, @Cast("const TF_DataType*") int[] values,
+                               int num_values);
+public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
+                               String attr_name, @Cast("const TF_DataType*") IntPointer values,
+                               int num_values);
+public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
+                               @Cast("const char*") BytePointer attr_name, @Cast("const TF_DataType*") IntBuffer values,
+                               int num_values);
+public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
+                               String attr_name, @Cast("const TF_DataType*") int[] values,
+                               int num_values);
+
+// Set `num_dims` to -1 to represent "unknown rank".  Otherwise,
+// `dims` points to an array of length `num_dims`.  `dims[i]` must be
+// >= -1, with -1 meaning "unknown dimension".
+public static native void TF_SetAttrShape(TF_OperationDescription desc,
+                            @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongPointer dims,
+                            int num_dims);
+public static native void TF_SetAttrShape(TF_OperationDescription desc,
+                            String attr_name, @Cast("const int64_t*") LongBuffer dims,
+                            int num_dims);
+public static native void TF_SetAttrShape(TF_OperationDescription desc,
+                            @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") long[] dims,
+                            int num_dims);
+public static native void TF_SetAttrShape(TF_OperationDescription desc,
+                            String attr_name, @Cast("const int64_t*") LongPointer dims,
+                            int num_dims);
+public static native void TF_SetAttrShape(TF_OperationDescription desc,
+                            @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongBuffer dims,
+                            int num_dims);
+public static native void TF_SetAttrShape(TF_OperationDescription desc,
+                            String attr_name, @Cast("const int64_t*") long[] dims,
+                            int num_dims);
+// `dims` and `num_dims` must point to arrays of length `num_shapes`.
+// Set `num_dims[i]` to -1 to represent "unknown rank".  Otherwise,
+// `dims[i]` points to an array of length `num_dims[i]`.  `dims[i][j]`
+// must be >= -1, with -1 meaning "unknown dimension".
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name,
+                                @Cast("const int64_t*const*") PointerPointer dims, @Const IntPointer num_dims,
+                                int num_shapes);
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name,
+                                @Cast("const int64_t*const*") @ByPtrPtr LongPointer dims, @Const IntPointer num_dims,
+                                int num_shapes);
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                String attr_name,
+                                @Cast("const int64_t*const*") @ByPtrPtr LongBuffer dims, @Const IntBuffer num_dims,
+                                int num_shapes);
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name,
+                                @Cast("const int64_t*const*") @ByPtrPtr long[] dims, @Const int[] num_dims,
+                                int num_shapes);
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                String attr_name,
+                                @Cast("const int64_t*const*") @ByPtrPtr LongPointer dims, @Const IntPointer num_dims,
+                                int num_shapes);
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                @Cast("const char*") BytePointer attr_name,
+                                @Cast("const int64_t*const*") @ByPtrPtr LongBuffer dims, @Const IntBuffer num_dims,
+                                int num_shapes);
+public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
+                                String attr_name,
+                                @Cast("const int64_t*const*") @ByPtrPtr long[] dims, @Const int[] num_dims,
+                                int num_shapes);
+// `proto` must point to an array of `proto_len` bytes representing a
+// binary-serialized TensorShapeProto.
+public static native void TF_SetAttrTensorShapeProto(TF_OperationDescription desc,
+                                       @Cast("const char*") BytePointer attr_name, Pointer proto,
+                                       int proto_len, TF_Status status);
+public static native void TF_SetAttrTensorShapeProto(TF_OperationDescription desc,
+                                       String attr_name, Pointer proto,
+                                       int proto_len, TF_Status status);
+// `protos` and `proto_lens` must point to arrays of length `num_shapes`.
+// `protos[i]` must point to an array of `proto_lens[i]` bytes
+// representing a binary-serialized TensorShapeProto.
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const void*const*") PointerPointer protos,
+                                           @Const IntPointer proto_lens,
+                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
+                                           @Const IntPointer proto_lens,
+                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           String attr_name,
+                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
+                                           @Const IntBuffer proto_lens,
+                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
+                                           @Const int[] proto_lens,
+                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           String attr_name,
+                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
+                                           @Const IntPointer proto_lens,
+                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
+                                           @Const IntBuffer proto_lens,
+                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
+                                           String attr_name,
+                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
+                                           @Const int[] proto_lens,
+                                           int num_shapes, TF_Status status);
+
+// This functions takes ownership of *value (the
+// implementation will eventually call TF_DeleteTensor).
+public static native void TF_SetAttrTensor(TF_OperationDescription desc,
+                             @Cast("const char*") BytePointer attr_name, TF_Tensor value,
+                             TF_Status status);
+public static native void TF_SetAttrTensor(TF_OperationDescription desc,
+                             String attr_name, TF_Tensor value,
+                             TF_Status status);
+// This functions takes ownership of values[0]..values[num_values-1] (the
+// implementation will eventually call TF_DeleteTensor on each).
+public static native void TF_SetAttrTensorList(TF_OperationDescription desc,
+                                 @Cast("const char*") BytePointer attr_name,
+                                 @Cast("TF_Tensor*const*") PointerPointer values, int num_values,
+                                 TF_Status status);
+public static native void TF_SetAttrTensorList(TF_OperationDescription desc,
+                                 @Cast("const char*") BytePointer attr_name,
+                                 @ByPtrPtr TF_Tensor values, int num_values,
+                                 TF_Status status);
+public static native void TF_SetAttrTensorList(TF_OperationDescription desc,
+                                 String attr_name,
+                                 @ByPtrPtr TF_Tensor values, int num_values,
+                                 TF_Status status);
+
+// `proto` should point to a sequence of bytes of length `proto_len`
+// representing a binary serialization of an AttrValue protocol
+// buffer.
+public static native void TF_SetAttrToAttrValueProto(TF_OperationDescription desc,
+                                       @Cast("const char*") BytePointer attr_name, @Const Pointer proto,
+                                       @Cast("size_t") long proto_len, TF_Status status);
+public static native void TF_SetAttrToAttrValueProto(TF_OperationDescription desc,
+                                       String attr_name, @Const Pointer proto,
+                                       @Cast("size_t") long proto_len, TF_Status status);
+
+// If this function succeeds:
+//   * *status is set to an OK value,
+//   * a TF_Operation is added to the graph,
+//   * a non-null value pointing to the added operation is returned --
+//     this value is valid until the underlying graph is deleted.
+// Otherwise:
+//   * *status is set to a non-OK value,
+//   * the graph is not modified,
+//   * a null value is returned.
+// In either case, it deletes `desc`.
+public static native TF_Operation TF_FinishOperation(TF_OperationDescription desc,
+                                        TF_Status status);
+
+// TF_Operation functions.  Operations are immutable once created, so
+// these are all query functions.
+
+public static native @Cast("const char*") BytePointer TF_OperationName(TF_Operation oper);
+public static native @Cast("const char*") BytePointer TF_OperationOpType(TF_Operation oper);
+public static native @Cast("const char*") BytePointer TF_OperationDevice(TF_Operation oper);
+
+public static native int TF_OperationNumOutputs(TF_Operation oper);
+public static native @Cast("TF_DataType") int TF_OperationOutputType(@ByVal TF_Port oper_out);
+public static native int TF_OperationOutputListLength(TF_Operation oper,
+                                        @Cast("const char*") BytePointer arg_name,
+                                        TF_Status status);
+public static native int TF_OperationOutputListLength(TF_Operation oper,
+                                        String arg_name,
+                                        TF_Status status);
+
+public static native int TF_OperationNumInputs(TF_Operation oper);
+public static native @Cast("TF_DataType") int TF_OperationInputType(@ByVal TF_Port oper_in);
+public static native int TF_OperationInputListLength(TF_Operation oper, @Cast("const char*") BytePointer arg_name,
+                                       TF_Status status);
+public static native int TF_OperationInputListLength(TF_Operation oper, String arg_name,
+                                       TF_Status status);
+
+// In this code:
+//   TF_Port producer = TF_OperationInput(consumer);
+// There is an edge from producer.oper's output (given by
+// producer.index) to consumer.oper's input (given by consumer.index).
+public static native @ByVal TF_Port TF_OperationInput(@ByVal TF_Port oper_in);
+
+// Get the number of current consumers of a specific output of an
+// operation.  Note that this number can change when new operations
+// are added to the graph.
+public static native int TF_OperationOutputNumConsumers(@ByVal TF_Port oper_out);
+
+// Get list of all current consumers of a specific output of an
+// operation.  `consumers` must point to an array of length at least
+// `max_consumers` (ideally set to
+// TF_OperationOutputNumConsumers(oper_out)).  Beware that a concurrent
+// modification of the graph can increase the number of consumers of
+// an operation.  Returns the number of output consumers (should match
+// TF_OperationOutputNumConsumers(oper_out)).
+public static native int TF_OperationOutputConsumers(@ByVal TF_Port oper_out, TF_Port consumers,
+                                       int max_consumers);
+
+// Get the number of control inputs to an operation.
+public static native int TF_OperationNumControlInputs(TF_Operation oper);
+
+// Get list of all control inputs to an operation.  `control_inputs` must
+// point to an array of length `max_control_inputs` (ideally set to
+// TF_OperationNumControlInputs(oper)).  Returns the number of control
+// inputs (should match TF_OperationNumControlInputs(oper)).
+public static native int TF_OperationGetControlInputs(TF_Operation oper,
+                                        @Cast("TF_Operation**") PointerPointer control_inputs,
+                                        int max_control_inputs);
+public static native int TF_OperationGetControlInputs(TF_Operation oper,
+                                        @ByPtrPtr TF_Operation control_inputs,
+                                        int max_control_inputs);
+
+// Get the number of operations that have `*oper` as a control input.
+// Note that this number can change when new operations are added to
+// the graph.
+public static native int TF_OperationNumControlOutputs(TF_Operation oper);
+
+// Get the list of operations that have `*oper` as a control input.
+// `control_outputs` must point to an array of length at least
+// `max_control_outputs` (ideally set to
+// TF_OperationNumControlOutputs(oper)). Beware that a concurrent
+// modification of the graph can increase the number of control
+// outputs.  Returns the number of control outputs (should match
+// TF_OperationNumControlOutputs(oper)).
+public static native int TF_OperationGetControlOutputs(TF_Operation oper,
+                                         @Cast("TF_Operation**") PointerPointer control_outputs,
+                                         int max_control_outputs);
+public static native int TF_OperationGetControlOutputs(TF_Operation oper,
+                                         @ByPtrPtr TF_Operation control_outputs,
+                                         int max_control_outputs);
+
+// Sets `output_attr_value` to the binary-serialized AttrValue proto
+// representation of the value of the `attr_name` attr of `oper`.
+public static native void TF_OperationGetAttrValueProto(TF_Operation oper,
+                                          @Cast("const char*") BytePointer attr_name,
+                                          TF_Buffer output_attr_value,
+                                          TF_Status status);
+public static native void TF_OperationGetAttrValueProto(TF_Operation oper,
+                                          String attr_name,
+                                          TF_Buffer output_attr_value,
+                                          TF_Status status);
+
+// Returns the operation in the graph with `oper_name`. Returns nullptr if
+// no operation found.
+public static native TF_Operation TF_GraphOperationByName(TF_Graph graph,
+                                             @Cast("const char*") BytePointer oper_name);
+public static native TF_Operation TF_GraphOperationByName(TF_Graph graph,
+                                             String oper_name);
+
+// Iterate through the operations of a graph.  To use:
+// size_t pos = 0;
+// TF_Operation* oper;
+// while ((oper = TF_GraphNextOperation(graph, &pos)) != nullptr) {
+//   DoSomethingWithOperation(oper);
+// }
+public static native TF_Operation TF_GraphNextOperation(TF_Graph graph, @Cast("size_t*") SizeTPointer pos);
+
+// Note: The following two functions may fail on very large protos in the
+// future.
+
+public static native void TF_GraphToGraphDef(TF_Graph graph, TF_Buffer output_graph_def,
+                               TF_Status status);
+
+public static native void TF_OperationToNodeDef(TF_Operation oper,
+                                  TF_Buffer output_node_def,
+                                  TF_Status status);
+
+// TODO(josh11b): Query attrs for an operation.
+
+// TODO(cwhipkey): Query shape for operation outputs.
+
+// TODO(josh11b,mrry): Import GraphDef into TF_Graph.
+
+// TODO(andydavis): Function to add gradients to a graph.
+
+// TODO(josh11b): Register OpDef, available to all operations added
+// to this graph.
+
+// The following two may both benefit from a subgraph-definition API
+// that re-uses most of the graph-definition API.
+// TODO(andydavis): Add functions to a graph.
+// TODO(yuanbyu): Add while loop to graph.
+
+// --------------------------------------------------------------------------
+// The new session API that uses TF_Graph*.  The intent is this will
+// replace the TF_ExtendGraph() API.
+
+// TODO(josh11b): Rename this TF_Session once we delete the old API.
+@Opaque public static class TF_SessionWithGraph extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_SessionWithGraph() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_SessionWithGraph(Pointer p) { super(p); }
+}
+
+// Return a new execution session with the associated graph, or NULL
+// on error.  *graph must be a valid graph (not deleted or nullptr).
+// This function will prevent the graph from being deleted until
+// TF_DeleteSessionWithGraph() is called.  Does not take ownership of opts.
+// TODO(josh11b): Rename this TF_NewSession() once we delete the old API.
+public static native TF_SessionWithGraph TF_NewSessionWithGraph(
+    TF_Graph graph, @Const TF_SessionOptions opts, TF_Status status);
+
+// Close a session. This contacts any other processes associated with this
+// session, if applicable. This may not be called after
+// TF_DeleteSessionWithGraph().
+// TODO(josh11b): Rename this TF_CloseSession() once we delete the old API.
+public static native void TF_CloseSessionWithGraph(TF_SessionWithGraph arg0, TF_Status status);
+
+// Destroy a session object.  Even if error information is recorded in
+// *status, this call discards all local resources associated with the
+// session.  The session may not be used during or after this call
+// (and the session drops its reference to the corresponding graph).
+// TODO(josh11b): Rename this TF_DeleteSession() once we delete the old API.
+public static native void TF_DeleteSessionWithGraph(TF_SessionWithGraph arg0, TF_Status status);
+
+// See TF_Run() below.
+public static native void TF_SessionRun(TF_SessionWithGraph session,
+                          @Const TF_Buffer run_options,
+                          @Const TF_Port inputs, @Cast("TF_Tensor*const*") PointerPointer input_values,
+                          int ninputs,
+                          @Const TF_Port outputs, @Cast("TF_Tensor**") PointerPointer output_values,
+                          int noutputs,
+                          @Cast("const TF_Operation*const*") PointerPointer target_opers, int ntargets,
+                          TF_Buffer run_metadata,
+                          TF_Status arg11);
+public static native void TF_SessionRun(TF_SessionWithGraph session,
+                          @Const TF_Buffer run_options,
+                          @Const TF_Port inputs, @ByPtrPtr TF_Tensor input_values,
+                          int ninputs,
+                          @Const TF_Port outputs, @ByPtrPtr TF_Tensor output_values,
+                          int noutputs,
+                          @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+                          TF_Buffer run_metadata,
+                          TF_Status arg11);
+
+// See TF_PRunSetup() below.
+public static native void TF_SessionPRunSetup(TF_SessionWithGraph arg0,
+                                @Const TF_Port inputs, int ninputs,
+                                @Const TF_Port outputs, int noutputs,
+                                @Cast("const TF_Operation*const*") PointerPointer target_opers,
+                                int ntargets,
+                                @Cast("const char**") PointerPointer handle,
+                                TF_Status arg8);
+public static native void TF_SessionPRunSetup(TF_SessionWithGraph arg0,
+                                @Const TF_Port inputs, int ninputs,
+                                @Const TF_Port outputs, int noutputs,
+                                @Const @ByPtrPtr TF_Operation target_opers,
+                                int ntargets,
+                                @Cast("const char**") @ByPtrPtr BytePointer handle,
+                                TF_Status arg8);
+public static native void TF_SessionPRunSetup(TF_SessionWithGraph arg0,
+                                @Const TF_Port inputs, int ninputs,
+                                @Const TF_Port outputs, int noutputs,
+                                @Const @ByPtrPtr TF_Operation target_opers,
+                                int ntargets,
+                                @Cast("const char**") @ByPtrPtr ByteBuffer handle,
+                                TF_Status arg8);
+public static native void TF_SessionPRunSetup(TF_SessionWithGraph arg0,
+                                @Const TF_Port inputs, int ninputs,
+                                @Const TF_Port outputs, int noutputs,
+                                @Const @ByPtrPtr TF_Operation target_opers,
+                                int ntargets,
+                                @Cast("const char**") @ByPtrPtr byte[] handle,
+                                TF_Status arg8);
+
+// See TF_PRun() below.
+public static native void TF_SessionPRun(TF_SessionWithGraph arg0, @Cast("const char*") BytePointer handle,
+                           @Const TF_Port inputs,
+                           @Cast("TF_Tensor*const*") PointerPointer input_values, int ninputs,
+                           @Const TF_Port outputs, @Cast("TF_Tensor**") PointerPointer output_values,
+                           int noutputs,
+                           @Cast("const TF_Operation*const*") PointerPointer target_opers,
+                           int ntargets,
+                           TF_Status arg10);
+public static native void TF_SessionPRun(TF_SessionWithGraph arg0, @Cast("const char*") BytePointer handle,
+                           @Const TF_Port inputs,
+                           @ByPtrPtr TF_Tensor input_values, int ninputs,
+                           @Const TF_Port outputs, @ByPtrPtr TF_Tensor output_values,
+                           int noutputs,
+                           @Const @ByPtrPtr TF_Operation target_opers,
+                           int ntargets,
+                           TF_Status arg10);
+public static native void TF_SessionPRun(TF_SessionWithGraph arg0, String handle,
+                           @Const TF_Port inputs,
+                           @ByPtrPtr TF_Tensor input_values, int ninputs,
+                           @Const TF_Port outputs, @ByPtrPtr TF_Tensor output_values,
+                           int noutputs,
+                           @Const @ByPtrPtr TF_Operation target_opers,
+                           int ntargets,
+                           TF_Status arg10);
+
+// --------------------------------------------------------------------------
+// The deprecated session API.  Please switch to the above instead of
+// TF_ExtendGraph().  TF_Session manages a single graph and execution.
+
+@Opaque public static class TF_Session extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Session() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Session(Pointer p) { super(p); }
+}
+
+// Return a new execution session, or NULL on error.
+public static native TF_Session TF_NewSession(@Const TF_SessionOptions arg0, TF_Status status);
+
+// Close a session.
+public static native void TF_CloseSession(TF_Session arg0, TF_Status status);
+
+// Destroy a session.  Even if error information is recorded in *status,
+// this call discards all resources associated with the session.
+public static native void TF_DeleteSession(TF_Session arg0, TF_Status status);
+
+// Closes all existing sessions connected to the `target` specified in the
+// `SessionOptions`, and frees shared resources in `containers` on `target'.
+// If no containers are provided, all containers are cleared.
+public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") PointerPointer containers,
+                     int ncontainers, TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") @ByPtrPtr BytePointer containers,
+                     int ncontainers, TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") @ByPtrPtr ByteBuffer containers,
+                     int ncontainers, TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") @ByPtrPtr byte[] containers,
+                     int ncontainers, TF_Status status);
+
+// Treat the bytes proto[0,proto_len-1] as a serialized GraphDef and
+// add the nodes in that GraphDef to the graph for the session.
+public static native void TF_ExtendGraph(TF_Session arg0, @Const Pointer proto, @Cast("size_t") long proto_len,
+                           TF_Status arg3);
+
+// Run the graph associated with the session starting with the
+// supplied inputs (inputs[0,ninputs-1]).  Regardless of success or
+// failure, inputs[] become the property of the implementation (the
+// implementation will eventually call TF_DeleteTensor on each input).
+//
+// Any NULL and non-NULL value combinations for (`run_options`,
+// `run_metadata`) are valid.
+//
+//    - `run_options` may be NULL, in which case it will be ignored; or
+//      non-NULL, in which case it must point to a `TF_Buffer` containing the
+//      serialized representation of a `RunOptions` protocol buffer.
+//    - `run_metadata` may be NULL, in which case it will be ignored; or
+//      non-NULL, in which case it must point to an empty, freshly allocated
+//      `TF_Buffer` that may be updated to contain the serialized representation
+//      of a `RunMetadata` protocol buffer.
+//
+// The caller retains the ownership of `run_options` and/or `run_metadata` (when
+// not NULL) and should manually call TF_DeleteBuffer on them.
+//
+// On success, the tensors corresponding to output_names[0,noutputs-1]
+// are placed in outputs[], and these outputs[] become the property
+// of the caller (the caller must eventually call TF_DeleteTensor on
+// them).
+//
+// On failure, outputs[] contains NULLs.
+public static native void TF_Run(TF_Session arg0,
+                   @Const TF_Buffer run_options,
+                   @Cast("const char**") PointerPointer input_names, @Cast("TF_Tensor**") PointerPointer inputs, int ninputs,
+                   @Cast("const char**") PointerPointer output_names, @Cast("TF_Tensor**") PointerPointer outputs, int noutputs,
+                   @Cast("const char**") PointerPointer target_oper_names, int ntargets,
+                   TF_Buffer run_metadata,
+                   TF_Status arg11);
+public static native void TF_Run(TF_Session arg0,
+                   @Const TF_Buffer run_options,
+                   @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                   @Cast("const char**") @ByPtrPtr BytePointer output_names, @ByPtrPtr TF_Tensor outputs, int noutputs,
+                   @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                   TF_Buffer run_metadata,
+                   TF_Status arg11);
+public static native void TF_Run(TF_Session arg0,
+                   @Const TF_Buffer run_options,
+                   @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                   @Cast("const char**") @ByPtrPtr ByteBuffer output_names, @ByPtrPtr TF_Tensor outputs, int noutputs,
+                   @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                   TF_Buffer run_metadata,
+                   TF_Status arg11);
+public static native void TF_Run(TF_Session arg0,
+                   @Const TF_Buffer run_options,
+                   @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                   @Cast("const char**") @ByPtrPtr byte[] output_names, @ByPtrPtr TF_Tensor outputs, int noutputs,
+                   @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                   TF_Buffer run_metadata,
+                   TF_Status arg11);
+
+// Set up the graph with the intended feeds and fetches for a sequence
+// of partial run calls.
+//
+// On success, returns a handle that is used for subsequent PRun calls.
+//
+// On failure, out_status contains a tensorflow::Status with an error
+// message.
+// NOTE: This is EXPERIMENTAL and subject to change.
+public static native void TF_PRunSetup(TF_Session arg0,
+                         @Cast("const char**") PointerPointer input_names, int ninputs,
+                         @Cast("const char**") PointerPointer output_names, int noutputs,
+                         @Cast("const char**") PointerPointer target_oper_names, int ntargets,
+                         @Cast("const char**") PointerPointer handle,
+                         TF_Status arg8);
+public static native void TF_PRunSetup(TF_Session arg0,
+                         @Cast("const char**") @ByPtrPtr BytePointer input_names, int ninputs,
+                         @Cast("const char**") @ByPtrPtr BytePointer output_names, int noutputs,
+                         @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                         @Cast("const char**") @ByPtrPtr BytePointer handle,
+                         TF_Status arg8);
+public static native void TF_PRunSetup(TF_Session arg0,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer input_names, int ninputs,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer output_names, int noutputs,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer handle,
+                         TF_Status arg8);
+public static native void TF_PRunSetup(TF_Session arg0,
+                         @Cast("const char**") @ByPtrPtr byte[] input_names, int ninputs,
+                         @Cast("const char**") @ByPtrPtr byte[] output_names, int noutputs,
+                         @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                         @Cast("const char**") @ByPtrPtr byte[] handle,
+                         TF_Status arg8);
+
+// Continue to run the graph with additional feeds and fetches. The
+// execution state is uniquely identified by the handle.
+// NOTE: This is EXPERIMENTAL and subject to change.
+public static native void TF_PRun(TF_Session arg0, @Cast("const char*") BytePointer handle,
+                    @Cast("const char**") PointerPointer input_names, @Cast("TF_Tensor**") PointerPointer inputs, int ninputs,
+                    @Cast("const char**") PointerPointer output_names, @Cast("TF_Tensor**") PointerPointer outputs,
+                    int noutputs,
+                    @Cast("const char**") PointerPointer target_oper_names, int ntargets,
+                    TF_Status arg10);
+public static native void TF_PRun(TF_Session arg0, @Cast("const char*") BytePointer handle,
+                    @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                    @Cast("const char**") @ByPtrPtr BytePointer output_names, @ByPtrPtr TF_Tensor outputs,
+                    int noutputs,
+                    @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                    TF_Status arg10);
+public static native void TF_PRun(TF_Session arg0, String handle,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer output_names, @ByPtrPtr TF_Tensor outputs,
+                    int noutputs,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                    TF_Status arg10);
+public static native void TF_PRun(TF_Session arg0, @Cast("const char*") BytePointer handle,
+                    @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                    @Cast("const char**") @ByPtrPtr byte[] output_names, @ByPtrPtr TF_Tensor outputs,
+                    int noutputs,
+                    @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                    TF_Status arg10);
+public static native void TF_PRun(TF_Session arg0, String handle,
+                    @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                    @Cast("const char**") @ByPtrPtr BytePointer output_names, @ByPtrPtr TF_Tensor outputs,
+                    int noutputs,
+                    @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                    TF_Status arg10);
+public static native void TF_PRun(TF_Session arg0, @Cast("const char*") BytePointer handle,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer output_names, @ByPtrPtr TF_Tensor outputs,
+                    int noutputs,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                    TF_Status arg10);
+public static native void TF_PRun(TF_Session arg0, String handle,
+                    @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
+                    @Cast("const char**") @ByPtrPtr byte[] output_names, @ByPtrPtr TF_Tensor outputs,
+                    int noutputs,
+                    @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                    TF_Status arg10);
+
+// --------------------------------------------------------------------------
+// Load plugins containing custom ops and kernels
+
+// TF_Library holds information about dynamically loaded TensorFlow plugins.
+@Opaque public static class TF_Library extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Library() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Library(Pointer p) { super(p); }
+}
+
+// Load the library specified by library_filename and register the ops and
+// kernels present in that library.
+//
+// Pass "library_filename" to a platform-specific mechanism for dynamically
+// loading a library. The rules for determining the exact location of the
+// library are platform-specific and are not documented here.
+// Expects the symbols "RegisterOps", "RegisterKernels", and "GetOpList", to be
+// defined in the library.
+//
+// On success, place OK in status and return the newly created library handle.
+// The caller owns the library handle.
+//
+// On failure, place an error status in status and return NULL.
+public static native TF_Library TF_LoadLibrary(@Cast("const char*") BytePointer library_filename,
+                                  TF_Status status);
+public static native TF_Library TF_LoadLibrary(String library_filename,
+                                  TF_Status status);
+
+// Get the OpList of OpDefs defined in the library pointed by lib_handle.
+//
+// Returns a TF_Buffer. The memory pointed to by the result is owned by
+// lib_handle. The data in the buffer will be the serialized OpList proto for
+// ops defined in the library.
+public static native @ByVal TF_Buffer TF_GetOpList(TF_Library lib_handle);
+
+// #ifdef __cplusplus /* end extern "C" */
+// #endif
+
+// #endif  // TENSORFLOW_C_C_API_H_
+
+
 // Parsed from tensorflow/core/framework/op_def.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!

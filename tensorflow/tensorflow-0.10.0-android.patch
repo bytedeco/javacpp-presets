@@ -53,6 +53,46 @@ index 7f80bf9..85b0b7e 100644
 +        "//tensorflow/core:android_tensorflow_lib",
      ],
  )
+diff --git a/tensorflow/c/BUILD b/tensorflow/c/BUILD
+index fec8ca7..551a611 100644
+--- a/tensorflow/c/BUILD
++++ b/tensorflow/c/BUILD
+@@ -30,6 +30,19 @@ tf_cuda_library(
+     ],
+ )
+ 
++filegroup(
++    name = "c_api_files",
++    srcs = glob(
++        ["**/*"],
++        exclude = [
++            "**/METADATA",
++            "**/OWNERS",
++            "**/*test.cc",
++        ],
++    ),
++    visibility = ["//visibility:public"],
++)
++
+ tf_cuda_library(
+     name = "tf_status_helper",
+     srcs = ["tf_status_helper.cc"],
+diff --git a/tensorflow/core/BUILD b/tensorflow/core/BUILD
+index c5f2f18..3d69019 100644
+--- a/tensorflow/core/BUILD
++++ b/tensorflow/core/BUILD
+@@ -654,7 +654,10 @@ cc_library(
+ # binary size (by packaging a reduced operator set) is a concern.
+ cc_library(
+     name = "android_tensorflow_lib",
+-    srcs = if_android([":android_op_registrations_and_gradients"]),
++    srcs = if_android([
++    	":android_op_registrations_and_gradients",
++    	"//tensorflow/c:c_api_files",
++    ]),
+     copts = tf_copts(),
+     linkopts = ["-lz"],
+     tags = [
 diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
 index 3c2dab9..46fa346 100644
 --- a/tensorflow/core/kernels/BUILD
