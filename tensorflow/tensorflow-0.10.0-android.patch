@@ -1,5 +1,5 @@
 diff --git a/WORKSPACE b/WORKSPACE
-index 61c7773..2a21d81 100644
+index 61c7773..3d1f5d5 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -9,10 +9,10 @@ workspace(name = "org_tensorflow")
@@ -12,7 +12,7 @@ index 61c7773..2a21d81 100644
 -#    api_level=21)
 +android_ndk_repository(
 +    name="androidndk",
-+    path="/usr/local/Cellar/android-ndk/r11c",
++    path="<PATH_TO_NDK>",
 +    api_level=21)
  
  # Please add all new TensorFlow dependencies in workspace.bzl.
