@@ -53,4 +53,15 @@ index 7f80bf9..85b0b7e 100644
 +        "//tensorflow/core:android_tensorflow_lib",
      ],
  )
+diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
+index 3c2dab9..46fa346 100644
+--- a/tensorflow/core/kernels/BUILD
++++ b/tensorflow/core/kernels/BUILD
+@@ -1918,6 +1918,7 @@ filegroup(
+         "transpose_op.h",
+         "where_op.h",
+         "xent_op.h",
++        "cwise_op_floor.cc",
+     ],
+ )
  
