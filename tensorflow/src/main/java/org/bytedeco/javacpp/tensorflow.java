@@ -10308,25 +10308,6 @@ limitations under the License.
 // Template specialization that forwards all calls to the contained builder.
 
 // Template specialization that turns all calls into no-ops.
-
-@Namespace("tensorflow::register_op") public static class OpDefBuilderReceiver extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public OpDefBuilderReceiver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public OpDefBuilderReceiver(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OpDefBuilderReceiver(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public OpDefBuilderReceiver position(long position) {
-        return (OpDefBuilderReceiver)super.position(position);
-    }
-
-  // To call OpRegistry::Global()->Register(...), used by the
-  // REGISTER_OP macro below.
-  // Note: These are implicitly converting constructors.  // NOLINT(runtime/explicit)  // NOLINT(runtime/explicit)
-}
   // namespace register_op
 
 // #define REGISTER_OP(name) REGISTER_OP_UNIQ_HELPER(__COUNTER__, name)

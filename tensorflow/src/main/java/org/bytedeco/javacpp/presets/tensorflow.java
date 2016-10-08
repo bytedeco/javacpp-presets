@@ -235,7 +235,8 @@ public class tensorflow implements InfoMapper {
         infoMap.put(new Info("tensorflow::RegisterOps(void*)",
          "tensorflow::OpDefBuilder::Doc(tensorflow::StringPiece)",
          "tensorflow::register_op::OpDefBuilderWrapper<true>",
-         "tensorflow::register_op::OpDefBuilderWrapper<false>").skip());
+         "tensorflow::register_op::OpDefBuilderWrapper<false>",
+         "tensorflow::register_op::OpDefBuilderReceiver").skip());
     }
 
     public static class Fn extends FunctionPointer {
