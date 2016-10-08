@@ -158,14 +158,20 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
                .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
+               .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
 
+               .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
+               .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
+               .put(new Info("tensorflow::ops::Cast").cppTypes("class tensorflow::ops::Cast").pointerTypes("CastOp"))
+               .put(new Info("tensorflow::ops::Const").cppTypes("class tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>").cast().pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>").cast().pointerTypes("TensorShapeVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::ops::NodeOut>")/*.cast()*/.pointerTypes("NodeOutVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Node*>")/*.cast()*/.pointerTypes("NodeVector"))
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NeighborIter>").pointerTypes("NeighborIterRange").define())
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NeighborIter>()").skip())
@@ -310,6 +316,15 @@ public class tensorflow implements InfoMapper {
         protected EdgeLabelFunction() { allocate(); }
         private native void allocate();
         public native @StdString BytePointer call(@Cast("const tensorflow::Edge*") Pointer node);
+    }
+
+    public static class FactoryFn extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    FactoryFn(Pointer p) { super(p); }
+        protected FactoryFn() { allocate(); }
+        private native void allocate();
+        public native @Cast("tensorflow::FileSystem*") Pointer call();
     }
 
     public static class ShapeInferenceFn extends FunctionPointer {

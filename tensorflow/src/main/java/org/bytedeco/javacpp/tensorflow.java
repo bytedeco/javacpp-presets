@@ -12924,15 +12924,15 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node SourceOp(@StdString String op_name, @Const @ByRef GraphDefBuilder.Options opts);
 
 // For adding an Op with one input to a GraphDefBuilder.
-@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString BytePointer op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut input,
+@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString BytePointer op_name, @ByVal NodeBuilder.NodeOut input,
               @Const @ByRef GraphDefBuilder.Options opts);
-@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString String op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut input,
+@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString String op_name, Node input,
               @Const @ByRef GraphDefBuilder.Options opts);
 
 // For adding an Op with two inputs to a GraphDefBuilder.
-@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString BytePointer op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut a, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut b,
+@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString BytePointer op_name, @ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b,
                @Const @ByRef GraphDefBuilder.Options opts);
-@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString String op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut a, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut b,
+@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString String op_name, Node a, Node b,
                @Const @ByRef GraphDefBuilder.Options opts);
 
   // namespace ops
