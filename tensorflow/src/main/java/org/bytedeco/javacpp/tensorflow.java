@@ -11293,9 +11293,9 @@ limitations under the License.
   // to suppress the automatically-generated type documentation in
   // generated output.
 // #ifndef TF_LEAN_BINARY
-  
+  public native @ByRef OpDefBuilder Doc(@StringPiece BytePointer text);
+  public native @ByRef OpDefBuilder Doc(@StringPiece String text);
 // #else
-  
 // #endif
 
   public static class Fn_InferenceContext extends FunctionPointer {
@@ -11564,12 +11564,6 @@ limitations under the License.
                   @Const @ByPtrPtr OpRegistrationData op_reg_data);
 }
 
-// Treats 'registry_ptr' as a pointer to OpRegistry, and calls
-// registry_ptr->Register(op_def) for each op_def that has been registered with
-// the current library's global op registry (obtained by calling
-// OpRegistry::Global().
-
-
 // Support for defining the OpDef (specifying the semantics of the Op and how
 // it should be created) and registering it in the OpRegistry::Global()
 // registry.  Usage:
@@ -11597,29 +11591,29 @@ limitations under the License.
 // registration to turn the entire call-chain into a no-op.
 
 // Template specialization that forwards all calls to the contained builder.
-@Platform(not = "android") @Name("tensorflow::register_op::OpDefBuilderWrapper<true>") @NoOffset public static class TrueOpDefBuilderWrapper extends Pointer {
+@Name("tensorflow::register_op::OpDefBuilderWrapper<true>") @NoOffset public static class TrueOpDefBuilderWrapper extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrueOpDefBuilderWrapper(Pointer p) { super(p); }
 
   public TrueOpDefBuilderWrapper(@Cast("const char*") BytePointer name) { super((Pointer)null); allocate(name); }
-  private native @Platform(not = "android") void allocate(@Cast("const char*") BytePointer name);
+  private native void allocate(@Cast("const char*") BytePointer name);
   public TrueOpDefBuilderWrapper(String name) { super((Pointer)null); allocate(name); }
-  private native @Platform(not = "android") void allocate(String name);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece String spec);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Input(@StringPiece String spec);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Output(@StringPiece String spec);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper SetIsCommutative();
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper SetIsAggregate();
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper SetIsStateful();
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper SetAllowsUninitializedInput();
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece BytePointer explanation);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece String explanation);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece String text);
+  private native void allocate(String name);
+  public native @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
+  public native @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece String spec);
+  public native @ByRef TrueOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
+  public native @ByRef TrueOpDefBuilderWrapper Input(@StringPiece String spec);
+  public native @ByRef TrueOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
+  public native @ByRef TrueOpDefBuilderWrapper Output(@StringPiece String spec);
+  public native @ByRef TrueOpDefBuilderWrapper SetIsCommutative();
+  public native @ByRef TrueOpDefBuilderWrapper SetIsAggregate();
+  public native @ByRef TrueOpDefBuilderWrapper SetIsStateful();
+  public native @ByRef TrueOpDefBuilderWrapper SetAllowsUninitializedInput();
+  public native @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece BytePointer explanation);
+  public native @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece String explanation);
+  public native @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
+  public native @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece String text);
   public static class Fn_InferenceContext extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -11628,35 +11622,35 @@ limitations under the License.
       private native void allocate();
       public native @ByVal Status call(InferenceContext arg0);
   }
-  public native @Platform(not = "android") @ByRef TrueOpDefBuilderWrapper SetShapeFn(
+  public native @ByRef TrueOpDefBuilderWrapper SetShapeFn(
         Fn_InferenceContext fn);
   public native @Const @ByRef OpDefBuilder builder();
 }
 
 // Template specialization that turns all calls into no-ops.
-@Platform(not = "android") @Name("tensorflow::register_op::OpDefBuilderWrapper<false>") public static class FalseOpDefBuilderWrapper extends Pointer {
+@Name("tensorflow::register_op::OpDefBuilderWrapper<false>") public static class FalseOpDefBuilderWrapper extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FalseOpDefBuilderWrapper(Pointer p) { super(p); }
 
   public FalseOpDefBuilderWrapper(@Cast("const char*") BytePointer name) { super((Pointer)null); allocate(name); }
-  private native @Platform(not = "android") void allocate(@Cast("const char*") BytePointer name);
+  private native void allocate(@Cast("const char*") BytePointer name);
   public FalseOpDefBuilderWrapper(String name) { super((Pointer)null); allocate(name); }
-  private native @Platform(not = "android") void allocate(String name);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece String spec);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Input(@StringPiece String spec);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Output(@StringPiece String spec);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper SetIsCommutative();
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper SetIsAggregate();
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper SetIsStateful();
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper SetAllowsUninitializedInput();
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece BytePointer arg1);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece String arg1);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece String text);
+  private native void allocate(String name);
+  public native @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
+  public native @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece String spec);
+  public native @ByRef FalseOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
+  public native @ByRef FalseOpDefBuilderWrapper Input(@StringPiece String spec);
+  public native @ByRef FalseOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
+  public native @ByRef FalseOpDefBuilderWrapper Output(@StringPiece String spec);
+  public native @ByRef FalseOpDefBuilderWrapper SetIsCommutative();
+  public native @ByRef FalseOpDefBuilderWrapper SetIsAggregate();
+  public native @ByRef FalseOpDefBuilderWrapper SetIsStateful();
+  public native @ByRef FalseOpDefBuilderWrapper SetAllowsUninitializedInput();
+  public native @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece BytePointer arg1);
+  public native @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece String arg1);
+  public native @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
+  public native @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece String text);
   public static class Fn_InferenceContext extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -11665,8 +11659,24 @@ limitations under the License.
       private native void allocate();
       public native @ByVal Status call(InferenceContext arg0);
   }
-  public native @Platform(not = "android") @ByRef FalseOpDefBuilderWrapper SetShapeFn(
+  public native @ByRef FalseOpDefBuilderWrapper SetShapeFn(
         Fn_InferenceContext fn);
+}
+
+@Namespace("tensorflow::register_op") public static class OpDefBuilderReceiver extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpDefBuilderReceiver(Pointer p) { super(p); }
+
+  // To call OpRegistry::Global()->Register(...), used by the
+  // REGISTER_OP macro below.
+  // Note: These are implicitly converting constructors.
+  public OpDefBuilderReceiver(
+        @Const @ByRef TrueOpDefBuilderWrapper wrapper) { super((Pointer)null); allocate(wrapper); }
+  private native void allocate(
+        @Const @ByRef TrueOpDefBuilderWrapper wrapper);  // NOLINT(runtime/explicit)
+  public OpDefBuilderReceiver(@Const @ByRef FalseOpDefBuilderWrapper arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@Const @ByRef FalseOpDefBuilderWrapper arg0);  // NOLINT(runtime/explicit)
 }
   // namespace register_op
 

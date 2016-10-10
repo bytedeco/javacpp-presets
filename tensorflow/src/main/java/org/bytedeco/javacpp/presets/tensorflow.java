@@ -275,8 +275,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
                .put(new Info("tensorflow::EdgeSet::const_iterator", "tensorflow::EdgeSet::iterator").pointerTypes("EdgeSetIterator"))
 
-               .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").annotations("@Platform(not = \"android\")").pointerTypes("TrueOpDefBuilderWrapper"))
-               .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").annotations("@Platform(not = \"android\")").pointerTypes("FalseOpDefBuilderWrapper"))
+               .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").pointerTypes("TrueOpDefBuilderWrapper"))
+               .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))
 
                .put(new Info("protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap"))
 
@@ -322,12 +322,6 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::ops::Const(tensorflow::StringPiece, tensorflow::GraphDefBuilder::Options&)")
                        .javaText("@Namespace(\"tensorflow::ops\") public static native Node Const("
                                + "@Cast({\"\", \"tensorflow::StringPiece&\"}) @StringPiece String s, @Const @ByRef GraphDefBuilder.Options options);"));
-
-        infoMap.put(new Info("tensorflow::RegisterOps(void*)",
-         "tensorflow::OpDefBuilder::Doc(tensorflow::StringPiece)",
-         "tensorflow::register_op::OpDefBuilderWrapper<true>",
-         "tensorflow::register_op::OpDefBuilderWrapper<false>",
-         "tensorflow::register_op::OpDefBuilderReceiver").skip());
     }
 
     public static class Fn extends FunctionPointer {

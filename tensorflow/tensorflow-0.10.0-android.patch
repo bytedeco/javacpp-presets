@@ -122,3 +122,15 @@ index 3c2dab9..46fa346 100644
      ],
  )
  
+diff --git a/tensorflow/tensorflow.bzl b/tensorflow/tensorflow.bzl
+index f4a846a..23126fe 100644
+--- a/tensorflow/tensorflow.bzl
++++ b/tensorflow/tensorflow.bzl
+@@ -108,7 +108,6 @@ def tf_copts():
+           select({"//tensorflow:android": [
+                     "-std=c++11",
+                     "-DMIN_LOG_LEVEL=0",
+-                    "-DTF_LEAN_BINARY",
+                     "-O2",
+                   ],
+                   "//tensorflow:darwin": [],
