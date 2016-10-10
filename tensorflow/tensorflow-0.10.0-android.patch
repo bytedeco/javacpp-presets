@@ -93,6 +93,23 @@ index c5f2f18..3d69019 100644
      copts = tf_copts(),
      linkopts = ["-lz"],
      tags = [
+diff --git a/tensorflow/core/framework/op.h b/tensorflow/core/framework/op.h
+index abee32b..f047ddb 100644
+--- a/tensorflow/core/framework/op.h
++++ b/tensorflow/core/framework/op.h
+@@ -171,12 +171,6 @@ class OpListOpRegistry : public OpRegistryInterface {
+   std::unordered_map<string, const OpRegistrationData*> index_;
+ };
+ 
+-// Treats 'registry_ptr' as a pointer to OpRegistry, and calls
+-// registry_ptr->Register(op_def) for each op_def that has been registered with
+-// the current library's global op registry (obtained by calling
+-// OpRegistry::Global().
+-extern "C" void RegisterOps(void* registry_ptr);
+-
+ // Support for defining the OpDef (specifying the semantics of the Op and how
+ // it should be created) and registering it in the OpRegistry::Global()
+ // registry.  Usage:
 diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
 index 3c2dab9..46fa346 100644
 --- a/tensorflow/core/kernels/BUILD
