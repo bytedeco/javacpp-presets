@@ -10,6 +10,12 @@ fi
 export PYTHON_BIN_PATH=$(which python)
 export TF_NEED_CUDA=0
 export TF_NEED_GCP=0
+export TF_CUDA_VERSION=8.0
+export TF_CUDNN_VERSION=5
+export GCC_HOST_COMPILER_PATH=$(which gcc)
+export CUDA_TOOLKIT_PATH=/usr/local/cuda
+export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
+export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
 TENSORFLOW_VERSION=0.10.0
 
@@ -39,10 +45,13 @@ case $PLATFORM in
     linux-x86_64)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
-        export BUILDFLAGS="--copt=-m64 --linkopt=-m64"
+        export TF_NEED_CUDA=1
+        export GCC_HOST_COMPILER_PATH=$CC
+        export BUILDFLAGS="--config=cuda --copt=-m64 --linkopt=-m64"
         ;;
     macosx-*)
-        export BUILDFLAGS="--linkopt=-install_name --linkopt=@rpath/libtensorflow.so"
+        export TF_NEED_CUDA=1
+        export BUILDFLAGS="--config=cuda --linkopt=-install_name --linkopt=@rpath/libtensorflow.so"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

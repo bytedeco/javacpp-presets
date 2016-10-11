@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 0.8.0  http://www.tensorflow.org/
+ * TensorFlow 0.10.0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of TensorFlow ported to Java from this C++ source file:
 
- * https://github.com/tensorflow/tensorflow/blob/master/tensorflow/cc/tutorials/example_trainer.cc
+ * https://github.com/tensorflow/tensorflow/blob/v0.10.0/tensorflow/cc/tutorials/example_trainer.cc
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleTrainer.java` source files below, simply execute on the command line:
 ```bash
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.2</version>
+    <version>1.2.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>0.8.0-1.2</version>
+            <version>0.10.0-1.2.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -50,7 +50,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 ### The `src/main/java/ExampleTrainer.java` source file
 ```java
-/* Copyright 2015 Google Inc. All Rights Reserved.
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -125,31 +125,31 @@ public class ExampleTrainer {
     static GraphDef CreateGraphDef() throws Exception {
         // TODO(jeff,opensource): This should really be a more interesting
         // computation.  Maybe turn this into an mnist model instead?
-        GraphDefBuilder b = new GraphDefBuilder();
+        Scope root = Scope.NewRootScope();
 
-        // Store rows [3, 2] and [-1, 0] in row major format.
-        Node a = Const(new float[] {3.f, 2.f, -1.f, 0.f}, new TensorShape(2, 2), b.opts());
+        // a = [3 2; -1 0]
+        Output a = Const(root, Tensor.create(new float[] {3.f, 2.f, -1.f, 0.f}, new TensorShape(2, 2)));
 
-        // x is from the feed.
-        Node x = Const(new float[] {0.f}, new TensorShape(2, 1), b.opts().WithName("x"));
+        // x = [1.0; 1.0]
+        Output x = Const(root.WithOpName("x"), Tensor.create(new float[] {1.f, 1.f}, new TensorShape(2, 1)));
 
-        // y = A * x
-        Node y = MatMul(a, x, b.opts().WithName("y"));
+        // y = a * x
+        MatMul y = new MatMul(root.WithOpName("y"), new Input(a), new Input(x));
 
         // y2 = y.^2
-        Node y2 = Square(y, b.opts());
+        Square y2 = new Square(root, y.asInput());
 
         // y2_sum = sum(y2)
-        Node y2_sum = Sum(y2, Const(0, b.opts()), b.opts());
+        Sum y2_sum = new Sum(root, y2.asInput(), new Input(0));
 
         // y_norm = sqrt(y2_sum)
-        Node y_norm = Sqrt(y2_sum, b.opts());
+        Sqrt y_norm = new Sqrt(root, y2_sum.asInput());
 
         // y_normalized = y ./ y_norm
-        Div(y, y_norm, b.opts().WithName("y_normalized"));
+        new Div(root.WithOpName("y_normalized"), y.asInput(), y_norm.asInput());
 
         GraphDef def = new GraphDef();
-        Status s = b.ToGraphDef(def);
+        Status s = root.ToGraphDef(def);
         if (!s.ok()) {
             throw new Exception(s.error_message().getString());
         }
@@ -161,7 +161,10 @@ public class ExampleTrainer {
         assert y.NumElements() == 2;
         FloatBuffer x_flat = x.createBuffer();
         FloatBuffer y_flat = y.createBuffer();
-        float lambda = y_flat.get(0) / x_flat.get(0);
+        // Compute an estimate of the eigenvalue via
+        //      (x' A x) / (x' x) = (x' y) / (x' x)
+        // and exploit the fact that x' x = 1 by assumption
+        float lambda = x_flat.get(0) * y_flat.get(0) + x_flat.get(1) * y_flat.get(1);
         return String.format("lambda = %8.6f x = [%8.6f %8.6f] y = [%8.6f %8.6f]",
                              lambda, x_flat.get(0), x_flat.get(1), y_flat.get(0), y_flat.get(1));
     }
@@ -192,6 +195,9 @@ public class ExampleTrainer {
                 FloatBuffer x_flat = x.createBuffer();
                 x_flat.put(0, (float)Math.random());
                 x_flat.put(1, (float)Math.random());
+                float inv_norm = 1 / (float)Math.sqrt(x_flat.get(0) *  x_flat.get(0) + x_flat.get(1) *  x_flat.get(1));
+                x_flat.put(0, x_flat.get(0) * inv_norm);
+                x_flat.put(1, x_flat.get(1) * inv_norm);
 
                 // Iterations.
                 TensorVector outputs = new TensorVector();
