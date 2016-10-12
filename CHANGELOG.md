@@ -1,4 +1,5 @@
 
+ * Keep a reference of `tensorflow.SessionOptions` in `AbstractSession` to prevent premature deallocation ([pull #297](https://github.com/bytedeco/javacpp-presets/pull/297))
  * Enable CUDA in `cppbuild.sh` script for TensorFlow ([issue #294](https://github.com/bytedeco/javacpp-presets/issues/294))
  * Bundle `libgomp.so.1` in JAR files of OpenCV for the sake of some Linux distributions ([issue bytedeco/javacv#436](https://github.com/bytedeco/javacv/issues/436))
  * Fix `linux-armhf` and `linux-ppc64le` builds for all presets ([pull #279](https://github.com/bytedeco/javacpp-presets/pull/279))

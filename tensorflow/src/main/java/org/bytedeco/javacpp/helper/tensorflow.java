@@ -212,9 +212,13 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
 
     public static abstract class AbstractSession extends Pointer {
         static { Loader.load(); }
+
+        SessionOptions options; // a reference to prevent deallocation
+
         public AbstractSession(Pointer p) { super(p); }
         /** Calls {@link org.bytedeco.javacpp.tensorflow#NewSession(SessionOptions)} and registers a deallocator. */
         public AbstractSession(SessionOptions options) {
+            this.options = options;
             if (NewSession(options, (Session)this).ok() && !isNull()) {
                 deallocator(new DeleteDeallocator((Session)this));
             }
