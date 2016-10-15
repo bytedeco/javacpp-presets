@@ -1,0 +1,491 @@
+diff -ruN hdf5-1.10.0-patch1/configure hdf5-1.10.0-patch1-android/configure
+--- hdf5-1.10.0-patch1/configure	2016-05-19 04:06:24.000000000 +0900
++++ hdf5-1.10.0-patch1-android/configure	2016-10-15 23:36:18.669602427 +0900
+@@ -6335,75 +6335,6 @@
+ done
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking maximum decimal precision for C" >&5
+-$as_echo_n "checking maximum decimal precision for C... " >&6; }
+-rm -f pac_Cconftest.out
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-
+-                #include <float.h>
+-                #include <stdio.h>
+-                #define CHECK_FLOAT128 $ac_cv_sizeof___float128
+-                #if CHECK_FLOAT128!=0
+-                # if $HAVE_QUADMATH!=0
+-                #include <quadmath.h>
+-                # endif
+-                # ifdef FLT128_DIG
+-                #define C_FLT128_DIG FLT128_DIG
+-                # else
+-                #define C_FLT128_DIG 0
+-                # endif
+-                #else
+-                #define C_FLT128_DIG 0
+-                #endif
+-                #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+-                #define C_LDBL_DIG DECIMAL_DIG
+-                #else
+-                #define C_LDBL_DIG LDBL_DIG
+-                #endif
+-
+-int
+-main ()
+-{
+-
+-                  FILE * pFile;
+-                  pFile = fopen("pac_Cconftest.out","w");
+-                  fprintf(pFile, "%d\n%d\n", C_LDBL_DIG, C_FLT128_DIG);
+-
+-  ;
+-  return 0;
+-}
+-
+-_ACEOF
+-        if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  if ac_fn_c_try_run "$LINENO"; then :
+-
+-            if test -s pac_Cconftest.out ; then
+-	        LDBL_DIG="`sed -n '1p' pac_Cconftest.out`"
+-	        FLT128_DIG="`sed -n '2p' pac_Cconftest.out`"
+-            else
+-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No output from test program!" >&5
+-$as_echo "$as_me: WARNING: No output from test program!" >&2;}
+-            fi
+-            rm -f pac_Cconftest.out
+-
+-else
+-
+-            as_fn_error $? "C program fails to build or run!" "$LINENO" 5
+-
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam
+-fi
+-
+-
+-
+ 
+ 
+ if test "$ac_cv_sizeof___float128" != 0 && test "$FLT128_DIG" != 0 ; then
+@@ -28583,7 +28514,7 @@
+ fi
+ done
+ 
+-for ac_func in frexpl gethostname getpwuid getrusage gettimeofday
++for ac_func in frexpl gethostname getpwuid_bad getrusage gettimeofday
+ do :
+   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+@@ -30306,113 +30237,7 @@
+     ;;
+ esac
+ 
+-## ----------------------------------------------------------------------
+-## Set the flag to indicate that the machine is using a special algorithm to convert
+-## 'long double' to '(unsigned) long' values.  (This flag should only be set for
+-## the IBM Power6 Linux.  When the bit sequence of long double is
+-## 0x4351ccf385ebc8a0bfcc2a3c3d855620, the converted value of (unsigned)long
+-## is 0x004733ce17af227f, not the same as the library's conversion to 0x004733ce17af2282.
+-## The machine's conversion gets the correct value.  We define the macro and disable
+-## this kind of test until we figure out what algorithm they use.
+-##
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if using special algorithm to convert long double to (unsigned) long values" >&5
+-$as_echo_n "checking if using special algorithm to convert long double to (unsigned) long values... " >&6; }
+ 
+-if test ${ac_cv_sizeof_long_double} = 0; then
+-   hdf5_cv_ldouble_to_long_special=${hdf5_cv_ldouble_to_long_special=no}
+-else
+-   if ${hdf5_cv_ldouble_to_long_special+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-                #include <string.h>
+-
+-#ifdef FC_DUMMY_MAIN
+-#ifndef FC_DUMMY_MAIN_EQ_F77
+-#  ifdef __cplusplus
+-     extern "C"
+-#  endif
+-   int FC_DUMMY_MAIN() { return 1; }
+-#endif
+-#endif
+-int
+-main ()
+-{
+-
+-                long double         ld = 20041683600089727.779961L;
+-                long                ll;
+-                unsigned long       ull;
+-                unsigned char       s[16];
+-                unsigned char       s2[8];
+-                int                 ret = 1;
+-
+-                if(sizeof(long double) == 16 && sizeof(long) == 8) {
+-                    /*make sure the long double type has 16 bytes in size and
+-                     * 11 bits of exponent.  If it is,
+-                     *the bit sequence should be like below.  It's not
+-                     *a decent way to check but this info isn't available. */
+-                    memcpy(s, &ld, 16);
+-                    if(s[0]==0x43 && s[1]==0x51 && s[2]==0xcc && s[3]==0xf3 &&
+-                        s[4]==0x85 && s[5]==0xeb && s[6]==0xc8 && s[7]==0xa0 &&
+-                        s[8]==0xbf && s[9]==0xcc && s[10]==0x2a && s[11]==0x3c) {
+-
+-                        /* Assign the hexadecimal value of long double type. */
+-                        s[0]=0x43; s[1]=0x51; s[2]=0xcc; s[3]=0xf3;
+-                        s[4]=0x85; s[5]=0xeb; s[6]=0xc8; s[7]=0xa0;
+-                        s[8]=0xbf; s[9]=0xcc; s[10]=0x2a; s[11]=0x3c;
+-                        s[12]=0x3d; s[13]=0x85; s[14]=0x56; s[15]=0x20;
+-
+-                        memcpy(&ld, s, 16);
+-
+-                        ll = (long)ld;
+-                        memcpy(s2, &ll, 8);
+-
+-                        /* The library's algorithm converts it to 0x 00 47 33 ce 17 af 22 82
+-                         * and gets wrong value 20041683600089730 on the IBM Power6 Linux.
+-                         * But the IBM Power6 Linux converts it to 0x00 47 33 ce 17 af 22 7f
+-                         * and gets the correct value 20041683600089727.  It uses some special
+-                         * algorithm.  We're going to define the macro and skip the test until
+-                         * we can figure out how they do it. */
+-                        if(s2[0]==0x00 && s2[1]==0x47 && s2[2]==0x33 && s2[3]==0xce &&
+-                           s2[4]==0x17 && s2[5]==0xaf && s2[6]==0x22 && s2[7]==0x7f)
+-                            ret = 0;
+-
+-                        ull = (unsigned long)ld;
+-                        memcpy(s2, &ull, 8);
+-
+-                        /* The unsigned long is the same as signed long. */
+-                        if(s2[0]==0x00 && s2[1]==0x47 && s2[2]==0x33 && s2[3]==0xce &&
+-                           s2[4]==0x17 && s2[5]==0xaf && s2[6]==0x22 && s2[7]==0x7f)
+-                            ret = 0;
+-                    }
+-                }
+-                exit(ret);
+-
+-  ;
+-  return 0;
+-}
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-  hdf5_cv_ldouble_to_long_special=yes
+-else
+-  hdf5_cv_ldouble_to_long_special=no
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+-
+-fi
+-
+-fi
+ 
+ if test ${hdf5_cv_ldouble_to_long_special} = "yes"; then
+ 
+@@ -30425,115 +30250,7 @@
+ $as_echo "no" >&6; }
+ fi
+ 
+-## ----------------------------------------------------------------------
+-## Set the flag to indicate that the machine is using a special algorithm
+-## to convert some values of '(unsigned) long' to 'long double' values.
+-## (This flag should be off for all machines, except for IBM Power6 Linux,
+-## when the bit sequences are 003fff..., 007fff..., 00ffff..., 01ffff...,
+-## ..., 7fffff..., the compiler uses a unknown algorithm.  We define a
+-## macro and skip the test for now until we know about the algorithm.
+-##
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if using special algorithm to convert (unsigned) long to long double values" >&5
+-$as_echo_n "checking if using special algorithm to convert (unsigned) long to long double values... " >&6; }
+ 
+-if test ${ac_cv_sizeof_long_double} = 0; then
+-   hdf5_cv_long_to_ldouble_special=${hdf5_cv_long_to_ldouble_special=no}
+-else
+-   if ${hdf5_cv_long_to_ldouble_special+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-                #include <string.h>
+-
+-#ifdef FC_DUMMY_MAIN
+-#ifndef FC_DUMMY_MAIN_EQ_F77
+-#  ifdef __cplusplus
+-     extern "C"
+-#  endif
+-   int FC_DUMMY_MAIN() { return 1; }
+-#endif
+-#endif
+-int
+-main ()
+-{
+-
+-                long double         ld;
+-                long                ll;
+-                unsigned long       ull;
+-                unsigned char       s[16];
+-                int                 flag=0, ret=1;
+-
+-                /*Determine if long double has 16 byte in size, 11 bit exponent, and
+-                 *the bias is 0x3ff */
+-                if(sizeof(long double) == 16) {
+-                    ld = 1.0L;
+-                    memcpy(s, &ld, 16);
+-                    if(s[0]==0x3f && s[1]==0xf0 && s[2]==0x00 && s[3]==0x00 &&
+-                        s[4]==0x00 && s[5]==0x00 && s[6]==0x00 && s[7]==0x00)
+-                        flag = 1;
+-                }
+-
+-                if(flag==1 && sizeof(long)==8) {
+-                    ll = 0x003fffffffffffffL;
+-                    ld = (long double)ll;
+-                    memcpy(s, &ld, 16);
+-                    /* The library converts the value to 0x434fffffffffffff8000000000000000.
+-                     * In decimal it is 18014398509481982.000000, one value short of the original.
+-                     * The IBM Power6 Linux converts it to 0x4350000000000000bff0000000000000.
+-                     * The value is correct in decimal. It uses some special
+-                     * algorithm.  We're going to define the macro and skip the test until
+-                     * we can figure out how they do it. */
+-                    if(s[0]==0x43 && s[1]==0x50 && s[2]==0x00 && s[3]==0x00 &&
+-                        s[4]==0x00 && s[5]==0x00 && s[6]==0x00 && s[7]==0x00 &&
+-                        s[8]==0xbf && s[9]==0xf0 && s[10]==0x00 && s[11]==0x00 &&
+-                        s[12]==0x00 && s[13]==0x00 && s[14]==0x00 && s[15]==0x00)
+-                        ret = 0;
+-                }
+-                if(flag==1 && sizeof(unsigned long)==8) {
+-                    ull = 0xffffffffffffffffUL;
+-                    ld = (long double)ull;
+-                    memcpy(s, &ld, 16);
+-                    /* Use a different value from signed long to test. The problem is the same
+-                     * for both long and unsigned long. The value is 18446744073709551615.
+-                     * The library converts the value to 0x43effffffffffffffe000000000000000.
+-                     * In decimal it's 18446744073709548544.000000, very different from the original.
+-                     * The IBM Power6 Linux converts it to 0x43f0000000000000bff0000000000000.
+-                     * The value is correct in decimal. It uses some special
+-                     * algorithm.  We're going to define the macro and skip the test until
+-                     * we can figure out how they do it. */
+-                    if(s[0]==0x43 && s[1]==0xf0 && s[2]==0x00 && s[3]==0x00 &&
+-                        s[4]==0x00 && s[5]==0x00 && s[6]==0x00 && s[7]==0x00 &&
+-                        s[8]==0xbf && s[9]==0xf0 && s[10]==0x00 && s[11]==0x00 &&
+-                        s[12]==0x00 && s[13]==0x00 && s[14]==0x00 && s[15]==0x00)
+-                        ret = 0;
+-                }
+-                exit(ret);
+-
+-  ;
+-  return 0;
+-}
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-  hdf5_cv_long_to_ldouble_special=yes
+-else
+-  hdf5_cv_long_to_ldouble_special=no
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+-
+-fi
+-
+-fi
+ 
+ if test ${hdf5_cv_long_to_ldouble_special} = "yes"; then
+ 
+@@ -30546,85 +30263,6 @@
+ $as_echo "no" >&6; }
+ fi
+ 
+-## ----------------------------------------------------------------------
+-## Set the flag to indicate that the machine can accurately convert
+-## 'long double' to '(unsigned) long long' values.  (This flag should
+-## be set for all machines, except for Mac OS 10.4, SGI IRIX64 6.5 and
+-## Powerpc Linux using XL compilers.
+-## When the bit sequence of long double is 0x4351ccf385ebc8a0bfcc2a3c...,
+-## the values of (unsigned)long long start to go wrong on these
+-## two machines.  Adjusting it higher to 0x4351ccf385ebc8a0dfcc... or
+-## 0x4351ccf385ebc8a0ffcc... will make the converted values wildly wrong.
+-## This test detects this wrong behavior and disable the test.
+-##
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if correctly converting long double to (unsigned) long long values" >&5
+-$as_echo_n "checking if correctly converting long double to (unsigned) long long values... " >&6; }
+-
+-if test ${ac_cv_sizeof_long_double} = 0; then
+-   hdf5_cv_ldouble_to_llong_accurate=${hdf5_cv_ldouble_to_llong_accurate=no}
+-else
+-   if ${hdf5_cv_ldouble_to_llong_accurate+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-        int main(void)
+-        {
+-            long double         ld = 20041683600089727.779961L;
+-            long long           ll;
+-            unsigned long long  ull;
+-            unsigned char       s[16];
+-            int                 ret = 0;
+-
+-            if(sizeof(long double) == 16) {
+-                /*make sure the long double type is the same as the failing type
+-                 *which has 16 bytes in size and 11 bits of exponent.  If it is,
+-                 *the bit sequence should be like below.  It's not
+-                 *a decent way to check but this info isn't available. */
+-                memcpy(s, &ld, 16);
+-                if(s[0]==0x43 && s[1]==0x51 && s[2]==0xcc && s[3]==0xf3 &&
+-                    s[4]==0x85 && s[5]==0xeb && s[6]==0xc8 && s[7]==0xa0 &&
+-                    s[8]==0xbf && s[9]==0xcc && s[10]==0x2a && s[11]==0x3c) {
+-
+-                    /*slightly adjust the bit sequence (s[8]=0xdf).  The converted
+-                     *values will go wild on Mac OS 10.4 and IRIX64 6.5.*/
+-                    s[0]=0x43; s[1]=0x51; s[2]=0xcc; s[3]=0xf3;
+-                    s[4]=0x85; s[5]=0xeb; s[6]=0xc8; s[7]=0xa0;
+-                    s[8]=0xdf; s[9]=0xcc; s[10]=0x2a; s[11]=0x3c;
+-                    s[12]=0x3d; s[13]=0x85; s[14]=0x56; s[15]=0x20;
+-
+-                    memcpy(&ld, s, 16);
+-                    ll = (long long)ld;
+-                    ull = (unsigned long long)ld;
+-
+-                    if(ll != 20041683600089728 || ull != 20041683600089728)
+-                        ret = 1;
+-                }
+-            }
+-    done:
+-            exit(ret);
+-        }
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-  hdf5_cv_ldouble_to_llong_accurate=yes
+-else
+-  hdf5_cv_ldouble_to_llong_accurate=no
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+-
+-fi
+-
+-fi
+ 
+ if test ${hdf5_cv_ldouble_to_llong_accurate} = "yes"; then
+ 
+@@ -30638,86 +30276,6 @@
+ fi
+ 
+ 
+-## ----------------------------------------------------------------------
+-## Set the flag to indicate that the machine can accurately convert
+-## '(unsigned) long long' to 'long double' values.  (This flag should be
+-## set for all machines, except for Mac OS 10.4 and Powerpc Linux using
+-## XL compilers.
+-## When the bit sequences are 003fff..., 007fff..., 00ffff..., 01ffff...,
+-## ..., 7fffff..., the converted values are twice as big as they should be.
+-##
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if correctly converting (unsigned) long long to long double values" >&5
+-$as_echo_n "checking if correctly converting (unsigned) long long to long double values... " >&6; }
+-
+-if test ${ac_cv_sizeof_long_double} = 0; then
+-   hdf5_cv_llong_to_ldouble_correct=${hdf5_cv_llong_to_ldouble_correct=no}
+-else
+-   if ${hdf5_cv_llong_to_ldouble_correct+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-        int main(void)
+-        {
+-            long double         ld;
+-            long long           ll;
+-            unsigned long long  ull;
+-            unsigned char       s[16];
+-            int                 flag=0, ret=0;
+-
+-            /*Determine if long double has 16 byte in size, 11 bit exponent, and
+-             *the bias is 0x3ff */
+-            if(sizeof(long double) == 16) {
+-                ld = 1.0L;
+-                memcpy(s, &ld, 16);
+-                if(s[0]==0x3f && s[1]==0xf0 && s[2]==0x00 && s[3]==0x00 &&
+-                    s[4]==0x00 && s[5]==0x00 && s[6]==0x00 && s[7]==0x00)
+-                    flag = 1;
+-            }
+-
+-            if(flag==1 && sizeof(long long)==8) {
+-                ll = 0x01ffffffffffffffLL;
+-                ld = (long double)ll;
+-                memcpy(s, &ld, 16);
+-                /*Check if the bit sequence is as supposed to be*/
+-                if(s[0]!=0x43 || s[1]!=0x7f || s[2]!=0xff || s[3]!=0xff ||
+-                    s[4]!=0xff || s[5]!=0xff || s[6]!=0xff || s[7]!=0xff ||
+-                    s[8]!=0xf0 || s[9]!=0x00 || s[10]!=0x00 || s[11]!=0x00)
+-                    ret = 1;
+-            }
+-            if(flag==1 && sizeof(unsigned long long)==8) {
+-                ull = 0x01ffffffffffffffULL;
+-                ld = (long double)ull;
+-                memcpy(s, &ld, 16);
+-                if(s[0]!=0x43 || s[1]!=0x7f || s[2]!=0xff || s[3]!=0xff ||
+-                    s[4]!=0xff || s[5]!=0xff || s[6]!=0xff || s[7]!=0xff ||
+-                    s[8]!=0xf0 || s[9]!=0x00 || s[10]!=0x00 || s[11]!=0x00)
+-                    ret = 1;
+-            }
+-    done:
+-            exit(ret);
+-        }
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-  hdf5_cv_llong_to_ldouble_correct=yes
+-else
+-  hdf5_cv_llong_to_ldouble_correct=no
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+-
+-fi
+-
+-fi
+ 
+ if test ${hdf5_cv_llong_to_ldouble_correct} = "yes"; then
+ 
