@@ -1,0 +1,136 @@
+diff --git a/WORKSPACE b/WORKSPACE
+index 61c7773..3d1f5d5 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -9,10 +9,10 @@ workspace(name = "org_tensorflow")
+ #    path = "<PATH_TO_SDK>",
+ #)
+ #
+-#android_ndk_repository(
+-#    name="androidndk",
+-#    path="<PATH_TO_NDK>",
+-#    api_level=21)
++android_ndk_repository(
++    name="androidndk",
++    path="<PATH_TO_NDK>",
++    api_level=21)
+ 
+ # Please add all new TensorFlow dependencies in workspace.bzl.
+ load("//tensorflow:workspace.bzl", "tf_workspace")
+diff --git a/tensorflow/BUILD b/tensorflow/BUILD
+index 7f80bf9..85b0b7e 100644
+--- a/tensorflow/BUILD
++++ b/tensorflow/BUILD
+@@ -165,11 +165,29 @@ cc_binary(
+     ],
+ )
+ 
++
++load("//tensorflow:tensorflow.bzl", "tf_copts")
++
+ cc_binary(
+     name = "libtensorflow_cc.so",
++    copts = tf_copts(),
++    linkopts = [
++        "-landroid",
++        "-ljnigraphics",
++        "-llog",
++        "-lm",
++        "-z defs",
++        "-s",
++        "-ldl",
++        "-Wl,--icf=all",  # Identical Code Folding
++    ],
++    tags = [
++        "manual",
++        "notap",
++    ],
+     linkshared = 1,
++    linkstatic = 1,
+     deps = [
+-        "//tensorflow/cc:cc_ops",
+-        "//tensorflow/core:tensorflow",
++        "//tensorflow/core:android_tensorflow_lib",
+     ],
+ )
+diff --git a/tensorflow/c/BUILD b/tensorflow/c/BUILD
+index fec8ca7..551a611 100644
+--- a/tensorflow/c/BUILD
++++ b/tensorflow/c/BUILD
+@@ -30,6 +30,19 @@ tf_cuda_library(
+     ],
+ )
+ 
++filegroup(
++    name = "c_api_files",
++    srcs = glob(
++        ["**/*"],
++        exclude = [
++            "**/METADATA",
++            "**/OWNERS",
++            "**/*test.cc",
++        ],
++    ),
++    visibility = ["//visibility:public"],
++)
++
+ tf_cuda_library(
+     name = "tf_status_helper",
+     srcs = ["tf_status_helper.cc"],
+diff --git a/tensorflow/core/BUILD b/tensorflow/core/BUILD
+index c5f2f18..3d69019 100644
+--- a/tensorflow/core/BUILD
++++ b/tensorflow/core/BUILD
+@@ -654,7 +654,10 @@ cc_library(
+ # binary size (by packaging a reduced operator set) is a concern.
+ cc_library(
+     name = "android_tensorflow_lib",
+-    srcs = if_android([":android_op_registrations_and_gradients"]),
++    srcs = if_android([
++    	":android_op_registrations_and_gradients",
++    	"//tensorflow/c:c_api_files",
++    ]),
+     copts = tf_copts(),
+     linkopts = ["-lz"],
+     tags = [
+diff --git a/tensorflow/core/framework/op.h b/tensorflow/core/framework/op.h
+index abee32b..f047ddb 100644
+--- a/tensorflow/core/framework/op.h
++++ b/tensorflow/core/framework/op.h
+@@ -171,12 +171,6 @@ class OpListOpRegistry : public OpRegistryInterface {
+   std::unordered_map<string, const OpRegistrationData*> index_;
+ };
+ 
+-// Treats 'registry_ptr' as a pointer to OpRegistry, and calls
+-// registry_ptr->Register(op_def) for each op_def that has been registered with
+-// the current library's global op registry (obtained by calling
+-// OpRegistry::Global().
+-extern "C" void RegisterOps(void* registry_ptr);
+-
+ // Support for defining the OpDef (specifying the semantics of the Op and how
+ // it should be created) and registering it in the OpRegistry::Global()
+ // registry.  Usage:
+diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
+index 3c2dab9..46fa346 100644
+--- a/tensorflow/core/kernels/BUILD
++++ b/tensorflow/core/kernels/BUILD
+@@ -1918,6 +1918,7 @@ filegroup(
+         "transpose_op.h",
+         "where_op.h",
+         "xent_op.h",
++        "cwise_op_floor.cc",
+     ],
+ )
+ 
+diff --git a/tensorflow/tensorflow.bzl b/tensorflow/tensorflow.bzl
+index f4a846a..23126fe 100644
+--- a/tensorflow/tensorflow.bzl
++++ b/tensorflow/tensorflow.bzl
+@@ -108,7 +108,6 @@ def tf_copts():
+           select({"//tensorflow:android": [
+                     "-std=c++11",
+                     "-DMIN_LOG_LEVEL=0",
+-                    "-DTF_LEAN_BINARY",
+                     "-O2",
+                   ],
+                   "//tensorflow:darwin": [],

@@ -17,7 +17,26 @@ export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
+TENSORFLOW_VERSION=0.10.0
+
+download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
+
+mkdir -p $PLATFORM
+cd $PLATFORM
+
+echo "Decompressing archives"
+tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
+
+# Assumes Bazel is available in the path: http://bazel.io/docs/install.html
+cd tensorflow-$TENSORFLOW_VERSION
+
+
 case $PLATFORM in
+	android-arm)
+        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
+        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        export BUILDFLAGS="--crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
+        ;;
     linux-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
@@ -40,17 +59,6 @@ case $PLATFORM in
         ;;
 esac
 
-TENSORFLOW_VERSION=0.10.0
-download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
-
-mkdir -p $PLATFORM
-cd $PLATFORM
-
-echo "Decompressing archives"
-tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
-
-# Assumes Bazel is available in the path: http://bazel.io/docs/install.html
-cd tensorflow-$TENSORFLOW_VERSION
 ./configure
 bazel build -c opt //tensorflow:libtensorflow_cc.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures
 
