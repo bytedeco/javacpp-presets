@@ -1,4 +1,5 @@
 
+ * Add support for `android-arm` and `android-x86` platforms to TensorFlow presets ([pull #297](https://github.com/bytedeco/javacpp-presets/pull/297))
  * Keep a reference of `tensorflow.SessionOptions` in `AbstractSession` to prevent premature deallocation ([pull #297](https://github.com/bytedeco/javacpp-presets/pull/297))
  * Enable CUDA in `cppbuild.sh` script for TensorFlow ([issue #294](https://github.com/bytedeco/javacpp-presets/issues/294))
  * Bundle `libgomp.so.1` in JAR files of OpenCV for the sake of some Linux distributions ([issue bytedeco/javacv#436](https://github.com/bytedeco/javacv/issues/436))

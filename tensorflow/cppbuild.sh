@@ -33,9 +33,18 @@ cd tensorflow-$TENSORFLOW_VERSION
 
 case $PLATFORM in
 	android-arm)
+        export CC="/usr/bin/gcc"
+        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         export BUILDFLAGS="--crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
+        ;;
+	android-x86)
+        export CC="/usr/bin/gcc"
+        export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
+        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        export BUILDFLAGS="--crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
         ;;
     linux-x86)
         export CC="/usr/bin/gcc"
