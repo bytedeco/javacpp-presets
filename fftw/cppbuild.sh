@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    FFTW_VERSION=3.3.4
+    FFTW_VERSION=3.3.5
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll$BITS.zip fftw-$FFTW_VERSION-dll$BITS.zip
 
@@ -18,7 +18,7 @@ if [[ $PLATFORM == windows* ]]; then
     unzip -o ../fftw-$FFTW_VERSION-dll$BITS.zip -d fftw-$FFTW_VERSION-dll$BITS
     cd fftw-$FFTW_VERSION-dll$BITS
 else
-    FFTW_VERSION=3.3.4
+    FFTW_VERSION=3.3.5
     download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
     mkdir -p $PLATFORM

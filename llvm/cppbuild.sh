@@ -28,7 +28,7 @@ case $PLATFORM in
         ;;
 esac
 
-LLVM_VERSION=3.8.0
+LLVM_VERSION=3.9.0
 download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
 
@@ -44,7 +44,7 @@ rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
 cd ../build
 
-../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized
+cmake -DCMAKE_INSTALL_PREFIX=../.. -DDLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host ..
 make -j $MAKEJ
 make install
 

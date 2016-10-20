@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import org.bytedeco.javacpp.tools.*;
 @Properties(inherit = LLVM.class, target = "org.bytedeco.javacpp.clang", value = @Platform(value = {"linux-x86", "macosx"},
     include = {"<clang-c/Platform.h>", "<clang-c/CXErrorCode.h>", "<clang-c/CXString.h>", "<clang-c/CXCompilationDatabase.h>",
                "<clang-c/BuildSystem.h>", "<clang-c/Index.h>", "<clang-c/Documentation.h>"},
-    link = "clang"))
+    compiler = "cpp11", link = "clang"))
 public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CINDEX_LINKAGE", "CINDEX_VERSION_STRING").cppTypes().annotations())

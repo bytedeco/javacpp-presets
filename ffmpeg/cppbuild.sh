@@ -18,11 +18,11 @@ ZLIB=zlib-1.2.8
 LAME=lame-3.99.5
 SPEEX=speex-1.2rc2
 OPENCORE_AMR=opencore-amr-0.1.3
-OPENSSL=openssl-1.0.2h
+OPENSSL=openssl-1.0.2j
 OPENH264_VERSION=1.5.0
-X265=x265_2.0
+X265=x265_2.1
 VPX_VERSION=v1.6.0
-FFMPEG_VERSION=3.1.2
+FFMPEG_VERSION=3.1.4
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
