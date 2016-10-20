@@ -18,11 +18,11 @@ ZLIB=zlib-1.2.8
 LAME=lame-3.99.5
 SPEEX=speex-1.2rc2
 OPENCORE_AMR=opencore-amr-0.1.3
-OPENSSL=openssl-1.0.2h
+OPENSSL=openssl-1.0.2j
 OPENH264_VERSION=1.5.0
-X265=x265_1.9
-VPX_VERSION=v1.5.0
-FFMPEG_VERSION=3.0.2
+X265=x265_2.1
+VPX_VERSION=v1.6.0
+FFMPEG_VERSION=3.1.4
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
@@ -270,7 +270,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENSSL
-        ./Configure linux-armv4:arm-linux-gnueabihf-gcc -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-armv4 -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
@@ -280,7 +280,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$X265
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=/usr/bin/arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=/usr/arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=/rpxc/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/rpxc/bin/arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=/rpxc/bin/arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=/rpxc/arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
@@ -289,7 +289,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         make -j $MAKEJ
         make install
         ;;
@@ -463,3 +463,4 @@ case $PLATFORM in
 esac
 
 cd ../..
+

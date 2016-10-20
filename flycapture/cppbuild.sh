@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 case $PLATFORM in
-    linux-*)
+    linux-x86*|linux-arm*)
         if [[ ! -d "/usr/include/flycapture/" ]]; then
             echo "Please install FlyCapture under the default installation directory"
             exit 1

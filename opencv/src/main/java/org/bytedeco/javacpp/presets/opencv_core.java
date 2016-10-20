@@ -45,6 +45,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.1", "opencv_imgproc@.3.1"}),
+    @Platform(value = "linux",        preloadpath = "/usr/lib/", preload = "gomp@.1"),
+    @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
+    @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
+    @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
     @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core310", "opencv_imgproc310"}, preload = {"msvcr120", "msvcp120"}),
     @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x86/Microsoft.VC120.CRT/"),
     @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x64/Microsoft.VC120.CRT/")},
@@ -192,8 +196,8 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::UMat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
 
-               .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray").skip()./*cast().*/pointerTypes("Mat"))
-               .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip()./*cast().*/pointerTypes("MatVector"))
+               .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray").skip()./*cast().*/pointerTypes("Mat", "Mat", "UMat", "UMat"))
+               .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip()./*cast().*/pointerTypes("MatVector", "UMatVector"))
 
                .put(new Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
                .put(new Info("cv::Point_<float>").pointerTypes("Point2f").base("FloatPointer"))

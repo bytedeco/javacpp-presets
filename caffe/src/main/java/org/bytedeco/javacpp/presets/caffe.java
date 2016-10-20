@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_highgui.class, target = "org.bytedeco.javacpp.caffe", value = {
-    @Platform(value = {"linux", "macosx"}, define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
+    @Platform(value = {"linux-x86", "macosx"}, define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
         "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h",
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
         "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/layers/base_data_layer.hpp", "caffe/layers/data_layer.hpp",
@@ -78,7 +78,7 @@ public class caffe implements InfoMapper {
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "MDB_env", "boost::mt19937").cast().pointerTypes("Pointer"))
-               .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
+               .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
                              "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip());
 

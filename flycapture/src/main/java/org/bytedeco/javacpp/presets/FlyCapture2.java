@@ -41,10 +41,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jarek Sacha
  */
 @Properties(target = "org.bytedeco.javacpp.FlyCapture2", value = {
-        @Platform(value = {"linux", "windows"}, include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
+        @Platform(value = {"linux-x86", "linux-arm", "windows"}, include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
                 "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
                 "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>"}),
-        @Platform(value = "linux", link = "flycapture@.2", includepath = "/usr/include/flycapture/"),
+        @Platform(value = {"linux-x86", "linux-arm"}, link = "flycapture@.2", includepath = "/usr/include/flycapture/"),
         @Platform(value = "windows", link = "FlyCapture2",
                 includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/"),
         @Platform(value = "windows-x86",    define = {"WIN32", "AddPort AddPortA"},

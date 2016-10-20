@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GSL_VERSION=2.1
+GSL_VERSION=2.2.1
 download ftp://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -55,6 +55,16 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-x86_64)
+        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    linux-armhf)
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    linux-ppc64le)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
         make -j $MAKEJ
         make install-strip

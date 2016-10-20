@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    FFTW_VERSION=3.3.4
+    FFTW_VERSION=3.3.5
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll$BITS.zip fftw-$FFTW_VERSION-dll$BITS.zip
 
@@ -18,7 +18,7 @@ if [[ $PLATFORM == windows* ]]; then
     unzip -o ../fftw-$FFTW_VERSION-dll$BITS.zip -d fftw-$FFTW_VERSION-dll$BITS
     cd fftw-$FFTW_VERSION-dll$BITS
 else
-    FFTW_VERSION=3.3.4
+    FFTW_VERSION=3.3.5
     download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
     mkdir -p $PLATFORM
@@ -78,6 +78,22 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64" --enable-float
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    linux-armhf)
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf 
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --enable-float
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    linux-ppc64le)
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
