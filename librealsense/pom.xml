@@ -6,13 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.2.2</version>
+    <version>1.2</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>librealsense</artifactId>
   <version>1.9.6-${project.parent.version}</version>
-  <!--<version>1.9.6-1.2.2</version>-->
   <name>JavaCPP Presets for librealsense</name>
 
   <properties>

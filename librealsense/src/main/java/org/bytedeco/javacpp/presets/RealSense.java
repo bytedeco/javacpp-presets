@@ -21,7 +21,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target = "org.bytedeco.javacpp.RealSense",
         value = {
-            @Platform(include = {"<librealsense/rs.h>",
+            @Platform(value = "linux-x86_64", 
+                    include = {"<librealsense/rs.h>",
         "<librealsense/rs.hpp>",
         "<librealsense/rscore.hpp>",
         "<librealsense/rsutil.h>"},
