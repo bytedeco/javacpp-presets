@@ -32,8 +32,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.javacpp.openblas", value = {
-    @Platform(include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapacke.h", "lapacke_utils.h"}, link = "openblas@.0",
+@Properties(target = "org.bytedeco.javacpp.openblas", value = {@Platform(define = "LAPACK_COMPLEX_CPP",
+              include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapacke.h", "lapacke_utils.h"}, link = "openblas@.0",
               preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
                          "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "gomp@.1", "quadmath@.0", "gfortran@.3"}, compiler = "fastfpu"),
     @Platform(value = "android", include = {"openblas_config.h", "cblas.h" /* no LAPACK */}, link = "openblas", preload = "", compiler = "fastfpu"),

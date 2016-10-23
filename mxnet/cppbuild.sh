@@ -49,6 +49,9 @@ ln -snf ../mshadow-$MXNET_VERSION mshadow
 ln -snf ../ps-lite-$MXNET_VERSION ps-lite
 
 export PKG_CONFIG_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/pkgconfig/"
+export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/"
+export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
+export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/"
 
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS"
 cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..

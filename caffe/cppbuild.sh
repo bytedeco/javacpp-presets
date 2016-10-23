@@ -49,7 +49,6 @@ SNAPPY=1.1.3
 LMDB=0.9.18
 BOOST=1_62_0
 HDF5=1.8.17
-OPENBLAS=0.2.19
 CAFFE_VERSION=master
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
@@ -60,7 +59,6 @@ download https://github.com/google/snappy/releases/download/$SNAPPY/snappy-$SNAP
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download http://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
-download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS.tar.gz OpenBLAS-$OPENBLAS.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -79,7 +77,6 @@ tar --totals -xf ../snappy-$SNAPPY.tar.gz
 tar --totals -xf ../lmdb-LMDB_$LMDB.tar.gz
 tar --totals -xf ../boost_$BOOST.tar.gz
 tar --totals -xf ../hdf5-$HDF5.tar.bz2
-tar --totals -xf ../OpenBLAS-$OPENBLAS.tar.gz
 tar --totals -xf ../caffe-$CAFFE_VERSION.tar.gz
 
 export CFLAGS="-fPIC"
@@ -106,6 +103,8 @@ make install
 cd ..
 
 cd leveldb-$LEVELDB
+mkdir -p out-static/db out-static/helpers out-static/port out-static/table out-static/util
+mkdir -p out-shared/db out-shared/helpers out-shared/port out-shared/table out-shared/util
 make -j $MAKEJ
 cp -a out-static/libleveldb.a "$INSTALL_PATH/lib"
 cp -a include/leveldb "$INSTALL_PATH/include/"
@@ -135,14 +134,10 @@ make -j $MAKEJ
 make install
 cd ..
 
-# OSX has Accelerate
-if [[ $BLAS == "open" ]]; then
-    # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
-    cd OpenBLAS-$OPENBLAS
-    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_SHARED=1 TARGET=GENERIC
-    make install "PREFIX=$INSTALL_PATH" NO_SHARED=1
-    cd ..
-fi
+# OSX has Accelerate, but...
+export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/"
+export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
+export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/"
 
 cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch

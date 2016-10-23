@@ -20,6 +20,7 @@ tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
 cd OpenBLAS-$OPENBLAS_VERSION
 
+# blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0
@@ -34,6 +35,7 @@ case $PLATFORM in
         export LDFLAGS="-Wl,--fix-cortex-a8 -Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
         if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
             export NO_LAPACK=1
+            export NOFORTRAN=1
         fi
         export BINARY=32
         export TARGET=ARMV5
@@ -47,6 +49,7 @@ case $PLATFORM in
         export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
         if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
             export NO_LAPACK=1
+            export NOFORTRAN=1
         fi
         export BINARY=32
         export TARGET=ATOM
@@ -74,6 +77,7 @@ case $PLATFORM in
         export TARGET=ARMV6
         ;;
     macosx-*)
+        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-macosx.patch
         export CC="gcc"
         export FC="gfortran"
         export BINARY=64
@@ -94,7 +98,7 @@ case $PLATFORM in
         ;;
 esac
 
-make -j $MAKEJ "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF=
+make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF=
 make install "PREFIX=$INSTALL_PATH"
 
 cd ../..

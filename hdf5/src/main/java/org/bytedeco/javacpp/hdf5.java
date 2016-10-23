@@ -3855,7 +3855,7 @@ public static class H5E_error2_t extends Pointer {
 
 /* HDF5 error class */
 // #define H5E_ERR_CLS		(H5OPEN H5E_ERR_CLS_g)
-public static native @Cast("hid_t") int H5E_ERR_CLS_g(); public static native void H5E_ERR_CLS_g(int H5E_ERR_CLS_g);
+
 
 /* Include the automatically generated public header information */
 /* (This includes the list of major and minor error codes for the library) */

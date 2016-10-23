@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = opencv_highgui.class, target = "org.bytedeco.javacpp.caffe", value = {
+@Properties(inherit = {openblas.class, opencv_highgui.class}, target = "org.bytedeco.javacpp.caffe", value = {
     @Platform(value = {"linux-x86", "macosx"}, define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
         "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h",
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",

@@ -40,10 +40,10 @@ case $PLATFORM in
         export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
@@ -58,26 +58,26 @@ case $PLATFORM in
         export LDFLAGS="-nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m32"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m32"
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m32" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m32" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64"
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
@@ -90,19 +90,19 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-ppc64le)
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
     macosx-*)
         patch -Np1 < ../../../fftw-$FFTW_VERSION-macosx.patch
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-float
         make -j $MAKEJ
         make install-strip
         ;;

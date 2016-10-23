@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = opencv_highgui.class, target = "org.bytedeco.javacpp.mxnet", value = {
+@Properties(inherit = {openblas.class, opencv_highgui.class}, target = "org.bytedeco.javacpp.mxnet", value = {
     @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
                    "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/},

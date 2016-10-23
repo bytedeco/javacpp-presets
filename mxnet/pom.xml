@@ -25,6 +25,11 @@
       <version>3.1.0-${project.parent.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>openblas</artifactId>
+      <version>0.2.19-${project.parent.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
@@ -58,20 +63,24 @@
           </propertyKeysAndValues>
           <classPaths>
             <classPath>${basedir}/../opencv/target/classes/</classPath>
+            <classPath>${basedir}/../openblas/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
             <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>
         </configuration>

@@ -33,7 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target = "org.bytedeco.javacpp.hdf5", value = {
-    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"H5pubconf.h", /* "H5version.h", */ "H5public.h", "H5Cpublic.h", "H5Ipublic.h",
+    @Platform(value = {"linux", "macosx", "windows"},
+            define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"H5pubconf.h", /* "H5version.h", */ "H5public.h", "H5Cpublic.h", "H5Ipublic.h",
         "H5Tpublic.h", "H5Lpublic.h", "H5Opublic.h", "H5Zpublic.h",  "H5Apublic.h", "H5ACpublic.h", "H5Dpublic.h", "H5Epublic.h", "H5Fpublic.h",
         "H5FDpublic.h", "H5Gpublic.h", "H5MMpublic.h", "H5Ppublic.h", "H5PLpublic.h", "H5Rpublic.h", "H5Spublic.h", "H5FDcore.h", "H5FDdirect.h",
         "H5FDfamily.h", "H5FDlog.h", "H5FDmpi.h", "H5FDmulti.h", "H5FDsec2.h", "H5FDstdio.h", /* "H5FDwindows.h", */ "H5DOpublic.h", "H5DSpublic.h",
@@ -43,7 +44,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5Attribute.h", "H5OcreatProp.h", "H5DcreatProp.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h", "H5FaccProp.h", "H5FcreatProp.h",
         "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h", "H5ArrayType.h",
         "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
-            link = {"hdf5@.100", "hdf5_hl@.100", "hdf5_cpp@.100"}) })
+            link = {"hdf5@.100", "hdf5_hl@.100", "hdf5_cpp@.100"}),
+    @Platform(value = "windows", link = {"libhdf5", "libhdf5_hl", "libhdf5_cpp", "libszip", "libzlib"}, preload = {"msvcp120", "msvcr120"}),
+    @Platform(value = "windows-x86",    includepath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/include/",
+                                        preloadpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/bin/",
+                                           linkpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/lib/"),
+    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/HDF_Group/HDF5/1.10.0/include/",
+                                        preloadpath = "C:/Program Files/HDF_Group/HDF5/1.10.0/bin/",
+                                           linkpath = "C:/Program Files/HDF_Group/HDF5/1.10.0/lib/") })
 public class hdf5 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5_HLDLL", "H5_DLLCPP", "H5CHECK", "H5OPEN", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
@@ -55,7 +63,7 @@ public class hdf5 implements InfoMapper {
                              "H5O_SHMESG_DTYPE_FLAG", "H5O_SHMESG_FILL_FLAG", "H5O_SHMESG_PLINE_FLAG", "H5O_SHMESG_ATTR_FLAG", "H5T_VARIABLE",
                              "H5T_NATIVE_CHAR", "H5D_CHUNK_CACHE_NSLOTS_DEFAULT", "H5D_CHUNK_CACHE_NBYTES_DEFAULT", "H5E_DEFAULT",
                              "H5F_ACC_SWMR_WRITE", "H5F_ACC_SWMR_READ", "H5F_FAMILY_DEFAULT", "H5F_UNLIMITED", "H5P_DEFAULT", "H5S_ALL").translate(false))
-               .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT").skip())
+               .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT", "H5E_ERR_CLS_g").skip())
 
                .put(new Info("H5::attr_operator_t").valueTypes("attr_operator_t").pointerTypes("@ByPtrPtr attr_operator_t").javaText(
                        "public static class attr_operator_t extends FunctionPointer {\n"

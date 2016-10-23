@@ -1,6 +1,6 @@
-diff -ruN OpenBLAS-0.2.18/common.h OpenBLAS-0.2.18-android/common.h
---- OpenBLAS-0.2.18/common.h	2016-04-13 04:29:19.000000000 +0900
-+++ OpenBLAS-0.2.18-android/common.h	2016-08-24 14:04:13.057535318 +0900
+diff -ruN OpenBLAS-0.2.19/common.h OpenBLAS-0.2.19-android/common.h
+--- OpenBLAS-0.2.19/common.h	2016-09-01 12:58:42.000000000 +0900
++++ OpenBLAS-0.2.19-android/common.h	2016-10-21 11:26:16.001064468 +0900
 @@ -100,9 +100,9 @@
  #ifdef OS_ANDROID
  #define NO_SYSV_IPC
@@ -13,9 +13,9 @@ diff -ruN OpenBLAS-0.2.18/common.h OpenBLAS-0.2.18-android/common.h
  #endif
  
  #ifdef OS_WINDOWS
-diff -ruN OpenBLAS-0.2.18/exports/Makefile OpenBLAS-0.2.18-android/exports/Makefile
---- OpenBLAS-0.2.18/exports/Makefile	2016-04-13 04:29:19.000000000 +0900
-+++ OpenBLAS-0.2.18-android/exports/Makefile	2016-08-24 12:24:58.661889197 +0900
+diff -ruN OpenBLAS-0.2.19/exports/Makefile OpenBLAS-0.2.19-android/exports/Makefile
+--- OpenBLAS-0.2.19/exports/Makefile	2016-09-01 12:58:42.000000000 +0900
++++ OpenBLAS-0.2.19-android/exports/Makefile	2016-10-21 11:26:16.001064468 +0900
 @@ -118,7 +118,7 @@
  dllinit.$(SUFFIX) : dllinit.c
  	$(CC) $(CFLAGS) -c -o $(@F) -s $<
@@ -41,9 +41,9 @@ diff -ruN OpenBLAS-0.2.18/exports/Makefile OpenBLAS-0.2.18-android/exports/Makef
  	$(FC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
  endif
  	rm -f linktest
-diff -ruN OpenBLAS-0.2.18/kernel/arm/zdot.c OpenBLAS-0.2.18-android/kernel/arm/zdot.c
---- OpenBLAS-0.2.18/kernel/arm/zdot.c	2016-04-13 04:29:19.000000000 +0900
-+++ OpenBLAS-0.2.18-android/kernel/arm/zdot.c	2016-08-24 14:23:19.671303569 +0900
+diff -ruN OpenBLAS-0.2.19/kernel/arm/zdot.c OpenBLAS-0.2.19-android/kernel/arm/zdot.c
+--- OpenBLAS-0.2.19/kernel/arm/zdot.c	2016-09-01 12:58:42.000000000 +0900
++++ OpenBLAS-0.2.19-android/kernel/arm/zdot.c	2016-10-21 11:26:16.002064489 +0900
 @@ -36,12 +36,12 @@
  
  #include "common.h"
@@ -62,9 +62,9 @@ diff -ruN OpenBLAS-0.2.18/kernel/arm/zdot.c OpenBLAS-0.2.18-android/kernel/arm/z
  {
  	BLASLONG i=0;
  	BLASLONG ix=0,iy=0;
-diff -ruN OpenBLAS-0.2.18/lapack-netlib/LAPACKE/include/lapacke_config.h OpenBLAS-0.2.18-android/lapack-netlib/LAPACKE/include/lapacke_config.h
---- OpenBLAS-0.2.18/lapack-netlib/LAPACKE/include/lapacke_config.h	2016-08-24 14:05:16.424908207 +0900
-+++ OpenBLAS-0.2.18-android/lapack-netlib/LAPACKE/include/lapacke_config.h	2016-08-24 14:05:46.816566659 +0900
+diff -ruN OpenBLAS-0.2.19/lapack-netlib/LAPACKE/include/lapacke_config.h OpenBLAS-0.2.19-android/lapack-netlib/LAPACKE/include/lapacke_config.h
+--- OpenBLAS-0.2.19/lapack-netlib/LAPACKE/include/lapacke_config.h	2016-09-01 12:58:42.000000000 +0900
++++ OpenBLAS-0.2.19-android/lapack-netlib/LAPACKE/include/lapacke_config.h	2016-10-21 11:26:16.002064489 +0900
 @@ -36,9 +36,9 @@
  
  // For Android prior to API 21 (no <complex> include)
@@ -77,9 +77,9 @@ diff -ruN OpenBLAS-0.2.18/lapack-netlib/LAPACKE/include/lapacke_config.h OpenBLA
  #endif
  
  #ifdef __cplusplus
-diff -ruN OpenBLAS-0.2.18/Makefile OpenBLAS-0.2.18-android/Makefile
---- OpenBLAS-0.2.18/Makefile	2016-04-13 04:29:19.000000000 +0900
-+++ OpenBLAS-0.2.18-android/Makefile	2016-08-24 12:24:19.678027696 +0900
+diff -ruN OpenBLAS-0.2.19/Makefile OpenBLAS-0.2.19-android/Makefile
+--- OpenBLAS-0.2.19/Makefile	2016-09-01 12:58:42.000000000 +0900
++++ OpenBLAS-0.2.19-android/Makefile	2016-10-21 11:26:16.002064489 +0900
 @@ -81,7 +81,7 @@
  
  shared :
@@ -89,17 +89,17 @@ diff -ruN OpenBLAS-0.2.18/Makefile OpenBLAS-0.2.18-android/Makefile
  	@$(MAKE) -C exports so
  	@ln -fs $(LIBSONAME) $(LIBPREFIX).so
  	@ln -fs $(LIBSONAME) $(LIBPREFIX).so.$(MAJOR_VERSION)
-diff -ruN OpenBLAS-0.2.18/Makefile.install OpenBLAS-0.2.18-android/Makefile.install
---- OpenBLAS-0.2.18/Makefile.install	2016-04-13 04:29:19.000000000 +0900
-+++ OpenBLAS-0.2.18-android/Makefile.install	2016-08-24 12:24:29.226238701 +0900
+diff -ruN OpenBLAS-0.2.19/Makefile.install OpenBLAS-0.2.19-android/Makefile.install
+--- OpenBLAS-0.2.19/Makefile.install	2016-09-01 12:58:42.000000000 +0900
++++ OpenBLAS-0.2.19-android/Makefile.install	2016-10-21 11:27:03.505055385 +0900
 @@ -64,7 +64,7 @@
  #for install shared library
  ifndef NO_SHARED
  	@echo Copying the shared library to $(DESTDIR)$(OPENBLAS_LIBRARY_DIR)
 -ifeq ($(OSNAME), $(filter $(OSNAME),Linux SunOS))
 +ifeq ($(OSNAME), $(filter $(OSNAME),Android Linux SunOS))
- 	@install -pm755 $(LIBSONAME) $(DESTDIR)$(OPENBLAS_LIBRARY_DIR)
- 	@cd $(DESTDIR)$(OPENBLAS_LIBRARY_DIR) ; \
+ 	@install -pm755 $(LIBSONAME) "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)"
+ 	@cd "$(DESTDIR)$(OPENBLAS_LIBRARY_DIR)" ; \
  	ln -fs $(LIBSONAME) $(LIBPREFIX).so ; \
 @@ -101,7 +101,7 @@
  
@@ -107,6 +107,6 @@ diff -ruN OpenBLAS-0.2.18/Makefile.install OpenBLAS-0.2.18-android/Makefile.inst
  #ifeq logical or
 -ifeq ($(OSNAME), $(filter $(OSNAME),Linux FreeBSD NetBSD))
 +ifeq ($(OSNAME), $(filter $(OSNAME),Android Linux FreeBSD NetBSD))
- 	@echo "SET(OpenBLAS_LIBRARIES ${OPENBLAS_LIBRARY_DIR}/$(LIBPREFIX).so)" >> $(DESTDIR)$(OPENBLAS_CMAKE_DIR)/$(OPENBLAS_CMAKE_CONFIG)
+ 	@echo "SET(OpenBLAS_LIBRARIES ${OPENBLAS_LIBRARY_DIR}/$(LIBPREFIX).so)" >> "$(DESTDIR)$(OPENBLAS_CMAKE_DIR)/$(OPENBLAS_CMAKE_CONFIG)"
  endif
  ifeq ($(OSNAME), $(filter $(OSNAME),WINNT CYGWIN_NT))

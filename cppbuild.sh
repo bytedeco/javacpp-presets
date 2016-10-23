@@ -2,7 +2,8 @@
 # Scripts to build and install native C++ libraries
 set -eu
 
-[[ -z ${CMAKE:-} ]] && CMAKE=cmake
+which cmake3 &> /dev/null && CMAKE3="cmake3" || CMAKE3="cmake"
+[[ -z ${CMAKE:-} ]] && CMAKE=$CMAKE3
 [[ -z ${MAKEJ:-} ]] && MAKEJ=4
 [[ -z ${OLDCC:-} ]] && OLDCC="gcc"
 [[ -z ${OLDCXX:-} ]] && OLDCXX="g++"

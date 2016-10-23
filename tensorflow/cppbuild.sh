@@ -49,6 +49,7 @@ case $PLATFORM in
     linux-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION.patch
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --copt=-D_mm_cvtm64_si64=reinterpret_cast<__int64_t> --copt=-D_mm_cvtsi64_m64=reinterpret_cast<__m64>"
         ;;
     linux-x86_64)
