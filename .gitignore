@@ -2,6 +2,8 @@
 /target/
 /opencv/cppbuild/
 /opencv/target/
+/openblas/cppbuild/
+/openblas/target/
 /ffmpeg/cppbuild/
 /ffmpeg/target/
 /flycapture/cppbuild/
