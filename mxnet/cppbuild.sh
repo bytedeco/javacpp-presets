@@ -23,6 +23,43 @@ case $PLATFORM in
         export CXX="clang-omp++"
         export BLAS="apple"
         ;;
+	windows-*)
+		return 0
+		mkdir -p $PLATFORM
+		cd $PLATFORM	
+		INSTALL_PATH=`pwd`		
+		
+		# clone mxnet and its submodules
+ 		git clone https://github.com/dmlc/mxnet.git --recursive
+		cd mxnet
+		
+		# checkout a stable commit
+		git checkout a5aeb0c43028f41863a8148eb3ecf30e90caad1e
+		
+		# configure the build
+		export OPENCV_DIR="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/" # override the system variable
+		USE_X="-DUSE_CUDA=OFF -DUSE_CUDNN=OFF -DUSE_OPENCV=ON"
+		OPENCV="-DOpenCV_DIR=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/ -DOpenCV_CONFIG_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/ -DOpenCV_3RDPARTY_LIB_DIR_DBG=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib -DOpenCV_3RDPARTY_LIB_DIR_OPT=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib -DOpenCV_LIB_DIR_DBG=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib -DOpenCV_LIB_DIR_OPT=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM//lib"
+		OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/ -DOpenBLAS_LIB=$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/libopenblas.dll.a"        
+		"$CMAKE" -G "Visual Studio 12 2013 Win64" -DCMAKE_INSTALL_PREFIX=.. $USE_X $OPENBLAS $OPENCV
+		
+		# build the project
+		MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release
+		
+		# copy include files
+		mkdir ../include
+		cp -a include/mxnet dmlc-core/include/dmlc mshadow/mshadow ../include
+		
+		# copy binary files
+		mkdir ../bin
+		cp -a Release/* ../bin
+		
+		# copy library files
+		mkdir ../lib
+		cp -a Release/* ../lib
+		cd ../..
+		return 0
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         return 0
