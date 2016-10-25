@@ -59,7 +59,7 @@ case $PLATFORM in
 # Installers available at: https://support.hdfgroup.org/HDF5/release/obtain5110.html
     windows-*)
         if [[ ! -d "/C/Program Files/HDF_Group/HDF5/1.10.0/" ]]; then
-            echo "Please install HDF5 under the default installation directory"
+            echo "Please install HDF5 (https://support.hdfgroup.org/HDF5/release/obtain5110.html) under the default installation directory (C:\Program Files\HDF_Group\HDF5\1.10.0\)"
             exit 1
         fi
         ;;
