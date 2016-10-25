@@ -101,4 +101,11 @@ esac
 make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF=
 make install "PREFIX=$INSTALL_PATH"
 
+# create .lib files which can be used in other builds
+case $PLATFORM in
+	windows-*)
+		cp ../lib/libopenblas.dll.a ../lib/openblas.lib
+		;;
+esac
+
 cd ../..
