@@ -36,11 +36,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-    linux-armhf)
-        ./configure --prefix=$INSTALL_PATH --host="arm-linux-gnueabihf" CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" --enable-cxx
-        make -j $MAKEJ
-        make install-strip
-        ;;
+#    linux-armhf)
+#        ./configure --prefix=$INSTALL_PATH --host="arm-linux-gnueabihf" CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" --enable-cxx
+#        make -j $MAKEJ
+#        make install-strip
+#        ;;
     linux-x86_64)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
         make -j $MAKEJ
