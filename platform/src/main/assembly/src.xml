@@ -4,9 +4,11 @@
   <formats>
     <format>zip</format>
   </formats>
+  <baseDirectory>${project.parent.artifactId}</baseDirectory>
   <fileSets>
     <fileSet>
-      <directory>${project.basedir}</directory>
+      <directory>${project.parent.basedir}</directory>
+      <outputDirectory>/</outputDirectory>
       <useDefaultExcludes>true</useDefaultExcludes>
       <excludes>
         <!-- TODO: use expresssions instead: ${project.build.sourceDirectory}, etc -->

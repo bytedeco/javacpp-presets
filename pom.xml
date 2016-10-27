@@ -88,6 +88,16 @@
     <javacpp.cppbuild.skip>false</javacpp.cppbuild.skip> <!-- To skip execution of cppbuild.sh: -Djavacpp.cppbuild.skip=true -->
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
+    <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
+    <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
+    <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
+    <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
+    <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
+    <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
+    <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
+    <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
+    <javacpp.platform.windows-x86>windows-x86</javacpp.platform.windows-x86>
+    <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
   </properties>
 
   <dependencyManagement>
@@ -213,7 +223,7 @@
                 </manifest>
                 <manifestEntries>
                   <!-- <addClasspath/> is broken: http://jira.codehaus.org/browse/MJAR-61 -->
-                  <Class-Path>. javacpp.jar ${project.artifactId}-linux-arm.jar ${project.artifactId}-linux-x86.jar ${project.artifactId}-linux-x86_64.jar ${project.artifactId}-macosx-x86.jar ${project.artifactId}-macosx-x86_64.jar ${project.artifactId}-windows-x86.jar ${project.artifactId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>. javacpp.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-macosx-x86.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                   <Name>org/bytedeco/javacpp/presets/</Name>
                   <Implementation-Title>${project.name}</Implementation-Title>
                   <Implementation-Vendor>Bytedeco</Implementation-Vendor>
@@ -255,50 +265,6 @@
                 <exclude>**/*.lib</exclude>
                 <exclude>**/*.obj</exclude>
               </excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.parent.build.directory}</outputDirectory>
-              <stripVersion>true</stripVersion>
-            </configuration>
-          </execution>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <stripVersion>true</stripVersion>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>${project.artifactId}</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>${project.artifactId}</artifactId>
-                  <version>${project.version}</version>
-                  <classifier>${javacpp.platform}</classifier>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
-                </artifactItem>
-              </artifactItems>
             </configuration>
           </execution>
         </executions>
@@ -354,7 +320,7 @@
               <arguments>
                 <argument>${project.basedir}/../cppbuild.sh</argument>
                 <argument>install</argument>
-                <argument>${project.artifactId}</argument>
+                <argument>${javacpp.moduleId}</argument>
                 <argument>-platform</argument>
                 <argument>${javacpp.platform}</argument>
               </arguments>
@@ -370,7 +336,7 @@
               <arguments>
                 <argument>${project.basedir}/../cppbuild.sh</argument>
                 <argument>clean</argument>
-                <argument>${project.artifactId}</argument>
+                <argument>${javacpp.moduleId}</argument>
               </arguments>
             </configuration>
           </execution>		  
@@ -435,28 +401,9 @@
 
     <profile>
       <id>assembly</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.5.5</version>
-            <configuration>
-              <descriptors>
-                <descriptor>src/main/assembly/bin.xml</descriptor>
-                <descriptor>src/main/assembly/src.xml</descriptor>
-              </descriptors>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
+      <modules>
+        <module>platform</module>
+      </modules>
     </profile>
 
     <profile>
@@ -501,6 +448,68 @@
       </properties>
     </profile>
 
+    <profile>
+      <id>javacpp-platform-custom</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform.android-arm>${javacpp.platform}</javacpp.platform.android-arm>
+        <javacpp.platform.android-x86>${javacpp.platform}</javacpp.platform.android-x86>
+        <javacpp.platform.linux-x86>${javacpp.platform}</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64>${javacpp.platform}</javacpp.platform.linux-x86_64>
+        <javacpp.platform.linux-armhf>${javacpp.platform}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-ppc64le>${javacpp.platform}</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.macosx-x86_64>${javacpp.platform}</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86>${javacpp.platform}</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64>${javacpp.platform}</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-host</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
+        <javacpp.platform.android-arm>${os.name}-${os.arch}</javacpp.platform.android-arm>
+        <javacpp.platform.android-x86>${os.name}-${os.arch}</javacpp.platform.android-x86>
+        <javacpp.platform.linux-x86>${os.name}-${os.arch}</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64>${os.name}-${os.arch}</javacpp.platform.linux-x86_64>
+        <javacpp.platform.linux-armhf>${os.name}-${os.arch}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-ppc64le>${os.name}-${os.arch}</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.macosx-x86_64>${os.name}-${os.arch}</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86>${os.name}-${os.arch}</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64>${os.name}-${os.arch}</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-none</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.none</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform></javacpp.platform>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
     <!-- Provide convenient profiles to set commonly used paths for Android -->
     <profile>
       <id>android-arm-default</id>
@@ -529,105 +538,6 @@
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/x86-4.9/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</javacpp.platform.compiler>
       </properties>
-    </profile>
-
-    <!-- Include platform dependency by default for modules without a C++ build script file, but can be disabled with -Djavacpp.platform.dependency=false -->
-    <profile>
-      <id>platform-dependency-default</id>
-      <activation>
-        <file>
-          <missing>${user.dir}/cppbuild.sh</missing>
-        </file>
-        <property>
-          <name>!javacpp.platform.dependency</name>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>${javacpp.platform}</classifier>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>platform-dependency</id>
-      <activation>
-        <property>
-          <name>javacpp.platform.dependency</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>${javacpp.platform}</classifier>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>platform-dependencies</id>
-      <activation>
-        <property>
-          <name>javacpp.platform.dependencies</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>${javacpp.platform}</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>android-arm</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>android-x86</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>linux-x86</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>linux-x86_64</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>macosx-x86_64</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>windows-x86</classifier>
-        </dependency>
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>${project.artifactId}</artifactId>
-          <version>${project.version}</version>
-          <classifier>windows-x86_64</classifier>
-        </dependency>
-      </dependencies>
     </profile>
 
     <!-- If someone knows a better way to do this, please do let me know! -->
