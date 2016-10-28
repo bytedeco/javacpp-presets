@@ -8,10 +8,10 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 MXNET_VERSION=master
-download https://github.com/dmlc/dmlc-core/archive/master.tar.gz dmlc-core-$MXNET_VERSION.tar.gz
-download https://github.com/dmlc/mshadow/archive/master.tar.gz mshadow-$MXNET_VERSION.tar.gz
-download https://github.com/dmlc/ps-lite/archive/master.tar.gz ps-lite-$MXNET_VERSION.tar.gz
-download https://github.com/dmlc/mxnet/archive/master.tar.gz mxnet-$MXNET_VERSION.tar.gz
+download https://github.com/dmlc/dmlc-core/archive/bf321638b22d1d33bb36775e925f7b43b22db688.tar.gz dmlc-core-$MXNET_VERSION.tar.gz
+download https://github.com/dmlc/mshadow/archive/223b45a5cedf126a50b6c8ca4c82ede8c81874e0.tar.gz mshadow-$MXNET_VERSION.tar.gz
+download https://github.com/dmlc/ps-lite/archive/36b015ffd51c0f7062bba845f01164c0433dc6b3.tar.gz ps-lite-$MXNET_VERSION.tar.gz
+download https://github.com/dmlc/mxnet/archive/a5aeb0c43028f41863a8148eb3ecf30e90caad1e.tar.gz mxnet-$MXNET_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -26,14 +26,6 @@ rmdir dmlc-core mshadow ps-lite || true
 ln -snf ../dmlc-core-$MXNET_VERSION dmlc-core
 ln -snf ../mshadow-$MXNET_VERSION mshadow
 ln -snf ../ps-lite-$MXNET_VERSION ps-lite
-
-# --------- Checkout a stable commit with git -----------
-# clone mxnet and its submodules
-#git clone https://github.com/dmlc/mxnet.git --recursive
-#cd mxnet
-#      
-# checkout a stable commit
-#git checkout a5aeb0c43028f41863a8148eb3ecf30e90caad1e
 
 case $PLATFORM in
     linux-x86)

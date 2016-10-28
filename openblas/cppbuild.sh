@@ -104,7 +104,7 @@ make install "PREFIX=$INSTALL_PATH"
 # create .lib files which can be used in other builds
 case $PLATFORM in
 	windows-*)
-		cp ../lib/libopenblas.dll.a ../lib/openblas.lib
+		cp ../lib/libopenblas.dll.a ../lib/libopenblas.lib
 		;;
 esac
 
