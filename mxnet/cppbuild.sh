@@ -7,25 +7,28 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MXNET_VERSION=master
-download https://github.com/dmlc/dmlc-core/archive/bf321638b22d1d33bb36775e925f7b43b22db688.tar.gz dmlc-core-$MXNET_VERSION.tar.gz
-download https://github.com/dmlc/mshadow/archive/223b45a5cedf126a50b6c8ca4c82ede8c81874e0.tar.gz mshadow-$MXNET_VERSION.tar.gz
-download https://github.com/dmlc/ps-lite/archive/36b015ffd51c0f7062bba845f01164c0433dc6b3.tar.gz ps-lite-$MXNET_VERSION.tar.gz
-download https://github.com/dmlc/mxnet/archive/a5aeb0c43028f41863a8148eb3ecf30e90caad1e.tar.gz mxnet-$MXNET_VERSION.tar.gz
+MXNET_VERSION=a5aeb0c43028f41863a8148eb3ecf30e90caad1e
+DMLC_CORE_VERSION=bf321638b22d1d33bb36775e925f7b43b22db688
+MSHADOW_VERSION=223b45a5cedf126a50b6c8ca4c82ede8c81874e0
+PSLITE_VERSION=36b015ffd51c0f7062bba845f01164c0433dc6b3
+download https://github.com/dmlc/dmlc-core/archive/$DMLC_CORE_VERSION.tar.gz dmlc-core-$DMLC_CORE_VERSION.tar.gz
+download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
+download https://github.com/dmlc/ps-lite/archive/$PSLITE_VERSION.tar.gz ps-lite-$PSLITE_VERSION.tar.gz
+download https://github.com/dmlc/mxnet/archive/$MXNET_VERSION.tar.gz mxnet-$MXNET_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 
-tar -xzvf ../dmlc-core-$MXNET_VERSION.tar.gz
-tar -xzvf ../mshadow-$MXNET_VERSION.tar.gz
-tar -xzvf ../ps-lite-$MXNET_VERSION.tar.gz
+tar -xzvf ../dmlc-core-$DMLC_CORE_VERSION.tar.gz
+tar -xzvf ../mshadow-$MSHADOW_VERSION.tar.gz
+tar -xzvf ../ps-lite-$PSLITE_VERSION.tar.gz
 tar -xzvf ../mxnet-$MXNET_VERSION.tar.gz
 cd mxnet-$MXNET_VERSION
 rmdir dmlc-core mshadow ps-lite || true
-ln -snf ../dmlc-core-$MXNET_VERSION dmlc-core
-ln -snf ../mshadow-$MXNET_VERSION mshadow
-ln -snf ../ps-lite-$MXNET_VERSION ps-lite
+ln -snf ../dmlc-core-$DMLC_CORE_VERSION dmlc-core
+ln -snf ../mshadow-$MSHADOW_VERSION mshadow
+ln -snf ../ps-lite-$PSLITE_VERSION ps-lite
 
 case $PLATFORM in
     linux-x86)
@@ -83,7 +86,7 @@ export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/"
 
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS"
-cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
-cp -a ../mshadow-$MXNET_VERSION/mshadow ../include
+cp -a include lib ../dmlc-core-$DMLC_CORE_VERSION/include ..
+cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
 
 cd ../..
