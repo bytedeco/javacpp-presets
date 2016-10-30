@@ -895,6 +895,35 @@ public static native void cblas_zaxpby(@Cast("const blasint") long n, @Const dou
 // #endif
 
 
+// Parsed from blas_extra.h
+
+// Based on code found in https://github.com/deeplearning4j/libnd4j/blob/master/blas/cpu/NativeBlas.cpp
+
+// #include <cblas.h>
+
+// #ifdef _WIN32
+// #include <Windows.h>
+// #else
+// #include <dlfcn.h>
+// #endif
+
+public static native int maxThreads(); public static native void maxThreads(int maxThreads);
+public static native int vendor(); public static native void vendor(int vendor);
+
+public static native void blas_set_num_threads(int num);
+
+
+public static native int blas_get_num_threads();
+
+/**
+ *  0 - Unknown
+ *  1 - cuBLAS
+ *  2 - OpenBLAS
+ *  3 - MKL
+ */
+public static native int blas_get_vendor();
+
+
 // Parsed from lapacke_config.h
 
 /*****************************************************************************
