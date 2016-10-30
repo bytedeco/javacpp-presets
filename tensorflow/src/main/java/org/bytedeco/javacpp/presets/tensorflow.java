@@ -50,7 +50,7 @@ import java.lang.annotation.Target;
         @Platform(
                 value = {"linux-x86", "macosx"},
                 compiler = "cpp11",
-                define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std"},
+                define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/framework/numeric_types.h",
@@ -66,7 +66,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/platform/file_system.h",
                         "tensorflow/core/platform/file_statistics.h",
                         "tensorflow/core/platform/env.h",
-                        "tensorflow/core/graph/dot.h",
+//                        "tensorflow/core/graph/dot.h",
                         "tensorflow/core/protobuf/config.pb.h",
                         "tensorflow/core/framework/cost_graph.pb.h",
                         "tensorflow/core/framework/step_stats.pb.h",
@@ -86,6 +86,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/tensor_reference.h",
                         "tensorflow/core/framework/tensor.h",
                         "tensorflow/core/framework/attr_value.pb.h",
+                        "tensorflow/core/framework/node_def.pb.h",
                         "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/function.pb.h",
                         "tensorflow/core/framework/graph.pb.h",
@@ -198,16 +199,16 @@ import java.lang.annotation.Target;
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
-               .put(new Info("TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE",
+               .put(new Info("TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_DEPRECATED_ATTR",
                              "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
-               .put(new Info("SWIG").define())
+               .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define())
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
                .put(new Info("short", "tensorflow::int16", "tensorflow::uint16").valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
                .put(new Info("int", "int32", "tensorflow::int32", "tensorflow::uint32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
-               .put(new Info("long long", "tensorflow::int64", "tensorflow::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
+               .put(new Info("long long", "tensorflow::int64", "tensorflow::uint64", "std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
                .put(new Info("float").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("double").valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double..."))
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
