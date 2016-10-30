@@ -1,4 +1,5 @@
 
+ * Add `blas_extra.h` to presets for OpenBLAS, containing `blas_set_num_threads()` and `blas_get_vendor()` functions
  * Introduce platform artifacts that depend on binaries for all available platforms and work with any build system (sbt, Gradle, M2Eclipse, etc)
  * Map more functions of the OpenCV Transparent API with `UMat` and `UMatVector` parameters ([issue bytedeco/javacv#518](https://github.com/bytedeco/javacv/issues/518))
  * Add support for `android-arm` and `android-x86` platforms to TensorFlow presets ([pull #297](https://github.com/bytedeco/javacpp-presets/pull/297))
