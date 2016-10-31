@@ -65,6 +65,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-ppc64le)
+        sed -i s/elf64ppc/elf64lppc/ configure
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
         make -j $MAKEJ
         make install-strip
