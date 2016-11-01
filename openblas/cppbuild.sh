@@ -25,6 +25,7 @@ export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0
 export TARGET=GENERIC
+export USE_OPENMP=1
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
@@ -39,6 +40,7 @@ case $PLATFORM in
         fi
         export BINARY=32
         export TARGET=ARMV5
+        sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
         ;;
     android-x86)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
@@ -78,8 +80,8 @@ case $PLATFORM in
         ;;
     macosx-*)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-macosx.patch
-        export CC="gcc"
-        export FC="gfortran"
+        export CC="/usr/local/bin/gcc-?"
+        export FC="/usr/local/bin/gfortran-?"
         export BINARY=64
         ;;
     windows-x86)
@@ -98,7 +100,7 @@ case $PLATFORM in
         ;;
 esac
 
-make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF=
-make install "PREFIX=$INSTALL_PATH"
+make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF= NUM_CORES=$MAKEJ
+make install "PREFIX=$INSTALL_PATH" NUM_CORES=$MAKEJ
 
 cd ../..

@@ -70,6 +70,7 @@
             <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/javacpp/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
           </includePaths>
