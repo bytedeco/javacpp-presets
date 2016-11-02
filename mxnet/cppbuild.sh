@@ -19,9 +19,9 @@ case $PLATFORM in
         export BLAS="openblas"
         ;;
     macosx-*)
-        export CC="clang-omp"
-        export CXX="clang-omp++"
-        export BLAS="apple"
+        export CC="$(ls /usr/local/bin/gcc-?)"
+        export CXX="$(ls /usr/local/bin/g++-?)"
+        export BLAS="openblas"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -53,8 +53,14 @@ export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/includ
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/"
 
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS"
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
 cp -a ../mshadow-$MXNET_VERSION/mshadow ../include
+
+case $PLATFORM in
+    macosx-*)
+        install_name_tool -add_rpath @loader_path/. -id @rpath/libmxnet.so ../lib/libmxnet.so
+        ;;
+esac
 
 cd ../..
