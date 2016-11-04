@@ -48,11 +48,12 @@ ln -snf ../dmlc-core-$MXNET_VERSION dmlc-core
 ln -snf ../mshadow-$MXNET_VERSION mshadow
 ln -snf ../ps-lite-$MXNET_VERSION ps-lite
 
-export PKG_CONFIG_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/pkgconfig/"
-export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/"
+export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/:$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/"
+export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/:$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/"
 
+sed -i="" 's/`pkg-config --cflags opencv`//' Makefile
+sed -i="" 's/`pkg-config --libs opencv`/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
 cp -a ../mshadow-$MXNET_VERSION/mshadow ../include
