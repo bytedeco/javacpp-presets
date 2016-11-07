@@ -8,8 +8,10 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 export PYTHON_BIN_PATH=$(which python)
+export USE_DEFAULT_PYTHON_LIB_PATH=1
 export TF_NEED_CUDA=0
 export TF_NEED_GCP=0
+export TF_NEED_HDFS=0
 export TF_CUDA_VERSION=8.0
 export TF_CUDNN_VERSION=5
 export GCC_HOST_COMPILER_PATH=$(which gcc)
@@ -30,6 +32,7 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
 
+patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION.patch
 
 case $PLATFORM in
 	android-arm)
