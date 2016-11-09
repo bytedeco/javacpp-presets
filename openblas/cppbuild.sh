@@ -67,10 +67,12 @@ case $PLATFORM in
         export BINARY=64
         ;;
     linux-ppc64le)
+        # patch to use less buggy generic kernels
+        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-linux-ppc64le.patch
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
-        export TARGET=POWER8
+        export TARGET=POWER5
         ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc"
