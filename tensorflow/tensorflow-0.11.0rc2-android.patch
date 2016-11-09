@@ -1,5 +1,5 @@
 diff --git a/WORKSPACE b/WORKSPACE
-index 61c7773..3d1f5d5 100644
+index af5fef3..17ac35e 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -9,10 +9,10 @@ workspace(name = "org_tensorflow")
@@ -18,10 +18,10 @@ index 61c7773..3d1f5d5 100644
  # Please add all new TensorFlow dependencies in workspace.bzl.
  load("//tensorflow:workspace.bzl", "tf_workspace")
 diff --git a/tensorflow/BUILD b/tensorflow/BUILD
-index 7f80bf9..85b0b7e 100644
+index 0aa7644..cbbe984 100644
 --- a/tensorflow/BUILD
 +++ b/tensorflow/BUILD
-@@ -165,11 +165,29 @@ cc_binary(
+@@ -218,12 +218,29 @@ cc_binary(
      ],
  )
  
@@ -48,16 +48,17 @@ index 7f80bf9..85b0b7e 100644
      linkshared = 1,
 +    linkstatic = 1,
      deps = [
+-        "//tensorflow/c:c_api",
 -        "//tensorflow/cc:cc_ops",
 -        "//tensorflow/core:tensorflow",
 +        "//tensorflow/core:android_tensorflow_lib",
      ],
  )
 diff --git a/tensorflow/c/BUILD b/tensorflow/c/BUILD
-index fec8ca7..551a611 100644
+index 7f86d34..b60e0a3 100644
 --- a/tensorflow/c/BUILD
 +++ b/tensorflow/c/BUILD
-@@ -30,6 +30,19 @@ tf_cuda_library(
+@@ -31,6 +31,19 @@ tf_cuda_library(
      ],
  )
  
@@ -78,10 +79,10 @@ index fec8ca7..551a611 100644
      name = "tf_status_helper",
      srcs = ["tf_status_helper.cc"],
 diff --git a/tensorflow/core/BUILD b/tensorflow/core/BUILD
-index c5f2f18..3d69019 100644
+index 0ed133b..440abee 100644
 --- a/tensorflow/core/BUILD
 +++ b/tensorflow/core/BUILD
-@@ -654,7 +654,10 @@ cc_library(
+@@ -713,7 +713,10 @@ cc_library(
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
@@ -111,10 +112,10 @@ index abee32b..f047ddb 100644
  // it should be created) and registering it in the OpRegistry::Global()
  // registry.  Usage:
 diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
-index 3c2dab9..46fa346 100644
+index 2e04827..b8cbbbc 100644
 --- a/tensorflow/core/kernels/BUILD
 +++ b/tensorflow/core/kernels/BUILD
-@@ -1918,6 +1918,7 @@ filegroup(
+@@ -2094,6 +2094,7 @@ filegroup(
          "transpose_op.h",
          "where_op.h",
          "xent_op.h",
@@ -123,10 +124,10 @@ index 3c2dab9..46fa346 100644
  )
  
 diff --git a/tensorflow/tensorflow.bzl b/tensorflow/tensorflow.bzl
-index f4a846a..23126fe 100644
+index 7a18d52..18c32c5 100644
 --- a/tensorflow/tensorflow.bzl
 +++ b/tensorflow/tensorflow.bzl
-@@ -108,7 +108,6 @@ def tf_copts():
+@@ -141,7 +141,6 @@ def tf_copts():
            select({"//tensorflow:android": [
                      "-std=c++11",
                      "-DMIN_LOG_LEVEL=0",
