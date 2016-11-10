@@ -19,8 +19,8 @@ case $PLATFORM in
         export BLAS="openblas"
         ;;
     macosx-*)
-        export CC="$(ls /usr/local/bin/gcc-?)"
-        export CXX="$(ls /usr/local/bin/g++-?)"
+        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
+        export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
         export BLAS="openblas"
         ;;
     *)

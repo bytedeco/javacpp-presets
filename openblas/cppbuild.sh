@@ -82,8 +82,8 @@ case $PLATFORM in
         ;;
     macosx-*)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-macosx.patch
-        export CC="$(ls /usr/local/bin/gcc-?)"
-        export FC="$(ls /usr/local/bin/gfortran-?)"
+        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
+        export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
         ;;
     windows-x86)
