@@ -31,16 +31,16 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install-strip
 #        ;;
-    linux-x86)
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32" CXX="$OLDCXX -m32" --enable-cxx
-        make -j $MAKEJ
-        make install-strip
-        ;;
 #    linux-armhf)
 #        ./configure --prefix=$INSTALL_PATH --host="arm-linux-gnueabihf" CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" --enable-cxx
 #        make -j $MAKEJ
 #        make install-strip
 #        ;;
+    linux-x86)
+        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32" CXX="$OLDCXX -m32" --enable-cxx
+        make -j $MAKEJ
+        make install-strip
+        ;;
     linux-x86_64)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
         make -j $MAKEJ
@@ -52,6 +52,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
+        patch -Np1 < ../../../hdf5-$HDF5_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH --enable-cxx
         make -j $MAKEJ
         make install-strip
