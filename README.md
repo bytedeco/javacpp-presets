@@ -107,25 +107,26 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 3.1.0  http://opencv.org/downloads.html
- * FFmpeg 3.0.x  http://ffmpeg.org/download.html
+ * FFmpeg 3.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.9.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
+ * librealsense 1.9.6  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.0  https://support.hdfgroup.org/HDF5/
- * OpenBLAS 0.2.18  http://www.openblas.net/
- * FFTW 3.3.4  http://www.fftw.org/download.html
- * GSL 2.1  http://www.gnu.org/software/gsl/#downloading
- * LLVM 3.8.0  http://llvm.org/releases/download.html
+ * OpenBLAS 0.2.19  http://www.openblas.net/
+ * FFTW 3.3.5  http://www.fftw.org/download.html
+ * GSL 2.2.1  http://www.gnu.org/software/gsl/#downloading
+ * LLVM 3.9.0  http://llvm.org/releases/download.html
  * Leptonica 1.73  http://www.leptonica.org/download.html
  * Tesseract 3.04.01  https://github.com/tesseract-ocr/tesseract
- * Caffe 1.0-rc3  https://github.com/BVLC/caffe
- * CUDA 7.5  https://developer.nvidia.com/cuda-downloads
+ * Caffe  https://github.com/BVLC/caffe
+ * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
  * MXnet  https://github.com/dmlc/mxnet
- * TensorFlow 0.8.0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 0.11.0  https://github.com/tensorflow/tensorflow
 
 Once everything installed and configured, simply execute
 ```bash

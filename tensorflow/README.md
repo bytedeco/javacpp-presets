@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 0.10.0  http://www.tensorflow.org/
+ * TensorFlow 0.11.0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>0.10.0-1.2.5-SNAPSHOT</version>
+            <version>0.11.0-1.2.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -69,6 +69,7 @@ import java.nio.FloatBuffer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import static org.bytedeco.javacpp.tensorflow.*;
 
 public class ExampleTrainer {
@@ -221,11 +222,12 @@ public class ExampleTrainer {
             }});
         }
 
+        step_threads.shutdown();
+        step_threads.awaitTermination(1, TimeUnit.MINUTES);
         s = session.Close();
         if (!s.ok()) {
             throw new Exception(s.error_message().getString());
         }
-        step_threads.shutdown();
     }
 
     static void ConcurrentSessions(final Options opts) throws Exception {

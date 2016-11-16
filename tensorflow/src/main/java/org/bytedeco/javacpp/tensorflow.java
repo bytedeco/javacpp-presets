@@ -872,6 +872,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/platform/logging.h"
 
+/** Denotes success or failure of a call in Tensorflow. */
 @Namespace("tensorflow") @NoOffset public static class Status extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1140,8 +1141,12 @@ limitations under the License.
   public native @ByVal Status IsDirectory(@StdString String fname);
 }
 
+// START_SKIP_DOXYGEN
+
 // #ifndef SWIG
 // #endif
+
+// END_SKIP_DOXYGEN
 
 /** A file abstraction for randomly reading the contents of a file. */
 @Namespace("tensorflow") public static class RandomAccessFile extends Pointer {
@@ -1696,6 +1701,7 @@ limitations under the License.
                                 @Cast("void**") @ByPtrPtr Pointer symbol);
 }
 
+/** Represents a thread used to run a Tensorflow function. */
 @Namespace("tensorflow") public static class Thread extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1761,7 +1767,11 @@ limitations under the License.
 @Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString String fname,
                        @Cast("tensorflow::protobuf::MessageLite*") Pointer proto);
 
+// START_SKIP_DOXYGEN
+
   // namespace register_file_system
+
+// END_SKIP_DOXYGEN
 
   // namespace tensorflow
 
@@ -6238,8 +6248,20 @@ limitations under the License.
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/lib/strings/strcat.h"
-// #include "tensorflow/core/platform/logging.h"  // Declared below
+// #include "tensorflow/core/platform/logging.h"
 
+// START_SKIP_DOXYGEN  // Declared below
+// END_SKIP_DOXYGEN
+
+/** Represents the shape of a Tensor.
+ * 
+ *  A tensor's shape is denoted by its number of dimensions and a size for each
+ *  dimension.  For example, a Tensor represented by a 3 x 4 matrix would have
+ *  a shape of 2-D, [3,4].
+ * 
+ *  If you know the exact shape of your Tensor when you create the TensorShape
+ *  object, you can specify it then, or you can create a TensorShape with
+ *  zero dimensions and one element, and call AddDim() to add dimensions later. */
 @Namespace("tensorflow") @NoOffset public static class TensorShape extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -6361,6 +6383,7 @@ limitations under the License.
   public native void DumpRep();
 }
 
+/** Represents the value of one dimension in a TensorShape. */
 @Namespace("tensorflow") @NoOffset public static class TensorShapeDim extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -6371,6 +6394,7 @@ limitations under the License.
   public native @Cast("tensorflow::int64") long size(); public native TensorShapeDim size(long size);
 }
 
+// START_SKIP_DOXYGEN
 @Namespace("tensorflow") @NoOffset public static class TensorShapeIter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -6383,6 +6407,7 @@ limitations under the License.
   public native @Name("operator ++") void increment();
   public native @ByVal @Name("operator *") TensorShapeDim multiply();
 }
+// END_SKIP_DOXYGEN
 
 /** \brief Static helper routines for {@code TensorShape}. Includes a few common
  *  predicates on a tensor shape. */
@@ -6950,6 +6975,8 @@ limitations under the License.
 
 // Implementation details
 
+// START_SKIP_DOXYGEN
+
 // Interface to access the raw ref-counted data buffer.
 @Namespace("tensorflow") public static class TensorBuffer extends Pointer {
     static { Loader.load(); }
@@ -7013,6 +7040,8 @@ limitations under the License.
 
 
 
+
+// END_SKIP_DOXYGEN
 
   // namespace tensorflow
 
