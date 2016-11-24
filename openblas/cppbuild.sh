@@ -24,7 +24,7 @@ cd OpenBLAS-$OPENBLAS_VERSION
 export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0
-export TARGET=GENERIC
+export NUM_THREADS=64
 export USE_OPENMP=1
 case $PLATFORM in
     android-arm)
@@ -60,11 +60,13 @@ case $PLATFORM in
         export CC="$OLDCC -m32"
         export FC="$OLDFC -m32"
         export BINARY=32
+        export DYNAMIC_ARCH=1
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
+        export DYNAMIC_ARCH=1
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
@@ -85,16 +87,19 @@ case $PLATFORM in
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
+        export DYNAMIC_ARCH=1
         ;;
     windows-x86)
         export CC="$OLDCC -m32"
         export FC="$OLDFC -m32"
         export BINARY=32
+        export DYNAMIC_ARCH=1
         ;;
     windows-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
+        export DYNAMIC_ARCH=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -102,7 +107,7 @@ case $PLATFORM in
         ;;
 esac
 
-make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF= NUM_CORES=$MAKEJ
-make install "PREFIX=$INSTALL_PATH" NUM_CORES=$MAKEJ
+make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF=
+make install "PREFIX=$INSTALL_PATH"
 
 cd ../..
