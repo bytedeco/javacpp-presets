@@ -169,51 +169,56 @@ public class Tutorial01 {
                 AV_PIX_FMT_RGB24, SWS_BILINEAR, null, null, (DoublePointer)null);
 
         // Assign appropriate parts of buffer to image planes in pFrameRGB
+        // Note that pFrameRGB is an AVFrame, but AVFrame is a superset
+        // of AVPicture
         av_image_fill_arrays(pFrame.data(), pFrame.linesize(), buffer,
                 pFrame.format(), pFrame.width(), pFrame.height(), 1);
 
         // Read frames and save first five frames to disk
-        final AVPacket packet = new AVPacket();
-        for (int i = 0; av_read_frame(pFormatCtx, packet) >= 0;) {
-            // Is this a packet from the video stream?
-            if (packet.stream_index() == videoStream) {
-                // Decode video frame
-                if (avcodec_send_packet(pCodecCtx, packet) != 0) {
-                    System.exit(-1);
+        try(final AVPacket packet = new AVPacket()) {
+            for (int i = 0; av_read_frame(pFormatCtx, packet) >= 0;) {
+                // Is this a packet from the video stream?
+                if (packet.stream_index() == videoStream) {
+                    // Decode video frame
+                    if (avcodec_send_packet(pCodecCtx, packet) != 0) {
+                        System.exit(-1);
+                    }
+
+                    if (avcodec_receive_frame(pCodecCtx, pFrame) == 0) {
+                        // Convert the image from its native format to RGB
+                        sws_scale(sws_ctx, pFrame.data(), pFrame.linesize(), 0,
+                                pCodecCtx.height(), pFrameRGB.data(), pFrameRGB.linesize());
+
+                        // Save the frame to disk
+                        if (++i<=5) {
+                            saveFrame(pFrameRGB, pCodecCtx.width(), pCodecCtx.height(), i);
+                        }
+                        else {
+                            // Free the packet that was allocated by av_read_frame
+                            av_packet_unref(packet);
+                            return;
+                        }
+                    }
                 }
 
-                if (avcodec_receive_frame(pCodecCtx, pFrame) == 0) {
-                    // Convert the image from its native format to RGB
-                    sws_scale(sws_ctx, pFrame.data(), pFrame.linesize(), 0,
-                            pCodecCtx.height(), pFrameRGB.data(), pFrameRGB.linesize());
-
-                    // Save the frame to disk
-                    if (++i<=5) {
-                        saveFrame(pFrameRGB, pCodecCtx.width(), pCodecCtx.height(), i);
-                    }
-                    else {
-                        System.exit(0);
-                    }
-                }
+                // Free the packet that was allocated by av_read_frame
+                av_packet_unref(packet);
             }
-
-            // Free the packet that was allocated by av_read_frame
-            av_packet_unref(packet);
         }
+        finally {
+            // Free the RGB image
+            av_free(buffer);
+            av_free(pFrameRGB);
 
-        // Free the RGB image
-        av_free(buffer);
-        av_free(pFrameRGB);
+            // Free the YUV frame
+            av_free(pFrame);
 
-        // Free the YUV frame
-        av_free(pFrame);
+            // Close the codec
+            avcodec_close(pCodecCtx);
 
-        // Close the codec
-        avcodec_close(pCodecCtx);
-
-        // Close the video file
-        avformat_close_input(pFormatCtx);
-
+            // Close the video file
+            avformat_close_input(pFormatCtx);
+        }
         System.exit(0);
     }
 }
