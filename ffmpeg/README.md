@@ -181,7 +181,8 @@ public class Tutorial01 {
                 if (packet.stream_index() == videoStream) {
                     // Decode video frame
                     if (avcodec_send_packet(pCodecCtx, packet) != 0) {
-                        System.exit(-1);
+                        System.err.println("Frame read failed!");
+                        return;
                     }
 
                     if (avcodec_receive_frame(pCodecCtx, pFrame) == 0) {
