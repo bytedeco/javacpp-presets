@@ -169,8 +169,6 @@ public class Tutorial01 {
                 AV_PIX_FMT_RGB24, SWS_BILINEAR, null, null, (DoublePointer)null);
 
         // Assign appropriate parts of buffer to image planes in pFrameRGB
-        // Note that pFrameRGB is an AVFrame, but AVFrame is a superset
-        // of AVPicture
         av_image_fill_arrays(pFrame.data(), pFrame.linesize(), buffer,
                 pFrame.format(), pFrame.width(), pFrame.height(), 1);
 
