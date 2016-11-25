@@ -25,7 +25,7 @@ export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0
 export NUM_THREADS=64
-export USE_OPENMP=1
+export NO_AFFINITY=1
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
