@@ -253,6 +253,16 @@ case $PLATFORM in
         export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
+        HOST_ARCH="$(uname -m)"
+        CROSSCOMPILE=1
+        if [[ $HOST_ARCH == *"arm"* ]]
+        then
+          echo "Detected arm arch so not cross compiling";
+          CROSSCOMPILE=0
+        else
+          echo "Detected non arm arch so cross compiling";
+        fi
+        
         cd $ZLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
@@ -270,26 +280,51 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENSSL
-        ./Configure linux-armv4 -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          ./Configure linux-armv4 -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH
+        else
+          ./Configure linux-armv4  -fPIC no-shared --prefix=$INSTALL_PATH
+        fi
         make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf libraries install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-cli --host=arm-linux-gnueabihf --cross-prefix="arm-linux-gnueabihf-" --disable-asm
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-cli --host=arm-linux-gnueabihf --cross-prefix="arm-linux-gnueabihf-" --disable-asm
+        else
+          ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-cli --disable-asm
+        fi
         make -j $MAKEJ
         make install
         cd ../$X265
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=/rpxc/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/rpxc/bin/arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=/rpxc/bin/arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=/rpxc/arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=/rpxc/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/rpxc/bin/arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=/rpxc/bin/arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=/rpxc/arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        else
+          $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        fi
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        CROSS=arm-linux-gnueabihf- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=armv7-linux-gcc
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          CROSS=arm-linux-gnueabihf- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=armv7-linux-gcc
+        else
+          ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
+        fi
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+        else
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+        fi
         make -j $MAKEJ
         make install
         ;;
