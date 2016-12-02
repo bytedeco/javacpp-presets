@@ -1099,8 +1099,8 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  */
 
 /**
- * \defgroup libavf I/O and Muxing/Demuxing Library
- * \{
+ * \defgroup libavf libavformat
+ * I/O and Muxing/Demuxing Library
  *
  * Libavformat (lavf) is a library for dealing with various media container
  * formats. Its main two purposes are demuxing - i.e. splitting a media file
@@ -1160,6 +1160,8 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * Note that some schemes/protocols are quite powerful, allowing access to
  * both local and remote files, parts of them, concatenations of them, local
  * audio and video devices and so on.
+ *
+ * \{
  *
  * \defgroup lavf_decoding Demuxing
  * \{
@@ -1862,6 +1864,8 @@ public static class AVOutputFormat extends Pointer {
      * AVStream parameters that need to be set before packets are sent.
      * This method must not write output.
      *
+     * Return 0 if streams were fully configured, 1 if not, negative AVERROR on failure
+     *
      * Any allocations made here must be freed in deinit().
      */
     public static class Init_AVFormatContext extends FunctionPointer {
@@ -2214,6 +2218,9 @@ public static class AVIndexEntry extends Pointer {
                                    */
     public native @Cast("int64_t") long timestamp(); public native AVIndexEntry timestamp(long timestamp);
 public static final int AVINDEX_KEYFRAME = 0x0001;
+public static final int AVINDEX_DISCARD_FRAME =  0x0002;    /**
+                                          * Flag is used to indicate which frame should be discarded after decoding.
+                                          */
     public native @NoOffset int flags(); public native AVIndexEntry flags(int flags);
     public native @NoOffset int size(); public native AVIndexEntry size(int size); //Yeah, trying to keep the size of this small to reduce memory requirements (it is 24 vs. 32 bytes due to possible 8-byte alignment).
     /** Minimum distance between this and the previous keyframe, used to avoid unneeded searching. */
@@ -2241,11 +2248,17 @@ public static final int AV_DISPOSITION_VISUAL_IMPAIRED =   0x0100;
 public static final int AV_DISPOSITION_CLEAN_EFFECTS =     0x0200;
 /**
  * The stream is stored in the file as an attached picture/"cover art" (e.g.
- * APIC frame in ID3v2). The single packet associated with it will be returned
- * among the first few packets read from the file unless seeking takes place.
- * It can also be accessed at any time in AVStream.attached_pic.
+ * APIC frame in ID3v2). The first (usually only) packet associated with it
+ * will be returned among the first few packets read from the file unless
+ * seeking takes place. It can also be accessed at any time in
+ * AVStream.attached_pic.
  */
 public static final int AV_DISPOSITION_ATTACHED_PIC =      0x0400;
+/**
+ * The stream is sparse, and contains thumbnail images, often corresponding
+ * to chapter markers. Only ever used with AV_DISPOSITION_ATTACHED_PIC.
+ */
+public static final int AV_DISPOSITION_TIMED_THUMBNAILS =  0x0800;
 
 @Opaque public static class AVStreamInternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -2966,6 +2979,10 @@ public static final int AVFMT_FLAG_PRIV_OPT =    0x20000;
 public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
 /** Enable fast, but inaccurate seeks for some formats */
 public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
+/** Stop muxing when the shortest stream stops. */
+public static final int AVFMT_FLAG_SHORTEST =   0x100000;
+/** Wait for packet data before writing a header, and add bitstream filters as requested by the muxer */
+public static final int AVFMT_FLAG_AUTO_BSF =   0x200000;
 
     /**
      * Maximum size of the data read from input for determining
@@ -3613,12 +3630,15 @@ public static class AVPacketList extends Pointer {
  * @param size pointer for side information size to store (optional)
  * @return pointer to data if present or NULL otherwise
  */
+// #if FF_API_NOCONST_GET_SIDE_DATA
 @NoException public static native @Cast("uint8_t*") BytePointer av_stream_get_side_data(AVStream stream,
                                  @Cast("AVPacketSideDataType") int type, IntPointer size);
 @NoException public static native @Cast("uint8_t*") ByteBuffer av_stream_get_side_data(AVStream stream,
                                  @Cast("AVPacketSideDataType") int type, IntBuffer size);
 @NoException public static native @Cast("uint8_t*") byte[] av_stream_get_side_data(AVStream stream,
                                  @Cast("AVPacketSideDataType") int type, int[] size);
+// #else
+// #endif
 
 @NoException public static native AVProgram av_new_program(AVFormatContext s, int id);
 
@@ -3962,6 +3982,12 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  * \addtogroup lavf_encoding
  * \{
  */
+
+/** stream parameters initialized in avformat_write_header */
+public static final int AVSTREAM_INIT_IN_WRITE_HEADER = 0;
+/** stream parameters initialized in avformat_init_output */
+public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
+
 /**
  * Allocate the stream private data and write the stream header to
  * an output media file.
@@ -3973,12 +3999,36 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  *                 On return this parameter will be destroyed and replaced with a dict containing
  *                 options that were not found. May be NULL.
  *
- * @return 0 on success, negative AVERROR on failure.
+ * @return AVSTREAM_INIT_IN_WRITE_HEADER on success if the codec had not already been fully initialized in avformat_init,
+ *         AVSTREAM_INIT_IN_INIT_OUTPUT  on success if the codec had already been fully initialized in avformat_init,
+ *         negative AVERROR on failure.
  *
- * @see av_opt_find, av_dict_set, avio_open, av_oformat_next.
+ * @see av_opt_find, av_dict_set, avio_open, av_oformat_next, avformat_init_output.
  */
 @NoException public static native int avformat_write_header(AVFormatContext s, @Cast("AVDictionary**") PointerPointer options);
 @NoException public static native int avformat_write_header(AVFormatContext s, @ByPtrPtr AVDictionary options);
+
+/**
+ * Allocate the stream private data and initialize the codec, but do not write the header.
+ * May optionally be used before avformat_write_header to initialize stream parameters
+ * before actually writing the header.
+ * If using this function, do not pass the same options to avformat_write_header.
+ *
+ * @param s Media file handle, must be allocated with avformat_alloc_context().
+ *          Its oformat field must be set to the desired output format;
+ *          Its pb field must be set to an already opened AVIOContext.
+ * @param options  An AVDictionary filled with AVFormatContext and muxer-private options.
+ *                 On return this parameter will be destroyed and replaced with a dict containing
+ *                 options that were not found. May be NULL.
+ *
+ * @return AVSTREAM_INIT_IN_WRITE_HEADER on success if the codec requires avformat_write_header to fully initialize,
+ *         AVSTREAM_INIT_IN_INIT_OUTPUT  on success if the codec has been fully initialized,
+ *         negative AVERROR on failure.
+ *
+ * @see av_opt_find, av_dict_set, avio_open, av_oformat_next, avformat_write_header.
+ */
+@NoException public static native int avformat_init_output(AVFormatContext s, @Cast("AVDictionary**") PointerPointer options);
+@NoException public static native int avformat_init_output(AVFormatContext s, @ByPtrPtr AVDictionary options);
 
 /**
  * Write a packet to an output media file.
@@ -4374,6 +4424,10 @@ public static final int AVSEEK_FLAG_FRAME =    8;
                     String url,
                     int is_output);
 
+
+/** Allow multiple %d */
+public static final int AV_FRAME_FILENAME_FLAGS_MULTIPLE = 1;
+
 /**
  * Return in 'buf' the path with '%d' replaced by a number.
  *
@@ -4384,8 +4438,22 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  * @param buf_size destination buffer size
  * @param path numbered sequence string
  * @param number frame number
+ * @param flags AV_FRAME_FILENAME_FLAGS_*
  * @return 0 if OK, -1 on format error
  */
+@NoException public static native int av_get_frame_filename2(@Cast("char*") BytePointer buf, int buf_size,
+                          @Cast("const char*") BytePointer path, int number, int flags);
+@NoException public static native int av_get_frame_filename2(@Cast("char*") ByteBuffer buf, int buf_size,
+                          String path, int number, int flags);
+@NoException public static native int av_get_frame_filename2(@Cast("char*") byte[] buf, int buf_size,
+                          @Cast("const char*") BytePointer path, int number, int flags);
+@NoException public static native int av_get_frame_filename2(@Cast("char*") BytePointer buf, int buf_size,
+                          String path, int number, int flags);
+@NoException public static native int av_get_frame_filename2(@Cast("char*") ByteBuffer buf, int buf_size,
+                          @Cast("const char*") BytePointer path, int number, int flags);
+@NoException public static native int av_get_frame_filename2(@Cast("char*") byte[] buf, int buf_size,
+                          String path, int number, int flags);
+
 @NoException public static native int av_get_frame_filename(@Cast("char*") BytePointer buf, int buf_size,
                           @Cast("const char*") BytePointer path, int number);
 @NoException public static native int av_get_frame_filename(@Cast("char*") ByteBuffer buf, int buf_size,
@@ -4550,6 +4618,36 @@ public static final int AVSEEK_FLAG_FRAME =    8;
 @NoException public static native @Deprecated int av_apply_bitstream_filters(AVCodecContext codec, AVPacket pkt,
                                AVBitStreamFilterContext bsfc);
 // #endif
+
+/** enum AVTimebaseSource */
+public static final int
+    AVFMT_TBCF_AUTO = -1,
+    AVFMT_TBCF_DECODER = 0,
+    AVFMT_TBCF_DEMUXER = 1,
+// #if FF_API_R_FRAME_RATE
+    AVFMT_TBCF_R_FRAMERATE = 2;
+// #endif
+
+/**
+ * Transfer internal timing information from one stream to another.
+ *
+ * This function is useful when doing stream copy.
+ *
+ * @param ofmt     target output format for ost
+ * @param ost      output stream which needs timings copy and adjustments
+ * @param ist      reference input stream to copy timings from
+ * @param copy_tb  define from where the stream codec timebase needs to be imported
+ */
+@NoException public static native int avformat_transfer_internal_stream_timing_info(@Const AVOutputFormat ofmt,
+                                                  AVStream ost, @Const AVStream ist,
+                                                  @Cast("AVTimebaseSource") int copy_tb);
+
+/**
+ * Get the internal codec timebase from a stream.
+ *
+ * @param st  input stream to extract the timebase from
+ */
+@NoException public static native @ByVal AVRational av_stream_get_codec_timebase(@Const AVStream st);
 
 /**
  * \}

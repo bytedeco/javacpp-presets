@@ -50,7 +50,9 @@ public class swscale extends org.bytedeco.javacpp.presets.swscale {
 // #include "version.h"
 
 /**
- * \defgroup libsws Color conversion and scaling
+ * \defgroup libsws libswscale
+ * Color conversion and scaling library.
+ *
  * \{
  *
  * Return the LIBSWSCALE_VERSION_INT constant.

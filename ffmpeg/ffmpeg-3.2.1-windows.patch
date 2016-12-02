@@ -1,16 +1,16 @@
-diff -ruN ffmpeg-3.0.2/configure ffmpeg-3.0.2-windows/configure
---- ffmpeg-3.0.2/configure	2016-04-28 10:05:53.000000000 +0900
-+++ ffmpeg-3.0.2-windows/configure	2016-06-14 12:41:10.282471200 +0900
-@@ -5478,7 +5478,7 @@
- enabled libopencv         && { check_header opencv2/core/core_c.h &&
-                                require_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
+diff -ruN ffmpeg-3.2.1/configure ffmpeg-3.2.1-windows/configure
+--- ffmpeg-3.2.1/configure	2016-11-26 11:12:05.000000000 +0900
++++ ffmpeg-3.2.1-windows/configure	2016-12-02 17:33:38.136034953 +0900
+@@ -5720,7 +5720,7 @@
+                                { use_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
+                                  require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader; }
 -enabled libopenh264       && require_pkg_config openh264 wels/codec_api.h WelsGetCodecVersion
 +enabled libopenh264       && require openh264 wels/codec_api.h WelsGetCodecVersion -lopenh264
- enabled libopenjpeg       && { check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC ||
-                                check_lib openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC ||
-                                check_lib openjpeg-1.5/openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC ||
-@@ -5495,7 +5495,7 @@
+ enabled libopenjpeg       && { { check_lib2 openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
+                                check_lib2 openjpeg-2.1/openjpeg.h opj_version -lopenjp2 ||
+                                { check_lib2 openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
+@@ -5739,7 +5739,7 @@
  enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
@@ -19,7 +19,7 @@ diff -ruN ffmpeg-3.0.2/configure ffmpeg-3.0.2-windows/configure
  enabled libtesseract      && require_pkg_config tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
  enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
-@@ -5509,22 +5509,18 @@
+@@ -5752,22 +5752,18 @@
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -42,7 +42,7 @@ diff -ruN ffmpeg-3.0.2/configure ffmpeg-3.0.2-windows/configure
              check_lib2 "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VP9E_SET_AQ_MODE" -lvpx ||
                  disable libvpx_vp9_encoder;
      }
-@@ -5537,14 +5533,14 @@
+@@ -5780,14 +5776,14 @@
  enabled libwebp           && {
      enabled libwebp_encoder      && require_pkg_config "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
      enabled libwebp_anim_encoder && { use_pkg_config "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit || disable libwebp_anim_encoder; } }

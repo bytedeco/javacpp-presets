@@ -49,8 +49,9 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
  */
 
 /**
- * \defgroup lavd Special devices muxing/demuxing library
- * \{
+ * \defgroup lavd libavdevice
+ * Special devices muxing/demuxing library.
+ *
  * Libavdevice is a complementary library to \ref libavf "libavformat". It
  * provides various "special" platform-specific muxers and demuxers, e.g. for
  * grabbing devices, audio capture and playback etc. As a consequence, the
@@ -61,7 +62,8 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
  *
  * To use libavdevice, simply call avdevice_register_all() to register all
  * compiled muxers and demuxers. They all use standard libavformat API.
- * \}
+ *
+ * \{
  */
 
 // #include "libavutil/log.h"
@@ -647,6 +649,10 @@ public static class AVDeviceInfoList extends Pointer {
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
 @NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, String device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
+
+/**
+ * \}
+ */
 
 // #endif /* AVDEVICE_AVDEVICE_H */
 

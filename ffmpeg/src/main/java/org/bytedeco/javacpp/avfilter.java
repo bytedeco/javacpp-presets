@@ -49,7 +49,9 @@ public class avfilter extends org.bytedeco.javacpp.presets.avfilter {
  */
 
 /**
- * \defgroup lavfi Libavfilter - graph-based frame editing library
+ * \defgroup lavfi libavfilter
+ * Graph-based frame editing library.
+ *
  * \{
  */
 
@@ -483,6 +485,13 @@ public static class AVFilterContext extends Pointer {
      * hardware context information.
      */
     public native AVBufferRef hw_device_ctx(); public native AVFilterContext hw_device_ctx(AVBufferRef hw_device_ctx);
+
+    /**
+     * Max number of threads allowed in this filter instance.
+     * If <= 0, its value is ignored.
+     * Overrides global number of threads set per filter graph.
+     */
+    public native int nb_threads(); public native AVFilterContext nb_threads(int nb_threads);
 }
 
 /**
@@ -1573,7 +1582,6 @@ public static class AVABufferSinkParams extends Pointer {
  * Memory buffer source API.
  */
 
-// #include "libavcodec/avcodec.h"
 // #include "avfilter.h"
 
 /**

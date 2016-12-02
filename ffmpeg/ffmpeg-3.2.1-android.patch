@@ -1,16 +1,16 @@
-diff -ruN ffmpeg-3.0/configure ffmpeg-3.0-android/configure
---- ffmpeg-3.0/configure	2016-02-15 11:29:37.000000000 +0900
-+++ ffmpeg-3.0-android/configure	2016-02-20 23:24:17.225243882 +0900
-@@ -5490,7 +5490,7 @@
- enabled libopencv         && { check_header opencv2/core/core_c.h &&
-                                require_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
+diff -ruN ffmpeg-3.2.1/configure ffmpeg-3.2.1-android/configure
+--- ffmpeg-3.2.1/configure	2016-11-26 11:12:05.000000000 +0900
++++ ffmpeg-3.2.1-android/configure	2016-12-02 17:36:22.554654633 +0900
+@@ -5720,7 +5720,7 @@
+                                { use_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
+                                  require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader; }
 -enabled libopenh264       && require_pkg_config openh264 wels/codec_api.h WelsGetCodecVersion
 +enabled libopenh264       && require openh264 wels/codec_api.h WelsGetCodecVersion -lopenh264
- enabled libopenjpeg       && { check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC ||
-                                check_lib openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC ||
-                                check_lib openjpeg-1.5/openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC ||
-@@ -5507,7 +5507,7 @@
+ enabled libopenjpeg       && { { check_lib2 openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
+                                check_lib2 openjpeg-2.1/openjpeg.h opj_version -lopenjp2 ||
+                                { check_lib2 openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
+@@ -5739,7 +5739,7 @@
  enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
@@ -19,7 +19,7 @@ diff -ruN ffmpeg-3.0/configure ffmpeg-3.0-android/configure
  enabled libtesseract      && require_pkg_config tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
  enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
-@@ -5556,7 +5556,7 @@
+@@ -5787,7 +5787,7 @@
                                 die "ERROR: libx264 must be installed and version must be >= 0.118."; } &&
                               { check_cpp_condition x264.h "X264_MPEG2" &&
                                 enable libx262; }
@@ -28,12 +28,12 @@ diff -ruN ffmpeg-3.0/configure ffmpeg-3.0-android/configure
                               { check_cpp_condition x265.h "X265_BUILD >= 68" ||
                                 die "ERROR: libx265 version must be >= 68."; }
  enabled libxavs           && require libxavs xavs.h xavs_encoder_encode -lxavs
-diff -ruN ffmpeg-3.0/library.mak ffmpeg-3.0-android/library.mak
---- ffmpeg-3.0/library.mak	2016-02-15 11:29:42.000000000 +0900
-+++ ffmpeg-3.0-android/library.mak	2016-02-20 23:58:18.828086226 +0900
-@@ -53,16 +53,13 @@
- $(TESTPROGS) $(TOOLS): %$(EXESUF): %.o $(EXEOBJS)
- 	$$(LD) $(LDFLAGS) $(LDEXEFLAGS) $$(LD_O) $$(filter %.o,$$^) $$(THISLIB) $(FFEXTRALIBS) $$(ELIBS)
+diff -ruN ffmpeg-3.2.1/library.mak ffmpeg-3.2.1-android/library.mak
+--- ffmpeg-3.2.1/library.mak	2016-10-28 01:17:40.000000000 +0900
++++ ffmpeg-3.2.1-android/library.mak	2016-12-02 17:35:43.292796153 +0900
+@@ -43,16 +43,13 @@
+ $(SUBDIR)lib$(NAME).ver: $(SUBDIR)lib$(NAME).v $(OBJS)
+ 	$$(M)sed 's/MAJOR/$(lib$(NAME)_VERSION_MAJOR)/' $$< | $(VERSION_SCRIPT_POSTPROCESS_CMD) > $$@
  
 -$(SUBDIR)$(SLIBNAME): $(SUBDIR)$(SLIBNAME_WITH_MAJOR)
 -	$(Q)cd ./$(SUBDIR) && $(LN_S) $(SLIBNAME_WITH_MAJOR) $(SLIBNAME)
@@ -50,7 +50,7 @@ diff -ruN ffmpeg-3.0/library.mak ffmpeg-3.0-android/library.mak
  endif
  
  clean::
-@@ -74,9 +71,8 @@
+@@ -65,9 +62,8 @@
  
  install-lib$(NAME)-shared: $(SUBDIR)$(SLIBNAME)
  	$(Q)mkdir -p "$(SHLIBDIR)"
@@ -62,7 +62,7 @@ diff -ruN ffmpeg-3.0/library.mak ffmpeg-3.0-android/library.mak
  	$(if $(SLIB_INSTALL_EXTRA_SHLIB),$$(INSTALL) -m 644 $(SLIB_INSTALL_EXTRA_SHLIB:%=$(SUBDIR)%) "$(SHLIBDIR)")
  	$(if $(SLIB_INSTALL_EXTRA_LIB),$(Q)mkdir -p "$(LIBDIR)")
  	$(if $(SLIB_INSTALL_EXTRA_LIB),$$(INSTALL) -m 644 $(SLIB_INSTALL_EXTRA_LIB:%=$(SUBDIR)%) "$(LIBDIR)")
-@@ -95,9 +91,7 @@
+@@ -86,9 +82,7 @@
  	$$(INSTALL) -m 644 $$^ "$(PKGCONFIGDIR)"
  
  uninstall-libs::

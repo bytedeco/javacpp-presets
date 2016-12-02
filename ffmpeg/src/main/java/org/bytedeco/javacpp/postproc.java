@@ -43,7 +43,9 @@ public class postproc extends org.bytedeco.javacpp.presets.postproc {
  */
 
 /**
- * \defgroup lpp Libpostproc
+ * \defgroup lpp libpostproc
+ * Video postprocessing library.
+ *
  * \{
  */
 

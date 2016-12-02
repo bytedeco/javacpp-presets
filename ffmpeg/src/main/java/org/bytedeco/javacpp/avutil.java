@@ -36,7 +36,8 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
 
 /**
  * \file
- * external API header
+ * \ingroup lavu
+ * Convenience header that includes \ref lavu "libavutil"'s core.
  */
 
 /**
@@ -91,14 +92,15 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  */
 
 /**
- * \defgroup lavu Common utility functions
+ * \defgroup lavu libavutil
+ * Common code shared across all FFmpeg libraries.
  *
- * \brief
- * libavutil contains the code shared across all the other FFmpeg
- * libraries
- *
- * \note In order to use the functions provided by avutil you must include
- * the specific header.
+ * \note
+ * libavutil is designed to be modular. In most cases, in order to use the
+ * functions provided by one component of libavutil you must explicitly include
+ * the specific header containing that feature. If you are only using
+ * media-related components, you could simply include libavutil/avutil.h, which
+ * brings in most of the "core" components.
  *
  * \{
  *
@@ -107,7 +109,7 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  * \{
  * \}
  *
- * \defgroup lavu_math Maths
+ * \defgroup lavu_math Mathematics
  * \{
  *
  * \}
@@ -567,7 +569,8 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 
 /**
  * \file
- * memory handling functions
+ * \ingroup lavu_mem
+ * Memory handling functions
  */
 
 // #ifndef AVUTIL_MEM_H
@@ -582,9 +585,56 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 
 /**
  * \addtogroup lavu_mem
+ * Utilities for manipulating memory.
+ *
+ * FFmpeg has several applications of memory that are not required of a typical
+ * program. For example, the computing-heavy components like video decoding and
+ * encoding can be sped up significantly through the use of aligned memory.
+ *
+ * However, for each of FFmpeg's applications of memory, there might not be a
+ * recognized or standardized API for that specific use. Memory alignment, for
+ * instance, varies wildly depending on operating systems, architectures, and
+ * compilers. Hence, this component of \ref libavutil is created to make
+ * dealing with memory consistently possible on all platforms.
+ *
+ * \{
+ *
+ * \defgroup lavu_mem_macros Alignment Macros
+ * Helper macros for declaring aligned variables.
  * \{
  */
 
+/**
+ * \def DECLARE_ALIGNED(n,t,v)
+ * Declare a variable that is aligned in memory.
+ *
+ * <pre>{@code {.c}
+ * DECLARE_ALIGNED(16, uint16_t, aligned_int) = 42;
+ * DECLARE_ALIGNED(32, uint8_t, aligned_array)[128];
+ *
+ * // The default-alignment equivalent would be
+ * uint16_t aligned_int = 42;
+ * uint8_t aligned_array[128];
+ * }</pre>
+ *
+ * @param n Minimum alignment in bytes
+ * @param t Type of the variable (or array element)
+ * @param v Name of the variable
+ */
+
+/**
+ * \def DECLARE_ASM_CONST(n,t,v)
+ * Declare a static constant aligned variable appropriate for use in inline
+ * assembly code.
+ *
+ * <pre>{@code {.c}
+ * DECLARE_ASM_CONST(16, uint64_t, pw_08) = UINT64_C(0x0008000800080008);
+ * }</pre>
+ *
+ * @param n Minimum alignment in bytes
+ * @param t Type of the variable (or array element)
+ * @param v Name of the variable
+ */
 
 // #if defined(__INTEL_COMPILER) && __INTEL_COMPILER < 1110 || defined(__SUNPRO_C)
 //     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
@@ -607,11 +657,46 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 //     #define DECLARE_ASM_CONST(n,t,v)    static const t v
 // #endif
 
+/**
+ * \}
+ */
+
+/**
+ * \defgroup lavu_mem_attrs Function Attributes
+ * Function attributes applicable to memory handling functions.
+ *
+ * These function attributes can help compilers emit more useful warnings, or
+ * generate better code.
+ * \{
+ */
+
+/**
+ * \def av_malloc_attrib
+ * Function attribute denoting a malloc-like function.
+ *
+ * @see <a href="https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-g_t_0040code_007bmalloc_007d-function-attribute-3251">Function attribute {@code malloc} in GCC's documentation</a>
+ */
+
 // #if AV_GCC_VERSION_AT_LEAST(3,1)
 //     #define av_malloc_attrib __attribute__((__malloc__))
 // #else
 //     #define av_malloc_attrib
 // #endif
+
+/**
+ * \def av_alloc_size(...)
+ * Function attribute used on a function that allocates memory, whose size is
+ * given by the specified parameter(s).
+ *
+ * <pre>{@code {.c}
+ * void *av_malloc(size_t size) av_alloc_size(1);
+ * void *av_calloc(size_t nmemb, size_t size) av_alloc_size(1, 2);
+ * }</pre>
+ *
+ * @param ... One or two parameter indexes, separated by a comma
+ *
+ * @see <a href="https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-g_t_0040code_007balloc_005fsize_007d-function-attribute-3220">Function attribute {@code alloc_size} in GCC's documentation</a>
+ */
 
 // #if AV_GCC_VERSION_AT_LEAST(4,3)
 //     #define av_alloc_size(...) __attribute__((alloc_size(__VA_ARGS__)))
@@ -620,195 +705,432 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 // #endif
 
 /**
- * Allocate a block of size bytes with alignment suitable for all
- * memory accesses (including vectors if available on the CPU).
- * @param size Size in bytes for the memory block to be allocated.
- * @return Pointer to the allocated block, NULL if the block cannot
- * be allocated.
+ * \}
+ */
+
+/**
+ * \defgroup lavu_mem_funcs Heap Management
+ * Functions responsible for allocating, freeing, and copying memory.
+ *
+ * All memory allocation functions have a built-in upper limit of {@code INT_MAX}
+ * bytes. This may be changed with av_max_alloc(), although exercise extreme
+ * caution when doing so.
+ *
+ * \{
+ */
+
+/**
+ * Allocate a memory block with alignment suitable for all memory accesses
+ * (including vectors if available on the CPU).
+ *
+ * @param size Size in bytes for the memory block to be allocated
+ * @return Pointer to the allocated block, or {@code NULL} if the block cannot
+ *         be allocated
  * @see av_mallocz()
  */
 @NoException public static native Pointer av_malloc(@Cast("size_t") long size);
 
 /**
- * Allocate a block of size * nmemb bytes with av_malloc().
- * @param nmemb Number of elements
- * @param size Size of the single element
- * @return Pointer to the allocated block, NULL if the block cannot
- * be allocated.
- * @see av_malloc()
- */
-@NoException public static native Pointer av_malloc_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
-
-/**
- * Allocate or reallocate a block of memory.
- * If ptr is NULL and size > 0, allocate a new block. If
- * size is zero, free the memory block pointed to by ptr.
- * @param ptr Pointer to a memory block already allocated with
- * av_realloc() or NULL.
- * @param size Size in bytes of the memory block to be allocated or
- * reallocated.
- * @return Pointer to a newly-reallocated block or NULL if the block
- * cannot be reallocated or the function is used to free the memory block.
- * \warning Pointers originating from the av_malloc() family of functions must
- *          not be passed to av_realloc(). The former can be implemented using
- *          memalign() (or other functions), and there is no guarantee that
- *          pointers from such functions can be passed to realloc() at all.
- *          The situation is undefined according to POSIX and may crash with
- *          some libc implementations.
- * @see av_fast_realloc()
- */
-@NoException public static native Pointer av_realloc(Pointer ptr, @Cast("size_t") long size);
-
-/**
- * Allocate or reallocate a block of memory.
- * This function does the same thing as av_realloc, except:
- * - It takes two arguments and checks the result of the multiplication for
- *   integer overflow.
- * - It frees the input block in case of failure, thus avoiding the memory
- *   leak with the classic "buf = realloc(buf); if (!buf) return -1;".
- */
-@NoException public static native Pointer av_realloc_f(Pointer ptr, @Cast("size_t") long nelem, @Cast("size_t") long elsize);
-
-/**
- * Allocate or reallocate a block of memory.
- * If *ptr is NULL and size > 0, allocate a new block. If
- * size is zero, free the memory block pointed to by ptr.
- * @param   ptr Pointer to a pointer to a memory block already allocated
- *          with av_realloc(), or pointer to a pointer to NULL.
- *          The pointer is updated on success, or freed on failure.
- * @param   size Size in bytes for the memory block to be allocated or
- *          reallocated
- * @return  Zero on success, an AVERROR error code on failure.
- * \warning Pointers originating from the av_malloc() family of functions must
- *          not be passed to av_reallocp(). The former can be implemented using
- *          memalign() (or other functions), and there is no guarantee that
- *          pointers from such functions can be passed to realloc() at all.
- *          The situation is undefined according to POSIX and may crash with
- *          some libc implementations.
- */
-@NoException public static native int av_reallocp(Pointer ptr, @Cast("size_t") long size);
-
-/**
- * Allocate or reallocate an array.
- * If ptr is NULL and nmemb > 0, allocate a new block. If
- * nmemb is zero, free the memory block pointed to by ptr.
- * @param ptr Pointer to a memory block already allocated with
- * av_realloc() or NULL.
- * @param nmemb Number of elements
- * @param size Size of the single element
- * @return Pointer to a newly-reallocated block or NULL if the block
- * cannot be reallocated or the function is used to free the memory block.
- * \warning Pointers originating from the av_malloc() family of functions must
- *          not be passed to av_realloc(). The former can be implemented using
- *          memalign() (or other functions), and there is no guarantee that
- *          pointers from such functions can be passed to realloc() at all.
- *          The situation is undefined according to POSIX and may crash with
- *          some libc implementations.
- */
-@NoException public static native Pointer av_realloc_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
-
-/**
- * Allocate or reallocate an array through a pointer to a pointer.
- * If *ptr is NULL and nmemb > 0, allocate a new block. If
- * nmemb is zero, free the memory block pointed to by ptr.
- * @param ptr Pointer to a pointer to a memory block already allocated
- * with av_realloc(), or pointer to a pointer to NULL.
- * The pointer is updated on success, or freed on failure.
- * @param nmemb Number of elements
- * @param size Size of the single element
- * @return Zero on success, an AVERROR error code on failure.
- * \warning Pointers originating from the av_malloc() family of functions must
- *          not be passed to av_realloc(). The former can be implemented using
- *          memalign() (or other functions), and there is no guarantee that
- *          pointers from such functions can be passed to realloc() at all.
- *          The situation is undefined according to POSIX and may crash with
- *          some libc implementations.
- */
-@NoException public static native int av_reallocp_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
-
-/**
- * Free a memory block which has been allocated with av_malloc(z)() or
- * av_realloc().
- * @param ptr Pointer to the memory block which should be freed.
- * \note ptr = NULL is explicitly allowed.
- * \note It is recommended that you use av_freep() instead.
- * @see av_freep()
- */
-@NoException public static native void av_free(Pointer ptr);
-
-/**
- * Allocate a block of size bytes with alignment suitable for all
- * memory accesses (including vectors if available on the CPU) and
- * zero all the bytes of the block.
- * @param size Size in bytes for the memory block to be allocated.
- * @return Pointer to the allocated block, NULL if it cannot be allocated.
+ * Allocate a memory block with alignment suitable for all memory accesses
+ * (including vectors if available on the CPU) and zero all the bytes of the
+ * block.
+ *
+ * @param size Size in bytes for the memory block to be allocated
+ * @return Pointer to the allocated block, or {@code NULL} if it cannot be allocated
  * @see av_malloc()
  */
 @NoException public static native Pointer av_mallocz(@Cast("size_t") long size);
 
 /**
- * Allocate a block of nmemb * size bytes with alignment suitable for all
- * memory accesses (including vectors if available on the CPU) and
- * zero all the bytes of the block.
- * The allocation will fail if nmemb * size is greater than or equal
- * to INT_MAX.
- * @param nmemb
- * @param size
- * @return Pointer to the allocated block, NULL if it cannot be allocated.
+ * Allocate a memory block for an array with av_malloc().
+ *
+ * The allocated memory will have size {@code size * nmemb} bytes.
+ *
+ * @param nmemb Number of element
+ * @param size  Size of a single element
+ * @return Pointer to the allocated block, or {@code NULL} if the block cannot
+ *         be allocated
+ * @see av_malloc()
  */
-@NoException public static native Pointer av_calloc(@Cast("size_t") long nmemb, @Cast("size_t") long size);
+@NoException public static native Pointer av_malloc_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
- * Allocate a block of size * nmemb bytes with av_mallocz().
+ * Allocate a memory block for an array with av_mallocz().
+ *
+ * The allocated memory will have size {@code size * nmemb} bytes.
+ *
  * @param nmemb Number of elements
- * @param size Size of the single element
- * @return Pointer to the allocated block, NULL if the block cannot
- * be allocated.
+ * @param size  Size of the single element
+ * @return Pointer to the allocated block, or {@code NULL} if the block cannot
+ *         be allocated
+ *
  * @see av_mallocz()
  * @see av_malloc_array()
  */
 @NoException public static native Pointer av_mallocz_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
- * Duplicate the string s.
- * @param s string to be duplicated
- * @return Pointer to a newly-allocated string containing a
- * copy of s or NULL if the string cannot be allocated.
+ * Non-inlined equivalent of av_mallocz_array().
+ *
+ * Created for symmetry with the calloc() C function.
  */
-@NoException public static native @Cast("char*") BytePointer av_strdup(@Cast("const char*") BytePointer s);
-@NoException public static native @Cast("char*") ByteBuffer av_strdup(String s);
+@NoException public static native Pointer av_calloc(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
- * Duplicate a substring of the string s.
- * @param s string to be duplicated
- * @param len the maximum length of the resulting string (not counting the
- *            terminating byte).
- * @return Pointer to a newly-allocated string containing a
- * copy of s or NULL if the string cannot be allocated.
+ * Allocate, reallocate, or free a block of memory.
+ *
+ * If {@code ptr} is {@code NULL} and {@code size} > 0, allocate a new block. If {@code size} is
+ * zero, free the memory block pointed to by {@code ptr}. Otherwise, expand or
+ * shrink that block of memory according to {@code size}.
+ *
+ * @param ptr  Pointer to a memory block already allocated with
+ *             av_realloc() or {@code NULL}
+ * @param size Size in bytes of the memory block to be allocated or
+ *             reallocated
+ *
+ * @return Pointer to a newly-reallocated block or {@code NULL} if the block
+ *         cannot be reallocated or the function is used to free the memory block
+ *
+ * \warning Unlike av_malloc(), the returned pointer is not guaranteed to be
+ *          correctly aligned.
+ * @see av_fast_realloc()
+ * @see av_reallocp()
  */
-@NoException public static native @Cast("char*") BytePointer av_strndup(@Cast("const char*") BytePointer s, @Cast("size_t") long len);
-@NoException public static native @Cast("char*") ByteBuffer av_strndup(String s, @Cast("size_t") long len);
+@NoException public static native Pointer av_realloc(Pointer ptr, @Cast("size_t") long size);
 
 /**
- * Duplicate the buffer p.
- * @param p buffer to be duplicated
- * @return Pointer to a newly allocated buffer containing a
- * copy of p or NULL if the buffer cannot be allocated.
+ * Allocate, reallocate, or free a block of memory through a pointer to a
+ * pointer.
+ *
+ * If {@code *ptr} is {@code NULL} and {@code size} > 0, allocate a new block. If {@code size} is
+ * zero, free the memory block pointed to by {@code *ptr}. Otherwise, expand or
+ * shrink that block of memory according to {@code size}.
+ *
+ * @param [in,out] ptr  Pointer to a pointer to a memory block already allocated
+ *                     with av_realloc(), or a pointer to {@code NULL}. The pointer
+ *                     is updated on success, or freed on failure.
+ * @param [in]     size Size in bytes for the memory block to be allocated or
+ *                     reallocated
+ *
+ * @return Zero on success, an AVERROR error code on failure
+ *
+ * \warning Unlike av_malloc(), the allocated memory is not guaranteed to be
+ *          correctly aligned.
  */
-@NoException public static native Pointer av_memdup(@Const Pointer p, @Cast("size_t") long size);
+@NoException public static native int av_reallocp(Pointer ptr, @Cast("size_t") long size);
 
 /**
- * Free a memory block which has been allocated with av_malloc(z)() or
- * av_realloc() and set the pointer pointing to it to NULL.
- * @param ptr Pointer to the pointer to the memory block which should
- * be freed.
- * \note passing a pointer to a NULL pointer is safe and leads to no action.
+ * Allocate, reallocate, or free a block of memory.
+ *
+ * This function does the same thing as av_realloc(), except:
+ * - It takes two size arguments and allocates {@code nelem * elsize} bytes,
+ *   after checking the result of the multiplication for integer overflow.
+ * - It frees the input block in case of failure, thus avoiding the memory
+ *   leak with the classic
+ *   <pre>{@code {.c}
+ *   buf = realloc(buf);
+ *   if (!buf)
+ *       return -1;
+ *   }</pre>
+ *   pattern.
+ */
+@NoException public static native Pointer av_realloc_f(Pointer ptr, @Cast("size_t") long nelem, @Cast("size_t") long elsize);
+
+/**
+ * Allocate, reallocate, or free an array.
+ *
+ * If {@code ptr} is {@code NULL} and {@code nmemb} > 0, allocate a new block. If
+ * {@code nmemb} is zero, free the memory block pointed to by {@code ptr}.
+ *
+ * @param ptr   Pointer to a memory block already allocated with
+ *              av_realloc() or {@code NULL}
+ * @param nmemb Number of elements in the array
+ * @param size  Size of the single element of the array
+ *
+ * @return Pointer to a newly-reallocated block or NULL if the block
+ *         cannot be reallocated or the function is used to free the memory block
+ *
+ * \warning Unlike av_malloc(), the allocated memory is not guaranteed to be
+ *          correctly aligned.
+ * @see av_reallocp_array()
+ */
+@NoException public static native Pointer av_realloc_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
+
+/**
+ * Allocate, reallocate, or free an array through a pointer to a pointer.
+ *
+ * If {@code *ptr} is {@code NULL} and {@code nmemb} > 0, allocate a new block. If {@code nmemb} is
+ * zero, free the memory block pointed to by {@code *ptr}.
+ *
+ * @param [in,out] ptr   Pointer to a pointer to a memory block already
+ *                      allocated with av_realloc(), or a pointer to {@code NULL}.
+ *                      The pointer is updated on success, or freed on failure.
+ * @param [in]     nmemb Number of elements
+ * @param [in]     size  Size of the single element
+ *
+ * @return Zero on success, an AVERROR error code on failure
+ *
+ * \warning Unlike av_malloc(), the allocated memory is not guaranteed to be
+ *          correctly aligned.
+ */
+@NoException public static native int av_reallocp_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
+
+/**
+ * Reallocate the given buffer if it is not large enough, otherwise do nothing.
+ *
+ * If the given buffer is {@code NULL}, then a new uninitialized buffer is allocated.
+ *
+ * If the given buffer is not large enough, and reallocation fails, {@code NULL} is
+ * returned and {@code *size} is set to 0, but the original buffer is not changed or
+ * freed.
+ *
+ * A typical use pattern follows:
+ *
+ * <pre>{@code {.c}
+ * uint8_t *buf = ...;
+ * uint8_t *new_buf = av_fast_realloc(buf, &current_size, size_needed);
+ * if (!new_buf) {
+ *     // Allocation failed; clean up original buffer
+ *     av_freep(&buf);
+ *     return AVERROR(ENOMEM);
+ * }
+ * }</pre>
+ *
+ * @param [in,out] ptr      Already allocated buffer, or {@code NULL}
+ * @param [in,out] size     Pointer to current size of buffer {@code ptr}. {@code *size} is
+ *                         changed to {@code min_size} in case of success or 0 in
+ *                         case of failure
+ * @param [in]     min_size New size of buffer {@code ptr}
+ * @return {@code ptr} if the buffer is large enough, a pointer to newly reallocated
+ *         buffer if the buffer was not large enough, or {@code NULL} in case of
+ *         error
+ * @see av_realloc()
+ * @see av_fast_malloc()
+ */
+@NoException public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+@NoException public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+@NoException public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+
+/**
+ * Allocate a buffer, reusing the given one if large enough.
+ *
+ * Contrary to av_fast_realloc(), the current buffer contents might not be
+ * preserved and on error the old buffer is freed, thus no special handling to
+ * avoid memleaks is necessary.
+ *
+ * {@code *ptr} is allowed to be {@code NULL}, in which case allocation always happens if
+ * {@code size_needed} is greater than 0.
+ *
+ * <pre>{@code {.c}
+ * uint8_t *buf = ...;
+ * av_fast_malloc(&buf, &current_size, size_needed);
+ * if (!buf) {
+ *     // Allocation failed; buf already freed
+ *     return AVERROR(ENOMEM);
+ * }
+ * }</pre>
+ *
+ * @param [in,out] ptr      Pointer to pointer to an already allocated buffer.
+ *                         {@code *ptr} will be overwritten with pointer to new
+ *                         buffer on success or {@code NULL} on failure
+ * @param [in,out] size     Pointer to current size of buffer {@code *ptr}. {@code *size} is
+ *                         changed to {@code min_size} in case of success or 0 in
+ *                         case of failure
+ * @param [in]     min_size New size of buffer {@code *ptr}
+ * @see av_realloc()
+ * @see av_fast_mallocz()
+ */
+@NoException public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+
+/**
+ * Allocate and clear a buffer, reusing the given one if large enough.
+ *
+ * Like av_fast_malloc(), but all newly allocated space is initially cleared.
+ * Reused buffer is not cleared.
+ *
+ * {@code *ptr} is allowed to be {@code NULL}, in which case allocation always happens if
+ * {@code size_needed} is greater than 0.
+ *
+ * @param [in,out] ptr      Pointer to pointer to an already allocated buffer.
+ *                         {@code *ptr} will be overwritten with pointer to new
+ *                         buffer on success or {@code NULL} on failure
+ * @param [in,out] size     Pointer to current size of buffer {@code *ptr}. {@code *size} is
+ *                         changed to {@code min_size} in case of success or 0 in
+ *                         case of failure
+ * @param [in]     min_size New size of buffer {@code *ptr}
+ * @see av_fast_malloc()
+ */
+@NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+
+/**
+ * Free a memory block which has been allocated with a function of av_malloc()
+ * or av_realloc() family.
+ *
+ * @param ptr Pointer to the memory block which should be freed.
+ *
+ * \note {@code ptr = NULL} is explicitly allowed.
+ * \note It is recommended that you use av_freep() instead, to prevent leaving
+ *       behind dangling pointers.
+ * @see av_freep()
+ */
+@NoException public static native void av_free(Pointer ptr);
+
+/**
+ * Free a memory block which has been allocated with a function of av_malloc()
+ * or av_realloc() family, and set the pointer pointing to it to {@code NULL}.
+ *
+ * <pre>{@code {.c}
+ * uint8_t *buf = av_malloc(16);
+ * av_free(buf);
+ * // buf now contains a dangling pointer to freed memory, and accidental
+ * // dereference of buf will result in a use-after-free, which may be a
+ * // security risk.
+ *
+ * uint8_t *buf = av_malloc(16);
+ * av_freep(&buf);
+ * // buf is now NULL, and accidental dereference will only result in a
+ * // NULL-pointer dereference.
+ * }</pre>
+ *
+ * @param ptr Pointer to the pointer to the memory block which should be freed
+ * \note {@code *ptr = NULL} is safe and leads to no action.
  * @see av_free()
  */
 @NoException public static native void av_freep(Pointer ptr);
 
 /**
- * Add an element to a dynamic array.
+ * Duplicate a string.
+ *
+ * @param s String to be duplicated
+ * @return Pointer to a newly-allocated string containing a
+ *         copy of {@code s} or {@code NULL} if the string cannot be allocated
+ * @see av_strndup()
+ */
+@NoException public static native @Cast("char*") BytePointer av_strdup(@Cast("const char*") BytePointer s);
+@NoException public static native @Cast("char*") ByteBuffer av_strdup(String s);
+
+/**
+ * Duplicate a substring of a string.
+ *
+ * @param s   String to be duplicated
+ * @param len Maximum length of the resulting string (not counting the
+ *            terminating byte)
+ * @return Pointer to a newly-allocated string containing a
+ *         substring of {@code s} or {@code NULL} if the string cannot be allocated
+ */
+@NoException public static native @Cast("char*") BytePointer av_strndup(@Cast("const char*") BytePointer s, @Cast("size_t") long len);
+@NoException public static native @Cast("char*") ByteBuffer av_strndup(String s, @Cast("size_t") long len);
+
+/**
+ * Duplicate a buffer with av_malloc().
+ *
+ * @param p    Buffer to be duplicated
+ * @param size Size in bytes of the buffer copied
+ * @return Pointer to a newly allocated buffer containing a
+ *         copy of {@code p} or {@code NULL} if the buffer cannot be allocated
+ */
+@NoException public static native Pointer av_memdup(@Const Pointer p, @Cast("size_t") long size);
+
+/**
+ * Overlapping memcpy() implementation.
+ *
+ * @param dst  Destination buffer
+ * @param back Number of bytes back to start copying (i.e. the initial size of
+ *             the overlapping window); must be > 0
+ * @param cnt  Number of bytes to copy; must be >= 0
+ *
+ * \note {@code cnt > back} is valid, this will copy the bytes we just copied,
+ *       thus creating a repeating pattern with a period length of {@code back}.
+ */
+@NoException public static native void av_memcpy_backptr(@Cast("uint8_t*") BytePointer dst, int back, int cnt);
+@NoException public static native void av_memcpy_backptr(@Cast("uint8_t*") ByteBuffer dst, int back, int cnt);
+@NoException public static native void av_memcpy_backptr(@Cast("uint8_t*") byte[] dst, int back, int cnt);
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup lavu_mem_dynarray Dynamic Array
+ *
+ * Utilities to make an array grow when needed.
+ *
+ * Sometimes, the programmer would want to have an array that can grow when
+ * needed. The libavutil dynamic array utilities fill that need.
+ *
+ * libavutil supports two systems of appending elements onto a dynamically
+ * allocated array, the first one storing the pointer to the value in the
+ * array, and the second storing the value directly. In both systems, the
+ * caller is responsible for maintaining a variable containing the length of
+ * the array, as well as freeing of the array after use.
+ *
+ * The first system stores pointers to values in a block of dynamically
+ * allocated memory. Since only pointers are stored, the function does not need
+ * to know the size of the type. Both av_dynarray_add() and
+ * av_dynarray_add_nofree() implement this system.
+ *
+ * <pre>{@code
+ * type **array = NULL; //< an array of pointers to values
+ * int    nb    = 0;    //< a variable to keep track of the length of the array
+ *
+ * type to_be_added  = ...;
+ * type to_be_added2 = ...;
+ *
+ * av_dynarray_add(&array, &nb, &to_be_added);
+ * if (nb == 0)
+ *     return AVERROR(ENOMEM);
+ *
+ * av_dynarray_add(&array, &nb, &to_be_added2);
+ * if (nb == 0)
+ *     return AVERROR(ENOMEM);
+ *
+ * // Now:
+ * //  nb           == 2
+ * // &to_be_added  == array[0]
+ * // &to_be_added2 == array[1]
+ *
+ * av_freep(&array);
+ * }</pre>
+ *
+ * The second system stores the value directly in a block of memory. As a
+ * result, the function has to know the size of the type. av_dynarray2_add()
+ * implements this mechanism.
+ *
+ * <pre>{@code
+ * type *array = NULL; //< an array of values
+ * int   nb    = 0;    //< a variable to keep track of the length of the array
+ *
+ * type to_be_added  = ...;
+ * type to_be_added2 = ...;
+ *
+ * type *addr = av_dynarray2_add((void **)&array, &nb, sizeof(*array), NULL);
+ * if (!addr)
+ *     return AVERROR(ENOMEM);
+ * memcpy(addr, &to_be_added, sizeof(to_be_added));
+ *
+ * // Shortcut of the above.
+ * type *addr = av_dynarray2_add((void **)&array, &nb, sizeof(*array),
+ *                               (const void *)&to_be_added2);
+ * if (!addr)
+ *     return AVERROR(ENOMEM);
+ *
+ * // Now:
+ * //  nb           == 2
+ * //  to_be_added  == array[0]
+ * //  to_be_added2 == array[1]
+ *
+ * av_freep(&array);
+ * }</pre>
+ *
+ * \{
+ */
+
+/**
+ * Add the pointer to an element to a dynamic array.
  *
  * The array to grow is supposed to be an array of pointers to
  * structures, and the element to add must be a pointer to an already
@@ -818,14 +1140,14 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * Therefore, the amortized cost of adding an element is constant.
  *
  * In case of success, the pointer to the array is updated in order to
- * point to the new grown array, and the number pointed to by nb_ptr
+ * point to the new grown array, and the number pointed to by {@code nb_ptr}
  * is incremented.
- * In case of failure, the array is freed, *tab_ptr is set to NULL and
- * *nb_ptr is set to 0.
+ * In case of failure, the array is freed, {@code *tab_ptr} is set to {@code NULL} and
+ * {@code *nb_ptr} is set to 0.
  *
- * @param tab_ptr pointer to the array to grow
- * @param nb_ptr  pointer to the number of elements in the array
- * @param elem    element to add
+ * @param [in,out] tab_ptr Pointer to the array to grow
+ * @param [in,out] nb_ptr  Pointer to the number of elements in the array
+ * @param [in]     elem    Element to add
  * @see av_dynarray_add_nofree(), av_dynarray2_add()
  */
 @NoException public static native void av_dynarray_add(Pointer tab_ptr, IntPointer nb_ptr, Pointer elem);
@@ -839,10 +1161,7 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * but it doesn't free memory on fails. It returns error code
  * instead and leave current buffer untouched.
  *
- * @param tab_ptr pointer to the array to grow
- * @param nb_ptr  pointer to the number of elements in the array
- * @param elem    element to add
- * @return >=0 on success, negative otherwise.
+ * @return >=0 on success, negative otherwise
  * @see av_dynarray_add(), av_dynarray2_add()
  */
 @NoException public static native int av_dynarray_add_nofree(Pointer tab_ptr, IntPointer nb_ptr, Pointer elem);
@@ -850,24 +1169,26 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 @NoException public static native int av_dynarray_add_nofree(Pointer tab_ptr, int[] nb_ptr, Pointer elem);
 
 /**
- * Add an element of size elem_size to a dynamic array.
+ * Add an element of size {@code elem_size} to a dynamic array.
  *
  * The array is reallocated when its number of elements reaches powers of 2.
  * Therefore, the amortized cost of adding an element is constant.
  *
  * In case of success, the pointer to the array is updated in order to
- * point to the new grown array, and the number pointed to by nb_ptr
+ * point to the new grown array, and the number pointed to by {@code nb_ptr}
  * is incremented.
- * In case of failure, the array is freed, *tab_ptr is set to NULL and
- * *nb_ptr is set to 0.
+ * In case of failure, the array is freed, {@code *tab_ptr} is set to {@code NULL} and
+ * {@code *nb_ptr} is set to 0.
  *
- * @param tab_ptr   pointer to the array to grow
- * @param nb_ptr    pointer to the number of elements in the array
- * @param elem_size size in bytes of the elements in the array
- * @param elem_data pointer to the data of the element to add. If NULL, the space of
- *                  the new added element is not filled.
- * @return          pointer to the data of the element to copy in the new allocated space.
- *                  If NULL, the new allocated space is left uninitialized."
+ * @param [in,out] tab_ptr   Pointer to the array to grow
+ * @param [in,out] nb_ptr    Pointer to the number of elements in the array
+ * @param [in]     elem_size Size in bytes of an element in the array
+ * @param [in]     elem_data Pointer to the data of the element to add. If
+ *                          {@code NULL}, the space of the newly added element is
+ *                          allocated but left uninitialized.
+ *
+ * @return Pointer to the data of the element to copy in the newly allocated
+ *         space
  * @see av_dynarray_add(), av_dynarray_add_nofree()
  */
 @NoException public static native Pointer av_dynarray2_add(@Cast("void**") PointerPointer tab_ptr, IntPointer nb_ptr, @Cast("size_t") long elem_size,
@@ -880,72 +1201,43 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
                        @Cast("const uint8_t*") byte[] elem_data);
 
 /**
- * Multiply two size_t values checking for overflow.
- * @return  0 if success, AVERROR(EINVAL) if overflow.
+ * \}
+ */
+
+/**
+ * \defgroup lavu_mem_misc Miscellaneous Functions
+ *
+ * Other functions related to memory allocation.
+ *
+ * \{
+ */
+
+/**
+ * Multiply two {@code size_t} values checking for overflow.
+ *
+ * @param [in]  a,b Operands of multiplication
+ * @param [out] r   Pointer to the result of the operation
+ * @return 0 on success, AVERROR(EINVAL) on overflow
  */
 @NoException public static native int av_size_mult(@Cast("size_t") long a, @Cast("size_t") long b, @Cast("size_t*") SizeTPointer r);
 
 /**
- * Set the maximum size that may me allocated in one block.
+ * Set the maximum size that may be allocated in one block.
+ *
+ * The value specified with this function is effective for all libavutil's \ref
+ * lavu_mem_funcs "heap management functions."
+ *
+ * By default, the max value is defined as {@code INT_MAX}.
+ *
+ * @param max Value to be set as the new maximum size
+ *
+ * \warning Exercise extreme caution when using this function. Don't touch
+ *          this if you do not understand the full consequence of doing so.
  */
 @NoException public static native void av_max_alloc(@Cast("size_t") long max);
 
 /**
- * deliberately overlapping memcpy implementation
- * @param dst destination buffer
- * @param back how many bytes back we start (the initial size of the overlapping window), must be > 0
- * @param cnt number of bytes to copy, must be >= 0
- *
- * cnt > back is valid, this will copy the bytes we just copied,
- * thus creating a repeating pattern with a period length of back.
- */
-@NoException public static native void av_memcpy_backptr(@Cast("uint8_t*") BytePointer dst, int back, int cnt);
-@NoException public static native void av_memcpy_backptr(@Cast("uint8_t*") ByteBuffer dst, int back, int cnt);
-@NoException public static native void av_memcpy_backptr(@Cast("uint8_t*") byte[] dst, int back, int cnt);
-
-/**
- * Reallocate the given block if it is not large enough, otherwise do nothing.
- *
- * @see av_realloc
- */
-@NoException public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-@NoException public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-@NoException public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
-
-/**
- * Allocate a buffer, reusing the given one if large enough.
- *
- * Contrary to av_fast_realloc the current buffer contents might not be
- * preserved and on error the old buffer is freed, thus no special
- * handling to avoid memleaks is necessary.
- *
- * @param ptr pointer to pointer to already allocated buffer, overwritten with pointer to new buffer
- * @param size size of the buffer *ptr points to
- * @param min_size minimum size of *ptr buffer after returning, *ptr will be NULL and
- *                 *size 0 if an error occurred.
- */
-@NoException public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-@NoException public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-@NoException public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
-
-/**
- * Allocate a buffer, reusing the given one if large enough.
- *
- * All newly allocated space is initially cleared
- * Contrary to av_fast_realloc the current buffer contents might not be
- * preserved and on error the old buffer is freed, thus no special
- * handling to avoid memleaks is necessary.
- *
- * @param ptr pointer to pointer to already allocated buffer, overwritten with pointer to new buffer
- * @param size size of the buffer *ptr points to
- * @param min_size minimum size of *ptr buffer after returning, *ptr will be NULL and
- *                 *size 0 if an error occurred.
- */
-@NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-@NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-@NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
-
-/**
+ * \}
  * \}
  */
 
@@ -972,6 +1264,12 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * You should have received a copy of the GNU Lesser General Public
  * License along with FFmpeg; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+/**
+ * \file
+ * \addtogroup lavu_math
+ * Mathematical utilities for working with timestamp and time base.
  */
 
 // #ifndef AVUTIL_MATHEMATICS_H
@@ -1021,10 +1319,13 @@ public static final double INFINITY = INFINITY();
 
 /**
  * \addtogroup lavu_math
+ *
  * \{
  */
 
-
+/**
+ * Rounding methods.
+ */
 /** enum AVRounding */
 public static final int
     /** Round toward zero. */
@@ -1037,74 +1338,141 @@ public static final int
     AV_ROUND_UP       = 3,
     /** Round to nearest and halfway cases away from zero. */
     AV_ROUND_NEAR_INF = 5,
-    /** Flag to pass INT64_MIN/MAX through instead of rescaling, this avoids special cases for AV_NOPTS_VALUE */
+    /**
+     * Flag telling rescaling functions to pass {@code INT64_MIN}/{@code MAX} through
+     * unchanged, avoiding special cases for #AV_NOPTS_VALUE.
+     *
+     * Unlike other values of the enumeration AVRounding, this value is a
+     * bitmask that must be used in conjunction with another value of the
+     * enumeration through a bitwise OR, in order to set behavior for normal
+     * cases.
+     *
+     * <pre>{@code {.c}
+     * av_rescale_rnd(3, 1, 2, AV_ROUND_UP | AV_ROUND_PASS_MINMAX);
+     * // Rescaling 3:
+     * //     Calculating 3 * 1 / 2
+     * //     3 / 2 is rounded up to 2
+     * //     => 2
+     *
+     * av_rescale_rnd(AV_NOPTS_VALUE, 1, 2, AV_ROUND_UP | AV_ROUND_PASS_MINMAX);
+     * // Rescaling AV_NOPTS_VALUE:
+     * //     AV_NOPTS_VALUE == INT64_MIN
+     * //     AV_NOPTS_VALUE is passed through
+     * //     => AV_NOPTS_VALUE
+     * }</pre>
+     */
     AV_ROUND_PASS_MINMAX = 8192;
 
 /**
- * Compute the greatest common divisor of a and b.
+ * Compute the greatest common divisor of two integer operands.
  *
- * @return gcd of a and b up to sign; if a >= 0 and b >= 0, return value is >= 0;
+ * @param a,b Operands
+ * @return GCD of a and b up to sign; if a >= 0 and b >= 0, return value is >= 0;
  * if a == 0 and b == 0, returns 0.
  */
 @NoException public static native @Cast("int64_t") @Const long av_gcd(@Cast("int64_t") long a, @Cast("int64_t") long b);
 
 /**
  * Rescale a 64-bit integer with rounding to nearest.
- * A simple a*b/c isn't possible as it can overflow.
+ *
+ * The operation is mathematically equivalent to {@code a * b / c}, but writing that
+ * directly can overflow.
+ *
+ * This function is equivalent to av_rescale_rnd() with #AV_ROUND_NEAR_INF.
+ *
+ * @see av_rescale_rnd(), av_rescale_q(), av_rescale_q_rnd()
  */
 @NoException public static native @Cast("int64_t") long av_rescale(@Cast("int64_t") long a, @Cast("int64_t") long b, @Cast("int64_t") long c);
 
 /**
  * Rescale a 64-bit integer with specified rounding.
- * A simple a*b/c isn't possible as it can overflow.
  *
- * @return rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
- *         INT64_MIN or INT64_MAX then a is passed through unchanged.
+ * The operation is mathematically equivalent to {@code a * b / c}, but writing that
+ * directly can overflow, and does not support different rounding methods.
+ *
+ * @see av_rescale(), av_rescale_q(), av_rescale_q_rnd()
  */
-@NoException public static native @Cast("int64_t") long av_rescale_rnd(@Cast("int64_t") long a, @Cast("int64_t") long b, @Cast("int64_t") long c, @Cast("AVRounding") int arg3);
+@NoException public static native @Cast("int64_t") long av_rescale_rnd(@Cast("int64_t") long a, @Cast("int64_t") long b, @Cast("int64_t") long c, @Cast("AVRounding") int rnd);
 
 /**
  * Rescale a 64-bit integer by 2 rational numbers.
+ *
+ * The operation is mathematically equivalent to {@code a * bq / cq}.
+ *
+ * This function is equivalent to av_rescale_q_rnd() with #AV_ROUND_NEAR_INF.
+ *
+ * @see av_rescale(), av_rescale_rnd(), av_rescale_q_rnd()
  */
 @NoException public static native @Cast("int64_t") long av_rescale_q(@Cast("int64_t") long a, @ByVal AVRational bq, @ByVal AVRational cq);
 
 /**
  * Rescale a 64-bit integer by 2 rational numbers with specified rounding.
  *
- * @return rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
- *         INT64_MIN or INT64_MAX then a is passed through unchanged.
+ * The operation is mathematically equivalent to {@code a * bq / cq}.
+ *
+ * @see av_rescale(), av_rescale_rnd(), av_rescale_q()
  */
 @NoException public static native @Cast("int64_t") long av_rescale_q_rnd(@Cast("int64_t") long a, @ByVal AVRational bq, @ByVal AVRational cq,
-                         @Cast("AVRounding") int arg3);
+                         @Cast("AVRounding") int rnd);
 
 /**
- * Compare 2 timestamps each in its own timebases.
- * The result of the function is undefined if one of the timestamps
- * is outside the int64_t range when represented in the others timebase.
- * @return -1 if ts_a is before ts_b, 1 if ts_a is after ts_b or 0 if they represent the same position
+ * Compare two timestamps each in its own time base.
+ *
+ * @return One of the following values:
+ *         - -1 if {@code ts_a} is before {@code ts_b}
+ *         - 1 if {@code ts_a} is after {@code ts_b}
+ *         - 0 if they represent the same position
+ *
+ * \warning
+ * The result of the function is undefined if one of the timestamps is outside
+ * the {@code int64_t} range when represented in the other's timebase.
  */
 @NoException public static native int av_compare_ts(@Cast("int64_t") long ts_a, @ByVal AVRational tb_a, @Cast("int64_t") long ts_b, @ByVal AVRational tb_b);
 
 /**
- * Compare 2 integers modulo mod.
- * That is we compare integers a and b for which only the least
- * significant log2(mod) bits are known.
+ * Compare the remainders of two integer operands divided by a common divisor.
  *
- * @param mod must be a power of 2
- * @return a negative value if a is smaller than b
- *         a positive value if a is greater than b
- *         0                if a equals          b
+ * In other words, compare the least significant {@code log2(mod)} bits of integers
+ * {@code a} and {@code b}.
+ *
+ * <pre>{@code {.c}
+ * av_compare_mod(0x11, 0x02, 0x10) < 0 // since 0x11 % 0x10  (0x1) < 0x02 % 0x10  (0x2)
+ * av_compare_mod(0x11, 0x02, 0x20) > 0 // since 0x11 % 0x20 (0x11) > 0x02 % 0x20 (0x02)
+ * }</pre>
+ *
+ * @param a,b Operands
+ * @param mod Divisor; must be a power of 2
+ * @return
+ *         - a negative value if {@code a % mod < b % mod}
+ *         - a positive value if {@code a % mod > b % mod}
+ *         - zero             if {@code a % mod == b % mod}
  */
 @NoException public static native @Cast("int64_t") long av_compare_mod(@Cast("uint64_t") long a, @Cast("uint64_t") long b, @Cast("uint64_t") long mod);
 
 /**
  * Rescale a timestamp while preserving known durations.
  *
- * @param in_ts Input timestamp
- * @param in_tb Input timebase
- * @param fs_tb Duration and *last timebase
- * @param duration duration till the next call
- * @param out_tb Output timebase
+ * This function is designed to be called per audio packet to scale the input
+ * timestamp to a different time base. Compared to a simple av_rescale_q()
+ * call, this function is robust against possible inconsistent frame durations.
+ *
+ * The {@code last} parameter is a state variable that must be preserved for all
+ * subsequent calls for the same stream. For the first call, {@code *last} should be
+ * initialized to #AV_NOPTS_VALUE.
+ *
+ * @param [in]     in_tb    Input time base
+ * @param [in]     in_ts    Input timestamp
+ * @param [in]     fs_tb    Duration time base; typically this is finer-grained
+ *                         (greater) than {@code in_tb} and {@code out_tb}
+ * @param [in]     duration Duration till the next call to this function (i.e.
+ *                         duration of the current packet/frame)
+ * @param [in,out] last     Pointer to a timestamp expressed in terms of
+ *                         {@code fs_tb}, acting as a state variable
+ * @param [in]     out_tb   Output timebase
+ * @return        Timestamp expressed in terms of {@code out_tb}
+ *
+ * \note In the context of this function, "duration" is in term of samples, not
+ *       seconds.
  */
 @NoException public static native @Cast("int64_t") long av_rescale_delta(@ByVal AVRational in_tb, @Cast("int64_t") long in_ts,  @ByVal AVRational fs_tb, int duration, @Cast("int64_t*") LongPointer last, @ByVal AVRational out_tb);
 @NoException public static native @Cast("int64_t") long av_rescale_delta(@ByVal AVRational in_tb, @Cast("int64_t") long in_ts,  @ByVal AVRational fs_tb, int duration, @Cast("int64_t*") LongBuffer last, @ByVal AVRational out_tb);
@@ -1116,15 +1484,15 @@ public static final int
  * This function guarantees that when the same value is repeatly added that
  * no accumulation of rounding errors occurs.
  *
- * @param ts Input timestamp
- * @param ts_tb Input timestamp timebase
- * @param inc value to add to ts
- * @param inc_tb inc timebase
+ * @param [in] ts     Input timestamp
+ * @param [in] ts_tb  Input timestamp time base
+ * @param [in] inc    Value to be added
+ * @param [in] inc_tb Time base of {@code inc}
  */
 @NoException public static native @Cast("int64_t") long av_add_stable(@ByVal AVRational ts_tb, @Cast("int64_t") long ts, @ByVal AVRational inc_tb, @Cast("int64_t") long inc);
 
 
-    /**
+/**
  * \}
  */
 
@@ -1156,7 +1524,8 @@ public static final int
 
 /**
  * \file
- * rational numbers
+ * \ingroup lavu_math_rational
+ * Utilties for rational number calculation.
  * @author Michael Niedermayer <michaelni\gmx.at>
  */
 
@@ -1168,12 +1537,26 @@ public static final int
 // #include "attributes.h"
 
 /**
- * \addtogroup lavu_math
+ * \defgroup lavu_math_rational AVRational
+ * \ingroup lavu_math
+ * Rational number calculation.
+ *
+ * While rational numbers can be expressed as floating-point numbers, the
+ * conversion process is a lossy one, so are floating-point operations. On the
+ * other hand, the nature of FFmpeg demands highly accurate calculation of
+ * timestamps. This set of rational number utilities serves as a generic
+ * interface for manipulating rational numbers as pairs of numerators and
+ * denominators.
+ *
+ * Many of the functions that operate on AVRational's have the suffix {@code _q}, in
+ * reference to the mathematical symbol "ℚ" (Q) which denotes the set of all
+ * rational numbers.
+ *
  * \{
  */
 
 /**
- * rational number numerator/denominator
+ * Rational number (pair of numerator and denominator).
  */
 public static class AVRational extends Pointer {
     static { Loader.load(); }
@@ -1189,44 +1572,55 @@ public static class AVRational extends Pointer {
         return (AVRational)super.position(position);
     }
 
-    /** numerator */
+    /** Numerator */
     public native int num(); public native AVRational num(int num);
-    /** denominator */
+    /** Denominator */
     public native int den(); public native AVRational den(int den);
 }
 
 /**
- * Create a rational.
+ * Create an AVRational.
+ *
  * Useful for compilers that do not support compound literals.
- * \note  The return value is not reduced.
+ *
+ * \note The return value is not reduced.
+ * @see av_reduce()
  */
 @NoException public static native @ByVal AVRational av_make_q(int num, int den);
 
 /**
  * Compare two rationals.
- * @param a first rational
- * @param b second rational
- * @return 0 if a==b, 1 if a>b, -1 if a<b, and INT_MIN if one of the
- * values is of the form 0/0
+ *
+ * @param a First rational
+ * @param b Second rational
+ *
+ * @return One of the following values:
+ *         - 0 if {@code a == b}
+ *         - 1 if {@code a > b}
+ *         - -1 if {@code a < b}
+ *         - {@code INT_MIN} if one of the values is of the form {@code 0 / 0}
  */
 @NoException public static native int av_cmp_q(@ByVal AVRational a, @ByVal AVRational b);
 
 /**
- * Convert rational to double.
- * @param a rational to convert
- * @return (double) a
+ * Convert an AVRational to a {@code double}.
+ * @param a AVRational to convert
+ * @return {@code a} in floating-point form
+ * @see av_d2q()
  */
 @NoException public static native double av_q2d(@ByVal AVRational a);
 
 /**
  * Reduce a fraction.
+ *
  * This is useful for framerate calculations.
- * @param dst_num destination numerator
- * @param dst_den destination denominator
- * @param num source numerator
- * @param den source denominator
- * @param max the maximum allowed for dst_num & dst_den
- * @return 1 if exact, 0 otherwise
+ *
+ * @param [out] dst_num Destination numerator
+ * @param [out] dst_den Destination denominator
+ * @param [in]      num Source numerator
+ * @param [in]      den Source denominator
+ * @param [in]      max Maximum allowed values for {@code dst_num} & {@code dst_den}
+ * @return 1 if the operation is exact, 0 otherwise
  */
 @NoException public static native int av_reduce(IntPointer dst_num, IntPointer dst_den, @Cast("int64_t") long num, @Cast("int64_t") long den, @Cast("int64_t") long max);
 @NoException public static native int av_reduce(IntBuffer dst_num, IntBuffer dst_den, @Cast("int64_t") long num, @Cast("int64_t") long den, @Cast("int64_t") long max);
@@ -1234,32 +1628,32 @@ public static class AVRational extends Pointer {
 
 /**
  * Multiply two rationals.
- * @param b first rational
- * @param c second rational
+ * @param b First rational
+ * @param c Second rational
  * @return b*c
  */
 @NoException public static native @ByVal AVRational av_mul_q(@ByVal AVRational b, @ByVal AVRational c);
 
 /**
  * Divide one rational by another.
- * @param b first rational
- * @param c second rational
+ * @param b First rational
+ * @param c Second rational
  * @return b/c
  */
 @NoException public static native @ByVal AVRational av_div_q(@ByVal AVRational b, @ByVal AVRational c);
 
 /**
  * Add two rationals.
- * @param b first rational
- * @param c second rational
+ * @param b First rational
+ * @param c Second rational
  * @return b+c
  */
 @NoException public static native @ByVal AVRational av_add_q(@ByVal AVRational b, @ByVal AVRational c);
 
 /**
  * Subtract one rational from another.
- * @param b first rational
- * @param c second rational
+ * @param b First rational
+ * @param c Second rational
  * @return b-c
  */
 @NoException public static native @ByVal AVRational av_sub_q(@ByVal AVRational b, @ByVal AVRational c);
@@ -1273,31 +1667,46 @@ public static class AVRational extends Pointer {
 
 /**
  * Convert a double precision floating point number to a rational.
- * inf is expressed as {1,0} or {-1,0} depending on the sign.
  *
- * @param d double to convert
- * @param max the maximum allowed numerator and denominator
- * @return (AVRational) d
+ * In case of infinity, the returned value is expressed as {@code {1, 0}} or
+ * {@code {-1, 0}} depending on the sign.
+ *
+ * @param d   {@code double} to convert
+ * @param max Maximum allowed numerator and denominator
+ * @return {@code d} in AVRational form
+ * @see av_q2d()
  */
 @NoException public static native @ByVal AVRational av_d2q(double d, int max);
 
 /**
- * @return 1 if q1 is nearer to q than q2, -1 if q2 is nearer
- * than q1, 0 if they have the same distance.
+ * Find which of the two rationals is closer to another rational.
+ *
+ * @param q     Rational to be compared against
+ * @param q1,q2 Rationals to be tested
+ * @return One of the following values:
+ *         - 1 if {@code q1} is nearer to {@code q} than {@code q2}
+ *         - -1 if {@code q2} is nearer to {@code q} than {@code q1}
+ *         - 0 if they have the same distance
  */
 @NoException public static native int av_nearer_q(@ByVal AVRational q, @ByVal AVRational q1, @ByVal AVRational q2);
 
 /**
- * Find the nearest value in q_list to q.
- * @param q_list an array of rationals terminated by {0, 0}
- * @return the index of the nearest value found in the array
+ * Find the value in a list of rationals nearest a given reference rational.
+ *
+ * @param q      Reference rational
+ * @param q_list Array of rationals terminated by {@code {0, 0}}
+ * @return Index of the nearest value found in the array
  */
 @NoException public static native int av_find_nearest_q_idx(@ByVal AVRational q, @Const AVRational q_list);
 
 /**
- * Converts a AVRational to a IEEE 32bit float.
+ * Convert an AVRational to a IEEE 32-bit {@code float} expressed in fixed-point
+ * format.
  *
- * The float is returned in a uint32_t and its value is platform indepenant.
+ * @param q Rational to be converted
+ * @return Equivalent floating-point value, expressed as an unsigned 32-bit
+ *         integer.
+ * \note The returned value is platform-indepedant.
  */
 @NoException public static native @Cast("uint32_t") int av_q2intfloat(@ByVal AVRational q);
 
@@ -2255,94 +2664,93 @@ public static final int
 // #if FF_API_XVMC
     /** XVideo Motion Acceleration via common packet passing */
     AV_PIX_FMT_XVMC_MPEG2_MC = 15,
-    AV_PIX_FMT_XVMC_MPEG2_IDCT = 16;
-public static final int AV_PIX_FMT_XVMC = AV_PIX_FMT_XVMC_MPEG2_IDCT;
-public static final int
+    AV_PIX_FMT_XVMC_MPEG2_IDCT = 16,
+    AV_PIX_FMT_XVMC =  AV_PIX_FMT_XVMC_MPEG2_IDCT,
 // #endif /* FF_API_XVMC */
     /** packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1 */
-    AV_PIX_FMT_UYVY422 = 17,
+    AV_PIX_FMT_UYVY422 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 1,
     /** packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3 */
-    AV_PIX_FMT_UYYVYY411 = 18,
+    AV_PIX_FMT_UYYVYY411 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 2,
     /** packed RGB 3:3:2,  8bpp, (msb)2B 3G 3R(lsb) */
-    AV_PIX_FMT_BGR8 = 19,
+    AV_PIX_FMT_BGR8 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 3,
     /** packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits */
-    AV_PIX_FMT_BGR4 = 20,
+    AV_PIX_FMT_BGR4 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 4,
     /** packed RGB 1:2:1,  8bpp, (msb)1B 2G 1R(lsb) */
-    AV_PIX_FMT_BGR4_BYTE = 21,
+    AV_PIX_FMT_BGR4_BYTE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 5,
     /** packed RGB 3:3:2,  8bpp, (msb)2R 3G 3B(lsb) */
-    AV_PIX_FMT_RGB8 = 22,
+    AV_PIX_FMT_RGB8 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 6,
     /** packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits */
-    AV_PIX_FMT_RGB4 = 23,
+    AV_PIX_FMT_RGB4 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 7,
     /** packed RGB 1:2:1,  8bpp, (msb)1R 2G 1B(lsb) */
-    AV_PIX_FMT_RGB4_BYTE = 24,
+    AV_PIX_FMT_RGB4_BYTE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 8,
     /** planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V) */
-    AV_PIX_FMT_NV12 = 25,
+    AV_PIX_FMT_NV12 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 9,
     /** as above, but U and V bytes are swapped */
-    AV_PIX_FMT_NV21 = 26,
+    AV_PIX_FMT_NV21 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 10,
 
     /** packed ARGB 8:8:8:8, 32bpp, ARGBARGB... */
-    AV_PIX_FMT_ARGB = 27,
+    AV_PIX_FMT_ARGB =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 11,
     /** packed RGBA 8:8:8:8, 32bpp, RGBARGBA... */
-    AV_PIX_FMT_RGBA = 28,
+    AV_PIX_FMT_RGBA =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 12,
     /** packed ABGR 8:8:8:8, 32bpp, ABGRABGR... */
-    AV_PIX_FMT_ABGR = 29,
+    AV_PIX_FMT_ABGR =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 13,
     /** packed BGRA 8:8:8:8, 32bpp, BGRABGRA... */
-    AV_PIX_FMT_BGRA = 30,
+    AV_PIX_FMT_BGRA =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 14,
 
     /**        Y        , 16bpp, big-endian */
-    AV_PIX_FMT_GRAY16BE = 31,
+    AV_PIX_FMT_GRAY16BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 15,
     /**        Y        , 16bpp, little-endian */
-    AV_PIX_FMT_GRAY16LE = 32,
+    AV_PIX_FMT_GRAY16LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 16,
     /** planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples) */
-    AV_PIX_FMT_YUV440P = 33,
+    AV_PIX_FMT_YUV440P =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 17,
     /** planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range */
-    AV_PIX_FMT_YUVJ440P = 34,
+    AV_PIX_FMT_YUVJ440P =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 18,
     /** planar YUV 4:2:0, 20bpp, (1 Cr & Cb sample per 2x2 Y & A samples) */
-    AV_PIX_FMT_YUVA420P = 35,
+    AV_PIX_FMT_YUVA420P =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 19,
 // #if FF_API_VDPAU
     /** H.264 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_H264 = 36,
+    AV_PIX_FMT_VDPAU_H264 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 20,
     /** MPEG-1 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_MPEG1 = 37,
+    AV_PIX_FMT_VDPAU_MPEG1 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 21,
     /** MPEG-2 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_MPEG2 = 38,
+    AV_PIX_FMT_VDPAU_MPEG2 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 22,
     /** WMV3 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_WMV3 = 39,
+    AV_PIX_FMT_VDPAU_WMV3 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 23,
     /** VC-1 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_VC1 = 40,
+    AV_PIX_FMT_VDPAU_VC1 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 24,
 // #endif
     /** packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian */
-    AV_PIX_FMT_RGB48BE = 41,
+    AV_PIX_FMT_RGB48BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 25,
     /** packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian */
-    AV_PIX_FMT_RGB48LE = 42,
+    AV_PIX_FMT_RGB48LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 26,
 
     /** packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian */
-    AV_PIX_FMT_RGB565BE = 43,
+    AV_PIX_FMT_RGB565BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 27,
     /** packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian */
-    AV_PIX_FMT_RGB565LE = 44,
+    AV_PIX_FMT_RGB565LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 28,
     /** packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), big-endian   , X=unused/undefined */
-    AV_PIX_FMT_RGB555BE = 45,
+    AV_PIX_FMT_RGB555BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 29,
     /** packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_RGB555LE = 46,
+    AV_PIX_FMT_RGB555LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 30,
 
     /** packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), big-endian */
-    AV_PIX_FMT_BGR565BE = 47,
+    AV_PIX_FMT_BGR565BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 31,
     /** packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), little-endian */
-    AV_PIX_FMT_BGR565LE = 48,
+    AV_PIX_FMT_BGR565LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 32,
     /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), big-endian   , X=unused/undefined */
-    AV_PIX_FMT_BGR555BE = 49,
+    AV_PIX_FMT_BGR555BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 33,
     /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_BGR555LE = 50,
+    AV_PIX_FMT_BGR555LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 34,
 
 // #if FF_API_VAAPI
     /** \name Deprecated pixel formats */
     /**\{*/
     /** HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers */
-    AV_PIX_FMT_VAAPI_MOCO = 51,
+    AV_PIX_FMT_VAAPI_MOCO =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 35,
     /** HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers */
-    AV_PIX_FMT_VAAPI_IDCT = 52,
+    AV_PIX_FMT_VAAPI_IDCT =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 36,
     /** HW decoding through VA API, Picture.data[3] contains a VASurfaceID */
-    AV_PIX_FMT_VAAPI_VLD = 53,
+    AV_PIX_FMT_VAAPI_VLD =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 37,
     /**\}*/
     AV_PIX_FMT_VAAPI =  AV_PIX_FMT_VAAPI_VLD,
 // #else
@@ -2421,118 +2829,119 @@ public static final int
     AV_PIX_FMT_VDA_VLD =  AV_PIX_FMT_YA8 + 15,
     /** planar GBR 4:4:4 24bpp */
     AV_PIX_FMT_GBRP =  AV_PIX_FMT_YA8 + 16,
+    AV_PIX_FMT_GBR24P =  AV_PIX_FMT_GBRP, // alias for #AV_PIX_FMT_GBRP
     /** planar GBR 4:4:4 27bpp, big-endian */
-    AV_PIX_FMT_GBRP9BE =  AV_PIX_FMT_YA8 + 17,
+    AV_PIX_FMT_GBRP9BE =  AV_PIX_FMT_GBRP + 1,
     /** planar GBR 4:4:4 27bpp, little-endian */
-    AV_PIX_FMT_GBRP9LE =  AV_PIX_FMT_YA8 + 18,
+    AV_PIX_FMT_GBRP9LE =  AV_PIX_FMT_GBRP + 2,
     /** planar GBR 4:4:4 30bpp, big-endian */
-    AV_PIX_FMT_GBRP10BE =  AV_PIX_FMT_YA8 + 19,
+    AV_PIX_FMT_GBRP10BE =  AV_PIX_FMT_GBRP + 3,
     /** planar GBR 4:4:4 30bpp, little-endian */
-    AV_PIX_FMT_GBRP10LE =  AV_PIX_FMT_YA8 + 20,
+    AV_PIX_FMT_GBRP10LE =  AV_PIX_FMT_GBRP + 4,
     /** planar GBR 4:4:4 48bpp, big-endian */
-    AV_PIX_FMT_GBRP16BE =  AV_PIX_FMT_YA8 + 21,
+    AV_PIX_FMT_GBRP16BE =  AV_PIX_FMT_GBRP + 5,
     /** planar GBR 4:4:4 48bpp, little-endian */
-    AV_PIX_FMT_GBRP16LE =  AV_PIX_FMT_YA8 + 22,
+    AV_PIX_FMT_GBRP16LE =  AV_PIX_FMT_GBRP + 6,
     /** planar YUV 4:2:2 24bpp, (1 Cr & Cb sample per 2x1 Y & A samples) */
-    AV_PIX_FMT_YUVA422P =  AV_PIX_FMT_YA8 + 23,
+    AV_PIX_FMT_YUVA422P =  AV_PIX_FMT_GBRP + 7,
     /** planar YUV 4:4:4 32bpp, (1 Cr & Cb sample per 1x1 Y & A samples) */
-    AV_PIX_FMT_YUVA444P =  AV_PIX_FMT_YA8 + 24,
+    AV_PIX_FMT_YUVA444P =  AV_PIX_FMT_GBRP + 8,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA420P9BE =  AV_PIX_FMT_YA8 + 25,
+    AV_PIX_FMT_YUVA420P9BE =  AV_PIX_FMT_GBRP + 9,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA420P9LE =  AV_PIX_FMT_YA8 + 26,
+    AV_PIX_FMT_YUVA420P9LE =  AV_PIX_FMT_GBRP + 10,
     /** planar YUV 4:2:2 27bpp, (1 Cr & Cb sample per 2x1 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA422P9BE =  AV_PIX_FMT_YA8 + 27,
+    AV_PIX_FMT_YUVA422P9BE =  AV_PIX_FMT_GBRP + 11,
     /** planar YUV 4:2:2 27bpp, (1 Cr & Cb sample per 2x1 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA422P9LE =  AV_PIX_FMT_YA8 + 28,
+    AV_PIX_FMT_YUVA422P9LE =  AV_PIX_FMT_GBRP + 12,
     /** planar YUV 4:4:4 36bpp, (1 Cr & Cb sample per 1x1 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA444P9BE =  AV_PIX_FMT_YA8 + 29,
+    AV_PIX_FMT_YUVA444P9BE =  AV_PIX_FMT_GBRP + 13,
     /** planar YUV 4:4:4 36bpp, (1 Cr & Cb sample per 1x1 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA444P9LE =  AV_PIX_FMT_YA8 + 30,
+    AV_PIX_FMT_YUVA444P9LE =  AV_PIX_FMT_GBRP + 14,
     /** planar YUV 4:2:0 25bpp, (1 Cr & Cb sample per 2x2 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA420P10BE =  AV_PIX_FMT_YA8 + 31,
+    AV_PIX_FMT_YUVA420P10BE =  AV_PIX_FMT_GBRP + 15,
     /** planar YUV 4:2:0 25bpp, (1 Cr & Cb sample per 2x2 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA420P10LE =  AV_PIX_FMT_YA8 + 32,
+    AV_PIX_FMT_YUVA420P10LE =  AV_PIX_FMT_GBRP + 16,
     /** planar YUV 4:2:2 30bpp, (1 Cr & Cb sample per 2x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA422P10BE =  AV_PIX_FMT_YA8 + 33,
+    AV_PIX_FMT_YUVA422P10BE =  AV_PIX_FMT_GBRP + 17,
     /** planar YUV 4:2:2 30bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA422P10LE =  AV_PIX_FMT_YA8 + 34,
+    AV_PIX_FMT_YUVA422P10LE =  AV_PIX_FMT_GBRP + 18,
     /** planar YUV 4:4:4 40bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA444P10BE =  AV_PIX_FMT_YA8 + 35,
+    AV_PIX_FMT_YUVA444P10BE =  AV_PIX_FMT_GBRP + 19,
     /** planar YUV 4:4:4 40bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA444P10LE =  AV_PIX_FMT_YA8 + 36,
+    AV_PIX_FMT_YUVA444P10LE =  AV_PIX_FMT_GBRP + 20,
     /** planar YUV 4:2:0 40bpp, (1 Cr & Cb sample per 2x2 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA420P16BE =  AV_PIX_FMT_YA8 + 37,
+    AV_PIX_FMT_YUVA420P16BE =  AV_PIX_FMT_GBRP + 21,
     /** planar YUV 4:2:0 40bpp, (1 Cr & Cb sample per 2x2 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA420P16LE =  AV_PIX_FMT_YA8 + 38,
+    AV_PIX_FMT_YUVA420P16LE =  AV_PIX_FMT_GBRP + 22,
     /** planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA422P16BE =  AV_PIX_FMT_YA8 + 39,
+    AV_PIX_FMT_YUVA422P16BE =  AV_PIX_FMT_GBRP + 23,
     /** planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA422P16LE =  AV_PIX_FMT_YA8 + 40,
+    AV_PIX_FMT_YUVA422P16LE =  AV_PIX_FMT_GBRP + 24,
     /** planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA444P16BE =  AV_PIX_FMT_YA8 + 41,
+    AV_PIX_FMT_YUVA444P16BE =  AV_PIX_FMT_GBRP + 25,
     /** planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA444P16LE =  AV_PIX_FMT_YA8 + 42,
+    AV_PIX_FMT_YUVA444P16LE =  AV_PIX_FMT_GBRP + 26,
 
     /** HW acceleration through VDPAU, Picture.data[3] contains a VdpVideoSurface */
-    AV_PIX_FMT_VDPAU =  AV_PIX_FMT_YA8 + 43,
+    AV_PIX_FMT_VDPAU =  AV_PIX_FMT_GBRP + 27,
 
     /** packed XYZ 4:4:4, 36 bpp, (msb) 12X, 12Y, 12Z (lsb), the 2-byte value for each X/Y/Z is stored as little-endian, the 4 lower bits are set to 0 */
-    AV_PIX_FMT_XYZ12LE =  AV_PIX_FMT_YA8 + 44,
+    AV_PIX_FMT_XYZ12LE =  AV_PIX_FMT_GBRP + 28,
     /** packed XYZ 4:4:4, 36 bpp, (msb) 12X, 12Y, 12Z (lsb), the 2-byte value for each X/Y/Z is stored as big-endian, the 4 lower bits are set to 0 */
-    AV_PIX_FMT_XYZ12BE =  AV_PIX_FMT_YA8 + 45,
+    AV_PIX_FMT_XYZ12BE =  AV_PIX_FMT_GBRP + 29,
     /** interleaved chroma YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples) */
-    AV_PIX_FMT_NV16 =  AV_PIX_FMT_YA8 + 46,
+    AV_PIX_FMT_NV16 =  AV_PIX_FMT_GBRP + 30,
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_NV20LE =  AV_PIX_FMT_YA8 + 47,
+    AV_PIX_FMT_NV20LE =  AV_PIX_FMT_GBRP + 31,
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_NV20BE =  AV_PIX_FMT_YA8 + 48,
+    AV_PIX_FMT_NV20BE =  AV_PIX_FMT_GBRP + 32,
 
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_RGBA64BE =  AV_PIX_FMT_YA8 + 49,
+    AV_PIX_FMT_RGBA64BE =  AV_PIX_FMT_GBRP + 33,
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_RGBA64LE =  AV_PIX_FMT_YA8 + 50,
+    AV_PIX_FMT_RGBA64LE =  AV_PIX_FMT_GBRP + 34,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_BGRA64BE =  AV_PIX_FMT_YA8 + 51,
+    AV_PIX_FMT_BGRA64BE =  AV_PIX_FMT_GBRP + 35,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_BGRA64LE =  AV_PIX_FMT_YA8 + 52,
+    AV_PIX_FMT_BGRA64LE =  AV_PIX_FMT_GBRP + 36,
 
     /** packed YUV 4:2:2, 16bpp, Y0 Cr Y1 Cb */
-    AV_PIX_FMT_YVYU422 =  AV_PIX_FMT_YA8 + 53,
+    AV_PIX_FMT_YVYU422 =  AV_PIX_FMT_GBRP + 37,
 
     /** HW acceleration through VDA, data[3] contains a CVPixelBufferRef */
-    AV_PIX_FMT_VDA =  AV_PIX_FMT_YA8 + 54,
+    AV_PIX_FMT_VDA =  AV_PIX_FMT_GBRP + 38,
 
     /** 16 bits gray, 16 bits alpha (big-endian) */
-    AV_PIX_FMT_YA16BE =  AV_PIX_FMT_YA8 + 55,
+    AV_PIX_FMT_YA16BE =  AV_PIX_FMT_GBRP + 39,
     /** 16 bits gray, 16 bits alpha (little-endian) */
-    AV_PIX_FMT_YA16LE =  AV_PIX_FMT_YA8 + 56,
+    AV_PIX_FMT_YA16LE =  AV_PIX_FMT_GBRP + 40,
 
     /** planar GBRA 4:4:4:4 32bpp */
-    AV_PIX_FMT_GBRAP =  AV_PIX_FMT_YA8 + 57,
+    AV_PIX_FMT_GBRAP =  AV_PIX_FMT_GBRP + 41,
     /** planar GBRA 4:4:4:4 64bpp, big-endian */
-    AV_PIX_FMT_GBRAP16BE =  AV_PIX_FMT_YA8 + 58,
+    AV_PIX_FMT_GBRAP16BE =  AV_PIX_FMT_GBRP + 42,
     /** planar GBRA 4:4:4:4 64bpp, little-endian */
-    AV_PIX_FMT_GBRAP16LE =  AV_PIX_FMT_YA8 + 59,
+    AV_PIX_FMT_GBRAP16LE =  AV_PIX_FMT_GBRP + 43,
     /**
      *  HW acceleration through QSV, data[3] contains a pointer to the
      *  mfxFrameSurface1 structure.
      */
-    AV_PIX_FMT_QSV =  AV_PIX_FMT_YA8 + 60,
+    AV_PIX_FMT_QSV =  AV_PIX_FMT_GBRP + 44,
     /**
      * HW acceleration though MMAL, data[3] contains a pointer to the
      * MMAL_BUFFER_HEADER_T structure.
      */
-    AV_PIX_FMT_MMAL =  AV_PIX_FMT_YA8 + 61,
+    AV_PIX_FMT_MMAL =  AV_PIX_FMT_GBRP + 45,
 
     /** HW decoding through Direct3D11, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
-    AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_YA8 + 62,
+    AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_GBRP + 46,
 
     /**
      * HW acceleration through CUDA. data[i] contain CUdeviceptr pointers
      * exactly as for system memory frames.
      */
-    AV_PIX_FMT_CUDA =  AV_PIX_FMT_YA8 + 63,
+    AV_PIX_FMT_CUDA =  AV_PIX_FMT_GBRP + 47,
 
     /** packed RGB 8:8:8, 32bpp, XRGBXRGB...   X=unused/undefined */
     AV_PIX_FMT_0RGB= 0x123+4,
@@ -2635,11 +3044,11 @@ public static final int
     /** planar GBR 4:4:4:4 40bpp, little-endian */
     AV_PIX_FMT_GBRAP10LE = 0x123+4 + 45,
 
-    /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 46;
+    /** hardware decoding through MediaCodec */
+    AV_PIX_FMT_MEDIACODEC = 0x123+4 + 46,
 
-// #define AV_PIX_FMT_Y400A AV_PIX_FMT_GRAY8A
-public static final int AV_PIX_FMT_GBR24P = AV_PIX_FMT_GBRP;
+    /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
+    AV_PIX_FMT_NB = 0x123+4 + 47;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -2799,9 +3208,13 @@ public static final int
     /** ITU-R BT2020 */
     AVCOL_PRI_BT2020      = 9,
     /** SMPTE ST 428-1 (CIE 1931 XYZ) */
-    AVCOL_PRI_SMPTEST428_1= 10,
+    AVCOL_PRI_SMPTEST428_1 = 10,
+    /** SMPTE ST 431-2 (2011) */
+    AVCOL_PRI_SMPTE431    = 11,
+    /** SMPTE ST 432-1 D65 (2010) */
+    AVCOL_PRI_SMPTE432    = 12,
     /** Not part of ABI */
-    AVCOL_PRI_NB = 11;
+    AVCOL_PRI_NB = 13;
 
 /**
  * Color Transfer Characteristic.
@@ -2870,8 +3283,10 @@ public static final int
     AVCOL_SPC_BT2020_NCL  = 9,
     /** ITU-R BT2020 constant luminance system */
     AVCOL_SPC_BT2020_CL   = 10,
+    /** SMPTE 2085, Y'D'zD'x */
+    AVCOL_SPC_SMPTE2085   = 11,
     /** Not part of ABI */
-    AVCOL_SPC_NB = 11;
+    AVCOL_SPC_NB = 12;
 public static final int AVCOL_SPC_YCGCO = AVCOL_SPC_YCOCG;
 
 
@@ -3116,7 +3531,7 @@ public static class AVFrameSideData extends Pointer {
  * without breaking compatibility with each other.
  *
  * Fields can be accessed through AVOptions, the name string used, matches the
- * C structure field name for fields accessable through AVOptions. The AVClass
+ * C structure field name for fields accessible through AVOptions. The AVClass
  * for AVFrame can be obtained from avcodec_get_frame_class()
  */
 public static class AVFrame extends Pointer {
@@ -3222,10 +3637,13 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      */
     public native @Cast("int64_t") long pts(); public native AVFrame pts(long pts);
 
+// #if FF_API_PKT_PTS
     /**
      * PTS copied from the AVPacket that was decoded to produce this frame.
+     * @deprecated use the pts field instead
      */
-    public native @Cast("int64_t") long pkt_pts(); public native AVFrame pkt_pts(long pkt_pts);
+    public native @Cast("int64_t") @Deprecated long pkt_pts(); public native AVFrame pkt_pts(long pkt_pts);
+// #endif
 
     /**
      * DTS copied from the AVPacket that triggered returning this frame. (if frame threading isn't used)
@@ -3343,6 +3761,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
 
 /**
  * \defgroup lavu_frame_flags AV_FRAME_FLAGS
+ * \ingroup lavu_frame
  * Flags describing additional frame properties.
  *
  * \{
@@ -3352,6 +3771,10 @@ public static final int AV_NUM_DATA_POINTERS = 8;
  * The frame data may be corrupted, e.g. due to decoding errors.
  */
 public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
+/**
+ * A flag to mark the frames which need to be decoded, but shouldn't be output.
+ */
+public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
 /**
  * \}
  */
@@ -3787,9 +4210,13 @@ public static final int
     AV_SAMPLE_FMT_FLTP = 8,
     /** double, planar */
     AV_SAMPLE_FMT_DBLP = 9,
+    /** signed 64 bits */
+    AV_SAMPLE_FMT_S64 = 10,
+    /** signed 64 bits, planar */
+    AV_SAMPLE_FMT_S64P = 11,
 
     /** Number of sample formats. DO NOT USE if linking dynamically */
-    AV_SAMPLE_FMT_NB = 10;
+    AV_SAMPLE_FMT_NB = 12;
 
 /**
  * Return the name of sample_fmt, or NULL if sample_fmt is not
@@ -5968,101 +6395,6 @@ public static final int AV_PIX_FMT_FLAG_PSEUDOPAL =    (1 << 6);
 public static final int AV_PIX_FMT_FLAG_ALPHA =        (1 << 7);
 
 /**
- * Read a line from an image, and write the values of the
- * pixel format component c to dst.
- *
- * @param data the array containing the pointers to the planes of the image
- * @param linesize the array containing the linesizes of the image
- * @param desc the pixel format descriptor for the image
- * @param x the horizontal coordinate of the first pixel to read
- * @param y the vertical coordinate of the first pixel to read
- * @param w the width of the line to read, that is the number of
- * values to write to dst
- * @param read_pal_component if not zero and the format is a paletted
- * format writes the values corresponding to the palette
- * component c in data[1] to dst, rather than the palette indexes in
- * data[0]. The behavior is undefined if the format is not paletted.
- */
-@NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") PointerPointer data,
-                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
-                        int x, int y, int c, int w, int read_pal_component);
-@NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") @ByPtrPtr BytePointer data,
-                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
-                        int x, int y, int c, int w, int read_pal_component);
-@NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortBuffer dst, @Cast("const uint8_t**") @ByPtrPtr ByteBuffer data,
-                        @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
-                        int x, int y, int c, int w, int read_pal_component);
-@NoException public static native void av_read_image_line(@Cast("uint16_t*") short[] dst, @Cast("const uint8_t**") @ByPtrPtr byte[] data,
-                        @Const int[] linesize, @Const AVPixFmtDescriptor desc,
-                        int x, int y, int c, int w, int read_pal_component);
-
-/**
- * Write the values from src to the pixel format component c of an
- * image line.
- *
- * @param src array containing the values to write
- * @param data the array containing the pointers to the planes of the
- * image to write into. It is supposed to be zeroed.
- * @param linesize the array containing the linesizes of the image
- * @param desc the pixel format descriptor for the image
- * @param x the horizontal coordinate of the first pixel to write
- * @param y the vertical coordinate of the first pixel to write
- * @param w the width of the line to write, that is the number of
- * values to write to the image line
- */
-@NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") PointerPointer data,
-                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
-                         int x, int y, int c, int w);
-@NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") @ByPtrPtr BytePointer data,
-                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
-                         int x, int y, int c, int w);
-@NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortBuffer src, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
-                         @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
-                         int x, int y, int c, int w);
-@NoException public static native void av_write_image_line(@Cast("const uint16_t*") short[] src, @Cast("uint8_t**") @ByPtrPtr byte[] data,
-                         @Const int[] linesize, @Const AVPixFmtDescriptor desc,
-                         int x, int y, int c, int w);
-
-/**
- * Return the pixel format corresponding to name.
- *
- * If there is no pixel format with name name, then looks for a
- * pixel format with the name corresponding to the native endian
- * format of name.
- * For example in a little-endian system, first looks for "gray16",
- * then for "gray16le".
- *
- * Finally if no pixel format has been found, returns AV_PIX_FMT_NONE.
- */
-@NoException public static native @Cast("AVPixelFormat") int av_get_pix_fmt(@Cast("const char*") BytePointer name);
-@NoException public static native @Cast("AVPixelFormat") int av_get_pix_fmt(String name);
-
-/**
- * Return the short name for a pixel format, NULL in case pix_fmt is
- * unknown.
- *
- * @see av_get_pix_fmt(), av_get_pix_fmt_string()
- */
-@NoException public static native @Cast("const char*") BytePointer av_get_pix_fmt_name(@Cast("AVPixelFormat") int pix_fmt);
-
-/**
- * Print in buf the string corresponding to the pixel format with
- * number pix_fmt, or a header if pix_fmt is negative.
- *
- * @param buf the buffer where to write the string
- * @param buf_size the size of buf
- * @param pix_fmt the number of the pixel format to print the
- * corresponding info string, or a negative value to print the
- * corresponding header.
- */
-@NoException public static native @Cast("char*") BytePointer av_get_pix_fmt_string(@Cast("char*") BytePointer buf, int buf_size,
-                            @Cast("AVPixelFormat") int pix_fmt);
-@NoException public static native @Cast("char*") ByteBuffer av_get_pix_fmt_string(@Cast("char*") ByteBuffer buf, int buf_size,
-                            @Cast("AVPixelFormat") int pix_fmt);
-@NoException public static native @Cast("char*") byte[] av_get_pix_fmt_string(@Cast("char*") byte[] buf, int buf_size,
-                            @Cast("AVPixelFormat") int pix_fmt);
-
-/**
  * Return the number of bits per pixel used by the pixel format
  * described by pixdesc. Note that this is not the same as the number
  * of bits per sample.
@@ -6127,6 +6459,126 @@ public static final int AV_PIX_FMT_FLAG_ALPHA =        (1 << 7);
  * valid pixel format.
  */
 @NoException public static native int av_pix_fmt_count_planes(@Cast("AVPixelFormat") int pix_fmt);
+
+/**
+ * @return the name for provided color range or NULL if unknown.
+ */
+@NoException public static native @Cast("const char*") BytePointer av_color_range_name(@Cast("AVColorRange") int range);
+
+/**
+ * @return the name for provided color primaries or NULL if unknown.
+ */
+@NoException public static native @Cast("const char*") BytePointer av_color_primaries_name(@Cast("AVColorPrimaries") int primaries);
+
+/**
+ * @return the name for provided color transfer or NULL if unknown.
+ */
+@NoException public static native @Cast("const char*") BytePointer av_color_transfer_name(@Cast("AVColorTransferCharacteristic") int transfer);
+
+/**
+ * @return the name for provided color space or NULL if unknown.
+ */
+@NoException public static native @Cast("const char*") BytePointer av_color_space_name(@Cast("AVColorSpace") int space);
+
+/**
+ * @return the name for provided chroma location or NULL if unknown.
+ */
+@NoException public static native @Cast("const char*") BytePointer av_chroma_location_name(@Cast("AVChromaLocation") int location);
+
+/**
+ * Return the pixel format corresponding to name.
+ *
+ * If there is no pixel format with name name, then looks for a
+ * pixel format with the name corresponding to the native endian
+ * format of name.
+ * For example in a little-endian system, first looks for "gray16",
+ * then for "gray16le".
+ *
+ * Finally if no pixel format has been found, returns AV_PIX_FMT_NONE.
+ */
+@NoException public static native @Cast("AVPixelFormat") int av_get_pix_fmt(@Cast("const char*") BytePointer name);
+@NoException public static native @Cast("AVPixelFormat") int av_get_pix_fmt(String name);
+
+/**
+ * Return the short name for a pixel format, NULL in case pix_fmt is
+ * unknown.
+ *
+ * @see av_get_pix_fmt(), av_get_pix_fmt_string()
+ */
+@NoException public static native @Cast("const char*") BytePointer av_get_pix_fmt_name(@Cast("AVPixelFormat") int pix_fmt);
+
+/**
+ * Print in buf the string corresponding to the pixel format with
+ * number pix_fmt, or a header if pix_fmt is negative.
+ *
+ * @param buf the buffer where to write the string
+ * @param buf_size the size of buf
+ * @param pix_fmt the number of the pixel format to print the
+ * corresponding info string, or a negative value to print the
+ * corresponding header.
+ */
+@NoException public static native @Cast("char*") BytePointer av_get_pix_fmt_string(@Cast("char*") BytePointer buf, int buf_size,
+                            @Cast("AVPixelFormat") int pix_fmt);
+@NoException public static native @Cast("char*") ByteBuffer av_get_pix_fmt_string(@Cast("char*") ByteBuffer buf, int buf_size,
+                            @Cast("AVPixelFormat") int pix_fmt);
+@NoException public static native @Cast("char*") byte[] av_get_pix_fmt_string(@Cast("char*") byte[] buf, int buf_size,
+                            @Cast("AVPixelFormat") int pix_fmt);
+
+/**
+ * Read a line from an image, and write the values of the
+ * pixel format component c to dst.
+ *
+ * @param data the array containing the pointers to the planes of the image
+ * @param linesize the array containing the linesizes of the image
+ * @param desc the pixel format descriptor for the image
+ * @param x the horizontal coordinate of the first pixel to read
+ * @param y the vertical coordinate of the first pixel to read
+ * @param w the width of the line to read, that is the number of
+ * values to write to dst
+ * @param read_pal_component if not zero and the format is a paletted
+ * format writes the values corresponding to the palette
+ * component c in data[1] to dst, rather than the palette indexes in
+ * data[0]. The behavior is undefined if the format is not paletted.
+ */
+@NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") PointerPointer data,
+                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+@NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") @ByPtrPtr BytePointer data,
+                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+@NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortBuffer dst, @Cast("const uint8_t**") @ByPtrPtr ByteBuffer data,
+                        @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+@NoException public static native void av_read_image_line(@Cast("uint16_t*") short[] dst, @Cast("const uint8_t**") @ByPtrPtr byte[] data,
+                        @Const int[] linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+
+/**
+ * Write the values from src to the pixel format component c of an
+ * image line.
+ *
+ * @param src array containing the values to write
+ * @param data the array containing the pointers to the planes of the
+ * image to write into. It is supposed to be zeroed.
+ * @param linesize the array containing the linesizes of the image
+ * @param desc the pixel format descriptor for the image
+ * @param x the horizontal coordinate of the first pixel to write
+ * @param y the vertical coordinate of the first pixel to write
+ * @param w the width of the line to write, that is the number of
+ * values to write to the image line
+ */
+@NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") PointerPointer data,
+                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
+@NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") @ByPtrPtr BytePointer data,
+                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
+@NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortBuffer src, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
+                         @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
+@NoException public static native void av_write_image_line(@Cast("const uint16_t*") short[] src, @Cast("uint8_t**") @ByPtrPtr byte[] data,
+                         @Const int[] linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
 
 /**
  * Utility function to swap the endianness of a pixel format.
@@ -6197,31 +6649,6 @@ public static final int FF_LOSS_CHROMA =      0x0020;
                                              @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntBuffer loss_ptr);
 @NoException public static native @Cast("AVPixelFormat") int av_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                              @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
-
-/**
- * @return the name for provided color range or NULL if unknown.
- */
-@NoException public static native @Cast("const char*") BytePointer av_color_range_name(@Cast("AVColorRange") int range);
-
-/**
- * @return the name for provided color primaries or NULL if unknown.
- */
-@NoException public static native @Cast("const char*") BytePointer av_color_primaries_name(@Cast("AVColorPrimaries") int primaries);
-
-/**
- * @return the name for provided color transfer or NULL if unknown.
- */
-@NoException public static native @Cast("const char*") BytePointer av_color_transfer_name(@Cast("AVColorTransferCharacteristic") int transfer);
-
-/**
- * @return the name for provided color space or NULL if unknown.
- */
-@NoException public static native @Cast("const char*") BytePointer av_color_space_name(@Cast("AVColorSpace") int space);
-
-/**
- * @return the name for provided chroma location or NULL if unknown.
- */
-@NoException public static native @Cast("const char*") BytePointer av_chroma_location_name(@Cast("AVChromaLocation") int location);
 
 // #endif /* AVUTIL_PIXDESC_H */
 
@@ -6824,7 +7251,7 @@ public static class AVStereo3D extends Pointer {
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "3.1.4";
+public static final String FFMPEG_VERSION = "3.2.1";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
