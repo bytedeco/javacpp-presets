@@ -8396,7 +8396,7 @@ public static native @Cast("CUresult") int cuMemAdvise(@Cast("CUdeviceptr") long
  * \sa ::cuMemRangeGetAttributes, ::cuMemPrefetchAsync,
  * ::cuMemAdvise
  */
-public static native @Cast("CUresult") int cuMemRangeGetAttribute(Pointer data, @Cast("size_t") long dataSize, @Cast("CUmem_range_attribute") int attribute, @Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count);
+
 
 /**
  * \brief Query attributes of a given memory range.
@@ -8435,10 +8435,7 @@ public static native @Cast("CUresult") int cuMemRangeGetAttribute(Pointer data, 
  * \sa ::cuMemRangeGetAttribute, ::cuMemAdvise
  * ::cuMemPrefetchAsync
  */
-public static native @Cast("CUresult") int cuMemRangeGetAttributes(@Cast("void**") PointerPointer data, @Cast("size_t*") SizeTPointer dataSizes, @Cast("CUmem_range_attribute*") IntPointer attributes, @Cast("size_t") long numAttributes, @Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count);
-public static native @Cast("CUresult") int cuMemRangeGetAttributes(@Cast("void**") @ByPtrPtr Pointer data, @Cast("size_t*") SizeTPointer dataSizes, @Cast("CUmem_range_attribute*") IntPointer attributes, @Cast("size_t") long numAttributes, @Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count);
-public static native @Cast("CUresult") int cuMemRangeGetAttributes(@Cast("void**") @ByPtrPtr Pointer data, @Cast("size_t*") SizeTPointer dataSizes, @Cast("CUmem_range_attribute*") IntBuffer attributes, @Cast("size_t") long numAttributes, @Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count);
-public static native @Cast("CUresult") int cuMemRangeGetAttributes(@Cast("void**") @ByPtrPtr Pointer data, @Cast("size_t*") SizeTPointer dataSizes, @Cast("CUmem_range_attribute*") int[] attributes, @Cast("size_t") long numAttributes, @Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count);
+
 // #endif /* __CUDA_API_VERSION >= 8000 */
 
 // #if __CUDA_API_VERSION >= 6000
