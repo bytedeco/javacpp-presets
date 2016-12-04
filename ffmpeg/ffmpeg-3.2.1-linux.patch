@@ -1,0 +1,12 @@
+diff -ruN ffmpeg-3.2.1/configure ffmpeg-3.2.1-linux/configure
+--- ffmpeg-3.2.1/configure	2016-11-26 11:12:05.000000000 +0900
++++ ffmpeg-3.2.1-linux/configure	2016-12-04 10:27:50.595125748 +0900
+@@ -5720,7 +5720,7 @@
+                                { use_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
+                                  require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
+                                require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader; }
+-enabled libopenh264       && require_pkg_config openh264 wels/codec_api.h WelsGetCodecVersion
++enabled libopenh264       && require openh264 wels/codec_api.h WelsGetCodecVersion -lopenh264
+ enabled libopenjpeg       && { { check_lib2 openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
+                                check_lib2 openjpeg-2.1/openjpeg.h opj_version -lopenjp2 ||
+                                { check_lib2 openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
