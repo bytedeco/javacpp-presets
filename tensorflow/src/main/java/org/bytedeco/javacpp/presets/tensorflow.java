@@ -171,6 +171,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/tensor_reference.h",
                         "tensorflow/core/framework/tensor.h",
                         "tensorflow/core/framework/attr_value.pb.h",
+                        "tensorflow/core/framework/node_def.pb.h",
                         "tensorflow/core/framework/function.pb.h",
                         "tensorflow/core/framework/graph.pb.h",
                         "tensorflow/core/framework/shape_inference.h",

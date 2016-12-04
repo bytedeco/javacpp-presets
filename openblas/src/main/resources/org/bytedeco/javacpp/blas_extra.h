@@ -64,12 +64,12 @@ static void blas_set_num_threads(int num) {
         printf("Unable to guess runtime. Please set OMP_NUM_THREADS manually.\n");
       }
     }
-#elif __APPLE__
-   // do nothing for MacOS
-   printf("Unable to guess runtime. Please set OMP_NUM_THREADS or equivalent manually.\n");
 #else
     // it's possible to have MKL being loaded at runtime
     void *handle = dlopen("libmkl_rt.so", RTLD_NOW|RTLD_GLOBAL);
+    if (handle == NULL) {
+        handle = dlopen("libmkl_rt.dylib", RTLD_NOW|RTLD_GLOBAL);
+    }
     if (handle != NULL) {
 
         // we call for openblas only if libmkl isn't loaded, and openblas_set_num_threads exists
@@ -99,6 +99,9 @@ static void blas_set_num_threads(int num) {
         handle = dlopen("libopenblas.so.0", RTLD_NOW|RTLD_GLOBAL);
         if (handle == NULL) {
             handle = dlopen("libopenblas.so", RTLD_NOW|RTLD_GLOBAL);
+        }
+        if (handle == NULL) {
+            handle = dlopen("libopenblas.dylib", RTLD_NOW|RTLD_GLOBAL);
         }
 
         if (handle != NULL) {
