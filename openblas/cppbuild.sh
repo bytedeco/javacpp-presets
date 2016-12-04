@@ -88,18 +88,21 @@ case $PLATFORM in
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
         export DYNAMIC_ARCH=1
+        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/opt/gcc?/lib/gcc/?/libquadmath.a"
         ;;
     windows-x86)
         export CC="$OLDCC -m32"
         export FC="$OLDFC -m32"
         export BINARY=32
         export DYNAMIC_ARCH=1
+        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
         ;;
     windows-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
+        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -109,5 +112,6 @@ esac
 
 make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN
 make install "PREFIX=$INSTALL_PATH"
+export LDFLAGS=
 
 cd ../..

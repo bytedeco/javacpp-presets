@@ -35,19 +35,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target = "org.bytedeco.javacpp.openblas", value = {@Platform(define = {"__OPENBLAS 1", "LAPACK_COMPLEX_CPP"},
               include = {"openblas_config.h", "cblas.h", "blas_extra.h", "lapacke_config.h", "lapacke_mangling.h", "lapacke.h", "lapacke_utils.h"}, link = "openblas@.0",
               preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
-                         "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "gomp@.1", "quadmath@.0", "gfortran@.3"}, compiler = "fastfpu"),
+                         "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "quadmath@.0", "gfortran@.3"}, compiler = "fastfpu"),
     @Platform(value = "android", include = {"openblas_config.h", "cblas.h", "blas_extra.h" /* no LAPACK */}, link = "openblas", preload = "", compiler = "fastfpu"),
-    @Platform(value = "windows", preload = {"libiomp5md", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
-                                            "mkl_intel_thread", "mkl_rt", "mkl_rt#libopenblas", "libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libgomp-1",
-                                            "libstdc++-6", "libquadmath-0", "libgfortran-3", "libopenblas"}),
+    @Platform(value = "windows", preload = {"libiomp5md", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_intel_lp64",
+                                            "mkl_intel_thread", "mkl_rt", "mkl_rt#libopenblas", "libopenblas"}),
     @Platform(value = "linux",          preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
     @Platform(value = "linux-armhf",    preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
     @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/"}),
-    @Platform(value = "linux-ppc64",    preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "macosx-x86_64",  preloadpath = {"/usr/local/lib/", "/usr/local/opt/gcc5/lib/gcc/5/", "/usr/local/opt/gcc/lib/gcc/6/"}),
-    @Platform(value = "windows-x86",    preloadpath = {"C:/msys64/mingw32/bin/"}),
-    @Platform(value = "windows-x86_64", preloadpath = {"C:/msys64/mingw64/bin/"}) })
+    @Platform(value = "linux-ppc64",    preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}) })
 public class openblas implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
