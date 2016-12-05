@@ -1,6 +1,6 @@
-diff -Naur cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rscore.hpp cppbuild-good/linux-x86_64/librealsense-1.9.6/include/librealsense/rscore.hpp
---- cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rscore.hpp	2016-08-18 09:03:02.000000000 +0200
-+++ cppbuild-good/linux-x86_64/librealsense-1.9.6/include/librealsense/rscore.hpp	2016-08-18 16:15:28.141873000 +0200
+diff -ruN librealsense-1.9.6/include/librealsense/rscore.hpp librealsense-1.9.6-linux/include/librealsense/rscore.hpp
+--- librealsense-1.9.6/include/librealsense/rscore.hpp	2016-08-18 21:41:54.000000000 +0900
++++ librealsense-1.9.6-linux/include/librealsense/rscore.hpp	2016-12-05 12:36:12.533028493 +0900
 @@ -19,7 +19,7 @@
  
      virtual rs_extrinsics                   get_extrinsics_to(const rs_stream_interface & r) const = 0;
@@ -49,9 +49,9 @@ diff -Naur cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rscore.
      virtual bool                            supports_option(rs_option option) const = 0;
      virtual void                            get_option_range(rs_option option, double & min, double & max, double & step, double & def) = 0;
      virtual void                            set_options(const rs_option options[], size_t count, const double values[]) = 0;
-diff -Naur cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.h cppbuild-good/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.h
---- cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.h	2016-08-18 09:03:02.000000000 +0200
-+++ cppbuild-good/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.h	2016-08-18 17:53:38.437558000 +0200
+diff -ruN librealsense-1.9.6/include/librealsense/rs.h librealsense-1.9.6-linux/include/librealsense/rs.h
+--- librealsense-1.9.6/include/librealsense/rs.h	2016-08-18 21:41:54.000000000 +0900
++++ librealsense-1.9.6-linux/include/librealsense/rs.h	2016-12-05 12:36:12.535028540 +0900
 @@ -18,7 +18,8 @@
  /* Version in encoded integer format (1,9,x) -> 1090x note that each component is limited into [0-99] range by design*/
  #define	RS_API_VERSION  (((RS_API_MAJOR_VERSION) * 10000) + ((RS_API_MINOR_VERSION) * 100) + (RS_API_PATCH_VERSION))
@@ -89,9 +89,9 @@ diff -Naur cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.h cp
  * of the motiohn module.
  * \param[in] firmware data.
  * \param[out] error  if non-null, receives any error that occurs during this call, otherwise, errors are ignored
-diff -Naur cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.hpp cppbuild-good/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.hpp
---- cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.hpp	2016-08-18 09:03:02.000000000 +0200
-+++ cppbuild-good/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.hpp	2016-08-18 17:56:18.142514000 +0200
+diff -ruN librealsense-1.9.6/include/librealsense/rs.hpp librealsense-1.9.6-linux/include/librealsense/rs.hpp
+--- librealsense-1.9.6/include/librealsense/rs.hpp	2016-08-18 21:41:54.000000000 +0900
++++ librealsense-1.9.6-linux/include/librealsense/rs.hpp	2016-12-05 12:36:12.536028564 +0900
 @@ -18,10 +18,10 @@
  {
      enum class capabilities : int32_t
@@ -440,3 +440,15 @@ diff -Naur cppbuild/linux-x86_64/librealsense-1.9.6/include/librealsense/rs.hpp 
  
      // Additional utilities
      inline void apply_depth_control_preset(device * device, int preset) { rs_apply_depth_control_preset((rs_device *)device, preset); }
+diff -ruN librealsense-1.9.6/src/uvc-v4l2.cpp librealsense-1.9.6-linux/src/uvc-v4l2.cpp
+--- librealsense-1.9.6/src/uvc-v4l2.cpp	2016-08-18 21:41:54.000000000 +0900
++++ librealsense-1.9.6-linux/src/uvc-v4l2.cpp	2016-12-05 12:38:16.173109900 +0900
+@@ -369,7 +369,7 @@
+                         LOG_WARNING("interrupt e.p. timeout");
+                         break;
+                     default:
+-                        throw std::runtime_error(to_string() << "USB Interrupt end-point error " << libusb_strerror((libusb_error)res));
++                        throw std::runtime_error(to_string() << "USB Interrupt end-point error " << res);
+                         break;
+                     }
+                 }
