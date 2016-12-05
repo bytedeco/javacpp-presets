@@ -80,22 +80,19 @@ public class Tutorial01 {
     static void saveFrame(AVFrame pFrame, int width, int height, int iFrame)
             throws IOException {
         // Open file
-        OutputStream stream = new FileOutputStream("frame" + iFrame + ".ppm");
+        try (OutputStream stream = new FileOutputStream("frame" + iFrame + ".ppm")) {
+            // Write header
+            stream.write(("P6\n" + width + " " + height + "\n255\n").getBytes());
 
-        // Write header
-        stream.write(("P6\n" + width + " " + height + "\n255\n").getBytes());
-
-        // Write pixel data
-        BytePointer data = pFrame.data(0);
-        byte[] bytes = new byte[width * 3];
-        int l = pFrame.linesize(0);
-        for(int y = 0; y < height; y++) {
-            data.position(y * l).get(bytes);
-            stream.write(bytes);
+            // Write pixel data
+            BytePointer data = pFrame.data(0);
+            byte[] bytes = new byte[width * 3];
+            int l = pFrame.linesize(0);
+            for(int y = 0; y < height; y++) {
+                data.position(y * l).get(bytes);
+                stream.write(bytes);
+            }
         }
-
-        // Close file
-        stream.close();
     }
 
     public static void main(String[] args) throws IOException {
