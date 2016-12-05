@@ -172,7 +172,8 @@ public class Tutorial01 {
                 pFrame.format(), pFrame.width(), pFrame.height(), 1);
 
         // Read frames and save first five frames to disk
-        try(final AVPacket packet = new AVPacket()) {
+        try {
+            final AVPacket packet = new AVPacket();
             for (int i = 0; av_read_frame(pFormatCtx, packet) >= 0;) {
                 // Is this a packet from the video stream?
                 if (packet.stream_index() == videoStream) {
