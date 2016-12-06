@@ -41,7 +41,7 @@ case $PLATFORM in
         make install
         ;;
     linux-armhf)
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/ -DCMAKE_EXE_LINKER_FLAGS=-lgomp
         make -j4
         make install
         ;;

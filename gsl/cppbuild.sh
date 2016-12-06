@@ -60,7 +60,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-armhf)
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install-strip
         ;;

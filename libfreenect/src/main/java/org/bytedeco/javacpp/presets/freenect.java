@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target="org.bytedeco.javacpp.freenect", value={
     @Platform(not="android", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_audio.h>", "<libfreenect/libfreenect_sync.h>"},
-        link={"freenect@0.5", "freenect_sync@0.5"}, preload="libusb-1.0"),
+        link={"freenect@0.5", "freenect_sync@0.5"}, preload="libusb-1.0", preloadpath="/usr/local/lib/"),
     @Platform(value="windows", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_sync.h>"},
         link={"freenect", "freenect_sync", "pthreadVC2"}),
     @Platform(value="windows-x86",    preload="libusb0_x86"),

@@ -82,10 +82,10 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-armhf)
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf 
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=arm-linux-gnueabihf --enable-float
         make -j $MAKEJ
         make install-strip
         ;;
