@@ -34,15 +34,15 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.3</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>0.11.0-1.2.5-SNAPSHOT</version>
+            <artifactId>tensorflow-platform</artifactId>
+            <version>0.11.0-1.3</version>
         </dependency>
     </dependencies>
 </project>

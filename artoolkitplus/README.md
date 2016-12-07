@@ -35,15 +35,15 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.artoolkitplus</groupId>
     <artifactId>multimain</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <properties>
         <exec.mainClass>MultiMain</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>artoolkitplus</artifactId>
-            <version>2.3.1-1.2</version>
+            <artifactId>artoolkitplus-platform</artifactId>
+            <version>2.3.1-1.3</version>
         </dependency>
     </dependencies>
 </project>

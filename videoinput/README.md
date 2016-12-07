@@ -34,15 +34,15 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.videoinput</groupId>
     <artifactId>exampleusage</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <properties>
         <exec.mainClass>ExampleUsage</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>videoinput</artifactId>
-            <version>0.200-1.2</version>
+            <artifactId>videoinput-platform</artifactId>
+            <version>0.200-1.3</version>
         </dependency>
     </dependencies>
 </project>

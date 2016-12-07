@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -218,12 +218,12 @@
             </goals>
             <configuration>
               <archive>
-                <manifest>
-                  <addClasspath>true</addClasspath>
-                </manifest>
+<!--                <manifest>                          -->
+<!--                  <addClasspath>true</addClasspath> -->
+<!--                </manifest>                         -->
                 <manifestEntries>
                   <!-- <addClasspath/> is broken: http://jira.codehaus.org/browse/MJAR-61 -->
-                  <Class-Path>. javacpp.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-macosx-x86.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>. javacpp.jar</Class-Path>
                   <Name>org/bytedeco/javacpp/presets/</Name>
                   <Implementation-Title>${project.name}</Implementation-Title>
                   <Implementation-Vendor>Bytedeco</Implementation-Vendor>

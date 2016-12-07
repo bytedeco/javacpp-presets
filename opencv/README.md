@@ -34,15 +34,15 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.opencv</groupId>
     <artifactId>stitching</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <properties>
         <exec.mainClass>Stitching</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>opencv</artifactId>
-            <version>3.1.0-1.2</version>
+            <artifactId>opencv-platform</artifactId>
+            <version>3.1.0-1.3</version>
         </dependency>
     </dependencies>
 </project>

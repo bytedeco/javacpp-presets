@@ -1,4 +1,5 @@
 
+### December 7, 2016 version 1.3
  * Fix FFmpeg builds on ARM when not using a cross compiler ([issue #322](https://github.com/bytedeco/javacpp-presets/issues/322))
  * Add `blas_extra.h` to presets for OpenBLAS, containing `blas_set_num_threads()` and `blas_get_vendor()` functions
  * Introduce platform artifacts that depend on binaries for all available platforms and work with any build system (sbt, Gradle, M2Eclipse, etc)

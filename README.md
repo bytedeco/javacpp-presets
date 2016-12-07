@@ -12,8 +12,8 @@ Downloads
 ---------
 To install manually the JAR files, obtain the following archives and follow the instructions in the [Manual Installation](#manual-installation) section below.
 
- * JavaCPP Presets 1.2 binary archive  [javacpp-presets-1.2-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/1.2/javacpp-presets-1.2-bin.zip) (342 MB)
- * JavaCPP Presets 1.2 source archive  [javacpp-presets-1.2-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/1.2/javacpp-presets-1.2-src.zip) (2.3 MB)
+ * JavaCPP Presets 1.3 binary archive  [javacpp-presets-platform-1.3-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets-platform/1.3/javacpp-presets-platform-1.3-bin.zip) (516 MB)
+ * JavaCPP Presets 1.3 source archive  [javacpp-presets-platform-1.3-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets-platform/1.3/javacpp-presets-platform-1.3-src.zip) (2.8 MB)
 
 The binary archive contains builds for Android, Linux, Mac OS X, and Windows. The JAR files for specific child modules or platforms can also be obtained individually from the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco).
 
@@ -24,30 +24,24 @@ We can also have everything downloaded and installed automatically with:
 ```xml
   <dependency>
     <groupId>org.bytedeco.javacpp-presets</groupId>
-    <artifactId>${moduleName}</artifactId>
-    <version>${moduleVersion}-1.2</version>
+    <artifactId>${moduleName}-platform</artifactId>
+    <version>${moduleVersion}-1.3</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
-  repositories {
-    mavenCentral()
-  }
   dependencies {
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-1.2'
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-1.2', classifier: platformName
+    compile group: 'org.bytedeco.javacpp-presets', name: moduleName + '-platform', version: moduleVersion + '-1.3'
   }
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  classpathTypes += "maven-plugin"
-
-  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-1.2" classifier "" classifier platformName
+  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.3"
 ```
 
-where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, with Maven, we need to either set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, or set the `javacpp.platform.dependencies` one to `true` to get all the binaries for Android, Linux, Mac OS X, and Windows. **On build systems where this does not work, we need to add the platform-specific artifacts manually.** For example, with Gradle and sbt, we would usually have the `platformName` variable take on a value such as `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
+where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
 
 
 Required Software
@@ -66,7 +60,7 @@ Further, in the case of Android, the JavaCPP Presets also rely on:
 
 Manual Installation
 -------------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux were built for CentOS 7, so they should work on most distributions currently in use. The ones for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux were built for CentOS 6 and 7, so they should work on most distributions currently in use. The ones for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 7 or newer):
 
@@ -102,12 +96,12 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.2  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.3  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 3.1.0  http://opencv.org/downloads.html
- * FFmpeg 3.1.x  http://ffmpeg.org/download.html
+ * FFmpeg 3.2.x  http://ffmpeg.org/download.html
  * FlyCapture 2.9.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
@@ -145,7 +139,7 @@ With the above in working order, simply execute
 ```bash
 $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] <install | clean> [projects]
 ```
-where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-arm`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
+where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 
@@ -170,7 +164,7 @@ Contributions of any kind are highly welcome! At the moment, the `Parser` has li
 
  * Setting up continuous integration, preferably free on the cloud ([Travis CI](https://travis-ci.org/)?)
  * Improving the `Parser` (by using the [presets for Clang](llvm/src/main/java/org/bytedeco/javacpp/clang.java)?)
- * Providing builds for more platforms, most notably `linux-arm` for [Raspberry Pi](https://www.raspberrypi.org/), etc.
+ * Providing builds for more platforms, as with `linux-armhf` for [Raspberry Pi](https://www.raspberrypi.org/), etc.
  * Replacing the Bash/Maven build combo by something easier to use ([Gradle](http://gradle.org/)?)
  * Adding new presets as child modules for other C/C++ libraries (OpenNI, OpenMesh, PCL, etc.)
 

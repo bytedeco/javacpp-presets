@@ -49,7 +49,6 @@ tar -xjvf ../last_stable_x264.tar.bz2
 tar -xzvf ../$X265.tar.gz
 mkdir -p libvpx-$VPX_VERSION
 tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
-tar -xjvf ../alsa-lib-$ALSA_VERSION.tar.bz2
 tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 X264=`echo x264-snapshot-*`
 
@@ -255,6 +254,8 @@ case $PLATFORM in
         ;;
 
     linux-armhf)
+        tar -xjvf ../alsa-lib-$ALSA_VERSION.tar.bz2
+
         export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
