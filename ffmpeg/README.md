@@ -77,28 +77,39 @@ import static org.bytedeco.javacpp.avutil.*;
 import static org.bytedeco.javacpp.swscale.*;
 
 public class Tutorial01 {
-    static void saveFrame(AVFrame pFrame, int width, int height, int iFrame)
-            throws IOException {
+    private static void saveFrame(final AVFrame pFrame, final int iFrame) throws IOException {
         // Open file
+        final int width = pFrame.width();
+        final int height = pFrame.height();
         try (OutputStream stream = new FileOutputStream("frame" + iFrame + ".ppm")) {
             // Write header
             stream.write(("P6\n" + width + " " + height + "\n255\n").getBytes());
 
             // Write pixel data
-            BytePointer data = pFrame.data(0);
-            byte[] bytes = new byte[width * 3];
-            int l = pFrame.linesize(0);
-            for(int y = 0; y < height; y++) {
+            final BytePointer data = pFrame.data(0);
+            final byte[] bytes = new byte[width * 3];
+            final int l = pFrame.linesize(0);
+            for (int y = 0; y < height; y++) {
                 data.position(y * l).get(bytes);
                 stream.write(bytes);
             }
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    private static AVStream findVideoStream(final AVFormatContext pFormatCtx) {
+        // Find the first video stream
+        for (int i = 0; i < pFormatCtx.nb_streams(); i++) {
+            final AVStream videoStream = pFormatCtx.streams(i);
+            if (videoStream.codecpar().codec_type() == AVMEDIA_TYPE_VIDEO) {
+                return videoStream;
+            }
+        }
+        throw new IllegalStateException("Couldn't find a video stream");
+    }
+
+    public static void main(final String[] args) throws IOException {
         if (args.length < 1) {
-            System.out.println("Please provide a movie file");
-            System.exit(-1);
+            throw new IllegalStateException("Please provide a movie file");
         }
         // Register all formats and codecs
         av_register_all();
@@ -110,87 +121,76 @@ public class Tutorial01 {
         }
 
         // Retrieve stream information
-        if (avformat_find_stream_info(pFormatCtx, (PointerPointer<?>)null) < 0) {
+        if (avformat_find_stream_info(pFormatCtx, (PointerPointer<?>) null) < 0) {
             System.exit(-1); // Couldn't find stream information
         }
 
         // Dump information about file onto standard error
         av_dump_format(pFormatCtx, 0, args[0], 0);
 
-        // Find the first video stream
-        int videoStream = -1;
-        for (int i = 0; i < pFormatCtx.nb_streams(); i++) {
-            if (pFormatCtx.streams(i).codecpar().codec_type() == AVMEDIA_TYPE_VIDEO) {
-                videoStream = i;
-                break;
-            }
-        }
-        if (videoStream == -1) {
-            System.exit(-1); // Didn't find a video stream
+        // Iterate through all metadata
+        for (AVDictionaryEntry tag = null; (tag = av_dict_get(pFormatCtx.metadata(), "", tag, AV_DICT_IGNORE_SUFFIX)) != null;) {
+            final String key = tag.key().getString();
+            final String value = tag.value().getString();
+            System.out.println(key + ": " + value);
         }
 
-        // Get a pointer to the codec context for the video stream
-        final AVCodecContext pCodecCtx = pFormatCtx.streams(videoStream).codec();
+        final AVStream videoStream = findVideoStream(pFormatCtx);
+        final AVCodecContext pCodecCtx = videoStream.codec();
+        final AVCodecParameters pCodecParameters = videoStream.codecpar();
 
         // Find the decoder for the video stream
-        final AVCodec pCodec = avcodec_find_decoder(pCodecCtx.codec_id());
+        final AVCodec pCodec = avcodec_find_decoder(pCodecParameters.codec_id());
         if (pCodec == null) {
-            System.err.println("Unsupported codec!");
-            System.exit(-1); // Codec not found
+            throw new IllegalStateException("Unsupported codec!");
         }
         // Open codec
-        if (avcodec_open2(pCodecCtx, pCodec, (AVDictionary)null) < 0) {
-            System.exit(-1); // Could not open codec
+        if (avcodec_open2(pCodecCtx, pCodec, (AVDictionary) null) < 0) {
+            throw new IllegalStateException("Could not open codec");
         }
 
         // Allocate video frame
-        final AVFrame pFrame = av_frame_alloc();
-        pFrame.width(pCodecCtx.width());
-        pFrame.height(pCodecCtx.height());
-        pFrame.format(AV_PIX_FMT_RGB24);
+        final AVFrame pFrameYUV = av_frame_alloc();
 
-        // Allocate an AVFrame structure
+        // Allocate an RGB AVFrame structure
         final AVFrame pFrameRGB = av_frame_alloc();
-        if(pFrameRGB == null) {
-            System.exit(-1);
-        }
+        pFrameRGB.width(pCodecCtx.width());
+        pFrameRGB.height(pCodecCtx.height());
+        pFrameRGB.format(AV_PIX_FMT_RGB24);
 
         // Determine required buffer size and allocate buffer
-        int numBytes = av_image_get_buffer_size(pFrame.format(),
-                pFrame.width(), pFrame.height(), 1);
-
+        final int numBytes = av_image_get_buffer_size(pFrameRGB.format(), pFrameRGB.width(), pFrameRGB.height(), 1);
         final BytePointer buffer = new BytePointer(av_malloc(numBytes));
 
-        SwsContext sws_ctx = sws_getContext(pCodecCtx.width(), pCodecCtx.height(),
-                pCodecCtx.pix_fmt(), pCodecCtx.width(), pCodecCtx.height(),
-                AV_PIX_FMT_RGB24, SWS_BILINEAR, null, null, (DoublePointer)null);
+        final SwsContext sws_ctx = sws_getContext(pCodecParameters.width(), pCodecParameters.height(),
+            pCodecParameters.format(), pFrameRGB.width(), pFrameRGB.height(),
+            pFrameRGB.format(), SWS_BICUBIC, null, null, (DoublePointer) null);
 
         // Assign appropriate parts of buffer to image planes in pFrameRGB
         // Note that pFrameRGB is an AVFrame, but AVFrame is a superset
         // of AVPicture
-        av_image_fill_arrays(pFrame.data(), pFrame.linesize(), buffer,
-                pFrame.format(), pFrame.width(), pFrame.height(), 1);
+        av_image_fill_arrays(pFrameRGB.data(), pFrameRGB.linesize(), buffer,
+            pFrameRGB.format(), pFrameRGB.width(), pFrameRGB.height(), 1);
 
         // Read frames and save first five frames to disk
         try {
             final AVPacket packet = new AVPacket();
             for (int i = 0; av_read_frame(pFormatCtx, packet) >= 0;) {
                 // Is this a packet from the video stream?
-                if (packet.stream_index() == videoStream) {
+                if (packet.stream_index() == videoStream.index()) {
                     // Decode video frame
                     if (avcodec_send_packet(pCodecCtx, packet) != 0) {
-                        System.err.println("Frame read failed!");
-                        return;
+                        throw new IllegalStateException("Frame read failed!");
                     }
 
-                    if (avcodec_receive_frame(pCodecCtx, pFrame) == 0) {
+                    if (avcodec_receive_frame(pCodecCtx, pFrameYUV) == 0) {
                         // Convert the image from its native format to RGB
-                        sws_scale(sws_ctx, pFrame.data(), pFrame.linesize(), 0,
-                                pCodecCtx.height(), pFrameRGB.data(), pFrameRGB.linesize());
+                        sws_scale(sws_ctx, pFrameYUV.data(), pFrameYUV.linesize(), 0,
+                            pCodecCtx.height(), pFrameRGB.data(), pFrameRGB.linesize());
 
                         // Save the frame to disk
-                        if (++i<=5) {
-                            saveFrame(pFrameRGB, pCodecCtx.width(), pCodecCtx.height(), i);
+                        if (++i <= 5) {
+                            saveFrame(pFrameRGB, i);
                         }
                         else {
                             // Free the packet that was allocated by av_read_frame
@@ -210,7 +210,7 @@ public class Tutorial01 {
             av_free(pFrameRGB);
 
             // Free the YUV frame
-            av_free(pFrame);
+            av_free(pFrameYUV);
 
             // Close the codec
             avcodec_close(pCodecCtx);
@@ -218,7 +218,6 @@ public class Tutorial01 {
             // Close the video file
             avformat_close_input(pFormatCtx);
         }
-        System.exit(0);
     }
 }
 ```
