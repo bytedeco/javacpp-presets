@@ -1,4 +1,7 @@
 
+ * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))
+ * Add presets for the `text` module of OpenCV 3.1 ([pull #333](https://github.com/bytedeco/javacpp-presets/pull/333))
+
 ### December 7, 2016 version 1.3
  * Fix FFmpeg builds on ARM when not using a cross compiler ([issue #322](https://github.com/bytedeco/javacpp-presets/issues/322))
  * Add `blas_extra.h` to presets for OpenBLAS, containing `blas_set_num_threads()` and `blas_get_vendor()` functions
