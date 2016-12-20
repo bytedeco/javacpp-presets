@@ -65,16 +65,16 @@ else
     cd $PLATFORM
     INSTALL_PATH=`pwd`
     tar -xzvf ../$ZLIB.tar.gz
-    tar -xzvf ../$LAME.tar.gz
-    tar -xzvf ../$SPEEX.tar.gz
-    tar -xzvf ../$OPENCORE_AMR.tar.gz
-    tar -xzvf ../$OPENSSL.tar.gz
-    tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
-    tar -xjvf ../last_stable_x264.tar.bz2
-    tar -xzvf ../$X265.tar.gz
+#    tar -xzvf ../$LAME.tar.gz
+#    tar -xzvf ../$SPEEX.tar.gz
+#    tar -xzvf ../$OPENCORE_AMR.tar.gz
+#    tar -xzvf ../$OPENSSL.tar.gz
+#    tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
+#    tar -xjvf ../last_stable_x264.tar.bz2
+#    tar -xzvf ../$X265.tar.gz
 
-    mkdir -p libvpx-$VPX_VERSION
-    tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
+#    mkdir -p libvpx-$VPX_VERSION
+#    tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
     tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
     X264=`echo x264-snapshot-*`
 fi
@@ -383,9 +383,9 @@ case $PLATFORM in
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         patch -Np1 < ../../../ffmpeg-rtmps-block.patch
 #        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --enable-cross-compile --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
+#        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --enable-cross-compile --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
 
-#        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
