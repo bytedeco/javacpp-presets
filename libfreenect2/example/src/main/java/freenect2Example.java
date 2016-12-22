@@ -11,7 +11,7 @@ import org.bytedeco.javacpp.freenect2.SyncMultiFrameListener;
  *
  * @author Jeremy Laviole
  */
-public class freenect2Test {
+public class freenect2Example {
 
     public static void main(String[] args) {
         Freenect2 freenect2Context;

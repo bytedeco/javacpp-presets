@@ -1,10 +1,10 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
-    <artifactId>freenect2Test</artifactId>
+    <artifactId>freenect2Example</artifactId>
     <version>0.2.0</version>
     <properties>
-        <exec.mainClass>freenect2Test</exec.mainClass>
+        <exec.mainClass>freenect2Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>

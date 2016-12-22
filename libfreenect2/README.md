@@ -20,11 +20,11 @@ Java API documentation is available here:
 Sample Usage
 ------------
 
-Sample usage is in the `test/` folder. 
+Sample usage is in the `example/` folder. 
 
 Here is the full code: 
 
-* File: `src/main/java/freenect2Test.java`
+* File: `src/main/java/freenect2Example.java`
 
 ``` java
 import org.bytedeco.javacpp.Loader;
@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.freenect2.Freenect2Device;
 import org.bytedeco.javacpp.freenect2.PacketPipeline;
 import org.bytedeco.javacpp.freenect2.SyncMultiFrameListener;
 
-public class freenect2Test {
+public class freenect2Example {
     public static void main(String[] args) {
         Freenect2 freenect2Context;
         try {
@@ -116,10 +116,10 @@ public class freenect2Test {
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
-    <artifactId>freenect2Test</artifactId>
+    <artifactId>freenect2Example</artifactId>
     <version>0.2.0</version>
     <properties>
-        <exec.mainClass>freenect2Test</exec.mainClass>
+        <exec.mainClass>freenect2Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
