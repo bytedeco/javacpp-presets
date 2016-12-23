@@ -1,4 +1,6 @@
 
+ * Upgrade presets for libdc1394 2.2.5
+ * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))
  * Add presets for the `text` module of OpenCV 3.1 ([pull #333](https://github.com/bytedeco/javacpp-presets/pull/333))
 

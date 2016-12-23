@@ -47,12 +47,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = {"linux-x86", "linux-arm"}, link = "flycapture@.2", includepath = "/usr/include/flycapture/"),
         @Platform(value = "windows", link = "FlyCapture2",
                 includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/"),
-        @Platform(value = "windows-x86",    define = {"WIN32", "AddPort AddPortA"},
+        @Platform(value = "windows-x86",
                 linkpath    = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/",
                                "C:/Program Files (x86)/Point Grey Research/FlyCapture2/lib/"},
                 preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin/",
                                "C:/Program Files (x86)/Point Grey Research/FlyCapture2/bin/"}),
-        @Platform(value = "windows-x86_64", define = {"WIN64", "AddPort AddPortA"},
+        @Platform(value = "windows-x86_64",
                 linkpath    = "C:/Program Files/Point Grey Research/FlyCapture2/lib64/",
                 preloadpath = "C:/Program Files/Point Grey Research/FlyCapture2/bin64/") })
 public class FlyCapture2 implements InfoMapper {
@@ -61,6 +61,7 @@ public class FlyCapture2 implements InfoMapper {
                .put(new Info("defined(WIN32) || defined(WIN64)").define())
                .put(new Info("FlyCapture2::ImageEventCallback").valueTypes("ImageEventCallback")
                        .pointerTypes("@Cast(\"FlyCapture2::ImageEventCallback*\") @ByPtrPtr ImageEventCallback"))
-               .put(new Info("FlyCapture2::CameraBase::GetRegisterString", "FlyCapture2::CameraBase::StartSyncCapture").skip());
+               .put(new Info("FlyCapture2::CameraBase::GetRegisterString", "FlyCapture2::CameraBase::StartSyncCapture",
+                             "FlyCapture2::TopologyNode::AddPort").skip());
     }
 }

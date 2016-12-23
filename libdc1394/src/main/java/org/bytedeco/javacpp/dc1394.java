@@ -838,6 +838,15 @@ public static native void dc1394_camera_free(dc1394camera_t camera);
  */
 public static native @Cast("dc1394error_t") int dc1394_camera_print_info(dc1394camera_t camera, @Cast("FILE*") Pointer fd);
 
+/**
+ * Returns a pointer to a string identifying the platform for the cameras. Platforms strings are:
+ * juju, linux, macosx, windows, usb
+ */
+public static native @Cast("dc1394error_t") int dc1394_camera_get_platform_string(dc1394camera_t camera, @Cast("const char**") PointerPointer platform);
+public static native @Cast("dc1394error_t") int dc1394_camera_get_platform_string(dc1394camera_t camera, @Cast("const char**") @ByPtrPtr BytePointer platform);
+public static native @Cast("dc1394error_t") int dc1394_camera_get_platform_string(dc1394camera_t camera, @Cast("const char**") @ByPtrPtr ByteBuffer platform);
+public static native @Cast("dc1394error_t") int dc1394_camera_get_platform_string(dc1394camera_t camera, @Cast("const char**") @ByPtrPtr byte[] platform);
+
 // #ifdef __cplusplus
 // #endif
 

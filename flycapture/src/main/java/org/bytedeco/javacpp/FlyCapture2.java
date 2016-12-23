@@ -6041,7 +6041,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 			 *
 			 * @param childPort The port to add.
 			 */
-			public native void AddPort( @Cast("FlyCapture2::TopologyNode::PortType") int childPort );
+			
 
 			/**
 			 * Assign a PGRGuid and device ID to the node.
