@@ -7,8 +7,11 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+#DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+#ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+
+DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
+ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
 
 DISABLE_MAC="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
@@ -20,10 +23,20 @@ ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --ena
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 # ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
-DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+#DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
+#ENABLE="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-static --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2"
 
-if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
+
+DISABLE_WIN_H264="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+ENABLE_WIN_H264="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+
+DISABLE_WIN_SVC2="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
+ENABLE_WIN_SVC2="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
+
+DISABLE_WIN=$DISABLE_WIN_H264
+ENABLE_WIN=$ENABLE_WIN_H264
+
+if [[ $PLATFORM == windows* && !($DISABLE_WIN =~ "--disable-everything") ]]; then
     FFMPEG_VERSION=20160428-git-78baa45
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
@@ -34,6 +47,7 @@ if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
     7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
 else
+    ZLIB=zlib-1.2.8
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc2
     OPENCORE_AMR=opencore-amr-0.1.3
@@ -42,10 +56,11 @@ else
     X265=x265_1.9
     VPX_VERSION=v1.5.0
     FFMPEG_VERSION=3.0.2
+    download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
     download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-    download https://www.openssl.org/source/old/1.0.2/$OPENSSL.tar.gz $OPENSSL.tar.gz
+    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
     download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
     download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
@@ -55,16 +70,17 @@ else
     mkdir -p $PLATFORM
     cd $PLATFORM
     INSTALL_PATH=`pwd`
+    tar -xzvf ../$ZLIB.tar.gz
     tar -xzvf ../$LAME.tar.gz
-    tar -xzvf ../$SPEEX.tar.gz
-    tar -xzvf ../$OPENCORE_AMR.tar.gz
+#    tar -xzvf ../$SPEEX.tar.gz
+#    tar -xzvf ../$OPENCORE_AMR.tar.gz
     tar -xzvf ../$OPENSSL.tar.gz
     tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
     tar -xjvf ../last_stable_x264.tar.bz2
-    tar -xzvf ../$X265.tar.gz
+#    tar -xzvf ../$X265.tar.gz
 
-    mkdir -p libvpx-$VPX_VERSION
-    tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
+#    mkdir -p libvpx-$VPX_VERSION
+#    tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
     tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
     X264=`echo x264-snapshot-*`
 fi
@@ -177,7 +193,11 @@ case $PLATFORM in
         ;;
 
     linux-x86)
-        cd $LAME
+        cd $ZLIB
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ
+        make install
+#        cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
 #        make -j $MAKEJ
 #        make install
@@ -193,8 +213,8 @@ case $PLATFORM in
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
-#        cd ../openh264-$OPENH264_VERSION
-#        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 libraries install-static
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 libraries install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
         make -j $MAKEJ
@@ -208,15 +228,18 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
-#        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
+        [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
         ;;
 
     linux-x86_64)
-        cd $LAME
+        cd $ZLIB
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ
+        make install
+#        cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
 #        make -j $MAKEJ
 #        make install
@@ -234,10 +257,10 @@ case $PLATFORM in
         make install
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 libraries install-static
-        cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
-        make -j $MAKEJ
-        make install
+#        cd ../$X264
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
+#        make -j $MAKEJ
+#        make install
 #        cd ../$X265
 #        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
 #        make -j $MAKEJ
@@ -247,9 +270,8 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
-#        [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/  ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --enable-indev=x11grab_xcb --cc="gcc -m64" --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
+        [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/  ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m64" --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
         ;;
@@ -286,7 +308,6 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
         [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         PKG_CONFIG_PATH=../lib/pkgconfig/ CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         make -j $MAKEJ
@@ -326,14 +347,13 @@ case $PLATFORM in
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
-        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_MAC $ENABLE_MAC --enable-indev=avfoundation  --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
         ;;
 
     windows-x86)
-        if [[ !($DISABLE =~ "--disable-everything") ]]; then
+        if [[ !($DISABLE_WIN =~ "--disable-everything") ]]; then
             cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
             cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
             cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
@@ -341,7 +361,9 @@ case $PLATFORM in
             return
         fi
 
-        cd $LAME
+        cd $ZLIB
+#        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+#        cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
 #        make -j $MAKEJ
 #        make install
@@ -359,10 +381,10 @@ case $PLATFORM in
         make install
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 libraries install-static
-#        cd ../$X264
-#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
-#        make -j $MAKEJ
-#        make install
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
+        make -j $MAKEJ
+        make install
 #        cd ../$X265
 #        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
 #        make -j $MAKEJ
@@ -374,13 +396,16 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         patch -Np1 < ../../../ffmpeg-rtmps-block.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+#        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --enable-cross-compile --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
+
+#        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
 
     windows-x86_64)
-        if [[ !($DISABLE =~ "--disable-everything") ]]; then
+        if [[ !($DISABLE_WIN =~ "--disable-everything") ]]; then
             cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
             cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
             cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
@@ -388,6 +413,8 @@ case $PLATFORM in
             return
         fi
 
+#        cd $ZLIB
+#        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
 #        make -j $MAKEJ
@@ -421,7 +448,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         patch -Np1 < ../../../ffmpeg-rtmps-block.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
@@ -431,4 +458,3 @@ case $PLATFORM in
 esac
 
 cd ../..
-

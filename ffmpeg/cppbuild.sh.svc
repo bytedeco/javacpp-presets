@@ -7,8 +7,11 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+#DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+#ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+
+DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
+ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
 
 DISABLE_MAC="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
@@ -190,7 +193,11 @@ case $PLATFORM in
         ;;
 
     linux-x86)
-        cd $LAME
+        cd $ZLIB
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ
+        make install
+#        cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
 #        make -j $MAKEJ
 #        make install
@@ -221,14 +228,18 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
         ;;
 
     linux-x86_64)
-        cd $LAME
+        cd $ZLIB
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ
+        make install
+#        cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
 #        make -j $MAKEJ
 #        make install
