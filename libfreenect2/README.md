@@ -1,5 +1,5 @@
 JavaCPP Presets for libfreenect2
-===============================
+================================
 
 Introduction
 ------------
@@ -17,16 +17,47 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/libfreenect2/apidocs/
 
 
-Sample Usage
-------------
+Example
+-------
 
-Sample usage is in the `example/` folder. 
+Here is the full code of the example found in the [`example/`](example/) folder.
 
-Here is the full code: 
+### The `pom.xml` file
 
-* File: `src/main/java/freenect2Example.java`
+```xml
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
+    <artifactId>freenect2Example</artifactId>
+    <version>0.2.0</version>
+    <properties>
+        <exec.mainClass>freenect2Example</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+          <groupId>org.bytedeco.javacpp-presets</groupId>
+          <artifactId>libfreenect2</artifactId>
+          <version>0.2.0-1.3.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+          <groupId>org.jogamp.gluegen</groupId>
+          <artifactId>gluegen-rt-main</artifactId>
+          <version>2.3.1</version>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.jogamp.jogl</groupId>
+          <artifactId>jogl-all-main</artifactId>
+          <version>2.3.1</version>
+          <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
+```
 
-``` java
+### The `src/main/java/freenect2Example.java` file
+
+```java
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.freenect2;
 import org.bytedeco.javacpp.freenect2.CpuPacketPipeline;
@@ -107,38 +138,4 @@ public class freenect2Example {
         device.close();
     }
 }
-``` 
-
-
-* File: `pom.xml`
-
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
-    <artifactId>freenect2Example</artifactId>
-    <version>0.2.0</version>
-    <properties>
-        <exec.mainClass>freenect2Example</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>libfreenect2</artifactId>
-            <version>0.2.0-1.3</version>
-        </dependency>
-        <dependency>
-          <groupId>org.jogamp.gluegen</groupId>
-          <artifactId>gluegen-rt-main</artifactId>
-          <version>2.3.1</version>
-          <optional>true</optional>
-        </dependency>
-        <dependency>
-          <groupId>org.jogamp.jogl</groupId>
-          <artifactId>jogl-all-main</artifactId>
-          <version>2.3.1</version>
-          <optional>true</optional>
-        </dependency>
-    </dependencies>
-</project>
 ```
