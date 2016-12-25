@@ -42,6 +42,7 @@
     <module>flycapture</module>
     <module>libdc1394</module>
     <module>libfreenect</module>
+    <module>libfreenect2</module>
     <module>librealsense</module>
     <module>videoinput</module>
     <module>artoolkitplus</module>
