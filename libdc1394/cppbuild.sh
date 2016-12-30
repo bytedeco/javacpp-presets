@@ -49,7 +49,7 @@ case $PLATFORM in
         mkdir -p "$INSTALL_PATH/bin"
         cp "/c/Program Files (x86)/CMU/1394Camera/lib/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
         export LIBRARY_PATH="$INSTALL_PATH/bin/"
-        CC="gcc -m32 -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
+        CC="gcc -m32 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
         make -j4
         make install-strip
         ;;
@@ -58,7 +58,7 @@ case $PLATFORM in
         mkdir -p "$INSTALL_PATH/bin"
         cp "/c/Program Files (x86)/CMU/1394Camera/lib64/x64/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
         export LIBRARY_PATH="$INSTALL_PATH/bin/"
-        CC="gcc -m64 -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
+        CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
         make -j4
         make install-strip
         ;;
