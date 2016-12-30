@@ -1,0 +1,22 @@
+language: cpp
+sudo: required
+dist: trusty
+
+compiler:
+- gcc
+- clang
+
+addons:
+  apt:
+    packages:
+    - maven
+    - nasm
+    - yasm
+
+before_script:
+- git clone https://github.com/bytedeco/javacpp
+- pushd javacpp; mvn install; popd
+
+script:
+- ./cppbuild.sh install opencv ffmpeg
+- mvn package --projects .,opencv,ffmpeg
