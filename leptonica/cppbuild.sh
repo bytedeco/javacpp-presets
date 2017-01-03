@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ZLIB=zlib-1.2.9
+ZLIB=zlib-1.2.10
 GIFLIB=giflib-5.1.4
 LIBJPEG=libjpeg-turbo-1.5.1
 LIBPNG=libpng-1.6.26
