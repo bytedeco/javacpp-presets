@@ -1712,33 +1712,6 @@ public static class Callback_Pointer_int_String_Pointer extends FunctionPointer 
 @NoException public static native void av_log_format_line(Pointer ptr, int level, String fmt, @ByVal @Cast("va_list*") Pointer vl,
                         @Cast("char*") byte[] line, int line_size, int[] print_prefix);
 
-/**
- * Format a line of log the same way as the default callback.
- * @param line          buffer to receive the formatted line;
- *                      may be NULL if line_size is 0
- * @param line_size     size of the buffer; at most line_size-1 characters will
- *                      be written to the buffer, plus one null terminator
- * @param print_prefix  used to store whether the prefix must be printed;
- *                      must point to a persistent integer initially set to 1
- * @return Returns a negative value if an error occurred, otherwise returns
- *         the number of characters that would have been written for a
- *         sufficiently large buffer, not including the terminating null
- *         character. If the return value is not less than line_size, it means
- *         that the log message was truncated to fit the buffer.
- */
-@NoException public static native int av_log_format_line2(Pointer ptr, int level, @Cast("const char*") BytePointer fmt, @ByVal @Cast("va_list*") Pointer vl,
-                        @Cast("char*") BytePointer line, int line_size, IntPointer print_prefix);
-@NoException public static native int av_log_format_line2(Pointer ptr, int level, String fmt, @ByVal @Cast("va_list*") Pointer vl,
-                        @Cast("char*") ByteBuffer line, int line_size, IntBuffer print_prefix);
-@NoException public static native int av_log_format_line2(Pointer ptr, int level, @Cast("const char*") BytePointer fmt, @ByVal @Cast("va_list*") Pointer vl,
-                        @Cast("char*") byte[] line, int line_size, int[] print_prefix);
-@NoException public static native int av_log_format_line2(Pointer ptr, int level, String fmt, @ByVal @Cast("va_list*") Pointer vl,
-                        @Cast("char*") BytePointer line, int line_size, IntPointer print_prefix);
-@NoException public static native int av_log_format_line2(Pointer ptr, int level, @Cast("const char*") BytePointer fmt, @ByVal @Cast("va_list*") Pointer vl,
-                        @Cast("char*") ByteBuffer line, int line_size, IntBuffer print_prefix);
-@NoException public static native int av_log_format_line2(Pointer ptr, int level, String fmt, @ByVal @Cast("va_list*") Pointer vl,
-                        @Cast("char*") byte[] line, int line_size, int[] print_prefix);
-
 // #if FF_API_DLOG
 /**
  * av_dlog macros
@@ -2100,45 +2073,13 @@ public static class Alloc_int extends FunctionPointer {
 @NoException public static native AVBufferPool av_buffer_pool_init(int size, Alloc_int alloc);
 
 /**
- * Allocate and initialize a buffer pool with a more complex allocator.
- *
- * @param size size of each buffer in this pool
- * @param opaque arbitrary user data used by the allocator
- * @param alloc a function that will be used to allocate new buffers when the
- *              pool is empty.
- * @param pool_free a function that will be called immediately before the pool
- *                  is freed. I.e. after av_buffer_pool_can_uninit() is called
- *                  by the pool and all the frames are returned to the pool and
- *                  freed. It is intended to uninitialize the user opaque data.
- * @return newly created buffer pool on success, NULL on error.
- */
-public static class Alloc_Pointer_int extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Alloc_Pointer_int(Pointer p) { super(p); }
-    protected Alloc_Pointer_int() { allocate(); }
-    private native void allocate();
-    public native AVBufferRef call(Pointer opaque, int size);
-}
-public static class Pool_free_Pointer extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Pool_free_Pointer(Pointer p) { super(p); }
-    protected Pool_free_Pointer() { allocate(); }
-    private native void allocate();
-    public native void call(Pointer opaque);
-}
-@NoException public static native AVBufferPool av_buffer_pool_init2(int size, Pointer opaque,
-                                   Alloc_Pointer_int alloc,
-                                   Pool_free_Pointer pool_free);
-
-/**
  * Mark the pool as being available for freeing. It will actually be freed only
  * once all the allocated buffers associated with the pool are released. Thus it
  * is safe to call this function while some of the allocated buffers are still
  * in use.
  *
  * @param pool pointer to the pool to be freed. It will be set to NULL.
+ * @see av_buffer_pool_can_uninit()
  */
 @NoException public static native void av_buffer_pool_uninit(@Cast("AVBufferPool**") PointerPointer pool);
 @NoException public static native void av_buffer_pool_uninit(@ByPtrPtr AVBufferPool pool);
@@ -2186,6 +2127,7 @@ public static class Pool_free_Pointer extends FunctionPointer {
 /**
  * \file
  * pixel format definitions
+ *
  */
 
 // #include "libavutil/avconfig.h"
@@ -2341,7 +2283,7 @@ public static final int
     AV_PIX_FMT_VAAPI_MOCO = 51,
     /** HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers */
     AV_PIX_FMT_VAAPI_IDCT = 52,
-    /** HW decoding through VA API, Picture.data[3] contains a VASurfaceID */
+    /** HW decoding through VA API, Picture.data[3] contains a vaapi_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
     AV_PIX_FMT_VAAPI_VLD = 53,
     /**\}*/
     AV_PIX_FMT_VAAPI =  AV_PIX_FMT_VAAPI_VLD,
@@ -2528,12 +2470,6 @@ public static final int
     /** HW decoding through Direct3D11, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
     AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_YA8 + 62,
 
-    /**
-     * HW acceleration through CUDA. data[i] contain CUdeviceptr pointers
-     * exactly as for system memory frames.
-     */
-    AV_PIX_FMT_CUDA =  AV_PIX_FMT_YA8 + 63,
-
     /** packed RGB 8:8:8, 32bpp, XRGBXRGB...   X=unused/undefined */
     AV_PIX_FMT_0RGB= 0x123+4,
     /** packed RGB 8:8:8, 32bpp, RGBXRGBX...   X=unused/undefined */
@@ -2625,13 +2561,8 @@ public static final int
     /** like NV12, with 10bpp per component, data in the high bits, zeros in the low bits, big-endian */
     AV_PIX_FMT_P010BE = 0x123+4 + 41,
 
-    /** planar GBR 4:4:4:4 48bpp, big-endian */
-    AV_PIX_FMT_GBRAP12BE = 0x123+4 + 42,
-    /** planar GBR 4:4:4:4 48bpp, little-endian */
-    AV_PIX_FMT_GBRAP12LE = 0x123+4 + 43,
-
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 44;
+    AV_PIX_FMT_NB = 0x123+4 + 42;
 
 // #define AV_PIX_FMT_Y400A AV_PIX_FMT_GRAY8A
 public static final int AV_PIX_FMT_GBR24P = AV_PIX_FMT_GBRP;
@@ -2725,8 +2656,6 @@ public static native @MemberGetter int AV_PIX_FMT_GBRP14();
 public static final int AV_PIX_FMT_GBRP14 = AV_PIX_FMT_GBRP14();
 public static native @MemberGetter int AV_PIX_FMT_GBRP16();
 public static final int AV_PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16();
-public static native @MemberGetter int AV_PIX_FMT_GBRAP12();
-public static final int AV_PIX_FMT_GBRAP12 = AV_PIX_FMT_GBRAP12();
 public static native @MemberGetter int AV_PIX_FMT_GBRAP16();
 public static final int AV_PIX_FMT_GBRAP16 = AV_PIX_FMT_GBRAP16();
 
@@ -2914,6 +2843,7 @@ public static final int
 // Parsed from <libavutil/frame.h>
 
 /*
+ *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -3128,9 +3058,6 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * see avcodec_align_dimensions2(). Some filters and swscale can read
      * up to 16 bytes beyond the planes, if these filters are to be used,
      * then 16 extra bytes must be allocated.
-     *
-     * NOTE: Except for hwaccel formats, pointers not needed by the format
-     * MUST be set to NULL.
      */
     public native @Cast("uint8_t*") BytePointer data(int i); public native AVFrame data(int i, BytePointer data);
     @MemberGetter public native @Cast("uint8_t**") PointerPointer data();
@@ -3372,12 +3299,6 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
     public native @Cast("AVChromaLocation") int chroma_location(); public native AVFrame chroma_location(int chroma_location);
 
     /**
-     * For hwaccel-format frames, this should be a reference to the
-     * AVHWFramesContext describing the frame.
-     */
-    public native AVBufferRef hw_frames_ctx(); public native AVFrame hw_frames_ctx(AVBufferRef hw_frames_ctx);
-
-    /**
      * frame timestamp estimated using various heuristics, in stream time base
      * Code outside libavutil should access this field using:
      * av_frame_get_best_effort_timestamp(frame)
@@ -3539,10 +3460,6 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
  * If src is not reference counted, new buffers are allocated and the data is
  * copied.
  *
- * \warning: dst MUST have been either unreferenced with av_frame_unref(dst),
- *           or newly allocated with av_frame_alloc() before calling this
- *           function, or undefined behavior will occur.
- *
  * @return 0 on success, a negative AVERROR on error
  */
 @NoException public static native int av_frame_ref(AVFrame dst, @Const AVFrame src);
@@ -3563,10 +3480,6 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
 
 /**
  * Move everything contained in src to dst and reset src.
- *
- * \warning: dst is not unreferenced, but directly overwritten without reading
- *           or deallocating its contents. Call av_frame_unref(dst) manually
- *           before calling this function to ensure that no memory is leaked.
  */
 @NoException public static native void av_frame_move_ref(AVFrame dst, AVFrame src);
 
@@ -3581,10 +3494,6 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
  * This function will fill AVFrame.data and AVFrame.buf arrays and, if
  * necessary, allocate and fill AVFrame.extended_data and AVFrame.extended_buf.
  * For planar formats, one buffer will be allocated for each plane.
- *
- * \warning: if frame already has been allocated, calling this function will
- *           leak memory. In addition, undefined behavior can occur in certain
- *           cases.
  *
  * @param frame frame in which to store the new buffers.
  * @param align required buffer size alignment
@@ -3727,6 +3636,7 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
  *
  * Audio sample format enumeration and related convenience functions.
  * \{
+ *
  */
 
 /**
@@ -4365,7 +4275,7 @@ public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
 /**
  * Return the flags which specify extensions supported by the CPU.
  * The returned value is affected by av_force_cpu_flags() if that was used
- * before. So av_get_cpu_flags() can easily be used in an application to
+ * before. So av_get_cpu_flags() can easily be used in a application to
  * detect the enabled cpu flags.
  */
 @NoException public static native int av_get_cpu_flags();
@@ -4420,6 +4330,7 @@ public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
 // Parsed from <libavutil/dict.h>
 
 /*
+ *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -4485,6 +4396,7 @@ public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
    }
    av_dict_free(&d);
  }</pre>
+ *
  */
 
 /** Only get an entry with exact-case key match. Only relevant in av_dict_get(). */
@@ -4503,8 +4415,6 @@ public static final int AV_DICT_DONT_OVERWRITE = 16;
 /** If the entry already exists, append to it.  Note that no
                                       delimiter is added, the strings are simply concatenated. */
 public static final int AV_DICT_APPEND =         32;
-/** Allow to store several equal keys in the dictionary */
-public static final int AV_DICT_MULTIKEY =       64;
 
 public static class AVDictionaryEntry extends Pointer {
     static { Loader.load(); }
@@ -4565,13 +4475,10 @@ public static class AVDictionaryEntry extends Pointer {
  * Note: If AV_DICT_DONT_STRDUP_KEY or AV_DICT_DONT_STRDUP_VAL is set,
  * these arguments will be freed on error.
  *
- * Warning: Adding a new entry to a dictionary invalidates all existing entries
- * previously returned with av_dict_get.
- *
  * @param pm pointer to a pointer to a dictionary struct. If *pm is NULL
  * a dictionary struct is allocated and put in *pm.
- * @param key entry key to add to *pm (will either be av_strduped or added as a new key depending on flags)
- * @param value entry value to add to *pm (will be av_strduped or added as a new key depending on flags).
+ * @param key entry key to add to *pm (will be av_strduped depending on flags)
+ * @param value entry value to add to *pm (will be av_strduped depending on flags).
  *        Passing a NULL value will cause an existing entry to be deleted.
  * @return >= 0 on success otherwise an error code <0
  */
@@ -5866,16 +5773,17 @@ public static class AVPixFmtDescriptor extends Pointer {
     /**
      * Amount to shift the luma width right to find the chroma width.
      * For YV12 this is 1 for example.
-     * chroma_width = AV_CEIL_RSHIFT(luma_width, log2_chroma_w)
+     * chroma_width = -((-luma_width) >> log2_chroma_w)
      * The note above is needed to ensure rounding up.
      * This value only refers to the chroma components.
      */
+    /** chroma_width = -((-luma_width )>>log2_chroma_w) */
     public native @Cast("uint8_t") byte log2_chroma_w(); public native AVPixFmtDescriptor log2_chroma_w(byte log2_chroma_w);
 
     /**
      * Amount to shift the luma height right to find the chroma height.
      * For YV12 this is 1 for example.
-     * chroma_height= AV_CEIL_RSHIFT(luma_height, log2_chroma_h)
+     * chroma_height= -((-luma_height) >> log2_chroma_h)
      * The note above is needed to ensure rounding up.
      * This value only refers to the chroma components.
      */
@@ -6792,7 +6700,7 @@ public static class AVStereo3D extends Pointer {
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "N-79690-g78baa45";
+public static final String FFMPEG_VERSION = "3.0.2";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -7201,24 +7109,6 @@ public static class Int_func_Pointer_Pointer_int extends FunctionPointer {
  */
 @NoException public static native int av_audio_fifo_peek(AVAudioFifo af, @Cast("void**") PointerPointer data, int nb_samples);
 @NoException public static native int av_audio_fifo_peek(AVAudioFifo af, @Cast("void**") @ByPtrPtr Pointer data, int nb_samples);
-
-/**
- * Peek data from an AVAudioFifo.
- *
- * @see enum AVSampleFormat
- * The documentation for AVSampleFormat describes the data layout.
- *
- * @param af          AVAudioFifo to read from
- * @param data        audio data plane pointers
- * @param nb_samples  number of samples to peek
- * @param offset      offset from current read position
- * @return            number of samples actually peek, or negative AVERROR code
- *                    on failure. The number of samples actually peek will not
- *                    be greater than nb_samples, and will only be less than
- *                    nb_samples if av_audio_fifo_size is less than nb_samples.
- */
-@NoException public static native int av_audio_fifo_peek_at(AVAudioFifo af, @Cast("void**") PointerPointer data, int nb_samples, int offset);
-@NoException public static native int av_audio_fifo_peek_at(AVAudioFifo af, @Cast("void**") @ByPtrPtr Pointer data, int nb_samples, int offset);
 
 /**
  * Read data from an AVAudioFifo.

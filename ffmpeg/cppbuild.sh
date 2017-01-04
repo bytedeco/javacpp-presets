@@ -13,8 +13,14 @@ fi
 DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
 ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
 
-DISABLE_MAC="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+DISABLE_MAC_H264="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+ENABLE_MAC_H264="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+
+DISABLE_MAC_SVC2="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
+ENABLE_MAC_SVC2="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flash-sv2"
+
+DISABLE_MAC=$DISABLE_MAC_SVC2
+ENABLE_MAC=$ENABLE_MAC_SVC2
 
 #DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
 #ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
@@ -47,10 +53,11 @@ if [[ $PLATFORM == windows* && !($DISABLE_WIN =~ "--disable-everything") ]]; the
     7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
 else
-    ZLIB=zlib-1.2.8
+    ZLIB=zlib-1.2.10
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc2
     OPENCORE_AMR=opencore-amr-0.1.3
+    OPENSSL_VERSION=1.0.2
     OPENSSL=openssl-1.0.2h
     OPENH264_VERSION=1.5.0
     X265=x265_1.9
@@ -60,7 +67,7 @@ else
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
     download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
+    download https://www.openssl.org/source/old/$OPENSSL_VERSION/$OPENSSL.tar.gz $OPENSSL.tar.gz
     download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
     download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
@@ -70,7 +77,10 @@ else
     mkdir -p $PLATFORM
     cd $PLATFORM
     INSTALL_PATH=`pwd`
+    echo "install path $INSTALL_PATH"
+    echo "tar zlib ../$ZLIB.tar.gz"
     tar -xzvf ../$ZLIB.tar.gz
+    echo "tar lame"
     tar -xzvf ../$LAME.tar.gz
 #    tar -xzvf ../$SPEEX.tar.gz
 #    tar -xzvf ../$OPENCORE_AMR.tar.gz
@@ -315,7 +325,11 @@ case $PLATFORM in
         ;;
 
     macosx-*)
-        cd $LAME
+        cd $ZLIB
+        CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ
+        make install
+#        cd $LAME
 #        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
 #        make -j $MAKEJ
 #        make install
@@ -347,6 +361,7 @@ case $PLATFORM in
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
+        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_MAC $ENABLE_MAC --enable-indev=avfoundation  --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
