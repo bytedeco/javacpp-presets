@@ -7,8 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-#DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-#ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+echo "============================================="
+echo " Building SVC2 Codec libraries"
+echo "============================================="
 
 DISABLE_LINUX="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
 ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
@@ -16,22 +17,8 @@ ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --e
 DISABLE_MAC_H264="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 ENABLE_MAC_H264="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
 
-DISABLE_MAC_SVC2="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
-ENABLE_MAC_SVC2="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flash-sv2"
-
-DISABLE_MAC=$DISABLE_MAC_SVC2
-ENABLE_MAC=$ENABLE_MAC_SVC2
-
-#DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
-#ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
-
-# minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
-# DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
-
-#DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
-#ENABLE="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-static --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2"
-
+DISABLE_MAC="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
+ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flash-sv2"
 
 DISABLE_WIN_H264="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 ENABLE_WIN_H264="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
@@ -329,36 +316,14 @@ case $PLATFORM in
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
         make install
-#        cd $LAME
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-#        make -j $MAKEJ
-#        make install
-#        cd ../$SPEEX
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-#        make -j $MAKEJ
-#        make install
-#        cd ../$OPENCORE_AMR
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-#        make -j $MAKEJ
-#        make install
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
-#        cd ../openh264-$OPENH264_VERSION
-#        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar libraries install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
         make -j $MAKEJ
         make install
-#        cd ../$X265
-#        CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-#        make -j $MAKEJ
-#        make install
-#        cd ../libvpx-$VPX_VERSION
-#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
-#        make -j $MAKEJ
-#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
         patch -Np1 < ../../../ffmpeg-rtmps-block.patch
