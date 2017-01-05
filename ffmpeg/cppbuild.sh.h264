@@ -327,7 +327,7 @@ case $PLATFORM in
         ;;
 
     windows-x86)
-        if [[ !($DISABLE =~ "--disable-everything") ]]; then
+        if [[ !($DISABLE_WIN =~ "--disable-everything") ]]; then
             cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
             cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
             cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
@@ -335,19 +335,7 @@ case $PLATFORM in
             return
         fi
 
-        cd $LAME
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
-#        make -j $MAKEJ
-#        make install
-#        cd ../$SPEEX
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
-#        make -j $MAKEJ
-#        make install
-#        cd ../$OPENCORE_AMR
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
-#        make -j $MAKEJ
-#        make install
-        cd ../$OPENSSL
+        cd $OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
@@ -357,18 +345,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
-#        cd ../$X265
-#        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-#        make -j $MAKEJ
-#        make install
-#        cd ../libvpx-$VPX_VERSION
-#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
-#        make -j $MAKEJ
-#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         patch -Np1 < ../../../ffmpeg-rtmps-block.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
