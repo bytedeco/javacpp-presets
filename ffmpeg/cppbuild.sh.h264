@@ -13,10 +13,10 @@ ENABLE_LINUX="--enable-filter=scale --enable-filter=format --enable-pthreads --e
 DISABLE_MAC="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
 
-DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+DISABLE_WIN="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+ENABLE_WIN="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
 
-if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
+if [[ $PLATFORM == windows* && !($DISABLE_WIN =~ "--disable-everything") ]]; then
     FFMPEG_VERSION=20160428-git-78baa45
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
@@ -374,7 +374,7 @@ case $PLATFORM in
         ;;
 
     windows-x86_64)
-        if [[ !($DISABLE =~ "--disable-everything") ]]; then
+        if [[ !($DISABLE_WIN =~ "--disable-everything") ]]; then
             cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
             cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
             cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
@@ -382,19 +382,7 @@ case $PLATFORM in
             return
         fi
 
-        cd $LAME
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-#        make -j $MAKEJ
-#        make install
-#        cd ../$SPEEX
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-#        make -j $MAKEJ
-#        make install
-#        cd ../$OPENCORE_AMR
-#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
-#        make -j $MAKEJ
-#        make install
-        cd ../$OPENSSL
+        cd $OPENSSL
         ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
@@ -404,18 +392,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
         make -j $MAKEJ
         make install
-#        cd ../$X265
-#        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-#        make -j $MAKEJ
-#        make install
-#        cd ../libvpx-$VPX_VERSION
-#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-win64-gcc
-#        make -j $MAKEJ
-#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         patch -Np1 < ../../../ffmpeg-rtmps-block.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_WIN $ENABLE_WIN --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
