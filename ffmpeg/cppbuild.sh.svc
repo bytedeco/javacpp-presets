@@ -22,7 +22,7 @@ ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --ena
 
 
 DISABLE_WIN="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-everything"
-ENABLE_WIN="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
+ENABLE_WIN="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmpt --enable-protocol=rtmps --enable-protocol=tls_openssl --enable-zlib --enable-encoder=flashsv2 --enable-decoder=flashsv2"
 
 
 if [[ $PLATFORM == windows* && !($DISABLE_WIN =~ "--disable-everything") ]]; then
@@ -285,7 +285,9 @@ case $PLATFORM in
             return
         fi
 
-        cd $OPENSSL
+        cd $ZLIB
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        cd ../$OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
@@ -306,7 +308,9 @@ case $PLATFORM in
             return
         fi
 
-        cd $OPENSSL
+        cd $ZLIB
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        cd ../$OPENSSL
         ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
