@@ -35,21 +35,9 @@ Here is the full code of the example found in the [`example/`](example/) folder.
     </properties>
     <dependencies>
         <dependency>
-          <groupId>org.bytedeco.javacpp-presets</groupId>
-          <artifactId>libfreenect2</artifactId>
-          <version>0.2.0-1.3.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>org.jogamp.gluegen</groupId>
-          <artifactId>gluegen-rt-main</artifactId>
-          <version>2.3.1</version>
-          <optional>true</optional>
-        </dependency>
-        <dependency>
-          <groupId>org.jogamp.jogl</groupId>
-          <artifactId>jogl-all-main</artifactId>
-          <version>2.3.1</version>
-          <optional>true</optional>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>libfreenect2</artifactId>
+            <version>0.2.0-1.3.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

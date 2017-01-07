@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.3.1-SNAPSHOT</version>
+    <version>1.3.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -20,6 +20,7 @@
     <module>../flycapture/platform</module>
     <module>../libdc1394/platform</module>
     <module>../libfreenect/platform</module>
+    <module>../libfreenect2/platform</module>
     <module>../librealsense/platform</module>
     <module>../videoinput/platform</module>
     <module>../artoolkitplus/platform</module>
@@ -69,6 +70,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>libfreenect-platform</artifactId>
       <version>0.5.3-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>libfreenect2-platform</artifactId>
+      <version>0.2.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
