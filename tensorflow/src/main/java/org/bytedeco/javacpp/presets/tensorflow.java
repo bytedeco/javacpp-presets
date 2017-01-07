@@ -77,6 +77,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/allocator.h",
                         "tensorflow/core/framework/tensor_shape.pb.h",
                         "tensorflow/core/framework/types.pb.h",
+                        "tensorflow/core/framework/resource_handle.pb.h",
                         "tensorflow/core/framework/tensor.pb.h",
                         "tensorflow/core/framework/tensor_description.pb.h",
                         "tensorflow/core/framework/tensor_types.h",
@@ -163,6 +164,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/allocator.h",
                         "tensorflow/core/framework/tensor_shape.pb.h",
                         "tensorflow/core/framework/types.pb.h",
+                        "tensorflow/core/framework/resource_handle.pb.h",
                         "tensorflow/core/framework/tensor.pb.h",
                         "tensorflow/core/framework/tensor_description.pb.h",
                         "tensorflow/core/framework/tensor_types.h",
@@ -200,12 +202,14 @@ import java.lang.annotation.Target;
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
-               .put(new Info("TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_DEPRECATED_ATTR",
-                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT").cppTypes().annotations())
+               .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_DEPRECATED_ATTR",
+                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define())
+               .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
+               .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
                .put(new Info("short", "tensorflow::int16", "tensorflow::uint16").valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
                .put(new Info("int", "int32", "tensorflow::int32", "tensorflow::uint32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
@@ -225,7 +229,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("google::protobuf::Arena", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Message",
                              "google::protobuf::Metadata", "google::protobuf::io::CodedInputStream", "google::protobuf::io::CodedOutputStream").cast().pointerTypes("Pointer"))
-               .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField").skip())
+               .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "::google::protobuf::internal::ExplicitlyConstructed").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -291,6 +295,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::function<tensorflow::FileSystem*()>").pointerTypes("FactoryFn"))
                .put(new Info("tensorflow::OpRegistrationData::shape_inference_fn")
                        .javaText("@MemberSetter public native OpRegistrationData shape_inference_fn(@ByVal ShapeInferenceFn shape_inference_fn);"))
+               .put(new Info("tensorflow::shape_inference::InferenceContext::Run")
+                       .javaText("public native @ByVal Status Run(@ByVal ShapeInferenceFn fn);"))
                .put(new Info("tensorflow::ConstantFoldingOptions::consider")
                        .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
                .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")
