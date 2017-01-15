@@ -67,6 +67,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/platform/file_statistics.h",
                         "tensorflow/core/platform/env.h",
 //                        "tensorflow/core/graph/dot.h",
+                        "tensorflow/core/protobuf/debug.pb.h",
                         "tensorflow/core/protobuf/config.pb.h",
                         "tensorflow/core/framework/cost_graph.pb.h",
                         "tensorflow/core/framework/step_stats.pb.h",
@@ -154,6 +155,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/platform/file_system.h",
                         "tensorflow/core/platform/file_statistics.h",
                         "tensorflow/core/platform/env.h",
+                        "tensorflow/core/protobuf/debug.pb.h",
                         "tensorflow/core/protobuf/config.pb.h",
                         "tensorflow/core/framework/cost_graph.pb.h",
                         "tensorflow/core/framework/step_stats.pb.h",
@@ -292,6 +294,7 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
+               .put(new Info("std::function<void(int64,int64,int)>").pointerTypes("ParallelForFn"))
                .put(new Info("std::function<tensorflow::FileSystem*()>").pointerTypes("FactoryFn"))
                .put(new Info("tensorflow::OpRegistrationData::shape_inference_fn")
                        .javaText("@MemberSetter public native OpRegistrationData shape_inference_fn(@ByVal ShapeInferenceFn shape_inference_fn);"))
@@ -356,6 +359,15 @@ public class tensorflow implements InfoMapper {
         protected ForFn() { allocate(); }
         private native void allocate();
         public native void call(long from, long to);
+    }
+
+    public static class ParallelForFn extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    ParallelForFn(Pointer p) { super(p); }
+        protected ParallelForFn() { allocate(); }
+        private native void allocate();
+        public native void call(long from, long to, int i);
     }
 
     public static class ConsiderFunction extends FunctionPointer {

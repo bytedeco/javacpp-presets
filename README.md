@@ -121,7 +121,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * Caffe  https://github.com/BVLC/caffe
  * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
  * MXnet  https://github.com/dmlc/mxnet
- * TensorFlow 0.11.0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.0.0-alpha  https://github.com/tensorflow/tensorflow
 
 Once everything installed and configured, simply execute
 ```bash

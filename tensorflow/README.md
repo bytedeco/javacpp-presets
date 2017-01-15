@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 0.12.1  http://www.tensorflow.org/
+ * TensorFlow 1.0.0-alpha  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>0.12.1-1.3.2-SNAPSHOT</version>
+            <version>1.0.0-alpha-1.3.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
