@@ -6344,6 +6344,7 @@ public static final int
 
 	/** The initial positions of the particleCount particles. */
 	@MemberGetter public native @Const b2Vec2 positionData();
+	@MemberSetter public native b2ParticleGroupDef positionData(@Const b2Vec2 positionData);
 
 	/** Lifetime of the particle group in seconds.  A value <= 0.0f indicates a
 	 *  particle group with infinite lifetime. */

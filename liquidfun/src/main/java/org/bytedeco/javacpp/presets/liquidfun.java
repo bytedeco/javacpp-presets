@@ -93,6 +93,8 @@ public class liquidfun implements InfoMapper {
                                                             "@MemberSetter public native b2ParticleGroupDef shape(@Const b2Shape shape);"))
         .put(new Info("b2ParticleGroupDef::shapes").javaText("@MemberGetter public native @Cast(\"const b2Shape*const*\") PointerPointer shapes();\n" +
                                                              "@MemberSetter public native b2ParticleGroupDef shapes(@Cast(\"const b2Shape*const*\") PointerPointer shapes);"))
+        .put(new Info("b2ParticleGroupDef::positionData").javaText("@MemberGetter public native @Const b2Vec2 positionData();\n" +
+                                                                   "@MemberSetter public native b2ParticleGroupDef positionData(@Const b2Vec2 positionData);"))
         // Java lacks C++'s unsigned ints, so promote to larger types to fit
         .put(new Info("uint8").cast().valueTypes("short").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
         .put(new Info("uint16").cast().valueTypes("int").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
