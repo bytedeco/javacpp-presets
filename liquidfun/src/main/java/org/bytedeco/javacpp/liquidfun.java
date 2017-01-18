@@ -4093,6 +4093,7 @@ public static class b2SolverData extends Pointer {
 	public native void ShiftOrigin(@Const @ByRef b2Vec2 newOrigin);
 
 	/** Get the contact manager for testing. */
+	public native @Const @ByRef b2ContactManager GetContactManager();
 
 	/** Get the current profile. */
 	public native @Const @ByRef b2Profile GetProfile();
@@ -4156,6 +4157,67 @@ public static class b2SolverData extends Pointer {
 
 
 // #endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
+
+// #endif
+
+
+// Parsed from <Box2D/Dynamics/b2ContactManager.h>
+
+/*
+* Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
+*
+* This software is provided 'as-is', without any express or implied
+* warranty.  In no event will the authors be held liable for any damages
+* arising from the use of this software.
+* Permission is granted to anyone to use this software for any purpose,
+* including commercial applications, and to alter it and redistribute it
+* freely, subject to the following restrictions:
+* 1. The origin of this software must not be misrepresented; you must not
+* claim that you wrote the original software. If you use this software
+* in a product, an acknowledgment in the product documentation would be
+* appreciated but is not required.
+* 2. Altered source versions must be plainly marked as such, and must not be
+* misrepresented as being the original software.
+* 3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef B2_CONTACT_MANAGER_H
+// #define B2_CONTACT_MANAGER_H
+
+// #include <Box2D/Collision/b2BroadPhase.h>
+
+// Delegate of b2World.
+@NoOffset public static class b2ContactManager extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public b2ContactManager(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public b2ContactManager(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public b2ContactManager position(long position) {
+        return (b2ContactManager)super.position(position);
+    }
+
+
+	public b2ContactManager() { super((Pointer)null); allocate(); }
+	private native void allocate();
+
+	// Broad-phase callback.
+	public native void AddPair(Pointer proxyUserDataA, Pointer proxyUserDataB);
+
+	public native void FindNewContacts();
+
+	public native void Destroy(b2Contact c);
+
+	public native void Collide();
+            
+	public native @ByRef b2BroadPhase m_broadPhase(); public native b2ContactManager m_broadPhase(b2BroadPhase m_broadPhase);
+	public native b2Contact m_contactList(); public native b2ContactManager m_contactList(b2Contact m_contactList);
+	public native @Cast("int32") int m_contactCount(); public native b2ContactManager m_contactCount(int m_contactCount);
+	public native b2ContactFilter m_contactFilter(); public native b2ContactManager m_contactFilter(b2ContactFilter m_contactFilter);
+	public native b2ContactListener m_contactListener(); public native b2ContactManager m_contactListener(b2ContactListener m_contactListener);
+	public native b2BlockAllocator m_allocator(); public native b2ContactManager m_allocator(b2BlockAllocator m_allocator);
+}
 
 // #endif
 
@@ -5990,6 +6052,8 @@ public static final int
 	/** Constructor with four elements: r (red), g (green), b (blue), and a
 	 *  (opacity).
 	 *  Each element can be specified 0 to 255. */
+	public b2ParticleColor(@Cast("uint8") short r, @Cast("uint8") short g, @Cast("uint8") short b, @Cast("uint8") short a) { super((Pointer)null); allocate(r, g, b, a); }
+	private native void allocate(@Cast("uint8") short r, @Cast("uint8") short g, @Cast("uint8") short b, @Cast("uint8") short a);
 
 	/** Constructor that initializes the above four elements with the value of
 	 *  the b2Color object. */
@@ -6008,9 +6072,14 @@ public static final int
 	/** Used internally to convert the value of b2Color.
 	 *  */
 	
+	///
+	public native @ByVal b2Color GetColor();
 
 	/** Sets color for current object using the four elements described above.
 	 *  */
+	
+	///
+	public native void Set(@Cast("uint8") short r_, @Cast("uint8") short g_, @Cast("uint8") short b_, @Cast("uint8") short a_);
 
 	/** Initializes the object with the value of the b2Color.
 	 *  */
@@ -6034,6 +6103,7 @@ public static final int
 
 	/** Add two colors.  This is a non-saturating addition so values
 	 *  overflows will wrap. */
+	public native @ByRef @Name("operator +=") b2ParticleColor addPut(@Const @ByRef b2ParticleColor color);
 
 	/** Add two colors.  This is a non-saturating addition so values
 	 *  overflows will wrap. */
@@ -6041,6 +6111,7 @@ public static final int
 
 	/** Subtract a color from this color.  This is a subtraction without
 	 *  saturation so underflows will wrap. */
+	public native @ByRef @Name("operator -=") b2ParticleColor subtractPut(@Const @ByRef b2ParticleColor color);
 
 	/** Subtract a color from this color returning the result.  This is a
 	 *  subtraction without saturation so underflows will wrap. */
@@ -6054,12 +6125,16 @@ public static final int
 	 *  strength is 0..128 where 0 results in no color mixing and 128 results
 	 *  in an equal mix of both colors.  strength 0..128 is analogous to an
 	 *  alpha channel value between 0.0f..0.5f. */
+	public native void Mix(b2ParticleColor mixColor, @Cast("const int32") int strength);
 
 	/** Mix colorA with colorB using strength to control how much of
 	 *  colorA is mixed with colorB and vice versa.  The range of
 	 *  strength is 0..128 where 0 results in no color mixing and 128 results
 	 *  in an equal mix of both colors.  strength 0..128 is analogous to an
 	 *  alpha channel value between 0.0f..0.5f. */
+	public static native void MixColors(b2ParticleColor colorA,
+								 b2ParticleColor colorB,
+								 @Cast("const int32") int strength);
 	public native @Cast("uint8") short r(); public native b2ParticleColor r(short r);
 	public native @Cast("uint8") short g(); public native b2ParticleColor g(short g);
 	public native @Cast("uint8") short b(); public native b2ParticleColor b(short b);

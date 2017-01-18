@@ -54,6 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<Box2D/Dynamics/b2WorldCallbacks.h>",
                          "<Box2D/Dynamics/b2TimeStep.h>",
                          "<Box2D/Dynamics/b2World.h>",
+                         "<Box2D/Dynamics/b2ContactManager.h>",
                          "<Box2D/Dynamics/Contacts/b2Contact.h>",
                          "<Box2D/Dynamics/Joints/b2Joint.h>",
                          "<Box2D/Dynamics/Joints/b2DistanceJoint.h>",
@@ -82,9 +83,7 @@ public class liquidfun implements InfoMapper {
         .put(new Info("b2_epsilon").skip())
         .put(new Info("b2_maxTranslationSquared").skip())
         .put(new Info("b2_maxRotationSquared").skip())
-        .put(new Info("b2Inline").skip())
-        .put(new Info("b2ContactManager").skip())
-        .put(new Info("b2ParticleColor::GetColor()").skip()) /* internal */
+        .put(new Info("b2Inline").cppTypes().annotations().cppText(""))
         // template to specialize
         .put(new Info("b2TypedIntrusiveListNode<b2ParticleHandle>").pointerTypes("ParticleHandleListNode").define())
         // setters for const* members
