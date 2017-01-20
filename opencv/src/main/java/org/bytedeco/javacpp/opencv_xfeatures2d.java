@@ -197,6 +197,8 @@ They are competitive alternatives to existing keypoints in particular for embedd
 <p>
 An image descriptor that can be computed very fast, while being
 about as robust as, for example, SURF or BRIEF.
+<p>
+\note It requires a color image as input.
  */
 @Namespace("cv::xfeatures2d") public static class LUCID extends Feature2D {
     static { Loader.load(); }
@@ -216,7 +218,8 @@ about as robust as, for example, SURF or BRIEF.
      * @param lucid_kernel kernel for descriptor construction, where 1=3x3, 2=5x5, 3=7x7 and so forth
      * @param blur_kernel kernel for blurring image prior to descriptor construction, where 1=3x3, 2=5x5, 3=7x7 and so forth
      */
-    public static native @Ptr LUCID create(int lucid_kernel, int blur_kernel);
+    public static native @Ptr LUCID create(int lucid_kernel/*=1*/, int blur_kernel/*=2*/);
+    public static native @Ptr LUCID create();
 }
 
 
@@ -255,8 +258,8 @@ Note: a complete example can be found under /samples/cpp/tutorial_code/xfeatures
         return (LATCH)super.position(position);
     }
 
-	public static native @Ptr LATCH create(int bytes/*=32*/, @Cast("bool") boolean rotationInvariance/*=true*/, int half_ssd_size/*=3*/);
-	public static native @Ptr LATCH create();
+    public static native @Ptr LATCH create(int bytes/*=32*/, @Cast("bool") boolean rotationInvariance/*=true*/, int half_ssd_size/*=3*/);
+    public static native @Ptr LATCH create();
 }
 
 /** \brief Class implementing DAISY descriptor, described in \cite Tola10
@@ -397,6 +400,621 @@ localization accuracy.
                 int m_nms_radius/*=5*/, int m_nms_scale_radius/*=0*/, float m_th_saliency/*=250.0f*/, int m_kNN/*=4*/,
                 float m_scale_factor/*=1.25f*/, int m_n_scales/*=-1*/, @Cast("bool") boolean m_compute_orientation/*=false*/);
     public static native @Ptr MSDDetector create();
+}
+
+/** \brief Class implementing VGG (Oxford Visual Geometry Group) descriptor trained end to end
+using "Descriptor Learning Using Convex Optimisation" (DLCO) aparatus described in \cite Simonyan14.
+<p>
+@param desc type of descriptor to use, VGG::VGG_120 is default (120 dimensions float)
+Available types are VGG::VGG_120, VGG::VGG_80, VGG::VGG_64, VGG::VGG_48
+@param isigma gaussian kernel value for image blur (default is 1.4f)
+@param img_normalize use image sample intensity normalization (enabled by default)
+@param use_orientation sample patterns using keypoints orientation, enabled by default
+@param scale_factor adjust the sampling window of detected keypoints to 64.0f (VGG sampling window)
+6.25f is default and fits for KAZE, SURF detected keypoints window ratio
+6.75f should be the scale for SIFT detected keypoints window ratio
+5.00f should be the scale for AKAZE, MSD, AGAST, FAST, BRISK keypoints window ratio
+0.75f should be the scale for ORB keypoints ratio
+<p>
+@param dsc_normalize clamp descriptors to 255 and convert to uchar CV_8UC1 (disabled by default)
+ <p>
+ */
+@Namespace("cv::xfeatures2d") public static class VGG extends Feature2D {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public VGG(Pointer p) { super(p); }
+
+
+    /** enum cv::xfeatures2d::VGG:: */
+    public static final int
+        VGG_120 = 100, VGG_80 = 101, VGG_64 = 102, VGG_48 = 103;
+
+    public static native @Ptr VGG create( int desc/*=cv::xfeatures2d::VGG::VGG_120*/, float isigma/*=1.4f*/,
+                                        @Cast("bool") boolean img_normalize/*=true*/, @Cast("bool") boolean use_scale_orientation/*=true*/,
+                                        float scale_factor/*=6.25f*/, @Cast("bool") boolean dsc_normalize/*=false*/ );
+    public static native @Ptr VGG create( );
+    /**
+     * @param image image to extract descriptors
+     * @param keypoints of interest within image
+     * @param descriptors resulted descriptors array
+     */
+    public native void compute( @ByVal Mat image, @ByRef KeyPointVector keypoints, @ByVal Mat descriptors );
+    public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat descriptors );
+
+}
+
+/** \brief Class implementing BoostDesc (Learning Image Descriptors with Boosting), described in
+\cite Trzcinski13a and \cite Trzcinski13b.
+<p>
+@param desc type of descriptor to use, BoostDesc::BINBOOST_256 is default (256 bit long dimension)
+Available types are: BoostDesc::BGM, BoostDesc::BGM_HARD, BoostDesc::BGM_BILINEAR, BoostDesc::LBGM,
+BoostDesc::BINBOOST_64, BoostDesc::BINBOOST_128, BoostDesc::BINBOOST_256
+@param use_orientation sample patterns using keypoints orientation, enabled by default
+@param scale_factor adjust the sampling window of detected keypoints
+6.25f is default and fits for KAZE, SURF detected keypoints window ratio
+6.75f should be the scale for SIFT detected keypoints window ratio
+5.00f should be the scale for AKAZE, MSD, AGAST, FAST, BRISK keypoints window ratio
+0.75f should be the scale for ORB keypoints ratio
+1.50f was the default in original implementation
+<p>
+\note BGM is the base descriptor where each binary dimension is computed as the output of a single weak learner.
+BGM_HARD and BGM_BILINEAR refers to same BGM but use different type of gradient binning. In the BGM_HARD that
+use ASSIGN_HARD binning type the gradient is assigned to the nearest orientation bin. In the BGM_BILINEAR that use
+ASSIGN_BILINEAR binning type the gradient is assigned to the two neighbouring bins. In the BGM and all other modes that use
+ASSIGN_SOFT binning type the gradient is assigned to 8 nearest bins according to the cosine value between the gradient
+angle and the bin center. LBGM (alias FP-Boost) is the floating point extension where each dimension is computed
+as a linear combination of the weak learner responses. BINBOOST and subvariants are the binary extensions of LBGM
+where each bit is computed as a thresholded linear combination of a set of weak learners.
+BoostDesc header files (boostdesc_*.i) was exported from original binaries with export-boostdesc.py script from
+samples subfolder.
+<p>
+*/
+
+@Namespace("cv::xfeatures2d") public static class BoostDesc extends Feature2D {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public BoostDesc() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BoostDesc(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BoostDesc(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public BoostDesc position(long position) {
+        return (BoostDesc)super.position(position);
+    }
+
+
+    /** enum cv::xfeatures2d::BoostDesc:: */
+    public static final int
+       BGM = 100, BGM_HARD = 101, BGM_BILINEAR = 102, LBGM = 200,
+       BINBOOST_64 = 300, BINBOOST_128 = 301, BINBOOST_256 = 302;
+
+    public static native @Ptr BoostDesc create( int desc/*=cv::xfeatures2d::BoostDesc::BINBOOST_256*/,
+                        @Cast("bool") boolean use_scale_orientation/*=true*/, float scale_factor/*=6.25f*/ );
+    public static native @Ptr BoostDesc create( );
+}
+
+
+/*
+* Position-Color-Texture signatures
+*/
+
+/**
+* \brief Class implementing PCT (position-color-texture) signature extraction
+*       as described in \cite KrulisLS16.
+*       The algorithm is divided to a feature sampler and a clusterizer.
+*       Feature sampler produces samples at given set of coordinates.
+*       Clusterizer then produces clusters of these samples using k-means algorithm.
+*       Resulting set of clusters is the signature of the input image.
+*
+*       A signature is an array of SIGNATURE_DIMENSION-dimensional points.
+*       Used dimensions are:
+*       weight, x, y position; lab color, contrast, entropy.
+* \cite KrulisLS16
+* \cite BeecksUS10
+*/
+@Namespace("cv::xfeatures2d") public static class PCTSignatures extends Algorithm {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PCTSignatures(Pointer p) { super(p); }
+
+    /**
+    * \brief Lp distance function selector.
+    */
+    /** enum cv::xfeatures2d::PCTSignatures::DistanceFunction */
+    public static final int
+        L0_25 = 0, L0_5 = 1, L1 = 2, L2 = 3, L2SQUARED = 4, L5 = 5, L_INFINITY = 6;
+
+    /**
+    * \brief Point distributions supported by random point generator.
+    */
+    /** enum cv::xfeatures2d::PCTSignatures::PointDistribution */
+    public static final int
+        /** Generate numbers uniformly. */
+        UNIFORM = 0,
+        /** Generate points in a regular grid. */
+        REGULAR = 1,
+        /** Generate points with normal (gaussian) distribution. */
+        NORMAL = 2;
+
+    /**
+    * \brief Similarity function selector.
+    * @see
+    *       Christian Beecks, Merih Seran Uysal, Thomas Seidl.
+    *       Signature quadratic form distance.
+    *       In Proceedings of the ACM International Conference on Image and Video Retrieval, pages 438-445.
+    *       ACM, 2010.
+    * \cite BeecksUS10
+    * \note For selected distance function: \f[ d(c_i, c_j) \f]  and parameter: \f[ \alpha \f]
+    */
+    /** enum cv::xfeatures2d::PCTSignatures::SimilarityFunction */
+    public static final int
+        /** \f[ -d(c_i, c_j) \f] */
+        MINUS = 0,
+        /** \f[ e^{ -\alpha * d^2(c_i, c_j)} \f] */
+        GAUSSIAN = 1,
+        /** \f[ \frac{1}{\alpha + d(c_i, c_j)} \f] */
+        HEURISTIC = 2;
+
+
+    /**
+    * \brief Creates PCTSignatures algorithm using sample and seed count.
+    *       It generates its own sets of sampling points and clusterization seed indexes.
+    * @param initSampleCount Number of points used for image sampling.
+    * @param initSeedCount Number of initial clusterization seeds.
+    *       Must be lower or equal to initSampleCount
+    * @param pointDistribution Distribution of generated points. Default: UNIFORM.
+    *       Available: UNIFORM, REGULAR, NORMAL.
+    * @return Created algorithm.
+    */
+    public static native @Ptr PCTSignatures create(
+            int initSampleCount/*=2000*/,
+            int initSeedCount/*=400*/,
+            int pointDistribution/*=0*/);
+    public static native @Ptr PCTSignatures create();
+
+    /**
+    * \brief Creates PCTSignatures algorithm using pre-generated sampling points
+    *       and number of clusterization seeds. It uses the provided
+    *       sampling points and generates its own clusterization seed indexes.
+    * @param initSamplingPoints Sampling points used in image sampling.
+    * @param initSeedCount Number of initial clusterization seeds.
+    *       Must be lower or equal to initSamplingPoints.size().
+    * @return Created algorithm.
+    */
+    public static native @Ptr PCTSignatures create(
+            @Const @ByRef Point2fVector initSamplingPoints,
+            int initSeedCount);
+
+    /**
+    * \brief Creates PCTSignatures algorithm using pre-generated sampling points
+    *       and clusterization seeds indexes.
+    * @param initSamplingPoints Sampling points used in image sampling.
+    * @param initClusterSeedIndexes Indexes of initial clusterization seeds.
+    *       Its size must be lower or equal to initSamplingPoints.size().
+    * @return Created algorithm.
+    */
+    public static native @Ptr PCTSignatures create(
+            @Const @ByRef Point2fVector initSamplingPoints,
+            @StdVector IntPointer initClusterSeedIndexes);
+    public static native @Ptr PCTSignatures create(
+            @Const @ByRef Point2fVector initSamplingPoints,
+            @StdVector IntBuffer initClusterSeedIndexes);
+    public static native @Ptr PCTSignatures create(
+            @Const @ByRef Point2fVector initSamplingPoints,
+            @StdVector int[] initClusterSeedIndexes);
+
+
+
+    /**
+    * \brief Computes signature of given image.
+    * @param image Input image of CV_8U type.
+    * @param signature Output computed signature.
+    */
+    public native void computeSignature(
+            @ByVal Mat image,
+            @ByVal Mat signature);
+    public native void computeSignature(
+            @ByVal UMat image,
+            @ByVal UMat signature);
+
+    /**
+    * \brief Computes signatures for multiple images in parallel.
+    * @param images Vector of input images of CV_8U type.
+    * @param signatures Vector of computed signatures.
+    */
+    public native void computeSignatures(
+            @Const @ByRef MatVector images,
+            @ByRef MatVector signatures);
+
+    /**
+    * \brief Draws signature in the source image and outputs the result.
+    *       Signatures are visualized as a circle
+    *       with radius based on signature weight
+    *       and color based on signature color.
+    *       Contrast and entropy are not visualized.
+    * @param source Source image.
+    * @param signature Image signature.
+    * @param result Output result.
+    * @param radiusToShorterSideRatio Determines maximal radius of signature in the output image.
+    * @param borderThickness Border thickness of the visualized signature.
+    */
+    public static native void drawSignature(
+            @ByVal Mat source,
+            @ByVal Mat signature,
+            @ByVal Mat result,
+            float radiusToShorterSideRatio/*=1.0 / 8*/,
+            int borderThickness/*=1*/);
+    public static native void drawSignature(
+            @ByVal Mat source,
+            @ByVal Mat signature,
+            @ByVal Mat result);
+    public static native void drawSignature(
+            @ByVal UMat source,
+            @ByVal UMat signature,
+            @ByVal UMat result,
+            float radiusToShorterSideRatio/*=1.0 / 8*/,
+            int borderThickness/*=1*/);
+    public static native void drawSignature(
+            @ByVal UMat source,
+            @ByVal UMat signature,
+            @ByVal UMat result);
+
+    /**
+    * \brief Generates initial sampling points according to selected point distribution.
+    * @param initPoints Output vector where the generated points will be saved.
+    * @param count Number of points to generate.
+    * @param pointDistribution Point distribution selector.
+    *       Available: UNIFORM, REGULAR, NORMAL.
+    * \note Generated coordinates are in range [0..1)
+    */
+    public static native void generateInitPoints(
+            @ByRef Point2fVector initPoints,
+            int count,
+            int pointDistribution);
+
+
+    /**** sampler ****/
+
+    /**
+    * \brief Number of initial samples taken from the image.
+    */
+    public native int getSampleCount();
+
+    /**
+    * \brief Color resolution of the greyscale bitmap represented in allocated bits
+    *       (i.e., value 4 means that 16 shades of grey are used).
+    *       The greyscale bitmap is used for computing contrast and entropy values.
+    */
+    public native int getGrayscaleBits();
+    /**
+    * \brief Color resolution of the greyscale bitmap represented in allocated bits
+    *       (i.e., value 4 means that 16 shades of grey are used).
+    *       The greyscale bitmap is used for computing contrast and entropy values.
+    */
+    public native void setGrayscaleBits(int grayscaleBits);
+
+    /**
+    * \brief Size of the texture sampling window used to compute contrast and entropy
+    *       (center of the window is always in the pixel selected by x,y coordinates
+    *       of the corresponding feature sample).
+    */
+    public native int getWindowRadius();
+    /**
+    * \brief Size of the texture sampling window used to compute contrast and entropy
+    *       (center of the window is always in the pixel selected by x,y coordinates
+    *       of the corresponding feature sample).
+    */
+    public native void setWindowRadius(int radius);
+
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightX();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightX(float weight);
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightY();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightY(float weight);
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightL();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightL(float weight);
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightA();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightA(float weight);
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightB();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightB(float weight);
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightConstrast();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightContrast(float weight);
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native float getWeightEntropy();
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
+    *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
+    */
+    public native void setWeightEntropy(float weight);
+
+    /**
+    * \brief Initial samples taken from the image.
+    *       These sampled features become the input for clustering.
+    */
+    public native @ByVal Point2fVector getSamplingPoints();
+
+
+
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space.
+    * @param idx ID of the weight
+    * @param value Value of the weight
+    * \note
+    *       WEIGHT_IDX = 0;
+    *       X_IDX = 1;
+    *       Y_IDX = 2;
+    *       L_IDX = 3;
+    *       A_IDX = 4;
+    *       B_IDX = 5;
+    *       CONTRAST_IDX = 6;
+    *       ENTROPY_IDX = 7;
+    */
+    public native void setWeight(int idx, float value);
+    /**
+    * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space.
+    * @param weights Values of all weights.
+    * \note
+    *       WEIGHT_IDX = 0;
+    *       X_IDX = 1;
+    *       Y_IDX = 2;
+    *       L_IDX = 3;
+    *       A_IDX = 4;
+    *       B_IDX = 5;
+    *       CONTRAST_IDX = 6;
+    *       ENTROPY_IDX = 7;
+    */
+    public native void setWeights(@StdVector FloatPointer weights);
+    public native void setWeights(@StdVector FloatBuffer weights);
+    public native void setWeights(@StdVector float[] weights);
+
+    /**
+    * \brief Translations of the individual axes of the feature space.
+    * @param idx ID of the translation
+    * @param value Value of the translation
+    * \note
+    *       WEIGHT_IDX = 0;
+    *       X_IDX = 1;
+    *       Y_IDX = 2;
+    *       L_IDX = 3;
+    *       A_IDX = 4;
+    *       B_IDX = 5;
+    *       CONTRAST_IDX = 6;
+    *       ENTROPY_IDX = 7;
+    */
+    public native void setTranslation(int idx, float value);
+    /**
+    * \brief Translations of the individual axes of the feature space.
+    * @param translations Values of all translations.
+    * \note
+    *       WEIGHT_IDX = 0;
+    *       X_IDX = 1;
+    *       Y_IDX = 2;
+    *       L_IDX = 3;
+    *       A_IDX = 4;
+    *       B_IDX = 5;
+    *       CONTRAST_IDX = 6;
+    *       ENTROPY_IDX = 7;
+    */
+    public native void setTranslations(@StdVector FloatPointer translations);
+    public native void setTranslations(@StdVector FloatBuffer translations);
+    public native void setTranslations(@StdVector float[] translations);
+
+    /**
+    * \brief Sets sampling points used to sample the input image.
+    * @param samplingPoints Vector of sampling points in range [0..1)
+    * \note Number of sampling points must be greater or equal to clusterization seed count.
+    */
+    public native void setSamplingPoints(@ByVal Point2fVector samplingPoints);
+
+
+
+    /**** clusterizer ****/
+    /**
+    * \brief Initial seeds (initial number of clusters) for the k-means algorithm.
+    */
+    public native @StdVector IntPointer getInitSeedIndexes();
+    /**
+    * \brief Initial seed indexes for the k-means algorithm.
+    */
+    public native void setInitSeedIndexes(@StdVector IntPointer initSeedIndexes);
+    public native void setInitSeedIndexes(@StdVector IntBuffer initSeedIndexes);
+    public native void setInitSeedIndexes(@StdVector int[] initSeedIndexes);
+    /**
+    * \brief Number of initial seeds (initial number of clusters) for the k-means algorithm.
+    */
+    public native int getInitSeedCount();
+
+    /**
+    * \brief Number of iterations of the k-means clustering.
+    *       We use fixed number of iterations, since the modified clustering is pruning clusters
+    *       (not iteratively refining k clusters).
+    */
+    public native int getIterationCount();
+    /**
+    * \brief Number of iterations of the k-means clustering.
+    *       We use fixed number of iterations, since the modified clustering is pruning clusters
+    *       (not iteratively refining k clusters).
+    */
+    public native void setIterationCount(int iterationCount);
+
+    /**
+    * \brief Maximal number of generated clusters. If the number is exceeded,
+    *       the clusters are sorted by their weights and the smallest clusters are cropped.
+    */
+    public native int getMaxClustersCount();
+    /**
+    * \brief Maximal number of generated clusters. If the number is exceeded,
+    *       the clusters are sorted by their weights and the smallest clusters are cropped.
+    */
+    public native void setMaxClustersCount(int maxClustersCount);
+
+    /**
+    * \brief This parameter multiplied by the index of iteration gives lower limit for cluster size.
+    *       Clusters containing fewer points than specified by the limit have their centroid dismissed
+    *       and points are reassigned.
+    */
+    public native int getClusterMinSize();
+    /**
+    * \brief This parameter multiplied by the index of iteration gives lower limit for cluster size.
+    *       Clusters containing fewer points than specified by the limit have their centroid dismissed
+    *       and points are reassigned.
+    */
+    public native void setClusterMinSize(int clusterMinSize);
+
+    /**
+    * \brief Threshold euclidean distance between two centroids.
+    *       If two cluster centers are closer than this distance,
+    *       one of the centroid is dismissed and points are reassigned.
+    */
+    public native float getJoiningDistance();
+    /**
+    * \brief Threshold euclidean distance between two centroids.
+    *       If two cluster centers are closer than this distance,
+    *       one of the centroid is dismissed and points are reassigned.
+    */
+    public native void setJoiningDistance(float joiningDistance);
+
+    /**
+    * \brief Remove centroids in k-means whose weight is lesser or equal to given threshold.
+    */
+    public native float getDropThreshold();
+    /**
+    * \brief Remove centroids in k-means whose weight is lesser or equal to given threshold.
+    */
+    public native void setDropThreshold(float dropThreshold);
+
+    /**
+    * \brief Distance function selector used for measuring distance between two points in k-means.
+    */
+    public native int getDistanceFunction();
+    /**
+    * \brief Distance function selector used for measuring distance between two points in k-means.
+    *       Available: L0_25, L0_5, L1, L2, L2SQUARED, L5, L_INFINITY.
+    */
+    public native void setDistanceFunction(int distanceFunction);
+
+}
+
+/**
+* \brief Class implementing Signature Quadratic Form Distance (SQFD).
+* @see Christian Beecks, Merih Seran Uysal, Thomas Seidl.
+*   Signature quadratic form distance.
+*   In Proceedings of the ACM International Conference on Image and Video Retrieval, pages 438-445.
+*   ACM, 2010.
+* \cite BeecksUS10
+*/
+@Namespace("cv::xfeatures2d") public static class PCTSignaturesSQFD extends Algorithm {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PCTSignaturesSQFD(Pointer p) { super(p); }
+
+
+    /**
+    * \brief Creates the algorithm instance using selected distance function,
+    *       similarity function and similarity function parameter.
+    * @param distanceFunction Distance function selector. Default: L2
+    *       Available: L0_25, L0_5, L1, L2, L2SQUARED, L5, L_INFINITY
+    * @param similarityFunction Similarity function selector. Default: HEURISTIC
+    *       Available: MINUS, GAUSSIAN, HEURISTIC
+    * @param similarityParameter Parameter of the similarity function.
+    */
+    public static native @Ptr PCTSignaturesSQFD create(
+            int distanceFunction/*=3*/,
+            int similarityFunction/*=2*/,
+            float similarityParameter/*=1.0f*/);
+    public static native @Ptr PCTSignaturesSQFD create();
+
+    /**
+    * \brief Computes Signature Quadratic Form Distance of two signatures.
+    * @param _signature0 The first signature.
+    * @param _signature1 The second signature.
+    */
+    public native float computeQuadraticFormDistance(
+            @ByVal Mat _signature0,
+            @ByVal Mat _signature1);
+    public native float computeQuadraticFormDistance(
+            @ByVal UMat _signature0,
+            @ByVal UMat _signature1);
+
+    /**
+    * \brief Computes Signature Quadratic Form Distance between the reference signature
+    *       and each of the other image signatures.
+    * @param sourceSignature The signature to measure distance of other signatures from.
+    * @param imageSignatures Vector of signatures to measure distance from the source signature.
+    * @param distances Output vector of measured distances.
+    */
+    public native void computeQuadraticFormDistances(
+            @Const @ByRef Mat sourceSignature,
+            @Const @ByRef MatVector imageSignatures,
+            @StdVector FloatPointer distances);
+    public native void computeQuadraticFormDistances(
+            @Const @ByRef Mat sourceSignature,
+            @Const @ByRef MatVector imageSignatures,
+            @StdVector FloatBuffer distances);
+    public native void computeQuadraticFormDistances(
+            @Const @ByRef Mat sourceSignature,
+            @Const @ByRef MatVector imageSignatures,
+            @StdVector float[] distances);
+
 }
 
 /** \} */

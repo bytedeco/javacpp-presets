@@ -1,0 +1,24 @@
+diff -ruN opencv-3.2.0/modules/core/include/opencv2/core/utility.hpp opencv-3.2.0-windows/modules/core/include/opencv2/core/utility.hpp
+--- opencv-3.2.0/modules/core/include/opencv2/core/utility.hpp	2016-12-23 21:54:44.000000000 +0900
++++ opencv-3.2.0-windows/modules/core/include/opencv2/core/utility.hpp	2017-01-20 23:57:37.933097800 +0900
+@@ -1137,7 +1137,7 @@
+     double getTotalMs()   const { return ((double)m_ticksTotal / cv::getTickFrequency()) * 1000; }
+     double getMeanMs()    const { return (((double)m_ticksTotal/m_counter) / cv::getTickFrequency()) * 1000; }
+ };
+-bool operator==(const NodeData& lhs, const NodeData& rhs);
++CV_EXPORTS bool operator==(const NodeData& lhs, const NodeData& rhs);
+ 
+ typedef Node<NodeData> InstrNode;
+ 
+diff -ruN opencv-3.2.0/modules/core/src/system.cpp opencv-3.2.0-windows/modules/core/src/system.cpp
+--- opencv-3.2.0/modules/core/src/system.cpp	2016-12-23 21:54:44.000000000 +0900
++++ opencv-3.2.0-windows/modules/core/src/system.cpp	2017-01-20 23:57:18.103863800 +0900
+@@ -1395,7 +1395,7 @@
+ NodeData::~NodeData()
+ {
+ }
+-bool operator==(const NodeData& left, const NodeData& right)
++CV_EXPORTS bool operator==(const NodeData& left, const NodeData& right)
+ {
+     if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName)
+     {

@@ -1,5 +1,5 @@
 
- * Upgrade presets for libdc1394 2.2.5, LLVM 3.9.1 ([pull #343](https://github.com/bytedeco/javacpp-presets/pull/343)), TensorFlow 1.0.0-alpha
+ * Upgrade presets for OpenCV 3.2.0, libdc1394 2.2.5, LLVM 3.9.1 ([pull #343](https://github.com/bytedeco/javacpp-presets/pull/343)), TensorFlow 1.0.0-alpha
  * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340))
  * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))

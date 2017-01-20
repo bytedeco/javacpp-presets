@@ -59,8 +59,8 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
 //
 //M*/
 
-// #ifndef __OPENCV_SUPERRES_HPP__
-// #define __OPENCV_SUPERRES_HPP__
+// #ifndef OPENCV_SUPERRES_HPP
+// #define OPENCV_SUPERRES_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/superres/optical_flow.hpp"
@@ -216,7 +216,7 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
     
 
 
-// #endif // __OPENCV_SUPERRES_HPP__
+// #endif // OPENCV_SUPERRES_HPP
 
 
 // Parsed from <opencv2/superres/optical_flow.hpp>
@@ -263,8 +263,8 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 //
 //M*/
 
-// #ifndef __OPENCV_SUPERRES_OPTICAL_FLOW_HPP__
-// #define __OPENCV_SUPERRES_OPTICAL_FLOW_HPP__
+// #ifndef OPENCV_SUPERRES_OPTICAL_FLOW_HPP
+// #define OPENCV_SUPERRES_OPTICAL_FLOW_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -284,10 +284,10 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
         }
 
 
-        @Namespace("cv::superres") public static class FarnebackOpticalFlow extends DenseOpticalFlowExt {
+        @Name("cv::superres::FarnebackOpticalFlow") public static class SuperResFarnebackOpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public FarnebackOpticalFlow(Pointer p) { super(p); }
+            public SuperResFarnebackOpticalFlow(Pointer p) { super(p); }
         
             /** @see setPyrScale */
             public native double getPyrScale();
@@ -318,8 +318,8 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
             /** \copybrief getFlags @see getFlags */
             public native void setFlags(int val);
         }
-        @Namespace("cv::superres") public static native @Ptr FarnebackOpticalFlow createOptFlow_Farneback();
-        @Namespace("cv::superres") public static native @Ptr FarnebackOpticalFlow createOptFlow_Farneback_CUDA();
+        @Namespace("cv::superres") public static native @Ptr SuperResFarnebackOpticalFlow createOptFlow_Farneback();
+        @Namespace("cv::superres") public static native @Ptr SuperResFarnebackOpticalFlow createOptFlow_Farneback_CUDA();
 
 
 //        CV_EXPORTS Ptr<DenseOpticalFlowExt> createOptFlow_Simple();
@@ -431,7 +431,7 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
     
 
 
-// #endif // __OPENCV_SUPERRES_OPTICAL_FLOW_HPP__
+// #endif // OPENCV_SUPERRES_OPTICAL_FLOW_HPP
 
 
 }

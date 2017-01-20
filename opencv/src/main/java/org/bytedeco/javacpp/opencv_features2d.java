@@ -61,8 +61,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 //
 //M*/
 
-// #ifndef __OPENCV_FEATURES_2D_HPP__
-// #define __OPENCV_FEATURES_2D_HPP__
+// #ifndef OPENCV_FEATURES_2D_HPP
+// #define OPENCV_FEATURES_2D_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/flann/miniflann.hpp"
@@ -264,6 +264,16 @@ This section describes approaches based on local 2D features and used to categor
     public native int descriptorType();
     public native int defaultNorm();
 
+    public native void write( @Str BytePointer fileName );
+    public native void write( @Str String fileName );
+
+    public native void read( @Str BytePointer fileName );
+    public native void read( @Str String fileName );
+
+    public native void write( @ByRef FileStorage arg0);
+
+    public native void read( @Const @ByRef FileNode arg0);
+
     /** Return true if detector object is empty */
     public native @Cast("bool") boolean empty();
 }
@@ -447,7 +457,7 @@ code which is distributed under GPL.
 
     /** \brief Detect %MSER regions
     <p>
-    @param image input image (8UC1, 8UC3 or 8UC4)
+    @param image input image (8UC1, 8UC3 or 8UC4, must be greater or equal than 3x3)
     @param msers resulting list of point sets
     @param bboxes resulting bounding boxes
     */
@@ -890,6 +900,14 @@ an image set.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorMatcher(Pointer p) { super(p); }
 
+   /** enum cv::DescriptorMatcher:: */
+   public static final int
+        FLANNBASED            = 1,
+        BRUTEFORCE            = 2,
+        BRUTEFORCE_L1         = 3,
+        BRUTEFORCE_HAMMING    = 4,
+        BRUTEFORCE_HAMMINGLUT = 5,
+        BRUTEFORCE_SL2        = 6;
 
     /** \brief Adds descriptors to train a CPU(trainDescCollectionis) or GPU(utrainDescCollectionis) descriptor
     collection.
@@ -1072,6 +1090,12 @@ an image set.
     public native void radiusMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
                           @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
 
+
+    public native void write( @Str BytePointer fileName );
+    public native void write( @Str String fileName );
+
+    public native void read( @Str BytePointer fileName );
+    public native void read( @Str String fileName );
     // Reads matcher object from a file node
     public native void read( @Const @ByRef FileNode arg0 );
     // Writes matcher object to a file storage
@@ -1099,6 +1123,8 @@ an image set.
      */
     public static native @Ptr DescriptorMatcher create( @Str BytePointer descriptorMatcherType );
     public static native @Ptr DescriptorMatcher create( @Str String descriptorMatcherType );
+
+    public static native @Ptr DescriptorMatcher create( int matcherType );
 }
 
 /** \brief Brute-force descriptor matcher.
@@ -1118,8 +1144,18 @@ sets.
         return (BFMatcher)super.position(position);
     }
 
-    /** \brief Brute-force matcher constructor.
-    <p>
+    /** \brief Brute-force matcher constructor (obsolete). Please use BFMatcher.create()
+     *
+     *
+    */
+    public BFMatcher( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ ) { super((Pointer)null); allocate(normType, crossCheck); }
+    private native void allocate( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
+    public BFMatcher( ) { super((Pointer)null); allocate(); }
+    private native void allocate( );
+
+    public native @Cast("bool") boolean isMaskSupported();
+
+    /* @brief Brute-force matcher create method.
     @param normType One of NORM_L1, NORM_L2, NORM_HAMMING, NORM_HAMMING2. L1 and L2 norms are
     preferable choices for SIFT and SURF descriptors, NORM_HAMMING should be used with ORB, BRISK and
     BRIEF, NORM_HAMMING2 should be used with ORB when WTA_K==3 or 4 (see ORB::ORB constructor
@@ -1131,12 +1167,8 @@ sets.
     pairs. Such technique usually produces best results with minimal number of outliers when there are
     enough matches. This is alternative to the ratio test, used by D. Lowe in SIFT paper.
      */
-    public BFMatcher( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ ) { super((Pointer)null); allocate(normType, crossCheck); }
-    private native void allocate( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
-    public BFMatcher( ) { super((Pointer)null); allocate(); }
-    private native void allocate( );
-
-    public native @Cast("bool") boolean isMaskSupported();
+    public static native @Ptr BFMatcher create( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
+    public static native @Ptr BFMatcher create( );
 
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr DescriptorMatcher clone( );
@@ -1145,7 +1177,7 @@ sets.
 
 /** \brief Flann-based descriptor matcher.
 <p>
-This matcher trains flann::Index_ on a train descriptor collection and calls its nearest search
+This matcher trains cv::flann::Index on a train descriptor collection and calls its nearest search
 methods to find the best matches. So, this matcher may be faster when matching a large train
 collection than the brute force matcher. FlannBasedMatcher does not support masking permissible
 matches of descriptor sets because flann::Index does not support this. :
@@ -1179,6 +1211,8 @@ matches of descriptor sets because flann::Index does not support this. :
 
     public native void train();
     public native @Cast("bool") boolean isMaskSupported();
+
+    public static native @Ptr FlannBasedMatcher create();
 
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr DescriptorMatcher clone( );

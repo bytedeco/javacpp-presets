@@ -61,8 +61,8 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
 //
 //M*/
 
-// #ifndef __OPENCV_OBJDETECT_C_H__
-// #define __OPENCV_OBJDETECT_C_H__
+// #ifndef OPENCV_OBJDETECT_C_H
+// #define OPENCV_OBJDETECT_C_H
 
 // #include "opencv2/core/core_c.h"
 
@@ -279,7 +279,7 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 
 // #endif
 
-// #endif /* __OPENCV_OBJDETECT_C_H__ */
+// #endif /* OPENCV_OBJDETECT_C_H */
 
 
 // Parsed from <opencv2/objdetect.hpp>
@@ -327,8 +327,8 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 //
 //M*/
 
-// #ifndef __OPENCV_OBJDETECT_HPP__
-// #define __OPENCV_OBJDETECT_HPP__
+// #ifndef OPENCV_OBJDETECT_HPP
+// #define OPENCV_OBJDETECT_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -377,7 +377,7 @@ compensate for the differences in the size of areas. The sums of pixel values ov
 regions are calculated rapidly using integral images (see below and the integral description).
 <p>
 To see the object detector at work, have a look at the facedetect demo:
-<https://github.com/Itseez/opencv/tree/master/samples/cpp/dbt_face_detection.cpp>
+<https://github.com/opencv/opencv/tree/master/samples/cpp/dbt_face_detection.cpp>
 <p>
 The following reference is for the detection part only. There is a separate application called
 opencv_traincascade that can train a cascade of boosted classifiers from a set of samples.
@@ -631,7 +631,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     @param flags Parameter with the same meaning for an old cascade as in the function
     cvHaarDetectObjects. It is not used for a new cascade.
     @param minSize Minimum possible object size. Objects smaller than that are ignored.
-    @param maxSize Maximum possible object size. Objects larger than that are ignored.
+    @param maxSize Maximum possible object size. Objects larger than that are ignored. If {@code maxSize == minSize} model is evaluated on single scale.
     <p>
     The function is parallelized with the TBB library.
     <p>
@@ -669,7 +669,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     @param flags Parameter with the same meaning for an old cascade as in the function
     cvHaarDetectObjects. It is not used for a new cascade.
     @param minSize Minimum possible object size. Objects smaller than that are ignored.
-    @param maxSize Maximum possible object size. Objects larger than that are ignored.
+    @param maxSize Maximum possible object size. Objects larger than that are ignored. If {@code maxSize == minSize} model is evaluated on single scale.
     */
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
                               @ByRef RectVector objects,
@@ -1083,12 +1083,12 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 //
 //M*/
 
-// #ifndef __OPENCV_OBJDETECT_DBT_HPP__
-// #define __OPENCV_OBJDETECT_DBT_HPP__
+// #ifndef OPENCV_OBJDETECT_DBT_HPP
+// #define OPENCV_OBJDETECT_DBT_HPP
 
 // After this condition removal update blacklist for bindings: modules/python/common.cmake
 // #if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) ||
-//   (defined(__cplusplus) &&  __cplusplus > 201103L) || (defined(_MSC_VER) && _MSC_VER >= 1700)
+//   (defined(__cplusplus) &&  __cplusplus > 199711L) || (defined(_MSC_VER) && _MSC_VER >= 1700)
 
 // #include <vector>
 

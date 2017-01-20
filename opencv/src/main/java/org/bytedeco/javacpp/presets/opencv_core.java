@@ -41,26 +41,26 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(value = {
     @Platform(include = {"<opencv2/core/hal/interface.h>", "<opencv2/core/cvdef.h>", "<opencv2/core/hal/hal.hpp>", "<opencv2/core/fast_math.hpp>",
-        "<algorithm>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
+        "<algorithm>", "<map>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.1", "opencv_imgproc@.3.1"}),
+        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.2", "opencv_imgproc@.3.2"}),
     @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = "gomp@.1"),
     @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core310", "opencv_imgproc310"}, preload = {"msvcr120", "msvcp120"}),
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core320", "opencv_imgproc320"}, preload = {"msvcr120", "msvcp120"}),
     @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x86/Microsoft.VC120.CRT/"),
     @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x64/Microsoft.VC120.CRT/")},
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("algorithm", "opencv_adapters.h").skip())
+        infoMap.put(new Info("algorithm", "map", "opencv_adapters.h").skip())
                .put(new Info("__cplusplus", "CV_StaticAssert").define())
                .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
                              "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
-                             "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA").define(false))
+                             "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA", "CV_FP16_TYPE").define(false))
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE",
                              "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END").cppTypes().annotations())
@@ -149,9 +149,17 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::vector<cv::Mat>").pointerTypes("MatVector").define())
                .put(new Info("std::vector<cv::UMat>").pointerTypes("UMatVector").define())
                .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
+               .put(new Info("std::map<int,double>").pointerTypes("IntDoubleMap").define())
+               .put(new Info("std::vector<std::pair<int,double> >").pointerTypes("IntDoublePairVector").define())
                .put(new Info("std::vector<std::pair<int,int> >").pointerTypes("IntIntPairVector").define())
                .put(new Info("std::vector<std::pair<cv::Mat,uchar> >").pointerTypes("MatBytePairVector").define())
                .put(new Info("std::vector<std::pair<cv::UMat,uchar> >").pointerTypes("UMatBytePairVector").define())
+               .put(new Info("std::vector<cv::instr::NodeDataTls*>").pointerTypes("NodeDataTlsVector").define())
+               .put(new Info("cv::TLSData<cv::instr::NodeDataTls>").pointerTypes("NodeDataTlsData").define())
+               .put(new Info("cv::Node<cv::instr::NodeData>").pointerTypes("InstrNode").define())
+               .put(new Info("cv::instr::NodeData::m_tls").javaText("@MemberGetter public native @ByRef NodeDataTlsData m_tls();"))
+               .put(new Info("cv::SparseMat::Node").pointerTypes("SparseMat.Node"))
+               .put(new Info("cv::ml::DTrees::Node").pointerTypes("DTrees.Node"))
                .put(new Info("cv::randu<int>").javaNames("intRand"))
                .put(new Info("cv::randu<float>").javaNames("floatRand"))
                .put(new Info("cv::randu<double>").javaNames("doubleRand"))
@@ -164,7 +172,9 @@ public class opencv_core implements InfoMapper {
                              "cv::MatCommaInitializer_", "cv::MatxCommaInitializer", "cv::VecCommaInitializer",
                              "cv::MatConstIterator(cv::Mat*, int*)", "cv::SparseMatIterator(cv::SparseMat*, int*)",
                              "cv::SparseMatIterator_", "cv::SparseMatConstIterator_", "cv::SparseMatConstIterator::operator --",
-                             "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser").skip())
+                             "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser",
+                             "cv::cvStartWriteRawData_Base64", "cv::cvWriteRawData_Base64", "cv::cvEndWriteRawData_Base64",
+                             "cv::cvWriteMat_Base64", "cv::cvWriteMatND_Base64").skip())
                .put(new Info("cv::AutoBuffer<double>").cast().pointerTypes("Pointer"))
 
                .put(new Info("cv::Mat").base("AbstractMat"))

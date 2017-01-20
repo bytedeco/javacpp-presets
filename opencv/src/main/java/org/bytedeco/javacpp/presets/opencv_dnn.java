@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = opencv_imgproc.class, value = {
     @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/blob.hpp>",
-                         "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>"}, link = "opencv_dnn@.3.1"),
-    @Platform(value = "windows", link = "opencv_dnn310")},
+                         "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>"}, link = "opencv_dnn@.3.2"),
+    @Platform(value = "windows", link = "opencv_dnn320")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {

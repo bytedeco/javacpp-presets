@@ -252,7 +252,7 @@ grouping horizontally aligned text, and the method proposed by Lluis Gomez and D
 in [Gomez13][Gomez14] for grouping arbitrary oriented text (see erGrouping).
 <p>
 To see the text detector at work, have a look at the textdetection demo:
-<https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/textdetection.cpp>
+<https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/textdetection.cpp>
     <p>
     \defgroup text_recognize Scene Text Recognition
   \}
@@ -358,7 +358,7 @@ component tree of the image. :
     public native double central_moments(int i); public native ERStat central_moments(int i, double central_moments);
     @MemberGetter public native DoublePointer central_moments();
     /** horizontal crossings */
-    public native IntDeque crossings(); public native ERStat crossings(IntDeque crossings);
+    public native @Ptr IntDeque crossings(); public native ERStat crossings(IntDeque crossings);
     /** median of the crossings at three different height levels */
     public native float med_crossings(); public native ERStat med_crossings(float med_crossings);
 
@@ -489,10 +489,10 @@ global limit pmin and the difference between local maximum and local minimum is 
 minProbabilityDiff).
  */
 @Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Ptr ERFilter.Callback cb,
-                                                  int thresholdDelta/*=1*/, float minArea/*=0.00025*/,
-                                                  float maxArea/*=0.13*/, float minProbability/*=0.4*/,
+                                                  int thresholdDelta/*=1*/, float minArea/*=(float)0.00025*/,
+                                                  float maxArea/*=(float)0.13*/, float minProbability/*=(float)0.4*/,
                                                   @Cast("bool") boolean nonMaxSuppression/*=true*/,
-                                                  float minProbabilityDiff/*=0.1*/);
+                                                  float minProbabilityDiff/*=(float)0.1*/);
 @Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Ptr ERFilter.Callback cb);
 
 /** \brief Create an Extremal Region Filter for the 2nd stage classifier of N&M algorithm [Neumann12].
@@ -507,7 +507,7 @@ classifier uses all the features calculated in the first stage and the following
 features: hole area ratio, convex hull ratio, and number of outer inflexion points.
  */
 @Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Ptr ERFilter.Callback cb,
-                                                  float minProbability/*=0.3*/);
+                                                  float minProbability/*=(float)0.3*/);
 @Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Ptr ERFilter.Callback cb);
 
 
@@ -517,8 +517,8 @@ features: hole area ratio, convex hull ratio, and number of outer inflexion poin
 <p>
 returns a pointer to ERFilter::Callback.
  */
-@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM1(@StdString BytePointer filename);
-@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM1(@StdString String filename);
+@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM1(@Str BytePointer filename);
+@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM1(@Str String filename);
 
 /** \brief Allow to implicitly load the default classifier when creating an ERFilter object.
 <p>
@@ -526,8 +526,8 @@ returns a pointer to ERFilter::Callback.
 <p>
 returns a pointer to ERFilter::Callback.
  */
-@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM2(@StdString BytePointer filename);
-@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM2(@StdString String filename);
+@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM2(@Str BytePointer filename);
+@Namespace("cv::text") public static native @Ptr ERFilter.Callback loadClassifierNM2(@Str String filename);
 
 
 /** computeNMChannels operation modes */
@@ -653,6 +653,37 @@ method is ERGROUPING_ORIENTATION_ANY.
                                            @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
                                            @ByRef RectVector groups_rects);
 
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat image, @ByVal Mat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbablity/*=(float)0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat image, @ByVal Mat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat image, @ByVal Mat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str String filename/*=cv::String()*/,
+                                           float minProbablity/*=(float)0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat image, @ByVal UMat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbablity/*=(float)0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat image, @ByVal UMat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat image, @ByVal UMat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str String filename/*=cv::String()*/,
+                                           float minProbablity/*=(float)0.5*/);
+
 /** \brief Converts MSER contours (vector\<Point\>) to ERStat regions.
 <p>
 @param image Source image CV_8UC1 from which the MSERs where extracted.
@@ -667,12 +698,16 @@ single vector\<Point\>, the function separates them in two different vectors (th
 ERStats where extracted from two different channels).
 <p>
 An example of MSERsToERStats in use can be found in the text detection webcam_demo:
-<https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/webcam_demo.cpp>
+<https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/webcam_demo.cpp>
  */
 @Namespace("cv::text") public static native void MSERsToERStats(@ByVal Mat image, @ByRef PointVectorVector contours,
                                @ByRef ERStatVectorVector regions);
 @Namespace("cv::text") public static native void MSERsToERStats(@ByVal UMat image, @ByRef PointVectorVector contours,
                                @ByRef ERStatVectorVector regions);
+
+// Utility funtion for scripting
+@Namespace("cv::text") public static native void detectRegions(@ByVal Mat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
+@Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
 
 /** \} */
 
@@ -795,10 +830,10 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
 \note
    -   (C++) An example of OCRTesseract recognition combined with scene text detection can be found
         at the end_to_end_recognition demo:
-        <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/end_to_end_recognition.cpp>
+        <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/end_to_end_recognition.cpp>
     -   (C++) Another example of OCRTesseract recognition combined with scene text detection can be
         found at the webcam_demo:
-        <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/webcam_demo.cpp>
+        <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/webcam_demo.cpp>
  */
 @Namespace("cv::text") public static class OCRTesseract extends BaseOCR {
     static { Loader.load(); }
@@ -911,7 +946,7 @@ public static final int
 \note
    -   (C++) An example on using OCRHMMDecoder recognition combined with scene text detection can
         be found at the webcam_demo sample:
-        <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/webcam_demo.cpp>
+        <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/webcam_demo.cpp>
  */
 @Namespace("cv::text") @NoOffset public static class OCRHMMDecoder extends BaseOCR {
     static { Loader.load(); }
@@ -935,7 +970,7 @@ public static final int
     <p>
     The default character classifier and feature extractor can be loaded using the utility funtion
     loadOCRHMMClassifierNM and KNN model provided in
-    <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/OCRHMM_knn_model_data.xml.gz>.
+    <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRHMM_knn_model_data.xml.gz>.
      */
     public static class ClassifierCallback extends Pointer {
         static { Loader.load(); }
@@ -1155,7 +1190,7 @@ at each window location.
  * The function calculate frequency statistics of character pairs from the given lexicon and fills the output transition_probabilities_table with them. The transition_probabilities_table can be used as input in the OCRHMMDecoder::create() and OCRBeamSearchDecoder::create() methods.
  * \note
  *    -   (C++) An alternative would be to load the default generic language transition table provided in the text module samples folder (created from ispell 42869 english words list) :
- *            <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/OCRHMM_transitions_table.xml>
+ *            <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRHMM_transitions_table.xml>
  **/
 @Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
 @Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
@@ -1173,7 +1208,7 @@ at each window location.
 \note
    -   (C++) An example on using OCRBeamSearchDecoder recognition combined with scene text detection can
         be found at the demo sample:
-        <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/word_recognition.cpp>
+        <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/word_recognition.cpp>
  */
 @Namespace("cv::text") @NoOffset public static class OCRBeamSearchDecoder extends BaseOCR {
     static { Loader.load(); }
@@ -1197,7 +1232,7 @@ at each window location.
     <p>
     The default character classifier and feature extractor can be loaded using the utility funtion
     loadOCRBeamSearchClassifierCNN with all its parameters provided in
-    <https://github.com/Itseez/opencv_contrib/blob/master/modules/text/samples/OCRBeamSearch_CNN_model_data.xml.gz>.
+    <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRBeamSearch_CNN_model_data.xml.gz>.
      */
     public static class ClassifierCallback extends Pointer {
         static { Loader.load(); }

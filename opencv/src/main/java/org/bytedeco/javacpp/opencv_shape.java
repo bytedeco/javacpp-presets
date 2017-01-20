@@ -57,8 +57,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 //
 //M*/
 
-// #ifndef __OPENCV_SHAPE_HPP__
-// #define __OPENCV_SHAPE_HPP__
+// #ifndef OPENCV_SHAPE_HPP
+// #define OPENCV_SHAPE_HPP
 
 // #include "opencv2/shape/emdL1.hpp"
 // #include "opencv2/shape/shape_transformer.hpp"
@@ -118,8 +118,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 //
 //M*/
 
-// #ifndef __OPENCV_EMD_L1_HPP__
-// #define __OPENCV_EMD_L1_HPP__
+// #ifndef OPENCV_EMD_L1_HPP
+// #define OPENCV_EMD_L1_HPP
 
 // #include "opencv2/core.hpp"
 /****************************************************************************************\
@@ -193,8 +193,8 @@ the histogram in each bin.
 //
 //M*/
 
-// #ifndef __OPENCV_SHAPE_SHAPE_TRANSFORM_HPP__
-// #define __OPENCV_SHAPE_SHAPE_TRANSFORM_HPP__
+// #ifndef OPENCV_SHAPE_SHAPE_TRANSFORM_HPP
+// #define OPENCV_SHAPE_SHAPE_TRANSFORM_HPP
 // #include <vector>
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
@@ -342,8 +342,8 @@ F.L. Bookstein (PAMI 1989). :
 //
 //M*/
 
-// #ifndef __OPENCV_HIST_COST_HPP__
-// #define __OPENCV_HIST_COST_HPP__
+// #ifndef OPENCV_HIST_COST_HPP
+// #define OPENCV_HIST_COST_HPP
 
 // #include "opencv2/imgproc.hpp"
 
@@ -468,8 +468,8 @@ F.L. Bookstein (PAMI 1989). :
 //
 //M*/
 
-// #ifndef __OPENCV_SHAPE_SHAPE_DISTANCE_HPP__
-// #define __OPENCV_SHAPE_SHAPE_DISTANCE_HPP__
+// #ifndef OPENCV_SHAPE_SHAPE_DISTANCE_HPP
+// #define OPENCV_SHAPE_SHAPE_DISTANCE_HPP
 // #include "opencv2/core.hpp"
 // #include "opencv2/shape/hist_cost.hpp"
 // #include "opencv2/shape/shape_transformer.hpp"
