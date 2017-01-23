@@ -65,77 +65,106 @@ the use of this software, even if advised of the possibility of such damage.
 
 // #ifndef __OPENCV_PREDICT_COLLECTOR_HPP__
 // #define __OPENCV_PREDICT_COLLECTOR_HPP__
+
+// #include <vector>
+// #include <map>
+// #include <utility>
 // #include <cfloat>
-// #include "opencv2/core/cvdef.h"
+
 // #include "opencv2/core/cvstd.hpp"
 /** \addtogroup face
  *  \{
 /** \brief Abstract base class for all strategies of prediction result handling
 */
-@Namespace("cv::face") @NoOffset public static class PredictCollector extends Pointer {
+@Namespace("cv::face") public static class PredictCollector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PredictCollector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PredictCollector(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public PredictCollector position(long position) {
-        return (PredictCollector)super.position(position);
-    }
 
-    /** \brief creates new predict collector with given threshhold */
-    public PredictCollector(double threshhold/*=DBL_MAX*/) { super((Pointer)null); allocate(threshhold); }
-    private native void allocate(double threshhold/*=DBL_MAX*/);
-    public PredictCollector() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    /** \brief called once at start of recognition
+
+    /** \brief Interface method called by face recognizer before results processing
     @param size total size of prediction evaluation that recognizer could perform
-    @param state user defined send-to-back optional value to allow multi-thread, multi-session or aggregation scenarios
     */
-    public native void init(int size, int state/*=0*/);
-    public native void init(int size);
-    /** \brief called with every recognition result
+    public native void init(@Cast("size_t") long size);
+
+    /** \brief Interface method called by face recognizer for each result
     @param label current prediction label
     @param dist current prediction distance (confidence)
-    @param state user defined send-to-back optional value to allow multi-thread, multi-session or aggregation scenarios
-    @return true if recognizer should proceed prediction , false - if recognizer should terminate prediction
     */
-    public native @Cast("bool") boolean emit(int label, double dist, int state/*=0*/);
-    public native @Cast("bool") boolean emit(int label, double dist); //not abstract while Python generation require non-abstract class
+    public native @Cast("bool") boolean collect(int label, double dist);
 }
 
-/** \brief default predict collector that trace minimal distance with treshhold checking (that is default behavior for most predict logic)
+/** \brief Default predict collector
+<p>
+Trace minimal distance with treshhold checking (that is default behavior for most predict logic)
 */
-@Namespace("cv::face") @NoOffset public static class MinDistancePredictCollector extends PredictCollector {
+@Namespace("cv::face") @NoOffset public static class StandardCollector extends PredictCollector {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public MinDistancePredictCollector(Pointer p) { super(p); }
+    public StandardCollector(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MinDistancePredictCollector(long size) { super((Pointer)null); allocateArray(size); }
+    public StandardCollector(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public MinDistancePredictCollector position(long position) {
-        return (MinDistancePredictCollector)super.position(position);
+    @Override public StandardCollector position(long position) {
+        return (StandardCollector)super.position(position);
     }
 
-    /** \brief creates new MinDistancePredictCollector with given threshhold */
-    public MinDistancePredictCollector(double threshhold/*=DBL_MAX*/) { super((Pointer)null); allocate(threshhold); }
-    private native void allocate(double threshhold/*=DBL_MAX*/);
-    public MinDistancePredictCollector() { super((Pointer)null); allocate(); }
+    @NoOffset public static class PredictResult extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public PredictResult(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PredictResult(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PredictResult position(long position) {
+            return (PredictResult)super.position(position);
+        }
+    
+        public native int label(); public native PredictResult label(int label);
+        public native double distance(); public native PredictResult distance(double distance);
+        public PredictResult(int label_/*=-1*/, double distance_/*=DBL_MAX*/) { super((Pointer)null); allocate(label_, distance_); }
+        private native void allocate(int label_/*=-1*/, double distance_/*=DBL_MAX*/);
+        public PredictResult() { super((Pointer)null); allocate(); }
+        private native void allocate();
+    }
+    /** \brief Constructor
+    @param threshold_ set threshold
+    */
+    public StandardCollector(double threshold_/*=DBL_MAX*/) { super((Pointer)null); allocate(threshold_); }
+    private native void allocate(double threshold_/*=DBL_MAX*/);
+    public StandardCollector() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public native @Cast("bool") boolean emit(int label, double dist, int state/*=0*/);
-    public native @Cast("bool") boolean emit(int label, double dist);
-    /** \brief result label, 0 if not found */
-    public native int getLabel();
-    /** \brief result distance (confidence) DBL_MAX if not found */
-    public native double getDist();
-    /** \brief factory method to create cv-pointers to MinDistancePredictCollector */
-    public static native @Ptr MinDistancePredictCollector create(double threshold/*=DBL_MAX*/);
-    public static native @Ptr MinDistancePredictCollector create();
+    /** \brief overloaded interface method */
+    public native void init(@Cast("size_t") long size);
+    /** \brief overloaded interface method */
+    public native @Cast("bool") boolean collect(int label, double dist);
+    /** \brief Returns label with minimal distance */
+    public native int getMinLabel();
+    /** \brief Returns minimal distance value */
+    public native double getMinDist();
+    /** \brief Return results as vector
+    @param sorted If set, results will be sorted by distance
+    Each values is a pair of label and distance.
+    */
+    public native @ByVal IntDoublePairVector getResults(@Cast("bool") boolean sorted/*=false*/);
+    public native @ByVal IntDoublePairVector getResults();
+    /** \brief Return results as map
+    Labels are keys, values are minimal distances
+    */
+    public native @ByVal IntDoubleMap getResultsMap();
+    /** \brief Static constructor
+    @param threshold set threshold
+    */
+    public static native @Ptr StandardCollector create(double threshold/*=DBL_MAX*/);
+    public static native @Ptr StandardCollector create();
 }
+
 /** \} */
 
 
+
 // #endif
+
 
 // Parsed from <opencv2/face.hpp>
 
@@ -403,8 +432,8 @@ String name = model->name();
     public native void update(@ByVal UMatVector src, @ByVal UMat labels);
 
     /** \overload */
-    public native int predict(@ByVal Mat src);
-    public native int predict(@ByVal UMat src);
+    public native @Name("predict") int predict_label(@ByVal Mat src);
+    public native @Name("predict") int predict_label(@ByVal UMat src);
 
 
     /** \brief Predicts a label and associated confidence (e.g. distance) for a given input image.
@@ -451,15 +480,12 @@ String name = model->name();
     /** \brief - if implemented - send all result of prediction to collector that can be used for somehow custom result handling
     @param src Sample image to get a prediction from.
     @param collector User-defined collector object that accepts all results
-    @param state - optional user-defined state token that should be passed back from FaceRecognizer implementation
     <p>
     To implement this method u just have to do same internal cycle as in predict(InputArray src, CV_OUT int &label, CV_OUT double &confidence) but
     not try to get "best\ result, just resend it to caller side with given collector
     */
-    public native void predict(@ByVal Mat src, @Ptr PredictCollector collector, int state/*=0*/);
-    public native void predict(@ByVal Mat src, @Ptr PredictCollector collector);
-    public native void predict(@ByVal UMat src, @Ptr PredictCollector collector, int state/*=0*/);
-    public native void predict(@ByVal UMat src, @Ptr PredictCollector collector);
+    public native @Name("predict") void predict_collect(@ByVal Mat src, @Ptr PredictCollector collector);
+    public native @Name("predict") void predict_collect(@ByVal UMat src, @Ptr PredictCollector collector);
 
     /** \brief Saves a FaceRecognizer and its model state.
     <p>
@@ -516,8 +542,10 @@ String name = model->name();
      */
     public native @StdVector IntPointer getLabelsByString(@Str BytePointer str);
     public native @StdVector IntBuffer getLabelsByString(@Str String str);
-    /** \brief threshhold parameter accessor - required for default BestMinDist collector */
+    /** \brief threshold parameter accessor - required for default BestMinDist collector */
     public native double getThreshold();
+    /** \brief Sets threshold of model */
+    public native void setThreshold(double val);
 }
 
 /** \} */

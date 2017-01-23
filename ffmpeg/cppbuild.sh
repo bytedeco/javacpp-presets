@@ -14,14 +14,14 @@ ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enabl
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-bzlib --disable-lzma --disable-everything"
 # ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
-ZLIB=zlib-1.2.10
+ZLIB=zlib-1.2.11
 LAME=lame-3.99.5
 SPEEX=speex-1.2rc2
 OPENCORE_AMR=opencore-amr-0.1.3
 OPENSSL=openssl-1.0.2j
 OPENH264_VERSION=1.6.0
 X265=x265_2.1
-VPX_VERSION=v1.6.0
+VPX_VERSION=v1.6.1
 ALSA_VERSION=1.1.2
 FFMPEG_VERSION=3.2.1
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz

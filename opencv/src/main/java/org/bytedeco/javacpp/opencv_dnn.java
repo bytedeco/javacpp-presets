@@ -191,28 +191,25 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DictValue(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DictValue(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DictValue position(long position) {
-        return (DictValue)super.position(position);
-    }
 
     public DictValue(@Const @ByRef DictValue r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef DictValue r);
     /** Constructs integer scalar */
-    public DictValue(int p/*=0*/) { super((Pointer)null); allocate(p); }
-    private native void allocate(int p/*=0*/);
+    public DictValue(@Cast("int64") long i/*=0*/) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Cast("int64") long i/*=0*/);
     public DictValue() { super((Pointer)null); allocate(); }
     private native void allocate();
+    /** Constructs integer scalar */
+    public DictValue(int i) { super((Pointer)null); allocate(i); }
+    private native void allocate(int i);
     /** Constructs floating point scalar */
     public DictValue(double p) { super((Pointer)null); allocate(p); }
     private native void allocate(double p);
     /** Constructs string scalar */
-    public DictValue(@Str BytePointer p) { super((Pointer)null); allocate(p); }
-    private native void allocate(@Str BytePointer p);
-    public DictValue(@Str String p) { super((Pointer)null); allocate(p); }
-    private native void allocate(@Str String p);
+    public DictValue(@Str BytePointer s) { super((Pointer)null); allocate(s); }
+    private native void allocate(@Str BytePointer s);
+    public DictValue(@Str String s) { super((Pointer)null); allocate(s); }
+    private native void allocate(@Str String s);
 
     public native int size();
 
@@ -317,6 +314,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #include <opencv2/core.hpp>
 // #include <vector>
 // #include <ostream>
+// #include <iostream>
 /** \addtogroup dnn
  *  \{
     <p>
@@ -332,15 +330,23 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
             return (BlobShape)super.position(position);
         }
     
-        /** Creates n-dim shape and fill its by \p fill */
-        public BlobShape(int ndims/*=4*/, int fill/*=1*/) { super((Pointer)null); allocate(ndims, fill); }
-        private native void allocate(int ndims/*=4*/, int fill/*=1*/);
+        /** Creates [1, 1, 1, 1] shape \todo Make more clearer behavior. */
         public BlobShape() { super((Pointer)null); allocate(); }
         private native void allocate();
+        /** Creates 1-dim shape [\p s0] */
+        public BlobShape(int s0) { super((Pointer)null); allocate(s0); }
+        private native void allocate(int s0);
+        /** \overload */
+        public BlobShape(int s0, int s1) { super((Pointer)null); allocate(s0, s1); }
+        private native void allocate(int s0, int s1);
+        /** \overload */
+        public BlobShape(int s0, int s1, int s2) { super((Pointer)null); allocate(s0, s1, s2); }
+        private native void allocate(int s0, int s1, int s2);
         /** Creates 4-dim shape [\p num, \p cn, \p rows, \p cols] */
         public BlobShape(int num, int cn, int rows, int cols) { super((Pointer)null); allocate(num, cn, rows, cols); }
         private native void allocate(int num, int cn, int rows, int cols);
-        /** Creates n-dim shape from the \p sizes array */
+
+        /** Creates n-dim shape from the \p sizes array; if \p sizes is NULL then shape will contain unspecified data */
         public BlobShape(int ndims, @Const IntPointer sizes) { super((Pointer)null); allocate(ndims, sizes); }
         private native void allocate(int ndims, @Const IntPointer sizes);
         public BlobShape(int ndims, @Const IntBuffer sizes) { super((Pointer)null); allocate(ndims, sizes); }
@@ -354,6 +360,10 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         private native void allocate(@StdVector IntBuffer sizes);
         public BlobShape(@StdVector int[] sizes) { super((Pointer)null); allocate(sizes); }
         private native void allocate(@StdVector int[] sizes);
+
+        /** Creates n-dim shape and fill its by \p fill */
+        public static native @ByVal BlobShape all(int ndims, int fill/*=1*/);
+        public static native @ByVal BlobShape all(int ndims);
 
         /** \brief Returns number of dimensions. */
         public native int dims();
@@ -379,16 +389,45 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native int xsize(int axis);
 
+        /** \brief Converts \p axis index to canonical format (where 0 <= \p axis < dims()). */
+        public native int canonicalAxis(int axis);
+
         /** \brief Returns the product of all sizes of axes. */
         public native @Cast("ptrdiff_t") long total();
 
+        /** \brief Computes the product of sizes of axes among the specified axes range [\p startAxis; \p endAxis).
+         * \details Negative axis indexing can be used. \sa Blob::total(int,int)
+         */
+        public native @Cast("ptrdiff_t") long total(int startAxis, int endAxis/*=INT_MAX*/);
+        public native @Cast("ptrdiff_t") long total(int startAxis);
+
+        /** \brief Constructs new shape from axes in range [\p startAxis; \p endAxis).
+         * \details Negative axis indexing can be used. \sa Blob::total(int,int)
+         */
+        public native @ByVal BlobShape slice(int startAxis, int endAxis/*=INT_MAX*/);
+        public native @ByVal BlobShape slice(int startAxis);
+
         /** \brief Returns pointer to the first element of continuous size array. */
-        public native @Const IntPointer ptr();
+        /** \overload */
+        public native IntPointer ptr();
 
-        /** \brief Checks equality of two shapes. */
+        /** Checks equality of two shapes. */
         public native @Cast("bool") boolean equal(@Const @ByRef BlobShape other);
-
+        /** \sa equal() */
         public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef BlobShape r);
+
+        /** Contacenates two shapes. */
+        public native @ByVal @Name("operator +") BlobShape add(@Const @ByRef BlobShape r);
+
+        /** Returns shape of passed Mat. */
+        public static native @ByVal BlobShape like(@Const @ByRef Mat m);
+        /** Returns shape of passed UMat. */
+        public static native @ByVal BlobShape like(@Const @ByRef UMat m);
+
+        /** Returns empty shape []. */
+        public static native @ByVal BlobShape empty();
+        /** Returns true if shape is empty (i.e []). */
+        public native @Cast("bool") boolean isEmpty();
     }
 
 
@@ -412,44 +451,74 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         private native void allocate();
 
         /** \brief Constructs blob with specified \p shape and \p type. */
-        public Blob(@Const @ByRef BlobShape shape, int type/*=CV_32F*/) { super((Pointer)null); allocate(shape, type); }
-        private native void allocate(@Const @ByRef BlobShape shape, int type/*=CV_32F*/);
+        public Blob(@Const @ByRef BlobShape shape, int type/*=CV_32F*/, int allocFlags/*=ALLOC_MAT*/) { super((Pointer)null); allocate(shape, type, allocFlags); }
+        private native void allocate(@Const @ByRef BlobShape shape, int type/*=CV_32F*/, int allocFlags/*=ALLOC_MAT*/);
         public Blob(@Const @ByRef BlobShape shape) { super((Pointer)null); allocate(shape); }
         private native void allocate(@Const @ByRef BlobShape shape);
 
-        /** \brief Constucts 4-dimensional blob (so-called batch) from image or array of images.
-         * @param image 2-dimensional multi-channel or 3-dimensional single-channel image (or array of images)
-         * @param dstCn specify size of second axis of ouptut blob
-        */
-        public Blob(@ByVal Mat image, int dstCn/*=-1*/) { super((Pointer)null); allocate(image, dstCn); }
-        private native void allocate(@ByVal Mat image, int dstCn/*=-1*/);
-        public Blob(@ByVal Mat image) { super((Pointer)null); allocate(image); }
-        private native void allocate(@ByVal Mat image);
-        public Blob(@ByVal UMat image, int dstCn/*=-1*/) { super((Pointer)null); allocate(image, dstCn); }
-        private native void allocate(@ByVal UMat image, int dstCn/*=-1*/);
-        public Blob(@ByVal UMat image) { super((Pointer)null); allocate(image); }
-        private native void allocate(@ByVal UMat image);
+        /** \brief Constructs Blob from existing Mat or UMat. */
+        public Blob(@ByVal Mat data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@ByVal Mat data);
+        public Blob(@ByVal UMat data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@ByVal UMat data);
+
+        /** \brief Constructs 4-dimensional blob (so-called batch) from image or array of images.
+         * @param image 2-dimensional multi-channel or 3-dimensional single-channel image (or array of such images)
+         * @param dstCn specifies size of second axis of ouptut blob
+         */
+        public static native @ByVal Blob fromImages(@ByVal Mat image, int dstCn/*=-1*/);
+        public static native @ByVal Blob fromImages(@ByVal Mat image);
+        public static native @ByVal Blob fromImages(@ByVal UMat image, int dstCn/*=-1*/);
+        public static native @ByVal Blob fromImages(@ByVal UMat image);
+
+        /** \brief Works like Blob::fromImages() but in-place. */
+        public native void batchFromImages(@ByVal Mat image, int dstCn/*=-1*/);
+        public native void batchFromImages(@ByVal Mat image);
+        public native void batchFromImages(@ByVal UMat image, int dstCn/*=-1*/);
+        public native void batchFromImages(@ByVal UMat image);
 
         /** \brief Creates blob with specified \p shape and \p type. */
-        public native void create(@Const @ByRef BlobShape shape, int type/*=CV_32F*/);
+        public native void create(@Const @ByRef BlobShape shape, int type/*=CV_32F*/, int allocFlags/*=ALLOC_MAT*/);
         public native void create(@Const @ByRef BlobShape shape);
 
-        /** \brief Creates blob from cv::Mat or cv::UMat without copying the data */
+        /** \brief Creates blob from Mat or UMat without copying the data.
+          * \details If in is Mat then Mat data is populated, otherwise - UMat.
+          */
         
+
         /** \brief Creates blob from user data.
          *  \details If \p deepCopy is false then CPU data will not be allocated.
          */
         public native @Name("fill") void _fill(@Const @ByRef BlobShape shape, int type, Pointer data, @Cast("bool") boolean deepCopy/*=true*/);
         public native @Name("fill") void _fill(@Const @ByRef BlobShape shape, int type, Pointer data);
 
+        /** \brief Sets \p value to the last used data (if \p allocFlags = -1).
+         * \details If \p allocFlags != -1 then destination data (Mat or UMat) is determined by flags from AllocFlag enum like in create().
+         */
+        public native void setTo(@ByVal Mat value, int allocFlags/*=-1*/);
+        public native void setTo(@ByVal Mat value);
+        public native void setTo(@ByVal UMat value, int allocFlags/*=-1*/);
+        public native void setTo(@ByVal UMat value);
+
         /** Returns reference to cv::Mat, containing blob data. */
+        public native @ByRef Mat matRef(@Cast("bool") boolean writeOnly/*=true*/);
         public native @ByRef Mat matRef();
         /** Returns reference to cv::Mat, containing blob data, for read-only purposes. */
         public native @Const @ByRef Mat matRefConst();
-        /** Returns reference to cv::UMat, containing blob data (not implemented yet). */
+        /** Returns reference to cv::UMat, containing blob data. */
+        public native @ByRef UMat umatRef(@Cast("bool") boolean writeOnly/*=true*/);
         public native @ByRef UMat umatRef();
-        /** Returns reference to cv::UMat, containing blob data, for read-only purposes (not implemented yet). */
+        /** Returns reference to cv::UMat, containing blob data, for read-only purposes. */
         public native @Const @ByRef UMat umatRefConst();
+
+        /** Actualizes data stored inside Mat of Blob; if \p syncData is false then only shape will be actualized. */
+        public native void updateMat(@Cast("bool") boolean syncData/*=true*/);
+        public native void updateMat();
+        /** Actualizes data stored inside Mat of Blob; if \p syncData is false then only shape will be actualized. */
+        public native void updateUMat(@Cast("bool") boolean syncData/*=true*/);
+        public native void updateUMat();
+        /** Updates Mat and UMat of Blob. */
+        public native void sync();
 
         /** \brief Returns number of blob dimensions. */
         public native int dims();
@@ -477,7 +546,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("size_t") long total(int startAxis/*=0*/, int endAxis/*=INT_MAX*/);
         public native @Cast("size_t") long total();
 
-        /** \brief Converts \p axis index to canonical format (where 0 <= axis < dims()). */
+        /** \brief Converts \p axis index to canonical format (where 0 <= \p axis < dims()). */
         public native int canonicalAxis(int axis);
 
         /** \brief Returns shape of the blob. */
@@ -490,6 +559,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  \details The behaviour is similar to the following numpy code: blob[n, cn, ...]
          */
         public native @ByVal Mat getPlane(int n, int cn);
+
+        /** \brief Returns slice of first dimension.
+         *  \details The behaviour is similar to getPlane(), but returns all
+         * channels * rows * cols values, corresponding to the n-th value
+         * of the first dimension.
+         */
+        public native @ByVal Mat getPlanes(int n);
 
         /* Shape getters of 4-dimensional blobs. */
         /** Returns size of the fourth axis blob. */
@@ -539,8 +615,29 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native @ByRef Blob reshape(@Const @ByRef BlobShape shape);
 
-        /** \brief Returns type of the blob. */
+        /** \brief Changes shape of the blob without copying the data.
+         * @return shallow copy of original blob with new shape.
+         */
+        public native @ByVal Blob reshaped(@Const @ByRef BlobShape newShape);
+
+        /** Returns type of the blob. */
         public native int type();
+        /** Returns size of single element in bytes. */
+        public native int elemSize();
+        /** Returns current state of the blob, @see DataState. */
+        public native int getState();
+        /** enum cv::dnn::Blob::DataState */
+        public static final int
+            UNINITIALIZED   = 0,
+            HEAD_AT_MAT     =  1 << 0,
+            HEAD_AT_UMAT    =  1 << 1,
+            SYNCED          =  HEAD_AT_MAT | HEAD_AT_UMAT;
+
+        /** enum cv::dnn::Blob::AllocFlag */
+        public static final int
+            ALLOC_MAT  =  HEAD_AT_MAT,
+            ALLOC_UMAT =  HEAD_AT_UMAT,
+            ALLOC_BOTH =  SYNCED;
     }
 
 /** \} */
@@ -631,6 +728,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
             return (LayerParams)super.position(position);
         }
     
+        //TODO: Add ability to name blob params
         /** List of learned parameters stored as blobs. */
         public native @ByRef BlobVector blobs(); public native LayerParams blobs(BlobVector blobs);
 
@@ -643,13 +741,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     /** \brief This interface class allows to build new Layers - are building blocks of networks.
      *
      * Each class, derived from Layer, must implement allocate() methods to declare own outputs and forward() to compute outputs.
-     * Also before using the new layer into networks you must register your layer by using one of \ref LayerFactoryModule "LayerFactory" macros.
+     * Also before using the new layer into networks you must register your layer by using one of \ref dnnLayerFactory "LayerFactory" macros.
      */
     @Namespace("cv::dnn") @NoOffset public static class Layer extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Layer(Pointer p) { super(p); }
     
+
         /** List of learned parameters must be stored here to allow read them by using Net::getParam(). */
         public native @ByRef BlobVector blobs(); public native Layer blobs(BlobVector blobs);
 
@@ -669,6 +768,18 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void forward(@ByRef BlobPointerVector input, @ByRef BlobVector output);
 
+        /** \brief \overload */
+        public native @Name("allocate") void _allocate(@Const @ByRef BlobVector inputs, @ByRef BlobVector outputs);
+
+        /** \brief \overload */
+        public native @ByVal @Name("allocate") BlobVector _allocate(@Const @ByRef BlobVector inputs);
+
+        /** \brief \overload */
+        public native void forward(@Const @ByRef BlobVector inputs, @ByRef BlobVector outputs);
+
+        /** \brief Allocates layer and computes output. */
+        public native void run(@Const @ByRef BlobVector inputs, @ByRef BlobVector outputs);
+
         /** \brief Returns index of input blob into the input array.
          *  @param inputName label of input blob
          *
@@ -687,6 +798,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Str BytePointer name(); public native Layer name(BytePointer name);
         /** Type name which was used for creating layer by layer factory. */
         public native @Str BytePointer type(); public native Layer type(BytePointer type);
+        /** Initializes only #name, #type and #blobs fields. */
+        public native void setParamsFrom(@Const @ByRef LayerParams params);
     }
 
     /** \brief This class allows to create and manipulate comprehensive artificial neural networks.
@@ -715,6 +828,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public Net() { super((Pointer)null); allocate(); }
         private native void allocate();
 
+        /** Returns true if there are no layers in the network. */
+        public native @Cast("bool") boolean empty();
+
         /** \brief Adds new layer to the net.
          *  @param name   unique name of the adding layer.
          *  @param type   typename of the adding layer (type must be registered in LayerRegister).
@@ -735,7 +851,12 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native int getLayerId(@Str BytePointer layer);
         public native int getLayerId(@Str String layer);
 
+        public native @ByVal StringVector getLayerNames();
+
         /** \brief Container for strings and integers. */
+
+        /** \brief Returns pointer to layer with specified name which the network use. */
+        public native @Ptr Layer getLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layerId);
 
         /** \brief Delete layer for the network (not implemented yet) */
         public native void deleteLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layer);
@@ -755,6 +876,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void connect(@Str BytePointer outPin, @Str BytePointer inpPin);
         public native void connect(@Str String outPin, @Str String inpPin);
+
         /** \brief Connects #\p outNum output of the first layer to #\p inNum input of the second layer.
          *  @param outLayerId identifier of the first layer
          *  @param inpLayerId identifier of the second layer
@@ -762,7 +884,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  @param inpNum number of the second layer input
          */
         public native void connect(int outLayerId, int outNum, int inpLayerId, int inpNum);
-        /** \brief Sets ouputs names of the network input pseudo layer.
+
+        /** \brief Sets outputs names of the network input pseudo layer.
          *
          * Each net always has special own the network input pseudo layer with id=0.
          * This layer stores the user blobs only and don't make any computations.
@@ -771,10 +894,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void setNetInputs(@Const @ByRef StringVector inputBlobNames);
 
-        /** \brief Runs forward pass for the whole network */
+        /** \brief Initializes and allocates all layers. */
+        public native @Name("allocate") void _allocate();
+
+        /** \brief Runs forward pass to compute output of layer \p toLayer.
+          * \details By default runs forward pass for the whole network.
+          */
+        public native void forward(@ByVal(nullValue = "cv::dnn::Net::LayerId(cv::String())") @Cast("cv::dnn::Net::LayerId*") DictValue toLayer);
         public native void forward();
-        /** \brief Runs forward pass to compute output of layer \p toLayer */
-        public native void forward(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue toLayer);
         /** \brief Runs forward pass to compute output of layer \p toLayer, but computations start from \p startLayer */
         
         /** \overload */
@@ -798,6 +925,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void setBlob(@Str BytePointer outputName, @Const @ByRef Blob blob);
         public native void setBlob(@Str String outputName, @Const @ByRef Blob blob);
+
         /** \brief Returns the layer output blob.
          *  @param outputName the descriptor of the returning layer output blob.
          *  @see connect(String, String)
@@ -814,6 +942,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  then the following forward pass may fail.
         */
         
+
         /** \brief Returns parameter blob of the layer.
          *  @param layer name or id of the layer.
          *  @param numParam index of the layer parameter in the Layer::blobs array.
@@ -830,7 +959,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public Importer(Pointer p) { super(p); }
     
 
-        /** \brief Adds loaded layers into the \p net and sets connetions between them. */
+        /** \brief Adds loaded layers into the \p net and sets connections between them. */
         public native void populateNet(@ByVal Net net);
     }
 
@@ -844,15 +973,30 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Namespace("cv::dnn") public static native @Ptr Importer createCaffeImporter(@Str String prototxt, @Str String caffeModel/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @Ptr Importer createCaffeImporter(@Str String prototxt);
 
+    /** \brief Reads a network model stored in Caffe model files.
+      * \details This is shortcut consisting from createCaffeImporter and Net::populateNet calls.
+      */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str BytePointer prototxt, @Str BytePointer caffeModel/*=cv::String()*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str BytePointer prototxt);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str String prototxt, @Str String caffeModel/*=cv::String()*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str String prototxt);
+
+    /** \brief Creates the importer of <a href="http://www.tensorflow.org">TensorFlow</a> framework network.
+     *  @param model   path to the .pb file with binary protobuf description of the network architecture.
+     *  @return Pointer to the created importer, NULL in failure cases.
+     */
+    @Namespace("cv::dnn") public static native @Ptr Importer createTensorflowImporter(@Str BytePointer model);
+    @Namespace("cv::dnn") public static native @Ptr Importer createTensorflowImporter(@Str String model);
+
     /** \brief Creates the importer of <a href="http://torch.ch">Torch7</a> framework network.
      *  @param filename path to the file, dumped from Torch by using torch.save() function.
      *  @param isBinary specifies whether the network was serialized in ascii mode or binary.
      *  @return Pointer to the created importer, NULL in failure cases.
      *
-     *  \warning Torch7 importer is experimental now, you need explicitly set CMake opencv_dnn_BUILD_TORCH_IMPORTER flag to compile its.
+     *  \warning Torch7 importer is experimental now, you need explicitly set CMake {@code opencv_dnn_BUILD_TORCH_IMPORTER} flag to compile its.
      *
-     *  \note Ascii mode of Torch serializer is more preferable, because binary mode extensively use long type of C language,
-     *  which has different bit-length on different systems.
+     *  \note Ascii mode of Torch serializer is more preferable, because binary mode extensively use {@code long} type of C language,
+     *  which has various bit-length on different systems.
      *
      * The loading file must contain serialized <a href="https://github.com/torch/nn/blob/master/doc/module.md">nn.Module</a> object
      * with importing network. Try to eliminate a custom objects from serialazing data to avoid importing errors.
@@ -938,7 +1082,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 /** \addtogroup dnn
  *  \{
  * 
- *  \defgroup LayerFactoryModule Utilities for new layers registration
+ *  \defgroup dnnLayerFactory Utilities for New Layers Registration
  *  \{
 <p>
 /** \brief %Layer factory allows to create instances of registered layers. */
@@ -980,7 +1124,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 *   \details This macros must be placed inside the function code.
 */
 // #define REG_RUNTIME_LAYER_FUNC(type, constuctorFunc)
-//     LayerFactory::registerLayer(#type, constuctorFunc);
+//     cv::dnn::LayerFactory::registerLayer(#type, constuctorFunc);
 
 /** \brief Registers layer class in runtime.
  *  @param type string, containing type name of the layer.
@@ -988,7 +1132,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
  *  \details This macros must be placed inside the function code.
  */
 // #define REG_RUNTIME_LAYER_CLASS(type, class)
-//     LayerFactory::registerLayer(#type, _layerDynamicRegisterer<class>);
+//     cv::dnn::LayerFactory::registerLayer(#type, _layerDynamicRegisterer<class>);
 
 /** \brief Registers layer constructor on module load time.
 *   @param type string, containing type name of the layer.
@@ -996,7 +1140,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 *   \details This macros must be placed outside the function code.
 */
 // #define REG_STATIC_LAYER_FUNC(type, constuctorFunc)
-// static _LayerStaticRegisterer __LayerStaticRegisterer_##type(#type, constuctorFunc);
+// static cv::dnn::_LayerStaticRegisterer __LayerStaticRegisterer_##type(#type, constuctorFunc);
 
 /** \brief Registers layer class on module load time.
  *  @param type string, containing type name of the layer.
@@ -1018,12 +1162,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _LayerStaticRegisterer(Pointer p) { super(p); }
 
-    public native @Str BytePointer type(); public native _LayerStaticRegisterer type(BytePointer type);
 
-    public _LayerStaticRegisterer(@Str BytePointer type, LayerFactory.Constuctor constuctor) { super((Pointer)null); allocate(type, constuctor); }
-    private native void allocate(@Str BytePointer type, LayerFactory.Constuctor constuctor);
-    public _LayerStaticRegisterer(@Str String type, LayerFactory.Constuctor constuctor) { super((Pointer)null); allocate(type, constuctor); }
-    private native void allocate(@Str String type, LayerFactory.Constuctor constuctor);
+    public _LayerStaticRegisterer(@Str BytePointer layerType, LayerFactory.Constuctor layerConstuctor) { super((Pointer)null); allocate(layerType, layerConstuctor); }
+    private native void allocate(@Str BytePointer layerType, LayerFactory.Constuctor layerConstuctor);
+    public _LayerStaticRegisterer(@Str String layerType, LayerFactory.Constuctor layerConstuctor) { super((Pointer)null); allocate(layerType, layerConstuctor); }
+    private native void allocate(@Str String layerType, LayerFactory.Constuctor layerConstuctor);
 }
 
 

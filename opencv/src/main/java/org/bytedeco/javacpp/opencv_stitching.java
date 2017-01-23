@@ -67,8 +67,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_WARPERS_HPP__
-// #define __OPENCV_STITCHING_WARPERS_HPP__
+// #ifndef OPENCV_STITCHING_WARPERS_HPP
+// #define OPENCV_STITCHING_WARPERS_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/core/cuda.hpp"
@@ -262,6 +262,44 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 }
 
 
+/** \brief Affine warper that uses rotations and translations
+ <p>
+ Uses affine transformation in homogeneous coordinates to represent both rotation and
+ translation in camera rotation matrix.
+ */
+@Namespace("cv::detail") public static class AffineWarper extends DetailPlaneWarper {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AffineWarper(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AffineWarper(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AffineWarper position(long position) {
+        return (AffineWarper)super.position(position);
+    }
+
+    /** \brief Construct an instance of the affine warper class.
+    <p>
+    @param scale Projected image scale multiplier
+     */
+    public AffineWarper(float scale/*=1.f*/) { super((Pointer)null); allocate(scale); }
+    private native void allocate(float scale/*=1.f*/);
+    public AffineWarper() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R,
+                   int interp_mode, int border_mode, @ByVal Mat dst);
+    public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R,
+                   int interp_mode, int border_mode, @ByVal UMat dst);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
+}
+
+
 @Namespace("cv::detail") public static class SphericalProjector extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -287,7 +325,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 /** \brief Warper that maps an image onto the unit sphere located at the origin.
  <p>
- Projects image onto unit sphere with origin at (0, 0, 0).
+ Projects image onto unit sphere with origin at (0, 0, 0) and radius scale, measured in pixels.
+ A 360° panorama would therefore have a resulting width of 2 * scale * PI pixels.
  Poles are located at (0, -1, 0) and (0, 1, 0) points.
 */
 @Name("cv::detail::SphericalWarper") public static class DetailSphericalWarper extends RotationWarper {
@@ -297,7 +336,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     /** \brief Construct an instance of the spherical warper class.
     <p>
-    @param scale Projected image scale multiplier
+    @param scale Radius of the projected sphere, in pixels. An image spanning the
+                 whole sphere will have a width of 2 * scale * PI pixels.
      */
     public DetailSphericalWarper(float scale) { super((Pointer)null); allocate(scale); }
     private native void allocate(float scale);
@@ -813,7 +853,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 // #include "warpers_inl.hpp"
 
-// #endif // __OPENCV_STITCHING_WARPERS_HPP__
+// #endif // OPENCV_STITCHING_WARPERS_HPP
 
 
 // Parsed from <opencv2/stitching/detail/matchers.hpp>
@@ -860,8 +900,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_MATCHERS_HPP__
-// #define __OPENCV_STITCHING_MATCHERS_HPP__
+// #ifndef OPENCV_STITCHING_MATCHERS_HPP
+// #define OPENCV_STITCHING_MATCHERS_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/features2d.hpp"
@@ -914,6 +954,21 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     */
     public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
     public native @Name("operator ()") void apply(@ByVal UMat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
+    /** \brief Finds features in the given images in parallel.
+    <p>
+    @param images Source images
+    @param features Found features for each image
+    @param rois Regions of interest for each image
+    <p>
+    \sa detail::ImageFeatures, Rect_
+    */
+    public native @Name("operator ()") void apply(@ByVal MatVector images, @StdVector ImageFeatures features,
+                         @Const @ByRef RectVectorVector rois);
+    public native @Name("operator ()") void apply(@ByVal UMatVector images, @StdVector ImageFeatures features,
+                         @Const @ByRef RectVectorVector rois);
+    /** \overload */
+    public native @Name("operator ()") void apply(@ByVal MatVector images, @StdVector ImageFeatures features);
+    public native @Name("operator ()") void apply(@ByVal UMatVector images, @StdVector ImageFeatures features);
     /** \brief Frees unused memory allocated before if there is any. */
     public native void collectGarbage();
 }
@@ -962,13 +1017,48 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     private native void allocate();
 }
 
+/** \brief AKAZE features finder. :
+<p>
+\sa detail::FeaturesFinder, AKAZE
+*/
+@Namespace("cv::detail") @NoOffset public static class AKAZEFeaturesFinder extends FeaturesFinder {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AKAZEFeaturesFinder(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AKAZEFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AKAZEFeaturesFinder position(long position) {
+        return (AKAZEFeaturesFinder)super.position(position);
+    }
+
+    public AKAZEFeaturesFinder(int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
+                            int descriptor_size/*=0*/,
+                            int descriptor_channels/*=3*/,
+                            float threshold/*=0.001f*/,
+                            int nOctaves/*=4*/,
+                            int nOctaveLayers/*=4*/,
+                            int diffusivity/*=cv::KAZE::DIFF_PM_G2*/) { super((Pointer)null); allocate(descriptor_type, descriptor_size, descriptor_channels, threshold, nOctaves, nOctaveLayers, diffusivity); }
+    private native void allocate(int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
+                            int descriptor_size/*=0*/,
+                            int descriptor_channels/*=3*/,
+                            float threshold/*=0.001f*/,
+                            int nOctaves/*=4*/,
+                            int nOctaveLayers/*=4*/,
+                            int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
+    public AKAZEFeaturesFinder() { super((Pointer)null); allocate(); }
+    private native void allocate();
+}
 
 // #ifdef HAVE_OPENCV_XFEATURES2D
 // #endif
 
 /** \brief Structure containing information about matches between two images.
 <p>
-It's assumed that there is a homography between those images.
+It's assumed that there is a transformation between those images. Transformation may be
+homography or affine transformation based on selected matcher.
+<p>
+\sa detail::FeaturesMatcher
 */
 @Namespace("cv::detail") @NoOffset public static class MatchesInfo extends Pointer {
     static { Loader.load(); }
@@ -995,7 +1085,7 @@ It's assumed that there is a homography between those images.
     public native @Cast("uchar*") @StdVector BytePointer inliers_mask(); public native MatchesInfo inliers_mask(BytePointer inliers_mask);
     /** Number of geometrically consistent matches */
     public native int num_inliers(); public native MatchesInfo num_inliers(int num_inliers);
-    /** Estimated homography */
+    /** Estimated transformation */
     public native @ByRef Mat H(); public native MatchesInfo H(Mat H);
     /** Confidence two images are from the same panorama */
     public native double confidence(); public native MatchesInfo confidence(double confidence);
@@ -1097,12 +1187,52 @@ ratio between descriptor distances is greater than the threshold match_conf
     public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
 }
 
+/** \brief Features matcher similar to cv::detail::BestOf2NearestMatcher which
+finds two best matches for each feature and leaves the best one only if the
+ratio between descriptor distances is greater than the threshold match_conf.
+<p>
+Unlike cv::detail::BestOf2NearestMatcher this matcher uses affine
+transformation (affine trasformation estimate will be placed in matches_info).
+<p>
+\sa cv::detail::FeaturesMatcher cv::detail::BestOf2NearestMatcher
+ */
+@Namespace("cv::detail") @NoOffset public static class AffineBestOf2NearestMatcher extends BestOf2NearestMatcher {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AffineBestOf2NearestMatcher(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AffineBestOf2NearestMatcher(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AffineBestOf2NearestMatcher position(long position) {
+        return (AffineBestOf2NearestMatcher)super.position(position);
+    }
+
+    /** \brief Constructs a "best of 2 nearest" matcher that expects affine trasformation
+    between images
+    <p>
+    @param full_affine whether to use full affine transformation with 6 degress of freedom or reduced
+    transformation with 4 degrees of freedom using only rotation, translation and uniform scaling
+    @param try_use_gpu Should try to use GPU or not
+    @param match_conf Match distances ration threshold
+    @param num_matches_thresh1 Minimum number of matches required for the 2D affine transform
+    estimation used in the inliers classification step
+    <p>
+    \sa cv::estimateAffine2D cv::estimateAffinePartial2D
+     */
+    public AffineBestOf2NearestMatcher(@Cast("bool") boolean full_affine/*=false*/, @Cast("bool") boolean try_use_gpu/*=false*/,
+                                    float match_conf/*=0.3f*/, int num_matches_thresh1/*=6*/) { super((Pointer)null); allocate(full_affine, try_use_gpu, match_conf, num_matches_thresh1); }
+    private native void allocate(@Cast("bool") boolean full_affine/*=false*/, @Cast("bool") boolean try_use_gpu/*=false*/,
+                                    float match_conf/*=0.3f*/, int num_matches_thresh1/*=6*/);
+    public AffineBestOf2NearestMatcher() { super((Pointer)null); allocate(); }
+    private native void allocate();
+}
+
 /** \} stitching_match */
 
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_MATCHERS_HPP__
+// #endif // OPENCV_STITCHING_MATCHERS_HPP
 
 
 // Parsed from <opencv2/stitching/detail/util.hpp>
@@ -1149,61 +1279,11 @@ ratio between descriptor distances is greater than the threshold match_conf
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_UTIL_HPP__
-// #define __OPENCV_STITCHING_UTIL_HPP__
+// #ifndef OPENCV_STITCHING_UTIL_HPP
+// #define OPENCV_STITCHING_UTIL_HPP
 
 // #include <list>
 // #include "opencv2/core.hpp"
-
-// #ifndef ENABLE_LOG
-public static final int ENABLE_LOG = 0;
-// #endif
-
-// TODO remove LOG macros, add logging class
-// #if ENABLE_LOG
-// #ifdef ANDROID
-//   #include <iostream>
-//   #include <sstream>
-//   #include <android/log.h>
-//   #define LOG_STITCHING_MSG(msg)
-//     do {
-//         Stringstream _os;
-//         _os << msg;
-//        __android_log_print(ANDROID_LOG_DEBUG, "STITCHING", "%s", _os.str().c_str());
-//     } while(0);
-// #else
-//   #include <iostream>
-//   #define LOG_STITCHING_MSG(msg) for(;;) { std::cout << msg; std::cout.fsh(); break; }
-// #endif
-// #else
-//   #define LOG_STITCHING_MSG(msg)
-// #endif
-
-// #define LOG_(_level, _msg)
-//     for(;;)
-//     {
-//         using namespace std;
-//         if ((_level) >= ::cv::detail::stitchingLogLevel())
-//         {
-//             LOG_STITCHING_MSG(_msg);
-//         }
-//     break;
-//     }
-
-
-// #define LOG(msg) LOG_(1, msg)
-// #define LOG_CHAT(msg) LOG_(0, msg)
-
-// #define LOGLN(msg) LOG(msg << std::endl)
-// #define LOGLN_CHAT(msg) LOG_CHAT(msg << std::endl)
-
-//#if DEBUG_LOG_CHAT
-//  #define LOG_CHAT(msg) LOG(msg)
-//  #define LOGLN_CHAT(msg) LOGLN(msg)
-//#else
-//  #define LOG_CHAT(msg) do{}while(0)
-//  #define LOGLN_CHAT(msg) do{}while(0)
-//#endif
 
 /** \addtogroup stitching
  *  \{ */
@@ -1295,7 +1375,7 @@ public static final int ENABLE_LOG = 0;
 
 // #include "util_inl.hpp"
 
-// #endif // __OPENCV_STITCHING_UTIL_HPP__
+// #endif // OPENCV_STITCHING_UTIL_HPP
 
 
 // Parsed from <opencv2/stitching/detail/camera.hpp>
@@ -1342,8 +1422,8 @@ public static final int ENABLE_LOG = 0;
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_CAMERA_HPP__
-// #define __OPENCV_STITCHING_CAMERA_HPP__
+// #ifndef OPENCV_STITCHING_CAMERA_HPP
+// #define OPENCV_STITCHING_CAMERA_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -1385,7 +1465,7 @@ public static final int ENABLE_LOG = 0;
  // namespace detail
  // namespace cv
 
-// #endif // #ifndef __OPENCV_STITCHING_CAMERA_HPP__
+// #endif // #ifndef OPENCV_STITCHING_CAMERA_HPP
 
 
 // Parsed from <opencv2/stitching/detail/motion_estimators.hpp>
@@ -1432,8 +1512,8 @@ public static final int ENABLE_LOG = 0;
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_MOTION_ESTIMATORS_HPP__
-// #define __OPENCV_STITCHING_MOTION_ESTIMATORS_HPP__
+// #ifndef OPENCV_STITCHING_MOTION_ESTIMATORS_HPP
+// #define OPENCV_STITCHING_MOTION_ESTIMATORS_HPP
 
 // #include "opencv2/core.hpp"
 // #include "matchers.hpp"
@@ -1488,6 +1568,29 @@ rotations in respect to the first camera, for instance. :
     private native void allocate();
 }
 
+/** \brief Affine transformation based estimator.
+<p>
+This estimator uses pairwise tranformations estimated by matcher to estimate
+final transformation for each camera.
+<p>
+\sa cv::detail::HomographyBasedEstimator
+ */
+@Namespace("cv::detail") public static class AffineBasedEstimator extends Estimator {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AffineBasedEstimator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AffineBasedEstimator(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AffineBasedEstimator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public AffineBasedEstimator position(long position) {
+        return (AffineBasedEstimator)super.position(position);
+    }
+
+}
+
 /** \brief Base class for all camera parameters refinement methods.
  */
 @Namespace("cv::detail") @NoOffset public static class BundleAdjusterBase extends Estimator {
@@ -1503,6 +1606,24 @@ rotations in respect to the first camera, for instance. :
 
     public native @ByVal TermCriteria termCriteria();
     public native void setTermCriteria(@Const @ByRef TermCriteria term_criteria);
+}
+
+
+/** \brief Stub bundle adjuster that does nothing.
+ */
+@Namespace("cv::detail") public static class NoBundleAdjuster extends BundleAdjusterBase {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NoBundleAdjuster(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NoBundleAdjuster(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NoBundleAdjuster position(long position) {
+        return (NoBundleAdjuster)super.position(position);
+    }
+
+    public NoBundleAdjuster() { super((Pointer)null); allocate(); }
+    private native void allocate();
 }
 
 
@@ -1549,6 +1670,56 @@ It can estimate focal length. It ignores the refinement mask for now.
 }
 
 
+/** \brief Bundle adjuster that expects affine transformation
+represented in homogeneous coordinates in R for each camera param. Implements
+camera parameters refinement algorithm which minimizes sum of the reprojection
+error squares
+<p>
+It estimates all transformation parameters. Refinement mask is ignored.
+<p>
+\sa AffineBasedEstimator AffineBestOf2NearestMatcher BundleAdjusterAffinePartial
+ */
+@Namespace("cv::detail") @NoOffset public static class BundleAdjusterAffine extends BundleAdjusterBase {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BundleAdjusterAffine(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BundleAdjusterAffine(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BundleAdjusterAffine position(long position) {
+        return (BundleAdjusterAffine)super.position(position);
+    }
+
+    public BundleAdjusterAffine() { super((Pointer)null); allocate(); }
+    private native void allocate();
+}
+
+
+/** \brief Bundle adjuster that expects affine transformation with 4 DOF
+represented in homogeneous coordinates in R for each camera param. Implements
+camera parameters refinement algorithm which minimizes sum of the reprojection
+error squares
+<p>
+It estimates all transformation parameters. Refinement mask is ignored.
+<p>
+\sa AffineBasedEstimator AffineBestOf2NearestMatcher BundleAdjusterAffine
+ */
+@Namespace("cv::detail") @NoOffset public static class BundleAdjusterAffinePartial extends BundleAdjusterBase {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BundleAdjusterAffinePartial(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BundleAdjusterAffinePartial(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BundleAdjusterAffinePartial position(long position) {
+        return (BundleAdjusterAffinePartial)super.position(position);
+    }
+
+    public BundleAdjusterAffinePartial() { super((Pointer)null); allocate(); }
+    private native void allocate();
+}
+
+
 /** enum cv::detail::WaveCorrectKind */
 public static final int
     WAVE_CORRECT_HORIZ = 0,
@@ -1589,7 +1760,7 @@ public static final int
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_MOTION_ESTIMATORS_HPP__
+// #endif // OPENCV_STITCHING_MOTION_ESTIMATORS_HPP
 
 
 // Parsed from <opencv2/stitching/detail/exposure_compensate.hpp>
@@ -1636,8 +1807,12 @@ public static final int
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP__
-// #define __OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP__
+// #ifndef OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP
+// #define OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP
+
+// #if defined(NO)
+// #  warning Detected Apple 'NO' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
+// #endif
 
 // #include "opencv2/core.hpp"
 
@@ -1753,7 +1928,7 @@ intensities, see \cite UES01 for details.
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP__
+// #endif // OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP
 
 
 // Parsed from <opencv2/stitching/detail/seam_finders.hpp>
@@ -1800,8 +1975,8 @@ intensities, see \cite UES01 for details.
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_SEAM_FINDERS_HPP__
-// #define __OPENCV_STITCHING_SEAM_FINDERS_HPP__
+// #ifndef OPENCV_STITCHING_SEAM_FINDERS_HPP
+// #define OPENCV_STITCHING_SEAM_FINDERS_HPP
 
 // #include <set>
 // #include "opencv2/core.hpp"
@@ -1961,7 +2136,7 @@ intensities, see \cite UES01 for details.
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_SEAM_FINDERS_HPP__
+// #endif // OPENCV_STITCHING_SEAM_FINDERS_HPP
 
 
 // Parsed from <opencv2/stitching/detail/blenders.hpp>
@@ -2008,8 +2183,12 @@ intensities, see \cite UES01 for details.
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_BLENDERS_HPP__
-// #define __OPENCV_STITCHING_BLENDERS_HPP__
+// #ifndef OPENCV_STITCHING_BLENDERS_HPP
+// #define OPENCV_STITCHING_BLENDERS_HPP
+
+// #if defined(NO)
+// #  warning Detected Apple 'NO' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
+// #endif
 
 // #include "opencv2/core.hpp"
 
@@ -2152,7 +2331,7 @@ Simple blender which puts one image over another
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_BLENDERS_HPP__
+// #endif // OPENCV_STITCHING_BLENDERS_HPP
 
 
 // Parsed from <opencv2/stitching/detail/autocalib.hpp>
@@ -2199,8 +2378,8 @@ Simple blender which puts one image over another
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_AUTOCALIB_HPP__
-// #define __OPENCV_STITCHING_AUTOCALIB_HPP__
+// #ifndef OPENCV_STITCHING_AUTOCALIB_HPP
+// #define OPENCV_STITCHING_AUTOCALIB_HPP
 
 // #include "opencv2/core.hpp"
 // #include "matchers.hpp"
@@ -2250,7 +2429,7 @@ by Heung-Yeung Shum and Richard Szeliski.
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_AUTOCALIB_HPP__
+// #endif // OPENCV_STITCHING_AUTOCALIB_HPP
 
 
 // Parsed from <opencv2/stitching/detail/timelapsers.hpp>
@@ -2298,8 +2477,8 @@ by Heung-Yeung Shum and Richard Szeliski.
 //M*/
 
 
-// #ifndef __OPENCV_STITCHING_TIMELAPSERS_HPP__
-// #define __OPENCV_STITCHING_TIMELAPSERS_HPP__
+// #ifndef OPENCV_STITCHING_TIMELAPSERS_HPP
+// #define OPENCV_STITCHING_TIMELAPSERS_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -2357,7 +2536,7 @@ by Heung-Yeung Shum and Richard Szeliski.
  // namespace detail
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_TIMELAPSERS_HPP__
+// #endif // OPENCV_STITCHING_TIMELAPSERS_HPP
 
 
 // Parsed from <opencv2/stitching/warpers.hpp>
@@ -2404,8 +2583,8 @@ by Heung-Yeung Shum and Richard Szeliski.
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_WARPER_CREATORS_HPP__
-// #define __OPENCV_STITCHING_WARPER_CREATORS_HPP__
+// #ifndef OPENCV_STITCHING_WARPER_CREATORS_HPP
+// #define OPENCV_STITCHING_WARPER_CREATORS_HPP
 
 // #include "opencv2/stitching/detail/warpers.hpp"
 
@@ -2441,6 +2620,10 @@ by Heung-Yeung Shum and Richard Szeliski.
 
     public native @Ptr RotationWarper create(float scale);
 }
+
+/** \brief Affine warper factory class.
+  \sa detail::AffineWarper
+ */
 
 /** \brief Cylindrical warper factory class.
 \sa detail::CylindricalWarper
@@ -2629,7 +2812,7 @@ by Heung-Yeung Shum and Richard Szeliski.
 
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_WARPER_CREATORS_HPP__
+// #endif // OPENCV_STITCHING_WARPER_CREATORS_HPP
 
 
 // Parsed from <opencv2/stitching.hpp>
@@ -2676,8 +2859,8 @@ by Heung-Yeung Shum and Richard Szeliski.
 //
 //M*/
 
-// #ifndef __OPENCV_STITCHING_STITCHER_HPP__
-// #define __OPENCV_STITCHING_STITCHER_HPP__
+// #ifndef OPENCV_STITCHING_STITCHER_HPP
+// #define OPENCV_STITCHING_STITCHER_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/features2d.hpp"
@@ -2689,6 +2872,12 @@ by Heung-Yeung Shum and Richard Szeliski.
 // #include "opencv2/stitching/detail/blenders.hpp"
 // #include "opencv2/stitching/detail/camera.hpp"
 
+
+// #if defined(Status)
+// #  warning Detected X11 'Status' macro definition, it can cause build conflicts. Please, include this header before any X11 headers.
+// #endif
+
+
 /**
 \defgroup stitching Images stitching
 <p>
@@ -2699,7 +2888,29 @@ one can combine and use them separately.
 <p>
 The implemented stitching pipeline is very similar to the one proposed in \cite BL07 .
 <p>
-![image](StitchingPipeline.jpg)
+![stitching pipeline](StitchingPipeline.jpg)
+<p>
+Camera models
+-------------
+<p>
+There are currently 2 camera models implemented in stitching pipeline.
+<p>
+- _Homography model_ expecting perspective transformations between images
+  implemented in \ref cv::detail::BestOf2NearestMatcher cv::detail::HomographyBasedEstimator
+  cv::detail::BundleAdjusterReproj cv::detail::BundleAdjusterRay
+- _Affine model_ expecting affine transformation with 6 DOF or 4 DOF implemented in
+  \ref cv::detail::AffineBestOf2NearestMatcher cv::detail::AffineBasedEstimator
+  cv::detail::BundleAdjusterAffine cv::detail::BundleAdjusterAffinePartial cv::AffineWarper
+<p>
+Homography model is useful for creating photo panoramas captured by camera,
+while affine-based model can be used to stitch scans and object captured by
+specialized devices. Use \ref cv::Stitcher::create to get preconfigured pipeline for one
+of those models.
+<p>
+\note
+Certain detailed settings of \ref cv::Stitcher might not make sense. Especially
+you should not mix classes implementing affine model and classes implementing
+Homography model, as they work with different transformations.
 <p>
 \{
     \defgroup stitching_match Features Finding and Images Matching
@@ -2749,6 +2960,20 @@ familiar with the theory is recommended.
         ERR_NEED_MORE_IMGS = 1,
         ERR_HOMOGRAPHY_EST_FAIL = 2,
         ERR_CAMERA_PARAMS_ADJUST_FAIL = 3;
+    /** enum cv::Stitcher::Mode */
+    public static final int
+        /** Mode for creating photo panoramas. Expects images under perspective
+        transformation and projects resulting pano to sphere.
+        <p>
+        \sa detail::BestOf2NearestMatcher SphericalWarper
+        */
+        PANORAMA = 0,
+        /** Mode for composing scans. Expects images under affine transformation does
+        not compensate exposure by default.
+        <p>
+        \sa detail::AffineBestOf2NearestMatcher AffineWarper
+        */
+        SCANS = 1;
 
    // Stitcher() {}
     /** \brief Creates a stitcher with the default parameters.
@@ -2758,6 +2983,16 @@ familiar with the theory is recommended.
      */
     public static native @ByVal Stitcher createDefault(@Cast("bool") boolean try_use_gpu/*=false*/);
     public static native @ByVal Stitcher createDefault();
+    /** \brief Creates a Stitcher configured in one of the stitching modes.
+    <p>
+    @param mode Scenario for stitcher operation. This is usually determined by source of images
+    to stitch and their transformation. Default parameters will be chosen for operation in given
+    scenario.
+    @param try_use_gpu Flag indicating whether GPU should be used whenever it's possible.
+    @return Stitcher class instance.
+     */
+    public static native @Ptr Stitcher create(@Cast("cv::Stitcher::Mode") int mode/*=cv::Stitcher::PANORAMA*/, @Cast("bool") boolean try_use_gpu/*=false*/);
+    public static native @Ptr Stitcher create();
 
     public native double registrationResol();
     public native void setRegistrationResol(double resol_mpx);
@@ -2788,6 +3023,13 @@ familiar with the theory is recommended.
 
     public native @Ptr BundleAdjusterBase bundleAdjuster();
     public native void setBundleAdjuster(@Ptr BundleAdjusterBase bundle_adjuster);
+
+    /* TODO OpenCV ABI 4.x
+    Ptr<detail::Estimator> estimator() { return estimator_; }
+    const Ptr<detail::Estimator> estimator() const { return estimator_; }
+    void setEstimator(Ptr<detail::Estimator> estimator)
+        { estimator_ = estimator; }
+    */
 
     public native @Ptr WarperCreator warper();
     public native void setWarper(@Ptr WarperCreator creator);
@@ -2864,7 +3106,7 @@ familiar with the theory is recommended.
 
  // namespace cv
 
-// #endif // __OPENCV_STITCHING_STITCHER_HPP__
+// #endif // OPENCV_STITCHING_STITCHER_HPP
 
 
 }

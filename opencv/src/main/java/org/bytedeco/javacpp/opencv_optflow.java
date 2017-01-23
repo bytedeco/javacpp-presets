@@ -90,6 +90,9 @@ Functions reading and writing .flo files in "Middlebury" format, see: <http://vi
 - cv::optflow::writeOpticalFlow
  <p>
  */
+
+// #include "opencv2/optflow/pcaflow.hpp"
+// #include "opencv2/optflow/sparse_matching_gpc.hpp"
     
 /** \addtogroup optflow
  *  \{
@@ -192,6 +195,67 @@ to the flow in the horizontal direction (u), second - vertical (v).
 @Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal UMat flow );
 @Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal UMat flow );
 
+/** \brief Variational optical flow refinement
+<p>
+This class implements variational refinement of the input flow field, i.e.
+it uses input flow to initialize the minimization of the following functional:
+\f$E(U) = \int_{\Omega} \delta \Psi(E_I) + \gamma \Psi(E_G) + \alpha \Psi(E_S) \f$,
+where \f$E_I,E_G,E_S\f$ are color constancy, gradient constancy and smoothness terms
+respectively. \f$\Psi(s^2)=\sqrt{s^2+\epsilon^2}\f$ is a robust penalizer to limit the
+influence of outliers. A complete formulation and a description of the minimization
+procedure can be found in \cite Brox2004
+*/
+@Namespace("cv::optflow") public static class VariationalRefinement extends DenseOpticalFlow {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public VariationalRefinement(Pointer p) { super(p); }
+
+    /** \brief \ref calc function overload to handle separate horizontal (u) and vertical (v) flow components
+    (to avoid extra splits/merges) */
+    public native void calcUV(@ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow_u, @ByVal Mat flow_v);
+    public native void calcUV(@ByVal UMat I0, @ByVal UMat I1, @ByVal UMat flow_u, @ByVal UMat flow_v);
+
+    /** \brief Number of outer (fixed-point) iterations in the minimization procedure.
+    @see setFixedPointIterations */
+    public native int getFixedPointIterations();
+    /** \copybrief getFixedPointIterations @see getFixedPointIterations */
+    public native void setFixedPointIterations(int val);
+
+    /** \brief Number of inner successive over-relaxation (SOR) iterations
+        in the minimization procedure to solve the respective linear system.
+    @see setSorIterations */
+    public native int getSorIterations();
+    /** \copybrief getSorIterations @see getSorIterations */
+    public native void setSorIterations(int val);
+
+    /** \brief Relaxation factor in SOR
+    @see setOmega */
+    public native float getOmega();
+    /** \copybrief getOmega @see getOmega */
+    public native void setOmega(float val);
+
+    /** \brief Weight of the smoothness term
+    @see setAlpha */
+    public native float getAlpha();
+    /** \copybrief getAlpha @see getAlpha */
+    public native void setAlpha(float val);
+
+    /** \brief Weight of the color constancy term
+    @see setDelta */
+    public native float getDelta();
+    /** \copybrief getDelta @see getDelta */
+    public native void setDelta(float val);
+
+    /** \brief Weight of the gradient constancy term
+    @see setGamma */
+    public native float getGamma();
+    /** \copybrief getGamma @see getGamma */
+    public native void setGamma(float val);
+}
+
+/** \brief Creates an instance of VariationalRefinement
+*/
+@Namespace("cv::optflow") public static native @Ptr VariationalRefinement createVariationalFlowRefinement();
 
 /** \brief DeepFlow optical flow algorithm implementation.
 <p>
@@ -228,6 +292,110 @@ Relaxation factor in SOR
 
 /** Additional interface to the SparseToDenseFlow algorithm - calcOpticalFlowSparseToDense() */
 @Namespace("cv::optflow") public static native @Ptr DenseOpticalFlow createOptFlow_SparseToDense();
+
+/** \brief DIS optical flow algorithm.
+<p>
+This class implements the Dense Inverse Search (DIS) optical flow algorithm. More
+details about the algorithm can be found at \cite Kroeger2016 . Includes three presets with preselected
+parameters to provide reasonable trade-off between speed and quality. However, even the slowest preset is
+still relatively fast, use DeepFlow if you need better quality and don't care about speed.
+<p>
+This implementation includes several additional features compared to the algorithm described in the paper,
+including spatial propagation of flow vectors (\ref getUseSpatialPropagation), as well as an option to
+utilize an initial flow approximation passed to \ref calc (which is, essentially, temporal propagation,
+if the previous frame's flow field is passed).
+*/
+@Namespace("cv::optflow") public static class DISOpticalFlow extends DenseOpticalFlow {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DISOpticalFlow(Pointer p) { super(p); }
+
+    /** enum cv::optflow::DISOpticalFlow:: */
+    public static final int
+        PRESET_ULTRAFAST = 0,
+        PRESET_FAST = 1,
+        PRESET_MEDIUM = 2;
+
+    /** \brief Finest level of the Gaussian pyramid on which the flow is computed (zero level
+        corresponds to the original image resolution). The final flow is obtained by bilinear upscaling.
+        @see setFinestScale */
+    public native int getFinestScale();
+    /** \copybrief getFinestScale @see getFinestScale */
+    public native void setFinestScale(int val);
+
+    /** \brief Size of an image patch for matching (in pixels). Normally, default 8x8 patches work well
+        enough in most cases.
+        @see setPatchSize */
+    public native int getPatchSize();
+    /** \copybrief getPatchSize @see getPatchSize */
+    public native void setPatchSize(int val);
+
+    /** \brief Stride between neighbor patches. Must be less than patch size. Lower values correspond
+        to higher flow quality.
+        @see setPatchStride */
+    public native int getPatchStride();
+    /** \copybrief getPatchStride @see getPatchStride */
+    public native void setPatchStride(int val);
+
+    /** \brief Maximum number of gradient descent iterations in the patch inverse search stage. Higher values
+        may improve quality in some cases.
+        @see setGradientDescentIterations */
+    public native int getGradientDescentIterations();
+    /** \copybrief getGradientDescentIterations @see getGradientDescentIterations */
+    public native void setGradientDescentIterations(int val);
+
+    /** \brief Number of fixed point iterations of variational refinement per scale. Set to zero to
+        disable variational refinement completely. Higher values will typically result in more smooth and
+        high-quality flow.
+    @see setGradientDescentIterations */
+    public native int getVariationalRefinementIterations();
+    /** \copybrief getGradientDescentIterations @see getGradientDescentIterations */
+    public native void setVariationalRefinementIterations(int val);
+
+    /** \brief Weight of the smoothness term
+    @see setVariationalRefinementAlpha */
+    public native float getVariationalRefinementAlpha();
+    /** \copybrief getVariationalRefinementAlpha @see getVariationalRefinementAlpha */
+    public native void setVariationalRefinementAlpha(float val);
+
+    /** \brief Weight of the color constancy term
+    @see setVariationalRefinementDelta */
+    public native float getVariationalRefinementDelta();
+    /** \copybrief getVariationalRefinementDelta @see getVariationalRefinementDelta */
+    public native void setVariationalRefinementDelta(float val);
+
+    /** \brief Weight of the gradient constancy term
+    @see setVariationalRefinementGamma */
+    public native float getVariationalRefinementGamma();
+    /** \copybrief getVariationalRefinementGamma @see getVariationalRefinementGamma */
+    public native void setVariationalRefinementGamma(float val);
+
+
+    /** \brief Whether to use mean-normalization of patches when computing patch distance. It is turned on
+        by default as it typically provides a noticeable quality boost because of increased robustness to
+        illumination variations. Turn it off if you are certain that your sequence doesn't contain any changes
+        in illumination.
+    @see setUseMeanNormalization */
+    public native @Cast("bool") boolean getUseMeanNormalization();
+    /** \copybrief getUseMeanNormalization @see getUseMeanNormalization */
+    public native void setUseMeanNormalization(@Cast("bool") boolean val);
+
+    /** \brief Whether to use spatial propagation of good optical flow vectors. This option is turned on by
+        default, as it tends to work better on average and can sometimes help recover from major errors
+        introduced by the coarse-to-fine scheme employed by the DIS optical flow algorithm. Turning this
+        option off can make the output flow field a bit smoother, however.
+    @see setUseSpatialPropagation */
+    public native @Cast("bool") boolean getUseSpatialPropagation();
+    /** \copybrief getUseSpatialPropagation @see getUseSpatialPropagation */
+    public native void setUseSpatialPropagation(@Cast("bool") boolean val);
+}
+
+/** \brief Creates an instance of DISOpticalFlow
+<p>
+@param preset one of PRESET_ULTRAFAST, PRESET_FAST and PRESET_MEDIUM
+*/
+@Namespace("cv::optflow") public static native @Ptr DISOpticalFlow createOptFlow_DIS(int preset/*=cv::optflow::DISOpticalFlow::PRESET_FAST*/);
+@Namespace("cv::optflow") public static native @Ptr DISOpticalFlow createOptFlow_DIS();
 
 /** \} */
 

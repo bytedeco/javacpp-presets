@@ -13,8 +13,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_highgui.class, opencv_ml.class}, value = {
     @Platform(include = {"<opencv2/text.hpp>", "<opencv2/text/erfilter.hpp>", "<opencv2/text/ocr.hpp>", "opencv_adapters.h"},
-              link = "opencv_text@.3.1"),
-    @Platform(value = "windows", link = "opencv_text310")},
+              link = "opencv_text@.3.2"),
+    @Platform(value = "windows", link = "opencv_text320")},
               target = "org.bytedeco.javacpp.opencv_text")
 public class opencv_text implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -63,8 +63,8 @@ public class opencv_calib3d extends org.bytedeco.javacpp.helper.opencv_calib3d {
 //
 //M*/
 
-// #ifndef __OPENCV_CALIB3D_C_H__
-// #define __OPENCV_CALIB3D_C_H__
+// #ifndef OPENCV_CALIB3D_C_H
+// #define OPENCV_CALIB3D_C_H
 
 // #include "opencv2/core/core_c.h"
 
@@ -351,6 +351,7 @@ public static final int CV_CALIB_FIX_S1_S2_S3_S4 =  65536;
 public static final int CV_CALIB_TILTED_MODEL =  262144;
 public static final int CV_CALIB_FIX_TAUX_TAUY =  524288;
 
+public static final int CV_CALIB_NINTRINSIC = 18;
 
 /* Finds intrinsic and extrinsic camera parameters
    from a few views of known calibration pattern */
@@ -598,7 +599,7 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
 
 // #endif
 
-// #endif /* __OPENCV_CALIB3D_C_H__ */
+// #endif /* OPENCV_CALIB3D_C_H */
 
 
 // Parsed from <opencv2/calib3d.hpp>
@@ -646,8 +647,8 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
 //
 //M*/
 
-// #ifndef __OPENCV_CALIB3D_HPP__
-// #define __OPENCV_CALIB3D_HPP__
+// #ifndef OPENCV_CALIB3D_HPP
+// #define OPENCV_CALIB3D_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/features2d.hpp"
@@ -701,6 +702,10 @@ u = f_x*x' + c_x \\
 v = f_y*y' + c_y
 \end{array}\f]
 <p>
+The following figure illustrates the pinhole camera model.
+<p>
+![Pinhole camera model](pics/pinhole_camera_model.png)
+<p>
 Real lenses usually have some distortion, mostly radial distortion and slight tangential distortion.
 So, the above model is extended as:
 <p>
@@ -718,6 +723,10 @@ v = f_y*y'' + c_y
 \f$k_1\f$, \f$k_2\f$, \f$k_3\f$, \f$k_4\f$, \f$k_5\f$, and \f$k_6\f$ are radial distortion coefficients. \f$p_1\f$ and \f$p_2\f$ are
 tangential distortion coefficients. \f$s_1\f$, \f$s_2\f$, \f$s_3\f$, and \f$s_4\f$, are the thin prism distortion
 coefficients. Higher-order coefficients are not considered in OpenCV.
+<p>
+The next figure shows two common types of radial distortion: barrel distortion (typically \f$ k_1 > 0 \f$ and pincushion distortion (typically \f$ k_1 < 0 \f$).
+<p>
+![](pics/distortion_examples.png)
 <p>
 In some cases the image sensor may be tilted in order to focus an oblique plane in front of the
 camera (Scheimpfug condition). This can be useful for particle image velocimetry (PIV) or
@@ -795,7 +804,7 @@ pattern (every view is described by several 3D-2D point correspondences).
     <p>
     \f[x = Xc_1 \\ y = Xc_2 \\ z = Xc_3\f]
     <p>
-    The pinehole projection coordinates of P is [a; b] where
+    The pinhole projection coordinates of P is [a; b] where
     <p>
     \f[a = x / z \ and \ b = y / z \\ r^2 = a^2 + b^2 \\ \theta = atan(r)\f]
     <p>
@@ -805,12 +814,12 @@ pattern (every view is described by several 3D-2D point correspondences).
     <p>
     The distorted point coordinates are [x'; y'] where
     <p>
-    \f[x' = (\theta_d / r) x \\ y' = (\theta_d / r) y \f]
+    \f[x' = (\theta_d / r) a \\ y' = (\theta_d / r) b \f]
     <p>
     Finally, conversion into pixel coordinates: The final pixel coordinates vector [u; v] where:
     <p>
     \f[u = f_x (x' + \alpha y') + c_x \\
-    v = f_y yy + c_y\f]
+    v = f_y y' + c_y\f]
     <p>
     \defgroup calib3d_c C API
   <p>
@@ -868,6 +877,8 @@ public static final int CALIB_USE_INTRINSIC_GUESS =  0x00001,
        CALIB_FIX_S1_S2_S3_S4     =  0x10000,
        CALIB_TILTED_MODEL        =  0x40000,
        CALIB_FIX_TAUX_TAUY       =  0x80000,
+       /** use QR instead of SVD decomposition for solving. Faster but potentially less precise */
+       CALIB_USE_QR              =  0x100000,
        // only for stereo
        CALIB_FIX_INTRINSIC       =  0x00100,
        CALIB_SAME_FOCAL_LENGTH   =  0x00200,
@@ -932,7 +943,7 @@ mask values are ignored.
 @param maxIters The maximum number of RANSAC iterations, 2000 is the maximum it can be.
 @param confidence Confidence level, between 0 and 1.
 <p>
-The functions find and return the perspective transformation \f$H\f$ between the source and the
+The function finds and returns the perspective transformation \f$H\f$ between the source and the
 destination planes:
 <p>
 \f[s_i  \vecthree{x'_i}{y'_i}{1} \sim H  \vecthree{x_i}{y_i}{1}\f]
@@ -967,8 +978,9 @@ determined up to a scale. Thus, it is normalized so that \f$h_{33}=1\f$. Note th
 cannot be estimated, an empty one will be returned.
 <p>
 \sa
-   getAffineTransform, getPerspectiveTransform, estimateRigidTransform, warpPerspective,
-    perspectiveTransform
+getAffineTransform, estimateAffine2D, estimateAffinePartial2D, getPerspectiveTransform, warpPerspective,
+perspectiveTransform
+<p>
 <p>
 \note
    -   A example on calculating a homography for image matching can be found at
@@ -1011,7 +1023,7 @@ and a rotation matrix.
 <p>
 It optionally returns three rotation matrices, one for each axis, and the three Euler angles in
 degrees (as the return value) that could be used in OpenGL. Note, there is always more than one
-sequence of rotations about the three principle axes that results in the same orientation of an
+sequence of rotations about the three principal axes that results in the same orientation of an
 object, eg. see \cite Slabaugh . Returned tree rotation matrices and corresponding three Euler angules
 are only one of the possible solutions.
  */
@@ -1043,7 +1055,7 @@ matrix and the position of a camera.
 <p>
 It optionally returns three rotation matrices, one for each axis, and three Euler angles that could
 be used in OpenGL. Note, there is always more than one sequence of rotations about the three
-principle axes that results in the same orientation of an object, eg. see \cite Slabaugh . Returned
+principal axes that results in the same orientation of an object, eg. see \cite Slabaugh . Returned
 tree rotation matrices and corresponding three Euler angules are only one of the possible solutions.
 <p>
 The function is based on RQDecomp3x3 .
@@ -1187,9 +1199,9 @@ perspective transformation (and also compute the derivatives) in the ideal zero-
 
 /** \brief Finds an object pose from 3D-2D point correspondences.
 <p>
-@param objectPoints Array of object points in the object coordinate space, 3xN/Nx3 1-channel or
+@param objectPoints Array of object points in the object coordinate space, Nx3 1-channel or
 1xN/Nx1 3-channel, where N is the number of points. vector\<Point3f\> can be also passed here.
-@param imagePoints Array of corresponding image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel,
+@param imagePoints Array of corresponding image points, Nx2 1-channel or 1xN/Nx1 2-channel,
 where N is the number of points. vector\<Point2f\> can be also passed here.
 @param cameraMatrix Input camera matrix \f$A = \vecthreethree{fx}{0}{cx}{0}{fy}{cy}{0}{0}{1}\f$ .
 @param distCoeffs Input vector of distortion coefficients
@@ -1236,6 +1248,9 @@ projections, as well as the camera matrix and the distortion coefficients.
         - Thus, given some data D = np.array(...) where D.shape = (N,M), in order to use a subset of
         it as, e.g., imagePoints, one must effectively copy it into a new array: imagePoints =
         np.ascontiguousarray(D[:,:2]).reshape((N,1,2))
+   -   The methods **SOLVEPNP_DLS** and **SOLVEPNP_UPNP** cannot be used as the current implementations are
+       unstable and sometimes give completly wrong results. If you pass one of these two flags,
+       **SOLVEPNP_EPNP** method will be used instead.
  */
 @Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal Mat objectPoints, @ByVal Mat imagePoints,
                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
@@ -1254,9 +1269,9 @@ projections, as well as the camera matrix and the distortion coefficients.
 
 /** \brief Finds an object pose from 3D-2D point correspondences using the RANSAC scheme.
 <p>
-@param objectPoints Array of object points in the object coordinate space, 3xN/Nx3 1-channel or
+@param objectPoints Array of object points in the object coordinate space, Nx3 1-channel or
 1xN/Nx1 3-channel, where N is the number of points. vector\<Point3f\> can be also passed here.
-@param imagePoints Array of corresponding image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel,
+@param imagePoints Array of corresponding image points, Nx2 1-channel or 1xN/Nx1 2-channel,
 where N is the number of points. vector\<Point2f\> can be also passed here.
 @param cameraMatrix Input camera matrix \f$A = \vecthreethree{fx}{0}{cx}{0}{fy}{cy}{0}{0}{1}\f$ .
 @param distCoeffs Input vector of distortion coefficients
@@ -1484,6 +1499,14 @@ k-th translation vector (see the next output parameter description) brings the c
 from the model coordinate space (in which object points are specified) to the world coordinate
 space, that is, a real position of the calibration pattern in the k-th pattern view (k=0.. *M* -1).
 @param tvecs Output vector of translation vectors estimated for each pattern view.
+@param stdDeviationsIntrinsics Output vector of standard deviations estimated for intrinsic parameters.
+ Order of deviations values:
+\f$(f_x, f_y, c_x, c_y, k_1, k_2, p_1, p_2, k_3, k_4, k_5, k_6 , s_1, s_2, s_3,
+ s_4, \tau_x, \tau_y)\f$ If one of parameters is not estimated, it's deviation is equals to zero.
+@param stdDeviationsExtrinsics Output vector of standard deviations estimated for extrinsic parameters.
+ Order of deviations values: \f$(R_1, T_1, \dotsc , R_M, T_M)\f$ where M is number of pattern views,
+ \f$R_i, T_i\f$ are concatenated 1x3 vectors.
+ @param perViewErrors Output vector of the RMS re-projection error estimated for each pattern view.
 @param flags Different flags that may be zero or a combination of the following values:
 -   **CV_CALIB_USE_INTRINSIC_GUESS** cameraMatrix contains valid initial values of
 fx, fy, cx, cy that are optimized further. Otherwise, (cx, cy) is initially set to the image
@@ -1522,6 +1545,8 @@ the optimization. If CV_CALIB_USE_INTRINSIC_GUESS is set, the coefficient from t
 supplied distCoeffs matrix is used. Otherwise, it is set to 0.
 @param criteria Termination criteria for the iterative optimization algorithm.
 <p>
+@return the overall RMS re-projection error.
+<p>
 The function estimates the intrinsic camera parameters and extrinsic parameters for each of the
 views. The algorithm is based on \cite Zhang2000 and \cite BouguetMCT . The coordinates of 3D object
 points and their corresponding 2D projections in each view must be specified. That may be achieved
@@ -1546,8 +1571,6 @@ The algorithm performs the following steps:
     the projected (using the current estimates for camera parameters and the poses) object points
     objectPoints. See projectPoints for details.
 <p>
-The function returns the final re-projection error.
-<p>
 \note
    If you use a non-square (=non-NxN) grid and findChessboardCorners for calibration, and
     calibrateCamera returns bad values (zero distortion coefficients, an image center very far from
@@ -1557,6 +1580,79 @@ The function returns the final re-projection error.
 <p>
 \sa
    findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate, undistort
+ */
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat perViewErrors );
+
+/** \overload double calibrateCamera( InputArrayOfArrays objectPoints,
+                                     InputArrayOfArrays imagePoints, Size imageSize,
+                                     InputOutputArray cameraMatrix, InputOutputArray distCoeffs,
+                                     OutputArrayOfArrays rvecs, OutputArrayOfArrays tvecs,
+                                     OutputArray stdDeviations, OutputArray perViewErrors,
+                                     int flags = 0, TermCriteria criteria = TermCriteria(
+                                        TermCriteria::COUNT + TermCriteria::EPS, 30, DBL_EPSILON) )
  */
 @Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
                                      @ByVal MatVector imagePoints, @ByVal Size imageSize,
@@ -2136,12 +2232,12 @@ same camera matrix.
 @param method Method for computing a fundamental matrix.
 -   **RANSAC** for the RANSAC algorithm.
 -   **MEDS** for the LMedS algorithm.
+@param prob Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of
+confidence (probability) that the estimated matrix is correct.
 @param threshold Parameter used for RANSAC. It is the maximum distance from a point to an epipolar
 line in pixels, beyond which the point is considered an outlier and is not used for computing the
 final fundamental matrix. It can be set to something like 1-3, depending on the accuracy of the
 point localization, image resolution, and the image noise.
-@param prob Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of
-confidence (probability) that the estimated matrix is correct.
 @param mask Output array of N elements, every element of which is set to 0 for outliers and to 1
 for the other points. The array is computed only in the RANSAC and LMedS methods.
 <p>
@@ -2172,8 +2268,8 @@ decomposeEssentialMat or recoverPose to recover the relative pose between camera
 be floating-point (single or double precision).
 @param points2 Array of the second image points of the same size and format as points1 .
 @param focal focal length of the camera. Note that this function assumes that points1 and points2
-are feature points from cameras with same focal length and principle point.
-@param pp principle point of the camera.
+are feature points from cameras with same focal length and principal point.
+@param pp principal point of the camera.
 @param method Method for computing a fundamental matrix.
 -   **RANSAC** for the RANSAC algorithm.
 -   **LMEDS** for the LMedS algorithm.
@@ -2285,8 +2381,8 @@ floating-point (single or double precision).
 @param R Recovered relative rotation.
 @param t Recoverd relative translation.
 @param focal Focal length of the camera. Note that this function assumes that points1 and points2
-are feature points from cameras with same focal length and principle point.
-@param pp Principle point of the camera.
+are feature points from cameras with same focal length and principal point.
+@param pp principal point of the camera.
 @param mask Input/output mask for inliers in points1 and points2.
 :   If it is not empty, then it marks inliers in points1 and points2 for then given essential
 matrix E. Only these inliers will be used to recover pose. In the output mask only inliers
@@ -2505,6 +2601,105 @@ RANSAC algorithm.
                                    double ransacThreshold/*=3*/, double confidence/*=0.99*/);
 @Namespace("cv") public static native int estimateAffine3D(@ByVal UMat src, @ByVal UMat dst,
                                    @ByVal UMat out, @ByVal UMat inliers);
+
+/** \brief Computes an optimal affine transformation between two 2D point sets.
+<p>
+@param from First input 2D point set.
+@param to Second input 2D point set.
+@param inliers Output vector indicating which points are inliers.
+@param method Robust method used to compute tranformation. The following methods are possible:
+-   cv::RANSAC - RANSAC-based robust method
+-   cv::LMEDS - Least-Median robust method
+RANSAC is the default method.
+@param ransacReprojThreshold Maximum reprojection error in the RANSAC algorithm to consider
+a point as an inlier. Applies only to RANSAC.
+@param maxIters The maximum number of robust method iterations, 2000 is the maximum it can be.
+@param confidence Confidence level, between 0 and 1, for the estimated transformation. Anything
+between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation
+significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.
+@param refineIters Maximum number of iterations of refining algorithm (Levenberg-Marquardt).
+Passing 0 will disable refining, so the output matrix will be output of robust method.
+<p>
+@return Output 2D affine transformation matrix \f$2 \times 3\f$ or empty matrix if transformation
+could not be estimated.
+<p>
+The function estimates an optimal 2D affine transformation between two 2D point sets using the
+selected robust algorithm.
+<p>
+The computed transformation is then refined further (using only inliers) with the
+Levenberg-Marquardt method to reduce the re-projection error even more.
+<p>
+\note
+The RANSAC method can handle practically any ratio of outliers but need a threshold to
+distinguish inliers from outliers. The method LMeDS does not need any threshold but it works
+correctly only when there are more than 50% of inliers.
+<p>
+\sa estimateAffinePartial2D, getAffineTransform
+*/
+@Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal Mat from, @ByVal Mat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat inliers,
+                                  int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
+                                  @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
+                                  @Cast("size_t") long refineIters/*=10*/);
+@Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal Mat from, @ByVal Mat to);
+@Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal UMat from, @ByVal UMat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat inliers,
+                                  int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
+                                  @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
+                                  @Cast("size_t") long refineIters/*=10*/);
+@Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal UMat from, @ByVal UMat to);
+
+/** \brief Computes an optimal limited affine transformation with 4 degrees of freedom between
+two 2D point sets.
+<p>
+@param from First input 2D point set.
+@param to Second input 2D point set.
+@param inliers Output vector indicating which points are inliers.
+@param method Robust method used to compute tranformation. The following methods are possible:
+-   cv::RANSAC - RANSAC-based robust method
+-   cv::LMEDS - Least-Median robust method
+RANSAC is the default method.
+@param ransacReprojThreshold Maximum reprojection error in the RANSAC algorithm to consider
+a point as an inlier. Applies only to RANSAC.
+@param maxIters The maximum number of robust method iterations, 2000 is the maximum it can be.
+@param confidence Confidence level, between 0 and 1, for the estimated transformation. Anything
+between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation
+significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.
+@param refineIters Maximum number of iterations of refining algorithm (Levenberg-Marquardt).
+Passing 0 will disable refining, so the output matrix will be output of robust method.
+<p>
+@return Output 2D affine transformation (4 degrees of freedom) matrix \f$2 \times 3\f$ or
+empty matrix if transformation could not be estimated.
+<p>
+The function estimates an optimal 2D affine transformation with 4 degrees of freedom limited to
+combinations of translation, rotation, and uniform scaling. Uses the selected algorithm for robust
+estimation.
+<p>
+The computed transformation is then refined further (using only inliers) with the
+Levenberg-Marquardt method to reduce the re-projection error even more.
+<p>
+Estimated transformation matrix is:
+\f[ \begin{bmatrix} \cos(\theta)s & -\sin(\theta)s & tx \\
+                \sin(\theta)s & \cos(\theta)s & ty
+\end{bmatrix} \f]
+Where \f$ \theta \f$ is the rotation angle, \f$ s \f$ the scaling factor and \f$ tx, ty \f$ are
+translations in \f$ x, y \f$ axes respectively.
+<p>
+\note
+The RANSAC method can handle practically any ratio of outliers but need a threshold to
+distinguish inliers from outliers. The method LMeDS does not need any threshold but it works
+correctly only when there are more than 50% of inliers.
+<p>
+\sa estimateAffine2D, getAffineTransform
+*/
+@Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal Mat from, @ByVal Mat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat inliers,
+                                  int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
+                                  @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
+                                  @Cast("size_t") long refineIters/*=10*/);
+@Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal Mat from, @ByVal Mat to);
+@Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal UMat from, @ByVal UMat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat inliers,
+                                  int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
+                                  @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
+                                  @Cast("size_t") long refineIters/*=10*/);
+@Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal UMat from, @ByVal UMat to);
 
 /** \brief Decompose a homography matrix to rotation(s), translation(s) and plane normal(s).
 <p>
@@ -2737,15 +2932,16 @@ check, quadratic interpolation and speckle filtering).
 
     /** enum cv::fisheye:: */
     public static final int
-        FISHEYE_CALIB_USE_INTRINSIC_GUESS   = 1,
-        FISHEYE_CALIB_RECOMPUTE_EXTRINSIC   = 2,
-        FISHEYE_CALIB_CHECK_COND            = 4,
-        FISHEYE_CALIB_FIX_SKEW              = 8,
-        FISHEYE_CALIB_FIX_K1                = 16,
-        FISHEYE_CALIB_FIX_K2                = 32,
-        FISHEYE_CALIB_FIX_K3                = 64,
-        FISHEYE_CALIB_FIX_K4                = 128,
-        FISHEYE_CALIB_FIX_INTRINSIC         = 256;
+        FISHEYE_CALIB_USE_INTRINSIC_GUESS   =  1 << 0,
+        FISHEYE_CALIB_RECOMPUTE_EXTRINSIC   =  1 << 1,
+        FISHEYE_CALIB_CHECK_COND            =  1 << 2,
+        FISHEYE_CALIB_FIX_SKEW              =  1 << 3,
+        FISHEYE_CALIB_FIX_K1                =  1 << 4,
+        FISHEYE_CALIB_FIX_K2                =  1 << 5,
+        FISHEYE_CALIB_FIX_K3                =  1 << 6,
+        FISHEYE_CALIB_FIX_K4                =  1 << 7,
+        FISHEYE_CALIB_FIX_INTRINSIC         =  1 << 8,
+        FISHEYE_CALIB_FIX_PRINCIPAL_POINT   =  1 << 9;
 
     /** \brief Projects points using fisheye model
     <p>
@@ -2790,6 +2986,10 @@ check, quadratic interpolation and speckle filtering).
     @param D Input vector of distortion coefficients \f$(k_1, k_2, k_3, k_4)\f$.
     @param alpha The skew coefficient.
     @param distorted Output array of image points, 1xN/Nx1 2-channel, or vector\<Point2f\> .
+    <p>
+    Note that the function assumes the camera matrix of the undistorted points to be indentity.
+    This means if you want to transform back points undistorted with undistortPoints() you have to
+    multiply them with \f$P^{-1}\f$.
      */
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/);
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
@@ -2921,8 +3121,10 @@ check, quadratic interpolation and speckle filtering).
     of intrinsic optimization.
     -   **fisheye::CALIB_CHECK_COND** The functions will check validity of condition number.
     -   **fisheye::CALIB_FIX_SKEW** Skew coefficient (alpha) is set to zero and stay zero.
-    -   **fisheye::CALIB_FIX_K1..4** Selected distortion coefficients are set to zeros and stay
-    zero.
+    -   **fisheye::CALIB_FIX_K1..fisheye::CALIB_FIX_K4** Selected distortion coefficients
+    are set to zeros and stay zero.
+    -   **fisheye::CALIB_FIX_PRINCIPAL_POINT** The principal point is not changed during the global
+optimization. It stays at the center or at a different location specified when CALIB_USE_INTRINSIC_GUESS is set too.
     @param criteria Termination criteria for the iterative optimization algorithm.
      */
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,

@@ -394,8 +394,9 @@ more informations in the above cited Jeanny Heraults's book.
     - warning, Exceptions are thrown if read XML file is not valid
     @param retinaParameterFile the parameters filename
     @param applyDefaultSetupOnFailure set to true if an error must be thrown on error
-    You can retreive the current parameers structure using method Retina::getParameters and update
-    it before running method Retina::setup
+    <p>
+    You can retrieve the current parameters structure using the method Retina::getParameters and update
+    it before running method Retina::setup.
      */
     public native void setup(@Str BytePointer retinaParameterFile/*=""*/, @Cast("const bool") boolean applyDefaultSetupOnFailure/*=true*/);
     public native void setup();

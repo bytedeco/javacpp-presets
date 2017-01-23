@@ -9,6 +9,32 @@ import org.bytedeco.javacpp.annotation.*;
 public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
 
+@Name("std::map<int,double>") public static class IntDoubleMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IntDoubleMap(Pointer p) { super(p); }
+    public IntDoubleMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef IntDoubleMap put(@ByRef IntDoubleMap x);
+
+    public native long size();
+
+    @Index public native double get(int i);
+    public native IntDoubleMap put(int i, double value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter int first();
+        public native @Name("operator*().second") @MemberGetter double second();
+    }
+}
+
 @Name("std::vector<std::vector<char> >") public static class ByteVectorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -497,6 +523,32 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
+@Name("std::vector<std::pair<int,double> >") public static class IntDoublePairVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IntDoublePairVector(Pointer p) { super(p); }
+    public IntDoublePairVector(int[] firstValue, double[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
+    public IntDoublePairVector()       { allocate();  }
+    public IntDoublePairVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef IntDoublePairVector put(@ByRef IntDoublePairVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native int first(@Cast("size_t") long i); public native IntDoublePairVector first(@Cast("size_t") long i, int first);
+    @Index public native double second(@Cast("size_t") long i);  public native IntDoublePairVector second(@Cast("size_t") long i, double second);
+
+    public IntDoublePairVector put(int[] firstValue, double[] secondValue) {
+        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
+            first(i, firstValue[i]);
+            second(i, secondValue[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<std::pair<int,int> >") public static class IntIntPairVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -575,6 +627,32 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
+@Name("std::vector<cv::instr::NodeDataTls*>") public static class NodeDataTlsVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NodeDataTlsVector(Pointer p) { super(p); }
+    public NodeDataTlsVector(NodeDataTls ... array) { this(array.length); put(array); }
+    public NodeDataTlsVector()       { allocate();  }
+    public NodeDataTlsVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef NodeDataTlsVector put(@ByRef NodeDataTlsVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native NodeDataTls get(@Cast("size_t") long i);
+    public native NodeDataTlsVector put(@Cast("size_t") long i, NodeDataTls value);
+
+    public NodeDataTlsVector put(NodeDataTls ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @NoOffset @Name("std::pair<int,int>") public static class IntIntPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -597,40 +675,35 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
 // Parsed from <opencv2/core/hal/interface.h>
 
-// #ifndef _HAL_INTERFACE_HPP_INCLUDED_
-// #define _HAL_INTERFACE_HPP_INCLUDED_
+// #ifndef OPENCV_CORE_HAL_INTERFACE_H
+// #define OPENCV_CORE_HAL_INTERFACE_H
 
 /** \addtogroup core_hal_interface
+ *  \{
+ <p>
+ *  \name Return codes
  *  \{ */
-
 public static final int CV_HAL_ERROR_OK = 0;
 public static final int CV_HAL_ERROR_NOT_IMPLEMENTED = 1;
 public static final int CV_HAL_ERROR_UNKNOWN = -1;
-
-public static final int CV_HAL_CMP_EQ = 0;
-public static final int CV_HAL_CMP_GT = 1;
-public static final int CV_HAL_CMP_GE = 2;
-public static final int CV_HAL_CMP_LT = 3;
-public static final int CV_HAL_CMP_LE = 4;
-public static final int CV_HAL_CMP_NE = 5;
+/** \} */
 
 // #ifdef __cplusplus
 // #include <cstddef>
 // #else
 // #endif
 
-/* primitive types */
-/*
-  schar  - signed 1 byte integer
-  uchar  - unsigned 1 byte integer
-  short  - signed 2 byte integer
-  ushort - unsigned 2 byte integer
-  int    - signed 4 byte integer
-  uint   - unsigned 4 byte integer
-  int64  - signed 8 byte integer
-  uint64 - unsigned 8 byte integer
-*/
-
+/** \name Data types
+ *  primitive types
+ *  - schar  - signed 1 byte integer
+ *  - uchar  - unsigned 1 byte integer
+ *  - short  - signed 2 byte integer
+ *  - ushort - unsigned 2 byte integer
+ *  - int    - signed 4 byte integer
+ *  - uint   - unsigned 4 byte integer
+ *  - int64  - signed 8 byte integer
+ *  - uint64 - unsigned 8 byte integer
+ *  \{ */
 // #if !defined _MSC_VER && !defined __BORLANDC__
 // #  if defined __cplusplus && __cplusplus >= 201103L && !defined __APPLE__
 // #    include <cstdint>
@@ -651,7 +724,120 @@ public static final int CV_HAL_CMP_NE = 5;
 // #  define CV_BIG_UINT(n)  n##ULL
 // #endif
 
-/** \} */
+public static final int CV_CN_MAX =     512;
+public static final int CV_CN_SHIFT =   3;
+public static final int CV_DEPTH_MAX =  (1 << CV_CN_SHIFT);
+
+public static final int CV_8U =   0;
+public static final int CV_8S =   1;
+public static final int CV_16U =  2;
+public static final int CV_16S =  3;
+public static final int CV_32S =  4;
+public static final int CV_32F =  5;
+public static final int CV_64F =  6;
+public static final int CV_USRTYPE1 = 7;
+
+public static final int CV_MAT_DEPTH_MASK =       (CV_DEPTH_MAX - 1);
+public static native int CV_MAT_DEPTH(int flags);
+
+public static native int CV_MAKETYPE(int depth, int cn);
+public static native int CV_MAKE_TYPE(int arg1, int arg2);
+
+public static final int CV_8UC1 = CV_MAKETYPE(CV_8U,1);
+public static final int CV_8UC2 = CV_MAKETYPE(CV_8U,2);
+public static final int CV_8UC3 = CV_MAKETYPE(CV_8U,3);
+public static final int CV_8UC4 = CV_MAKETYPE(CV_8U,4);
+public static native int CV_8UC(int n);
+
+public static final int CV_8SC1 = CV_MAKETYPE(CV_8S,1);
+public static final int CV_8SC2 = CV_MAKETYPE(CV_8S,2);
+public static final int CV_8SC3 = CV_MAKETYPE(CV_8S,3);
+public static final int CV_8SC4 = CV_MAKETYPE(CV_8S,4);
+public static native int CV_8SC(int n);
+
+public static final int CV_16UC1 = CV_MAKETYPE(CV_16U,1);
+public static final int CV_16UC2 = CV_MAKETYPE(CV_16U,2);
+public static final int CV_16UC3 = CV_MAKETYPE(CV_16U,3);
+public static final int CV_16UC4 = CV_MAKETYPE(CV_16U,4);
+public static native int CV_16UC(int n);
+
+public static final int CV_16SC1 = CV_MAKETYPE(CV_16S,1);
+public static final int CV_16SC2 = CV_MAKETYPE(CV_16S,2);
+public static final int CV_16SC3 = CV_MAKETYPE(CV_16S,3);
+public static final int CV_16SC4 = CV_MAKETYPE(CV_16S,4);
+public static native int CV_16SC(int n);
+
+public static final int CV_32SC1 = CV_MAKETYPE(CV_32S,1);
+public static final int CV_32SC2 = CV_MAKETYPE(CV_32S,2);
+public static final int CV_32SC3 = CV_MAKETYPE(CV_32S,3);
+public static final int CV_32SC4 = CV_MAKETYPE(CV_32S,4);
+public static native int CV_32SC(int n);
+
+public static final int CV_32FC1 = CV_MAKETYPE(CV_32F,1);
+public static final int CV_32FC2 = CV_MAKETYPE(CV_32F,2);
+public static final int CV_32FC3 = CV_MAKETYPE(CV_32F,3);
+public static final int CV_32FC4 = CV_MAKETYPE(CV_32F,4);
+public static native int CV_32FC(int n);
+
+public static final int CV_64FC1 = CV_MAKETYPE(CV_64F,1);
+public static final int CV_64FC2 = CV_MAKETYPE(CV_64F,2);
+public static final int CV_64FC3 = CV_MAKETYPE(CV_64F,3);
+public static final int CV_64FC4 = CV_MAKETYPE(CV_64F,4);
+public static native int CV_64FC(int n);
+/** \}
+ <p>
+ *  \name Comparison operation
+ *  \sa cv::CmpTypes
+ *  \{ */
+public static final int CV_HAL_CMP_EQ = 0;
+public static final int CV_HAL_CMP_GT = 1;
+public static final int CV_HAL_CMP_GE = 2;
+public static final int CV_HAL_CMP_LT = 3;
+public static final int CV_HAL_CMP_LE = 4;
+public static final int CV_HAL_CMP_NE = 5;
+/** \}
+ <p>
+ *  \name Border processing modes
+ *  \sa cv::BorderTypes
+ *  \{ */
+public static final int CV_HAL_BORDER_CONSTANT = 0;
+public static final int CV_HAL_BORDER_REPLICATE = 1;
+public static final int CV_HAL_BORDER_REFLECT = 2;
+public static final int CV_HAL_BORDER_WRAP = 3;
+public static final int CV_HAL_BORDER_REFLECT_101 = 4;
+public static final int CV_HAL_BORDER_TRANSPARENT = 5;
+public static final int CV_HAL_BORDER_ISOLATED = 16;
+/** \}
+ <p>
+ *  \name DFT flags
+ *  \{ */
+public static final int CV_HAL_DFT_INVERSE =        1;
+public static final int CV_HAL_DFT_SCALE =          2;
+public static final int CV_HAL_DFT_ROWS =           4;
+public static final int CV_HAL_DFT_COMPLEX_OUTPUT = 16;
+public static final int CV_HAL_DFT_REAL_OUTPUT =    32;
+public static final int CV_HAL_DFT_TWO_STAGE =      64;
+public static final int CV_HAL_DFT_STAGE_COLS =    128;
+public static final int CV_HAL_DFT_IS_CONTINUOUS = 512;
+public static final int CV_HAL_DFT_IS_INPLACE = 1024;
+/** \}
+ <p>
+ *  \name SVD flags
+ *  \{ */
+public static final int CV_HAL_SVD_NO_UV =    1;
+public static final int CV_HAL_SVD_SHORT_UV = 2;
+public static final int CV_HAL_SVD_MODIFY_A = 4;
+public static final int CV_HAL_SVD_FULL_UV =  8;
+/** \}
+ <p>
+ *  \name Gemm flags
+ *  \{ */
+public static final int CV_HAL_GEMM_1_T = 1;
+public static final int CV_HAL_GEMM_2_T = 2;
+public static final int CV_HAL_GEMM_3_T = 4;
+/** \}
+ <p>
+ *  \} */
 
 // #endif
 
@@ -702,8 +888,8 @@ public static final int CV_HAL_CMP_NE = 5;
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_CVDEF_H__
-// #define __OPENCV_CORE_CVDEF_H__
+// #ifndef OPENCV_CORE_CVDEF_H
+// #define OPENCV_CORE_CVDEF_H
 
 /** \addtogroup core_utils
  *  \{ */
@@ -766,7 +952,7 @@ public static final int CV_CPU_SSSE3 =            5;
 public static final int CV_CPU_SSE4_1 =           6;
 public static final int CV_CPU_SSE4_2 =           7;
 public static final int CV_CPU_POPCNT =           8;
-
+public static final int CV_CPU_FP16 =             9;
 public static final int CV_CPU_AVX =              10;
 public static final int CV_CPU_AVX2 =             11;
 public static final int CV_CPU_FMA3 =             12;
@@ -798,7 +984,7 @@ public static final int
     CPU_SSE4_1          = 6,
     CPU_SSE4_2          = 7,
     CPU_POPCNT          = 8,
-
+    CPU_FP16            = 9,
     CPU_AVX             = 10,
     CPU_AVX2            = 11,
     CPU_FMA3            = 12,
@@ -869,7 +1055,7 @@ public static final int CV_FMA3 = 1;
 
 // #if (defined WIN32 || defined _WIN32) && defined(_M_ARM)
 // # include <Intrin.h>
-// # include "arm_neon.h"
+// # include <arm_neon.h>
 // # define CV_NEON 1
 // # define CPU_HAS_NEON_FEATURE (true)
 // #elif defined(__ARM_NEON__) || (defined (__ARM_NEON) && defined(__aarch64__))
@@ -945,6 +1131,35 @@ public static final double CV_PI =   3.1415926535897932384626433832795;
 public static final double CV_2PI = 6.283185307179586476925286766559;
 public static final double CV_LOG2 = 0.69314718055994530941723212145818;
 
+// #if defined __ARM_FP16_FORMAT_IEEE
+//     && !defined __CUDACC__
+public static native @MemberGetter int CV_FP16_TYPE();
+public static final int CV_FP16_TYPE = CV_FP16_TYPE();
+// #else
+// #endif
+
+public static class Cv16suf extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public Cv16suf() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Cv16suf(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Cv16suf(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public Cv16suf position(long position) {
+        return (Cv16suf)super.position(position);
+    }
+
+    public native short i(); public native Cv16suf i(short i);
+// #if CV_FP16_TYPE
+// #endif
+        @Name("fmt.significand") public native @Cast("unsigned int") @NoOffset int fmt_significand(); public native Cv16suf fmt_significand(int fmt_significand);
+        @Name("fmt.exponent") public native @Cast("unsigned int") @NoOffset int fmt_exponent(); public native Cv16suf fmt_exponent(int fmt_exponent);
+        @Name("fmt.sign") public native @Cast("unsigned int") @NoOffset int fmt_sign(); public native Cv16suf fmt_sign(int fmt_sign);
+}
+
 public static class Cv32suf extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -962,6 +1177,9 @@ public static class Cv32suf extends Pointer {
     public native int i(); public native Cv32suf i(int i);
     public native @Cast("unsigned") int u(); public native Cv32suf u(int u);
     public native float f(); public native Cv32suf f(float f);
+        @Name("fmt.significand") public native @Cast("unsigned int") @NoOffset int fmt_significand(); public native Cv32suf fmt_significand(int fmt_significand);
+        @Name("fmt.exponent") public native @Cast("unsigned int") @NoOffset int fmt_exponent(); public native Cv32suf fmt_exponent(int fmt_exponent);
+        @Name("fmt.sign") public native @Cast("unsigned int") @NoOffset int fmt_sign(); public native Cv32suf fmt_sign(int fmt_sign);
 }
 
 public static class Cv64suf extends Pointer {
@@ -1020,67 +1238,6 @@ public static final int OPENCV_ABI_COMPATIBILITY = 300;
 *                                  Matrix type (Mat)                                     *
 \****************************************************************************************/
 
-public static final int CV_CN_MAX =     512;
-public static final int CV_CN_SHIFT =   3;
-public static final int CV_DEPTH_MAX =  (1 << CV_CN_SHIFT);
-
-public static final int CV_8U =   0;
-public static final int CV_8S =   1;
-public static final int CV_16U =  2;
-public static final int CV_16S =  3;
-public static final int CV_32S =  4;
-public static final int CV_32F =  5;
-public static final int CV_64F =  6;
-public static final int CV_USRTYPE1 = 7;
-
-public static final int CV_MAT_DEPTH_MASK =       (CV_DEPTH_MAX - 1);
-public static native int CV_MAT_DEPTH(int flags);
-
-public static native int CV_MAKETYPE(int depth, int cn);
-public static native int CV_MAKE_TYPE(int arg1, int arg2);
-
-public static final int CV_8UC1 = CV_MAKETYPE(CV_8U,1);
-public static final int CV_8UC2 = CV_MAKETYPE(CV_8U,2);
-public static final int CV_8UC3 = CV_MAKETYPE(CV_8U,3);
-public static final int CV_8UC4 = CV_MAKETYPE(CV_8U,4);
-public static native int CV_8UC(int n);
-
-public static final int CV_8SC1 = CV_MAKETYPE(CV_8S,1);
-public static final int CV_8SC2 = CV_MAKETYPE(CV_8S,2);
-public static final int CV_8SC3 = CV_MAKETYPE(CV_8S,3);
-public static final int CV_8SC4 = CV_MAKETYPE(CV_8S,4);
-public static native int CV_8SC(int n);
-
-public static final int CV_16UC1 = CV_MAKETYPE(CV_16U,1);
-public static final int CV_16UC2 = CV_MAKETYPE(CV_16U,2);
-public static final int CV_16UC3 = CV_MAKETYPE(CV_16U,3);
-public static final int CV_16UC4 = CV_MAKETYPE(CV_16U,4);
-public static native int CV_16UC(int n);
-
-public static final int CV_16SC1 = CV_MAKETYPE(CV_16S,1);
-public static final int CV_16SC2 = CV_MAKETYPE(CV_16S,2);
-public static final int CV_16SC3 = CV_MAKETYPE(CV_16S,3);
-public static final int CV_16SC4 = CV_MAKETYPE(CV_16S,4);
-public static native int CV_16SC(int n);
-
-public static final int CV_32SC1 = CV_MAKETYPE(CV_32S,1);
-public static final int CV_32SC2 = CV_MAKETYPE(CV_32S,2);
-public static final int CV_32SC3 = CV_MAKETYPE(CV_32S,3);
-public static final int CV_32SC4 = CV_MAKETYPE(CV_32S,4);
-public static native int CV_32SC(int n);
-
-public static final int CV_32FC1 = CV_MAKETYPE(CV_32F,1);
-public static final int CV_32FC2 = CV_MAKETYPE(CV_32F,2);
-public static final int CV_32FC3 = CV_MAKETYPE(CV_32F,3);
-public static final int CV_32FC4 = CV_MAKETYPE(CV_32F,4);
-public static native int CV_32FC(int n);
-
-public static final int CV_64FC1 = CV_MAKETYPE(CV_64F,1);
-public static final int CV_64FC2 = CV_MAKETYPE(CV_64F,2);
-public static final int CV_64FC3 = CV_MAKETYPE(CV_64F,3);
-public static final int CV_64FC4 = CV_MAKETYPE(CV_64F,4);
-public static native int CV_64FC(int n);
-
 public static final int CV_MAT_CN_MASK =          ((CV_CN_MAX - 1) << CV_CN_SHIFT);
 public static native int CV_MAT_CN(int flags);
 public static final int CV_MAT_TYPE_MASK =        (CV_DEPTH_MAX*CV_CN_MAX - 1);
@@ -1114,11 +1271,10 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 *          exchange-add operation for atomic operations on reference counters            *
 \****************************************************************************************/
 
-// #if defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)
+// #ifdef CV_XADD
+  // allow to use user-defined macro
 // #elif defined __GNUC__
 // #elif defined _MSC_VER && !defined RC_INVOKED
-// #  include <intrin.h>
-// #  define CV_XADD(addr, delta) (int)_InterlockedExchangeAdd((long volatile*)addr, delta)
 // #else
    
 // #endif
@@ -1157,7 +1313,7 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 
 /** \} */
 
-// #endif // __OPENCV_CORE_CVDEF_H__
+// #endif // OPENCV_CORE_CVDEF_H
 
 
 // Parsed from <opencv2/core/hal/hal.hpp>
@@ -1206,21 +1362,12 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 //
 //M*/
 
-// #ifndef __OPENCV_HAL_HPP__
-// #define __OPENCV_HAL_HPP__
+// #ifndef OPENCV_HAL_HPP
+// #define OPENCV_HAL_HPP
 
 // #include "opencv2/core/cvdef.h"
+// #include "opencv2/core/cvstd.hpp"
 // #include "opencv2/core/hal/interface.h"
-
-/** \cond IGNORED */
-// #define CALL_HAL(name, fun, ...)
-//     int res = fun(__VA_ARGS__);
-//     if (res == CV_HAL_ERROR_OK)
-//         return;
-//     else if (res != CV_HAL_ERROR_NOT_IMPLEMENTED)
-//         CV_Error_(cv::Error::StsInternal,
-//             ("HAL implementation " CVAUX_STR(name) " ==> " CVAUX_STR(fun) " returned %d (0x%08x)", res, res));
-/** \endcond */
 
 /** \addtogroup core_hal_functions
  *  \{ */
@@ -1251,6 +1398,55 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 @Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky64f(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
 @Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky64f(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
 @Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky64f(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native void SVD32f(FloatPointer At, @Cast("size_t") long astep, FloatPointer W, FloatPointer U, @Cast("size_t") long ustep, FloatPointer Vt, @Cast("size_t") long vstep, int m, int n, int flags);
+@Namespace("cv::hal") public static native void SVD32f(FloatBuffer At, @Cast("size_t") long astep, FloatBuffer W, FloatBuffer U, @Cast("size_t") long ustep, FloatBuffer Vt, @Cast("size_t") long vstep, int m, int n, int flags);
+@Namespace("cv::hal") public static native void SVD32f(float[] At, @Cast("size_t") long astep, float[] W, float[] U, @Cast("size_t") long ustep, float[] Vt, @Cast("size_t") long vstep, int m, int n, int flags);
+@Namespace("cv::hal") public static native void SVD64f(DoublePointer At, @Cast("size_t") long astep, DoublePointer W, DoublePointer U, @Cast("size_t") long ustep, DoublePointer Vt, @Cast("size_t") long vstep, int m, int n, int flags);
+@Namespace("cv::hal") public static native void SVD64f(DoubleBuffer At, @Cast("size_t") long astep, DoubleBuffer W, DoubleBuffer U, @Cast("size_t") long ustep, DoubleBuffer Vt, @Cast("size_t") long vstep, int m, int n, int flags);
+@Namespace("cv::hal") public static native void SVD64f(double[] At, @Cast("size_t") long astep, double[] W, double[] U, @Cast("size_t") long ustep, double[] Vt, @Cast("size_t") long vstep, int m, int n, int flags);
+@Namespace("cv::hal") public static native int QR32f(FloatPointer A, @Cast("size_t") long astep, int m, int n, int k, FloatPointer b, @Cast("size_t") long bstep, FloatPointer hFactors);
+@Namespace("cv::hal") public static native int QR32f(FloatBuffer A, @Cast("size_t") long astep, int m, int n, int k, FloatBuffer b, @Cast("size_t") long bstep, FloatBuffer hFactors);
+@Namespace("cv::hal") public static native int QR32f(float[] A, @Cast("size_t") long astep, int m, int n, int k, float[] b, @Cast("size_t") long bstep, float[] hFactors);
+@Namespace("cv::hal") public static native int QR64f(DoublePointer A, @Cast("size_t") long astep, int m, int n, int k, DoublePointer b, @Cast("size_t") long bstep, DoublePointer hFactors);
+@Namespace("cv::hal") public static native int QR64f(DoubleBuffer A, @Cast("size_t") long astep, int m, int n, int k, DoubleBuffer b, @Cast("size_t") long bstep, DoubleBuffer hFactors);
+@Namespace("cv::hal") public static native int QR64f(double[] A, @Cast("size_t") long astep, int m, int n, int k, double[] b, @Cast("size_t") long bstep, double[] hFactors);
+
+@Namespace("cv::hal") public static native void gemm32f(@Const FloatPointer src1, @Cast("size_t") long src1_step, @Const FloatPointer src2, @Cast("size_t") long src2_step,
+                        float alpha, @Const FloatPointer src3, @Cast("size_t") long src3_step, float beta, FloatPointer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm32f(@Const FloatBuffer src1, @Cast("size_t") long src1_step, @Const FloatBuffer src2, @Cast("size_t") long src2_step,
+                        float alpha, @Const FloatBuffer src3, @Cast("size_t") long src3_step, float beta, FloatBuffer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm32f(@Const float[] src1, @Cast("size_t") long src1_step, @Const float[] src2, @Cast("size_t") long src2_step,
+                        float alpha, @Const float[] src3, @Cast("size_t") long src3_step, float beta, float[] dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm64f(@Const DoublePointer src1, @Cast("size_t") long src1_step, @Const DoublePointer src2, @Cast("size_t") long src2_step,
+                        double alpha, @Const DoublePointer src3, @Cast("size_t") long src3_step, double beta, DoublePointer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm64f(@Const DoubleBuffer src1, @Cast("size_t") long src1_step, @Const DoubleBuffer src2, @Cast("size_t") long src2_step,
+                        double alpha, @Const DoubleBuffer src3, @Cast("size_t") long src3_step, double beta, DoubleBuffer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm64f(@Const double[] src1, @Cast("size_t") long src1_step, @Const double[] src2, @Cast("size_t") long src2_step,
+                        double alpha, @Const double[] src3, @Cast("size_t") long src3_step, double beta, double[] dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm32fc(@Const FloatPointer src1, @Cast("size_t") long src1_step, @Const FloatPointer src2, @Cast("size_t") long src2_step,
+                        float alpha, @Const FloatPointer src3, @Cast("size_t") long src3_step, float beta, FloatPointer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm32fc(@Const FloatBuffer src1, @Cast("size_t") long src1_step, @Const FloatBuffer src2, @Cast("size_t") long src2_step,
+                        float alpha, @Const FloatBuffer src3, @Cast("size_t") long src3_step, float beta, FloatBuffer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm32fc(@Const float[] src1, @Cast("size_t") long src1_step, @Const float[] src2, @Cast("size_t") long src2_step,
+                        float alpha, @Const float[] src3, @Cast("size_t") long src3_step, float beta, float[] dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm64fc(@Const DoublePointer src1, @Cast("size_t") long src1_step, @Const DoublePointer src2, @Cast("size_t") long src2_step,
+                        double alpha, @Const DoublePointer src3, @Cast("size_t") long src3_step, double beta, DoublePointer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm64fc(@Const DoubleBuffer src1, @Cast("size_t") long src1_step, @Const DoubleBuffer src2, @Cast("size_t") long src2_step,
+                        double alpha, @Const DoubleBuffer src3, @Cast("size_t") long src3_step, double beta, DoubleBuffer dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
+@Namespace("cv::hal") public static native void gemm64fc(@Const double[] src1, @Cast("size_t") long src1_step, @Const double[] src2, @Cast("size_t") long src2_step,
+                        double alpha, @Const double[] src3, @Cast("size_t") long src3_step, double beta, double[] dst, @Cast("size_t") long dst_step,
+                        int m_a, int n_a, int n_d, int flags);
 
 @Namespace("cv::hal") public static native int normL1_(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n);
 @Namespace("cv::hal") public static native int normL1_(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n);
@@ -1275,9 +1471,12 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 @Namespace("cv::hal") public static native void log64f(@Const DoubleBuffer src, DoubleBuffer dst, int n);
 @Namespace("cv::hal") public static native void log64f(@Const double[] src, double[] dst, int n);
 
-@Namespace("cv::hal") public static native void fastAtan2(@Const FloatPointer y, @Const FloatPointer x, FloatPointer dst, int n, @Cast("bool") boolean angleInDegrees);
-@Namespace("cv::hal") public static native void fastAtan2(@Const FloatBuffer y, @Const FloatBuffer x, FloatBuffer dst, int n, @Cast("bool") boolean angleInDegrees);
-@Namespace("cv::hal") public static native void fastAtan2(@Const float[] y, @Const float[] x, float[] dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan32f(@Const FloatPointer y, @Const FloatPointer x, FloatPointer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan32f(@Const FloatBuffer y, @Const FloatBuffer x, FloatBuffer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan32f(@Const float[] y, @Const float[] x, float[] dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan64f(@Const DoublePointer y, @Const DoublePointer x, DoublePointer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan64f(@Const DoubleBuffer y, @Const DoubleBuffer x, DoubleBuffer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan64f(@Const double[] y, @Const double[] x, double[] dst, int n, @Cast("bool") boolean angleInDegrees);
 @Namespace("cv::hal") public static native void magnitude32f(@Const FloatPointer x, @Const FloatPointer y, FloatPointer dst, int n);
 @Namespace("cv::hal") public static native void magnitude32f(@Const FloatBuffer x, @Const FloatBuffer y, FloatBuffer dst, int n);
 @Namespace("cv::hal") public static native void magnitude32f(@Const float[] x, @Const float[] y, float[] dst, int n);
@@ -1520,27 +1719,27 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 @Namespace("cv::hal") public static native void div64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
 @Namespace("cv::hal") public static native void div64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
 
-@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
-@Namespace("cv::hal") public static native void recip64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") BytePointer arg0, @Cast("size_t") long arg1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") ByteBuffer arg0, @Cast("size_t") long arg1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") byte[] arg0, @Cast("size_t") long arg1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") BytePointer arg0, @Cast("size_t") long arg1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") ByteBuffer arg0, @Cast("size_t") long arg1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") byte[] arg0, @Cast("size_t") long arg1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") ShortPointer arg0, @Cast("size_t") long arg1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") ShortBuffer arg0, @Cast("size_t") long arg1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") short[] arg0, @Cast("size_t") long arg1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16s( @Const ShortPointer arg0, @Cast("size_t") long arg1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16s( @Const ShortBuffer arg0, @Cast("size_t") long arg1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16s( @Const short[] arg0, @Cast("size_t") long arg1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32s( @Const IntPointer arg0, @Cast("size_t") long arg1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32s( @Const IntBuffer arg0, @Cast("size_t") long arg1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32s( @Const int[] arg0, @Cast("size_t") long arg1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32f( @Const FloatPointer arg0, @Cast("size_t") long arg1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32f( @Const FloatBuffer arg0, @Cast("size_t") long arg1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32f( @Const float[] arg0, @Cast("size_t") long arg1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip64f( @Const DoublePointer arg0, @Cast("size_t") long arg1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip64f( @Const DoubleBuffer arg0, @Cast("size_t") long arg1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip64f( @Const double[] arg0, @Cast("size_t") long arg1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
 
 @Namespace("cv::hal") public static native void addWeighted8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _scalars );
 @Namespace("cv::hal") public static native void addWeighted8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _scalars );
@@ -1563,6 +1762,46 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 @Namespace("cv::hal") public static native void addWeighted64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
 @Namespace("cv::hal") public static native void addWeighted64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
 @Namespace("cv::hal") public static native void addWeighted64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+
+@Namespace("cv::hal") public static class DFT1D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DFT1D(Pointer p) { super(p); }
+
+    public static native @Ptr DFT1D create(int len, int count, int depth, int flags, @Cast("bool*") BoolPointer useBuffer/*=0*/);
+    public static native @Ptr DFT1D create(int len, int count, int depth, int flags);
+    public static native @Ptr DFT1D create(int len, int count, int depth, int flags, @Cast("bool*") boolean[] useBuffer/*=0*/);
+    public native void apply(@Cast("const uchar*") BytePointer src, @Cast("uchar*") BytePointer dst);
+    public native void apply(@Cast("const uchar*") ByteBuffer src, @Cast("uchar*") ByteBuffer dst);
+    public native void apply(@Cast("const uchar*") byte[] src, @Cast("uchar*") byte[] dst);
+}
+
+@Namespace("cv::hal") public static class DFT2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DFT2D(Pointer p) { super(p); }
+
+    public static native @Ptr DFT2D create(int width, int height, int depth,
+                                 int src_channels, int dst_channels,
+                                 int flags, int nonzero_rows/*=0*/);
+    public static native @Ptr DFT2D create(int width, int height, int depth,
+                                 int src_channels, int dst_channels,
+                                 int flags);
+    public native void apply(@Cast("const uchar*") BytePointer src_data, @Cast("size_t") long src_step, @Cast("uchar*") BytePointer dst_data, @Cast("size_t") long dst_step);
+    public native void apply(@Cast("const uchar*") ByteBuffer src_data, @Cast("size_t") long src_step, @Cast("uchar*") ByteBuffer dst_data, @Cast("size_t") long dst_step);
+    public native void apply(@Cast("const uchar*") byte[] src_data, @Cast("size_t") long src_step, @Cast("uchar*") byte[] dst_data, @Cast("size_t") long dst_step);
+}
+
+@Namespace("cv::hal") public static class DCT2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DCT2D(Pointer p) { super(p); }
+
+    public static native @Ptr DCT2D create(int width, int height, int depth, int flags);
+    public native void apply(@Cast("const uchar*") BytePointer src_data, @Cast("size_t") long src_step, @Cast("uchar*") BytePointer dst_data, @Cast("size_t") long dst_step);
+    public native void apply(@Cast("const uchar*") ByteBuffer src_data, @Cast("size_t") long src_step, @Cast("uchar*") ByteBuffer dst_data, @Cast("size_t") long dst_step);
+    public native void apply(@Cast("const uchar*") byte[] src_data, @Cast("size_t") long src_step, @Cast("uchar*") byte[] dst_data, @Cast("size_t") long dst_step);
+}
 
 /** \} core_hal */
 
@@ -1597,6 +1836,9 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 @Namespace("cv::hal") public static native void log(@Const DoubleBuffer src, DoubleBuffer dst, int n);
 @Namespace("cv::hal") public static native void log(@Const double[] src, double[] dst, int n);
 
+@Namespace("cv::hal") public static native void fastAtan2(@Const FloatPointer y, @Const FloatPointer x, FloatPointer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan2(@Const FloatBuffer y, @Const FloatBuffer x, FloatBuffer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan2(@Const float[] y, @Const float[] x, float[] dst, int n, @Cast("bool") boolean angleInDegrees);
 @Namespace("cv::hal") public static native void magnitude(@Const FloatPointer x, @Const FloatPointer y, FloatPointer dst, int n);
 @Namespace("cv::hal") public static native void magnitude(@Const FloatBuffer x, @Const FloatBuffer y, FloatBuffer dst, int n);
 @Namespace("cv::hal") public static native void magnitude(@Const float[] x, @Const float[] y, float[] dst, int n);
@@ -1620,7 +1862,7 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 
  //cv::hal
 
-// #endif //__OPENCV_HAL_HPP__
+// #endif //OPENCV_HAL_HPP
 
 
 // Parsed from <opencv2/core/fast_math.hpp>
@@ -1669,8 +1911,8 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_FAST_MATH_HPP__
-// #define __OPENCV_CORE_FAST_MATH_HPP__
+// #ifndef OPENCV_CORE_FAST_MATH_HPP
+// #define OPENCV_CORE_FAST_MATH_HPP
 
 // #include "opencv2/core/cvdef.h"
 
@@ -1698,6 +1940,7 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 //     #define ARM_ROUND(_value, _asm_string)
 //         int res;
 //         float temp;
+//         (void)temp;
 //         asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value));
 //         return res
     // 2. version for double
@@ -1831,8 +2074,8 @@ public static native int cvIsInf( float value );
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_SATURATE_HPP__
-// #define __OPENCV_CORE_SATURATE_HPP__
+// #ifndef OPENCV_CORE_SATURATE_HPP
+// #define OPENCV_CORE_SATURATE_HPP
 
 // #include "opencv2/core/cvdef.h"
 // #include "opencv2/core/fast_math.hpp"
@@ -1920,7 +2163,7 @@ public static native int cvIsInf( float value );
 
  // cv
 
-// #endif // __OPENCV_CORE_SATURATE_HPP__
+// #endif // OPENCV_CORE_SATURATE_HPP
 
 
 // Parsed from <opencv2/core/version.hpp>
@@ -1974,18 +2217,18 @@ public static native int cvIsInf( float value );
   Usefull to test in user programs
 */
 
-// #ifndef __OPENCV_VERSION_HPP__
-// #define __OPENCV_VERSION_HPP__
+// #ifndef OPENCV_VERSION_HPP
+// #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    3;
-public static final int CV_VERSION_MINOR =    1;
+public static final int CV_VERSION_MINOR =    2;
 public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
 // #define CVAUX_STR(__A)      CVAUX_STR_EXP(__A)
 
-// #define CVAUX_STRW_EXP(__A)  L#__A
+// #define CVAUX_STRW_EXP(__A)  L ## #__A
 // #define CVAUX_STRW(__A)      CVAUX_STRW_EXP(__A)
 
 public static native @MemberGetter String CV_VERSION();
@@ -2045,11 +2288,13 @@ public static final int CV_SUBMINOR_VERSION = CV_VERSION_REVISION;
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_BASE_HPP__
-// #define __OPENCV_CORE_BASE_HPP__
+// #ifndef OPENCV_CORE_BASE_HPP
+// #define OPENCV_CORE_BASE_HPP
 
 // #ifndef __cplusplus
 // #endif
+
+// #include "opencv2/opencv_modules.hpp"
 
 // #include <climits>
 // #include <algorithm>
@@ -2587,7 +2832,7 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
 // #include "opencv2/core/neon_utils.hpp"
 
-// #endif //__OPENCV_CORE_BASE_HPP__
+// #endif //OPENCV_CORE_BASE_HPP
 
 
 // Parsed from <opencv2/core/cvstd.hpp>
@@ -2635,8 +2880,8 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_CVSTD_HPP__
-// #define __OPENCV_CORE_CVSTD_HPP__
+// #ifndef OPENCV_CORE_CVSTD_HPP
+// #define OPENCV_CORE_CVSTD_HPP
 
 // #ifndef __cplusplus
 // #endif
@@ -2657,10 +2902,9 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 // #  include <utility>
 // #  include <cstdlib> //for abs(int)
 // #  include <cmath>
-
-    @Namespace("std") public static native @Cast("uchar") byte abs(@Cast("uchar") byte a);
-    @Namespace("std") public static native @Cast("ushort") short abs(@Cast("ushort") short a);
-    @Namespace("std") public static native @Cast("unsigned") int abs(@Cast("unsigned") int a);
+    @Namespace("cv") public static native @Cast("uchar") byte abs(@Cast("uchar") byte a);
+    @Namespace("cv") public static native @Cast("ushort") short abs(@Cast("ushort") short a);
+    @Namespace("cv") public static native @Cast("unsigned") int abs(@Cast("unsigned") int a);
 
 
 // #else
@@ -2977,7 +3221,7 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 
 // #include "opencv2/core/ptr.inl.hpp"
 
-// #endif //__OPENCV_CORE_CVSTD_HPP__
+// #endif //OPENCV_CORE_CVSTD_HPP
 
 
 // Parsed from <opencv2/core/utility.hpp>
@@ -3026,10 +3270,14 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_UTILITY_H__
-// #define __OPENCV_CORE_UTILITY_H__
+// #ifndef OPENCV_CORE_UTILITY_H
+// #define OPENCV_CORE_UTILITY_H
 
 // #ifndef __cplusplus
+// #endif
+
+// #if defined(check)
+// #  warning Detected Apple 'check' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
 // #endif
 
 // #include "opencv2/core.hpp"
@@ -3184,7 +3432,8 @@ architecture.
 <p>
 The function returns the number of ticks after the certain event (for example, when the machine was
 turned on). It can be used to initialize RNG or to measure a function execution time by reading the
-tick count before and after the function call. See also the tick frequency.
+tick count before and after the function call.
+\sa getTickFrequency, TickMeter
  */
 @Namespace("cv") public static native @Cast("int64") long getTickCount();
 
@@ -3197,8 +3446,91 @@ execution time in seconds:
     // do something ...
     t = ((double)getTickCount() - t)/getTickFrequency();
 }</pre>
+\sa getTickCount, TickMeter
  */
 @Namespace("cv") public static native double getTickFrequency();
+
+/** \brief a Class to measure passing time.
+<p>
+The class computes passing time by counting the number of ticks per second. That is, the following code computes the
+execution time in seconds:
+<pre>{@code
+TickMeter tm;
+tm.start();
+// do something ...
+tm.stop();
+std::cout << tm.getTimeSec();
+}</pre>
+\sa getTickCount, getTickFrequency
+*/
+
+@Namespace("cv") @NoOffset public static class TickMeter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TickMeter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TickMeter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TickMeter position(long position) {
+        return (TickMeter)super.position(position);
+    }
+
+    /** the default constructor */
+    public TickMeter() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /**
+    starts counting ticks.
+    */
+    public native void start();
+
+    /**
+    stops counting ticks.
+    */
+    public native void stop();
+
+    /**
+    returns counted ticks.
+    */
+    public native @Cast("int64") long getTimeTicks();
+
+    /**
+    returns passed time in microseconds.
+    */
+    public native double getTimeMicro();
+
+    /**
+    returns passed time in milliseconds.
+    */
+    public native double getTimeMilli();
+
+    /**
+    returns passed time in seconds.
+    */
+    public native double getTimeSec();
+
+    /**
+    returns internal counter value.
+    */
+    public native @Cast("int64") long getCounter();
+
+    /**
+    resets internal values.
+    */
+    public native void reset();
+}
+
+/** \brief output operator
+<pre>{@code
+TickMeter tm;
+tm.start();
+// do something ...
+tm.stop();
+std::cout << tm;
+}</pre>
+*/
+
+@Namespace("cv") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef TickMeter tm);
 
 /** \brief Returns the number of CPU ticks.
 <p>
@@ -3344,6 +3676,24 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 }
 
 // Main TLS data class
+@Name("cv::TLSData<cv::instr::NodeDataTls>") public static class NodeDataTlsData extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NodeDataTlsData(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NodeDataTlsData(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NodeDataTlsData position(long position) {
+        return (NodeDataTlsData)super.position(position);
+    }
+
+    public NodeDataTlsData() { super((Pointer)null); allocate(); }
+    private native void allocate(); // Release key and delete associated data
+    public native NodeDataTls get(); // Get data assosiated with key
+
+     // Get data from all threads
+    public native void gather(@ByRef NodeDataTlsVector data);
+}
 
 /** \brief Designed for command line parsing
 <p>
@@ -3458,13 +3808,138 @@ For the described keys:
 
 /** \endcond */
 
+
+// Basic Node class for tree building
+@Name("cv::Node<cv::instr::NodeData>") @NoOffset public static class InstrNode extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InstrNode(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public InstrNode(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public InstrNode position(long position) {
+        return (InstrNode)super.position(position);
+    }
+
+    public InstrNode() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public InstrNode(@ByRef NodeData payload) { super((Pointer)null); allocate(payload); }
+    private native void allocate(@ByRef NodeData payload);
+
+    public native InstrNode findChild(@ByRef NodeData payload);
+
+    public native int findChild(InstrNode pNode);
+
+    public native void addChild(InstrNode pNode);
+
+    public native void removeChilds();
+
+    public native int getDepth();
+    public native @ByRef NodeData m_payload(); public native InstrNode m_payload(NodeData m_payload);
+    public native InstrNode m_pParent(); public native InstrNode m_pParent(InstrNode m_pParent);
+    public native @Cast("cv::Node<cv::instr::NodeData>**") @StdVector PointerPointer m_childs(); public native InstrNode m_childs(PointerPointer m_childs);
+}
+
+// Instrumentation external interface
+
+// #if !defined OPENCV_ABI_CHECK
+
+/** enum cv::instr::TYPE */
+public static final int
+    TYPE_GENERAL = 0,   // OpenCV API function, e.g. exported function
+    TYPE_MARKER = 1,        // Information marker
+    TYPE_WRAPPER = 2,       // Wrapper function for implementation
+    TYPE_FUN = 3;           // Simple function call
+
+/** enum cv::instr::IMPL */
+public static final int
+    IMPL_PLAIN = 0,
+    IMPL_IPP = 1,
+    IMPL_OPENCL = 2;
+
+@Namespace("cv::instr") @NoOffset public static class NodeDataTls extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NodeDataTls(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NodeDataTls(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NodeDataTls position(long position) {
+        return (NodeDataTls)super.position(position);
+    }
+
+    public NodeDataTls() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public native @Cast("uint64") int m_ticksTotal(); public native NodeDataTls m_ticksTotal(int m_ticksTotal);
+}
+
+@Namespace("cv::instr") @NoOffset public static class NodeData extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NodeData(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NodeData(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NodeData position(long position) {
+        return (NodeData)super.position(position);
+    }
+
+    public NodeData(@Cast("const char*") BytePointer funName/*=0*/, @Cast("const char*") BytePointer fileName/*=NULL*/, int lineNum/*=0*/, Pointer retAddress/*=NULL*/, @Cast("bool") boolean alwaysExpand/*=false*/, @Cast("cv::instr::TYPE") int instrType/*=cv::instr::TYPE_GENERAL*/, @Cast("cv::instr::IMPL") int implType/*=cv::instr::IMPL_PLAIN*/) { super((Pointer)null); allocate(funName, fileName, lineNum, retAddress, alwaysExpand, instrType, implType); }
+    private native void allocate(@Cast("const char*") BytePointer funName/*=0*/, @Cast("const char*") BytePointer fileName/*=NULL*/, int lineNum/*=0*/, Pointer retAddress/*=NULL*/, @Cast("bool") boolean alwaysExpand/*=false*/, @Cast("cv::instr::TYPE") int instrType/*=cv::instr::TYPE_GENERAL*/, @Cast("cv::instr::IMPL") int implType/*=cv::instr::IMPL_PLAIN*/);
+    public NodeData() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public NodeData(String funName/*=0*/, String fileName/*=NULL*/, int lineNum/*=0*/, Pointer retAddress/*=NULL*/, @Cast("bool") boolean alwaysExpand/*=false*/, @Cast("cv::instr::TYPE") int instrType/*=cv::instr::TYPE_GENERAL*/, @Cast("cv::instr::IMPL") int implType/*=cv::instr::IMPL_PLAIN*/) { super((Pointer)null); allocate(funName, fileName, lineNum, retAddress, alwaysExpand, instrType, implType); }
+    private native void allocate(String funName/*=0*/, String fileName/*=NULL*/, int lineNum/*=0*/, Pointer retAddress/*=NULL*/, @Cast("bool") boolean alwaysExpand/*=false*/, @Cast("cv::instr::TYPE") int instrType/*=cv::instr::TYPE_GENERAL*/, @Cast("cv::instr::IMPL") int implType/*=cv::instr::IMPL_PLAIN*/);
+    public NodeData(@ByRef NodeData ref) { super((Pointer)null); allocate(ref); }
+    private native void allocate(@ByRef NodeData ref);
+    public native @ByRef @Name("operator =") NodeData put(@Const @ByRef NodeData arg0);
+
+    public native @Str BytePointer m_funName(); public native NodeData m_funName(BytePointer m_funName);
+    public native @Cast("cv::instr::TYPE") int m_instrType(); public native NodeData m_instrType(int m_instrType);
+    public native @Cast("cv::instr::IMPL") int m_implType(); public native NodeData m_implType(int m_implType);
+    @MemberGetter public native @Cast("const char*") BytePointer m_fileName();
+    public native int m_lineNum(); public native NodeData m_lineNum(int m_lineNum);
+    public native Pointer m_retAddress(); public native NodeData m_retAddress(Pointer m_retAddress);
+    public native @Cast("bool") boolean m_alwaysExpand(); public native NodeData m_alwaysExpand(boolean m_alwaysExpand);
+    public native @Cast("bool") boolean m_funError(); public native NodeData m_funError(boolean m_funError);
+
+    public native int m_counter(); public native NodeData m_counter(int m_counter);
+    public native @Cast("uint64") int m_ticksTotal(); public native NodeData m_ticksTotal(int m_ticksTotal);
+    @MemberGetter public native @ByRef NodeDataTlsData m_tls();
+    public native int m_threads(); public native NodeData m_threads(int m_threads);
+
+    // No synchronization
+    public native double getTotalMs();
+    public native double getMeanMs();
+}
+@Namespace("cv::instr") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef NodeData lhs, @Const @ByRef NodeData rhs);
+
+@Namespace("cv::instr") public static native InstrNode getTrace();
+
+// #endif // !defined OPENCV_ABI_CHECK
+
+
+@Namespace("cv::instr") public static native @Cast("bool") boolean useInstrumentation();
+@Namespace("cv::instr") public static native void setUseInstrumentation(@Cast("bool") boolean flag);
+@Namespace("cv::instr") public static native void resetTrace();
+
+/** enum cv::instr::FLAGS */
+public static final int
+    FLAGS_NONE              = 0,
+    FLAGS_MAPPING           =  0x01,
+    FLAGS_EXPAND_SAME_NAMES =  0x02;
+
+@Namespace("cv::instr") public static native void setFlags(@Cast("cv::instr::FLAGS") int modeFlags);
+@Namespace("cv::instr") public static native @Cast("cv::instr::FLAGS") int getFlags();
+
+
  //namespace cv
 
 // #ifndef DISABLE_OPENCV_24_COMPATIBILITY
 // #include "opencv2/core/core_c.h"
 // #endif
 
-// #endif //__OPENCV_CORE_UTILITY_H__
+// #endif //OPENCV_CORE_UTILITY_H
 
 
 // Parsed from <opencv2/core/types_c.h>
@@ -3512,8 +3987,8 @@ For the described keys:
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_TYPES_H__
-// #define __OPENCV_CORE_TYPES_H__
+// #ifndef OPENCV_CORE_TYPES_H
+// #define OPENCV_CORE_TYPES_H
 
 // #ifdef HAVE_IPL
 // #  ifndef __IPL_H__
@@ -5575,6 +6050,9 @@ public static final int CV_STORAGE_FORMAT_MASK =   (7<<3);
 public static final int CV_STORAGE_FORMAT_AUTO =   0;
 public static final int CV_STORAGE_FORMAT_XML =    8;
 public static final int CV_STORAGE_FORMAT_YAML =  16;
+public static final int CV_STORAGE_FORMAT_JSON =  24;
+public static final int CV_STORAGE_BASE64 =       64;
+public static final int CV_STORAGE_WRITE_BASE64 =  (CV_STORAGE_BASE64 | CV_STORAGE_WRITE);
 
 /** \brief List of attributes. :
 <p>
@@ -5867,7 +6345,7 @@ public static class CvModuleInfo extends Pointer {
 
 /** \} */
 
-// #endif /*__OPENCV_CORE_TYPES_H__*/
+// #endif /*OPENCV_CORE_TYPES_H*/
 
 /* End of file. */
 
@@ -5918,8 +6396,8 @@ public static class CvModuleInfo extends Pointer {
 //M*/
 
 
-// #ifndef __OPENCV_CORE_C_H__
-// #define __OPENCV_CORE_C_H__
+// #ifndef OPENCV_CORE_C_H
+// #define OPENCV_CORE_C_H
 
 // #include "opencv2/core/types_c.h"
 
@@ -8092,8 +8570,16 @@ public static native void cvSetIPLAllocators( Cv_iplCreateImageHeader create_hea
 <p>
 The function opens file storage for reading or writing data. In the latter case, a new file is
 created or an existing file is rewritten. The type of the read or written file is determined by the
-filename extension: .xml for XML and .yml or .yaml for YAML. The function returns a pointer to the
-CvFileStorage structure. If the file cannot be opened then the function returns NULL.
+filename extension: .xml for XML, .yml or .yaml for YAML and .json for JSON.
+<p>
+At the same time, it also supports adding parameters like "example.xml?base64". The three ways
+are the same:
+\snippet samples/cpp/filestorage_base64.cpp suffix_in_file_name
+\snippet samples/cpp/filestorage_base64.cpp flag_write_base64
+\snippet samples/cpp/filestorage_base64.cpp flag_write_and_flag_base64
+<p>
+The function returns a pointer to the CvFileStorage structure.
+If the file cannot be opened then the function returns NULL.
 @param filename Name of the file associated with the storage
 @param memstorage Memory storage used for temporary data and for
 :   storing dynamic structures, such as CvSeq or CvGraph . If it is NULL, a temporary memory
@@ -8101,6 +8587,7 @@ CvFileStorage structure. If the file cannot be opened then the function returns 
 @param flags Can be one of the following:
 > -   **CV_STORAGE_READ** the storage is open for reading
 > -   **CV_STORAGE_WRITE** the storage is open for writing
+      (use **CV_STORAGE_WRITE | CV_STORAGE_WRITE_BASE64** to write rawdata in Base64)
 @param encoding
  */
 public static native CvFileStorage cvOpenFileStorage( @Cast("const char*") BytePointer filename, CvMemStorage memstorage,
@@ -8146,7 +8633,8 @@ One and only one of the two above flags must be specified
 @param type_name Optional parameter - the object type name. In
     case of XML it is written as a type_id attribute of the structure opening tag. In the case of
     YAML it is written after a colon following the structure name (see the example in
-    CvFileStorage description). Mainly it is used with user objects. When the storage is read, the
+    CvFileStorage description). In case of JSON it is written as a name/value pair.
+    Mainly it is used with user objects. When the storage is read, the
     encoded type name is used to determine the object type (see CvTypeInfo and cvFindType ).
 @param attributes This parameter is not used in the current implementation
  */
@@ -8307,7 +8795,7 @@ the file with multiple streams looks like this:
 }</pre>
 The YAML file will look like this:
 <pre>{@code {.yaml}
-    %YAML:1.0
+    %YAML 1.0
     # stream #1 data
     ...
     ---
@@ -8333,6 +8821,30 @@ public static native void cvWriteRawData( CvFileStorage fs, @Const Pointer src,
                                 int len, @Cast("const char*") BytePointer dt );
 public static native void cvWriteRawData( CvFileStorage fs, @Const Pointer src,
                                 int len, String dt );
+
+/** \brief Writes multiple numbers in Base64.
+<p>
+If either CV_STORAGE_WRITE_BASE64 or cv::FileStorage::WRITE_BASE64 is used,
+this function will be the same as cvWriteRawData. If neither, the main
+difference is that it outputs a sequence in Base64 encoding rather than
+in plain text.
+<p>
+This function can only be used to write a sequence with a type "binary".
+<p>
+Consider the following two examples where their output is the same:
+\snippet samples/cpp/filestorage_base64.cpp without_base64_flag
+and
+\snippet samples/cpp/filestorage_base64.cpp with_write_base64_flag
+<p>
+@param fs File storage
+@param src Pointer to the written array
+@param len Number of the array elements to write
+@param dt Specification of each array element, see \ref format_spec "format specification"
+*/
+public static native void cvWriteRawDataBase64( CvFileStorage fs, @Const Pointer src,
+                                 int len, @Cast("const char*") BytePointer dt );
+public static native void cvWriteRawDataBase64( CvFileStorage fs, @Const Pointer src,
+                                 int len, String dt );
 
 /** \brief Returns a unique pointer for a given name.
 <p>
@@ -8635,7 +9147,7 @@ public static native void cvReadRawData( @Const CvFileStorage fs, @Const CvFileN
 /** \brief Writes a file node to another file storage.
 <p>
 The function writes a copy of a file node to file storage. Possible applications of the function are
-merging several file storages into one and conversion between XML and YAML formats.
+merging several file storages into one and conversion between XML, YAML and JSON formats.
 @param fs Destination file storage
 @param new_node_name New name of the file node in the destination file storage. To keep the
 existing name, use cvcvGetFileNodeName
@@ -9217,8 +9729,8 @@ public static final String cvFuncName = "";
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_TYPES_HPP__
-// #define __OPENCV_CORE_TYPES_HPP__
+// #ifndef OPENCV_CORE_TYPES_HPP
+// #define OPENCV_CORE_TYPES_HPP
 
 // #ifndef __cplusplus
 // #endif
@@ -9226,6 +9738,7 @@ public static final String cvFuncName = "";
 // #include <climits>
 // #include <cfloat>
 // #include <vector>
+// #include <limits>
 
 // #include "opencv2/core/cvdef.h"
 // #include "opencv2/core/cvstd.hpp"
@@ -9443,6 +9956,9 @@ The following Point3_\<\> aliases are available:
     public native @ByRef @Name("operator =") Point3i put(@Const @ByRef Point3i pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
+// #if OPENCV_ABI_COMPATIBILITY > 300
+// #else
+// #endif
 
     /** dot product */
     public native int dot(@Const @ByRef Point3i pt);
@@ -9480,6 +9996,9 @@ The following Point3_\<\> aliases are available:
     public native @ByRef @Name("operator =") Point3f put(@Const @ByRef Point3f pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
+// #if OPENCV_ABI_COMPATIBILITY > 300
+// #else
+// #endif
 
     /** dot product */
     public native float dot(@Const @ByRef Point3f pt);
@@ -9517,6 +10036,9 @@ The following Point3_\<\> aliases are available:
     public native @ByRef @Name("operator =") Point3d put(@Const @ByRef Point3d pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
+// #if OPENCV_ABI_COMPATIBILITY > 300
+// #else
+// #endif
 
     /** dot product */
     public native double dot(@Const @ByRef Point3d pt);
@@ -9886,8 +10408,10 @@ The sample below demonstrates how to use RotatedRect:
     @param pts The points array for storing rectangle vertices.
     */
     public native void points(Point2f pts);
-    /** returns the minimal up-right rectangle containing the rotated rectangle */
+    /** returns the minimal up-right integer rectangle containing the rotated rectangle */
     public native @ByVal Rect boundingRect();
+    /** returns the minimal (exact) floating point rectangle containing the rotated rectangle, not intended for use with images */
+    public native @ByVal Rectf boundingRect2f();
 
     public native @ByRef Point2f center(); public native RotatedRect center(Point2f center); //< the rectangle mass center
     public native @ByRef Size2f size(); public native RotatedRect size(Size2f size);    //< width and height of the rectangle
@@ -10393,7 +10917,11 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
+// #if OPENCV_ABI_COMPATIBILITY > 300
 
+// #else
+
+// #endif
 
 
 
@@ -10449,7 +10977,12 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
-
+/**
+ * \brief measure dissimilarity between two sample sets
+ *
+ * computes the complement of the Jaccard Index as described in <https://en.wikipedia.org/wiki/Jaccard_index>.
+ * For rectangles this reduces to computing the intersection over the union.
+ */
 
 ////////////////////////////// RotatedRect //////////////////////////////
 
@@ -10546,7 +11079,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
  // cv
 
-// #endif //__OPENCV_CORE_TYPES_HPP__
+// #endif //OPENCV_CORE_TYPES_HPP
 
 
 // Parsed from <opencv2/core.hpp>
@@ -10595,8 +11128,8 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_HPP__
-// #define __OPENCV_CORE_HPP__
+// #ifndef OPENCV_CORE_HPP
+// #define OPENCV_CORE_HPP
 
 // #ifndef __cplusplus
 // #endif
@@ -10990,7 +11523,7 @@ Mat::convertTo
 
 /** \brief Performs per-element division of two arrays or a scalar by an array.
 <p>
-The functions divide divide one array by another:
+The function cv::divide divides one array by another:
 \f[\texttt{dst(I) = saturate(src1(I)*scale/src2(I))}\f]
 or a scalar by an array when there is no src1 :
 \f[\texttt{dst(I) = saturate(scale/src2(I))}\f]
@@ -11109,6 +11642,18 @@ For example:
                                   double alpha/*=1*/, double beta/*=0*/);
 @Namespace("cv") public static native void convertScaleAbs(@ByVal UMat src, @ByVal UMat dst);
 
+/** \brief Converts an array to half precision floating number.
+<p>
+This function converts FP32 (single precision floating point) from/to FP16 (half precision floating point).  The input array has to have type of CV_32F or
+CV_16S to represent the bit depth.  If the input array is neither of them, the function will raise an error.
+The format of half precision floating point is defined in IEEE 754-2008.
+<p>
+@param src input array.
+@param dst output array.
+*/
+@Namespace("cv") public static native void convertFp16(@ByVal Mat src, @ByVal Mat dst);
+@Namespace("cv") public static native void convertFp16(@ByVal UMat src, @ByVal UMat dst);
+
 /** \brief Performs a look-up table transform of an array.
 <p>
 The function LUT fills the output array with values from the look-up table. Indices of the entries
@@ -11128,7 +11673,7 @@ number of channels as in the input array.
 
 /** \brief Calculates the sum of array elements.
 <p>
-The functions sum calculate and return the sum of array elements,
+The function cv::sum calculates and returns the sum of array elements,
 independently for each channel.
 @param src input array that must have from 1 to 4 channels.
 \sa  countNonZero, mean, meanStdDev, norm, minMaxLoc, reduce
@@ -11177,10 +11722,10 @@ or
 
 /** \brief Calculates an average (mean) of array elements.
 <p>
-The function mean calculates the mean value M of array elements,
+The function cv::mean calculates the mean value M of array elements,
 independently for each channel, and return it:
 \f[\begin{array}{l} N =  \sum _{I: \; \texttt{mask} (I) \ne 0} 1 \\ M_c =  \left ( \sum _{I: \; \texttt{mask} (I) \ne 0}{ \texttt{mtx} (I)_c} \right )/N \end{array}\f]
-When all the mask elements are 0's, the functions return Scalar::all(0)
+When all the mask elements are 0's, the function returns Scalar::all(0)
 @param src input array that should have from 1 to 4 channels so that the result can be stored in
 Scalar_ .
 @param mask optional operation mask.
@@ -11193,11 +11738,11 @@ Scalar_ .
 
 /** Calculates a mean and standard deviation of array elements.
 <p>
-The function meanStdDev calculates the mean and the standard deviation M
+The function cv::meanStdDev calculates the mean and the standard deviation M
 of array elements independently for each channel and returns it via the
 output parameters:
 \f[\begin{array}{l} N =  \sum _{I, \texttt{mask} (I)  \ne 0} 1 \\ \texttt{mean} _c =  \frac{\sum_{ I: \; \texttt{mask}(I) \ne 0} \texttt{src} (I)_c}{N} \\ \texttt{stddev} _c =  \sqrt{\frac{\sum_{ I: \; \texttt{mask}(I) \ne 0} \left ( \texttt{src} (I)_c -  \texttt{mean} _c \right )^2}{N}} \end{array}\f]
-When all the mask elements are 0's, the functions return
+When all the mask elements are 0's, the function returns
 mean=stddev=Scalar::all(0).
 \note The calculated standard deviation is only the diagonal of the
 complete normalized covariance matrix. If the full matrix is needed, you
@@ -11221,7 +11766,7 @@ Scalar_ 's.
 /** \brief Calculates an absolute array norm, an absolute difference norm, or a
 relative difference norm.
 <p>
-The functions norm calculate an absolute norm of src1 (when there is no
+The function cv::norm calculates an absolute norm of src1 (when there is no
 src2 ):
 <p>
 \f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
@@ -11240,7 +11785,7 @@ or
 { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L1}\) }
 { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L2}\) }\f]
 <p>
-The functions norm return the calculated norm.
+The function cv::norm returns the calculated norm.
 <p>
 When the mask parameter is specified and it is not empty, the norm is
 calculated only over the region specified by the mask.
@@ -11305,7 +11850,7 @@ see http://en.wikipedia.org/wiki/Nearest_neighbor_search
 
 /** \brief Normalizes the norm or value range of an array.
 <p>
-The functions normalize scale and shift the input array elements so that
+The function cv::normalize normalizes scale and shift the input array elements so that
 \f[\| \texttt{dst} \| _{L_p}= \texttt{alpha}\f]
 (where p=Inf, 1 or 2) when normType=NORM_INF, NORM_L1, or NORM_L2, respectively; or so that
 \f[\min _I  \texttt{dst} (I)= \texttt{alpha} , \, \, \max _I  \texttt{dst} (I)= \texttt{beta}\f]
@@ -11379,11 +11924,11 @@ normalization.
 
 /** \brief Finds the global minimum and maximum in an array.
 <p>
-The functions minMaxLoc find the minimum and maximum element values and their positions. The
+The function cv::minMaxLoc finds the minimum and maximum element values and their positions. The
 extremums are searched across the whole array or, if mask is not an empty array, in the specified
 array region.
 <p>
-The functions do not work with multi-channel arrays. If you need to find minimum or maximum
+The function do not work with multi-channel arrays. If you need to find minimum or maximum
 elements across all the channels, use Mat::reshape first to reinterpret the array as
 single-channel. Or you may extract the particular channel using either extractImageCOI , or
 mixChannels , or split .
@@ -11415,7 +11960,7 @@ mixChannels , or split .
 
 /** \brief Finds the global minimum and maximum in an array
 <p>
-The function minMaxIdx finds the minimum and maximum element values and their positions. The
+The function cv::minMaxIdx finds the minimum and maximum element values and their positions. The
 extremums are searched across the whole array or, if mask is not an empty array, in the specified
 array region. The function does not work with multi-channel arrays. If you need to find minimum or
 maximum elements across all the channels, use Mat::reshape first to reinterpret the array as
@@ -11473,12 +12018,12 @@ in each dimension are stored there sequentially.
 
 /** \brief Reduces a matrix to a vector.
 <p>
-The function reduce reduces the matrix to a vector by treating the matrix rows/columns as a set of
+The function cv::reduce reduces the matrix to a vector by treating the matrix rows/columns as a set of
 1D vectors and performing the specified operation on the vectors until a single row/column is
 obtained. For example, the function can be used to compute horizontal and vertical projections of a
-raster image. In case of REDUCE_SUM and REDUCE_AVG , the output may have a larger element
-bit-depth to preserve accuracy. And multi-channel arrays are also supported in these two reduction
-modes.
+raster image. In case of REDUCE_MAX and REDUCE_MIN , the output image should have the same type as the source one.
+In case of REDUCE_SUM and REDUCE_AVG , the output may have a larger element bit-depth to preserve accuracy.
+And multi-channel arrays are also supported in these two reduction modes.
 @param src input 2D matrix.
 @param dst output vector. Its size and type is defined by dim and dtype parameters.
 @param dim dimension index along which the matrix is reduced. 0 means that the matrix is reduced to
@@ -11495,7 +12040,7 @@ otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
 
 /** \brief Creates one multi-channel array out of several single-channel ones.
 <p>
-The function merge merges several arrays to make a single multi-channel array. That is, each
+The function cv::merge merges several arrays to make a single multi-channel array. That is, each
 element of the output array will be a concatenation of the elements of the input arrays, where
 elements of i-th input array are treated as mv[i].channels()-element vectors.
 <p>
@@ -11524,7 +12069,7 @@ be the total number of channels in the matrix array.
 
 /** \brief Divides a multi-channel array into several single-channel arrays.
 <p>
-The functions split split a multi-channel array into separate single-channel arrays:
+The function cv::split splits a multi-channel array into separate single-channel arrays:
 \f[\texttt{mv} [c](I) =  \texttt{src} (I)_c\f]
 If you need to extract a single channel or do some other sophisticated channel permutation, use
 mixChannels .
@@ -11549,7 +12094,7 @@ output arrays.
 <p>
 The function cv::mixChannels provides an advanced mechanism for shuffling image channels.
 <p>
-cv::split and cv::merge and some forms of cv::cvtColor are partial cases of cv::mixChannels .
+cv::split,cv::merge,cv::extractChannel,cv::insertChannel and some forms of cv::cvtColor are partial cases of cv::mixChannels.
 <p>
 In the example below, the code splits a 4-channel BGRA image into a 3-channel BGR (with B and R
 channels swapped) and a separate alpha-channel image:
@@ -11583,7 +12128,7 @@ src[0].channels() + src[1].channels()-1, and so on, the same scheme is used for 
 channels; as a special case, when fromTo[k\*2] is negative, the corresponding output channel is
 filled with zero .
 @param npairs number of index pairs in {@code fromTo}.
-\sa cv::split, cv::merge, cv::cvtColor
+\sa split, merge, extractChannel, insertChannel, cvtColor
 */
 @Namespace("cv") public static native void mixChannels(@Const Mat src, @Cast("size_t") long nsrcs, Mat dst, @Cast("size_t") long ndsts,
                             @Const IntPointer fromTo, @Cast("size_t") long npairs);
@@ -11645,21 +12190,27 @@ filled with zero .
 @Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
                               @StdVector int[] fromTo);
 
-/** \brief extracts a single channel from src (coi is 0-based index)
-\todo document
+/** \brief Extracts a single channel from src (coi is 0-based index)
+@param src input array
+@param dst output array
+@param coi index of channel to extract
+\sa mixChannels, split
 */
 @Namespace("cv") public static native void extractChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 @Namespace("cv") public static native void extractChannel(@ByVal UMat src, @ByVal UMat dst, int coi);
 
-/** \brief inserts a single channel to dst (coi is 0-based index)
-\todo document
+/** \brief Inserts a single channel to dst (coi is 0-based index)
+@param src input array
+@param dst output array
+@param coi index of channel for insertion
+\sa mixChannels, merge
 */
 @Namespace("cv") public static native void insertChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 @Namespace("cv") public static native void insertChannel(@ByVal UMat src, @ByVal UMat dst, int coi);
 
 /** \brief Flips a 2D array around vertical, horizontal, or both axes.
 <p>
-The function flip flips the array in one of three different ways (row
+The function cv::flip flips the array in one of three different ways (row
 and column indices are 0-based):
 \f[\texttt{dst} _{ij} =
 \left\{
@@ -11692,27 +12243,46 @@ around both axes.
 @Namespace("cv") public static native void flip(@ByVal Mat src, @ByVal Mat dst, int flipCode);
 @Namespace("cv") public static native void flip(@ByVal UMat src, @ByVal UMat dst, int flipCode);
 
+/** enum cv::RotateFlags */
+public static final int
+    ROTATE_90_CLOCKWISE = 0, //Rotate 90 degrees clockwise
+    ROTATE_180 = 1, //Rotate 180 degrees clockwise
+    ROTATE_90_COUNTERCLOCKWISE = 2; //Rotate 270 degrees clockwise
+/** \brief Rotates a 2D array in multiples of 90 degrees.
+The function rotate rotates the array in one of three different ways:
+*   Rotate by 90 degrees clockwise (rotateCode = ROTATE_90).
+*   Rotate by 180 degrees clockwise (rotateCode = ROTATE_180).
+*   Rotate by 270 degrees clockwise (rotateCode = ROTATE_270).
+@param src input array.
+@param dst output array of the same type as src.  The size is the same with ROTATE_180,
+and the rows and cols are switched for ROTATE_90 and ROTATE_270.
+@param rotateCode an enum to specify how to rotate the array; see the enum RotateFlags
+\sa transpose , repeat , completeSymm, flip, RotateFlags
+*/
+@Namespace("cv") public static native void rotate(@ByVal Mat src, @ByVal Mat dst, int rotateCode);
+@Namespace("cv") public static native void rotate(@ByVal UMat src, @ByVal UMat dst, int rotateCode);
+
 /** \brief Fills the output array with repeated copies of the input array.
 <p>
-The functions repeat duplicate the input array one or more times along each of the two axes:
+The function cv::repeat duplicates the input array one or more times along each of the two axes:
 \f[\texttt{dst} _{ij}= \texttt{src} _{i\mod src.rows, \; j\mod src.cols }\f]
 The second variant of the function is more convenient to use with \ref MatrixExpressions.
 @param src input array to replicate.
-@param dst output array of the same type as src.
-@param ny Flag to specify how many times the src is repeated along the
+@param ny Flag to specify how many times the {@code src} is repeated along the
 vertical axis.
-@param nx Flag to specify how many times the src is repeated along the
+@param nx Flag to specify how many times the {@code src} is repeated along the
 horizontal axis.
-\sa reduce
+@param dst output array of the same type as {@code src}.
+\sa cv::reduce
 */
 @Namespace("cv") public static native void repeat(@ByVal Mat src, int ny, int nx, @ByVal Mat dst);
 @Namespace("cv") public static native void repeat(@ByVal UMat src, int ny, int nx, @ByVal UMat dst);
 
 /** \overload
 @param src input array to replicate.
-@param ny Flag to specify how many times the src is repeated along the
+@param ny Flag to specify how many times the {@code src} is repeated along the
 vertical axis.
-@param nx Flag to specify how many times the src is repeated along the
+@param nx Flag to specify how many times the {@code src} is repeated along the
 horizontal axis.
   */
 @Namespace("cv") public static native @ByVal Mat repeat(@Const @ByRef Mat src, int ny, int nx);
@@ -11858,7 +12428,7 @@ same depth.
 Calculates the per-element bit-wise conjunction of two arrays or an
 array and a scalar.
 <p>
-The function calculates the per-element bit-wise logical conjunction for:
+The function cv::bitwise_and calculates the per-element bit-wise logical conjunction for:
 *   Two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \wedge \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 *   An array and a scalar when src2 is constructed from Scalar or has
@@ -11891,7 +12461,7 @@ specifies elements of the output array to be changed.
 /** \brief Calculates the per-element bit-wise disjunction of two arrays or an
 array and a scalar.
 <p>
-The function calculates the per-element bit-wise logical disjunction for:
+The function cv::bitwise_or calculates the per-element bit-wise logical disjunction for:
 *   Two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \vee \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 *   An array and a scalar when src2 is constructed from Scalar or has
@@ -11924,7 +12494,7 @@ specifies elements of the output array to be changed.
 /** \brief Calculates the per-element bit-wise "exclusive or" operation on two
 arrays or an array and a scalar.
 <p>
-The function calculates the per-element bit-wise logical "exclusive-or"
+The function cv::bitwise_xor calculates the per-element bit-wise logical "exclusive-or"
 operation for:
 *   Two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \oplus \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
@@ -11957,7 +12527,7 @@ specifies elements of the output array to be changed.
 
 /** \brief  Inverts every bit of an array.
 <p>
-The function calculates per-element bit-wise inversion of the input
+The function cv::bitwise_not calculates per-element bit-wise inversion of the input
 array:
 \f[\texttt{dst} (I) =  \neg \texttt{src} (I)\f]
 In case of a floating-point input array, its machine-specific bit
@@ -11978,7 +12548,7 @@ specifies elements of the output array to be changed.
 
 /** \brief Calculates the per-element absolute difference between two arrays or between an array and a scalar.
 <p>
-The function absdiff calculates:
+The function cv::absdiff calculates:
 *   Absolute difference between two arrays when they have the same
     size and type:
     \f[\texttt{dst}(I) =  \texttt{saturate} (| \texttt{src1}(I) -  \texttt{src2}(I)|)\f]
@@ -12057,7 +12627,7 @@ equivalent matrix expressions:
 
 /** \brief Calculates per-element minimum of two arrays or an array and a scalar.
 <p>
-The functions min calculate the per-element minimum of two arrays:
+The function cv::min calculates the per-element minimum of two arrays:
 \f[\texttt{dst} (I)= \min ( \texttt{src1} (I), \texttt{src2} (I))\f]
 or array and a scalar:
 \f[\texttt{dst} (I)= \min ( \texttt{src1} (I), \texttt{value} )\f]
@@ -12077,7 +12647,7 @@ needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Comp
 
 /** \brief Calculates per-element maximum of two arrays or an array and a scalar.
 <p>
-The functions max calculate the per-element maximum of two arrays:
+The function cv::max calculates the per-element maximum of two arrays:
 \f[\texttt{dst} (I)= \max ( \texttt{src1} (I), \texttt{src2} (I))\f]
 or array and a scalar:
 \f[\texttt{dst} (I)= \max ( \texttt{src1} (I), \texttt{value} )\f]
@@ -12097,7 +12667,7 @@ needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Comp
 
 /** \brief Calculates a square root of array elements.
 <p>
-The functions sqrt calculate a square root of each input array element.
+The function cv::sqrt calculates a square root of each input array element.
 In case of multi-channel arrays, each channel is processed
 independently. The accuracy is approximately the same as of the built-in
 std::sqrt .
@@ -12109,7 +12679,7 @@ std::sqrt .
 
 /** \brief Raises every array element to a power.
 <p>
-The function pow raises every element of the input array to power :
+The function cv::pow raises every element of the input array to power :
 \f[\texttt{dst} (I) =  \fork{\texttt{src}(I)^{power}}{if \(\texttt{power}\) is integer}{|\texttt{src}(I)|^{power}}{otherwise}\f]
 <p>
 So, for a non-integer power exponent, the absolute values of input array
@@ -12135,7 +12705,7 @@ Special values (NaN, Inf) are not handled.
 
 /** \brief Calculates the exponent of every array element.
 <p>
-The function exp calculates the exponent of every element of the input
+The function cv::exp calculates the exponent of every element of the input
 array:
 \f[\texttt{dst} [I] = e^{ src(I) }\f]
 <p>
@@ -12152,14 +12722,11 @@ Inf) are not handled.
 
 /** \brief Calculates the natural logarithm of every array element.
 <p>
-The function log calculates the natural logarithm of the absolute value
-of every element of the input array:
-\f[\texttt{dst} (I) =  \fork{\log |\texttt{src}(I)|}{if \(\texttt{src}(I) \ne 0\) }{\texttt{C}}{otherwise}\f]
+The function cv::log calculates the natural logarithm of every element of the input array:
+\f[\texttt{dst} (I) =  \log (\texttt{src}(I)) \f]
 <p>
-where C is a large negative number (about -700 in the current
-implementation). The maximum relative error is about 7e-6 for
-single-precision input and less than 1e-10 for double-precision input.
-Special values (NaN, Inf) are not handled.
+Output on zero, negative and special (NaN, Inf) values is undefined.
+<p>
 @param src input array.
 @param dst output array of the same size and type as src .
 \sa exp, cartToPolar, polarToCart, phase, pow, sqrt, magnitude
@@ -12169,7 +12736,7 @@ Special values (NaN, Inf) are not handled.
 
 /** \brief Calculates x and y coordinates of 2D vectors from their magnitude and angle.
 <p>
-The function polarToCart calculates the Cartesian coordinates of each 2D
+The function cv::polarToCart calculates the Cartesian coordinates of each 2D
 vector represented by the corresponding elements of magnitude and angle:
 \f[\begin{array}{l} \texttt{x} (I) =  \texttt{magnitude} (I) \cos ( \texttt{angle} (I)) \\ \texttt{y} (I) =  \texttt{magnitude} (I) \sin ( \texttt{angle} (I)) \\ \end{array}\f]
 <p>
@@ -12198,7 +12765,7 @@ degrees, otherwise, they are measured in radians.
 
 /** \brief Calculates the magnitude and angle of 2D vectors.
 <p>
-The function cartToPolar calculates either the magnitude, angle, or both
+The function cv::cartToPolar calculates either the magnitude, angle, or both
 for every 2D vector (x(I),y(I)):
 \f[\begin{array}{l} \texttt{magnitude} (I)= \sqrt{\texttt{x}(I)^2+\texttt{y}(I)^2} , \\ \texttt{angle} (I)= \texttt{atan2} ( \texttt{y} (I), \texttt{x} (I))[ \cdot180 / \pi ] \end{array}\f]
 <p>
@@ -12227,7 +12794,7 @@ in radians (which is by default), or in degrees.
 
 /** \brief Calculates the rotation angle of 2D vectors.
 <p>
-The function phase calculates the rotation angle of each 2D vector that
+The function cv::phase calculates the rotation angle of each 2D vector that
 is formed from the corresponding elements of x and y :
 \f[\texttt{angle} (I) =  \texttt{atan2} ( \texttt{y} (I), \texttt{x} (I))\f]
 <p>
@@ -12250,7 +12817,7 @@ degrees, otherwise, they are measured in radians.
 
 /** \brief Calculates the magnitude of 2D vectors.
 <p>
-The function magnitude calculates the magnitude of 2D vectors formed
+The function cv::magnitude calculates the magnitude of 2D vectors formed
 from the corresponding elements of x and y arrays:
 \f[\texttt{dst} (I) =  \sqrt{\texttt{x}(I)^2 + \texttt{y}(I)^2}\f]
 @param x floating-point array of x-coordinates of the vectors.
@@ -12264,11 +12831,11 @@ have the same size as x.
 
 /** \brief Checks every element of an input array for invalid values.
 <p>
-The functions checkRange check that every array element is neither NaN nor infinite. When minVal \>
--DBL_MAX and maxVal \< DBL_MAX, the functions also check that each value is between minVal and
+The function cv::checkRange checks that every array element is neither NaN nor infinite. When minVal \>
+-DBL_MAX and maxVal \< DBL_MAX, the function also checks that each value is between minVal and
 maxVal. In case of multi-channel arrays, each channel is processed independently. If some values
 are out of range, position of the first outlier is stored in pos (when pos != NULL). Then, the
-functions either return false (when quiet=true) or throw an exception.
+function either returns false (when quiet=true) or throws an exception.
 @param a input array.
 @param quiet a flag, indicating whether the functions quietly return false when the array elements
 are out of range or they throw an exception.
@@ -12293,7 +12860,7 @@ elements.
 
 /** \brief Performs generalized matrix multiplication.
 <p>
-The function performs generalized matrix multiplication similar to the
+The function cv::gemm performs generalized matrix multiplication similar to the
 gemm functions in BLAS level 3. For example,
 {@code gemm(src1, src2, alpha, src3, beta, dst, GEMM_1_T + GEMM_3_T)}
 corresponds to
@@ -12330,7 +12897,7 @@ input matrices.
 
 /** \brief Calculates the product of a matrix and its transposition.
 <p>
-The function mulTransposed calculates the product of src and its
+The function cv::mulTransposed calculates the product of src and its
 transposition:
 \f[\texttt{dst} = \texttt{scale} ( \texttt{src} - \texttt{delta} )^T ( \texttt{src} - \texttt{delta} )\f]
 if aTa=true , and
@@ -12367,7 +12934,7 @@ type=CV_MAT_DEPTH(dtype) that should be either CV_32F or CV_64F .
 
 /** \brief Transposes a matrix.
 <p>
-The function transpose transposes the matrix src :
+The function cv::transpose transposes the matrix src :
 \f[\texttt{dst} (i,j) =  \texttt{src} (j,i)\f]
 \note No complex conjugation is done in case of a complex matrix. It it
 should be done separately if needed.
@@ -12379,7 +12946,7 @@ should be done separately if needed.
 
 /** \brief Performs the matrix transformation of every array element.
 <p>
-The function transform performs the matrix transformation of every
+The function cv::transform performs the matrix transformation of every
 element of the array src and stores the results in dst :
 \f[\texttt{dst} (I) =  \texttt{m} \cdot \texttt{src} (I)\f]
 (when m.cols=src.channels() ), or
@@ -12399,14 +12966,14 @@ m.cols or m.cols-1.
 @param dst output array of the same size and depth as src; it has as
 many channels as m.rows.
 @param m transformation 2x2 or 2x3 floating-point matrix.
-\sa perspectiveTransform, getAffineTransform, estimateRigidTransform, warpAffine, warpPerspective
+\sa perspectiveTransform, getAffineTransform, estimateAffine2D, warpAffine, warpPerspective
 */
 @Namespace("cv") public static native void transform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 @Namespace("cv") public static native void transform(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat m );
 
 /** \brief Performs the perspective matrix transformation of vectors.
 <p>
-The function perspectiveTransform transforms every element of src by
+The function cv::perspectiveTransform transforms every element of src by
 treating it as a 2D or 3D vector, in the following way:
 \f[(x, y, z)  \rightarrow (x'/w, y'/w, z'/w)\f]
 where
@@ -12434,7 +13001,7 @@ element is a 2D/3D vector to be transformed.
 
 /** \brief Copies the lower or the upper half of a square matrix to another half.
 <p>
-The function completeSymm copies the lower half of a square matrix to
+The function cv::completeSymm copies the lower half of a square matrix to
 its another half. The matrix diagonal remains unchanged:
 *   \f$\texttt{mtx}_{ij}=\texttt{mtx}_{ji}\f$ for \f$i > j\f$ if
     lowerToUpper=false
@@ -12452,7 +13019,7 @@ the upper half. Otherwise, the upper half is copied to the lower half.
 
 /** \brief Initializes a scaled identity matrix.
 <p>
-The function setIdentity initializes a scaled identity matrix:
+The function cv::setIdentity initializes a scaled identity matrix:
 \f[\texttt{mtx} (i,j)= \fork{\texttt{value}}{ if \(i=j\)}{0}{otherwise}\f]
 <p>
 The function can also be emulated using the matrix initializers and the
@@ -12472,7 +13039,7 @@ matrix expressions:
 
 /** \brief Returns the determinant of a square floating-point matrix.
 <p>
-The function determinant calculates and returns the determinant of the
+The function cv::determinant calculates and returns the determinant of the
 specified matrix. For small matrices ( mtx.cols=mtx.rows\<=3 ), the
 direct method is used. For larger matrices, the function uses LU
 factorization with partial pivoting.
@@ -12488,7 +13055,7 @@ square size.
 
 /** \brief Returns the trace of a matrix.
 <p>
-The function trace returns the sum of the diagonal elements of the
+The function cv::trace returns the sum of the diagonal elements of the
 matrix mtx .
 \f[\mathrm{tr} ( \texttt{mtx} ) =  \sum _i  \texttt{mtx} (i,i)\f]
 @param mtx input matrix.
@@ -12498,7 +13065,7 @@ matrix mtx .
 
 /** \brief Finds the inverse or pseudo-inverse of a matrix.
 <p>
-The function invert inverts the matrix src and stores the result in dst
+The function cv::invert inverts the matrix src and stores the result in dst
 . When the matrix src is singular or non-square, the function calculates
 the pseudo-inverse matrix (the dst matrix) so that norm(src\*dst - I) is
 minimal, where I is an identity matrix.
@@ -12528,7 +13095,7 @@ matrix in dst and returns non-zero. Otherwise, it returns 0.
 
 /** \brief Solves one or more linear systems or least-squares problems.
 <p>
-The function solve solves a linear system or least-squares problem (the
+The function cv::solve solves a linear system or least-squares problem (the
 latter is possible with SVD or QR methods, or by specifying the flag
 DECOMP_NORMAL ):
 \f[\texttt{dst} =  \arg \min _X \| \texttt{src1} \cdot \texttt{X} -  \texttt{src2} \|\f]
@@ -12559,7 +13126,7 @@ will not do the work. Use SVD::solveZ instead.
 
 /** \brief Sorts each row or each column of a matrix.
 <p>
-The function sort sorts each matrix row or each matrix column in
+The function cv::sort sorts each matrix row or each matrix column in
 ascending or descending order. So you should pass two operation flags to
 get desired behaviour. If you want to sort matrix rows or columns
 lexicographically, you can use STL std::sort generic function with the
@@ -12575,7 +13142,7 @@ proper comparison predicate.
 
 /** \brief Sorts each row or each column of a matrix.
 <p>
-The function sortIdx sorts each matrix row or each matrix column in the
+The function cv::sortIdx sorts each matrix row or each matrix column in the
 ascending or descending order. So you should pass two operation flags to
 get desired behaviour. Instead of reordering the elements themselves, it
 stores the indices of sorted elements in the output array. For example:
@@ -12611,7 +13178,7 @@ The roots are stored in the roots array.
 
 /** \brief Finds the real or complex roots of a polynomial equation.
 <p>
-The function solvePoly finds real and complex roots of a polynomial equation:
+The function cv::solvePoly finds real and complex roots of a polynomial equation:
 \f[\texttt{coeffs} [n] x^{n} +  \texttt{coeffs} [n-1] x^{n-1} + ... +  \texttt{coeffs} [1] x +  \texttt{coeffs} [0] = 0\f]
 @param coeffs array of polynomial coefficients.
 @param roots output (complex) array of roots.
@@ -12624,7 +13191,7 @@ The function solvePoly finds real and complex roots of a polynomial equation:
 
 /** \brief Calculates eigenvalues and eigenvectors of a symmetric matrix.
 <p>
-The functions eigen calculate just eigenvalues, or eigenvalues and eigenvectors of the symmetric
+The function cv::eigen calculates just eigenvalues, or eigenvalues and eigenvectors of the symmetric
 matrix src:
 <pre>{@code
     src*eigenvectors.row(i).t() = eigenvalues.at<srcType>(i)*eigenvectors.row(i).t()
@@ -12649,7 +13216,7 @@ eigenvalues.
 
 /** \brief Calculates the covariance matrix of a set of vectors.
 <p>
-The functions calcCovarMatrix calculate the covariance matrix and, optionally, the mean vector of
+The function cv::calcCovarMatrix calculates the covariance matrix and, optionally, the mean vector of
 the set of input vectors.
 @param samples samples stored as separate matrices
 @param nsamples number of samples
@@ -12724,7 +13291,7 @@ the set of input vectors.
 
 /** \brief Calculates the Mahalanobis distance between two vectors.
 <p>
-The function Mahalanobis calculates and returns the weighted distance between two vectors:
+The function cv::Mahalanobis calculates and returns the weighted distance between two vectors:
 \f[d( \texttt{vec1} , \texttt{vec2} )= \sqrt{\sum_{i,j}{\texttt{icovar(i,j)}\cdot(\texttt{vec1}(I)-\texttt{vec2}(I))\cdot(\texttt{vec1(j)}-\texttt{vec2(j)})} }\f]
 The covariance matrix may be calculated using the cv::calcCovarMatrix function and then inverted using
 the invert function (preferably using the cv::DECOMP_SVD method, as the most accurate).
@@ -12737,7 +13304,7 @@ the invert function (preferably using the cv::DECOMP_SVD method, as the most acc
 
 /** \brief Performs a forward or inverse Discrete Fourier transform of a 1D or 2D floating-point array.
 <p>
-The function performs one of the following:
+The function cv::dft performs one of the following:
 -   Forward the Fourier transform of a 1D vector of N elements:
     \f[Y = F^{(N)}  \cdot X,\f]
     where \f$F^{(N)}_{jk}=\exp(-2\pi i j k/N)\f$ and \f$i=\sqrt{-1}\f$
@@ -12891,7 +13458,7 @@ the convolution sample in dft description.
 
 /** \brief Performs a forward or inverse discrete Cosine transform of 1D or 2D array.
 <p>
-The function dct performs a forward or inverse discrete Cosine transform (DCT) of a 1D or 2D
+The function cv::dct performs a forward or inverse discrete Cosine transform (DCT) of a 1D or 2D
 floating-point array:
 -   Forward Cosine transform of a 1D vector of N elements:
     \f[Y = C^{(N)}  \cdot X\f]
@@ -12948,7 +13515,7 @@ idct(src, dst, flags) is equivalent to dct(src, dst, flags | DCT_INVERSE).
 
 /** \brief Performs the per-element multiplication of two Fourier spectrums.
 <p>
-The function mulSpectrums performs the per-element multiplication of the two CCS-packed or complex
+The function cv::mulSpectrums performs the per-element multiplication of the two CCS-packed or complex
 matrices that are results of a real or complex Fourier transform.
 <p>
 The function, together with dft and idft , may be used to calculate convolution (pass conjB=false )
@@ -12981,7 +13548,7 @@ original one. Arrays whose size is a power-of-two (2, 4, 8, 16, 32, ...) are the
 Though, the arrays whose size is a product of 2's, 3's, and 5's (for example, 300 = 5\*5\*3\*2\*2)
 are also processed quite efficiently.
 <p>
-The function getOptimalDFTSize returns the minimum number N that is greater than or equal to vecsize
+The function cv::getOptimalDFTSize returns the minimum number N that is greater than or equal to vecsize
 so that the DFT of a vector of size N can be processed efficiently. In the current implementation N
 = 2 ^p^ \* 3 ^q^ \* 5 ^r^ for some integer p, q, r.
 <p>
@@ -12997,7 +13564,7 @@ as getOptimalDFTSize((vecsize+1)/2)\*2.
 
 /** \brief Returns the default random number generator.
 <p>
-The function theRNG returns the default random number generator. For each thread, there is a
+The function cv::theRNG returns the default random number generator. For each thread, there is a
 separate random number generator, so you can use the function safely in multi-thread environments.
 If you just need to get a single random number using this generator or initialize an array, you can
 use randu or randn instead. But if you are going to generate many random numbers inside a loop, it
@@ -13005,6 +13572,14 @@ is much faster to use this function to retrieve the generator and then use RNG::
 \sa RNG, randu, randn
 */
 @Namespace("cv") public static native @ByRef RNG theRNG();
+
+/** \brief Sets state of default random number generator.
+<p>
+The function cv::setRNGSeed sets state of default random number generator to custom value.
+@param seed new state for default random number generator
+\sa RNG, randu, randn
+*/
+@Namespace("cv") public static native void setRNGSeed(int seed);
 
 /** \brief Generates a single uniformly-distributed random number or an array of random numbers.
 <p>
@@ -13021,7 +13596,7 @@ random numbers from the specified range:
 
 /** \brief Fills the array with normally distributed random numbers.
 <p>
-The function randn fills the matrix dst with normally distributed random numbers with the specified
+The function cv::randn fills the matrix dst with normally distributed random numbers with the specified
 mean vector and the standard deviation matrix. The generated random numbers are clipped to fit the
 value range of the output array data type.
 @param dst output array of random numbers; the array must be pre-allocated and have 1 to 4 channels.
@@ -13035,7 +13610,7 @@ which case a diagonal standard deviation matrix is assumed) or a square matrix.
 
 /** \brief Shuffles the array elements randomly.
 <p>
-The function randShuffle shuffles the specified 1D array by randomly choosing pairs of elements and
+The function cv::randShuffle shuffles the specified 1D array by randomly choosing pairs of elements and
 swapping them. The number of such swap operations will be dst.rows\*dst.cols\*iterFactor .
 @param dst input/output numerical 1D array.
 @param iterFactor scale factor that determines the number of random swap operations (see the details
@@ -13179,11 +13754,11 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     The operator performs %PCA of the supplied dataset. It is safe to reuse
     the same PCA structure for multiple datasets. That is, if the structure
     has been previously used with another dataset, the existing internal
-    data is reclaimed and the new eigenvalues, \ref eigenvectors , and \ref
+    data is reclaimed and the new \ref eigenvalues, \ref eigenvectors and \ref
     mean are allocated and computed.
     <p>
-    The computed eigenvalues are sorted from the largest to the smallest and
-    the corresponding eigenvectors are stored as eigenvectors rows.
+    The computed \ref eigenvalues are sorted from the largest to the smallest and
+    the corresponding \ref eigenvectors are stored as eigenvectors rows.
     <p>
     @param data input samples stored as the matrix rows or as the matrix
     columns.
@@ -13271,11 +13846,17 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     public native void backProject(@ByVal Mat vec, @ByVal Mat result);
     public native void backProject(@ByVal UMat vec, @ByVal UMat result);
 
-    /** \brief write and load PCA matrix
-<p>
-*/
-    public native void write(@ByRef FileStorage fs );
-    public native void read(@Const @ByRef FileNode fs);
+    /** \brief write PCA objects
+    <p>
+    Writes \ref eigenvalues \ref eigenvectors and \ref mean to specified FileStorage
+     */
+    public native void write(@ByRef FileStorage fs);
+
+    /** \brief load PCA objects
+    <p>
+    Loads \ref eigenvalues \ref eigenvectors and \ref mean from specified FileNode
+     */
+    public native void read(@Const @ByRef FileNode fn);
 
     /** eigenvectors of the covariation matrix */
     public native @ByRef Mat eigenvectors(); public native PCA eigenvectors(Mat eigenvectors);
@@ -13952,7 +14533,8 @@ Here is example of SIFT use in your application via Algorithm interface:
      <p>
      This is static template method of Algorithm. It's usage is following (in the case of SVM):
      <pre>{@code
-     Ptr<SVM> svm = Algorithm::read<SVM>(fn);
+     cv::FileStorage fsRead("example.xml", FileStorage::READ);
+     Ptr<SVM> svm = Algorithm::read<SVM>(fsRead.root());
      }</pre>
      In order to make this method work, the derived class must overwrite Algorithm::read(const
      FileNode& fn) and also have static create() method without parameters
@@ -14020,8 +14602,9 @@ Here is example of SIFT use in your application via Algorithm interface:
 // #include "opencv2/core/cvstd.inl.hpp"
 // #include "opencv2/core/utility.hpp"
 // #include "opencv2/core/optim.hpp"
+// #include "opencv2/core/ovx.hpp"
 
-// #endif /*__OPENCV_CORE_HPP__*/
+// #endif /*OPENCV_CORE_HPP*/
 
 
 // Parsed from <opencv2/core/operations.hpp>
@@ -14070,8 +14653,8 @@ Here is example of SIFT use in your application via Algorithm interface:
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_OPERATIONS_HPP__
-// #define __OPENCV_CORE_OPERATIONS_HPP__
+// #ifndef OPENCV_CORE_OPERATIONS_HPP
+// #define OPENCV_CORE_OPERATIONS_HPP
 
 // #ifndef __cplusplus
 // #endif
@@ -14227,8 +14810,8 @@ may or may not be in the same class.
 //
 // Copyright (C) 2014, Advanced Micro Devices, Inc., all rights reserved.
 
-// #ifndef __OPENCV_CORE_BUFFER_POOL_HPP__
-// #define __OPENCV_CORE_BUFFER_POOL_HPP__
+// #ifndef OPENCV_CORE_BUFFER_POOL_HPP
+// #define OPENCV_CORE_BUFFER_POOL_HPP
 
 /** \addtogroup core
  *  \{ */
@@ -14248,7 +14831,7 @@ may or may not be in the same class.
 
 
 
-// #endif // __OPENCV_CORE_BUFFER_POOL_HPP__
+// #endif // OPENCV_CORE_BUFFER_POOL_HPP
 
 
 // Parsed from <opencv2/core/mat.hpp>
@@ -14296,8 +14879,8 @@ may or may not be in the same class.
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_MAT_HPP__
-// #define __OPENCV_CORE_MAT_HPP__
+// #ifndef OPENCV_CORE_MAT_HPP
+// #define OPENCV_CORE_MAT_HPP
 
 // #ifndef __cplusplus
 // #endif
@@ -14859,6 +15442,18 @@ including std::sort().
     private native void allocate(int ndims, @Const int[] sizes, int type);
 
     /** \overload
+    @param sizes Array of integers specifying an n-dimensional array shape.
+    @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
+    CV_8UC(n), ..., CV_64FC(n) to create multi-channel (up to CV_CN_MAX channels) matrices.
+    */
+    public Mat(@StdVector IntPointer sizes, int type) { super((Pointer)null); allocate(sizes, type); }
+    private native void allocate(@StdVector IntPointer sizes, int type);
+    public Mat(@StdVector IntBuffer sizes, int type) { super((Pointer)null); allocate(sizes, type); }
+    private native void allocate(@StdVector IntBuffer sizes, int type);
+    public Mat(@StdVector int[] sizes, int type) { super((Pointer)null); allocate(sizes, type); }
+    private native void allocate(@StdVector int[] sizes, int type);
+
+    /** \overload
     @param ndims Array dimensionality.
     @param sizes Array of integers specifying an n-dimensional array shape.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -14873,6 +15468,22 @@ including std::sort().
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s);
     public Mat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s);
+
+    /** \overload
+    @param sizes Array of integers specifying an n-dimensional array shape.
+    @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
+    CV_8UC(n), ..., CV_64FC(n) to create multi-channel (up to CV_CN_MAX channels) matrices.
+    @param s An optional value to initialize each matrix element with. To set all the matrix elements to
+    the particular value after the construction, use the assignment operator
+    Mat::operator=(const Scalar& value) .
+    */
+    public Mat(@StdVector IntPointer sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(sizes, type, s); }
+    private native void allocate(@StdVector IntPointer sizes, int type, @Const @ByRef Scalar s);
+    public Mat(@StdVector IntBuffer sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(sizes, type, s); }
+    private native void allocate(@StdVector IntBuffer sizes, int type, @Const @ByRef Scalar s);
+    public Mat(@StdVector int[] sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(sizes, type, s); }
+    private native void allocate(@StdVector int[] sizes, int type, @Const @ByRef Scalar s);
+
 
     /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
@@ -14965,6 +15576,31 @@ including std::sort().
     private native void allocate(int ndims, @Const int[] sizes, int type, Pointer data);
 
     /** \overload
+    @param sizes Array of integers specifying an n-dimensional array shape.
+    @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
+    CV_8UC(n), ..., CV_64FC(n) to create multi-channel (up to CV_CN_MAX channels) matrices.
+    @param data Pointer to the user data. Matrix constructors that take data and step parameters do not
+    allocate matrix data. Instead, they just initialize the matrix header that points to the specified
+    data, which means that no data is copied. This operation is very efficient and can be used to
+    process external data using OpenCV functions. The external data is not automatically deallocated, so
+    you should take care of it.
+    @param steps Array of ndims-1 steps in case of a multi-dimensional array (the last step is always
+    set to the element size). If not specified, the matrix is assumed to be continuous.
+    */
+    public Mat(@StdVector IntPointer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { super((Pointer)null); allocate(sizes, type, data, steps); }
+    private native void allocate(@StdVector IntPointer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/);
+    public Mat(@StdVector IntPointer sizes, int type, Pointer data) { super((Pointer)null); allocate(sizes, type, data); }
+    private native void allocate(@StdVector IntPointer sizes, int type, Pointer data);
+    public Mat(@StdVector IntBuffer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { super((Pointer)null); allocate(sizes, type, data, steps); }
+    private native void allocate(@StdVector IntBuffer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/);
+    public Mat(@StdVector IntBuffer sizes, int type, Pointer data) { super((Pointer)null); allocate(sizes, type, data); }
+    private native void allocate(@StdVector IntBuffer sizes, int type, Pointer data);
+    public Mat(@StdVector int[] sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { super((Pointer)null); allocate(sizes, type, data, steps); }
+    private native void allocate(@StdVector int[] sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/);
+    public Mat(@StdVector int[] sizes, int type, Pointer data) { super((Pointer)null); allocate(sizes, type, data); }
+    private native void allocate(@StdVector int[] sizes, int type, Pointer data);
+
+    /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
     by these constructors. Instead, the header pointing to m data or its sub-array is constructed and
     associated with it. The reference counter, if any, is incremented. So, when you modify the matrix
@@ -14989,6 +15625,15 @@ including std::sort().
     */
     public Mat(@Const @ByRef Mat m, @Const @ByRef Rect roi) { super((Pointer)null); allocate(m, roi); }
     private native void allocate(@Const @ByRef Mat m, @Const @ByRef Rect roi);
+
+    /** \overload
+    @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
+    by these constructors. Instead, the header pointing to m data or its sub-array is constructed and
+    associated with it. The reference counter, if any, is incremented. So, when you modify the matrix
+    formed using such a constructor, you also modify the corresponding elements of m . If you want to
+    have an independent copy of the sub-array, use Mat::clone() .
+    @param ranges Array of selected ranges of m along each dimensionality.
+    */
 
     /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
@@ -15146,9 +15791,8 @@ including std::sort().
 
     /** \brief creates a diagonal matrix
     <p>
-    The method makes a new header for the specified matrix diagonal. The new matrix is represented as a
-    single-column matrix. Similarly to Mat::row and Mat::col, this is an O(1) operation.
-    @param d Single-column matrix that forms a diagonal matrix
+    The method creates a square diagonal matrix from specified main diagonal.
+    @param d One-dimensional matrix that represents the main diagonal.
      */
     public static native @ByVal Mat diag(@Const @ByRef Mat d);
 
@@ -15449,6 +16093,14 @@ including std::sort().
     public native void create(int ndims, @Const IntBuffer sizes, int type);
     public native void create(int ndims, @Const int[] sizes, int type);
 
+    /** \overload
+    @param sizes Array of integers specifying a new array shape.
+    @param type New matrix type.
+    */
+    public native void create(@StdVector IntPointer sizes, int type);
+    public native void create(@StdVector IntBuffer sizes, int type);
+    public native void create(@StdVector int[] sizes, int type);
+
     /** \brief Increments the reference counter.
     <p>
     The method increments the reference counter associated with the matrix data. If the matrix header
@@ -15597,6 +16249,10 @@ including std::sort().
     @param ranges Array of selected ranges along each array dimension.
     */
     public native @ByVal @Name("operator ()") Mat apply( @Const Range ranges );
+
+    /** \overload
+    @param ranges Array of selected ranges along each array dimension.
+    */
 
     // //! converts header to CvMat; no data is copied
     // operator CvMat() const;
@@ -15762,9 +16418,15 @@ including std::sort().
     public native @Cast("uchar*") BytePointer ptr();
     /** \overload */
 
-    /** \overload */
-    public native @Cast("uchar*") BytePointer ptr(int i0, int i1);
-    /** \overload */
+    /** \overload
+    @param row Index along the dimension 0
+    @param col Index along the dimension 1
+    */
+    public native @Cast("uchar*") BytePointer ptr(int row, int col);
+    /** \overload
+    @param row Index along the dimension 0
+    @param col Index along the dimension 1
+    */
 
     /** \overload */
     public native @Cast("uchar*") BytePointer ptr(int i0, int i1, int i2);
@@ -15780,8 +16442,14 @@ including std::sort().
 
     /** \overload */
     /** \overload */
-    /** \overload */
-    /** \overload */
+    /** \overload
+    @param row Index along the dimension 0
+    @param col Index along the dimension 1
+    */
+    /** \overload
+    @param row Index along the dimension 0
+    @param col Index along the dimension 1
+    */
     /** \overload */
     /** \overload */
     /** \overload */
@@ -15806,18 +16474,29 @@ including std::sort().
             for(int j = 0; j < H.cols; j++)
                 H.at<double>(i,j)=1./(i+j+1);
     }</pre>
+    <p>
+    Keep in mind that the size identifier used in the at operator cannot be chosen at random. It depends
+    on the image from which you are trying to retrieve the data. The table below gives a better insight in this:
+     - If matrix is of type {@code CV_8U} then use {@code Mat.at<uchar>(y,x)}.
+     - If matrix is of type {@code CV_8S} then use {@code Mat.at<schar>(y,x)}.
+     - If matrix is of type {@code CV_16U} then use {@code Mat.at<ushort>(y,x)}.
+     - If matrix is of type {@code CV_16S} then use {@code Mat.at<short>(y,x)}.
+     - If matrix is of type {@code CV_32S}  then use {@code Mat.at<int>(y,x)}.
+     - If matrix is of type {@code CV_32F}  then use {@code Mat.at<float>(y,x)}.
+     - If matrix is of type {@code CV_64F} then use {@code Mat.at<double>(y,x)}.
+    <p>
     @param i0 Index along the dimension 0
      */
     /** \overload
     @param i0 Index along the dimension 0
     */
     /** \overload
-    @param i0 Index along the dimension 0
-    @param i1 Index along the dimension 1
+    @param row Index along the dimension 0
+    @param col Index along the dimension 1
     */
     /** \overload
-    @param i0 Index along the dimension 0
-    @param i1 Index along the dimension 1
+    @param row Index along the dimension 0
+    @param col Index along the dimension 1
     */
 
     /** \overload
@@ -15893,12 +16572,11 @@ including std::sort().
     matrix element.
      */
 
-    /** \brief Invoke with arguments functor, and runs the functor over all matrix element.
+    /** \brief Runs the given functor over all matrix elements in parallel.
     <p>
-    The methods runs operation in parallel. Operation is passed by arguments. Operation have to be a
-    function pointer, a function object or a lambda(C++11).
+    The operation passed as argument has to be a function pointer, a function object or a lambda(C++11).
     <p>
-    All of below operation is equal. Put 0xFF to first channel of all matrix elements:
+    Example 1. All of the operations below put 0xFF the first channel of all matrix elements:
     <pre>{@code
         Mat image(1920, 1080, CV_8UC3);
         typedef cv::Point3_<uint8_t> Pixel;
@@ -15930,18 +16608,18 @@ including std::sort().
             p.x = 255;
         });
     }</pre>
-    position parameter is index of current pixel:
+    Example 2. Using the pixel's position:
     <pre>{@code
-        // Creating 3D matrix (255 x 255 x 255) typed uint8_t,
-        //  and initialize all elements by the value which equals elements position.
-        //  i.e. pixels (x,y,z) = (1,2,3) is (b,g,r) = (1,2,3).
+        // Creating 3D matrix (255 x 255 x 255) typed uint8_t
+        // and initialize all elements by the value which equals elements position.
+        // i.e. pixels (x,y,z) = (1,2,3) is (b,g,r) = (1,2,3).
 
         int sizes[] = { 255, 255, 255 };
         typedef cv::Point3_<uint8_t> Pixel;
 
         Mat_<Pixel> image = Mat::zeros(3, sizes, CV_8UC3);
 
-        image.forEachWithPosition([&](Pixel& pixel, const int position[]) -> void{
+        image.forEach<Pixel>([&](Pixel& pixel, const int position[]) -> void {
             pixel.x = position[0];
             pixel.y = position[1];
             pixel.z = position[2];
@@ -16222,6 +16900,12 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     public native void create(int ndims, @Const IntBuffer sizes, int type);
     public native void create(int ndims, @Const int[] sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
     public native void create(int ndims, @Const int[] sizes, int type);
+    public native void create(@StdVector IntPointer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
+    public native void create(@StdVector IntPointer sizes, int type);
+    public native void create(@StdVector IntBuffer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
+    public native void create(@StdVector IntBuffer sizes, int type);
+    public native void create(@StdVector int[] sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
+    public native void create(@StdVector int[] sizes, int type);
 
     /** increases the reference counter; use with care to avoid memleaks */
     public native void addref();
@@ -16332,15 +17016,16 @@ Elements can be accessed using the following methods:
     SparseMat::find), for example:
     <pre>{@code
         const int dims = 5;
-        int size[] = {10, 10, 10, 10, 10};
+        int size[5] = {10, 10, 10, 10, 10};
         SparseMat sparse_mat(dims, size, CV_32F);
         for(int i = 0; i < 1000; i++)
         {
             int idx[dims];
             for(int k = 0; k < dims; k++)
-                idx[k] = rand()
+                idx[k] = rand() % size[k];
             sparse_mat.ref<float>(idx) += 1.f;
         }
+        cout << "nnz = " << sparse_mat.nzcount() << endl;
     }</pre>
 -   Sparse matrix iterators. They are similar to MatIterator but different from NAryMatIterator.
     That is, the iteration loop is familiar to STL users:
@@ -16975,21 +17660,29 @@ The example below illustrates how you can compute a normalized and threshold 3D 
         }
 
         minProb *= image.rows*image.cols;
-        Mat plane;
-        NAryMatIterator it(&hist, &plane, 1);
+
+        // initialize iterator (the style is different from STL).
+        // after initialization the iterator will contain
+        // the number of slices or planes the iterator will go through.
+        // it simultaneously increments iterators for several matrices
+        // supplied as a null terminated list of pointers
+        const Mat* arrays[] = {&hist, 0};
+        Mat planes[1];
+        NAryMatIterator itNAry(arrays, planes, 1);
         double s = 0;
         // iterate through the matrix. on each iteration
-        // it.planes[*] (of type Mat) will be set to the current plane.
-        for(int p = 0; p < it.nplanes; p++, ++it)
+        // itNAry.planes[i] (of type Mat) will be set to the current plane
+        // of the i-th n-dim matrix passed to the iterator constructor.
+        for(int p = 0; p < itNAry.nplanes; p++, ++itNAry)
         {
-            threshold(it.planes[0], it.planes[0], minProb, 0, THRESH_TOZERO);
-            s += sum(it.planes[0])[0];
+            threshold(itNAry.planes[0], itNAry.planes[0], minProb, 0, THRESH_TOZERO);
+            s += sum(itNAry.planes[0])[0];
         }
 
         s = 1./s;
-        it = NAryMatIterator(&hist, &plane, 1);
-        for(int p = 0; p < it.nplanes; p++, ++it)
-            it.planes[0] *= s;
+        itNAry = NAryMatIterator(arrays, planes, 1);
+        for(int p = 0; p < itNAry.nplanes; p++, ++itNAry)
+            itNAry.planes[0] *= s;
     }
 }</pre>
  */
@@ -17323,7 +18016,7 @@ where C is depth=CV_8U .
 
 // #include "opencv2/core/mat.inl.hpp"
 
-// #endif // __OPENCV_CORE_MAT_HPP__
+// #endif // OPENCV_CORE_MAT_HPP
 
 
 // Parsed from <opencv2/core/persistence.hpp>
@@ -17371,8 +18064,8 @@ where C is depth=CV_8U .
 //
 //M*/
 
-// #ifndef __OPENCV_CORE_PERSISTENCE_HPP__
-// #define __OPENCV_CORE_PERSISTENCE_HPP__
+// #ifndef OPENCV_CORE_PERSISTENCE_HPP
+// #define OPENCV_CORE_PERSISTENCE_HPP
 
 // #ifndef __cplusplus
 // #endif
@@ -17386,8 +18079,9 @@ Several functions that are described below take CvFileStorage\* as inputs and al
 save or to load hierarchical collections that consist of scalar values, standard CXCore objects
 (such as matrices, sequences, graphs), and user-defined objects.
 <p>
-OpenCV can read and write data in XML (<http://www.w3c.org/XML>) or YAML (<http://www.yaml.org>)
-formats. Below is an example of 3x3 floating-point identity matrix A, stored in XML and YAML files
+OpenCV can read and write data in XML (<http://www.w3c.org/XML>), YAML (<http://www.yaml.org>) or
+JSON (<http://www.json.org/>) formats. Below is an example of 3x3 floating-point identity matrix A,
+stored in XML and YAML files
 using CXCore functions:
 XML:
 <pre>{@code {.xml}
@@ -17414,7 +18108,8 @@ As it can be seen from the examples, XML uses nested tags to represent hierarchy
 indentation for that purpose (similar to the Python programming language).
 <p>
 The same functions can read and write data in both formats; the particular format is determined by
-the extension of the opened file, ".xml" for XML files and ".yml" or ".yaml" for YAML.
+the extension of the opened file, ".xml" for XML files, ".yml" or ".yaml" for YAML and ".json" for
+JSON.
  */
 
 /** \} core_c */
@@ -17424,20 +18119,20 @@ the extension of the opened file, ".xml" for XML files and ".yml" or ".yaml" for
 
 /** \addtogroup core_xml
 <p>
-XML/YAML file storages.     {#xml_storage}
+XML/YAML/JSON file storages.     {#xml_storage}
 =======================
 Writing to a file storage.
 --------------------------
-You can store and then restore various OpenCV data structures to/from XML (<http://www.w3c.org/XML>)
-or YAML (<http://www.yaml.org>) formats. Also, it is possible store and load arbitrarily complex
-data structures, which include OpenCV data structures, as well as primitive data types (integer and
-floating-point numbers and text strings) as their elements.
+You can store and then restore various OpenCV data structures to/from XML (<http://www.w3c.org/XML>),
+YAML (<http://www.yaml.org>) or JSON (<http://www.json.org/>) formats. Also, it is possible store
+and load arbitrarily complex data structures, which include OpenCV data structures, as well as
+primitive data types (integer and floating-point numbers and text strings) as their elements.
 <p>
-Use the following procedure to write something to XML or YAML:
+Use the following procedure to write something to XML, YAML or JSON:
 -# Create new FileStorage and open it for writing. It can be done with a single call to
 FileStorage::FileStorage constructor that takes a filename, or you can use the default constructor
-and then call FileStorage::open. Format of the file (XML or YAML) is determined from the filename
-extension (".xml" and ".yml"/".yaml", respectively)
+and then call FileStorage::open. Format of the file (XML, YAML or JSON) is determined from the filename
+extension (".xml", ".yml"/".yaml" and ".json", respectively)
 -# Write all the data you want using the streaming operator {@code <<}, just like in the case of STL
 streams.
 -# Close the file using FileStorage::release. FileStorage destructor also closes the file.
@@ -17500,19 +18195,19 @@ features:
    - { x:344, y:158, lbp:[ 1, 1, 0, 0, 0, 0, 1, 0 ] }
 }</pre>
 <p>
-As an exercise, you can replace ".yml" with ".xml" in the sample above and see, how the
+As an exercise, you can replace ".yml" with ".xml" or ".json" in the sample above and see, how the
 corresponding XML file will look like.
 <p>
 Several things can be noted by looking at the sample code and the output:
 <p>
--   The produced YAML (and XML) consists of heterogeneous collections that can be nested. There are 2
-    types of collections: named collections (mappings) and unnamed collections (sequences). In mappings
+-   The produced YAML (and XML/JSON) consists of heterogeneous collections that can be nested. There are
+    2 types of collections: named collections (mappings) and unnamed collections (sequences). In mappings
     each element has a name and is accessed by name. This is similar to structures and std::map in
     C/C++ and dictionaries in Python. In sequences elements do not have names, they are accessed by
     indices. This is similar to arrays and std::vector in C/C++ and lists, tuples in Python.
     "Heterogeneous" means that elements of each single collection can have different types.
     <p>
-    Top-level collection in YAML/XML is a mapping. Each matrix is stored as a mapping, and the matrix
+    Top-level collection in YAML/XML/JSON is a mapping. Each matrix is stored as a mapping, and the matrix
     elements are stored as a sequence. Then, there is a sequence of features, where each feature is
     represented a mapping, and lbp value in a nested sequence.
 <p>
@@ -17528,7 +18223,7 @@ Several things can be noted by looking at the sample code and the output:
 -   To write a sequence, you first write the special string {@code [}, then write the elements, then
     write the closing {@code ]}.
 <p>
--   In YAML (but not XML), mappings and sequences can be written in a compact Python-like inline
+-   In YAML/JSON (but not XML), mappings and sequences can be written in a compact Python-like inline
     form. In the sample above matrix elements, as well as each feature, including its lbp value, is
     stored in such inline form. To store a mapping/sequence in a compact form, put {@code :} after the
     opening character, e.g. use {@code {:} instead of {@code {} and {@code [:} instead of {@code [}. When the
@@ -17536,7 +18231,7 @@ Several things can be noted by looking at the sample code and the output:
 <p>
 Reading data from a file storage.
 ---------------------------------
-To read the previously written XML or YAML file, do the following:
+To read the previously written XML, YAML or JSON file, do the following:
 -#  Open the file storage using FileStorage::FileStorage constructor or FileStorage::open method.
     In the current implementation the whole file is parsed and the whole representation of file
     storage is built in memory as a hierarchy of file nodes (see FileNode)
@@ -17614,8 +18309,8 @@ A complete example using the FileStorage interface
 
 ////////////////////////// XML & YAML I/O ////////////////////////// */
 
-/** \brief XML/YAML file storage class that encapsulates all the information necessary for writing or reading
-data to/from a file.
+/** \brief XML/YAML/JSON file storage class that encapsulates all the information necessary for writing or
+reading data to/from a file.
  */
 @Namespace("cv") @NoOffset public static class FileStorage extends Pointer {
     static { Loader.load(); }
@@ -17647,7 +18342,14 @@ data to/from a file.
         /** flag, XML format */
         FORMAT_XML  =  (1<<3),
         /** flag, YAML format */
-        FORMAT_YAML =  (2<<3);
+        FORMAT_YAML =  (2<<3),
+        /** flag, JSON format */
+        FORMAT_JSON =  (3<<3),
+
+        /** flag, write rawdata in Base64 by default. (consider using WRITE_BASE64) */
+        BASE64      = 64,
+        /** flag, enable both WRITE and BASE64 */
+        WRITE_BASE64 =  BASE64 | WRITE;
     /** enum cv::FileStorage:: */
     public static final int
         UNDEFINED      = 0,
@@ -17665,9 +18367,9 @@ data to/from a file.
 
     /** \overload
     @param source Name of the file to open or the text string to read the data from. Extension of the
-    file (.xml or .yml/.yaml) determines its format (XML or YAML respectively). Also you can append .gz
-    to work with compressed files, for example myHugeMatrix.xml.gz. If both FileStorage::WRITE and
-    FileStorage::MEMORY flags are specified, source is used just to specify the output file format (e.g.
+    file (.xml, .yml/.yaml, or .json) determines its format (XML, YAML or JSON respectively). Also you can
+    append .gz to work with compressed files, for example myHugeMatrix.xml.gz. If both FileStorage::WRITE
+    and FileStorage::MEMORY flags are specified, source is used just to specify the output file format (e.g.
     mydata.xml, .yml etc.).
     @param flags Mode of operation. See  FileStorage::Mode
     @param encoding Encoding of the file. Note that UTF-16 XML encoding is not supported currently and
@@ -17695,10 +18397,12 @@ data to/from a file.
     See description of parameters in FileStorage::FileStorage. The method calls FileStorage::release
     before opening the file.
     @param filename Name of the file to open or the text string to read the data from.
-       Extension of the file (.xml or .yml/.yaml) determines its format (XML or YAML respectively).
-        Also you can append .gz to work with compressed files, for example myHugeMatrix.xml.gz. If both
+       Extension of the file (.xml, .yml/.yaml or .json) determines its format (XML, YAML or JSON
+        respectively). Also you can append .gz to work with compressed files, for example myHugeMatrix.xml.gz. If both
         FileStorage::WRITE and FileStorage::MEMORY flags are specified, source is used just to specify
-        the output file format (e.g. mydata.xml, .yml etc.).
+        the output file format (e.g. mydata.xml, .yml etc.). A file name can also contain parameters.
+        You can use this format, "*?base64" (e.g. "file.json?base64" (case sensitive)), as an alternative to
+        FileStorage::BASE64 flag.
     @param flags Mode of operation. One of FileStorage::Mode
     @param encoding Encoding of the file. Note that UTF-16 XML encoding is not supported currently and
     you should use 8-bit encoding instead of it.
@@ -17749,6 +18453,8 @@ data to/from a file.
     public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
 
     /** \overload */
+    public native @ByVal @Name("operator []") FileNode getNode(@Cast("const char*") BytePointer nodename);
+    public native @ByVal @Name("operator []") FileNode getNode(String nodename);
 
     /** \brief Returns the obsolete C FileStorage structure.
     @return Pointer to the underlying C FileStorage structure
@@ -17779,6 +18485,35 @@ data to/from a file.
      */
     public native void writeObj( @Str BytePointer name, @Const Pointer obj );
     public native void writeObj( @Str String name, @Const Pointer obj );
+
+    /**
+     * \brief Simplified writing API to use with bindings.
+     * @param name Name of the written object
+     * @param val Value of the written object
+     */
+    public native void write(@Str BytePointer name, double val);
+    public native void write(@Str String name, double val);
+    /** \overload */
+    public native void write(@Str BytePointer name, @Str BytePointer val);
+    public native void write(@Str String name, @Str String val);
+    /** \overload */
+    public native void write(@Str BytePointer name, @ByVal Mat val);
+    public native void write(@Str String name, @ByVal Mat val);
+    public native void write(@Str BytePointer name, @ByVal UMat val);
+    public native void write(@Str String name, @ByVal UMat val);
+
+    /** \brief Writes a comment.
+    <p>
+    The function writes a comment into file storage. The comments are skipped when the storage is read.
+    @param comment The written comment, single-line or multi-line
+    @param append If true, the function tries to put the comment at the end of current line.
+    Else if the comment is multi-line, or if it does not fit at the end of the current
+    line, the comment starts a new line.
+     */
+    public native void writeComment(@Str BytePointer comment, @Cast("bool") boolean append/*=false*/);
+    public native void writeComment(@Str BytePointer comment);
+    public native void writeComment(@Str String comment, @Cast("bool") boolean append/*=false*/);
+    public native void writeComment(@Str String comment);
 
     /** \brief Returns the normalized object name for the specified name of a file.
     @param filename Name of a file
@@ -17883,11 +18618,13 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** \overload
     @param nodename Name of an element in the mapping node.
     */
+    public native @ByVal @Name("operator []") FileNode getNode(@Cast("const char*") BytePointer nodename);
+    public native @ByVal @Name("operator []") FileNode getNode(String nodename);
 
     /** \overload
     @param i Index of an element in the sequence node.
     */
-    public native @ByVal @Name("operator []") FileNode get(int i);
+    public native @ByVal @Name("operator []") FileNode at(int i);
 
     /** \brief Returns type of the node.
     @return Type of the node. See FileNode::Type
@@ -17951,6 +18688,13 @@ storage is opened for writing, no data is stored in memory after it is written.
 
     /** reads the registered object and returns pointer to it */
     public native Pointer readObj();
+
+    /** Simplified reading API to use with bindings. */
+    public native double real();
+    /** Simplified reading API to use with bindings. */
+    public native @Str BytePointer string();
+    /** Simplified reading API to use with bindings. */
+    public native @ByVal Mat mat();
 
     // do not use wrapper pointer classes for better efficiency
     @MemberGetter public native @Const CvFileStorage fs();
@@ -18227,6 +18971,15 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 /** \brief Reads data from a file storage.
  */
 
+/** \brief Reads KeyPoint from a file storage.
+*/
+//It needs special handling because it contains two types of fields, int & float.
+@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPointVector vec);
+/** \brief Reads DMatch from a file storage.
+*/
+//It needs special handling because it contains two types of fields, int & float.
+@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef DMatchVector vec);
+
 /** \} FileNode
  <p>
  *  \relates cv::FileNodeIterator
@@ -18268,11 +19021,25 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 
 
 
+
+
+
 /** \endcond */
+
+
+
+
+
+
+
+
+
+
+
 
  // cv
 
-// #endif // __OPENCV_CORE_PERSISTENCE_HPP__
+// #endif // OPENCV_CORE_PERSISTENCE_HPP
 
 
 // Parsed from <opencv2/core/optim.hpp>
@@ -18318,8 +19085,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 //
 //M*/
 
-// #ifndef __OPENCV_OPTIM_HPP__
-// #define __OPENCV_OPTIM_HPP__
+// #ifndef OPENCV_OPTIM_HPP
+// #define OPENCV_OPTIM_HPP
 
 // #include "opencv2/core.hpp"
 

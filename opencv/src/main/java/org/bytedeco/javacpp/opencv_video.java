@@ -57,8 +57,8 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEO_HPP__
-// #define __OPENCV_VIDEO_HPP__
+// #ifndef OPENCV_VIDEO_HPP
+// #define OPENCV_VIDEO_HPP
 
 /**
   \defgroup video Video Analysis
@@ -76,7 +76,7 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 // #include "opencv2/video/tracking_c.h"
 // #endif
 
-// #endif //__OPENCV_VIDEO_HPP__
+// #endif //OPENCV_VIDEO_HPP
 
 
 // Parsed from <opencv2/video/tracking_c.h>
@@ -124,8 +124,8 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 //
 //M*/
 
-// #ifndef __OPENCV_TRACKING_C_H__
-// #define __OPENCV_TRACKING_C_H__
+// #ifndef OPENCV_TRACKING_C_H
+// #define OPENCV_TRACKING_C_H
 
 // #include "opencv2/imgproc/types_c.h"
 
@@ -335,7 +335,7 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
 // #endif
 
 
-// #endif // __OPENCV_TRACKING_C_H__
+// #endif // OPENCV_TRACKING_C_H
 
 
 // Parsed from <opencv2/video/tracking.hpp>
@@ -383,8 +383,8 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
 //
 //M*/
 
-// #ifndef __OPENCV_TRACKING_HPP__
-// #define __OPENCV_TRACKING_HPP__
+// #ifndef OPENCV_TRACKING_HPP
+// #define OPENCV_TRACKING_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
@@ -607,7 +607,7 @@ The function finds an optical flow for each prev pixel using the \cite Farneback
 @param dst Second input 2D point set of the same size and the same type as A, or another image.
 @param fullAffine If true, the function finds an optimal affine transformation with no additional
 restrictions (6 degrees of freedom). Otherwise, the class of transformations to choose from is
-limited to combinations of translation, rotation, and uniform scaling (5 degrees of freedom).
+limited to combinations of translation, rotation, and uniform scaling (4 degrees of freedom).
 <p>
 The function finds an optimal affine transform *[A|b]* (a 2 x 3 floating-point matrix) that
 approximates best the affine transformation between:
@@ -626,7 +626,7 @@ where src[i] and dst[i] are the i-th points in src and dst, respectively
 when fullAffine=false.
 <p>
 \sa
-getAffineTransform, getPerspectiveTransform, findHomography
+estimateAffine2D, estimateAffinePartial2D, getAffineTransform, getPerspectiveTransform, findHomography
  */
 @Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine );
 @Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine );
@@ -687,7 +687,7 @@ sample image_alignment.cpp that demonstrates the use of the function. Note that 
 an exception if algorithm does not converges.
 <p>
 \sa
-estimateRigidTransform, findHomography
+estimateAffine2D, estimateAffinePartial2D, findHomography
  */
 @Namespace("cv") public static native double findTransformECC( @ByVal Mat templateImage, @ByVal Mat inputImage,
                                       @ByVal Mat warpMatrix, int motionType/*=cv::MOTION_AFFINE*/,
@@ -813,6 +813,39 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     public native void collectGarbage();
 }
 
+/** \brief Base interface for sparse optical flow algorithms.
+ */
+@Namespace("cv") public static class SparseOpticalFlow extends Algorithm {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseOpticalFlow(Pointer p) { super(p); }
+
+    /** \brief Calculates a sparse optical flow.
+    <p>
+    @param prevImg First input image.
+    @param nextImg Second input image of the same size and the same type as prevImg.
+    @param prevPts Vector of 2D points for which the flow needs to be found.
+    @param nextPts Output vector of 2D points containing the calculated new positions of input features in the second image.
+    @param status Output status vector. Each element of the vector is set to 1 if the
+                  flow for the corresponding features has been found. Otherwise, it is set to 0.
+    @param err Optional output vector that contains error response for each point (inverse confidence).
+     */
+    public native void calc(@ByVal Mat prevImg, @ByVal Mat nextImg,
+                          @ByVal Mat prevPts, @ByVal Mat nextPts,
+                          @ByVal Mat status,
+                          @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat err);
+    public native void calc(@ByVal Mat prevImg, @ByVal Mat nextImg,
+                          @ByVal Mat prevPts, @ByVal Mat nextPts,
+                          @ByVal Mat status);
+    public native void calc(@ByVal UMat prevImg, @ByVal UMat nextImg,
+                          @ByVal UMat prevPts, @ByVal UMat nextPts,
+                          @ByVal UMat status,
+                          @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat err);
+    public native void calc(@ByVal UMat prevImg, @ByVal UMat nextImg,
+                          @ByVal UMat prevPts, @ByVal UMat nextPts,
+                          @ByVal UMat status);
+}
+
 /** \brief "Dual TV L1" Optical Flow Algorithm.
 <p>
 The class implements the "Dual TV L1" optical flow algorithm described in \cite Zach2007 and
@@ -920,11 +953,107 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
     public native int getMedianFiltering();
     /** \copybrief getMedianFiltering @see getMedianFiltering */
     public native void setMedianFiltering(int val);
+
+    /** \brief Creates instance of cv::DualTVL1OpticalFlow*/
+    public static native @Ptr DualTVL1OpticalFlow create(
+                                                double tau/*=0.25*/,
+                                                double lambda/*=0.15*/,
+                                                double theta/*=0.3*/,
+                                                int nscales/*=5*/,
+                                                int warps/*=5*/,
+                                                double epsilon/*=0.01*/,
+                                                int innnerIterations/*=30*/,
+                                                int outerIterations/*=10*/,
+                                                double scaleStep/*=0.8*/,
+                                                double gamma/*=0.0*/,
+                                                int medianFiltering/*=5*/,
+                                                @Cast("bool") boolean useInitialFlow/*=false*/);
+    public static native @Ptr DualTVL1OpticalFlow create();
 }
 
 /** \brief Creates instance of cv::DenseOpticalFlow
 */
 @Namespace("cv") public static native @Ptr DualTVL1OpticalFlow createOptFlow_DualTVL1();
+
+/** \brief Class computing a dense optical flow using the Gunnar Farneback’s algorithm.
+ */
+@Namespace("cv") public static class FarnebackOpticalFlow extends DenseOpticalFlow {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FarnebackOpticalFlow(Pointer p) { super(p); }
+
+    public native int getNumLevels();
+    public native void setNumLevels(int numLevels);
+
+    public native double getPyrScale();
+    public native void setPyrScale(double pyrScale);
+
+    public native @Cast("bool") boolean getFastPyramids();
+    public native void setFastPyramids(@Cast("bool") boolean fastPyramids);
+
+    public native int getWinSize();
+    public native void setWinSize(int winSize);
+
+    public native int getNumIters();
+    public native void setNumIters(int numIters);
+
+    public native int getPolyN();
+    public native void setPolyN(int polyN);
+
+    public native double getPolySigma();
+    public native void setPolySigma(double polySigma);
+
+    public native int getFlags();
+    public native void setFlags(int flags);
+
+    public static native @Ptr FarnebackOpticalFlow create(
+                int numLevels/*=5*/,
+                double pyrScale/*=0.5*/,
+                @Cast("bool") boolean fastPyramids/*=false*/,
+                int winSize/*=13*/,
+                int numIters/*=10*/,
+                int polyN/*=5*/,
+                double polySigma/*=1.1*/,
+                int flags/*=0*/);
+    public static native @Ptr FarnebackOpticalFlow create();
+}
+
+
+/** \brief Class used for calculating a sparse optical flow.
+<p>
+The class can calculate an optical flow for a sparse feature set using the
+iterative Lucas-Kanade method with pyramids.
+<p>
+\sa calcOpticalFlowPyrLK
+<p>
+*/
+@Namespace("cv") public static class SparsePyrLKOpticalFlow extends SparseOpticalFlow {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparsePyrLKOpticalFlow(Pointer p) { super(p); }
+
+    public native @ByVal Size getWinSize();
+    public native void setWinSize(@ByVal Size winSize);
+
+    public native int getMaxLevel();
+    public native void setMaxLevel(int maxLevel);
+
+    public native @ByVal TermCriteria getTermCriteria();
+    public native void setTermCriteria(@ByRef TermCriteria crit);
+
+    public native int getFlags();
+    public native void setFlags(int flags);
+
+    public native double getMinEigThreshold();
+    public native void setMinEigThreshold(double minEigThreshold);
+
+    public static native @Ptr SparsePyrLKOpticalFlow create(
+                @ByVal(nullValue = "cv::Size(21, 21)") Size winSize,
+                int maxLevel/*=3*/, @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 0.01)") TermCriteria crit,
+                int flags/*=0*/,
+                double minEigThreshold/*=1e-4*/);
+    public static native @Ptr SparsePyrLKOpticalFlow create();
+}
 
 /** \} video_track */
 
@@ -978,8 +1107,8 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
 //
 //M*/
 
-// #ifndef __OPENCV_BACKGROUND_SEGM_HPP__
-// #define __OPENCV_BACKGROUND_SEGM_HPP__
+// #ifndef OPENCV_BACKGROUND_SEGM_HPP
+// #define OPENCV_BACKGROUND_SEGM_HPP
 
 // #include "opencv2/core.hpp"
 

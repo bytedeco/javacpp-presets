@@ -56,8 +56,8 @@ public class opencv_photo extends org.bytedeco.javacpp.presets.opencv_photo {
 //
 //M*/
 
-// #ifndef __OPENCV_PHOTO_C_H__
-// #define __OPENCV_PHOTO_C_H__
+// #ifndef OPENCV_PHOTO_C_H
+// #define OPENCV_PHOTO_C_H
 
 // #include "opencv2/core/core_c.h"
 
@@ -84,7 +84,7 @@ public static native void cvInpaint( @Const CvArr src, @Const CvArr inpaint_mask
 // #ifdef __cplusplus //extern "C"
 // #endif
 
-// #endif //__OPENCV_PHOTO_C_H__
+// #endif //OPENCV_PHOTO_C_H
 
 
 // Parsed from <opencv2/photo.hpp>
@@ -131,8 +131,8 @@ public static native void cvInpaint( @Const CvArr src, @Const CvArr inpaint_mask
 //
 //M*/
 
-// #ifndef __OPENCV_PHOTO_HPP__
-// #define __OPENCV_PHOTO_HPP__
+// #ifndef OPENCV_PHOTO_HPP
+// #define OPENCV_PHOTO_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
@@ -1278,8 +1278,8 @@ contrast while preserving, or enhancing, high-contrast features.
 //
 //M*/
 
-// #ifndef __OPENCV_PHOTO_CUDA_HPP__
-// #define __OPENCV_PHOTO_CUDA_HPP__
+// #ifndef OPENCV_PHOTO_CUDA_HPP
+// #define OPENCV_PHOTO_CUDA_HPP
 
 // #include "opencv2/core/cuda.hpp"
 
@@ -1393,7 +1393,7 @@ with given h parameters using FastNonLocalMeansDenoising::simpleMethod function.
 
  // namespace cv { namespace cuda {
 
-// #endif /* __OPENCV_PHOTO_CUDA_HPP__ */
+// #endif /* OPENCV_PHOTO_CUDA_HPP */
 
 
 }

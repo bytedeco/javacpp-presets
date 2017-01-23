@@ -65,8 +65,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP__
-// #define __OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP__
+// #ifndef OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP
+// #define OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP
 
 // #include <vector>
 // #include "opencv2/core.hpp"
@@ -185,8 +185,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_LOG_HPP__
-// #define __OPENCV_VIDEOSTAB_LOG_HPP__
+// #ifndef OPENCV_VIDEOSTAB_LOG_HPP
+// #define OPENCV_VIDEOSTAB_LOG_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -290,8 +290,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_FAST_MARCHING_HPP__
-// #define __OPENCV_VIDEOSTAB_FAST_MARCHING_HPP__
+// #ifndef OPENCV_VIDEOSTAB_FAST_MARCHING_HPP
+// #define OPENCV_VIDEOSTAB_FAST_MARCHING_HPP
 
 // #include <cmath>
 // #include <queue>
@@ -387,8 +387,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_OPTICAL_FLOW_HPP__
-// #define __OPENCV_VIDEOSTAB_OPTICAL_FLOW_HPP__
+// #ifndef OPENCV_VIDEOSTAB_OPTICAL_FLOW_HPP
+// #define OPENCV_VIDEOSTAB_OPTICAL_FLOW_HPP
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/opencv_modules.hpp"
@@ -526,8 +526,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_MOTION_CORE_HPP__
-// #define __OPENCV_VIDEOSTAB_MOTION_CORE_HPP__
+// #ifndef OPENCV_VIDEOSTAB_MOTION_CORE_HPP
+// #define OPENCV_VIDEOSTAB_MOTION_CORE_HPP
 
 // #include <cmath>
 // #include "opencv2/core.hpp"
@@ -647,8 +647,8 @@ public static final int
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_OUTLIER_REJECTION_HPP__
-// #define __OPENCV_VIDEOSTAB_OUTLIER_REJECTION_HPP__
+// #ifndef OPENCV_VIDEOSTAB_OUTLIER_REJECTION_HPP
+// #define OPENCV_VIDEOSTAB_OUTLIER_REJECTION_HPP
 
 // #include <vector>
 // #include "opencv2/core.hpp"
@@ -767,8 +767,8 @@ public static final int
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP__
-// #define __OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP__
+// #ifndef OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP
+// #define OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP
 
 // #include <vector>
 // #include <fstream>
@@ -1078,8 +1078,8 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_MOTION_STABILIZING_HPP__
-// #define __OPENCV_VIDEOSTAB_MOTION_STABILIZING_HPP__
+// #ifndef OPENCV_VIDEOSTAB_MOTION_STABILIZING_HPP
+// #define OPENCV_VIDEOSTAB_MOTION_STABILIZING_HPP
 
 // #include <vector>
 // #include <utility>
@@ -1262,8 +1262,8 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_INPAINTINT_HPP__
-// #define __OPENCV_VIDEOSTAB_INPAINTINT_HPP__
+// #ifndef OPENCV_VIDEOSTAB_INPAINTINT_HPP
+// #define OPENCV_VIDEOSTAB_INPAINTINT_HPP
 
 // #include <vector>
 // #include "opencv2/core.hpp"
@@ -1496,8 +1496,8 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_DEBLURRING_HPP__
-// #define __OPENCV_VIDEOSTAB_DEBLURRING_HPP__
+// #ifndef OPENCV_VIDEOSTAB_DEBLURRING_HPP
+// #define OPENCV_VIDEOSTAB_DEBLURRING_HPP
 
 // #include <vector>
 // #include "opencv2/core.hpp"
@@ -1622,8 +1622,8 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_WOBBLE_SUPPRESSION_HPP__
-// #define __OPENCV_VIDEOSTAB_WOBBLE_SUPPRESSION_HPP__
+// #ifndef OPENCV_VIDEOSTAB_WOBBLE_SUPPRESSION_HPP
+// #define OPENCV_VIDEOSTAB_WOBBLE_SUPPRESSION_HPP
 
 // #include <vector>
 // #include "opencv2/core.hpp"
@@ -1759,8 +1759,8 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_STABILIZER_HPP__
-// #define __OPENCV_VIDEOSTAB_STABILIZER_HPP__
+// #ifndef OPENCV_VIDEOSTAB_STABILIZER_HPP
+// #define OPENCV_VIDEOSTAB_STABILIZER_HPP
 
 // #include <vector>
 // #include <ctime>
@@ -1915,8 +1915,8 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_RING_BUFFER_HPP__
-// #define __OPENCV_VIDEOSTAB_RING_BUFFER_HPP__
+// #ifndef OPENCV_VIDEOSTAB_RING_BUFFER_HPP
+// #define OPENCV_VIDEOSTAB_RING_BUFFER_HPP
 
 // #include <vector>
 // #include "opencv2/imgproc.hpp"
@@ -1976,15 +1976,15 @@ matching.
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_HPP__
-// #define __OPENCV_VIDEOSTAB_HPP__
+// #ifndef OPENCV_VIDEOSTAB_HPP
+// #define OPENCV_VIDEOSTAB_HPP
 
 /**
   \defgroup videostab Video Stabilization
 <p>
 The video stabilization module contains a set of functions and classes that can be used to solve the
-problem of video stabilization. There are a few methods implemented, most of them are descibed in
-the papers \cite OF06 and \cite G11 . However, there are some extensions and deviations from the orginal
+problem of video stabilization. There are a few methods implemented, most of them are described in
+the papers \cite OF06 and \cite G11 . However, there are some extensions and deviations from the original
 paper methods.
 <p>
 ### References

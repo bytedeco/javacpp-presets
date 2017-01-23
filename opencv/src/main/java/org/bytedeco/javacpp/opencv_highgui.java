@@ -57,13 +57,17 @@ public class opencv_highgui extends org.bytedeco.javacpp.presets.opencv_highgui 
 //
 //M*/
 
-// #ifndef __OPENCV_HIGHGUI_H__
-// #define __OPENCV_HIGHGUI_H__
+// #ifndef OPENCV_HIGHGUI_H
+// #define OPENCV_HIGHGUI_H
 
 // #include "opencv2/core/core_c.h"
 // #include "opencv2/imgproc/imgproc_c.h"
+// #ifdef HAVE_OPENCV_IMGCODECS
 // #include "opencv2/imgcodecs/imgcodecs_c.h"
+// #endif
+// #ifdef HAVE_OPENCV_VIDEOIO
 // #include "opencv2/videoio/videoio_c.h"
+// #endif
 
 // #ifdef __cplusplus
 // #endif /* __cplusplus */
@@ -188,6 +192,7 @@ public static final int
     CV_WND_PROP_AUTOSIZE   = 1, //to change/get window's autosize property
     CV_WND_PROP_ASPECTRATIO= 2, //to change/get window's aspectratio property
     CV_WND_PROP_OPENGL     = 3, //to change/get window's opengl support
+    CV_WND_PROP_VISIBLE    = 4,
 
     //These 2 flags are used by cvNamedWindow and cvSet/GetWindowProperty
     CV_WINDOW_NORMAL       =  0x00000000, //the user can resize the window (no constraint)  / also use to switch a fullscreen window to a normal size
@@ -485,12 +490,16 @@ public static final int HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 //
 //M*/
 
-// #ifndef __OPENCV_HIGHGUI_HPP__
-// #define __OPENCV_HIGHGUI_HPP__
+// #ifndef OPENCV_HIGHGUI_HPP
+// #define OPENCV_HIGHGUI_HPP
 
 // #include "opencv2/core.hpp"
+// #ifdef HAVE_OPENCV_IMGCODECS
 // #include "opencv2/imgcodecs.hpp"
+// #endif
+// #ifdef HAVE_OPENCV_VIDEOIO
 // #include "opencv2/videoio.hpp"
+// #endif
 
 /**
 \defgroup highgui High-level GUI
@@ -632,7 +641,11 @@ public static final int
        /** the image expends as much as it can (no ratio constraint). */
        WINDOW_FREERATIO  =  0x00000100,
        /** the ratio of the image is respected. */
-       WINDOW_KEEPRATIO  =  0x00000000;
+       WINDOW_KEEPRATIO  =  0x00000000,
+       /** status bar and tool bar */
+       WINDOW_GUI_EXPANDED= 0x00000000,
+       /** old fashious way */
+       WINDOW_GUI_NORMAL =  0x00000010;
 
 /** Flags for cv::setWindowProperty / cv::getWindowProperty */
 /** enum cv::WindowPropertyFlags */
@@ -644,7 +657,9 @@ public static final int
        /** window's aspect ration (can be set to WINDOW_FREERATIO or WINDOW_KEEPRATIO). */
        WND_PROP_ASPECT_RATIO = 2,
        /** opengl support. */
-       WND_PROP_OPENGL       = 3;
+       WND_PROP_OPENGL       = 3,
+       /** checks whether the window exists and is visible */
+       WND_PROP_VISIBLE      = 4;
 
 /** Mouse Events see cv::MouseCallback */
 /** enum cv::MouseEventTypes */
@@ -718,11 +733,13 @@ public static final int
 /** enum cv::QtButtonTypes */
 public static final int
        /** Push button. */
-       QT_PUSH_BUTTON = 0,
+       QT_PUSH_BUTTON   = 0,
        /** Checkbox button. */
-       QT_CHECKBOX    = 1,
+       QT_CHECKBOX      = 1,
        /** Radiobox button. */
-       QT_RADIOBOX    = 2;
+       QT_RADIOBOX      = 2,
+       /** Button should create a new buttonbar */
+       QT_NEW_BUTTONBAR = 1024;
 
 /** \brief Callback function for mouse events. see cv::setMouseCallback
 @param event one of the cv::MouseEventTypes constants.
@@ -797,9 +814,9 @@ Qt backend supports additional flags:
      displayed image (see imshow ), and you cannot change the window size manually.
  -   **WINDOW_FREERATIO or WINDOW_KEEPRATIO:** WINDOW_FREERATIO adjusts the image
      with no respect to its ratio, whereas WINDOW_KEEPRATIO keeps the image ratio.
- -   **CV_GUI_NORMAL or CV_GUI_EXPANDED:** CV_GUI_NORMAL is the old way to draw the window
-     without statusbar and toolbar, whereas CV_GUI_EXPANDED is a new enhanced GUI.
-By default, flags == WINDOW_AUTOSIZE | WINDOW_KEEPRATIO | CV_GUI_EXPANDED
+ -   **WINDOW_GUI_NORMAL or WINDOW_GUI_EXPANDED:** WINDOW_GUI_NORMAL is the old way to draw the window
+     without statusbar and toolbar, whereas WINDOW_GUI_EXPANDED is a new enhanced GUI.
+By default, flags == WINDOW_AUTOSIZE | WINDOW_KEEPRATIO | WINDOW_GUI_EXPANDED
 <p>
 @param winname Name of the window in the window caption that may be used as a window identifier.
 @param flags Flags of the window. The supported flags are: (cv::WindowFlags)
@@ -825,6 +842,16 @@ The function destroyAllWindows destroys all of the opened HighGUI windows.
 @Namespace("cv") public static native void destroyAllWindows();
 
 @Namespace("cv") public static native int startWindowThread();
+
+/** \brief Similar to #waitKey, but returns full key code.
+<p>
+\note
+<p>
+Key code is implementation specific and depends on used backend: QT/GTK/Win32/etc
+<p>
+*/
+@Namespace("cv") public static native int waitKeyEx(int delay/*=0*/);
+@Namespace("cv") public static native int waitKeyEx();
 
 /** \brief Waits for a pressed key.
 <p>
@@ -946,7 +973,7 @@ The function getWindowProperty returns properties of a window.
 <p>
 @param winname Name of the window.
 @param onMouse Mouse callback. See OpenCV samples, such as
-<https://github.com/Itseez/opencv/tree/master/samples/cpp/ffilldemo.cpp>, on how to specify and
+<https://github.com/opencv/opencv/tree/master/samples/cpp/ffilldemo.cpp>, on how to specify and
 use the callback.
 @param userdata The optional parameter passed to the callback.
  */
@@ -1258,6 +1285,27 @@ The function addText draws *text* on the image *img* using a specific font *font
 @Namespace("cv") public static native void addText( @Const @ByRef Mat img, @Str BytePointer text, @ByVal Point org, @Const @ByRef QtFont font);
 @Namespace("cv") public static native void addText( @Const @ByRef Mat img, @Str String text, @ByVal Point org, @Const @ByRef QtFont font);
 
+/** \brief Draws a text on the image.
+<p>
+@param img 8-bit 3-channel image where the text should be drawn.
+@param text Text to write on an image.
+@param org Point(x,y) where the text should start on an image.
+@param nameFont Name of the font. The name should match the name of a system font (such as
+*Times*). If the font is not found, a default one is used.
+@param pointSize Size of the font. If not specified, equal zero or negative, the point size of the
+font is set to a system-dependent default value. Generally, this is 12 points.
+@param color Color of the font in BGRA where A = 255 is fully transparent.
+@param weight Font weight. Available operation flags are : cv::QtFontWeights You can also specify a positive integer for better control.
+@param style Font style. Available operation flags are : cv::QtFontStyles
+@param spacing Spacing between characters. It can be negative or positive.
+ */
+@Namespace("cv") public static native void addText(@Const @ByRef Mat img, @Str BytePointer text, @ByVal Point org, @Str BytePointer nameFont, int pointSize/*=-1*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color,
+        int weight/*=cv::QT_FONT_NORMAL*/, int style/*=cv::QT_STYLE_NORMAL*/, int spacing/*=0*/);
+@Namespace("cv") public static native void addText(@Const @ByRef Mat img, @Str BytePointer text, @ByVal Point org, @Str BytePointer nameFont);
+@Namespace("cv") public static native void addText(@Const @ByRef Mat img, @Str String text, @ByVal Point org, @Str String nameFont, int pointSize/*=-1*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color,
+        int weight/*=cv::QT_FONT_NORMAL*/, int style/*=cv::QT_STYLE_NORMAL*/, int spacing/*=0*/);
+@Namespace("cv") public static native void addText(@Const @ByRef Mat img, @Str String text, @ByVal Point org, @Str String nameFont);
+
 /** \brief Displays a text on a window image as an overlay for a specified duration.
 <p>
 The function displayOverlay displays useful information/tips on top of the window for a certain
@@ -1323,7 +1371,8 @@ location of the window windowName.
 <p>
 The function createButton attaches a button to the control panel. Each button is added to a
 buttonbar to the right of the last button. A new buttonbar is created if nothing was attached to the
-control panel before, or if the last element attached to the control panel was a trackbar.
+control panel before, or if the last element attached to the control panel was a trackbar or if the
+QT_NEW_BUTTONBAR flag is added to the type.
 <p>
 See below various examples of the cv::createButton function call: :
 <pre>{@code
@@ -1332,6 +1381,7 @@ See below various examples of the cv::createButton function call: :
     createButton("button3",callbackButton,&value);
     createButton("button5",callbackButton1,NULL,QT_RADIOBOX);
     createButton("button6",callbackButton2,NULL,QT_PUSH_BUTTON,1);
+    createButton("button6",callbackButton2,NULL,QT_PUSH_BUTTON|QT_NEW_BUTTONBAR);// create a push button in a new row
 }</pre>
 <p>
 @param  bar_name Name of the button.

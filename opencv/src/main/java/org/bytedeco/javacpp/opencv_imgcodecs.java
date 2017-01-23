@@ -55,8 +55,8 @@ public class opencv_imgcodecs extends org.bytedeco.javacpp.helper.opencv_imgcode
 //
 //M*/
 
-// #ifndef __OPENCV_IMGCODECS_H__
-// #define __OPENCV_IMGCODECS_H__
+// #ifndef OPENCV_IMGCODECS_H
+// #define OPENCV_IMGCODECS_H
 
 // #include "opencv2/core/core_c.h"
 
@@ -78,7 +78,9 @@ public static final int
 /* any depth, ? */
     CV_LOAD_IMAGE_ANYDEPTH   = 2,
 /* ?, any color */
-    CV_LOAD_IMAGE_ANYCOLOR   = 4;
+    CV_LOAD_IMAGE_ANYCOLOR   = 4,
+/* ?, no rotate */
+    CV_LOAD_IMAGE_IGNORE_ORIENTATION  = 128;
 
 /* load image from file
   iscolor can be a combination of above flags where CV_LOAD_IMAGE_UNCHANGED
@@ -112,7 +114,16 @@ public static final int
     CV_IMWRITE_PNG_STRATEGY_RLE = 3,
     CV_IMWRITE_PNG_STRATEGY_FIXED = 4,
     CV_IMWRITE_PXM_BINARY = 32,
-    CV_IMWRITE_WEBP_QUALITY = 64;
+    CV_IMWRITE_WEBP_QUALITY = 64,
+    CV_IMWRITE_PAM_TUPLETYPE = 128,
+    CV_IMWRITE_PAM_FORMAT_NULL = 0,
+    CV_IMWRITE_PAM_FORMAT_BLACKANDWHITE = 1,
+    CV_IMWRITE_PAM_FORMAT_GRAYSCALE = 2,
+    CV_IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA = 3,
+    CV_IMWRITE_PAM_FORMAT_RGB = 4,
+    CV_IMWRITE_PAM_FORMAT_RGB_ALPHA = 5;
+
+
 
 /* save image to file */
 public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image,
@@ -186,7 +197,7 @@ public static native void cvvConvertImage(CvArr arg1, CvArr arg2, int arg3);
 // #ifdef __cplusplus
 // #endif
 
-// #endif // __OPENCV_IMGCODECS_H__
+// #endif // OPENCV_IMGCODECS_H
 
 
 // Parsed from <opencv2/imgcodecs.hpp>
@@ -233,8 +244,8 @@ public static native void cvvConvertImage(CvArr arg1, CvArr arg2, int arg3);
 //
 //M*/
 
-// #ifndef __OPENCV_IMGCODECS_HPP__
-// #define __OPENCV_IMGCODECS_HPP__
+// #ifndef OPENCV_IMGCODECS_HPP
+// #define OPENCV_IMGCODECS_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -277,7 +288,9 @@ public static final int
        /** If set, always convert image to the single channel grayscale image and the image size reduced 1/8. */
        IMREAD_REDUCED_GRAYSCALE_8  = 64,
        /** If set, always convert image to the 3 channel BGR color image and the image size reduced 1/8. */
-       IMREAD_REDUCED_COLOR_8      = 65;
+       IMREAD_REDUCED_COLOR_8      = 65,
+       /** If set, do not rotate the image according to EXIF's orientation flag. */
+       IMREAD_IGNORE_ORIENTATION   = 128;
 
 /** Imwrite flags */
 /** enum cv::ImwriteFlags */
@@ -294,7 +307,7 @@ public static final int
        IMWRITE_JPEG_LUMA_QUALITY   = 5,
        /** Separate chroma quality level, 0 - 100, default is 0 - don't use. */
        IMWRITE_JPEG_CHROMA_QUALITY = 6,
-       /** For PNG, it can be the compression level from 0 to 9. A higher value means a smaller size and longer compression time. Default value is 3. */
+       /** For PNG, it can be the compression level from 0 to 9. A higher value means a smaller size and longer compression time. Default value is 3. Also strategy is changed to IMWRITE_PNG_STRATEGY_DEFAULT (Z_DEFAULT_STRATEGY). */
        IMWRITE_PNG_COMPRESSION     = 16,
        /** One of cv::ImwritePNGFlags, default is IMWRITE_PNG_STRATEGY_DEFAULT. */
        IMWRITE_PNG_STRATEGY        = 17,
@@ -303,7 +316,9 @@ public static final int
        /** For PPM, PGM, or PBM, it can be a binary format flag, 0 or 1. Default value is 1. */
        IMWRITE_PXM_BINARY          = 32,
        /** For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used. */
-       IMWRITE_WEBP_QUALITY        = 64;
+       IMWRITE_WEBP_QUALITY        = 64,
+       /** For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format */
+       IMWRITE_PAM_TUPLETYPE       = 128;
 
 /** Imwrite PNG specific flags used to tune the compression algorithm.
 /** These flags will be modify the way of PNG image compression and will be passed to the underlying zlib processing stage.
@@ -325,6 +340,16 @@ public static final int
        IMWRITE_PNG_STRATEGY_RLE          = 3,
        /** Using this value prevents the use of dynamic Huffman codes, allowing for a simpler decoder for special applications. */
        IMWRITE_PNG_STRATEGY_FIXED        = 4;
+
+/** Imwrite PAM specific tupletype flags used to define the 'TUPETYPE' field of a PAM file. */
+/** enum cv::ImwritePAMFlags */
+public static final int
+       IMWRITE_PAM_FORMAT_NULL = 0,
+       IMWRITE_PAM_FORMAT_BLACKANDWHITE = 1,
+       IMWRITE_PAM_FORMAT_GRAYSCALE = 2,
+       IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA = 3,
+       IMWRITE_PAM_FORMAT_RGB = 4,
+       IMWRITE_PAM_FORMAT_RGB_ALPHA = 5;
 
 /** \brief Loads an image from a file.
 <p>
@@ -365,6 +390,8 @@ Currently, the following file formats are supported:
     then [GDAL](http://www.gdal.org) driver will be used in order to decode the image by supporting
     the following formats: [Raster](http://www.gdal.org/formats_list.html),
     [Vector](http://www.gdal.org/ogr_formats.html).
+-   If EXIF information are embedded in the image file, the EXIF orientation will be taken into account
+    and thus the image will be rotated accordingly except if the flag \ref IMREAD_IGNORE_ORIENTATION is passed.
 @param filename Name of file to be loaded.
 @param flags Flag that can take values of cv::ImreadModes
 */
@@ -574,7 +601,7 @@ result. See cv::imwrite for the list of supported formats and flags description.
 
  // cv
 
-// #endif //__OPENCV_IMGCODECS_HPP__
+// #endif //OPENCV_IMGCODECS_HPP
 
 
 }

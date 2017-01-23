@@ -55,8 +55,8 @@ public class opencv_imgproc extends org.bytedeco.javacpp.helper.opencv_imgproc {
 //
 //M*/
 
-// #ifndef __OPENCV_IMGPROC_TYPES_C_H__
-// #define __OPENCV_IMGPROC_TYPES_C_H__
+// #ifndef OPENCV_IMGPROC_TYPES_C_H
+// #define OPENCV_IMGPROC_TYPES_C_H
 
 // #include "opencv2/core/core_c.h"
 
@@ -797,8 +797,8 @@ public static final int
 //
 //M*/
 
-// #ifndef __OPENCV_IMGPROC_IMGPROC_C_H__
-// #define __OPENCV_IMGPROC_IMGPROC_C_H__
+// #ifndef OPENCV_IMGPROC_IMGPROC_C_H
+// #define OPENCV_IMGPROC_IMGPROC_C_H
 
 // #include "opencv2/imgproc/types_c.h"
 
@@ -2501,8 +2501,8 @@ public static native void cvDrawContours( CvArr img, CvSeq contour,
 //
 //M*/
 
-// #ifndef __OPENCV_IMGPROC_HPP__
-// #define __OPENCV_IMGPROC_HPP__
+// #ifndef OPENCV_IMGPROC_HPP
+// #define OPENCV_IMGPROC_HPP
 
 // #include "opencv2/core.hpp"
 
@@ -2655,12 +2655,30 @@ int main(int argc, const char *argv[])
 <p>
 @see cv::ColormapTypes
     <p>
+    \defgroup imgproc_subdiv2d Planar Subdivision
+<p>
+The Subdiv2D class described in this section is used to perform various planar subdivision on
+a set of 2D points (represented as vector of Point2f). OpenCV subdivides a plane into triangles
+using the Delaunay’s algorithm, which corresponds to the dual graph of the Voronoi diagram.
+In the figure below, the Delaunay’s triangulation is marked with black lines and the Voronoi
+diagram with red lines.
+<p>
+![Delaunay triangulation (black) and Voronoi (red)](pics/delaunay_voronoi.png)
+<p>
+The subdivisions can be used for the 3D piece-wise transformation of a plane, morphing, fast
+location of points on the plane, building special graphs (such as NNG,RNG), and so forth.
+    <p>
     \defgroup imgproc_hist Histograms
     \defgroup imgproc_shape Structural Analysis and Shape Descriptors
     \defgroup imgproc_motion Motion Analysis and Object Tracking
     \defgroup imgproc_feature Feature Detection
     \defgroup imgproc_object Object Detection
     \defgroup imgproc_c C API
+    \defgroup imgproc_hal Hardware Acceleration Layer
+    \{
+        \defgroup imgproc_hal_functions Functions
+        \defgroup imgproc_hal_interface Interface
+    \}
   \}
 */
 
@@ -2694,7 +2712,7 @@ public static final int
  *  \f[\texttt{dst} = \mathrm{blackhat} ( \texttt{src} , \texttt{element} )= \mathrm{close} ( \texttt{src} , \texttt{element} )- \texttt{src}\f] */
     MORPH_BLACKHAT = 6,
     /** "hit and miss"
- *    .- Only supported for CV_8UC1 binary images. Tutorial can be found in [this page](http://opencv-code.com/tutorials/hit-or-miss-transform-in-opencv/) */
+ *    .- Only supported for CV_8UC1 binary images. Tutorial can be found in [this page](https://web.archive.org/web/20160316070407/http://opencv-code.com/tutorials/hit-or-miss-transform-in-opencv/) */
     MORPH_HITMISS  = 7;
 
 /** shape of the structuring element */
@@ -2736,9 +2754,9 @@ public static final int
     WARP_FILL_OUTLIERS   = 8,
     /** flag, inverse transformation
     <p>
-    For example, polar transforms:
-    - flag is __not__ set: \f$dst( \phi , \rho ) = src(x,y)\f$
-    - flag is set: \f$dst(x,y) = src( \phi , \rho )\f$
+    For example, \ref cv::linearPolar or \ref cv::logPolar transforms:
+    - flag is __not__ set: \f$dst( \rho , \phi ) = src(x,y)\f$
+    - flag is set: \f$dst(x,y) = src( \rho , \phi )\f$
     */
     WARP_INVERSE_MAP     = 16;
 
@@ -2890,6 +2908,16 @@ public static final int
     /** The total area (in pixels) of the connected component */
     CC_STAT_AREA   = 4,
     CC_STAT_MAX    = 5;
+
+/** connected components algorithm */
+/** enum cv::ConnectedComponentsAlgorithmsTypes */
+public static final int
+    /** SAUF algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity */
+    CCL_WU      = 0,
+    /** BBDT algortihm for 8-way connectivity, SAUF algorithm for 4-way connectivity */
+    CCL_DEFAULT = -1,
+    /** BBDT algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity */
+    CCL_GRANA   = 1;
 
 /** mode of the contour retrieval algorithm */
 /** enum cv::RetrievalModes */
@@ -3417,6 +3445,9 @@ public static final int
 }
 
 
+/** \addtogroup imgproc_subdiv2d
+ *  \{ */
+
 @Namespace("cv") @NoOffset public static class Subdiv2D extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -3428,13 +3459,20 @@ public static final int
         return (Subdiv2D)super.position(position);
     }
 
+    /** Subdiv2D point location cases */
     /** enum cv::Subdiv2D:: */
-    public static final int PTLOC_ERROR        = -2,
+    public static final int /** Point location error */
+ PTLOC_ERROR        = -2,
+           /** Point outside the subdivision bounding rect */
            PTLOC_OUTSIDE_RECT = -1,
+           /** Point inside some facet */
            PTLOC_INSIDE       = 0,
+           /** Point coincides with one of the subdivision vertices */
            PTLOC_VERTEX       = 1,
+           /** Point on some edge */
            PTLOC_ON_EDGE      = 2;
 
+    /** Subdiv2D edge type navigation (see: getEdge()) */
     /** enum cv::Subdiv2D:: */
     public static final int NEXT_AROUND_ORG   =  0x00,
            NEXT_AROUND_DST   =  0x22,
@@ -3445,22 +3483,125 @@ public static final int
            PREV_AROUND_LEFT  =  0x20,
            PREV_AROUND_RIGHT =  0x02;
 
+    /** creates an empty Subdiv2D object.
+    To create a new empty Delaunay subdivision you need to use the initDelaunay() function.
+     */
     public Subdiv2D() { super((Pointer)null); allocate(); }
     private native void allocate();
+
+    /** \overload
+    <p>
+    @param rect – Rectangle that includes all of the 2D points that are to be added to the subdivision.
+    <p>
+    The function creates an empty Delaunay subdivision where 2D points can be added using the function
+    insert() . All of the points to be added must be within the specified rectangle, otherwise a runtime
+    error is raised.
+     */
     public Subdiv2D(@ByVal Rect rect) { super((Pointer)null); allocate(rect); }
     private native void allocate(@ByVal Rect rect);
+
+    /** \brief Creates a new empty Delaunay subdivision
+    <p>
+    @param rect – Rectangle that includes all of the 2D points that are to be added to the subdivision.
+     <p>
+     */
     public native void initDelaunay(@ByVal Rect rect);
 
+    /** \brief Insert a single point into a Delaunay triangulation.
+    <p>
+    @param pt – Point to insert.
+    <p>
+    The function inserts a single point into a subdivision and modifies the subdivision topology
+    appropriately. If a point with the same coordinates exists already, no new point is added.
+    @return the ID of the point.
+    <p>
+    \note If the point is outside of the triangulation specified rect a runtime error is raised.
+     */
     public native int insert(@ByVal Point2f pt);
+
+    /** \brief Insert multiple points into a Delaunay triangulation.
+    <p>
+    @param ptvec – Points to insert.
+    <p>
+    The function inserts a vector of points into a subdivision and modifies the subdivision topology
+    appropriately.
+     */
     public native void insert(@Const @ByRef Point2fVector ptvec);
+
+    /** \brief Returns the location of a point within a Delaunay triangulation.
+    <p>
+    @param pt – Point to locate.
+    @param edge – Output edge that the point belongs to or is located to the right of it.
+    @param vertex – Optional output vertex the input point coincides with.
+    <p>
+    The function locates the input point within the subdivision and gives one of the triangle edges
+    or vertices.
+    <p>
+    @return an integer which specify one of the following five cases for point location:
+    -  The point falls into some facet. The function returns PTLOC_INSIDE and edge will contain one of
+       edges of the facet.
+    -  The point falls onto the edge. The function returns PTLOC_ON_EDGE and edge will contain this edge.
+    -  The point coincides with one of the subdivision vertices. The function returns PTLOC_VERTEX and
+       vertex will contain a pointer to the vertex.
+    -  The point is outside the subdivision reference rectangle. The function returns PTLOC_OUTSIDE_RECT
+       and no pointers are filled.
+    -  One of input arguments is invalid. A runtime error is raised or, if silent or “parent” error
+       processing mode is selected, CV_PTLOC_ERROR is returnd.
+     */
     public native int locate(@ByVal Point2f pt, @ByRef IntPointer edge, @ByRef IntPointer vertex);
     public native int locate(@ByVal Point2f pt, @ByRef IntBuffer edge, @ByRef IntBuffer vertex);
     public native int locate(@ByVal Point2f pt, @ByRef int[] edge, @ByRef int[] vertex);
 
+    /** \brief Finds the subdivision vertex closest to the given point.
+    <p>
+    @param pt – Input point.
+    @param nearestPt – Output subdivision vertex point.
+    <p>
+    The function is another function that locates the input point within the subdivision. It finds the
+    subdivision vertex that is the closest to the input point. It is not necessarily one of vertices
+    of the facet containing the input point, though the facet (located using locate() ) is used as a
+    starting point.
+    <p>
+    @return vertex ID.
+     */
     public native int findNearest(@ByVal Point2f pt, Point2f nearestPt/*=0*/);
     public native int findNearest(@ByVal Point2f pt);
+
+    /** \brief Returns a list of all edges.
+    <p>
+    @param edgeList – Output vector.
+    <p>
+    The function gives each edge as a 4 numbers vector, where each two are one of the edge
+    vertices. i.e. org_x = v[0], org_y = v[1], dst_x = v[2], dst_y = v[3].
+     */
     public native void getEdgeList(@Cast("cv::Vec4f*") @StdVector FloatPointer edgeList);
+
+    /** \brief Returns a list of the leading edge ID connected to each triangle.
+    <p>
+    @param leadingEdgeList – Output vector.
+    <p>
+    The function gives one edge ID for each triangle.
+     */
+    public native void getLeadingEdgeList(@StdVector IntPointer leadingEdgeList);
+    public native void getLeadingEdgeList(@StdVector IntBuffer leadingEdgeList);
+    public native void getLeadingEdgeList(@StdVector int[] leadingEdgeList);
+
+    /** \brief Returns a list of all triangles.
+    <p>
+    @param triangleList – Output vector.
+    <p>
+    The function gives each triangle as a 6 numbers vector, where each two are one of the triangle
+    vertices. i.e. p1_x = v[0], p1_y = v[1], p2_x = v[2], p2_y = v[3], p3_x = v[4], p3_y = v[5].
+     */
     public native void getTriangleList(@Cast("cv::Vec6f*") @StdVector FloatPointer triangleList);
+
+    /** \brief Returns a list of all Voroni facets.
+    <p>
+    @param idx – Vector of vertices IDs to consider. For all vertices you can pass empty vector.
+    @param facetList – Output vector of the Voroni facets.
+    @param facetCenters – Output vector of the Voroni facets center points.
+     <p>
+     */
     public native void getVoronoiFacetList(@StdVector IntPointer idx, @ByRef Point2fVectorVector facetList,
                                          @ByRef Point2fVector facetCenters);
     public native void getVoronoiFacetList(@StdVector IntBuffer idx, @ByRef Point2fVectorVector facetList,
@@ -3468,22 +3609,86 @@ public static final int
     public native void getVoronoiFacetList(@StdVector int[] idx, @ByRef Point2fVectorVector facetList,
                                          @ByRef Point2fVector facetCenters);
 
+    /** \brief Returns vertex location from vertex ID.
+    <p>
+    @param vertex – vertex ID.
+    @param firstEdge – Optional. The first edge ID which is connected to the vertex.
+    @return vertex (x,y)
+     <p>
+     */
     public native @ByVal Point2f getVertex(int vertex, IntPointer firstEdge/*=0*/);
     public native @ByVal Point2f getVertex(int vertex);
     public native @ByVal Point2f getVertex(int vertex, IntBuffer firstEdge/*=0*/);
     public native @ByVal Point2f getVertex(int vertex, int[] firstEdge/*=0*/);
 
+    /** \brief Returns one of the edges related to the given edge.
+    <p>
+    @param edge – Subdivision edge ID.
+    @param nextEdgeType - Parameter specifying which of the related edges to return.
+    The following values are possible:
+    -   NEXT_AROUND_ORG next around the edge origin ( eOnext on the picture below if e is the input edge)
+    -   NEXT_AROUND_DST next around the edge vertex ( eDnext )
+    -   PREV_AROUND_ORG previous around the edge origin (reversed eRnext )
+    -   PREV_AROUND_DST previous around the edge destination (reversed eLnext )
+    -   NEXT_AROUND_LEFT next around the left facet ( eLnext )
+    -   NEXT_AROUND_RIGHT next around the right facet ( eRnext )
+    -   PREV_AROUND_LEFT previous around the left facet (reversed eOnext )
+    -   PREV_AROUND_RIGHT previous around the right facet (reversed eDnext )
+    <p>
+    ![sample output](pics/quadedge.png)
+    <p>
+    @return edge ID related to the input edge.
+     */
     public native int getEdge( int edge, int nextEdgeType );
+
+    /** \brief Returns next edge around the edge origin.
+    <p>
+    @param edge – Subdivision edge ID.
+    <p>
+    @return an integer which is next edge ID around the edge origin: eOnext on the
+    picture above if e is the input edge).
+     */
     public native int nextEdge(int edge);
+
+    /** \brief Returns another edge of the same quad-edge.
+    <p>
+    @param edge – Subdivision edge ID.
+    @param rotate - Parameter specifying which of the edges of the same quad-edge as the input
+    one to return. The following values are possible:
+    -   0 - the input edge ( e on the picture below if e is the input edge)
+    -   1 - the rotated edge ( eRot )
+    -   2 - the reversed edge (reversed e (in green))
+    -   3 - the reversed rotated edge (reversed eRot (in green))
+    <p>
+    @return one of the edges ID of the same quad-edge as the input edge.
+     */
     public native int rotateEdge(int edge, int rotate);
     public native int symEdge(int edge);
+
+    /** \brief Returns the edge origin.
+    <p>
+    @param edge – Subdivision edge ID.
+    @param orgpt – Output vertex location.
+    <p>
+    @return vertex ID.
+     */
     public native int edgeOrg(int edge, Point2f orgpt/*=0*/);
     public native int edgeOrg(int edge);
+
+    /** \brief Returns the edge destination.
+    <p>
+    @param edge – Subdivision edge ID.
+    @param dstpt – Output vertex location.
+    <p>
+    @return vertex ID.
+     */
     public native int edgeDst(int edge, Point2f dstpt/*=0*/);
     public native int edgeDst(int edge);
 }
 
-/** \addtogroup imgproc_feature
+/** \} imgproc_subdiv2d
+ <p>
+ *  \addtogroup imgproc_feature
  *  \{
 <p>
 /** \example lsd_lines.cpp
@@ -3669,6 +3874,8 @@ operation is shifted.
 The function smoothes an image using the median filter with the \f$\texttt{ksize} \times
 \texttt{ksize}\f$ aperture. Each channel of a multi-channel image is processed independently.
 In-place operation is supported.
+<p>
+\note The median filter uses BORDER_REPLICATE internally to cope with border pixels, see cv::BorderTypes
 <p>
 @param src input 1-, 3-, or 4-channel image; when ksize is 3 or 5, the image depth should be
 CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U.
@@ -4107,6 +4314,29 @@ L2gradient=false ).
 @Namespace("cv") public static native void Canny( @ByVal UMat image, @ByVal UMat edges,
                          double threshold1, double threshold2 );
 
+/** \overload
+<p>
+Finds edges in an image using the Canny algorithm with custom image gradient.
+<p>
+@param dx 16-bit x derivative of input image (CV_16SC1 or CV_16SC3).
+@param dy 16-bit y derivative of input image (same type as dx).
+@param edges,threshold1,threshold2,L2gradient See cv::Canny
+ */
+@Namespace("cv") public static native void Canny( @ByVal Mat dx, @ByVal Mat dy,
+                         @ByVal Mat edges,
+                         double threshold1, double threshold2,
+                         @Cast("bool") boolean L2gradient/*=false*/ );
+@Namespace("cv") public static native void Canny( @ByVal Mat dx, @ByVal Mat dy,
+                         @ByVal Mat edges,
+                         double threshold1, double threshold2 );
+@Namespace("cv") public static native void Canny( @ByVal UMat dx, @ByVal UMat dy,
+                         @ByVal UMat edges,
+                         double threshold1, double threshold2,
+                         @Cast("bool") boolean L2gradient/*=false*/ );
+@Namespace("cv") public static native void Canny( @ByVal UMat dx, @ByVal UMat dy,
+                         @ByVal UMat edges,
+                         double threshold1, double threshold2 );
+
 /** \brief Calculates the minimal eigenvalue of gradient matrices for corner detection.
 <p>
 The function is similar to cornerEigenValsAndVecs but it calculates and stores only the minimal
@@ -4299,7 +4529,8 @@ with qualityLevel=B .
 @param image Input 8-bit or floating-point 32-bit, single-channel image.
 @param corners Output vector of detected corners.
 @param maxCorners Maximum number of corners to return. If there are more corners than are found,
-the strongest of them is returned.
+the strongest of them is returned. {@code maxCorners <= 0} implies that no limit on the maximum is set
+and all detected corners are returned.
 @param qualityLevel Parameter characterizing the minimal accepted quality of image corners. The
 parameter value is multiplied by the best corner quality measure, which is the minimal eigenvalue
 (see cornerMinEigenVal ) or the Harris function response (see cornerHarris ). The corners with the
@@ -4811,6 +5042,8 @@ not supported by this function.
 borderMode=BORDER_TRANSPARENT, it means that the pixels in the destination image that
 corresponds to the "outliers" in the source image are not modified by the function.
 @param borderValue Value used in case of a constant border. By default, it is 0.
+\note
+Due to current implementaion limitations the size of an input and output images should be less than 32767x32767.
  */
 @Namespace("cv") public static native void remap( @ByVal Mat src, @ByVal Mat dst,
                          @ByVal Mat map1, @ByVal Mat map2,
@@ -4833,13 +5066,13 @@ The function converts a pair of maps for remap from one representation to anothe
 options ( (map1.type(), map2.type()) \f$\rightarrow\f$ (dstmap1.type(), dstmap2.type()) ) are
 supported:
 <p>
-- \f$\texttt{(CV\_32FC1, CV\_32FC1)} \rightarrow \texttt{(CV\_16SC2, CV\_16UC1)}\f$. This is the
+- \f$\texttt{(CV_32FC1, CV_32FC1)} \rightarrow \texttt{(CV_16SC2, CV_16UC1)}\f$. This is the
 most frequently used conversion operation, in which the original floating-point maps (see remap )
 are converted to a more compact and much faster fixed-point representation. The first output array
 contains the rounded coordinates and the second array (created only when nninterpolation=false )
 contains indices in the interpolation tables.
 <p>
-- \f$\texttt{(CV\_32FC2)} \rightarrow \texttt{(CV\_16SC2, CV\_16UC1)}\f$. The same as above but
+- \f$\texttt{(CV_32FC2)} \rightarrow \texttt{(CV_16SC2, CV_16UC1)}\f$. The same as above but
 the original maps are stored in one 2-channel matrix.
 <p>
 - Reverse conversion. Obviously, the reconstructed floating-point maps will not be exactly the same
@@ -4898,7 +5131,7 @@ coordinate origin is assumed to be the top-left corner).
 <p>
 The function calculates the \f$2 \times 3\f$ matrix of an affine transform so that:
 <p>
-\f[\begin{bmatrix} x'_i \\ y'_i \end{bmatrix} = \texttt{map\_matrix} \cdot \begin{bmatrix} x_i \\ y_i \\ 1 \end{bmatrix}\f]
+\f[\begin{bmatrix} x'_i \\ y'_i \end{bmatrix} = \texttt{map_matrix} \cdot \begin{bmatrix} x_i \\ y_i \\ 1 \end{bmatrix}\f]
 <p>
 where
 <p>
@@ -4929,7 +5162,7 @@ The result is also a \f$2 \times 3\f$ matrix of the same type as M.
 <p>
 The function calculates the \f$3 \times 3\f$ matrix of a perspective transform so that:
 <p>
-\f[\begin{bmatrix} t_i x'_i \\ t_i y'_i \\ t_i \end{bmatrix} = \texttt{map\_matrix} \cdot \begin{bmatrix} x_i \\ y_i \\ 1 \end{bmatrix}\f]
+\f[\begin{bmatrix} t_i x'_i \\ t_i y'_i \\ t_i \end{bmatrix} = \texttt{map_matrix} \cdot \begin{bmatrix} x_i \\ y_i \\ 1 \end{bmatrix}\f]
 <p>
 where
 <p>
@@ -4980,43 +5213,80 @@ source image. The center must be inside the image.
 An example using the cv::linearPolar and cv::logPolar operations
 */
 
-/** \brief Remaps an image to log-polar space.
+/** \brief Remaps an image to semilog-polar coordinates space.
 <p>
-transforms the source image using the following transformation:
-\f[dst( \phi , \rho ) = src(x,y)\f]
+Transform the source image using the following transformation (See \ref polar_remaps_reference_image "Polar remaps reference image"):
+\f[\begin{array}{l}
+  dst( \rho , \phi ) = src(x,y) \\
+  dst.size() \leftarrow src.size()
+\end{array}\f]
+<p>
 where
-\f[\rho = M  \cdot \log{\sqrt{x^2 + y^2}} , \phi =atan(y/x)\f]
+\f[\begin{array}{l}
+  I = (dx,dy) = (x - center.x,y - center.y) \\
+  \rho = M \cdot log_e(\texttt{magnitude} (I)) ,\\
+  \phi = Ky \cdot \texttt{angle} (I)_{0..360 deg} \\
+\end{array}\f]
+<p>
+and
+\f[\begin{array}{l}
+  M = src.cols / log_e(maxRadius) \\
+  Ky = src.rows / 360 \\
+\end{array}\f]
 <p>
 The function emulates the human "foveal" vision and can be used for fast scale and
-rotation-invariant template matching, for object tracking and so forth. The function can not operate
-in-place.
-<p>
+rotation-invariant template matching, for object tracking and so forth.
 @param src Source image
-@param dst Destination image
+@param dst Destination image. It will have same size and type as src.
 @param center The transformation center; where the output precision is maximal
-@param M Magnitude scale parameter.
+@param M Magnitude scale parameter. It determines the radius of the bounding circle to transform too.
 @param flags A combination of interpolation methods, see cv::InterpolationFlags
- */
+<p>
+\note
+-   The function can not operate in-place.
+-   To calculate magnitude and angle in degrees \ref cv::cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
+*/
 @Namespace("cv") public static native void logPolar( @ByVal Mat src, @ByVal Mat dst,
                             @ByVal Point2f center, double M, int flags );
 @Namespace("cv") public static native void logPolar( @ByVal UMat src, @ByVal UMat dst,
                             @ByVal Point2f center, double M, int flags );
 
-/** \brief Remaps an image to polar space.
+/** \brief Remaps an image to polar coordinates space.
 <p>
-transforms the source image using the following transformation:
-\f[dst( \phi , \rho ) = src(x,y)\f]
+\anchor polar_remaps_reference_image
+![Polar remaps reference](pics/polar_remap_doc.png)
+<p>
+Transform the source image using the following transformation:
+\f[\begin{array}{l}
+  dst( \rho , \phi ) = src(x,y) \\
+  dst.size() \leftarrow src.size()
+\end{array}\f]
+<p>
 where
-\f[\rho = (src.width/maxRadius)  \cdot \sqrt{x^2 + y^2} , \phi =atan(y/x)\f]
+\f[\begin{array}{l}
+  I = (dx,dy) = (x - center.x,y - center.y) \\
+  \rho = Kx \cdot \texttt{magnitude} (I) ,\\
+  \phi = Ky \cdot \texttt{angle} (I)_{0..360 deg}
+\end{array}\f]
 <p>
-The function can not operate in-place.
+and
+\f[\begin{array}{l}
+  Kx = src.cols / maxRadius \\
+  Ky = src.rows / 360
+\end{array}\f]
+<p>
 <p>
 @param src Source image
-@param dst Destination image
+@param dst Destination image. It will have same size and type as src.
 @param center The transformation center;
-@param maxRadius Inverse magnitude scale parameter
+@param maxRadius The radius of the bounding circle to transform. It determines the inverse magnitude scale parameter too.
 @param flags A combination of interpolation methods, see cv::InterpolationFlags
- */
+<p>
+\note
+-   The function can not operate in-place.
+-   To calculate magnitude and angle in degrees \ref cv::cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
+<p>
+*/
 @Namespace("cv") public static native void linearPolar( @ByVal Mat src, @ByVal Mat dst,
                                @ByVal Point2f center, double maxRadius, int flags );
 @Namespace("cv") public static native void linearPolar( @ByVal UMat src, @ByVal UMat dst,
@@ -5045,7 +5315,7 @@ The function can not operate in-place.
 
 /** \brief Calculates the integral of an image.
 <p>
-The functions calculate one or more integral images for the source image as follows:
+The function calculates one or more integral images for the source image as follows:
 <p>
 \f[\texttt{sum} (X,Y) =  \sum _{x<X,y<Y}  \texttt{image} (x,y)\f]
 <p>
@@ -5574,20 +5844,23 @@ The function is similar to cv::undistort and cv::initUndistortRectifyMap but it 
 sparse set of points instead of a raster image. Also the function performs a reverse transformation
 to projectPoints. In case of a 3D object, it does not reconstruct its 3D coordinates, but for a
 planar object, it does, up to a translation vector, if the proper R is specified.
-<pre>{@code
-    // (u,v) is the input point, (u', v') is the output point
-    // camera_matrix=[fx 0 cx; 0 fy cy; 0 0 1]
-    // P=[fx' 0 cx' tx; 0 fy' cy' ty; 0 0 1 tz]
-    x" = (u - cx)/fx
-    y" = (v - cy)/fy
-    (x',y') = undistort(x",y",dist_coeffs)
-    [X,Y,W]T = R*[x' y' 1]T
-    x = X/W, y = Y/W
-    // only performed if P=[fx' 0 cx' [tx]; 0 fy' cy' [ty]; 0 0 1 [tz]] is specified
-    u' = x*fx' + cx'
-    v' = y*fy' + cy',
-}</pre>
-where cv::undistort is an approximate iterative algorithm that estimates the normalized original
+<p>
+For each observed point coordinate \f$(u, v)\f$ the function computes:
+\f[
+\begin{array}{l}
+x^{"}  \leftarrow (u - c_x)/f_x  \\
+y^{"}  \leftarrow (v - c_y)/f_y  \\
+(x',y') = undistort(x^{"},y^{"}, \texttt{distCoeffs}) \\
+{[X\,Y\,W]} ^T  \leftarrow R*[x' \, y' \, 1]^T  \\
+x  \leftarrow X/W  \\
+y  \leftarrow Y/W  \\
+\text{only performed if P is specified:} \\
+u'  \leftarrow x {f'}_x + {c'}_x  \\
+v'  \leftarrow y {f'}_y + {c'}_y
+\end{array}
+\f]
+<p>
+where *undistort* is an approximate iterative algorithm that estimates the normalized original
 point coordinates out of the normalized distorted point coordinates ("normalized" means that the
 coordinates do not depend on the camera matrix).
 <p>
@@ -5602,7 +5875,7 @@ transformation. If matrix P is identity or omitted, dst will contain normalized 
 of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
 @param R Rectification transformation in the object space (3x3 matrix). R1 or R2 computed by
 cv::stereoRectify can be passed here. If the matrix is empty, the identity transformation is used.
-@param P New camera matrix (3x3) or new projection matrix (3x4). P1 or P2 computed by
+@param P New camera matrix (3x3) or new projection matrix (3x4) \f$\begin{bmatrix} {f'}_x & 0 & {c'}_x & t_x \\ 0 & {f'}_y & {c'}_y & t_y \\ 0 & 0 & 1 & t_z \end{bmatrix}\f$. P1 or P2 computed by
 cv::stereoRectify can be passed here. If the matrix is empty, the identity new camera matrix is used.
  */
 @Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
@@ -5627,7 +5900,7 @@ An example for creating histograms of an image
 
 /** \brief Calculates a histogram of a set of arrays.
 <p>
-The functions calcHist calculate the histogram of one or more arrays. The elements of a tuple used
+The function cv::calcHist calculates the histogram of one or more arrays. The elements of a tuple used
 to increment a histogram bin are taken from the corresponding input arrays at the same location. The
 sample below shows how to compute a 2D Hue-Saturation histogram for a color image. :
 <pre>{@code
@@ -5688,7 +5961,7 @@ sample below shows how to compute a 2D Hue-Saturation histogram for a color imag
     }
 }</pre>
 <p>
-@param images Source arrays. They all should have the same depth, CV_8U or CV_32F , and the same
+@param images Source arrays. They all should have the same depth, CV_8U, CV_16U or CV_32F , and the same
 size. Each of them can have an arbitrary number of channels.
 @param nimages Number of source images.
 @param channels List of the dims channels used to compute the histogram. The first array channels
@@ -5933,7 +6206,7 @@ this variant uses cv::SparseMat for output
 
 /** \brief Calculates the back projection of a histogram.
 <p>
-The functions calcBackProject calculate the back project of the histogram. That is, similarly to
+The function cv::calcBackProject calculates the back project of the histogram. That is, similarly to
 cv::calcHist , at each location (x, y) the function collects the values from the selected channels
 in the input images and finds the corresponding histogram bin. But instead of incrementing it, the
 function reads the bin value, scales it by scale , and stores in backProject(x,y) . In terms of
@@ -5954,7 +6227,7 @@ component.
 <p>
 This is an approximate algorithm of the CamShift color object tracker.
 <p>
-@param images Source arrays. They all should have the same depth, CV_8U or CV_32F , and the same
+@param images Source arrays. They all should have the same depth, CV_8U, CV_16U or CV_32F , and the same
 size. Each of them can have an arbitrary number of channels.
 @param nimages Number of source images.
 @param channels The list of channels used to compute the back projection. The number of channels
@@ -5964,7 +6237,7 @@ images[0].channels() + images[1].channels()-1, and so on.
 @param hist Input histogram that can be dense or sparse.
 @param backProject Destination back projection array that is a single-channel array of the same
 size and depth as images[0] .
-@param ranges Array of arrays of the histogram bin boundaries in each dimension. See calcHist .
+@param ranges Array of arrays of the histogram bin boundaries in each dimension. See cv::calcHist .
 @param scale Optional scale factor for the output back projection.
 @param uniform Flag indicating whether the histogram is uniform or not (see above).
 <p>
@@ -6089,7 +6362,7 @@ size and depth as images[0] .
 
 /** \brief Compares two histograms.
 <p>
-The function compare two dense or two sparse histograms using the specified method.
+The function cv::compareHist compares two dense or two sparse histograms using the specified method.
 <p>
 The function returns \f$d(H_1, H_2)\f$ .
 <p>
@@ -6139,10 +6412,12 @@ same object.
 <p>
 @param signature1 First signature, a \f$\texttt{size1}\times \texttt{dims}+1\f$ floating-point matrix.
 Each row stores the point weight followed by the point coordinates. The matrix is allowed to have
-a single column (weights only) if the user-defined cost matrix is used.
+a single column (weights only) if the user-defined cost matrix is used. The weights must be
+non-negative and have at least one non-zero value.
 @param signature2 Second signature of the same format as signature1 , though the number of rows
 may be different. The total weights may be different. In this case an extra "dummy" point is added
-to either signature1 or signature2 .
+to either signature1 or signature2. The weights must be non-negative and have at least one non-zero
+value.
 @param distType Used metric. See cv::DistanceTypes.
 @param cost User-defined \f$\texttt{size1}\times \texttt{size2}\f$ cost matrix. Also, if a cost matrix
 is used, lower boundary lowerBound cannot be calculated because it needs a metric function.
@@ -6307,7 +6582,7 @@ An example on using the distance transform\
 
 /** \brief Calculates the distance to the closest zero pixel for each pixel of the source image.
 <p>
-The functions distanceTransform calculate the approximate or precise distance from every binary
+The function cv::distanceTransform calculates the approximate or precise distance from every binary
 image pixel to the nearest zero pixel. For zero image pixels, the distance will obviously be zero.
 <p>
 When maskSize == DIST_MASK_PRECISE and distanceType == DIST_L2 , the function runs the
@@ -6412,7 +6687,7 @@ variant without {@code mask} parameter
 
 /** \brief Fills a connected component with the given color.
 <p>
-The functions floodFill fill a connected component starting from the seed point with the specified
+The function cv::floodFill fills a connected component starting from the seed point with the specified
 color. The connectivity is determined by the color/brightness closeness of the neighbor pixels. The
 pixel at \f$(x,y)\f$ is considered to belong to the repainted domain if:
 <p>
@@ -6561,6 +6836,9 @@ results are returned in the structure cv::Moments.
 used for images only.
 @return moments.
 <p>
+\note Only applicable to contour moments calculations from Python bindings: Note that the numpy
+type for the input array should be either np.int32 or np.float32.
+<p>
 \sa  contourArea, arcLength
  */
 @Namespace("cv") public static native @ByVal Moments moments( @ByVal Mat array, @Cast("bool") boolean binaryImage/*=false*/ );
@@ -6660,19 +6938,64 @@ not set by default.
 image with 4 or 8 way connectivity - returns N, the total number of labels [0, N-1] where 0
 represents the background label. ltype specifies the output label image type, an important
 consideration based on the total number of labels or alternatively the total number of pixels in
-the source image.
+the source image. ccltype specifies the connected components labeling algorithm to use, currently
+Grana's (BBDT) and Wu's (SAUF) algorithms are supported, see the cv::ConnectedComponentsAlgorithmsTypes
+for details. Note that SAUF algorithm forces a row major ordering of labels while BBDT does not.
 <p>
 @param image the 8-bit single-channel image to be labeled
 @param labels destination labeled image
 @param connectivity 8 or 4 for 8-way or 4-way connectivity respectively
 @param ltype output image label type. Currently CV_32S and CV_16U are supported.
- */
+@param ccltype connected components algorithm type (see the cv::ConnectedComponentsAlgorithmsTypes).
+*/
+@Namespace("cv") public static native @Name("connectedComponents") int connectedComponentsWithAlgorithm(@ByVal Mat image, @ByVal Mat labels,
+                                                                        int connectivity, int ltype, int ccltype);
+@Namespace("cv") public static native @Name("connectedComponents") int connectedComponentsWithAlgorithm(@ByVal UMat image, @ByVal UMat labels,
+                                                                        int connectivity, int ltype, int ccltype);
+
+
+/** \overload
+<p>
+@param image the 8-bit single-channel image to be labeled
+@param labels destination labeled image
+@param connectivity 8 or 4 for 8-way or 4-way connectivity respectively
+@param ltype output image label type. Currently CV_32S and CV_16U are supported.
+*/
 @Namespace("cv") public static native int connectedComponents(@ByVal Mat image, @ByVal Mat labels,
                                      int connectivity/*=8*/, int ltype/*=CV_32S*/);
 @Namespace("cv") public static native int connectedComponents(@ByVal Mat image, @ByVal Mat labels);
 @Namespace("cv") public static native int connectedComponents(@ByVal UMat image, @ByVal UMat labels,
                                      int connectivity/*=8*/, int ltype/*=CV_32S*/);
 @Namespace("cv") public static native int connectedComponents(@ByVal UMat image, @ByVal UMat labels);
+
+
+/** \brief computes the connected components labeled image of boolean image and also produces a statistics output for each label
+<p>
+image with 4 or 8 way connectivity - returns N, the total number of labels [0, N-1] where 0
+represents the background label. ltype specifies the output label image type, an important
+consideration based on the total number of labels or alternatively the total number of pixels in
+the source image. ccltype specifies the connected components labeling algorithm to use, currently
+Grana's (BBDT) and Wu's (SAUF) algorithms are supported, see the cv::ConnectedComponentsAlgorithmsTypes
+for details. Note that SAUF algorithm forces a row major ordering of labels while BBDT does not.
+<p>
+<p>
+@param image the 8-bit single-channel image to be labeled
+@param labels destination labeled image
+@param stats statistics output for each label, including the background label, see below for
+available statistics. Statistics are accessed via stats(label, COLUMN) where COLUMN is one of
+cv::ConnectedComponentsTypes. The data type is CV_32S.
+@param centroids centroid output for each label, including the background label. Centroids are
+accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data type CV_64F.
+@param connectivity 8 or 4 for 8-way or 4-way connectivity respectively
+@param ltype output image label type. Currently CV_32S and CV_16U are supported.
+@param ccltype connected components algorithm type (see the cv::ConnectedComponentsAlgorithmsTypes).
+*/
+@Namespace("cv") public static native @Name("connectedComponentsWithStats") int connectedComponentsWithStatsWithAlgorithm(@ByVal Mat image, @ByVal Mat labels,
+                                                                                          @ByVal Mat stats, @ByVal Mat centroids,
+                                                                                          int connectivity, int ltype, int ccltype);
+@Namespace("cv") public static native @Name("connectedComponentsWithStats") int connectedComponentsWithStatsWithAlgorithm(@ByVal UMat image, @ByVal UMat labels,
+                                                                                          @ByVal UMat stats, @ByVal UMat centroids,
+                                                                                          int connectivity, int ltype, int ccltype);
 
 /** \overload
 @param image the 8-bit single-channel image to be labeled
@@ -6700,21 +7023,17 @@ accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data t
 /** \brief Finds contours in a binary image.
 <p>
 The function retrieves contours from the binary image using the algorithm \cite Suzuki85 . The contours
-are a useful tool for shape analysis and object detection and recognition. See squares.c in the
+are a useful tool for shape analysis and object detection and recognition. See squares.cpp in the
 OpenCV sample directory.
 <p>
-\note Source image is modified by this function. Also, the function does not take into account
-1-pixel border of the image (it's filled with 0's and used for neighbor analysis in the algorithm),
-therefore the contours touching the image border will be clipped.
-<p>
 @param image Source, an 8-bit single-channel image. Non-zero pixels are treated as 1's. Zero
-pixels remain 0's, so the image is treated as binary . You can use compare , inRange , threshold ,
-adaptiveThreshold , Canny , and others to create a binary image out of a grayscale or color one.
-The function modifies the image while extracting the contours. If mode equals to RETR_CCOMP
-or RETR_FLOODFILL, the input can also be a 32-bit integer image of labels (CV_32SC1).
-@param contours Detected contours. Each contour is stored as a vector of points.
-@param hierarchy Optional output vector, containing information about the image topology. It has
-as many elements as the number of contours. For each i-th contour contours[i] , the elements
+pixels remain 0's, so the image is treated as binary . You can use cv::compare, cv::inRange, cv::threshold ,
+cv::adaptiveThreshold, cv::Canny, and others to create a binary image out of a grayscale or color one.
+If mode equals to cv::RETR_CCOMP or cv::RETR_FLOODFILL, the input can also be a 32-bit integer image of labels (CV_32SC1).
+@param contours Detected contours. Each contour is stored as a vector of points (e.g.
+std::vector<std::vector<cv::Point> >).
+@param hierarchy Optional output vector (e.g. std::vector<cv::Vec4i>), containing information about the image topology. It has
+as many elements as the number of contours. For each i-th contour contours[i], the elements
 hierarchy[i][0] , hiearchy[i][1] , hiearchy[i][2] , and hiearchy[i][3] are set to 0-based indices
 in contours of the next and previous contours at the same hierarchical level, the first child
 contour and the parent contour, respectively. If for the contour i there are no next, previous,
@@ -6770,7 +7089,7 @@ context.
 
 /** \brief Approximates a polygonal curve(s) with the specified precision.
 <p>
-The functions approxPolyDP approximate a curve or a polygon with another curve/polygon with less
+The function cv::approxPolyDP approximates a curve or a polygon with another curve/polygon with less
 vertices so that the distance between them is less or equal to the specified precision. It uses the
 Douglas-Peucker algorithm <http://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm>
 <p>
@@ -6931,7 +7250,7 @@ An example using the convexHull functionality
 
 /** \brief Finds the convex hull of a point set.
 <p>
-The functions find the convex hull of a 2D point set using the Sklansky's algorithm \cite Sklansky82
+The function cv::convexHull finds the convex hull of a 2D point set using the Sklansky's algorithm \cite Sklansky82
 that has *O(N logN)* complexity in the current implementation. See the OpenCV sample convexhull.cpp
 that demonstrates the usage of different function variants.
 <p>
@@ -6946,8 +7265,8 @@ to the right, and its Y axis pointing upwards.
 @param returnPoints Operation flag. In case of a matrix, when the flag is true, the function
 returns convex hull points. Otherwise, it returns indices of the convex hull points. When the
 output array is std::vector, the flag is ignored, and the output depends on the type of the
-vector: std::vector\<int\> implies returnPoints=true, std::vector\<Point\> implies
-returnPoints=false.
+vector: std::vector\<int\> implies returnPoints=false, std::vector\<Point\> implies
+returnPoints=true.
  */
 @Namespace("cv") public static native void convexHull( @ByVal Mat points, @ByVal Mat hull,
                               @Cast("bool") boolean clockwise/*=false*/, @Cast("bool") boolean returnPoints/*=true*/ );
@@ -7141,7 +7460,7 @@ public static final int
 
 /** \brief Applies a GNU Octave/MATLAB equivalent colormap on a given image.
 <p>
-@param src The source image, grayscale or colored does not matter.
+@param src The source image, grayscale or colored of type CV_8UC1 or CV_8UC3.
 @param dst The result is the colormapped source image. Note: Mat::create is called on dst.
 @param colormap The colormap to apply, see cv::ColormapTypes
  */
@@ -7256,7 +7575,7 @@ filled circle is to be drawn.
 
 /** \brief Draws a simple or thick elliptic arc or fills an ellipse sector.
 <p>
-The functions ellipse with less parameters draw an ellipse outline, a filled ellipse, an elliptic
+The function cv::ellipse with less parameters draws an ellipse outline, a filled ellipse, an elliptic
 arc, or a filled ellipse sector. A piecewise-linear curve is used to approximate the elliptic arc
 boundary. If you need more control of the ellipse rendering, you can retrieve the curve using
 ellipse2Poly and then render it with polylines or fill it with fillPoly . If you use the first
@@ -7337,8 +7656,8 @@ marker types are supported, see cv::MarkerTypes for more information.
 <p>
 @param img Image.
 @param position The point where the crosshair is positioned.
-@param markerType The specific type of marker you want to use, see cv::MarkerTypes
 @param color Line color.
+@param markerType The specific type of marker you want to use, see cv::MarkerTypes
 @param thickness Line thickness.
 @param line_type Type of the line, see cv::LineTypes
 @param markerSize The length of the marker axis [default = 20 pixels]
@@ -7600,14 +7919,20 @@ parameter is only taken into account when there is hierarchy available.
 
 /** \brief Clips the line against the image rectangle.
 <p>
-The functions clipLine calculate a part of the line segment that is entirely within the specified
-rectangle. They return false if the line segment is completely outside the rectangle. Otherwise,
-they return true .
+The function cv::clipLine calculates a part of the line segment that is entirely within the specified
+rectangle. it returns false if the line segment is completely outside the rectangle. Otherwise,
+it returns true .
 @param imgSize Image size. The image rectangle is Rect(0, 0, imgSize.width, imgSize.height) .
 @param pt1 First line point.
 @param pt2 Second line point.
  */
 @Namespace("cv") public static native @Cast("bool") boolean clipLine(@ByVal Size imgSize, @ByRef Point pt1, @ByRef Point pt2);
+
+/** \overload
+@param imgSize Image size. The image rectangle is Rect(0, 0, imgSize.width, imgSize.height) .
+@param pt1 First line point.
+@param pt2 Second line point.
+*/
 
 /** \overload
 @param imgRect Image rectangle.
@@ -7633,6 +7958,20 @@ accuracy.
 @Namespace("cv") public static native void ellipse2Poly( @ByVal Point center, @ByVal Size axes, int angle,
                                 int arcStart, int arcEnd, int delta,
                                 @ByRef PointVector pts );
+
+/** \overload
+@param center Center of the arc.
+@param axes Half of the size of the ellipse main axes. See the ellipse for details.
+@param angle Rotation angle of the ellipse in degrees. See the ellipse for details.
+@param arcStart Starting angle of the elliptic arc in degrees.
+@param arcEnd Ending angle of the elliptic arc in degrees.
+@param delta Angle between the subsequent polyline vertices. It defines the approximation
+accuracy.
+@param pts Output vector of polyline vertices.
+*/
+@Namespace("cv") public static native void ellipse2Poly(@ByVal Point2d center, @ByVal Size2d axes, int angle,
+                             int arcStart, int arcEnd, int delta,
+                             @ByRef Point2dVector pts);
 
 /** \brief Draws a text string.
 <p>
@@ -7888,8 +8227,8 @@ for(int i = 0; i < it2.count; i++, ++it2)
 //
 //M*/
 
-// #ifndef __OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP__
-// #define __OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP__
+// #ifndef OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP
+// #define OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP
 
 /** \cond IGNORED */
 /**
@@ -7922,7 +8261,7 @@ respect to \f$\tau_y\f$.
 
 /** \endcond */
 
-// #endif // __OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP__
+// #endif // OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP
 
 
 }

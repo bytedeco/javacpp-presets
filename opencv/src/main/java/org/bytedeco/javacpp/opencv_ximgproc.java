@@ -25,26 +25,26 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
  *  By downloading, copying, installing or using the software you agree to this license.
  *  If you do not agree to this license, do not download, install,
  *  copy or use the software.
- *  
- *  
+ *
+ *
  *  License Agreement
  *  For Open Source Computer Vision Library
  *  (3 - clause BSD License)
- *  
+ *
  *  Redistribution and use in source and binary forms, with or without modification,
  *  are permitted provided that the following conditions are met :
- *  
- *  *Redistributions of source code must retain the above copyright notice,
+ *
+ *  * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
- *  
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
  *  this list of conditions and the following disclaimer in the documentation
  *  and / or other materials provided with the distribution.
- *  
+ *
  *  * Neither the names of the copyright holders nor the names of the contributors
  *  may be used to endorse or promote products derived from this software
  *  without specific prior written permission.
- *  
+ *
  *  This software is provided by the copyright holders and contributors "as is" and
  *  any express or implied warranties, including, but not limited to, the implied
  *  warranties of merchantability and fitness for a particular purpose are disclaimed.
@@ -68,32 +68,91 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
 // #include "ximgproc/segmentation.hpp"
 // #include "ximgproc/fast_hough_transform.hpp"
 // #include "ximgproc/estimated_covariance.hpp"
+// #include "ximgproc/weighted_median_filter.hpp"
 // #include "ximgproc/slic.hpp"
 // #include "ximgproc/lsc.hpp"
+// #include "ximgproc/paillou_filter.hpp"
+// #include "ximgproc/fast_line_detector.hpp"
+// #include "ximgproc/deriche_filter.hpp"
 
 /** \defgroup ximgproc Extended Image Processing
   \{
     \defgroup ximgproc_edge Structured forests for fast edge detection
 <p>
-This module contains implementations of modern structured edge detection algorithms, i.e. algorithms
-which somehow takes into account pixel affinities in natural images.
+This module contains implementations of modern structured edge detection algorithms,
+i.e. algorithms which somehow takes into account pixel affinities in natural images.
     <p>
     \defgroup ximgproc_filters Filters
     <p>
     \defgroup ximgproc_superpixel Superpixels
     <p>
     \defgroup ximgproc_segmentation Image segmentation
+    <p>
+    \defgroup ximgproc_fast_line_detector Fast line detector
   \}
 */
-    @Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal Mat _src, @ByVal Mat _dst, double maxValue,
-                int type, int blockSize, double delta );
-    @Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal UMat _src, @ByVal UMat _dst, double maxValue,
-                int type, int blockSize, double delta );
 
- // namespace ximgproc
- //namespace cv
+/** enum cv::ximgproc::ThinningTypes */
+public static final int
+    THINNING_ZHANGSUEN    = 0, // Thinning technique of Zhang-Suen
+    THINNING_GUOHALL      = 1;  // Thinning technique of Guo-Hall
 
-// #endif
+/** \addtogroup ximgproc
+ *  \{
+<p>
+/** \brief Applies Niblack thresholding to input image.
+<p>
+The function transforms a grayscale image to a binary image according to the formulae:
+-   **THRESH_BINARY**
+    \f[dst(x,y) =  \fork{\texttt{maxValue}}{if \(src(x,y) > T(x,y)\)}{0}{otherwise}\f]
+-   **THRESH_BINARY_INV**
+    \f[dst(x,y) =  \fork{0}{if \(src(x,y) > T(x,y)\)}{\texttt{maxValue}}{otherwise}\f]
+where \f$T(x,y)\f$ is a threshold calculated individually for each pixel.
+<p>
+The threshold value \f$T(x, y)\f$ is the mean minus \f$ delta \f$ times standard deviation
+of \f$\texttt{blockSize} \times\texttt{blockSize}\f$ neighborhood of \f$(x, y)\f$.
+<p>
+The function can't process the image in-place.
+<p>
+@param _src Source 8-bit single-channel image.
+@param _dst Destination image of the same size and the same type as src.
+@param maxValue Non-zero value assigned to the pixels for which the condition is satisfied,
+used with the THRESH_BINARY and THRESH_BINARY_INV thresholding types.
+@param type Thresholding type, see cv::ThresholdTypes.
+@param blockSize Size of a pixel neighborhood that is used to calculate a threshold value
+for the pixel: 3, 5, 7, and so on.
+@param delta Constant multiplied with the standard deviation and subtracted from the mean.
+Normally, it is taken to be a real number between 0 and 1.
+<p>
+\sa  threshold, adaptiveThreshold
+ */
+@Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal Mat _src, @ByVal Mat _dst,
+                                    double maxValue, int type,
+                                    int blockSize, double delta );
+@Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal UMat _src, @ByVal UMat _dst,
+                                    double maxValue, int type,
+                                    int blockSize, double delta );
+
+/** \brief Applies a binary blob thinning operation, to achieve a skeletization of the input image.
+<p>
+The function transforms a binary blob image into a skeletized form using the technique of Zhang-Suen.
+<p>
+@param src Source 8-bit single-channel image, containing binary blobs, with blobs having 255 pixel values.
+@param dst Destination image of the same size and the same type as src. The function can work in-place.
+@param thinningType Value that defines which thinning algorithm should be used. See cv::ThinningTypes
+ */
+@Namespace("cv::ximgproc") public static native void thinning( @ByVal Mat src, @ByVal Mat dst, int thinningType/*=cv::ximgproc::THINNING_ZHANGSUEN*/);
+@Namespace("cv::ximgproc") public static native void thinning( @ByVal Mat src, @ByVal Mat dst);
+@Namespace("cv::ximgproc") public static native void thinning( @ByVal UMat src, @ByVal UMat dst, int thinningType/*=cv::ximgproc::THINNING_ZHANGSUEN*/);
+@Namespace("cv::ximgproc") public static native void thinning( @ByVal UMat src, @ByVal UMat dst);
+
+
+/** \} */
+
+
+
+
+// #endif // __OPENCV_XIMGPROC_HPP__
 
 
 // Parsed from opencv2/ximgproc/edge_filter.hpp
@@ -111,7 +170,7 @@ which somehow takes into account pixel affinities in natural images.
  *  Redistribution and use in source and binary forms, with or without modification,
  *  are permitted provided that the following conditions are met :
  *
- *  *Redistributions of source code must retain the above copyright notice,
+ *  * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  *
  *  * Redistributions in binary form must reproduce the above copyright notice,
@@ -439,10 +498,36 @@ proportional to sigmaSpace .
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal UMat joint, @ByVal UMat src, @ByVal UMat dst, int d, double sigmaColor, double sigmaSpace, int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal UMat joint, @ByVal UMat src, @ByVal UMat dst, int d, double sigmaColor, double sigmaSpace);
 
+/** \brief Applies the bilateral texture filter to an image. It performs structure-preserving texture filter.
+For more details about this filter see \cite Cho2014.
+<p>
+@param src Source image whose depth is 8-bit UINT or 32-bit FLOAT
+<p>
+@param dst Destination image of the same size and type as src.
+<p>
+@param fr Radius of kernel to be used for filtering. It should be positive integer
+<p>
+@param numIter Number of iterations of algorithm, It should be positive integer
+<p>
+@param sigmaAlpha Controls the sharpness of the weight transition from edges to smooth/texture regions, where
+a bigger value means sharper transition. When the value is negative, it is automatically calculated.
+<p>
+@param sigmaAvg Range blur parameter for texture blurring. Larger value makes result to be more blurred. When the
+value is negative, it is automatically calculated as described in the paper.
+<p>
+\sa rollingGuidanceFilter, bilateralFilter
+*/
+@Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal Mat src, @ByVal Mat dst, int fr/*=3*/, int numIter/*=1*/, double sigmaAlpha/*=-1.*/, double sigmaAvg/*=-1.*/);
+@Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal Mat src, @ByVal Mat dst);
+@Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal UMat src, @ByVal UMat dst, int fr/*=3*/, int numIter/*=1*/, double sigmaAlpha/*=-1.*/, double sigmaAvg/*=-1.*/);
+@Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal UMat src, @ByVal UMat dst);
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
 /** \brief Applies the rolling guidance filter to an image.
+<p>
+For more details, please see \cite zhang2014rolling
 <p>
 @param src Source 8-bit or floating-point, 1-channel or 3-channel image.
 <p>
@@ -582,7 +667,7 @@ For more details about L0 Smoother, see the original paper \cite xu2011image.
  *  Redistribution and use in source and binary forms, with or without modification,
  *  are permitted provided that the following conditions are met :
  *
- *  *Redistributions of source code must retain the above copyright notice,
+ *  * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  *
  *  * Redistributions in binary form must reproduce the above copyright notice,
@@ -803,7 +888,7 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
  *  Redistribution and use in source and binary forms, with or without modification,
  *  are permitted provided that the following conditions are met :
  *
- *  *Redistributions of source code must retain the above copyright notice,
+ *  * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  *
  *  * Redistributions in binary form must reproduce the above copyright notice,
@@ -1326,53 +1411,216 @@ the use of this software, even if advised of the possibility of such damage.
                      */
                     @Namespace("cv::ximgproc::segmentation") public static native @Ptr GraphSegmentation createGraphSegmentation(double sigma/*=0.5*/, float k/*=300*/, int min_size/*=100*/);
                     @Namespace("cv::ximgproc::segmentation") public static native @Ptr GraphSegmentation createGraphSegmentation();
+
+                    /** \brief Strategie for the selective search segmentation algorithm
+                        The class implements a generic stragery for the algorithm described in \cite uijlings2013selective.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategy extends Algorithm {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentationStrategy(Pointer p) { super(p); }
+                    
+                            /** \brief Set a initial image, with a segementation.
+                                @param img The input image. Any number of channel can be provided
+                                @param regions A segementation of the image. The parameter must be the same size of img.
+                                @param sizes The sizes of different regions
+                                @param image_id If not set to -1, try to cache pre-computations. If the same set og (img, regions, size) is used, the image_id need to be the same.
+                            */
+                            public native void setImage(@ByVal Mat img, @ByVal Mat regions, @ByVal Mat sizes, int image_id/*=-1*/);
+                            public native void setImage(@ByVal Mat img, @ByVal Mat regions, @ByVal Mat sizes);
+                            public native void setImage(@ByVal UMat img, @ByVal UMat regions, @ByVal UMat sizes, int image_id/*=-1*/);
+                            public native void setImage(@ByVal UMat img, @ByVal UMat regions, @ByVal UMat sizes);
+
+                            /** \brief Return the score between two regions (between 0 and 1)
+                                @param r1 The first region
+                                @param r2 The second region
+                            */
+                            public native float get(int r1, int r2);
+
+                            /** \brief Inform the strategy that two regions will be merged
+                                @param r1 The first region
+                                @param r2 The second region
+                            */
+                            public native void merge(int r1, int r2);
+                    }
+
+                    /** \brief Color-based strategy for the selective search segmentation algorithm
+                        The class is implemented from the algorithm described in \cite uijlings2013selective.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyColor extends SelectiveSearchSegmentationStrategy {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentationStrategyColor(Pointer p) { super(p); }
+                    
+                    }
+
+                    /** \brief Create a new color-based strategy */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyColor createSelectiveSearchSegmentationStrategyColor();
+
+                    /** \brief Size-based strategy for the selective search segmentation algorithm
+                        The class is implemented from the algorithm described in \cite uijlings2013selective.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategySize extends SelectiveSearchSegmentationStrategy {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentationStrategySize(Pointer p) { super(p); }
+                    
+                    }
+
+                    /** \brief Create a new size-based strategy */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategySize createSelectiveSearchSegmentationStrategySize();
+
+                    /** \brief Texture-based strategy for the selective search segmentation algorithm
+                        The class is implemented from the algorithm described in \cite uijlings2013selective.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyTexture extends SelectiveSearchSegmentationStrategy {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentationStrategyTexture(Pointer p) { super(p); }
+                    
+                    }
+
+                    /** \brief Create a new size-based strategy */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyTexture createSelectiveSearchSegmentationStrategyTexture();
+
+                    /** \brief Fill-based strategy for the selective search segmentation algorithm
+                        The class is implemented from the algorithm described in \cite uijlings2013selective.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyFill extends SelectiveSearchSegmentationStrategy {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentationStrategyFill(Pointer p) { super(p); }
+                    
+                    }
+
+                    /** \brief Create a new fill-based strategy */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyFill createSelectiveSearchSegmentationStrategyFill();
+
+                    /** \brief Regroup multiple strategies for the selective search segmentation algorithm
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyMultiple extends SelectiveSearchSegmentationStrategy {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentationStrategyMultiple(Pointer p) { super(p); }
+                    
+
+                            /** \brief Add a new sub-strategy
+                                @param g The strategy
+                                @param weight The weight of the strategy
+                            */
+                            public native void addStrategy(@Ptr SelectiveSearchSegmentationStrategy g, float weight);
+                            /** \brief Remove all sub-strategies
+                            */
+                            public native void clearStrategies();
+                    }
+
+                    /** \brief Create a new multiple strategy */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyMultiple createSelectiveSearchSegmentationStrategyMultiple();
+
+                    /** \brief Create a new multiple strategy and set one subtrategy
+                        @param s1 The first strategy
+                    */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyMultiple createSelectiveSearchSegmentationStrategyMultiple(@Ptr SelectiveSearchSegmentationStrategy s1);
+
+                    /** \brief Create a new multiple strategy and set two subtrategies, with equal weights
+                        @param s1 The first strategy
+                        @param s2 The second strategy
+                    */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyMultiple createSelectiveSearchSegmentationStrategyMultiple(@Ptr SelectiveSearchSegmentationStrategy s1, @Ptr SelectiveSearchSegmentationStrategy s2);
+
+
+                    /** \brief Create a new multiple strategy and set three subtrategies, with equal weights
+                        @param s1 The first strategy
+                        @param s2 The second strategy
+                        @param s3 The third strategy
+                    */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyMultiple createSelectiveSearchSegmentationStrategyMultiple(@Ptr SelectiveSearchSegmentationStrategy s1, @Ptr SelectiveSearchSegmentationStrategy s2, @Ptr SelectiveSearchSegmentationStrategy s3);
+
+                    /** \brief Create a new multiple strategy and set four subtrategies, with equal weights
+                        @param s1 The first strategy
+                        @param s2 The second strategy
+                        @param s3 The third strategy
+                        @param s4 The forth strategy
+                    */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentationStrategyMultiple createSelectiveSearchSegmentationStrategyMultiple(@Ptr SelectiveSearchSegmentationStrategy s1, @Ptr SelectiveSearchSegmentationStrategy s2, @Ptr SelectiveSearchSegmentationStrategy s3, @Ptr SelectiveSearchSegmentationStrategy s4);
+
+                    /** \brief Selective search segmentation algorithm
+                        The class implements the algorithm described in \cite uijlings2013selective.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentation extends Algorithm {
+                        static { Loader.load(); }
+                        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                        public SelectiveSearchSegmentation(Pointer p) { super(p); }
+                    
+
+                            /** \brief Set a image used by switch* functions to initialize the class
+                                @param img The image
+                            */
+                            public native void setBaseImage(@ByVal Mat img);
+                            public native void setBaseImage(@ByVal UMat img);
+
+                            /** \brief Initialize the class with the 'Single stragegy' parameters describled in \cite uijlings2013selective.
+                                @param k The k parameter for the graph segmentation
+                                @param sigma The sigma parameter for the graph segmentation
+                            */
+                            public native void switchToSingleStrategy(int k/*=200*/, float sigma/*=0.8f*/);
+                            public native void switchToSingleStrategy();
+
+                            /** \brief Initialize the class with the 'Selective search fast' parameters describled in \cite uijlings2013selective.
+                                @param base_k The k parameter for the first graph segmentation
+                                @param inc_k The increment of the k parameter for all graph segmentations
+                                @param sigma The sigma parameter for the graph segmentation
+                            */
+                            public native void switchToSelectiveSearchFast(int base_k/*=150*/, int inc_k/*=150*/, float sigma/*=0.8f*/);
+                            public native void switchToSelectiveSearchFast();
+
+                            /** \brief Initialize the class with the 'Selective search fast' parameters describled in \cite uijlings2013selective.
+                                @param base_k The k parameter for the first graph segmentation
+                                @param inc_k The increment of the k parameter for all graph segmentations
+                                @param sigma The sigma parameter for the graph segmentation
+                            */
+                            public native void switchToSelectiveSearchQuality(int base_k/*=150*/, int inc_k/*=150*/, float sigma/*=0.8f*/);
+                            public native void switchToSelectiveSearchQuality();
+
+                            /** \brief Add a new image in the list of images to process.
+                                @param img The image
+                            */
+                            public native void addImage(@ByVal Mat img);
+                            public native void addImage(@ByVal UMat img);
+
+                            /** \brief Clear the list of images to process
+                            */
+                            public native void clearImages();
+
+                            /** \brief Add a new graph segmentation in the list of graph segementations to process.
+                                @param g The graph segmentation
+                            */
+                            public native void addGraphSegmentation(@Ptr GraphSegmentation g);
+
+                            /** \brief Clear the list of graph segmentations to process;
+                            */
+                            public native void clearGraphSegmentations();
+
+                            /** \brief Add a new strategy in the list of strategy to process.
+                                @param s The strategy
+                            */
+                            public native void addStrategy(@Ptr SelectiveSearchSegmentationStrategy s);
+
+                            /** \brief Clear the list of strategy to process;
+                            */
+                            public native void clearStrategies();
+
+                            /** \brief Based on all images, graph segmentations and stragies, computes all possible rects and return them
+                                @param rects The list of rects. The first ones are more relevents than the lasts ones.
+                            */
+                            public native void process(@ByRef RectVector rects);
+                    }
+
+                    /** \brief Create a new SelectiveSearchSegmentation class.
+                     */
+                    @Namespace("cv::ximgproc::segmentation") public static native @Ptr SelectiveSearchSegmentation createSelectiveSearchSegmentation();
+
             /** \} */
-
-            // Represent an edge between two pixels
-            @Namespace("cv::ximgproc::segmentation") public static class Edge extends Pointer {
-                static { Loader.load(); }
-                /** Default native constructor. */
-                public Edge() { super((Pointer)null); allocate(); }
-                /** Native array allocator. Access with {@link Pointer#position(long)}. */
-                public Edge(long size) { super((Pointer)null); allocateArray(size); }
-                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-                public Edge(Pointer p) { super(p); }
-                private native void allocate();
-                private native void allocateArray(long size);
-                @Override public Edge position(long position) {
-                    return (Edge)super.position(position);
-                }
-            
-                    public native int from(); public native Edge from(int from);
-                    public native int to(); public native Edge to(int to);
-                    public native float weight(); public native Edge weight(float weight);
-
-                    public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Edge e);
-            }
-
-            // A point in the sets of points
-            @Namespace("cv::ximgproc::segmentation") @NoOffset public static class PointSetElement extends Pointer {
-                static { Loader.load(); }
-                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-                public PointSetElement(Pointer p) { super(p); }
-                /** Native array allocator. Access with {@link Pointer#position(long)}. */
-                public PointSetElement(long size) { super((Pointer)null); allocateArray(size); }
-                private native void allocateArray(long size);
-                @Override public PointSetElement position(long position) {
-                    return (PointSetElement)super.position(position);
-                }
-            
-                    public native int p(); public native PointSetElement p(int p);
-                    public native int size(); public native PointSetElement size(int size);
-
-                    public PointSetElement() { super((Pointer)null); allocate(); }
-                    private native void allocate();
-
-                    public PointSetElement(int p_) { super((Pointer)null); allocate(p_); }
-                    private native void allocate(int p_);
-            }
-
-            // An object to manage set of points, who can be fusionned
 
         
     
@@ -1803,7 +2051,7 @@ superpixel algorithm, which are: region_size and ruler. It preallocate some buff
 computing iterations over the given image. An example of SLIC versus SLICO is ilustrated in the
 following picture.
 <p>
-![image](pics/slic_slico_kermit.png)
+![image](pics/superpixels_slic.png)
  <p>
  */
 
