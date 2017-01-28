@@ -9,10 +9,13 @@ fi
 
 export PYTHON_BIN_PATH=$(which python)
 export USE_DEFAULT_PYTHON_LIB_PATH=1
+export CC_OPT_FLAGS=-O3
+export TF_NEED_JEMALLOC=0
 export TF_NEED_CUDA=0
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_OPENCL=0
+export TF_ENABLE_XLA=0
 export TF_CUDA_VERSION=8.0
 export TF_CUDNN_VERSION=5
 export GCC_HOST_COMPILER_PATH=$(which gcc)
@@ -20,7 +23,7 @@ export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
-TENSORFLOW_VERSION=1.0.0-alpha
+TENSORFLOW_VERSION=1.0.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -72,5 +75,12 @@ esac
 
 ./configure
 bazel build -c opt //tensorflow:libtensorflow_cc.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures
+
+case $PLATFORM in
+    macosx-*)
+        chmod +w bazel-bin/tensorflow/libtensorflow_cc.so
+        install_name_tool -id @rpath/libtensorflow_cc.so bazel-bin/tensorflow/libtensorflow_cc.so
+        ;;
+esac
 
 cd ../..

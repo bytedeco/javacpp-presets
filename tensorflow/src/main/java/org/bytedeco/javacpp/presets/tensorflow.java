@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -105,6 +105,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/lib/gtl/iterator_range.h",
                         //        "tensorflow/core/lib/gtl/inlined_vector.h",
                         "tensorflow/core/graph/graph.h",
+                        "tensorflow/core/graph/tensor_id.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
                         "tensorflow/core/framework/selective_registration.h",
@@ -190,6 +191,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/edgeset.h",
                         "tensorflow/core/lib/gtl/iterator_range.h",
                         "tensorflow/core/graph/graph.h",
+                        "tensorflow/core/graph/tensor_id.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
                         "tensorflow/core/graph/node_builder.h",
@@ -292,6 +294,11 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap"))
 
+               .put(new Info("std::pair<tensorflow::StringPiece,int>").pointerTypes("StringPieceIntPair").define())
+               .put(new Info("std::map<tensorflow::TensorId,tensorflow::TensorId>").pointerTypes("TensorIdTensorIdMap").define())
+               .put(new Info("std::vector<tensorflow::Input>::iterator", "std::vector<tensorflow::Input>::const_iterator").skip())
+               .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
+
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
                .put(new Info("std::function<void(int64,int64,int)>").pointerTypes("ParallelForFn"))
@@ -367,7 +374,7 @@ public class tensorflow implements InfoMapper {
         public    ParallelForFn(Pointer p) { super(p); }
         protected ParallelForFn() { allocate(); }
         private native void allocate();
-        public native void call(long from, long to, int i);
+        public native int call(long from, long to, int i);
     }
 
     public static class ConsiderFunction extends FunctionPointer {
