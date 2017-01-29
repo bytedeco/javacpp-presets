@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = {openblas.class, opencv_highgui.class}, target = "org.bytedeco.javacpp.caffe", value = {
     @Platform(value = {"linux-x86", "macosx"}, define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
         "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h",
-        "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
+        "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", /*"caffe/data_reader.hpp",*/ "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
         "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/layers/base_data_layer.hpp", "caffe/layers/data_layer.hpp",
         "caffe/layers/dummy_data_layer.hpp", "caffe/layers/hdf5_data_layer.hpp", "caffe/layers/hdf5_output_layer.hpp", "caffe/layers/image_data_layer.hpp", "caffe/layers/memory_data_layer.hpp",
         "caffe/layers/window_data_layer.hpp", "caffe/layer_factory.hpp", "caffe/layer.hpp", "caffe/layers/accuracy_layer.hpp", "caffe/layers/loss_layer.hpp", "caffe/layers/contrastive_loss_layer.hpp",
