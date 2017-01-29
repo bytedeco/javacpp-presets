@@ -43,6 +43,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
+    linux-arm64)
+        ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        make -j $MAKEJ
+        make install-strip
+        ;;
     linux-x86_64)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
         make -j $MAKEJ

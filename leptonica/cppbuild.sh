@@ -30,6 +30,10 @@ tar -xzvf ../$GIFLIB.tar.gz
 tar -xzvf ../$LIBJPEG.tar.gz
 tar -xzvf ../$LIBPNG.tar.gz
 tar -xzvf ../$LIBTIFF.tar.gz
+
+#patch old config.sub for aarch64 support
+patch -p0 < ../../libtiff-aarch64.patch
+
 tar -xzvf ../$LIBWEBP.tar.gz
 tar -xzvf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
@@ -219,6 +223,41 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
+    linux-arm64)
+    	export CFLAGS="-I$INSTALL_PATH/include/"
+    	export CXXFLAGS="$CFLAGS"
+    	export CPPFLAGS="$CFLAGS"
+    	export CC="aarch64-linux-gnu-gcc -fPIC"
+    	cd $ZLIB
+    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
+    	make -j $MAKEJ
+    	make install
+    	cd ../$GIFLIB
+    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --disable-shared
+    	#./configure --prefix=$INSTALL_PATH --disable-shared --host=aarch64-linux-gnu
+    	make -j $MAKEJ
+    	make install
+    	cd ../$LIBJPEG
+    	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+    	make -j $MAKEJ
+    	make install
+    	cd ../$LIBPNG
+    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=aarch64-linux-gnu
+    	make -j $MAKEJ
+    	make install
+    	cd ../$LIBTIFF
+    	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=aarch64-linux-gnu
+    	make -j $MAKEJ
+    	make install
+    	cd ../$LIBWEBP
+    	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+    	make -j $MAKEJ
+    	make install
+    	cd ../leptonica-$LEPTONICA_VERSION
+    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=aarch64-linux-gnu --disable-programs
+    	make -j $MAKEJ
+    	make install-strip
+    	;;
     linux-ppc64le)
         export CC="$OLDCC -m64 -fPIC"
         cd $ZLIB
