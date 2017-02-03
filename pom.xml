@@ -299,6 +299,8 @@
               <goal>jar</goal>
             </goals>
             <configuration>
+              <minmemory>128m</minmemory>
+              <maxmemory>1024m</maxmemory>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs/</link>
               </links>
