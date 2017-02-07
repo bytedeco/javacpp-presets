@@ -7,16 +7,13 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIQUIDFUN_VERSION=1.1.0
-LIQUIDFUN_SHA=0708ce1 # 2016-12-29
-#download https://github.com/google/liquidfun/releases/download/v$LIQUIDFUN_VERSION/liquidfun-$LIQUIDFUN_VERSION.tar.gz liquidfun-$LIQUIDFUN_VERSION.tar.gz
+LIQUIDFUN_SHA=0708ce1 # 20150401
 download https://github.com/google/liquidfun/archive/$LIQUIDFUN_SHA.zip liquidfun_$LIQUIDFUN_SHA.zip
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 mkdir -p include lib bin
-#tar -xzvf ../liquidfun-$LIQUIDFUN_VERSION.tar.gz
 unzip -o ../liquidfun_$LIQUIDFUN_SHA.zip
 cd `ls -d liquidfun-*`
 
