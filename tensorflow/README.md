@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 1.0.0-rc0  http://www.tensorflow.org/
+ * TensorFlow 1.0.0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of TensorFlow ported to Java from this C++ source file:
 
- * https://github.com/tensorflow/tensorflow/blob/v0.10.0/tensorflow/cc/tutorials/example_trainer.cc
+ * https://github.com/tensorflow/tensorflow/blob/r1.0/tensorflow/cc/tutorials/example_trainer.cc
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleTrainer.java` source files below, simply execute on the command line:
 ```bash
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.0.0-rc0-1.3.2-SNAPSHOT</version>
+            <version>1.0.0-1.3.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
