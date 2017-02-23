@@ -21,7 +21,7 @@ OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
 case $PLATFORM in
     android-arm)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=$INSTALL_PATH/../../android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/ -DANDROID_NDK_ABI_NAME=armeabi_v7a
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=$INSTALL_PATH/../../android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/opencv-3.2.0 -DANDROID_NDK_ABI_NAME=armeabi_v7a
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
