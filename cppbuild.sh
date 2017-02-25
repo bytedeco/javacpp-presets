@@ -94,7 +94,7 @@ function download {
         curl -L "$1" -o "$TOP_PATH/downloads/$2" --fail
         DOWNLOADSTATUS=$?
         if [ "$DOWNLOADSTATUS" -eq 28 ]
-	then
+        then
 		echo "Download timed out, waiting 5 minutes then trying again"
 		rm "$TOP_PATH/downloads/$2"
 		sleep 600
@@ -106,11 +106,11 @@ function download {
 			exit 1
     		fi
         elif [ "$DOWNLOADSTATUS" -ne 0 ]
-	then
+        then
 		echo "File could not be downloaded!"
 		rm "$TOP_PATH/downloads/$2"
 		exit 1
-    	fi
+        fi
     fi
     ln -sf "$TOP_PATH/downloads/$2" "$2"
 }
