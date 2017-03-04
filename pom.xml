@@ -59,6 +59,7 @@
     <module>cuda</module>
     <module>mxnet</module>
     <module>tensorflow</module>
+    <module>liquidfun</module>
   </modules>
 
   <prerequisites>
