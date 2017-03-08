@@ -37,14 +37,14 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 cd tensorflow-$TENSORFLOW_VERSION
 
 case $PLATFORM in
-	android-arm)
+    android-arm)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         export BUILDFLAGS="--crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
         ;;
-	android-x86)
+    android-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
@@ -54,7 +54,8 @@ case $PLATFORM in
     linux-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
-        export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --copt=-D_mm_cvtm64_si64=reinterpret_cast<__int64_t> --copt=-D_mm_cvtsi64_m64=reinterpret_cast<__m64>"
+        sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
+        export BUILDFLAGS="--copt=-m32 --linkopt=-m32"
         ;;
     linux-x86_64)
         export CC="/usr/bin/gcc"
