@@ -1,10 +1,11 @@
 
+ * Add missing call to `Loader.load()` in helper class for `opencv_ml` ([issue bytedeco/javacv#638](https://github.com/bytedeco/javacv/issues/638))
  * Work around issues with TensorFlow on some versions of Mac OS X ([issue #335](https://github.com/bytedeco/javacpp-presets/issues/335))
  * Upgrade presets for OpenCV 3.2.0, libdc1394 2.2.5, LLVM 3.9.1 ([pull #343](https://github.com/bytedeco/javacpp-presets/pull/343)), TensorFlow 1.0.0
- * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340))
+ * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340)) and LiquidFun ([pull #356](https://github.com/bytedeco/javacpp-presets/pull/356))
  * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))
- * Add presets for the `text` module of OpenCV 3.1 ([pull #333](https://github.com/bytedeco/javacpp-presets/pull/333))
+ * Add presets for the `text` module of OpenCV 3.x ([pull #333](https://github.com/bytedeco/javacpp-presets/pull/333))
 
 ### December 7, 2016 version 1.3
  * Fix FFmpeg builds on ARM when not using a cross compiler ([issue #322](https://github.com/bytedeco/javacpp-presets/issues/322))

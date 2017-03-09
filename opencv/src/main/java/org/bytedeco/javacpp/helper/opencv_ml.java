@@ -23,6 +23,7 @@
 package org.bytedeco.javacpp.helper;
 
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Name;
 
@@ -43,6 +44,7 @@ import org.bytedeco.javacpp.presets.opencv_core.Str;
 public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 
     @Name("cv::ml::StatModel") public static abstract class AbstractStatModel extends Algorithm {
+        static { Loader.load(); }
         public AbstractStatModel(Pointer p) { super(p); }
 
         public static native @Ptr @Name("load<cv::ml::NormalBayesClassifier>") NormalBayesClassifier loadNormalBayesClassifier(@Str BytePointer filename, @Str BytePointer objname);
