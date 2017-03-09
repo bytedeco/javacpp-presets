@@ -122,6 +122,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
  * MXnet  https://github.com/dmlc/mxnet
  * TensorFlow 1.0.0  https://github.com/tensorflow/tensorflow
+ * LiquidFun  http://google.github.io/liquidfun/
 
 Once everything installed and configured, simply execute
 ```bash
