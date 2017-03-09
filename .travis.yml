@@ -110,6 +110,10 @@ matrix:
         env: PROJ=videoinput OS=macosx-x86_64
 
 before_install:
+   - git clone https://github.com/bytedeco/javacpp.git
+   - cd javacpp
+   - mvn install
+   - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
@@ -159,9 +163,7 @@ before_install:
       fi
 install:
 ###   - ./cppbuild.sh -platform $OS install ${PROJ[@]}
-   - git clone https://github.com/bytedeco/javacpp.git
-   - cd javacpp
-   - mvn install
+   - echo "install"
 script:
    - |
     for proj in "${PROJ[@]}"; do
