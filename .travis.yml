@@ -158,7 +158,10 @@ before_install:
         fi
       fi
 install:
-   - ./cppbuild.sh -platform $OS install ${PROJ[@]}
+###   - ./cppbuild.sh -platform $OS install ${PROJ[@]}
+   - git clone https://github.com/bytedeco/javacpp.git
+   - cd javacpp
+   - mvn install
 script:
    - |
     for proj in "${PROJ[@]}"; do
