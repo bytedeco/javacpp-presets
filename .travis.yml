@@ -162,7 +162,7 @@ install:
 script:
    - |
     for proj in "${PROJ[@]}"; do
-      mvn install -Djavacpp.platform=$OS -pl $proj
+      mvn install -s .travis-settings.xml -Djavacpp.platform=$OS -pl $proj
     done
 cache:
    directories:
