@@ -123,11 +123,9 @@ before_install:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib
-          sudo sudo apt-mark manual build-essential g++ gcc yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib
         else
           sudo apt-get update
           sudo apt-get install -q -y yasm nasm
-          sudo apt-mark manual -q -y yasm nasm
         fi
       else
         brew install yasm nasm
@@ -136,7 +134,7 @@ before_install:
       if [ "$PROJ" == "libfreenect" ] || [ "$PROJ" == "libdc1394" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y libusb-1.0-0-dev:i386
+            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libusb-1.0-0-dev:i386
           else
             sudo apt-get update
             sudo apt-get install -q -y libusb-1.0-0-dev
@@ -158,7 +156,7 @@ before_install:
       if [ "${PROJ[0]}" == "opencv" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y libglib2.0-0:i386 libglib2.0-dev:i386
+            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
           fi
           sudo apt-get install -q -y libblas-dev
         fi
