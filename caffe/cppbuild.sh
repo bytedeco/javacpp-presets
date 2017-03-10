@@ -131,7 +131,8 @@ ln -sf libboost_thread.a lib/libboost_thread-mt.a
 cd hdf5-$HDF5
 LDFLAGS= ./configure "--prefix=$INSTALL_PATH" --disable-shared
 make -j $MAKEJ
-make install
+echo "Sending HDF5 build log to hdf5BuildLog.txt as it has verbose warnings"
+make install > ./hd5BuildLog.txt
 cd ..
 
 # OSX has Accelerate, but...

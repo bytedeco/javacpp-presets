@@ -123,9 +123,11 @@ before_install:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib
+          sudo sudo apt-mark manual build-essential g++ gcc yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib
         else
           sudo apt-get update
           sudo apt-get install -q -y yasm nasm
+          sudo apt-mark manual -q -y yasm nasm
         fi
       else
         brew install yasm nasm
@@ -167,7 +169,7 @@ install:
 script:
    - |
     for proj in "${PROJ[@]}"; do
-      mvn install -Djavacpp.platform=$OS -pl $proj
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
     done
 cache:
    directories:
