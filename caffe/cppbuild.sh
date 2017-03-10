@@ -132,7 +132,7 @@ cd hdf5-$HDF5
 LDFLAGS= ./configure "--prefix=$INSTALL_PATH" --disable-shared
 make -j $MAKEJ
 echo "Sending HDF5 build log to hdf5BuildLog.txt as it has verbose warnings"
-make install > ./hd5BuildLog.txt
+make install &> ./hd5BuildLog.txt
 cd ..
 
 # OSX has Accelerate, but...
