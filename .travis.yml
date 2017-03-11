@@ -110,12 +110,15 @@ install:
    - echo "install"
 script:
    - |
+    echo "starting script"
     for proj in "${PROJ[@]}"; do
+      echo "running for $proj"
       if [ "$OS" == "linux-x86" ]; then
+        echo "starting docker"
         docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 -c "pwd; ls -ltr" 
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-	echo "container id is $DOCKER_CONTAINER_ID"
-	docker ps
+        echo "container id is $DOCKER_CONTAINER_ID"
+        docker ps
         docker logs $DOCKER_CONTAINER_ID
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
