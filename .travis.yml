@@ -80,11 +80,12 @@ script:
       echo "running for $proj"
       if [ "$OS" == "linux-x86" ]; then
         echo "starting docker"
-        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 -c "pwd; ls -ltr" 
+        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init 
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
         echo "container id is $DOCKER_CONTAINER_ID"
         docker ps
         docker logs $DOCKER_CONTAINER_ID
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"  
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
       else	
