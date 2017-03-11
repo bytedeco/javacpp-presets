@@ -1,56 +1,21 @@
 language: java
 sudo: required
 dist: trusty
-matrix:
-   include:
-
-
 services:
       - docker
-
-## Linux x86
-
+matrix:
+   include:
       - jdk: oraclejdk7
         os: linux
         env: PROJ=artoolkitplus OS=linux-x86
       - jdk: oraclejdk7
         os: linux
         env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=cuda OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=ffmpeg OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=fftw OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=gsl OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=leptonica:tesseract OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libdc1394 OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libfreenect OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=llvm OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=tensorflow OS=linux-x86
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=videoinput OS=linux-x86
 
 before_install:
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
-   - mvn install -Dmaven.javadoc.skip=true
+   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
