@@ -1,12 +1,9 @@
 language: java
 sudo: required
 dist: trusty
-matrix:
-   - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=1.9.2
-   include:
 
 services:
-  - docker
+      - docker
 
 ## Linux x86
 
@@ -47,72 +44,6 @@ services:
         os: linux
         env: PROJ=videoinput OS=linux-x86
 
-## Linux x86-64
-
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=artoolkitplus OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=cuda OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=ffmpeg OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=fftw OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=gsl OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=leptonica:tesseract OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libdc1394 OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libfreenect OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=llvm OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=tensorflow OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=videoinput OS=linux-x86_64
-
-### OSX
-
-      - os: osx
-        env: PROJ=artoolkitplus OS=macosx-x86_64
-      - os: osx
-        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=macosx-x86_64
-      - os: osx
-        env: PROJ=cuda OS=macosx-x86_64
-      - os: osx
-        env: PROJ=ffmpeg OS=macosx-x86_64
-      - os: osx
-        env: PROJ=fftw OS=macosx-x86_64
-      - os: osx
-        env: PROJ=gsl OS=macosx-x86_64
-      - os: osx
-        env: PROJ=leptonica:tesseract OS=macosx-x86_64
-      - os: osx
-        env: PROJ=libdc1394 OS=macosx-x86_64
-      - os: osx
-        env: PROJ=libfreenect OS=macosx-x86_64
-      - os: osx
-        env: PROJ=llvm OS=macosx-x86_64
-      - os: osx
-        env: PROJ=tensorflow OS=macosx-x86_64
-      - os: osx
-        env: PROJ=videoinput OS=macosx-x86_64
-
 before_install:
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
@@ -127,7 +58,8 @@ before_install:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get upgrade lxc-docker  
-	  echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+	  echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/dock
+er > /dev/null
 	  sudo service docker restart
 	  sleep 5
 	  sudo docker pull centos:${OS_VERSION}
@@ -142,7 +74,8 @@ before_install:
       if [ "$PROJ" == "libfreenect" ] || [ "$PROJ" == "libdc1394" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libusb-1.0-0-dev:i386
+            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib l
+ibusb-1.0-0-dev:i386
           else
             sudo apt-get update
             sudo apt-get install -q -y libusb-1.0-0-dev
@@ -164,7 +97,8 @@ before_install:
       if [ "${PROJ[0]}" == "opencv" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
+            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib l
+ibglib2.0-0:i386 libglib2.0-dev:i386
           fi
           sudo apt-get install -q -y libblas-dev
         fi
@@ -176,7 +110,8 @@ script:
    - |
     for proj in "${PROJ[@]}"; do
       if [ "$OS" == "linux-x86" ]; then
-        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos${OS_VERSION}   /usr/sbin/init
+        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos${OS_VERSION}   /usr/s
+bin/init
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
         docker logs $DOCKER_CONTAINER_ID
 	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"i
