@@ -27,7 +27,6 @@ before_install:
         if [ "$OS" == "linux-x86" ]; then
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get upgrade lxc-docker  
           echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
           sudo service docker restart
           sleep 5
@@ -76,6 +75,8 @@ install:
 script:
    - |
     echo "starting script"
+    pwd
+    ls -ltr
     for proj in "${PROJ[@]}"; do
       echo "running for $proj"
       if [ "$OS" == "linux-x86" ]; then
@@ -86,7 +87,8 @@ script:
         docker ps
         docker logs $DOCKER_CONTAINER_ID
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"  
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find . -name javacpp*"  
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sudo yum -y install epel-release"  
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sudo yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel"  
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
       else	
