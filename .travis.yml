@@ -1,6 +1,9 @@
 language: java
 sudo: required
 dist: trusty
+matrix:
+   include:
+
 
 services:
       - docker
@@ -51,18 +54,19 @@ before_install:
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
-   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
+   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then 
+      export JAVA_HOME=$(/usr/libexec/java_home); 
+     fi
    - |
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
         if [ "$OS" == "linux-x86" ]; then
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get upgrade lxc-docker  
-	  echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/dock
-er > /dev/null
-	  sudo service docker restart
-	  sleep 5
-	  sudo docker pull centos:${OS_VERSION}
+          echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+          sudo service docker restart
+          sleep 5
+          sudo docker pull centos:${OS_VERSION}
         else
           sudo apt-get update
           sudo apt-get install -q -y yasm nasm
@@ -74,8 +78,7 @@ er > /dev/null
       if [ "$PROJ" == "libfreenect" ] || [ "$PROJ" == "libdc1394" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib l
-ibusb-1.0-0-dev:i386
+            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libusb-1.0-0-dev:i386
           else
             sudo apt-get update
             sudo apt-get install -q -y libusb-1.0-0-dev
@@ -97,8 +100,7 @@ ibusb-1.0-0-dev:i386
       if [ "${PROJ[0]}" == "opencv" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib l
-ibglib2.0-0:i386 libglib2.0-dev:i386
+            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
           fi
           sudo apt-get install -q -y libblas-dev
         fi
@@ -110,11 +112,10 @@ script:
    - |
     for proj in "${PROJ[@]}"; do
       if [ "$OS" == "linux-x86" ]; then
-        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos${OS_VERSION}   /usr/s
-bin/init
+        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos${OS_VERSION}   /usr/sbin/init
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
         docker logs $DOCKER_CONTAINER_ID
-	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"i
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"i
         docker ps -a
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
