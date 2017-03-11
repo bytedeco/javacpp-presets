@@ -66,7 +66,7 @@ before_install:
           echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
           sudo service docker restart
           sleep 5
-          sudo docker pull centos:${OS_VERSION}
+          sudo docker pull centos:7
         else
           sudo apt-get update
           sudo apt-get install -q -y yasm nasm
@@ -112,11 +112,9 @@ script:
    - |
     for proj in "${PROJ[@]}"; do
       if [ "$OS" == "linux-x86" ]; then
-        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos${OS_VERSION}   /usr/sbin/init
+        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 -c "pwd; ls -ltr" 
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
         docker logs $DOCKER_CONTAINER_ID
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /home/travis;ls -ltr;pwd"
-        docker ps -a
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
       else	
