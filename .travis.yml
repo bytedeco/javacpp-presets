@@ -50,7 +50,7 @@ services:
 before_install:
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
-   - mvn install
+   - mvn install -Dmaven.javadoc.skip=true
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
@@ -114,6 +114,8 @@ script:
       if [ "$OS" == "linux-x86" ]; then
         docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 -c "pwd; ls -ltr" 
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+	echo "container id is $DOCKER_CONTAINER_ID"
+	docker ps
         docker logs $DOCKER_CONTAINER_ID
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
