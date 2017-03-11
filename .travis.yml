@@ -2,7 +2,11 @@ language: java
 sudo: required
 dist: trusty
 matrix:
+   - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=1.9.2
    include:
+
+services:
+  - docker
 
 ## Linux x86
 
@@ -122,7 +126,11 @@ before_install:
         if [ "$OS" == "linux-x86" ]; then
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib
+          sudo apt-get upgrade lxc-docker  
+	  echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+	  sudo service docker restart
+	  sleep 5
+	  sudo docker pull centos:${OS_VERSION}
         else
           sudo apt-get update
           sudo apt-get install -q -y yasm nasm
@@ -167,7 +175,17 @@ install:
 script:
    - |
     for proj in "${PROJ[@]}"; do
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
+      if [ "$OS" == "linux-x86" ]; then
+        docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos${OS_VERSION}   /usr/sbin/init
+        DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+        docker logs $DOCKER_CONTAINER_ID
+	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"i
+        docker ps -a
+        docker stop $DOCKER_CONTAINER_ID
+        docker rm -v $DOCKER_CONTAINER_ID
+      else	
+       mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
+      fi
     done
 cache:
    directories:
