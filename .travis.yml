@@ -7,10 +7,40 @@ matrix:
    include:
       - jdk: oraclejdk7
         os: linux
+        env: PROJ=artoolkitplus OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
         env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=cuda OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=ffmpeg OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=fftw OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=gsl OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=leptonica:tesseract OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=libdc1394 OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=libfreenect OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=llvm OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=tensorflow OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=videoinput OS=linux-x86_64
 
 before_install:
    - git clone https://github.com/bytedeco/javacpp.git
@@ -32,6 +62,18 @@ before_install:
           #sleep 5
           #sudo docker pull centos:7
           #sudo docker pull nvidia/cuda:8.0-cudnn5-devel-centos7
+        else if "$OS" == "linux-x86_64" ]; then
+          echo "starting docker"
+          if [ "${PROJ[0]}" == "cuda" ]; then
+            docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
+          else
+            docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init
+          fi
+          DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+          echo "container id is $DOCKER_CONTAINER_ID"
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release"
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel"
         fi
       else
         brew install yasm nasm
@@ -42,8 +84,8 @@ before_install:
           if [ "$OS" == "linux-x86" ]; then
             sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libusb-1.0-0-dev:i386
           else
-            sudo apt-get update
-            sudo apt-get install -q -y libusb-1.0-0-dev
+           # sudo apt-get update
+           # sudo apt-get install -q -y libusb-1.0-0-dev
           fi
         else
           brew install libusb
@@ -52,7 +94,7 @@ before_install:
    - |
       if [ "$PROJ" == "tensorflow" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-          sudo apt-get install -q -y swig python-numpy
+          #sudo apt-get install -q -y swig python-numpy
         else
           brew tap homebrew/python
           brew install swig numpy
@@ -73,33 +115,18 @@ install:
 script:
    - |
     echo "starting script"
-    pwd
-    ls -ltr
+    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+    echo "container id is $DOCKER_CONTAINER_ID"
     for proj in "${PROJ[@]}"; do
       echo "running for $proj"
       #if [ "$OS" == "linux-x86" ]; then
-        echo "starting docker"
-        if [ "${PROJ[0]}" == "cuda" ]; then
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init 
-        else
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init 
-        fi 
-        DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-        echo "container id is $DOCKER_CONTAINER_ID"
-        #docker ps
-        #docker logs $DOCKER_CONTAINER_ID
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"  
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release"  
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel"  
-        #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -LO https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run"
-        #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install cuda"  
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"  
-        docker stop $DOCKER_CONTAINER_ID
-        docker rm -v $DOCKER_CONTAINER_ID
       #else	
       # mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
       #fi
     done
+    docker stop $DOCKER_CONTAINER_ID
+    docker rm -v $DOCKER_CONTAINER_ID
 cache:
    directories:
       - $HOME/.m2
