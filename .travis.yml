@@ -43,10 +43,11 @@ matrix:
         env: PROJ=videoinput OS=linux-x86_64
 
 before_install:
-   - git clone https://github.com/bytedeco/javacpp.git
-   - cd javacpp
-   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
-   - cd ..
+   #maybe this needs to go into new first job
+   #- git clone https://github.com/bytedeco/javacpp.git
+   #- cd javacpp
+   #- mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+   #- cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then 
