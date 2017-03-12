@@ -62,7 +62,8 @@ before_install:
           #sleep 5
           #sudo docker pull centos:7
           #sudo docker pull nvidia/cuda:8.0-cudnn5-devel-centos7
-        else if "$OS" == "linux-x86_64" ]; then
+        fi
+        if "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
           if [ "${PROJ[0]}" == "cuda" ]; then
             docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
@@ -77,16 +78,6 @@ before_install:
         fi
       else
         brew install yasm nasm
-      fi
-   - |
-      if [ "$PROJ" == "libfreenect" ] || [ "$PROJ" == "libdc1394" ]; then
-        if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-          if [ "$OS" == "linux-x86" ]; then
-            sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libusb-1.0-0-dev:i386
-          fi
-        else
-          brew install libusb
-        fi
       fi
    - |
       if [ "$PROJ" == "tensorflow" ]; then
