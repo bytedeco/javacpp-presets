@@ -109,7 +109,8 @@ script:
     for proj in "${PROJ[@]}"; do
       echo "running for $proj"
       #if [ "$OS" == "linux-x86" ]; then
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"  
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"; export BUILD_STATUS=$?
+        echo "BUILD STATUS 1 is $BUILD_STATUS"  
         docker logs $DOCKER_CONTAINER_ID | grep "BUILD FAILURE"
         docker logs $DOCKER_CONTAINER_ID | grep "BUILD FAILURE"; export COMPILE_RESULT=$?
         echo "Build status $COMPILE_RESULT"
