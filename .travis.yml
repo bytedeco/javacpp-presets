@@ -110,12 +110,9 @@ script:
       echo "running for $proj"
       #if [ "$OS" == "linux-x86" ]; then
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"  
-        if [ "`docker logs $DOCKER_CONTAINER_ID | grep "BUILD FAILURE`" ]; then
-          echo "build failed"
-          return 1
-        else
-          echo "built OK"
-        fi
+        docker logs $DOCKER_CONTAINER_ID | grep "BUILD FAILURE"
+        docker logs $DOCKER_CONTAINER_ID | grep "BUILD FAILURE"; export COMPILE_RESULT=$?
+        echo "Build status $COMPILE_RESULT"
       #else	
       # mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
       #fi
