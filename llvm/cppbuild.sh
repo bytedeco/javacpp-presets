@@ -35,16 +35,17 @@ download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar xvf ../llvm-$LLVM_VERSION.src.tar.xz
+tar xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd llvm-$LLVM_VERSION.src
 mkdir -p build tools
 cd tools
-tar xvf ../../../cfe-$LLVM_VERSION.src.tar.xz
+tar xf ../../../cfe-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
 cd ../build
 
 $CMAKE -DCMAKE_INSTALL_PREFIX=../.. -DDLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLIBXML2_LIBRARIES= ..
+echo "Making with $MAKEJ makej"
 make -j $MAKEJ
 make install
 

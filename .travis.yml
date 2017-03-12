@@ -65,7 +65,7 @@ before_install:
         fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          if [ "${PROJ[0]}" == "cuda" ]; then
+          if [ "${PROJ[0]}" == "cuda" ] || [ "${PROJ[0]}" == "tensorflow" ]; then
             docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
           else
             docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init
@@ -110,6 +110,12 @@ script:
       echo "running for $proj"
       #if [ "$OS" == "linux-x86" ]; then
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"  
+        if [ "`docker logs $DOCKER_CONTAINER_ID | grep "BUILD FAILURE`" ]; then
+          echo "build failed"
+          return 1
+        else
+          echo "built OK"
+        fi
       #else	
       # mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
       #fi
