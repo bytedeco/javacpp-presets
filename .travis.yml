@@ -7,10 +7,10 @@ matrix:
    include:
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=artoolkitplus OS=linux-x86_64
+        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
+        env: PROJ=cuda OS=linux-x86_64
 
 before_install:
    - git clone https://github.com/bytedeco/javacpp.git
@@ -30,7 +30,8 @@ before_install:
           echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
           sudo service docker restart
           sleep 5
-          sudo docker pull centos:7
+          #sudo docker pull centos:7
+          sudo docker pull nvidia/cuda:8.0-cudnn5-devel-centos7
         else
           sudo apt-get update
           sudo apt-get install -q -y yasm nasm
@@ -81,7 +82,8 @@ script:
       echo "running for $proj"
       if [ "$OS" == "linux-x86" ]; then
         echo "starting docker"
-        docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init 
+        #docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init 
+        docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init 
         DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
         echo "container id is $DOCKER_CONTAINER_ID"
         docker ps
@@ -89,6 +91,8 @@ script:
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr"  
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release"  
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel"  
+        #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -LO https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run"
+        #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install cuda"  
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"  
         docker stop $DOCKER_CONTAINER_ID
         docker rm -v $DOCKER_CONTAINER_ID
