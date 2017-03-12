@@ -63,7 +63,7 @@ before_install:
           #sudo docker pull centos:7
           #sudo docker pull nvidia/cuda:8.0-cudnn5-devel-centos7
         fi
-        if "$OS" == "linux-x86_64" ]; then
+        if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
           if [ "${PROJ[0]}" == "cuda" ]; then
             docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
