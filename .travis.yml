@@ -7,10 +7,10 @@ matrix:
    include:
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=artoolkitplus OS=linux-x86
+        env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86
+        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
 
 before_install:
    - git clone https://github.com/bytedeco/javacpp.git
