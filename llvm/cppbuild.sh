@@ -45,9 +45,9 @@ mv cfe-$LLVM_VERSION.src clang
 cd ../build
 
 $CMAKE -DCMAKE_INSTALL_PREFIX=../.. -DDLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLIBXML2_LIBRARIES= ..
-echo "manually setting makej to 2"
+echo "manually setting makej to 6"
 echo "Making with $MAKEJ makej"
-make -j 2
+make -j 6 
 make install
 
 cd ../..
