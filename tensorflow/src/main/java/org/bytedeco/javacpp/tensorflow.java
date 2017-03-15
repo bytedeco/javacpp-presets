@@ -1014,7 +1014,8 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/platform/logging.h"
 
-/** Denotes success or failure of a call in Tensorflow. */
+/** \ingroup core
+ *  Denotes success or failure of a call in Tensorflow. */
 @Namespace("tensorflow") @NoOffset public static class Status extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1080,6 +1081,7 @@ limitations under the License.
 
 
 
+/** \ingroup core */
 @Namespace("tensorflow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef Status x);
 
 public static native void TF_CHECK_OK(@ByVal Status val);
@@ -7624,7 +7626,8 @@ limitations under the License.
     public TensorCApi(Pointer p) { super(p); }
 }
 
-/** Represents an n-dimensional array of values. */
+/** \ingroup core
+ *  Represents an n-dimensional array of values. */
 @Namespace("tensorflow") @NoOffset public static class Tensor extends AbstractTensor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -10720,13 +10723,15 @@ limitations under the License.
   // Values of <input_tensors_as_shapes> do not need to outlive the context.
   //
   // REQUIRES: <node_def> is not NULL, and must outlive the InferenceContext.
-  public InferenceContext(@Const NodeDef node_def, @Const @ByRef OpDef op_def,
+  public InferenceContext(int graph_def_version, @Const NodeDef node_def,
+                     @Const @ByRef OpDef op_def,
                      @StdVector ShapeHandle input_shapes,
                      @Const @ByRef ConstTensorPtrVector input_tensors,
                      @StdVector ShapeHandle input_tensors_as_shapes,
                      @StdVector ShapeHandle input_handle_shapes,
-                     @Cast("tensorflow::DataType*") @StdVector IntPointer input_handle_dtypes) { super((Pointer)null); allocate(node_def, op_def, input_shapes, input_tensors, input_tensors_as_shapes, input_handle_shapes, input_handle_dtypes); }
-  private native void allocate(@Const NodeDef node_def, @Const @ByRef OpDef op_def,
+                     @Cast("tensorflow::DataType*") @StdVector IntPointer input_handle_dtypes) { super((Pointer)null); allocate(graph_def_version, node_def, op_def, input_shapes, input_tensors, input_tensors_as_shapes, input_handle_shapes, input_handle_dtypes); }
+  private native void allocate(int graph_def_version, @Const NodeDef node_def,
+                     @Const @ByRef OpDef op_def,
                      @StdVector ShapeHandle input_shapes,
                      @Const @ByRef ConstTensorPtrVector input_tensors,
                      @StdVector ShapeHandle input_tensors_as_shapes,
@@ -10743,13 +10748,15 @@ limitations under the License.
   // Values of <input_tensors_as_shapes> do not need to outlive the context.
   //
   // REQUIRES: <node_def> is not NULL, and must outlive the InferenceContext.
-  public InferenceContext(@Const NodeDef node_def, @Const @ByRef OpDef op_def,
+  public InferenceContext(int graph_def_version, @Const NodeDef node_def,
+                     @Const @ByRef OpDef op_def,
                      @StdVector TensorShapeProto input_shapes,
                      @Const @ByRef ConstTensorPtrVector input_tensors,
                      @StdVector TensorShapeProto input_tensors_as_shapes,
                      @StdVector TensorShapeProto input_handle_shapes,
-                     @Cast("tensorflow::DataType*") @StdVector IntPointer input_handle_dtypes) { super((Pointer)null); allocate(node_def, op_def, input_shapes, input_tensors, input_tensors_as_shapes, input_handle_shapes, input_handle_dtypes); }
-  private native void allocate(@Const NodeDef node_def, @Const @ByRef OpDef op_def,
+                     @Cast("tensorflow::DataType*") @StdVector IntPointer input_handle_dtypes) { super((Pointer)null); allocate(graph_def_version, node_def, op_def, input_shapes, input_tensors, input_tensors_as_shapes, input_handle_shapes, input_handle_dtypes); }
+  private native void allocate(int graph_def_version, @Const NodeDef node_def,
+                     @Const @ByRef OpDef op_def,
                      @StdVector TensorShapeProto input_shapes,
                      @Const @ByRef ConstTensorPtrVector input_tensors,
                      @StdVector TensorShapeProto input_tensors_as_shapes,
@@ -10975,6 +10982,8 @@ limitations under the License.
   // then an unknown shape is returned.
   public native @ByVal Status MakeShapeFromTensor(@Const Tensor t, @ByVal ShapeHandle tensor_shape,
                                ShapeHandle out);
+
+  public native int graph_def_version();
 }
 
 // -----------------------------------------------------------------------------
@@ -15541,7 +15550,10 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** A {@code Scope} object represents a set of related TensorFlow ops that have the
+/** \addtogroup core
+ *  \{
+ <p>
+ *  A {@code Scope} object represents a set of related TensorFlow ops that have the
  *  same properties such as a common name prefix.
  * 
  *  A Scope object is a container for TensorFlow Op properties. Op constructors
@@ -15713,6 +15725,8 @@ limitations under the License.
 /** A helper struct to hold the scopes that would be used by a function
  *  constructing a composite op. */
 
+/** \} */
+
   // namespace tensorflow
 
 // #endif  // THIRD_PARTY_TENSORFLOW_CC_FRAMEWORK_SCOPE_H_
@@ -15746,7 +15760,12 @@ limitations under the License.
 // #include "tensorflow/core/lib/hash/hash.h"
 // #include "tensorflow/core/lib/strings/strcat.h"
 
-/** Represents a node in the computation graph. */
+/** \defgroup core Core Tensorflow API */
+
+/** \addtogroup core
+ *  \{
+ <p>
+ *  Represents a node in the computation graph. */
 @Namespace("tensorflow") @NoOffset public static class Operation extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -15809,6 +15828,7 @@ limitations under the License.
   public native @Cast("tensorflow::uint64") long hash();
 }
 
+/** Hash class that can be used for e.g. storing Outputs in an unordered_map */
 @Namespace("tensorflow") public static class OutputHash extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -15860,6 +15880,9 @@ limitations under the License.
      *  initializer lists, so such invalid initializers cannot be disallowed at
      *  compile time. This function performs checks to make sure that the nested
      *  initializer list is indeed a valid multi-dimensional tensor. */
+
+    // START_SKIP_DOXYGEN
+    // END_SKIP_DOXYGEN
 
     public native @ByVal TensorProto AsTensorProto();
 
@@ -15933,6 +15956,8 @@ limitations under the License.
   public InputList(@ArraySlice Input inputs) { super((Pointer)null); allocate(inputs); }
   private native void allocate(@ArraySlice Input inputs);
 }
+
+/** \} */
 
   // namespace tensorflow
 
@@ -16040,6 +16065,9 @@ limitations under the License.
 // #include "tensorflow/cc/framework/scope.h"
 // #include "tensorflow/core/graph/node_builder.h"
 
+/** \defgroup const_op Const Op
+ *  \{ */
+
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Const @ByRef Input.Initializer val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @ByRef Tensor val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, byte val);
@@ -16074,6 +16102,8 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native @ByVal NodeOutVector AsNodeOutList(@Const @ByRef Scope scope,
                                                 @Const @ByRef InputList inp);
 
+/** }\ */
+
   // namespace ops
   // namespace tensorflow
 
@@ -16096,7 +16126,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** BatchToSpace for 4-D tensors of type T.
+/** \defgroup array_ops Array Ops
+ *  \{
+ <p>
+ *  BatchToSpace for 4-D tensors of type T.
  * 
  *  This is a legacy version of the more general BatchToSpaceND.
  * 
@@ -16411,8 +16444,7 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * message:
- *      Prefix of the error message.
+ *  * message: Prefix of the error message.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -16477,6 +16509,9 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Input tensor.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * tensor_name: The name of the input tensor.
+ * 
  *  Returns:
  *  * {@code Output}: Output tensor, deep-copied from input. */
 @Namespace("tensorflow::ops") @NoOffset public static class Copy extends Pointer {
@@ -16484,10 +16519,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Copy(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Copy :
-   * 
-   *  TensorName(StringPiece): Defaults to ""
-   *      The name of the input tensor. */
+  /** Optional attribute setters for Copy */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -16502,6 +16534,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The name of the input tensor.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorName(@StringPiece String x);
 
@@ -16531,6 +16566,9 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Input tensor.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * tensor_name: The name of the input tensor.
+ * 
  *  Returns:
  *  * {@code Output}: Output tensor, deep-copied from input. */
 @Namespace("tensorflow::ops") @NoOffset public static class CopyHost extends Pointer {
@@ -16538,10 +16576,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CopyHost(Pointer p) { super(p); }
 
-  /** Optional attribute setters for CopyHost :
-   * 
-   *  TensorName(StringPiece): Defaults to ""
-   *      The name of the input tensor. */
+  /** Optional attribute setters for CopyHost */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -16556,6 +16591,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The name of the input tensor.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorName(@StringPiece String x);
 
@@ -16583,6 +16621,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Input tensor, non-Reference type.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * tensor_name: Name of the input tensor.
+ *  * debug_urls: List of URLs to debug targets, e.g.,
+ *  file:///foo/tfdbg_dump, grpc:://localhost:11011
+ * 
  *  Returns:
  *  * {@code Output}: Output tensor that equals the input tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class DebugIdentity extends Pointer {
@@ -16590,13 +16633,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DebugIdentity(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DebugIdentity :
-   * 
-   *  TensorName(StringPiece): Defaults to ""
-   *      Name of the input tensor.
-   *  DebugUrls(const gtl::ArraySlice<string>&): Defaults to []
-   *      List of URLs to debug targets, e.g.,
-   *  file:///foo/tfdbg_dump, grpc:://localhost:11011 */
+  /** Optional attribute setters for DebugIdentity */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -16611,9 +16648,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Name of the input tensor.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorName(@StringPiece String x);
 
+    /** List of URLs to debug targets, e.g.,
+     *  file:///foo/tfdbg_dump, grpc:://localhost:11011
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
 
     public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
@@ -16644,6 +16690,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Input tensor, non-Reference type.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * tensor_name: Name of the input tensor.
+ *  * debug_urls: List of URLs to debug targets, e.g.,
+ *  file:///foo/tfdbg_dump, grpc:://localhost:11011
+ * 
  *  Returns:
  *  * {@code Output}: An integer output tensor that is the number of NaNs in the input. */
 @Namespace("tensorflow::ops") @NoOffset public static class DebugNanCount extends Pointer {
@@ -16651,13 +16702,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DebugNanCount(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DebugNanCount :
-   * 
-   *  TensorName(StringPiece): Defaults to ""
-   *      Name of the input tensor.
-   *  DebugUrls(const gtl::ArraySlice<string>&): Defaults to []
-   *      List of URLs to debug targets, e.g.,
-   *  file:///foo/tfdbg_dump, grpc:://localhost:11011 */
+  /** Optional attribute setters for DebugNanCount */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -16672,9 +16717,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Name of the input tensor.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorName(@StringPiece String x);
 
+    /** List of URLs to debug targets, e.g.,
+     *  file:///foo/tfdbg_dump, grpc:://localhost:11011
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
 
     public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
@@ -16705,6 +16759,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Input tensor, non-Reference type, float or double.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * tensor_name: Name of the input tensor.
+ *  * debug_urls: List of URLs to debug targets, e.g.,
+ *  file:///foo/tfdbg_dump, grpc:://localhost:11011
+ * 
  *  Returns:
  *  * {@code Output}: A double tensor of shape [12], the elements of which are:
  *    [0]: is initialized (1.0) or not (0.0).
@@ -16729,13 +16788,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DebugNumericSummary(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DebugNumericSummary :
-   * 
-   *  TensorName(StringPiece): Defaults to ""
-   *      Name of the input tensor.
-   *  DebugUrls(const gtl::ArraySlice<string>&): Defaults to []
-   *      List of URLs to debug targets, e.g.,
-   *  file:///foo/tfdbg_dump, grpc:://localhost:11011 */
+  /** Optional attribute setters for DebugNumericSummary */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -16750,9 +16803,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Name of the input tensor.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs TensorName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorName(@StringPiece String x);
 
+    /** List of URLs to debug targets, e.g.,
+     *  file:///foo/tfdbg_dump, grpc:://localhost:11011
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs DebugUrls(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
 
     public native @StringPiece BytePointer tensor_name_(); public native Attrs tensor_name_(BytePointer tensor_name_);
@@ -16856,8 +16918,7 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * block_size:
- *      The size of the spatial block, same as in Space2Depth.
+ *  * block_size: The size of the spatial block, same as in Space2Depth.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -16922,9 +16983,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dequantize(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Dequantize :
-   * 
-   *  Mode(StringPiece): Defaults to "MIN_COMBINED" */
+  /** Optional attribute setters for Dequantize */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -16939,6 +16998,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to "MIN_COMBINED" */
     public native @ByVal Attrs Mode(@StringPiece BytePointer x);
     public native @ByVal Attrs Mode(@StringPiece String x);
 
@@ -17066,6 +17126,11 @@ limitations under the License.
  *  This is an M-length vector.
  *  * truth_shape: truth indices, vector.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * normalize: boolean (if true, edit distances are normalized by length of truth).
+ * 
+ *  The output is:
+ * 
  *  Returns:
  *  * {@code Output}: A dense float tensor with rank R - 1.
  * 
@@ -17102,12 +17167,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EditDistance(Pointer p) { super(p); }
 
-  /** Optional attribute setters for EditDistance :
-   * 
-   *  Normalize(bool): Defaults to true
-   *      boolean (if true, edit distances are normalized by length of truth).
-   * 
-   *  The output is: */
+  /** Optional attribute setters for EditDistance */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -17122,6 +17182,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** boolean (if true, edit distances are normalized by length of truth).
+     * 
+     *  The output is:
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs Normalize(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean normalize_(); public native Attrs normalize_(boolean normalize_);
@@ -17209,19 +17274,15 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * images: 4-D Tensor with shape {@code [batch, in_rows, in_cols, depth]}.
- *  * ksizes:
- *      The size of the sliding window for each dimension of {@code images}.
- *  * strides:
- *      1-D of length 4. How far the centers of two consecutive patches are in
+ *  * ksizes: The size of the sliding window for each dimension of {@code images}.
+ *  * strides: 1-D of length 4. How far the centers of two consecutive patches are in
  *  the images. Must be: {@code [1, stride_rows, stride_cols, 1]}.
- *  * rates:
- *      1-D of length 4. Must be: {@code [1, rate_rows, rate_cols, 1]}. This is the
+ *  * rates: 1-D of length 4. Must be: {@code [1, rate_rows, rate_cols, 1]}. This is the
  *  input stride, specifying how far two consecutive patch samples are in the
  *  input. Equivalent to extracting patches with
  *  {@code patch_sizes_eff = patch_sizes + (patch_sizes - 1) * (rates - 1)}, followed by
  *  subsampling them spatially by a factor of {@code rates}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  We specify the size-related attributes as:
  * 
@@ -17277,10 +17338,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FakeQuantWithMinMaxArgs(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FakeQuantWithMinMaxArgs :
-   * 
-   *  Min(float): Defaults to -6
-   *  Max(float): Defaults to 6 */
+  /** Optional attribute setters for FakeQuantWithMinMaxArgs */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -17295,8 +17353,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to -6 */
     public native @ByVal Attrs Min(float x);
 
+    /** Defaults to 6 */
     public native @ByVal Attrs Max(float x);
 
     public native float min_(); public native Attrs min_(float min_);
@@ -17331,10 +17391,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FakeQuantWithMinMaxArgsGradient(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FakeQuantWithMinMaxArgsGradient :
-   * 
-   *  Min(float): Defaults to -6
-   *  Max(float): Defaults to 6 */
+  /** Optional attribute setters for FakeQuantWithMinMaxArgsGradient */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -17349,8 +17406,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to -6 */
     public native @ByVal Attrs Min(float x);
 
+    /** Defaults to 6 */
     public native @ByVal Attrs Max(float x);
 
     public native float min_(); public native Attrs min_(float min_);
@@ -17585,9 +17644,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Gather(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Gather :
-   * 
-   *  ValidateIndices(bool): Defaults to true */
+  /** Optional attribute setters for Gather */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -17602,6 +17659,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to true */
     public native @ByVal Attrs ValidateIndices(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean validate_indices_(); public native Attrs validate_indices_(boolean validate_indices_);
@@ -17768,12 +17826,9 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * dtype:
- *      Type of the returned tensor.
- *  * shape:
- *      Shape of the returned tensor.
- *  * memory_region_name:
- *      Name of readonly memory region used by the tensor, see
+ *  * dtype: Type of the returned tensor.
+ *  * shape: Shape of the returned tensor.
+ *  * memory_region_name: Name of readonly memory region used by the tensor, see
  *  NewReadOnlyMemoryRegionFromFile in tensorflow::Env.
  * 
  *  Returns:
@@ -17869,9 +17924,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SetDiff1D(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SetDiff1D :
-   * 
-   *  OutIdx(DataType): Defaults to DT_INT32 */
+  /** Optional attribute setters for SetDiff1D */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -17886,6 +17939,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_INT32 */
     public native @ByVal Attrs OutIdx(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_idx_(); public native Attrs out_idx_(int out_idx_);
@@ -18145,8 +18199,7 @@ limitations under the License.
  *  * input: The input tensor to be padded.
  *  * paddings: A two-column matrix specifying the padding sizes. The number of
  *  rows must be the same as the rank of {@code input}.
- *  * mode:
- *      Either {@code REFLECT} or {@code SYMMETRIC}. In reflect mode the padded regions
+ *  * mode: Either {@code REFLECT} or {@code SYMMETRIC}. In reflect mode the padded regions
  *  do not include the borders, while in symmetric mode the padded regions
  *  do include the borders. For example, if {@code input} is {@code [1, 2, 3]} and {@code paddings}
  *  is {@code [0, 2]}, then the output is {@code [1, 2, 3, 2, 1]} in reflect mode, and
@@ -18272,6 +18325,9 @@ limitations under the License.
  *  * on_value: A scalar defining the value to fill in output when {@code indices[j] = i}.
  *  * off_value: A scalar defining the value to fill in output when {@code indices[j] != i}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * axis: The axis to fill (default: -1, a new inner-most axis).
+ * 
  *  Returns:
  *  * {@code Output}: The one-hot tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class OneHot extends Pointer {
@@ -18279,10 +18335,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OneHot(Pointer p) { super(p); }
 
-  /** Optional attribute setters for OneHot :
-   * 
-   *  Axis(int64): Defaults to -1
-   *      The axis to fill (default: -1, a new inner-most axis). */
+  /** Optional attribute setters for OneHot */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -18297,6 +18350,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The axis to fill (default: -1, a new inner-most axis).
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long axis_(); public native Attrs axis_(long axis_);
@@ -18348,6 +18404,10 @@ limitations under the License.
  *  * scope: A Scope object
  *  * values: Must be of same shape and type.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * axis: Dimension along which to pack.  Negative values wrap around, so the
+ *  valid range is {@code [-(R+1), R+1)}.
+ * 
  *  Returns:
  *  * {@code Output}: The packed tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class Stack extends Pointer {
@@ -18355,11 +18415,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Stack(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Stack :
-   * 
-   *  Axis(int64): Defaults to 0
-   *      Dimension along which to pack.  Negative values wrap around, so the
-   *  valid range is {@code [-(R+1), R+1)}. */
+  /** Optional attribute setters for Stack */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -18374,6 +18430,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Dimension along which to pack.  Negative values wrap around, so the
+     *  valid range is {@code [-(R+1), R+1)}.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long axis_(); public native Attrs axis_(long axis_);
@@ -18460,8 +18520,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * values: Tensors to be concatenated. All must have size 1 in the first dimension
  *  and same shape.
- *  * shape:
- *      the final shape of the result; should be equal to the shapes of any input
+ *  * shape: the final shape of the result; should be equal to the shapes of any input
  *  but with the number of input values in the first dimension.
  * 
  *  Returns:
@@ -18488,8 +18547,11 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * dtype:
- *      The type of elements in the tensor.
+ *  * dtype: The type of elements in the tensor.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * shape: (Optional) The shape of the tensor. If the shape has 0 dimensions, the
+ *  shape is unconstrained.
  * 
  *  Returns:
  *  * {@code Output}: A placeholder tensor that must be replaced using the feed mechanism. */
@@ -18498,11 +18560,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Placeholder(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Placeholder :
-   * 
-   *  Shape(TensorShape): Defaults to []
-   *      (Optional) The shape of the tensor. If the shape has 0 dimensions, the
-   *  shape is unconstrained. */
+  /** Optional attribute setters for Placeholder */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -18517,6 +18575,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** (Optional) The shape of the tensor. If the shape has 0 dimensions, the
+     *  shape is unconstrained.
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs Shape(@ByVal TensorShape x);
 
     public native @ByRef TensorShape shape_(); public native Attrs shape_(TensorShape shape_);
@@ -18542,10 +18604,8 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * dtype:
- *      The type of elements in the tensor.
- *  * shape:
- *      The shape of the tensor. The shape can be any partially-specified
+ *  * dtype: The type of elements in the tensor.
+ *  * shape: The shape of the tensor. The shape can be any partially-specified
  *  shape.  To be unconstrained, pass in a shape with unknown rank.
  * 
  *  Returns:
@@ -18569,8 +18629,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: The default value to produce when {@code output} is not fed.
- *  * shape:
- *      The (possibly partial) shape of the tensor.
+ *  * shape: The (possibly partial) shape of the tensor.
  * 
  *  Returns:
  *  * {@code Output}: A placeholder tensor that defaults to {@code input} if it is not fed. */
@@ -18673,6 +18732,13 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Tensor to quantize and then dequantize.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * signed_input: If the quantization is signed or unsigned.
+ *  * num_bits: The bitwidth of the quantization.
+ *  * range_given: If the range is given or should be computed from the tensor.
+ *  * input_min: If range is given, this is the min of the range.
+ *  * input_max: If range is given, this is the max of the range.
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class QuantizeAndDequantize extends Pointer {
@@ -18680,18 +18746,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizeAndDequantize(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizeAndDequantize :
-   * 
-   *  SignedInput(bool): Defaults to true
-   *      If the quantization is signed or unsigned.
-   *  NumBits(int64): Defaults to 8
-   *      The bitwidth of the quantization.
-   *  RangeGiven(bool): Defaults to false
-   *      If the range is given or should be computed from the tensor.
-   *  InputMin(float): Defaults to 0
-   *      If range is given, this is the min of the range.
-   *  InputMax(float): Defaults to 0
-   *      If range is given, this is the max of the range. */
+  /** Optional attribute setters for QuantizeAndDequantize */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -18706,14 +18761,37 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If the quantization is signed or unsigned.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs SignedInput(@Cast("bool") boolean x);
 
+    /** The bitwidth of the quantization.
+     * 
+     *  Defaults to 8 */
+    
+    ///
     public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
+    /** If the range is given or should be computed from the tensor.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
 
+    /** If range is given, this is the min of the range.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs InputMin(float x);
 
+    /** If range is given, this is the max of the range.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs InputMax(float x);
 
     public native @Cast("bool") boolean signed_input_(); public native Attrs signed_input_(boolean signed_input_);
@@ -18805,9 +18883,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizeV2(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizeV2 :
-   * 
-   *  Mode(StringPiece): Defaults to "MIN_COMBINED" */
+  /** Optional attribute setters for QuantizeV2 */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -18822,6 +18898,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to "MIN_COMBINED" */
     public native @ByVal Attrs Mode(@StringPiece BytePointer x);
     public native @ByVal Attrs Mode(@StringPiece String x);
 
@@ -18888,6 +18965,15 @@ limitations under the License.
  *  * x_min: The value represented by the lowest quantized input.
  *  * x_max: The value represented by the highest quantized input.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * output_range_given: If True, {@code given_y_min} and {@code given_y_min}
+ *  and {@code given_y_max} are used as the output range. Otherwise,
+ *  the implementation computes the output range.
+ *  * given_y_min: Output in {@code y_min} if {@code output_range_given} is True.
+ *  * given_y_max: Output in {@code y_max} if {@code output_range_given} is True.
+ *  * variance_epsilon: A small float number to avoid dividing by 0.
+ *  * min_separation: Minimum value of {@code y_max - y_min}
+ * 
  *  Returns:
  *  * {@code Output} y: A 4D Tensor.
  *  * {@code Output} y_min: The value represented by the lowest quantized output.
@@ -18897,20 +18983,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedInstanceNorm(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizedInstanceNorm :
-   * 
-   *  OutputRangeGiven(bool): Defaults to false
-   *      If True, {@code given_y_min} and {@code given_y_min}
-   *  and {@code given_y_max} are used as the output range. Otherwise,
-   *  the implementation computes the output range.
-   *  GivenYMin(float): Defaults to 0
-   *      Output in {@code y_min} if {@code output_range_given} is True.
-   *  GivenYMax(float): Defaults to 0
-   *      Output in {@code y_max} if {@code output_range_given} is True.
-   *  VarianceEpsilon(float): Defaults to 1e-05
-   *      A small float number to avoid dividing by 0.
-   *  MinSeparation(float): Defaults to 0.001
-   *      Minimum value of {@code y_max - y_min} */
+  /** Optional attribute setters for QuantizedInstanceNorm */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -18925,14 +18998,39 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, {@code given_y_min} and {@code given_y_min}
+     *  and {@code given_y_max} are used as the output range. Otherwise,
+     *  the implementation computes the output range.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs OutputRangeGiven(@Cast("bool") boolean x);
 
+    /** Output in {@code y_min} if {@code output_range_given} is True.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs GivenYMin(float x);
 
+    /** Output in {@code y_max} if {@code output_range_given} is True.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs GivenYMax(float x);
 
+    /** A small float number to avoid dividing by 0.
+     * 
+     *  Defaults to 1e-05 */
+    
+    ///
     public native @ByVal Attrs VarianceEpsilon(float x);
 
+    /** Minimum value of {@code y_max - y_min}
+     * 
+     *  Defaults to 0.001 */
     public native @ByVal Attrs MinSeparation(float x);
 
     public native @Cast("bool") boolean output_range_given_(); public native Attrs output_range_given_(boolean output_range_given_);
@@ -19172,8 +19270,10 @@ limitations under the License.
  *  * input: The input to reverse.
  *  * seq_lengths: 1-D with length {@code input.dims(batch_dim)} and
  *  {@code max(seq_lengths) < input.dims(seq_dim)}
- *  * seq_dim:
- *      The dimension which is partially reversed.
+ *  * seq_dim: The dimension which is partially reversed.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * batch_dim: The dimension along which reversal is performed.
  * 
  *  Returns:
  *  * {@code Output}: The partially reversed input. It has the same shape as {@code input}. */
@@ -19182,10 +19282,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReverseSequence(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ReverseSequence :
-   * 
-   *  BatchDim(int64): Defaults to 0
-   *      The dimension along which reversal is performed. */
+  /** Optional attribute setters for ReverseSequence */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -19200,6 +19297,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The dimension along which reversal is performed.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs BatchDim(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long batch_dim_(); public native Attrs batch_dim_(long batch_dim_);
@@ -19424,9 +19524,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeN(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ShapeN :
-   * 
-   *  OutType(DataType): Defaults to DT_INT32 */
+  /** Optional attribute setters for ShapeN */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -19441,6 +19539,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_INT32 */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -19479,9 +19578,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Size(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Size :
-   * 
-   *  OutType(DataType): Defaults to DT_INT32 */
+  /** Optional attribute setters for Size */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -19496,6 +19593,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_INT32 */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -19885,8 +19983,7 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * block_size:
- *      The size of the spatial block.
+ *  * block_size: The size of the spatial block.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -19911,8 +20008,7 @@ limitations under the License.
  *  * axis: 0-D.  The dimension along which to split.  Must be in the range
  *  {@code [0, rank(value))}.
  *  * value: The tensor to split.
- *  * num_split:
- *      The number of ways to split.  Must evenly divide
+ *  * num_split: The number of ways to split.  Must evenly divide
  *  {@code value.shape[split_dim]}.
  * 
  *  Returns:
@@ -19989,6 +20085,10 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: The {@code input} to squeeze.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * squeeze_dims: If specified, only squeezes the dimensions listed. The dimension
+ *  index starts at 0. It is an error to squeeze a dimension that is not 1.
+ * 
  *  Returns:
  *  * {@code Output}: Contains the same data as {@code input}, but has one or more dimensions of
  *  size 1 removed. */
@@ -19997,11 +20097,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Squeeze(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Squeeze :
-   * 
-   *  SqueezeDims(const gtl::ArraySlice<int>&): Defaults to []
-   *      If specified, only squeezes the dimensions listed. The dimension
-   *  index starts at 0. It is an error to squeeze a dimension that is not 1. */
+  /** Optional attribute setters for Squeeze */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20016,6 +20112,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If specified, only squeezes the dimensions listed. The dimension
+     *  index starts at 0. It is an error to squeeze a dimension that is not 1.
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs SqueezeDims(@ArraySlice IntPointer x);
     public native @ByVal Attrs SqueezeDims(@ArraySlice IntBuffer x);
     public native @ByVal Attrs SqueezeDims(@ArraySlice int... x);
@@ -20185,40 +20285,36 @@ limitations under the License.
  *  the original order. Out or range values are
  *  clamped to {@code [0,dim[i]) if slice[i]>0} or {@code [-1,dim[i]-1] if slice[i] < 0}
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * begin_mask: a bitmask where a bit i being 1 means to ignore the begin
+ *  value and instead use the largest interval possible. At runtime
+ *  begin[i] will be replaced with {@code [0, n-1) if }stride[i] > 0{@code  or
+ *  }[-1, n-1]{@code  if }stride[i] < 0{@code 
+ *  * end_mask: analogous to }begin_mask{@code 
+ *  * ellipsis_mask: a bitmask where bit }i{@code  being 1 means the }i{@code th
+ *  position is actually an ellipsis. One bit at most can be 1.
+ *  If }ellipsis_mask == 0{@code , then an implicit ellipsis mask of }1 << (m+1){@code 
+ *  is provided. This means that }foo[3:5] == foo[3:5, ...]{@code . An ellipsis
+ *  implicitly creates as many range specifications as necessary to fully
+ *  specify the sliced range for every dimension. For example for a 4-dimensional
+ *  tensor }foo{@code  the slice }foo[2, ..., 5:8]{@code  implies }foo[2, :, :, 5:8]{@code .
+ *  * new_axis_mask: a bitmask where bit }i{@code  being 1 means the }i{@code th
+ *  specification creates a new shape 1 dimension. For example
+ *  }foo[:4, tf.newaxis, :2]{@code  would produce a shape }(4, 1, 2){@code  tensor.
+ *  * shrink_axis_mask: a bitmask where bit }i{@code  implies that the }i{@code th
+ *  specification should shrink the dimensionality. begin and end
+ *  must imply a slice of size 1 in the dimension. For example in
+ *  python one might do }foo[:, 3, :]{@code  which would result in
+ *  }shrink_axis_mask{@code  being 2.
+ * 
  *  Returns:
- *  * {@code Output}: The output tensor. */
+ *  * }Output{@code : The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class StridedSlice extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StridedSlice(Pointer p) { super(p); }
 
-  /** Optional attribute setters for StridedSlice :
-   * 
-   *  BeginMask(int64): Defaults to 0
-   *      a bitmask where a bit i being 1 means to ignore the begin
-   *  value and instead use the largest interval possible. At runtime
-   *  begin[i] will be replaced with {@code [0, n-1) if }stride[i] > 0{@code  or
-   *  }[-1, n-1]{@code  if }stride[i] < 0{@code 
-   *  EndMask(int64): Defaults to 0
-   *      analogous to }begin_mask{@code 
-   *  EllipsisMask(int64): Defaults to 0
-   *      a bitmask where bit }i{@code  being 1 means the }i{@code th
-   *  position is actually an ellipsis. One bit at most can be 1.
-   *  If }ellipsis_mask == 0{@code , then an implicit ellipsis mask of }1 << (m+1){@code 
-   *  is provided. This means that }foo[3:5] == foo[3:5, ...]{@code . An ellipsis
-   *  implicitly creates as many range specifications as necessary to fully
-   *  specify the sliced range for every dimension. For example for a 4-dimensional
-   *  tensor }foo{@code  the slice }foo[2, ..., 5:8]{@code  implies }foo[2, :, :, 5:8]{@code .
-   *  NewAxisMask(int64): Defaults to 0
-   *      a bitmask where bit }i{@code  being 1 means the }i{@code th
-   *  specification creates a new shape 1 dimension. For example
-   *  }foo[:4, tf.newaxis, :2]{@code  would produce a shape }(4, 1, 2){@code  tensor.
-   *  ShrinkAxisMask(int64): Defaults to 0
-   *      a bitmask where bit }i{@code  implies that the }i{@code th
-   *  specification should shrink the dimensionality. begin and end
-   *  must imply a slice of size 1 in the dimension. For example in
-   *  python one might do }foo[:, 3, :]{@code  which would result in
-   *  }shrink_axis_mask{@code  being 2. */
+  /** Optional attribute setters for StridedSlice */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20233,14 +20329,52 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** a bitmask where a bit i being 1 means to ignore the begin
+     *  value and instead use the largest interval possible. At runtime
+     *  begin[i] will be replaced with {@code [0, n-1) if }stride[i] > 0{@code  or
+     *  }[-1, n-1]{@code  if }stride[i] < 0{@code 
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
 
+    /** analogous to {@code begin_mask}
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
 
+    /** a bitmask where bit {@code i} being 1 means the {@code i}th
+     *  position is actually an ellipsis. One bit at most can be 1.
+     *  If {@code ellipsis_mask == 0}, then an implicit ellipsis mask of {@code 1 << (m+1)}
+     *  is provided. This means that {@code foo[3:5] == foo[3:5, ...]}. An ellipsis
+     *  implicitly creates as many range specifications as necessary to fully
+     *  specify the sliced range for every dimension. For example for a 4-dimensional
+     *  tensor {@code foo} the slice {@code foo[2, ..., 5:8]} implies {@code foo[2, :, :, 5:8]}.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
 
+    /** a bitmask where bit {@code i} being 1 means the {@code i}th
+     *  specification creates a new shape 1 dimension. For example
+     *  {@code foo[:4, tf.newaxis, :2]} would produce a shape {@code (4, 1, 2)} tensor.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
 
+    /** a bitmask where bit {@code i} implies that the {@code i}th
+     *  specification should shrink the dimensionality. begin and end
+     *  must imply a slice of size 1 in the dimension. For example in
+     *  python one might do {@code foo[:, 3, :]} which would result in
+     *  {@code shrink_axis_mask} being 2.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long begin_mask_(); public native Attrs begin_mask_(long begin_mask_);
@@ -20293,13 +20427,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StridedSliceAssign(Pointer p) { super(p); }
 
-  /** Optional attribute setters for StridedSliceAssign :
-   * 
-   *  BeginMask(int64): Defaults to 0
-   *  EndMask(int64): Defaults to 0
-   *  EllipsisMask(int64): Defaults to 0
-   *  NewAxisMask(int64): Defaults to 0
-   *  ShrinkAxisMask(int64): Defaults to 0 */
+  /** Optional attribute setters for StridedSliceAssign */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20314,14 +20442,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to 0 */
     public native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long begin_mask_(); public native Attrs begin_mask_(long begin_mask_);
@@ -20378,13 +20511,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StridedSliceGrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for StridedSliceGrad :
-   * 
-   *  BeginMask(int64): Defaults to 0
-   *  EndMask(int64): Defaults to 0
-   *  EllipsisMask(int64): Defaults to 0
-   *  NewAxisMask(int64): Defaults to 0
-   *  ShrinkAxisMask(int64): Defaults to 0 */
+  /** Optional attribute setters for StridedSliceGrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20399,14 +20526,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to 0 */
     public native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
     public native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long begin_mask_(); public native Attrs begin_mask_(long begin_mask_);
@@ -20527,9 +20659,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Unique(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Unique :
-   * 
-   *  OutIdx(DataType): Defaults to DT_INT32 */
+  /** Optional attribute setters for Unique */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20544,6 +20674,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_INT32 */
     public native @ByVal Attrs OutIdx(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_idx_(); public native Attrs out_idx_(int out_idx_);
@@ -20592,9 +20723,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UniqueWithCounts(Pointer p) { super(p); }
 
-  /** Optional attribute setters for UniqueWithCounts :
-   * 
-   *  OutIdx(DataType): Defaults to DT_INT32 */
+  /** Optional attribute setters for UniqueWithCounts */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20609,6 +20738,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_INT32 */
     public native @ByVal Attrs OutIdx(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_idx_(); public native Attrs out_idx_(int out_idx_);
@@ -20644,6 +20774,10 @@ limitations under the License.
  *  * scope: A Scope object
  *  * value: 1-D or higher, with {@code axis} dimension size equal to {@code num}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * axis: Dimension along which to unpack.  Negative values wrap around, so the
+ *  valid range is {@code [-R, R)}.
+ * 
  *  Returns:
  *  * {@code OutputList}: The list of tensors unpacked from {@code value}. */
 @Namespace("tensorflow::ops") @NoOffset public static class Unstack extends Pointer {
@@ -20651,11 +20785,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Unstack(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Unstack :
-   * 
-   *  Axis(int64): Defaults to 0
-   *      Dimension along which to unpack.  Negative values wrap around, so the
-   *  valid range is {@code [-R, R)}. */
+  /** Optional attribute setters for Unstack */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20670,6 +20800,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Dimension along which to unpack.  Negative values wrap around, so the
+     *  valid range is {@code [-R, R)}.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long axis_(); public native Attrs axis_(long axis_);
@@ -20763,6 +20897,8 @@ limitations under the License.
   public native @ByRef Output y(); public native ZerosLike y(Output y);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -20785,7 +20921,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Generates labels for candidate sampling with a learned unigram distribution.
+/** \defgroup candidate_sampling_ops Candidate Sampling Ops
+ *  \{
+ <p>
+ *  Generates labels for candidate sampling with a learned unigram distribution.
  * 
  *  See explanations of candidate sampling and the data formats at
  *  go/candidate-sampling.
@@ -20801,14 +20940,17 @@ limitations under the License.
  *  * scope: A Scope object
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
- *  * num_true:
- *      Number of true labels per context.
- *  * num_sampled:
- *      Number of candidates to produce per batch.
- *  * unique:
- *      If unique is true, we sample with rejection, so that all sampled
+ *  * num_true: Number of true labels per context.
+ *  * num_sampled: Number of candidates to produce per batch.
+ *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} sampled_candidates: A vector of length num_sampled, in which each element is
@@ -20825,14 +20967,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AllCandidateSampler(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AllCandidateSampler :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for AllCandidateSampler */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20847,8 +20982,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -20878,8 +21023,13 @@ limitations under the License.
  *  * scope: A Scope object
  *  * true_classes: The true_classes output of UnpackSparseLabels.
  *  * sampled_candidates: The sampled_candidates output of CandidateSampler.
- *  * num_true:
- *      Number of true labels per context.
+ *  * num_true: Number of true labels per context.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} indices: A vector of indices corresponding to rows of true_candidates.
@@ -20892,14 +21042,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ComputeAccidentalHits(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ComputeAccidentalHits :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for ComputeAccidentalHits */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -20914,8 +21057,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -20959,16 +21112,41 @@ limitations under the License.
  *  * scope: A Scope object
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
- *  * num_true:
- *      Number of true labels per context.
- *  * num_sampled:
- *      Number of candidates to randomly sample per batch.
- *  * unique:
- *      If unique is true, we sample with rejection, so that all sampled
+ *  * num_true: Number of true labels per context.
+ *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
- *  * range_max:
- *      The sampler will sample integers from the interval [0, range_max).
+ *  * range_max: The sampler will sample integers from the interval [0, range_max).
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * vocab_file: Each valid line in this file (which should have a CSV-like format)
+ *  corresponds to a valid word ID. IDs are in sequential order, starting from
+ *  num_reserved_ids. The last entry in each line is expected to be a value
+ *  corresponding to the count or relative probability. Exactly one of vocab_file
+ *  and unigrams needs to be passed to this op.
+ *  * distortion: The distortion is used to skew the unigram probability distribution.
+ *  Each weight is first raised to the distortion's power before adding to the
+ *  internal unigram distribution. As a result, distortion = 1.0 gives regular
+ *  unigram sampling (as defined by the vocab file), and distortion = 0.0 gives
+ *  a uniform distribution.
+ *  * num_reserved_ids: Optionally some reserved IDs can be added in the range [0,
+ *  ..., num_reserved_ids) by the users. One use case is that a special unknown
+ *  word token is used as ID 0. These IDs will have a sampling probability of 0.
+ *  * num_shards: A sampler can be used to sample from a subset of the original range
+ *  in order to speed up the whole computation through parallelism. This parameter
+ *  (together with 'shard') indicates the number of partitions that are being
+ *  used in the overall computation.
+ *  * shard: A sampler can be used to sample from a subset of the original range
+ *  in order to speed up the whole computation through parallelism. This parameter
+ *  (together with 'num_shards') indicates the particular partition number of a
+ *  sampler op, when partitioning is being used.
+ *  * unigrams: A list of unigram counts or probabilities, one per ID in sequential
+ *  order. Exactly one of vocab_file and unigrams should be passed to this op.
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} sampled_candidates: A vector of length num_sampled, in which each element is
@@ -20985,43 +21163,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FixedUnigramCandidateSampler(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FixedUnigramCandidateSampler :
-   * 
-   *  VocabFile(StringPiece): Defaults to ""
-   *      Each valid line in this file (which should have a CSV-like format)
-   *  corresponds to a valid word ID. IDs are in sequential order, starting from
-   *  num_reserved_ids. The last entry in each line is expected to be a value
-   *  corresponding to the count or relative probability. Exactly one of vocab_file
-   *  and unigrams needs to be passed to this op.
-   *  Distortion(float): Defaults to 1
-   *      The distortion is used to skew the unigram probability distribution.
-   *  Each weight is first raised to the distortion's power before adding to the
-   *  internal unigram distribution. As a result, distortion = 1.0 gives regular
-   *  unigram sampling (as defined by the vocab file), and distortion = 0.0 gives
-   *  a uniform distribution.
-   *  NumReservedIds(int64): Defaults to 0
-   *      Optionally some reserved IDs can be added in the range [0,
-   *  ..., num_reserved_ids) by the users. One use case is that a special unknown
-   *  word token is used as ID 0. These IDs will have a sampling probability of 0.
-   *  NumShards(int64): Defaults to 1
-   *      A sampler can be used to sample from a subset of the original range
-   *  in order to speed up the whole computation through parallelism. This parameter
-   *  (together with 'shard') indicates the number of partitions that are being
-   *  used in the overall computation.
-   *  Shard(int64): Defaults to 0
-   *      A sampler can be used to sample from a subset of the original range
-   *  in order to speed up the whole computation through parallelism. This parameter
-   *  (together with 'num_shards') indicates the particular partition number of a
-   *  sampler op, when partitioning is being used.
-   *  Unigrams(const gtl::ArraySlice<float>&): Defaults to []
-   *      A list of unigram counts or probabilities, one per ID in sequential
-   *  order. Exactly one of vocab_file and unigrams should be passed to this op.
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for FixedUnigramCandidateSampler */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21036,23 +21178,80 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Each valid line in this file (which should have a CSV-like format)
+     *  corresponds to a valid word ID. IDs are in sequential order, starting from
+     *  num_reserved_ids. The last entry in each line is expected to be a value
+     *  corresponding to the count or relative probability. Exactly one of vocab_file
+     *  and unigrams needs to be passed to this op.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs VocabFile(@StringPiece BytePointer x);
     public native @ByVal Attrs VocabFile(@StringPiece String x);
 
+    /** The distortion is used to skew the unigram probability distribution.
+     *  Each weight is first raised to the distortion's power before adding to the
+     *  internal unigram distribution. As a result, distortion = 1.0 gives regular
+     *  unigram sampling (as defined by the vocab file), and distortion = 0.0 gives
+     *  a uniform distribution.
+     * 
+     *  Defaults to 1 */
+    
+    ///
     public native @ByVal Attrs Distortion(float x);
 
+    /** Optionally some reserved IDs can be added in the range [0,
+     *  ..., num_reserved_ids) by the users. One use case is that a special unknown
+     *  word token is used as ID 0. These IDs will have a sampling probability of 0.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs NumReservedIds(@Cast("tensorflow::int64") long x);
 
+    /** A sampler can be used to sample from a subset of the original range
+     *  in order to speed up the whole computation through parallelism. This parameter
+     *  (together with 'shard') indicates the number of partitions that are being
+     *  used in the overall computation.
+     * 
+     *  Defaults to 1 */
+    
+    ///
     public native @ByVal Attrs NumShards(@Cast("tensorflow::int64") long x);
 
+    /** A sampler can be used to sample from a subset of the original range
+     *  in order to speed up the whole computation through parallelism. This parameter
+     *  (together with 'num_shards') indicates the particular partition number of a
+     *  sampler op, when partitioning is being used.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Shard(@Cast("tensorflow::int64") long x);
 
+    /** A list of unigram counts or probabilities, one per ID in sequential
+     *  order. Exactly one of vocab_file and unigrams should be passed to this op.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs Unigrams(@ArraySlice FloatPointer x);
     public native @ByVal Attrs Unigrams(@ArraySlice FloatBuffer x);
     public native @ByVal Attrs Unigrams(@ArraySlice float... x);
 
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @StringPiece BytePointer vocab_file_(); public native Attrs vocab_file_(BytePointer vocab_file_);
@@ -21112,16 +21311,18 @@ limitations under the License.
  *  * scope: A Scope object
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
- *  * num_true:
- *      Number of true labels per context.
- *  * num_sampled:
- *      Number of candidates to randomly sample per batch.
- *  * unique:
- *      If unique is true, we sample with rejection, so that all sampled
+ *  * num_true: Number of true labels per context.
+ *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
- *  * range_max:
- *      The sampler will sample integers from the interval [0, range_max).
+ *  * range_max: The sampler will sample integers from the interval [0, range_max).
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} sampled_candidates: A vector of length num_sampled, in which each element is
@@ -21138,14 +21339,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LearnedUnigramCandidateSampler(Pointer p) { super(p); }
 
-  /** Optional attribute setters for LearnedUnigramCandidateSampler :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for LearnedUnigramCandidateSampler */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21160,8 +21354,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -21200,16 +21404,18 @@ limitations under the License.
  *  * scope: A Scope object
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
- *  * num_true:
- *      Number of true labels per context.
- *  * num_sampled:
- *      Number of candidates to randomly sample per batch.
- *  * unique:
- *      If unique is true, we sample with rejection, so that all sampled
+ *  * num_true: Number of true labels per context.
+ *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
- *  * range_max:
- *      The sampler will sample integers from the interval [0, range_max).
+ *  * range_max: The sampler will sample integers from the interval [0, range_max).
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} sampled_candidates: A vector of length num_sampled, in which each element is
@@ -21226,14 +21432,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogUniformCandidateSampler(Pointer p) { super(p); }
 
-  /** Optional attribute setters for LogUniformCandidateSampler :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for LogUniformCandidateSampler */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21248,8 +21447,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -21294,16 +21503,18 @@ limitations under the License.
  *  * scope: A Scope object
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
- *  * num_true:
- *      Number of true labels per context.
- *  * num_sampled:
- *      Number of candidates to randomly sample per batch.
- *  * unique:
- *      If unique is true, we sample with rejection, so that all sampled
+ *  * num_true: Number of true labels per context.
+ *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
- *  * range_max:
- *      The sampler will sample integers from the interval [0, range_max).
+ *  * range_max: The sampler will sample integers from the interval [0, range_max).
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} sampled_candidates: A vector of length num_sampled, in which each element is
@@ -21320,14 +21531,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UniformCandidateSampler(Pointer p) { super(p); }
 
-  /** Optional attribute setters for UniformCandidateSampler :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for UniformCandidateSampler */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21342,8 +21546,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -21361,6 +21575,8 @@ limitations under the License.
   public native @ByRef Output true_expected_count(); public native UniformCandidateSampler true_expected_count(Output true_expected_count);
   public native @ByRef Output sampled_expected_count(); public native UniformCandidateSampler sampled_expected_count(Output sampled_expected_count);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
@@ -21384,12 +21600,18 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Raise a exception to abort the process when called. If exit_without_error is true, the process will exit normally, otherwise it will exit with a SIGABORT signal.
+/** \defgroup control_flow_ops Control Flow Ops
+ *  \{
+ <p>
+ *  Raise a exception to abort the process when called. If exit_without_error is true, the process will exit normally, otherwise it will exit with a SIGABORT signal.
  * 
  *  Returns nothing but an exception.
  * 
  *  Arguments:
  *  * scope: A Scope object
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * error_msg: A string which is the message associated with the exception.
  * 
  *  Returns:
  *  * the created {@code Operation} */
@@ -21398,11 +21620,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Abort(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Abort :
-   * 
-   *  ErrorMsg(StringPiece): Defaults to ""
-   *      A string which is the message associated with the exception.
-   *  ExitWithoutError(bool): Defaults to false */
+  /** Optional attribute setters for Abort */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21417,9 +21635,13 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A string which is the message associated with the exception.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs ErrorMsg(@StringPiece BytePointer x);
     public native @ByVal Attrs ErrorMsg(@StringPiece String x);
 
+    /** Defaults to false */
     public native @ByVal Attrs ExitWithoutError(@Cast("bool") boolean x);
 
     public native @StringPiece BytePointer error_msg_(); public native Attrs error_msg_(BytePointer error_msg_);
@@ -21638,6 +21860,8 @@ limitations under the License.
   public native @ByRef Output output_true(); public native Switch output_true(Output output_true);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -21660,7 +21884,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Applies a gradient to a given accumulator. Does not add if local_step is lesser
+/** \defgroup data_flow_ops Data Flow Ops
+ *  \{
+ <p>
+ *  Applies a gradient to a given accumulator. Does not add if local_step is lesser
  * 
  *  than the accumulator's global_step.
  * 
@@ -21744,8 +21971,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to an accumulator.
  *  * num_required: Number of gradients required before we return an aggregate.
- *  * dtype:
- *      The data type of accumulated gradients. Needs to correspond to the type
+ *  * dtype: The data type of accumulated gradients. Needs to correspond to the type
  *  of the accumulator.
  * 
  *  Returns:
@@ -21777,8 +22003,18 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * component_types:
- *      The type of each component in a value.
+ *  * component_types: The type of each component in a value.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * shapes: The shape of each component in a value. Each shape must be 1 in the
+ *  first dimension. The length of this attr must be the same as the length of
+ *  component_types.
+ *  * capacity: The capacity of the barrier.  The default capacity is MAX_INT32,
+ *  which is the largest capacity of the underlying queue.
+ *  * container: If non-empty, this barrier is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this barrier will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the barrier. */
@@ -21787,21 +22023,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Barrier(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Barrier :
-   * 
-   *  Shapes(const gtl::ArraySlice<TensorShape>&): Defaults to []
-   *      The shape of each component in a value. Each shape must be 1 in the
-   *  first dimension. The length of this attr must be the same as the length of
-   *  component_types.
-   *  Capacity(int64): Defaults to -1
-   *      The capacity of the barrier.  The default capacity is MAX_INT32,
-   *  which is the largest capacity of the underlying queue.
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this barrier is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this barrier will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for Barrier */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21816,13 +22038,36 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The shape of each component in a value. Each shape must be 1 in the
+     *  first dimension. The length of this attr must be the same as the length of
+     *  component_types.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
 
+    /** The capacity of the barrier.  The default capacity is MAX_INT32,
+     *  which is the largest capacity of the underlying queue.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this barrier is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this barrier will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -21864,6 +22109,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a barrier.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * cancel_pending_enqueues: If true, all pending enqueue requests that are
+ *  blocked on the barrier's queue will be cancelled. InsertMany will fail, even
+ *  if no new key is introduced.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class BarrierClose extends Pointer {
@@ -21871,12 +22121,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BarrierClose(Pointer p) { super(p); }
 
-  /** Optional attribute setters for BarrierClose :
-   * 
-   *  CancelPendingEnqueues(bool): Defaults to false
-   *      If true, all pending enqueue requests that are
-   *  blocked on the barrier's queue will be cancelled. InsertMany will fail, even
-   *  if no new key is introduced. */
+  /** Optional attribute setters for BarrierClose */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -21891,6 +22136,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, all pending enqueue requests that are
+     *  blocked on the barrier's queue will be cancelled. InsertMany will fail, even
+     *  if no new key is introduced.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs CancelPendingEnqueues(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean cancel_pending_enqueues_(); public native Attrs cancel_pending_enqueues_(boolean cancel_pending_enqueues_);
@@ -21944,8 +22194,7 @@ limitations under the License.
  *  * keys: A one-dimensional tensor of keys, with length n.
  *  * values: An any-dimensional tensor of values, which are associated with the
  *  respective keys. The 0th dimension must have length n.
- *  * component_index:
- *      The component of the barrier elements that is being assigned.
+ *  * component_index: The component of the barrier elements that is being assigned.
  * 
  *  Returns:
  *  * the created {@code Operation} */
@@ -22001,8 +22250,14 @@ limitations under the License.
  *  * handle: The handle to a barrier.
  *  * num_elements: A single-element tensor containing the number of elements to
  *  take.
- *  * component_types:
- *      The type of each component in a value.
+ *  * component_types: The type of each component in a value.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * allow_small_batch: Allow to return less than num_elements items if barrier is
+ *  already closed.
+ *  * timeout_ms: If the queue is empty, this operation will block for up to
+ *  timeout_ms milliseconds.
+ *  Note: This option is not supported yet.
  * 
  *  Returns:
  *  * {@code Output} indices: A one-dimensional tensor of indices, with length num_elems.
@@ -22016,16 +22271,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BarrierTakeMany(Pointer p) { super(p); }
 
-  /** Optional attribute setters for BarrierTakeMany :
-   * 
-   *  AllowSmallBatch(bool): Defaults to false
-   *      Allow to return less than num_elements items if barrier is
-   *  already closed.
-   *  WaitForIncomplete(bool): Defaults to false
-   *  TimeoutMs(int64): Defaults to -1
-   *      If the queue is empty, this operation will block for up to
-   *  timeout_ms milliseconds.
-   *  Note: This option is not supported yet. */
+  /** Optional attribute setters for BarrierTakeMany */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22040,10 +22286,22 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Allow to return less than num_elements items if barrier is
+     *  already closed.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AllowSmallBatch(@Cast("bool") boolean x);
 
+    /** Defaults to false */
+    
+    ///
     public native @ByVal Attrs WaitForIncomplete(@Cast("bool") boolean x);
 
+    /** If the queue is empty, this operation will block for up to
+     *  timeout_ms milliseconds.
+     *  Note: This option is not supported yet.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("bool") boolean allow_small_batch_(); public native Attrs allow_small_batch_(boolean allow_small_batch_);
@@ -22078,10 +22336,14 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * dtype:
- *      The type of the value being accumulated.
- *  * shape:
- *      The shape of the values, can be [], in which case shape is unknown.
+ *  * dtype: The type of the value being accumulated.
+ *  * shape: The shape of the values, can be [], in which case shape is unknown.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this accumulator is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this accumulator will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the accumulator. */
@@ -22090,14 +22352,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConditionalAccumulator(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ConditionalAccumulator :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this accumulator is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this accumulator will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for ConditionalAccumulator */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22112,9 +22367,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this accumulator is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this accumulator will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -22202,8 +22467,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * partitions: Any shape.  Indices in the range {@code [0, num_partitions)}.
- *  * num_partitions:
- *      The number of partitions to output.
+ *  * num_partitions: The number of partitions to output.
  * 
  *  Returns:
  *  * {@code OutputList}: The outputs tensor. */
@@ -22291,8 +22555,19 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * component_types:
- *      The type of each component in a value.
+ *  * component_types: The type of each component in a value.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * shapes: The shape of each component in a value. The length of this attr must
+ *  be either 0 or the same as the length of component_types. If the length of
+ *  this attr is 0, the shapes of queue elements are not constrained, and
+ *  only one element may be dequeued at a time.
+ *  * capacity: The upper bound on the number of elements in this queue.
+ *  Negative numbers mean no limit.
+ *  * container: If non-empty, this queue is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this queue will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the queue. */
@@ -22301,22 +22576,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FIFOQueue(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FIFOQueue :
-   * 
-   *  Shapes(const gtl::ArraySlice<TensorShape>&): Defaults to []
-   *      The shape of each component in a value. The length of this attr must
-   *  be either 0 or the same as the length of component_types. If the length of
-   *  this attr is 0, the shapes of queue elements are not constrained, and
-   *  only one element may be dequeued at a time.
-   *  Capacity(int64): Defaults to -1
-   *      The upper bound on the number of elements in this queue.
-   *  Negative numbers mean no limit.
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this queue is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this queue will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for FIFOQueue */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22331,13 +22591,37 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The shape of each component in a value. The length of this attr must
+     *  be either 0 or the same as the length of component_types. If the length of
+     *  this attr is 0, the shapes of queue elements are not constrained, and
+     *  only one element may be dequeued at a time.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
 
+    /** The upper bound on the number of elements in this queue.
+     *  Negative numbers mean no limit.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this queue is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this queue will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -22391,8 +22675,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * handle: The handle for a tensor stored in the session state.
- *  * dtype:
- *      The type of the output value.
+ *  * dtype: The type of the output value.
  * 
  *  Returns:
  *  * {@code Output}: The tensor for the given handle. */
@@ -22441,8 +22724,23 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * component_types:
- *      The type of each component in a value.
+ *  * component_types: The type of each component in a value.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * shapes: The shape of each component in a value. The length of this attr must
+ *  be either 0 or the same as the length of component_types.
+ *  Shapes of fixed rank but variable size are allowed by setting
+ *  any shape dimension to -1.  In this case, the inputs' shape may vary along
+ *  the given dimension, and DequeueMany will pad the given dimension with
+ *  zeros up to the maximum shape of all elements in the given batch.
+ *  If the length of this attr is 0, different queue elements may have
+ *  different ranks and shapes, but only one element may be dequeued at a time.
+ *  * capacity: The upper bound on the number of elements in this queue.
+ *  Negative numbers mean no limit.
+ *  * container: If non-empty, this queue is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this queue will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the queue. */
@@ -22451,26 +22749,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PaddingFIFOQueue(Pointer p) { super(p); }
 
-  /** Optional attribute setters for PaddingFIFOQueue :
-   * 
-   *  Shapes(const gtl::ArraySlice<TensorShape>&): Defaults to []
-   *      The shape of each component in a value. The length of this attr must
-   *  be either 0 or the same as the length of component_types.
-   *  Shapes of fixed rank but variable size are allowed by setting
-   *  any shape dimension to -1.  In this case, the inputs' shape may vary along
-   *  the given dimension, and DequeueMany will pad the given dimension with
-   *  zeros up to the maximum shape of all elements in the given batch.
-   *  If the length of this attr is 0, different queue elements may have
-   *  different ranks and shapes, but only one element may be dequeued at a time.
-   *  Capacity(int64): Defaults to -1
-   *      The upper bound on the number of elements in this queue.
-   *  Negative numbers mean no limit.
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this queue is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this queue will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for PaddingFIFOQueue */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22485,13 +22764,41 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The shape of each component in a value. The length of this attr must
+     *  be either 0 or the same as the length of component_types.
+     *  Shapes of fixed rank but variable size are allowed by setting
+     *  any shape dimension to -1.  In this case, the inputs' shape may vary along
+     *  the given dimension, and DequeueMany will pad the given dimension with
+     *  zeros up to the maximum shape of all elements in the given batch.
+     *  If the length of this attr is 0, different queue elements may have
+     *  different ranks and shapes, but only one element may be dequeued at a time.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
 
+    /** The upper bound on the number of elements in this queue.
+     *  Negative numbers mean no limit.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this queue is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this queue will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -22528,11 +22835,19 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * shapes:
- *      The shape of each component in a value. The length of this attr must
+ *  * shapes: The shape of each component in a value. The length of this attr must
  *  be either 0 or the same as the length of component_types. If the length of
  *  this attr is 0, the shapes of queue elements are not constrained, and
  *  only one element may be dequeued at a time.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * component_types: The type of each component in a value.
+ *  * capacity: The upper bound on the number of elements in this queue.
+ *  Negative numbers mean no limit.
+ *  * container: If non-empty, this queue is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this queue will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the queue. */
@@ -22541,19 +22856,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PriorityQueue(Pointer p) { super(p); }
 
-  /** Optional attribute setters for PriorityQueue :
-   * 
-   *  ComponentTypes(const DataTypeSlice&): Defaults to []
-   *      The type of each component in a value.
-   *  Capacity(int64): Defaults to -1
-   *      The upper bound on the number of elements in this queue.
-   *  Negative numbers mean no limit.
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this queue is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this queue will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for PriorityQueue */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22568,13 +22871,34 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The type of each component in a value.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs ComponentTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
 
+    /** The upper bound on the number of elements in this queue.
+     *  Negative numbers mean no limit.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this queue is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this queue will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -22613,6 +22937,10 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a queue.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * cancel_pending_enqueues: If true, all pending enqueue requests that are
+ *  blocked on the given queue will be cancelled.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class QueueClose extends Pointer {
@@ -22620,11 +22948,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QueueClose(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QueueClose :
-   * 
-   *  CancelPendingEnqueues(bool): Defaults to false
-   *      If true, all pending enqueue requests that are
-   *  blocked on the given queue will be cancelled. */
+  /** Optional attribute setters for QueueClose */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22639,6 +22963,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, all pending enqueue requests that are
+     *  blocked on the given queue will be cancelled.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs CancelPendingEnqueues(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean cancel_pending_enqueues_(); public native Attrs cancel_pending_enqueues_(boolean cancel_pending_enqueues_);
@@ -22674,8 +23002,12 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a queue.
  *  * n: The number of tuples to dequeue.
- *  * component_types:
- *      The type of each component in a tuple.
+ *  * component_types: The type of each component in a tuple.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * timeout_ms: If the queue has fewer than n elements, this operation
+ *  will block for up to timeout_ms milliseconds.
+ *  Note: This option is not supported yet.
  * 
  *  Returns:
  *  * {@code OutputList}: One or more tensors that were dequeued as a tuple. */
@@ -22684,12 +23016,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QueueDequeueMany(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QueueDequeueMany :
-   * 
-   *  TimeoutMs(int64): Defaults to -1
-   *      If the queue has fewer than n elements, this operation
-   *  will block for up to timeout_ms milliseconds.
-   *  Note: This option is not supported yet. */
+  /** Optional attribute setters for QueueDequeueMany */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22704,6 +23031,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If the queue has fewer than n elements, this operation
+     *  will block for up to timeout_ms milliseconds.
+     *  Note: This option is not supported yet.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long timeout_ms_(); public native Attrs timeout_ms_(long timeout_ms_);
@@ -22750,8 +23082,12 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a queue.
  *  * n: The number of tuples to dequeue.
- *  * component_types:
- *      The type of each component in a tuple.
+ *  * component_types: The type of each component in a tuple.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * timeout_ms: If the queue has fewer than n elements, this operation
+ *  will block for up to timeout_ms milliseconds.
+ *  Note: This option is not supported yet.
  * 
  *  Returns:
  *  * {@code OutputList}: One or more tensors that were dequeued as a tuple. */
@@ -22760,12 +23096,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QueueDequeueUpTo(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QueueDequeueUpTo :
-   * 
-   *  TimeoutMs(int64): Defaults to -1
-   *      If the queue has fewer than n elements, this operation
-   *  will block for up to timeout_ms milliseconds.
-   *  Note: This option is not supported yet. */
+  /** Optional attribute setters for QueueDequeueUpTo */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22780,6 +23111,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If the queue has fewer than n elements, this operation
+     *  will block for up to timeout_ms milliseconds.
+     *  Note: This option is not supported yet.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long timeout_ms_(); public native Attrs timeout_ms_(long timeout_ms_);
@@ -22814,8 +23150,12 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * handle: The handle to a queue.
- *  * component_types:
- *      The type of each component in a tuple.
+ *  * component_types: The type of each component in a tuple.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * timeout_ms: If the queue is empty, this operation will block for up to
+ *  timeout_ms milliseconds.
+ *  Note: This option is not supported yet.
  * 
  *  Returns:
  *  * {@code OutputList}: One or more tensors that were dequeued as a tuple. */
@@ -22824,12 +23164,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QueueDequeue(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QueueDequeue :
-   * 
-   *  TimeoutMs(int64): Defaults to -1
-   *      If the queue is empty, this operation will block for up to
-   *  timeout_ms milliseconds.
-   *  Note: This option is not supported yet. */
+  /** Optional attribute setters for QueueDequeue */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22844,6 +23179,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If the queue is empty, this operation will block for up to
+     *  timeout_ms milliseconds.
+     *  Note: This option is not supported yet.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long timeout_ms_(); public native Attrs timeout_ms_(long timeout_ms_);
@@ -22882,6 +23222,11 @@ limitations under the License.
  *  * components: One or more tensors from which the enqueued tensors should
  *  be taken.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * timeout_ms: If the queue is too full, this operation will block for up
+ *  to timeout_ms milliseconds.
+ *  Note: This option is not supported yet.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class QueueEnqueueMany extends Pointer {
@@ -22889,12 +23234,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QueueEnqueueMany(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QueueEnqueueMany :
-   * 
-   *  TimeoutMs(int64): Defaults to -1
-   *      If the queue is too full, this operation will block for up
-   *  to timeout_ms milliseconds.
-   *  Note: This option is not supported yet. */
+  /** Optional attribute setters for QueueEnqueueMany */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22909,6 +23249,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If the queue is too full, this operation will block for up
+     *  to timeout_ms milliseconds.
+     *  Note: This option is not supported yet.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long timeout_ms_(); public native Attrs timeout_ms_(long timeout_ms_);
@@ -22941,6 +23286,11 @@ limitations under the License.
  *  * handle: The handle to a queue.
  *  * components: One or more tensors from which the enqueued tensors should be taken.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * timeout_ms: If the queue is full, this operation will block for up to
+ *  timeout_ms milliseconds.
+ *  Note: This option is not supported yet.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class QueueEnqueue extends Pointer {
@@ -22948,12 +23298,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QueueEnqueue(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QueueEnqueue :
-   * 
-   *  TimeoutMs(int64): Defaults to -1
-   *      If the queue is full, this operation will block for up to
-   *  timeout_ms milliseconds.
-   *  Note: This option is not supported yet. */
+  /** Optional attribute setters for QueueEnqueue */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -22968,6 +23313,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If the queue is full, this operation will block for up to
+     *  timeout_ms milliseconds.
+     *  Note: This option is not supported yet.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long timeout_ms_(); public native Attrs timeout_ms_(long timeout_ms_);
@@ -23013,8 +23363,25 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * component_types:
- *      The type of each component in a value.
+ *  * component_types: The type of each component in a value.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * shapes: The shape of each component in a value. The length of this attr must
+ *  be either 0 or the same as the length of component_types. If the length of
+ *  this attr is 0, the shapes of queue elements are not constrained, and
+ *  only one element may be dequeued at a time.
+ *  * capacity: The upper bound on the number of elements in this queue.
+ *  Negative numbers mean no limit.
+ *  * min_after_dequeue: Dequeue will block unless there would be this
+ *  many elements after the dequeue or the queue is closed. This
+ *  ensures a minimum level of mixing of elements.
+ *  * seed: If either seed or seed2 is set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, a random seed is used.
+ *  * seed2: A second seed to avoid seed collision.
+ *  * container: If non-empty, this queue is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this queue will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the queue. */
@@ -23023,31 +23390,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomShuffleQueue(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RandomShuffleQueue :
-   * 
-   *  Shapes(const gtl::ArraySlice<TensorShape>&): Defaults to []
-   *      The shape of each component in a value. The length of this attr must
-   *  be either 0 or the same as the length of component_types. If the length of
-   *  this attr is 0, the shapes of queue elements are not constrained, and
-   *  only one element may be dequeued at a time.
-   *  Capacity(int64): Defaults to -1
-   *      The upper bound on the number of elements in this queue.
-   *  Negative numbers mean no limit.
-   *  MinAfterDequeue(int64): Defaults to 0
-   *      Dequeue will block unless there would be this
-   *  many elements after the dequeue or the queue is closed. This
-   *  ensures a minimum level of mixing of elements.
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 is set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, a random seed is used.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision.
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this queue is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this queue will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for RandomShuffleQueue */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23062,19 +23405,61 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The shape of each component in a value. The length of this attr must
+     *  be either 0 or the same as the length of component_types. If the length of
+     *  this attr is 0, the shapes of queue elements are not constrained, and
+     *  only one element may be dequeued at a time.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
 
+    /** The upper bound on the number of elements in this queue.
+     *  Negative numbers mean no limit.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
 
+    /** Dequeue will block unless there would be this
+     *  many elements after the dequeue or the queue is closed. This
+     *  ensures a minimum level of mixing of elements.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs MinAfterDequeue(@Cast("tensorflow::int64") long x);
 
+    /** If either seed or seed2 is set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, a random seed is used.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this queue is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this queue will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -23111,8 +23496,15 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * file_pattern:
- *      Glob pattern for the data files.
+ *  * file_pattern: Glob pattern for the data files.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * file_random_seed: Random seeds used to produce randomized records.
+ *  * file_shuffle_shift_ratio: Shifts the list of files after the list is randomly
+ *  shuffled.
+ *  * file_buffer_size: The randomization shuffling buffer.
+ *  * file_parallelism: How many sstables are opened and concurrently iterated over.
+ *  * batch_size: The batch size.
  * 
  *  Returns:
  *  * {@code Output}: A tensor of shape [batch_size]. */
@@ -23121,19 +23513,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RecordInput(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RecordInput :
-   * 
-   *  FileRandomSeed(int64): Defaults to 301
-   *      Random seeds used to produce randomized records.
-   *  FileShuffleShiftRatio(float): Defaults to 0
-   *      Shifts the list of files after the list is randomly
-   *  shuffled.
-   *  FileBufferSize(int64): Defaults to 10000
-   *      The randomization shuffling buffer.
-   *  FileParallelism(int64): Defaults to 16
-   *      How many sstables are opened and concurrently iterated over.
-   *  BatchSize(int64): Defaults to 32
-   *      The batch size. */
+  /** Optional attribute setters for RecordInput */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23148,14 +23528,38 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Random seeds used to produce randomized records.
+     * 
+     *  Defaults to 301 */
+    
+    ///
     public native @ByVal Attrs FileRandomSeed(@Cast("tensorflow::int64") long x);
 
+    /** Shifts the list of files after the list is randomly
+     *  shuffled.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs FileShuffleShiftRatio(float x);
 
+    /** The randomization shuffling buffer.
+     * 
+     *  Defaults to 10000 */
+    
+    ///
     public native @ByVal Attrs FileBufferSize(@Cast("tensorflow::int64") long x);
 
+    /** How many sstables are opened and concurrently iterated over.
+     * 
+     *  Defaults to 16 */
+    
+    ///
     public native @ByVal Attrs FileParallelism(@Cast("tensorflow::int64") long x);
 
+    /** The batch size.
+     * 
+     *  Defaults to 32 */
     public native @ByVal Attrs BatchSize(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long file_random_seed_(); public native Attrs file_random_seed_(long file_random_seed_);
@@ -23199,8 +23603,7 @@ limitations under the License.
  *  the same first dimension as indices, i.e., the nnz represented by indices and
  *  values must be consistent.
  *  * gradient_shape: Shape of the sparse gradient to be accumulated.
- *  * has_known_shape:
- *      Boolean indicating whether gradient_shape is unknown, in which
+ *  * has_known_shape: Boolean indicating whether gradient_shape is unknown, in which
  *  case the input is ignored during validation.
  * 
  *  Returns:
@@ -23232,8 +23635,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a SparseConditionalAccumulator.
  *  * num_required: Number of gradients required before we return an aggregate.
- *  * dtype:
- *      The data type of accumulated gradients. Needs to correspond to the type
+ *  * dtype: The data type of accumulated gradients. Needs to correspond to the type
  *  of the accumulator.
  * 
  *  Returns:
@@ -23265,10 +23667,14 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * dtype:
- *      The type of the value being accumulated.
- *  * shape:
- *      The shape of the values.
+ *  * dtype: The type of the value being accumulated.
+ *  * shape: The shape of the values.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this accumulator is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this accumulator will be shared under the given name
+ *  across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the accumulator. */
@@ -23277,14 +23683,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseConditionalAccumulator(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseConditionalAccumulator :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this accumulator is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this accumulator will be shared under the given name
-   *  across multiple sessions. */
+  /** Optional attribute setters for SparseConditionalAccumulator */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23299,9 +23698,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this accumulator is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this accumulator will be shared under the given name
+     *  across multiple sessions.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -23337,6 +23746,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * values: a list of tensors
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this queue is placed in the given container. Otherwise,
+ *  a default container is used.
+ *  * shared_name: It is necessary to match this name to the matching Unstage Op.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class Stage extends Pointer {
@@ -23344,13 +23758,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Stage(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Stage :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this queue is placed in the given container. Otherwise,
-   *  a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      It is necessary to match this name to the matching Unstage Op. */
+  /** Optional attribute setters for Stage */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23365,9 +23773,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this queue is placed in the given container. Otherwise,
+     *  a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** It is necessary to match this name to the matching Unstage Op.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -23428,8 +23845,13 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a TensorArray.
  *  * flow_in: A float scalar that enforces proper chaining of operations.
- *  * dtype:
- *      The type of the elem that is returned.
+ *  * dtype: The type of the elem that is returned.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * element_shape_except0: The expected shape of an element, if known,
+ *  excluding the first dimension. Used to validate the shapes of
+ *  TensorArray elements. If this shape is not fully specified, concatenating
+ *  zero-size TensorArrays is an error.
  * 
  *  Returns:
  *  * {@code Output} value: All of the elements in the TensorArray, concatenated along the first
@@ -23442,13 +23864,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorArrayConcat(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TensorArrayConcat :
-   * 
-   *  ElementShapeExcept0(TensorShape): Defaults to <unknown>
-   *      The expected shape of an element, if known,
-   *  excluding the first dimension. Used to validate the shapes of
-   *  TensorArray elements. If this shape is not fully specified, concatenating
-   *  zero-size TensorArrays is an error. */
+  /** Optional attribute setters for TensorArrayConcat */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23463,6 +23879,12 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The expected shape of an element, if known,
+     *  excluding the first dimension. Used to validate the shapes of
+     *  TensorArray elements. If this shape is not fully specified, concatenating
+     *  zero-size TensorArrays is an error.
+     * 
+     *  Defaults to <unknown> */
     public native @ByVal Attrs ElementShapeExcept0(@ByVal TensorShape x);
 
     public native @ByRef TensorShape element_shape_except0_(); public native Attrs element_shape_except0_(TensorShape element_shape_except0_);
@@ -23491,8 +23913,12 @@ limitations under the License.
  *  * handle: The handle to a TensorArray.
  *  * indices: The locations in the TensorArray from which to read tensor elements.
  *  * flow_in: A float scalar that enforces proper chaining of operations.
- *  * dtype:
- *      The type of the elem that is returned.
+ *  * dtype: The type of the elem that is returned.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * element_shape: The expected shape of an element, if known. Used to
+ *  validate the shapes of TensorArray elements. If this shape is not
+ *  fully specified, gathering zero-size TensorArrays is an error.
  * 
  *  Returns:
  *  * {@code Output}: All of the elements in the TensorArray, concatenated along a new
@@ -23502,12 +23928,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorArrayGather(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TensorArrayGather :
-   * 
-   *  ElementShape(TensorShape): Defaults to <unknown>
-   *      The expected shape of an element, if known. Used to
-   *  validate the shapes of TensorArray elements. If this shape is not
-   *  fully specified, gathering zero-size TensorArrays is an error. */
+  /** Optional attribute setters for TensorArrayGather */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23522,6 +23943,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The expected shape of an element, if known. Used to
+     *  validate the shapes of TensorArray elements. If this shape is not
+     *  fully specified, gathering zero-size TensorArrays is an error.
+     * 
+     *  Defaults to <unknown> */
     public native @ByVal Attrs ElementShape(@ByVal TensorShape x);
 
     public native @ByRef TensorShape element_shape_(); public native Attrs element_shape_(TensorShape element_shape_);
@@ -23590,8 +24016,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to the forward TensorArray.
  *  * flow_in: A float scalar that enforces proper chaining of operations.
- *  * source:
- *      The gradient source string, used to decide which gradient TensorArray
+ *  * source: The gradient source string, used to decide which gradient TensorArray
  *  to return.
  * 
  *  Returns:
@@ -23621,8 +24046,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * handle: The handle to a TensorArray.
  *  * flow_in: A float scalar that enforces proper chaining of operations.
- *  * dtype:
- *      The type of the elem that is returned.
+ *  * dtype: The type of the elem that is returned.
  * 
  *  Returns:
  *  * {@code Output}: The tensor that is read from the TensorArray. */
@@ -23751,8 +24175,20 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * size: The size of the array.
- *  * dtype:
- *      The type of the elements on the tensor_array.
+ *  * dtype: The type of the elements on the tensor_array.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * element_shape: The expected shape of an element, if known. Used to
+ *  validate the shapes of TensorArray elements. If this shape is not
+ *  fully specified, gathering zero-size TensorArrays is an error.
+ *  * dynamic_size: A boolean that determines whether writes to the TensorArray
+ *  are allowed to grow the size.  By default, this is not allowed.
+ *  * clear_after_read: If true (default), Tensors in the TensorArray are cleared
+ *  after being read.  This disables multiple read semantics but allows early
+ *  release of memory.
+ *  * tensor_array_name: Overrides the name used for the temporary tensor_array
+ *  resource. Default value is the name of the 'TensorArray' op (which
+ *  is guaranteed unique).
  * 
  *  Returns:
  *  * {@code Output} handle: The handle to the TensorArray.
@@ -23762,23 +24198,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorArray(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TensorArray :
-   * 
-   *  ElementShape(TensorShape): Defaults to <unknown>
-   *      The expected shape of an element, if known. Used to
-   *  validate the shapes of TensorArray elements. If this shape is not
-   *  fully specified, gathering zero-size TensorArrays is an error.
-   *  DynamicSize(bool): Defaults to false
-   *      A boolean that determines whether writes to the TensorArray
-   *  are allowed to grow the size.  By default, this is not allowed.
-   *  ClearAfterRead(bool): Defaults to true
-   *      If true (default), Tensors in the TensorArray are cleared
-   *  after being read.  This disables multiple read semantics but allows early
-   *  release of memory.
-   *  TensorArrayName(StringPiece): Defaults to ""
-   *      Overrides the name used for the temporary tensor_array
-   *  resource. Default value is the name of the 'TensorArray' op (which
-   *  is guaranteed unique). */
+  /** Optional attribute setters for TensorArray */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23793,12 +24213,37 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The expected shape of an element, if known. Used to
+     *  validate the shapes of TensorArray elements. If this shape is not
+     *  fully specified, gathering zero-size TensorArrays is an error.
+     * 
+     *  Defaults to <unknown> */
+    
+    ///
     public native @ByVal Attrs ElementShape(@ByVal TensorShape x);
 
+    /** A boolean that determines whether writes to the TensorArray
+     *  are allowed to grow the size.  By default, this is not allowed.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs DynamicSize(@Cast("bool") boolean x);
 
+    /** If true (default), Tensors in the TensorArray are cleared
+     *  after being read.  This disables multiple read semantics but allows early
+     *  release of memory.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs ClearAfterRead(@Cast("bool") boolean x);
 
+    /** Overrides the name used for the temporary tensor_array
+     *  resource. Default value is the name of the 'TensorArray' op (which
+     *  is guaranteed unique).
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs TensorArrayName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorArrayName(@StringPiece String x);
 
@@ -23870,10 +24315,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Unstage(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Unstage :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *  SharedName(StringPiece): Defaults to "" */
+  /** Optional attribute setters for Unstage */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -23888,9 +24330,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to "" */
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -23911,6 +24355,8 @@ limitations under the License.
 
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector values(); public native Unstage values(StringVector values);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
@@ -23934,7 +24380,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Adjust the contrast of one or more images.
+/** \defgroup image_ops Image Ops
+ *  \{
+ <p>
+ *  Adjust the contrast of one or more images.
  * 
  *  {@code images} is a tensor of at least 3 dimensions.  The last 3 dimensions are
  *  interpreted as {@code [height, width, channels]}.  The other dimensions only
@@ -24065,6 +24514,11 @@ limitations under the License.
  *  content is not preserved. Both }crop_height{@code  and }crop_width{@code  need to be
  *  positive.
  * 
+ *  Optional attributes (see }Attrs{@code ):
+ *  * method: A string specifying the interpolation method. Only 'bilinear' is
+ *  supported for now.
+ *  * extrapolation_value: Value used for extrapolation, when applicable.
+ * 
  *  Returns:
  *  * }Output{@code : A 4-D tensor of shape }[num_boxes, crop_height, crop_width, depth]{@code . */
 @Namespace("tensorflow::ops") @NoOffset public static class CropAndResize extends Pointer {
@@ -24072,13 +24526,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CropAndResize(Pointer p) { super(p); }
 
-  /** Optional attribute setters for CropAndResize :
-   * 
-   *  Method(StringPiece): Defaults to "bilinear"
-   *      A string specifying the interpolation method. Only 'bilinear' is
-   *  supported for now.
-   *  ExtrapolationValue(float): Defaults to 0
-   *      Value used for extrapolation, when applicable. */
+  /** Optional attribute setters for CropAndResize */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24093,9 +24541,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A string specifying the interpolation method. Only 'bilinear' is
+     *  supported for now.
+     * 
+     *  Defaults to "bilinear" */
+    
+    ///
     public native @ByVal Attrs Method(@StringPiece BytePointer x);
     public native @ByVal Attrs Method(@StringPiece String x);
 
+    /** Value used for extrapolation, when applicable.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs ExtrapolationValue(float x);
 
     public native @StringPiece BytePointer method_(); public native Attrs method_(BytePointer method_);
@@ -24144,6 +24601,10 @@ limitations under the License.
  *  * box_ind: A 1-D tensor of shape }[num_boxes]{@code  with int32 values in }[0, batch){@code .
  *  The value of }box_ind[i]{@code  specifies the image that the }i{@code -th box refers to.
  * 
+ *  Optional attributes (see }Attrs{@code ):
+ *  * method: A string specifying the interpolation method. Only 'bilinear' is
+ *  supported for now.
+ * 
  *  Returns:
  *  * }Output{@code : A 2-D tensor of shape }[num_boxes, 4]{@code . */
 @Namespace("tensorflow::ops") @NoOffset public static class CropAndResizeGradBoxes extends Pointer {
@@ -24151,11 +24612,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CropAndResizeGradBoxes(Pointer p) { super(p); }
 
-  /** Optional attribute setters for CropAndResizeGradBoxes :
-   * 
-   *  Method(StringPiece): Defaults to "bilinear"
-   *      A string specifying the interpolation method. Only 'bilinear' is
-   *  supported for now. */
+  /** Optional attribute setters for CropAndResizeGradBoxes */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24170,6 +24627,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A string specifying the interpolation method. Only 'bilinear' is
+     *  supported for now.
+     * 
+     *  Defaults to "bilinear" */
     public native @ByVal Attrs Method(@StringPiece BytePointer x);
     public native @ByVal Attrs Method(@StringPiece String x);
 
@@ -24210,6 +24671,10 @@ limitations under the License.
  *  containing the original image size. Both }image_height{@code  and }image_width{@code  need
  *  to be positive.
  * 
+ *  Optional attributes (see }Attrs{@code ):
+ *  * method: A string specifying the interpolation method. Only 'bilinear' is
+ *  supported for now.
+ * 
  *  Returns:
  *  * }Output{@code : A 4-D tensor of shape }[batch, image_height, image_width, depth]{@code . */
 @Namespace("tensorflow::ops") @NoOffset public static class CropAndResizeGradImage extends Pointer {
@@ -24217,11 +24682,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CropAndResizeGradImage(Pointer p) { super(p); }
 
-  /** Optional attribute setters for CropAndResizeGradImage :
-   * 
-   *  Method(StringPiece): Defaults to "bilinear"
-   *      A string specifying the interpolation method. Only 'bilinear' is
-   *  supported for now. */
+  /** Optional attribute setters for CropAndResizeGradImage */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24236,6 +24697,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A string specifying the interpolation method. Only 'bilinear' is
+     *  supported for now.
+     * 
+     *  Defaults to "bilinear" */
     public native @ByVal Attrs Method(@StringPiece BytePointer x);
     public native @ByVal Attrs Method(@StringPiece String x);
 
@@ -24306,6 +24771,21 @@ limitations under the License.
  *  * scope: A Scope object
  *  * contents: 0-D.  The JPEG-encoded image.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * channels: Number of color channels for the decoded image.
+ *  * ratio: Downscaling ratio.
+ *  * fancy_upscaling: If true use a slower but nicer upscaling of the
+ *  chroma planes (yuv420/422 only).
+ *  * try_recover_truncated: If true try to recover an image from truncated input.
+ *  * acceptable_fraction: The minimum required fraction of lines before a truncated
+ *  input is accepted.
+ *  * dct_method: string specifying a hint about the algorithm used for
+ *  decompression.  Defaults to "" which maps to a system-specific
+ *  default.  Currently valid values are ["INTEGER_FAST",
+ *  "INTEGER_ACCURATE"].  The hint may be ignored (e.g., the internal
+ *  jpeg library changes to a version that does not have that specific
+ *  option.)
+ * 
  *  Returns:
  *  * {@code Output}: 3-D with shape {@code [height, width, channels]}.. */
 @Namespace("tensorflow::ops") @NoOffset public static class DecodeJpeg extends Pointer {
@@ -24313,27 +24793,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DecodeJpeg(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DecodeJpeg :
-   * 
-   *  Channels(int64): Defaults to 0
-   *      Number of color channels for the decoded image.
-   *  Ratio(int64): Defaults to 1
-   *      Downscaling ratio.
-   *  FancyUpscaling(bool): Defaults to true
-   *      If true use a slower but nicer upscaling of the
-   *  chroma planes (yuv420/422 only).
-   *  TryRecoverTruncated(bool): Defaults to false
-   *      If true try to recover an image from truncated input.
-   *  AcceptableFraction(float): Defaults to 1
-   *      The minimum required fraction of lines before a truncated
-   *  input is accepted.
-   *  DctMethod(StringPiece): Defaults to ""
-   *      string specifying a hint about the algorithm used for
-   *  decompression.  Defaults to "" which maps to a system-specific
-   *  default.  Currently valid values are ["INTEGER_FAST",
-   *  "INTEGER_ACCURATE"].  The hint may be ignored (e.g., the internal
-   *  jpeg library changes to a version that does not have that specific
-   *  option.) */
+  /** Optional attribute setters for DecodeJpeg */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24348,16 +24808,51 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Number of color channels for the decoded image.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Channels(@Cast("tensorflow::int64") long x);
 
+    /** Downscaling ratio.
+     * 
+     *  Defaults to 1 */
+    
+    ///
     public native @ByVal Attrs Ratio(@Cast("tensorflow::int64") long x);
 
+    /** If true use a slower but nicer upscaling of the
+     *  chroma planes (yuv420/422 only).
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs FancyUpscaling(@Cast("bool") boolean x);
 
+    /** If true try to recover an image from truncated input.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs TryRecoverTruncated(@Cast("bool") boolean x);
 
+    /** The minimum required fraction of lines before a truncated
+     *  input is accepted.
+     * 
+     *  Defaults to 1 */
+    
+    ///
     public native @ByVal Attrs AcceptableFraction(float x);
 
+    /** string specifying a hint about the algorithm used for
+     *  decompression.  Defaults to "" which maps to a system-specific
+     *  default.  Currently valid values are ["INTEGER_FAST",
+     *  "INTEGER_ACCURATE"].  The hint may be ignored (e.g., the internal
+     *  jpeg library changes to a version that does not have that specific
+     *  option.)
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs DctMethod(@StringPiece BytePointer x);
     public native @ByVal Attrs DctMethod(@StringPiece String x);
 
@@ -24408,6 +24903,9 @@ limitations under the License.
  *  * scope: A Scope object
  *  * contents: 0-D.  The PNG-encoded image.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * channels: Number of color channels for the decoded image.
+ * 
  *  Returns:
  *  * {@code Output}: 3-D with shape {@code [height, width, channels]}. */
 @Namespace("tensorflow::ops") @NoOffset public static class DecodePng extends Pointer {
@@ -24415,11 +24913,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DecodePng(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DecodePng :
-   * 
-   *  Channels(int64): Defaults to 0
-   *      Number of color channels for the decoded image.
-   *  Dtype(DataType): Defaults to DT_UINT8 */
+  /** Optional attribute setters for DecodePng */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24434,8 +24928,12 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Number of color channels for the decoded image.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Channels(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to DT_UINT8 */
     public native @ByVal Attrs Dtype(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::int64") long channels_(); public native Attrs channels_(long channels_);
@@ -24517,6 +25015,18 @@ limitations under the License.
  *  * scope: A Scope object
  *  * image: 3-D with shape {@code [height, width, channels]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * format: Per pixel image format.
+ *  * quality: Quality of the compression from 0 to 100 (higher is better and slower).
+ *  * progressive: If True, create a JPEG that loads progressively (coarse to fine).
+ *  * optimize_size: If True, spend CPU/RAM to reduce size with no quality change.
+ *  * chroma_downsampling: See http://en.wikipedia.org/wiki/Chroma_subsampling.
+ *  * density_unit: Unit used to specify {@code x_density} and {@code y_density}:
+ *  pixels per inch ({@code 'in'}) or centimeter ({@code 'cm'}).
+ *  * x_density: Horizontal pixels per density unit.
+ *  * y_density: Vertical pixels per density unit.
+ *  * xmp_metadata: If not empty, embed this XMP metadata in the image header.
+ * 
  *  Returns:
  *  * {@code Output}: 0-D. JPEG-encoded image. */
 @Namespace("tensorflow::ops") @NoOffset public static class EncodeJpeg extends Pointer {
@@ -24524,27 +25034,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EncodeJpeg(Pointer p) { super(p); }
 
-  /** Optional attribute setters for EncodeJpeg :
-   * 
-   *  Format(StringPiece): Defaults to ""
-   *      Per pixel image format.
-   *  Quality(int64): Defaults to 95
-   *      Quality of the compression from 0 to 100 (higher is better and slower).
-   *  Progressive(bool): Defaults to false
-   *      If True, create a JPEG that loads progressively (coarse to fine).
-   *  OptimizeSize(bool): Defaults to false
-   *      If True, spend CPU/RAM to reduce size with no quality change.
-   *  ChromaDownsampling(bool): Defaults to true
-   *      See http://en.wikipedia.org/wiki/Chroma_subsampling.
-   *  DensityUnit(StringPiece): Defaults to "in"
-   *      Unit used to specify {@code x_density} and {@code y_density}:
-   *  pixels per inch ({@code 'in'}) or centimeter ({@code 'cm'}).
-   *  XDensity(int64): Defaults to 300
-   *      Horizontal pixels per density unit.
-   *  YDensity(int64): Defaults to 300
-   *      Vertical pixels per density unit.
-   *  XmpMetadata(StringPiece): Defaults to ""
-   *      If not empty, embed this XMP metadata in the image header. */
+  /** Optional attribute setters for EncodeJpeg */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24559,24 +25049,68 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Per pixel image format.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Format(@StringPiece BytePointer x);
     public native @ByVal Attrs Format(@StringPiece String x);
 
+    /** Quality of the compression from 0 to 100 (higher is better and slower).
+     * 
+     *  Defaults to 95 */
+    
+    ///
     public native @ByVal Attrs Quality(@Cast("tensorflow::int64") long x);
 
+    /** If True, create a JPEG that loads progressively (coarse to fine).
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Progressive(@Cast("bool") boolean x);
 
+    /** If True, spend CPU/RAM to reduce size with no quality change.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs OptimizeSize(@Cast("bool") boolean x);
 
+    /** See http://en.wikipedia.org/wiki/Chroma_subsampling.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs ChromaDownsampling(@Cast("bool") boolean x);
 
+    /** Unit used to specify {@code x_density} and {@code y_density}:
+     *  pixels per inch ({@code 'in'}) or centimeter ({@code 'cm'}).
+     * 
+     *  Defaults to "in" */
+    
+    ///
     public native @ByVal Attrs DensityUnit(@StringPiece BytePointer x);
     public native @ByVal Attrs DensityUnit(@StringPiece String x);
 
+    /** Horizontal pixels per density unit.
+     * 
+     *  Defaults to 300 */
+    
+    ///
     public native @ByVal Attrs XDensity(@Cast("tensorflow::int64") long x);
 
+    /** Vertical pixels per density unit.
+     * 
+     *  Defaults to 300 */
+    
+    ///
     public native @ByVal Attrs YDensity(@Cast("tensorflow::int64") long x);
 
+    /** If not empty, embed this XMP metadata in the image header.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs XmpMetadata(@StringPiece BytePointer x);
     public native @ByVal Attrs XmpMetadata(@StringPiece String x);
 
@@ -24632,6 +25166,9 @@ limitations under the License.
  *  * scope: A Scope object
  *  * image: 3-D with shape {@code [height, width, channels]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * compression: Compression level.
+ * 
  *  Returns:
  *  * {@code Output}: 0-D. PNG-encoded image. */
 @Namespace("tensorflow::ops") @NoOffset public static class EncodePng extends Pointer {
@@ -24639,10 +25176,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EncodePng(Pointer p) { super(p); }
 
-  /** Optional attribute setters for EncodePng :
-   * 
-   *  Compression(int64): Defaults to -1
-   *      Compression level. */
+  /** Optional attribute setters for EncodePng */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24657,6 +25191,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Compression level.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs Compression(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long compression_(); public native Attrs compression_(long compression_);
@@ -24707,6 +25244,15 @@ limitations under the License.
  *  * offsets: A 2-D integer tensor of shape {@code [batch_size, 2]} containing
  *  the x, y locations of the center of each window.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * centered: indicates if the offset coordinates are centered relative to
+ *  the image, in which case the (0, 0) offset is relative to the center
+ *  of the input images. If false, the (0,0) offset corresponds to the
+ *  upper left corner of the input images.
+ *  * normalized: indicates if the offset coordinates are normalized.
+ *  * uniform_noise: indicates if the noise should be generated using a
+ *  uniform distribution or a Gaussian distribution.
+ * 
  *  Returns:
  *  * {@code Output}: A tensor representing the glimpses {@code [batch_size,
  *  glimpse_height, glimpse_width, channels]}. */
@@ -24715,18 +25261,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExtractGlimpse(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ExtractGlimpse :
-   * 
-   *  Centered(bool): Defaults to true
-   *      indicates if the offset coordinates are centered relative to
-   *  the image, in which case the (0, 0) offset is relative to the center
-   *  of the input images. If false, the (0,0) offset corresponds to the
-   *  upper left corner of the input images.
-   *  Normalized(bool): Defaults to true
-   *      indicates if the offset coordinates are normalized.
-   *  UniformNoise(bool): Defaults to true
-   *      indicates if the noise should be generated using a
-   *  uniform distribution or a Gaussian distribution. */
+  /** Optional attribute setters for ExtractGlimpse */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24741,10 +25276,27 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** indicates if the offset coordinates are centered relative to
+     *  the image, in which case the (0, 0) offset is relative to the center
+     *  of the input images. If false, the (0,0) offset corresponds to the
+     *  upper left corner of the input images.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs Centered(@Cast("bool") boolean x);
 
+    /** indicates if the offset coordinates are normalized.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs Normalized(@Cast("bool") boolean x);
 
+    /** indicates if the noise should be generated using a
+     *  uniform distribution or a Gaussian distribution.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs UniformNoise(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean centered_(); public native Attrs centered_(boolean centered_);
@@ -24827,6 +25379,10 @@ limitations under the License.
  *  * max_output_size: A scalar integer tensor representing the maximum number of
  *  boxes to be selected by non max suppression.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * iou_threshold: A float representing the threshold for deciding whether boxes
+ *  overlap too much with respect to IOU.
+ * 
  *  Returns:
  *  * {@code Output}: A 1-D integer tensor of shape {@code [M]} representing the selected
  *  indices from the boxes tensor, where {@code M <= max_output_size}. */
@@ -24835,11 +25391,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NonMaxSuppression(Pointer p) { super(p); }
 
-  /** Optional attribute setters for NonMaxSuppression :
-   * 
-   *  IouThreshold(float): Defaults to 0.5
-   *      A float representing the threshold for deciding whether boxes
-   *  overlap too much with respect to IOU. */
+  /** Optional attribute setters for NonMaxSuppression */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24854,6 +25406,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A float representing the threshold for deciding whether boxes
+     *  overlap too much with respect to IOU.
+     * 
+     *  Defaults to 0.5 */
     public native @ByVal Attrs IouThreshold(float x);
 
     public native float iou_threshold_(); public native Attrs iou_threshold_(float iou_threshold_);
@@ -24915,6 +25471,11 @@ limitations under the License.
  *  * size: = A 1-D int32 Tensor of 2 elements: {@code new_height, new_width}.  The
  *  new size for the images.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * align_corners: If true, rescale input by (new_height - 1) / (height - 1), which
+ *  exactly aligns the 4 corners of images and resized images. If false, rescale
+ *  by new_height / height. Treat similarly the width dimension.
+ * 
  *  Returns:
  *  * {@code Output}: 4-D with shape
  *  {@code [batch, new_height, new_width, channels]}. */
@@ -24923,12 +25484,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResizeArea(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResizeArea :
-   * 
-   *  AlignCorners(bool): Defaults to false
-   *      If true, rescale input by (new_height - 1) / (height - 1), which
-   *  exactly aligns the 4 corners of images and resized images. If false, rescale
-   *  by new_height / height. Treat similarly the width dimension. */
+  /** Optional attribute setters for ResizeArea */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -24943,6 +25499,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, rescale input by (new_height - 1) / (height - 1), which
+     *  exactly aligns the 4 corners of images and resized images. If false, rescale
+     *  by new_height / height. Treat similarly the width dimension.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AlignCorners(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean align_corners_(); public native Attrs align_corners_(boolean align_corners_);
@@ -24974,6 +25535,11 @@ limitations under the License.
  *  * size: = A 1-D int32 Tensor of 2 elements: {@code new_height, new_width}.  The
  *  new size for the images.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * align_corners: If true, rescale input by (new_height - 1) / (height - 1), which
+ *  exactly aligns the 4 corners of images and resized images. If false, rescale
+ *  by new_height / height. Treat similarly the width dimension.
+ * 
  *  Returns:
  *  * {@code Output}: 4-D with shape
  *  {@code [batch, new_height, new_width, channels]}. */
@@ -24982,12 +25548,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResizeBicubic(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResizeBicubic :
-   * 
-   *  AlignCorners(bool): Defaults to false
-   *      If true, rescale input by (new_height - 1) / (height - 1), which
-   *  exactly aligns the 4 corners of images and resized images. If false, rescale
-   *  by new_height / height. Treat similarly the width dimension. */
+  /** Optional attribute setters for ResizeBicubic */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25002,6 +25563,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, rescale input by (new_height - 1) / (height - 1), which
+     *  exactly aligns the 4 corners of images and resized images. If false, rescale
+     *  by new_height / height. Treat similarly the width dimension.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AlignCorners(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean align_corners_(); public native Attrs align_corners_(boolean align_corners_);
@@ -25033,6 +25599,11 @@ limitations under the License.
  *  * size: = A 1-D int32 Tensor of 2 elements: {@code new_height, new_width}.  The
  *  new size for the images.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * align_corners: If true, rescale input by (new_height - 1) / (height - 1), which
+ *  exactly aligns the 4 corners of images and resized images. If false, rescale
+ *  by new_height / height. Treat similarly the width dimension.
+ * 
  *  Returns:
  *  * {@code Output}: 4-D with shape
  *  {@code [batch, new_height, new_width, channels]}. */
@@ -25041,12 +25612,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResizeBilinear(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResizeBilinear :
-   * 
-   *  AlignCorners(bool): Defaults to false
-   *      If true, rescale input by (new_height - 1) / (height - 1), which
-   *  exactly aligns the 4 corners of images and resized images. If false, rescale
-   *  by new_height / height. Treat similarly the width dimension. */
+  /** Optional attribute setters for ResizeBilinear */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25061,6 +25627,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, rescale input by (new_height - 1) / (height - 1), which
+     *  exactly aligns the 4 corners of images and resized images. If false, rescale
+     *  by new_height / height. Treat similarly the width dimension.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AlignCorners(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean align_corners_(); public native Attrs align_corners_(boolean align_corners_);
@@ -25090,6 +25661,11 @@ limitations under the License.
  *  * size: = A 1-D int32 Tensor of 2 elements: {@code new_height, new_width}.  The
  *  new size for the images.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * align_corners: If true, rescale input by (new_height - 1) / (height - 1), which
+ *  exactly aligns the 4 corners of images and resized images. If false, rescale
+ *  by new_height / height. Treat similarly the width dimension.
+ * 
  *  Returns:
  *  * {@code Output}: 4-D with shape
  *  {@code [batch, new_height, new_width, channels]}. */
@@ -25098,12 +25674,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResizeNearestNeighbor(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResizeNearestNeighbor :
-   * 
-   *  AlignCorners(bool): Defaults to false
-   *      If true, rescale input by (new_height - 1) / (height - 1), which
-   *  exactly aligns the 4 corners of images and resized images. If false, rescale
-   *  by new_height / height. Treat similarly the width dimension. */
+  /** Optional attribute setters for ResizeNearestNeighbor */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25118,6 +25689,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, rescale input by (new_height - 1) / (height - 1), which
+     *  exactly aligns the 4 corners of images and resized images. If false, rescale
+     *  by new_height / height. Treat similarly the width dimension.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AlignCorners(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean align_corners_(); public native Attrs align_corners_(boolean align_corners_);
@@ -25182,6 +25758,26 @@ limitations under the License.
  *  * bounding_boxes: 3-D with shape {@code [batch, N, 4]} describing the N bounding boxes
  *  associated with the image.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to non-zero, the random number
+ *  generator is seeded by the given {@code seed}.  Otherwise, it is seeded by a random
+ *  seed.
+ *  * seed2: A second seed to avoid seed collision.
+ *  * min_object_covered: The cropped area of the image must contain at least this
+ *  fraction of any bounding box supplied. The value of this parameter should be
+ *  non-negative. In the case of 0, the cropped area does not need to overlap
+ *  any of the bounding boxes supplied.
+ *  * aspect_ratio_range: The cropped area of the image must have an aspect ratio =
+ *  width / height within this range.
+ *  * area_range: The cropped area of the image must contain a fraction of the
+ *  supplied image within in this range.
+ *  * max_attempts: Number of attempts at generating a cropped region of the image
+ *  of the specified constraints. After {@code max_attempts} failures, return the entire
+ *  image.
+ *  * use_image_if_no_bounding_boxes: Controls behavior if no bounding boxes supplied.
+ *  If true, assume an implicit bounding box covering the whole input. If false,
+ *  raise an error.
+ * 
  *  Returns:
  *  * {@code Output} begin: 1-D, containing {@code [offset_height, offset_width, 0]}. Provide as input to
  *  {@code tf.slice}.
@@ -25194,33 +25790,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SampleDistortedBoundingBox(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SampleDistortedBoundingBox :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to non-zero, the random number
-   *  generator is seeded by the given {@code seed}.  Otherwise, it is seeded by a random
-   *  seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision.
-   *  MinObjectCovered(float): Defaults to 0.1
-   *      The cropped area of the image must contain at least this
-   *  fraction of any bounding box supplied. The value of this parameter should be
-   *  non-negative. In the case of 0, the cropped area does not need to overlap
-   *  any of the bounding boxes supplied.
-   *  AspectRatioRange(const gtl::ArraySlice<float>&): Defaults to [0.75, 1.33]
-   *      The cropped area of the image must have an aspect ratio =
-   *  width / height within this range.
-   *  AreaRange(const gtl::ArraySlice<float>&): Defaults to [0.05, 1]
-   *      The cropped area of the image must contain a fraction of the
-   *  supplied image within in this range.
-   *  MaxAttempts(int64): Defaults to 100
-   *      Number of attempts at generating a cropped region of the image
-   *  of the specified constraints. After {@code max_attempts} failures, return the entire
-   *  image.
-   *  UseImageIfNoBoundingBoxes(bool): Defaults to false
-   *      Controls behavior if no bounding boxes supplied.
-   *  If true, assume an implicit bounding box covering the whole input. If false,
-   *  raise an error. */
+  /** Optional attribute setters for SampleDistortedBoundingBox */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25235,22 +25805,66 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to non-zero, the random number
+     *  generator is seeded by the given {@code seed}.  Otherwise, it is seeded by a random
+     *  seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
+    /** The cropped area of the image must contain at least this
+     *  fraction of any bounding box supplied. The value of this parameter should be
+     *  non-negative. In the case of 0, the cropped area does not need to overlap
+     *  any of the bounding boxes supplied.
+     * 
+     *  Defaults to 0.1 */
+    
+    ///
     public native @ByVal Attrs MinObjectCovered(float x);
 
+    /** The cropped area of the image must have an aspect ratio =
+     *  width / height within this range.
+     * 
+     *  Defaults to [0.75, 1.33] */
+    
+    ///
     public native @ByVal Attrs AspectRatioRange(@ArraySlice FloatPointer x);
     public native @ByVal Attrs AspectRatioRange(@ArraySlice FloatBuffer x);
     public native @ByVal Attrs AspectRatioRange(@ArraySlice float... x);
 
+    /** The cropped area of the image must contain a fraction of the
+     *  supplied image within in this range.
+     * 
+     *  Defaults to [0.05, 1] */
+    
+    ///
     public native @ByVal Attrs AreaRange(@ArraySlice FloatPointer x);
     public native @ByVal Attrs AreaRange(@ArraySlice FloatBuffer x);
     public native @ByVal Attrs AreaRange(@ArraySlice float... x);
 
+    /** Number of attempts at generating a cropped region of the image
+     *  of the specified constraints. After {@code max_attempts} failures, return the entire
+     *  image.
+     * 
+     *  Defaults to 100 */
+    
+    ///
     public native @ByVal Attrs MaxAttempts(@Cast("tensorflow::int64") long x);
 
+    /** Controls behavior if no bounding boxes supplied.
+     *  If true, assume an implicit bounding box covering the whole input. If false,
+     *  raise an error.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseImageIfNoBoundingBoxes(@Cast("bool") boolean x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -25287,6 +25901,8 @@ limitations under the License.
   public native @ByRef Output bboxes(); public native SampleDistortedBoundingBox bboxes(Output bboxes);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -25309,10 +25925,19 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** A Reader that outputs fixed-length records from a file.
+/** \defgroup io_ops Io Ops
+ *  \{
+ <p>
+ *  A Reader that outputs fixed-length records from a file.
  * 
  *  Arguments:
  *  * scope: A Scope object
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this reader is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this reader is named in the given bucket
+ *  with this shared_name. Otherwise, the node name is used instead.
  * 
  *  Returns:
  *  * {@code Output}: The handle to reference the Reader. */
@@ -25321,16 +25946,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FixedLengthRecordReader(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FixedLengthRecordReader :
-   * 
-   *  HeaderBytes(int64): Defaults to 0
-   *  FooterBytes(int64): Defaults to 0
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this reader is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this reader is named in the given bucket
-   *  with this shared_name. Otherwise, the node name is used instead. */
+  /** Optional attribute setters for FixedLengthRecordReader */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25345,13 +25961,27 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to 0 */
     public native @ByVal Attrs HeaderBytes(@Cast("tensorflow::int64") long x);
 
+    /** Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs FooterBytes(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this reader is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this reader is named in the given bucket
+     *  with this shared_name. Otherwise, the node name is used instead.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -25388,6 +26018,12 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this reader is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this reader is named in the given bucket
+ *  with this shared_name. Otherwise, the node name is used instead.
+ * 
  *  Returns:
  *  * {@code Output}: The handle to reference the Reader. */
 @Namespace("tensorflow::ops") @NoOffset public static class IdentityReader extends Pointer {
@@ -25395,14 +26031,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IdentityReader(Pointer p) { super(p); }
 
-  /** Optional attribute setters for IdentityReader :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this reader is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this reader is named in the given bucket
-   *  with this shared_name. Otherwise, the node name is used instead. */
+  /** Optional attribute setters for IdentityReader */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25417,9 +26046,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this reader is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this reader is named in the given bucket
+     *  with this shared_name. Otherwise, the node name is used instead.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -25484,6 +26123,9 @@ limitations under the License.
  *  * destination_prefix: scalar.  The desired final prefix.  Allowed to be the same
  *  as one of the checkpoint_prefixes.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * delete_old_dirs: see above.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class MergeV2Checkpoints extends Pointer {
@@ -25491,10 +26133,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeV2Checkpoints(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MergeV2Checkpoints :
-   * 
-   *  DeleteOldDirs(bool): Defaults to true
-   *      see above. */
+  /** Optional attribute setters for MergeV2Checkpoints */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25509,6 +26148,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** see above.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs DeleteOldDirs(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean delete_old_dirs_(); public native Attrs delete_old_dirs_(boolean delete_old_dirs_);
@@ -25749,8 +26391,11 @@ limitations under the License.
  *  which we read the tensor.
  *  * tensor_name: Must have a single element. The name of the tensor to be
  *  restored.
- *  * dt:
- *      The type of the tensor to be restored.
+ *  * dt: The type of the tensor to be restored.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * preferred_shard: Index of file to open first if multiple files match
+ *  {@code file_pattern}.
  * 
  *  Returns:
  *  * {@code Output}: The restored tensor. */
@@ -25759,11 +26404,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Restore(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Restore :
-   * 
-   *  PreferredShard(int64): Defaults to -1
-   *      Index of file to open first if multiple files match
-   *  {@code file_pattern}. */
+  /** Optional attribute setters for Restore */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25778,6 +26419,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Index of file to open first if multiple files match
+     *  {@code file_pattern}.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs PreferredShard(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long preferred_shard_(); public native Attrs preferred_shard_(long preferred_shard_);
@@ -25816,8 +26461,11 @@ limitations under the License.
  *  restored.
  *  * shape_and_slice: Scalar. The shapes and slice specifications to use when
  *  restoring a tensors.
- *  * dt:
- *      The type of the tensor to be restored.
+ *  * dt: The type of the tensor to be restored.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * preferred_shard: Index of file to open first if multiple files match
+ *  {@code file_pattern}. See the documentation for {@code Restore}.
  * 
  *  Returns:
  *  * {@code Output}: The restored tensor. */
@@ -25826,11 +26474,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RestoreSlice(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RestoreSlice :
-   * 
-   *  PreferredShard(int64): Defaults to -1
-   *      Index of file to open first if multiple files match
-   *  {@code file_pattern}. See the documentation for {@code Restore}. */
+  /** Optional attribute setters for RestoreSlice */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -25845,6 +26489,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Index of file to open first if multiple files match
+     *  {@code file_pattern}. See the documentation for {@code Restore}.
+     * 
+     *  Defaults to -1 */
     public native @ByVal Attrs PreferredShard(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long preferred_shard_(); public native Attrs preferred_shard_(long preferred_shard_);
@@ -25884,8 +26532,7 @@ limitations under the License.
  *  * tensor_names: shape {N}.  The names of the tensors to be restored.
  *  * shape_and_slices: shape {N}.  The slice specs of the tensors to be restored.
  *  Empty strings indicate that they are non-partitioned tensors.
- *  * dtypes:
- *      shape {N}.  The list of expected dtype for the tensors.  Must match
+ *  * dtypes: shape {N}.  The list of expected dtype for the tensors.  Must match
  *  those stored in the checkpoint.
  * 
  *  Returns:
@@ -26071,6 +26718,12 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this reader is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this reader is named in the given bucket
+ *  with this shared_name. Otherwise, the node name is used instead.
+ * 
  *  Returns:
  *  * {@code Output}: The handle to reference the Reader. */
 @Namespace("tensorflow::ops") @NoOffset public static class TFRecordReader extends Pointer {
@@ -26078,15 +26731,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TFRecordReader(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TFRecordReader :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this reader is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this reader is named in the given bucket
-   *  with this shared_name. Otherwise, the node name is used instead.
-   *  CompressionType(StringPiece): Defaults to "" */
+  /** Optional attribute setters for TFRecordReader */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26101,12 +26746,23 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this reader is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this reader is named in the given bucket
+     *  with this shared_name. Otherwise, the node name is used instead.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
+    /** Defaults to "" */
     public native @ByVal Attrs CompressionType(@StringPiece BytePointer x);
     public native @ByVal Attrs CompressionType(@StringPiece String x);
 
@@ -26137,6 +26793,13 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * skip_header_lines: Number of lines to skip from the beginning of every file.
+ *  * container: If non-empty, this reader is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this reader is named in the given bucket
+ *  with this shared_name. Otherwise, the node name is used instead.
+ * 
  *  Returns:
  *  * {@code Output}: The handle to reference the Reader. */
 @Namespace("tensorflow::ops") @NoOffset public static class TextLineReader extends Pointer {
@@ -26144,16 +26807,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TextLineReader(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TextLineReader :
-   * 
-   *  SkipHeaderLines(int64): Defaults to 0
-   *      Number of lines to skip from the beginning of every file.
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this reader is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this reader is named in the given bucket
-   *  with this shared_name. Otherwise, the node name is used instead. */
+  /** Optional attribute setters for TextLineReader */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26168,11 +26822,26 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Number of lines to skip from the beginning of every file.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs SkipHeaderLines(@Cast("tensorflow::int64") long x);
 
+    /** If non-empty, this reader is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this reader is named in the given bucket
+     *  with this shared_name. Otherwise, the node name is used instead.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -26205,6 +26874,12 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this reader is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this reader is named in the given bucket
+ *  with this shared_name. Otherwise, the node name is used instead.
+ * 
  *  Returns:
  *  * {@code Output}: The handle to reference the Reader. */
 @Namespace("tensorflow::ops") @NoOffset public static class WholeFileReader extends Pointer {
@@ -26212,14 +26887,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WholeFileReader(Pointer p) { super(p); }
 
-  /** Optional attribute setters for WholeFileReader :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this reader is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this reader is named in the given bucket
-   *  with this shared_name. Otherwise, the node name is used instead. */
+  /** Optional attribute setters for WholeFileReader */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26234,9 +26902,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this reader is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this reader is named in the given bucket
+     *  with this shared_name. Otherwise, the node name is used instead.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -26282,6 +26960,8 @@ limitations under the License.
   public native @ByRef Operation operation(); public native WriteFile operation(Operation operation);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -26304,7 +26984,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Computes the Cholesky decomposition of one or more square matrices.
+/** \defgroup linalg_ops Linalg Ops
+ *  \{
+ <p>
+ *  Computes the Cholesky decomposition of one or more square matrices.
  * 
  *  The input is a tensor of shape {@code [..., M, M]} whose inner-most 2 dimensions
  *  form square matrices, with the same constraints as the single matrix Cholesky
@@ -26418,9 +27101,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatrixInverse(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MatrixInverse :
-   * 
-   *  Adjoint(bool): Defaults to false */
+  /** Optional attribute setters for MatrixInverse */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26435,6 +27116,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to false */
     public native @ByVal Attrs Adjoint(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean adjoint_(); public native Attrs adjoint_(boolean adjoint_);
@@ -26468,6 +27150,10 @@ limitations under the License.
  *  * matrix: Shape is {@code [..., M, M]}.
  *  * rhs: Shape is {@code [..., M, K]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * adjoint: Boolean indicating whether to solve with {@code matrix} or its (block-wise)
+ *  adjoint.
+ * 
  *  Returns:
  *  * {@code Output}: Shape is {@code [..., M, K]}. */
 @Namespace("tensorflow::ops") @NoOffset public static class MatrixSolve extends Pointer {
@@ -26475,11 +27161,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatrixSolve(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MatrixSolve :
-   * 
-   *  Adjoint(bool): Defaults to false
-   *      Boolean indicating whether to solve with {@code matrix} or its (block-wise)
-   *  adjoint. */
+  /** Optional attribute setters for MatrixSolve */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26494,6 +27176,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Boolean indicating whether to solve with {@code matrix} or its (block-wise)
+     *  adjoint.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs Adjoint(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean adjoint_(); public native Attrs adjoint_(boolean adjoint_);
@@ -26566,9 +27252,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatrixSolveLs(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MatrixSolveLs :
-   * 
-   *  Fast(bool): Defaults to true */
+  /** Optional attribute setters for MatrixSolveLs */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26583,6 +27267,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to true */
     public native @ByVal Attrs Fast(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean fast_(); public native Attrs fast_(boolean fast_);
@@ -26629,6 +27314,16 @@ limitations under the License.
  *  * matrix: Shape is }[..., M, M]{@code .
  *  * rhs: Shape is }[..., M, K]{@code .
  * 
+ *  Optional attributes (see }Attrs{@code ):
+ *  * lower: Boolean indicating whether the innermost matrices in }matrix{@code  are
+ *  lower or upper triangular.
+ *  * adjoint: Boolean indicating whether to solve with }matrix{@code  or its (block-wise)
+ *           adjoint.
+ * 
+ *  @compatibility(numpy)
+ *  Equivalent to np.linalg.triangular_solve
+ *  @end_compatibility
+ * 
  *  Returns:
  *  * }Output{@code : Shape is }[..., M, K]{@code . */
 @Namespace("tensorflow::ops") @NoOffset public static class MatrixTriangularSolve extends Pointer {
@@ -26636,18 +27331,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatrixTriangularSolve(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MatrixTriangularSolve :
-   * 
-   *  Lower(bool): Defaults to true
-   *      Boolean indicating whether the innermost matrices in {@code matrix} are
-   *  lower or upper triangular.
-   *  Adjoint(bool): Defaults to false
-   *      Boolean indicating whether to solve with {@code matrix} or its (block-wise)
-   *           adjoint.
-   * 
-   *  \compatibility(numpy)
-   *  Equivalent to np.linalg.triangular_solve
-   *  \end_compatibility */
+  /** Optional attribute setters for MatrixTriangularSolve */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26662,8 +27346,23 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Boolean indicating whether the innermost matrices in {@code matrix} are
+     *  lower or upper triangular.
+     * 
+     *  Defaults to true */
+    
+    ///
+    ///
     public native @ByVal Attrs Lower(@Cast("bool") boolean x);
 
+    /** Boolean indicating whether to solve with {@code matrix} or its (block-wise)
+     *           adjoint.
+     * 
+     *  \compatibility(numpy)
+     *  Equivalent to np.linalg.triangular_solve
+     *  \end_compatibility
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs Adjoint(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean lower_(); public native Attrs lower_(boolean lower_);
@@ -26701,6 +27400,10 @@ limitations under the License.
  *  * input: A tensor of shape {@code [..., M, N]} whose inner-most 2 dimensions
  *  form matrices of size {@code [M, N]}. Let {@code P} be the minimum of {@code M} and {@code N}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * full_matrices: If true, compute full-sized {@code q} and {@code r}. If false
+ *  (the default), compute only the leading {@code P} columns of {@code q}.
+ * 
  *  Returns:
  *  * {@code Output} q: Orthonormal basis for range of {@code a}. If {@code full_matrices} is {@code False} then
  *  shape is {@code [..., M, P]}; if {@code full_matrices} is {@code True} then shape is
@@ -26712,11 +27415,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Qr(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Qr :
-   * 
-   *  FullMatrices(bool): Defaults to false
-   *      If true, compute full-sized {@code q} and {@code r}. If false
-   *  (the default), compute only the leading {@code P} columns of {@code q}. */
+  /** Optional attribute setters for Qr */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26731,6 +27430,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, compute full-sized {@code q} and {@code r}. If false
+     *  (the default), compute only the leading {@code P} columns of {@code q}.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs FullMatrices(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean full_matrices_(); public native Attrs full_matrices_(boolean full_matrices_);
@@ -26763,6 +27466,10 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: {@code Tensor} input of shape {@code [N, N]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * compute_v: If {@code True} then eigenvectors will be computed and returned in {@code v}.
+ *  Otherwise, only the eigenvalues will be computed.
+ * 
  *  Returns:
  *  * {@code Output} e: Eigenvalues. Shape is {@code [N]}.
  *  * {@code Output} v: Eigenvectors. Shape is {@code [N, N]}. */
@@ -26771,11 +27478,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SelfAdjointEig(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SelfAdjointEig :
-   * 
-   *  ComputeV(bool): Defaults to true
-   *      If {@code True} then eigenvectors will be computed and returned in {@code v}.
-   *  Otherwise, only the eigenvalues will be computed. */
+  /** Optional attribute setters for SelfAdjointEig */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26790,6 +27493,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True} then eigenvectors will be computed and returned in {@code v}.
+     *  Otherwise, only the eigenvalues will be computed.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs ComputeV(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean compute_v_(); public native Attrs compute_v_(boolean compute_v_);
@@ -26826,6 +27533,14 @@ limitations under the License.
  *  * input: A tensor of shape {@code [..., M, N]} whose inner-most 2 dimensions
  *  form matrices of size {@code [M, N]}. Let {@code P} be the minimum of {@code M} and {@code N}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * compute_uv: If true, left and right singular vectors will be
+ *  computed and returned in {@code u} and {@code v}, respectively.
+ *  If false, {@code u} and {@code v} are not set and should never referenced.
+ *  * full_matrices: If true, compute full-sized {@code u} and {@code v}. If false
+ *  (the default), compute only the leading {@code P} singular vectors.
+ *  Ignored if {@code compute_uv} is {@code False}.
+ * 
  *  Returns:
  *  * {@code Output} s: Singular values. Shape is {@code [..., P]}.
  *  * {@code Output} u: Left singular vectors. If {@code full_matrices} is {@code False} then shape is
@@ -26839,16 +27554,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Svd(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Svd :
-   * 
-   *  ComputeUv(bool): Defaults to true
-   *      If true, left and right singular vectors will be
-   *  computed and returned in {@code u} and {@code v}, respectively.
-   *  If false, {@code u} and {@code v} are not set and should never referenced.
-   *  FullMatrices(bool): Defaults to false
-   *      If true, compute full-sized {@code u} and {@code v}. If false
-   *  (the default), compute only the leading {@code P} singular vectors.
-   *  Ignored if {@code compute_uv} is {@code False}. */
+  /** Optional attribute setters for Svd */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26863,8 +27569,20 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, left and right singular vectors will be
+     *  computed and returned in {@code u} and {@code v}, respectively.
+     *  If false, {@code u} and {@code v} are not set and should never referenced.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs ComputeUv(@Cast("bool") boolean x);
 
+    /** If true, compute full-sized {@code u} and {@code v}. If false
+     *  (the default), compute only the leading {@code P} singular vectors.
+     *  Ignored if {@code compute_uv} is {@code False}.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs FullMatrices(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean compute_uv_(); public native Attrs compute_uv_(boolean compute_uv_);
@@ -26882,6 +27600,8 @@ limitations under the License.
   public native @ByRef Output u(); public native Svd u(Output u);
   public native @ByRef Output v(); public native Svd v(Output v);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
@@ -26905,7 +27625,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Asserts that the given condition is true.
+/** \defgroup logging_ops Logging Ops
+ *  \{
+ <p>
+ *  Asserts that the given condition is true.
  * 
  *  If {@code condition} evaluates to false, print the list of tensors in {@code data}.
  *  {@code summarize} determines how many entries of the tensors to print.
@@ -26915,6 +27638,9 @@ limitations under the License.
  *  * condition: The condition to evaluate.
  *  * data: The tensors to print out when condition is false.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * summarize: Print this many entries of each tensor.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class Assert extends Pointer {
@@ -26922,10 +27648,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Assert(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Assert :
-   * 
-   *  Summarize(int64): Defaults to 3
-   *      Print this many entries of each tensor. */
+  /** Optional attribute setters for Assert */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -26940,6 +27663,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Print this many entries of each tensor.
+     * 
+     *  Defaults to 3 */
     public native @ByVal Attrs Summarize(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long summarize_(); public native Attrs summarize_(long summarize_);
@@ -26979,6 +27705,9 @@ limitations under the License.
  *  * tensor: 2-D of shape {@code [batch_size, frames]}.
  *  * sample_rate: The sample rate of the signal in hertz.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * max_outputs: Max number of batch elements to generate audio for.
+ * 
  *  Returns:
  *  * {@code Output}: Scalar. Serialized {@code Summary} protocol buffer. */
 @Namespace("tensorflow::ops") @NoOffset public static class AudioSummary extends Pointer {
@@ -26986,10 +27715,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AudioSummary(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AudioSummary :
-   * 
-   *  MaxOutputs(int64): Defaults to 3
-   *      Max number of batch elements to generate audio for. */
+  /** Optional attribute setters for AudioSummary */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27004,6 +27730,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Max number of batch elements to generate audio for.
+     * 
+     *  Defaults to 3 */
     public native @ByVal Attrs MaxOutputs(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long max_outputs_(); public native Attrs max_outputs_(long max_outputs_);
@@ -27098,6 +27827,10 @@ limitations under the License.
  *  * tensor: 4-D of shape {@code [batch_size, height, width, channels]} where
  *  {@code channels} is 1, 3, or 4.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * max_images: Max number of batch elements to generate images for.
+ *  * bad_color: Color to use for pixels with non-finite values.
+ * 
  *  Returns:
  *  * {@code Output}: Scalar. Serialized {@code Summary} protocol buffer. */
 @Namespace("tensorflow::ops") @NoOffset public static class ImageSummary extends Pointer {
@@ -27105,12 +27838,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageSummary(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ImageSummary :
-   * 
-   *  MaxImages(int64): Defaults to 3
-   *      Max number of batch elements to generate images for.
-   *  BadColor(const TensorProto&): Defaults to Tensor<type: uint8 shape: [4] values: 255 0 0...>
-   *      Color to use for pixels with non-finite values. */
+  /** Optional attribute setters for ImageSummary */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27125,8 +27853,16 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Max number of batch elements to generate images for.
+     * 
+     *  Defaults to 3 */
+    
+    ///
     public native @ByVal Attrs MaxImages(@Cast("tensorflow::int64") long x);
 
+    /** Color to use for pixels with non-finite values.
+     * 
+     *  Defaults to Tensor<type: uint8 shape: [4] values: 255 0 0...> */
     public native @ByVal Attrs BadColor(@Const @ByRef TensorProto x);
 
     public native @Cast("tensorflow::int64") long max_images_(); public native Attrs max_images_(long max_images_);
@@ -27190,6 +27926,11 @@ limitations under the License.
  *  * input: The tensor passed to {@code output}
  *  * data: A list of tensors to print out when op is evaluated.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * message: A string, prefix of the error message.
+ *  * first_n: Only log {@code first_n} number of times. -1 disables logging.
+ *  * summarize: Only print this many entries of each tensor.
+ * 
  *  Returns:
  *  * {@code Output}: = The unmodified {@code input} tensor */
 @Namespace("tensorflow::ops") @NoOffset public static class Print extends Pointer {
@@ -27197,14 +27938,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Print(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Print :
-   * 
-   *  Message(StringPiece): Defaults to ""
-   *      A string, prefix of the error message.
-   *  FirstN(int64): Defaults to -1
-   *      Only log {@code first_n} number of times. -1 disables logging.
-   *  Summarize(int64): Defaults to 3
-   *      Only print this many entries of each tensor. */
+  /** Optional attribute setters for Print */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27219,11 +27953,24 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A string, prefix of the error message.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Message(@StringPiece BytePointer x);
     public native @ByVal Attrs Message(@StringPiece String x);
 
+    /** Only log {@code first_n} number of times. -1 disables logging.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs FirstN(@Cast("tensorflow::int64") long x);
 
+    /** Only print this many entries of each tensor.
+     * 
+     *  Defaults to 3 */
     public native @ByVal Attrs Summarize(@Cast("tensorflow::int64") long x);
 
     public native @StringPiece BytePointer message_(); public native Attrs message_(BytePointer message_);
@@ -27284,6 +28031,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * tensor: A tensor to serialize.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * description: A json-encoded SummaryDescription proto.
+ *  * labels: An unused list of strings.
+ *  * display_name: An unused string.
+ * 
  *  Returns:
  *  * {@code Output}: The summary tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class TensorSummary extends Pointer {
@@ -27291,14 +28043,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorSummary(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TensorSummary :
-   * 
-   *  Description(StringPiece): Defaults to ""
-   *      A json-encoded SummaryDescription proto.
-   *  Labels(const gtl::ArraySlice<string>&): Defaults to []
-   *      An unused list of strings.
-   *  DisplayName(StringPiece): Defaults to ""
-   *      An unused string. */
+  /** Optional attribute setters for TensorSummary */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27313,11 +28058,24 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A json-encoded SummaryDescription proto.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Description(@StringPiece BytePointer x);
     public native @ByVal Attrs Description(@StringPiece String x);
 
+    /** An unused list of strings.
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs Labels(@Cast("const tensorflow::gtl::ArraySlice<std::string>*") @ByRef StringVector x);
 
+    /** An unused string.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs DisplayName(@StringPiece BytePointer x);
     public native @ByVal Attrs DisplayName(@StringPiece String x);
 
@@ -27344,6 +28102,8 @@ limitations under the License.
   public native @ByRef Output summary(); public native TensorSummary summary(Output summary);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -27366,7 +28126,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Computes the absolute value of a tensor.
+/** \defgroup math_ops Math Ops
+ *  \{
+ <p>
+ *  Computes the absolute value of a tensor.
  * 
  *  Given a tensor {@code x}, this operation returns a tensor containing the absolute
  *  value of each element in {@code x}. For example, if x is an input element and y is
@@ -27472,6 +28235,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -27482,10 +28248,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public All(Pointer p) { super(p); }
 
-  /** Optional attribute setters for All :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for All */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27500,6 +28263,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -27525,6 +28291,7 @@ limitations under the License.
 ///
 ///
 ///
+///
 
 /** Computes the "logical or" of elements across dimensions of a tensor.
  * 
@@ -27538,6 +28305,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -27548,10 +28318,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Any(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Any :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for Any */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27566,6 +28333,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -27708,6 +28478,10 @@ limitations under the License.
  *  * x: 3-D or higher with shape {@code [..., r_x, c_x]}.
  *  * y: 3-D or higher with shape {@code [..., r_y, c_y]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * adj_x: If {@code True}, adjoint the slices of {@code x}. Defaults to {@code False}.
+ *  * adj_y: If {@code True}, adjoint the slices of {@code y}. Defaults to {@code False}.
+ * 
  *  Returns:
  *  * {@code Output}: 3-D or higher with shape {@code [..., r_o, c_o]} */
 @Namespace("tensorflow::ops") @NoOffset public static class BatchMatMul extends Pointer {
@@ -27715,12 +28489,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BatchMatMul(Pointer p) { super(p); }
 
-  /** Optional attribute setters for BatchMatMul :
-   * 
-   *  AdjX(bool): Defaults to false
-   *      If {@code True}, adjoint the slices of {@code x}. Defaults to {@code False}.
-   *  AdjY(bool): Defaults to false
-   *      If {@code True}, adjoint the slices of {@code y}. Defaults to {@code False}. */
+  /** Optional attribute setters for BatchMatMul */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27735,8 +28504,16 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, adjoint the slices of {@code x}. Defaults to {@code False}.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs AdjX(@Cast("bool") boolean x);
 
+    /** If {@code True}, adjoint the slices of {@code y}. Defaults to {@code False}.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AdjY(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean adj_x_(); public native Attrs adj_x_(boolean adj_x_);
@@ -27866,9 +28643,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Complex(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Complex :
-   * 
-   *  Tout(DataType): Defaults to DT_COMPLEX64 */
+  /** Optional attribute setters for Complex */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27883,6 +28658,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_COMPLEX64 */
     public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
@@ -27921,9 +28697,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ComplexAbs(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ComplexAbs :
-   * 
-   *  Tout(DataType): Defaults to DT_FLOAT */
+  /** Optional attribute setters for ComplexAbs */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -27938,6 +28712,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_FLOAT */
     public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
@@ -28076,10 +28851,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cumprod(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Cumprod :
-   * 
-   *  Exclusive(bool): Defaults to false
-   *  Reverse(bool): Defaults to false */
+  /** Optional attribute setters for Cumprod */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -28094,8 +28866,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to false */
     public native @ByVal Attrs Exclusive(@Cast("bool") boolean x);
 
+    /** Defaults to false */
     public native @ByVal Attrs Reverse(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean exclusive_(); public native Attrs exclusive_(boolean exclusive_);
@@ -28155,10 +28929,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cumsum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Cumsum :
-   * 
-   *  Exclusive(bool): Defaults to false
-   *  Reverse(bool): Defaults to false */
+  /** Optional attribute setters for Cumsum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -28173,8 +28944,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to false */
     public native @ByVal Attrs Exclusive(@Cast("bool") boolean x);
 
+    /** Defaults to false */
     public native @ByVal Attrs Reverse(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean exclusive_(); public native Attrs exclusive_(boolean exclusive_);
@@ -28751,9 +29524,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Imag(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Imag :
-   * 
-   *  Tout(DataType): Defaults to DT_FLOAT */
+  /** Optional attribute setters for Imag */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -28768,6 +29539,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_FLOAT */
     public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
@@ -29101,6 +29873,10 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * transpose_a: If true, "a" is transposed before multiplication.
+ *  * transpose_b: If true, "b" is transposed before multiplication.
+ * 
  *  Returns:
  *  * {@code Output}: The product tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class MatMul extends Pointer {
@@ -29108,12 +29884,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatMul(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MatMul :
-   * 
-   *  TransposeA(bool): Defaults to false
-   *      If true, "a" is transposed before multiplication.
-   *  TransposeB(bool): Defaults to false
-   *      If true, "b" is transposed before multiplication. */
+  /** Optional attribute setters for MatMul */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29128,8 +29899,16 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, "a" is transposed before multiplication.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
 
+    /** If true, "b" is transposed before multiplication.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean transpose_a_(); public native Attrs transpose_a_(boolean transpose_a_);
@@ -29165,6 +29944,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -29175,10 +29957,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Max(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Max :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for Max */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29193,6 +29972,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -29256,6 +30038,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -29266,10 +30051,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Mean(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Mean :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for Mean */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29284,6 +30066,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -29309,6 +30094,7 @@ limitations under the License.
 ///
 ///
 ///
+///
 
 /** Computes the minimum of elements across dimensions of a tensor.
  * 
@@ -29322,6 +30108,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -29332,10 +30121,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Min(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Min :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for Min */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29350,6 +30136,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -29591,6 +30380,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -29601,10 +30393,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Prod(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Prod :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for Prod */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29619,6 +30408,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -29676,8 +30468,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input_min: The float value that the minimum quantized input value represents.
  *  * input_max: The float value that the maximum quantized input value represents.
- *  * out_type:
- *      The type of the output. Should be a lower bit depth than Tinput.
+ *  * out_type: The type of the output. Should be a lower bit depth than Tinput.
  * 
  *  Returns:
  *  * {@code Output} output
@@ -29714,6 +30505,12 @@ limitations under the License.
  *  * min_b: The float value that the lowest quantized {@code b} value represents.
  *  * max_b: The float value that the highest quantized {@code b} value represents.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * transpose_a: If true, {@code a} is transposed before multiplication.
+ *  * transpose_b: If true, {@code b} is transposed before multiplication.
+ *  * Tactivation: The type of output produced by activation function
+ *  following this operation.
+ * 
  *  Returns:
  *  * {@code Output} out
  *  * {@code Output} min_out: The float value that the lowest quantized output value represents.
@@ -29723,16 +30520,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedMatMul(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizedMatMul :
-   * 
-   *  Toutput(DataType): Defaults to DT_QINT32
-   *  TransposeA(bool): Defaults to false
-   *      If true, {@code a} is transposed before multiplication.
-   *  TransposeB(bool): Defaults to false
-   *      If true, {@code b} is transposed before multiplication.
-   *  Tactivation(DataType): Defaults to DT_QUINT8
-   *      The type of output produced by activation function
-   *  following this operation. */
+  /** Optional attribute setters for QuantizedMatMul */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29747,12 +30535,29 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_QINT32 */
+    
+    ///
     public native @ByVal Attrs Toutput(@Cast("tensorflow::DataType") int x);
 
+    /** If true, {@code a} is transposed before multiplication.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
 
+    /** If true, {@code b} is transposed before multiplication.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
 
+    /** The type of output produced by activation function
+     *  following this operation.
+     * 
+     *  Defaults to DT_QUINT8 */
     public native @ByVal Attrs Tactivation(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int Toutput_(); public native Attrs Toutput_(int Toutput_);
@@ -29849,9 +30654,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Real(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Real :
-   * 
-   *  Tout(DataType): Defaults to DT_FLOAT */
+  /** Optional attribute setters for Real */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -29866,6 +30669,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_FLOAT */
     public native @ByVal Attrs Tout(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int Tout_(); public native Attrs Tout_(int Tout_);
@@ -29975,8 +30779,7 @@ limitations under the License.
  *  * input_max: The float value that the maximum quantized input value represents.
  *  * requested_output_min: The float value that the minimum quantized output value represents.
  *  * requested_output_max: The float value that the maximum quantized output value represents.
- *  * out_type:
- *      The type of the output. Should be a lower bit depth than Tinput.
+ *  * out_type: The type of the output. Should be a lower bit depth than Tinput.
  * 
  *  Returns:
  *  * {@code Output} output
@@ -30419,12 +31222,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseMatMul(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseMatMul :
-   * 
-   *  TransposeA(bool): Defaults to false
-   *  TransposeB(bool): Defaults to false
-   *  AIsSparse(bool): Defaults to false
-   *  BIsSparse(bool): Defaults to false */
+  /** Optional attribute setters for SparseMatMul */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -30439,12 +31237,16 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to false */
     public native @ByVal Attrs TransposeA(@Cast("bool") boolean x);
 
+    /** Defaults to false */
     public native @ByVal Attrs TransposeB(@Cast("bool") boolean x);
 
+    /** Defaults to false */
     public native @ByVal Attrs AIsSparse(@Cast("bool") boolean x);
 
+    /** Defaults to false */
     public native @ByVal Attrs BIsSparse(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean transpose_a_(); public native Attrs transpose_a_(boolean transpose_a_);
@@ -30754,6 +31556,7 @@ limitations under the License.
 ///
 ///
 ///
+///
 
 /** Computes the sum of elements across dimensions of a tensor.
  * 
@@ -30767,6 +31570,9 @@ limitations under the License.
  *  * input: The tensor to reduce.
  *  * axis: The dimensions to reduce.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: The reduced tensor.
  * 
@@ -30777,10 +31583,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Sum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Sum :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for Sum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -30795,6 +31598,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -30994,6 +31800,8 @@ limitations under the License.
   public native @ByRef Output z(); public native Zeta z(Output z);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -31016,7 +31824,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Performs average pooling on the input.
+/** \defgroup nn_ops Nn Ops
+ *  \{
+ <p>
+ *  Performs average pooling on the input.
  * 
  *  Each entry in {@code output} is the mean of the corresponding size {@code ksize}
  *  window in {@code value}.
@@ -31024,12 +31835,16 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * value: 4-D with shape {@code [batch, height, width, channels]}.
- *  * ksize:
- *      The size of the sliding window for each dimension of {@code value}.
- *  * strides:
- *      The stride of the sliding window for each dimension of {@code value}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * ksize: The size of the sliding window for each dimension of {@code value}.
+ *  * strides: The stride of the sliding window for each dimension of {@code value}.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the data is stored in the order of:
+ *      [batch, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
  * 
  *  Returns:
  *  * {@code Output}: The average pooled output tensor. */
@@ -31038,14 +31853,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AvgPool(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AvgPool :
-   * 
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the data is stored in the order of:
-   *      [batch, in_height, in_width, in_channels].
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width]. */
+  /** Optional attribute setters for AvgPool */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -31060,6 +31868,13 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the data is stored in the order of:
+     *      [batch, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -31128,14 +31943,11 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: Shape {@code [batch, depth, rows, cols, channels]} tensor to pool over.
- *  * ksize:
- *      1-D tensor of length 5. The size of the window for each dimension of
+ *  * ksize: 1-D tensor of length 5. The size of the window for each dimension of
  *  the input tensor. Must have {@code ksize[0] = ksize[4] = 1}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The average pooled output tensor. */
@@ -31181,14 +31993,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * orig_input_shape: The original input dimensions.
  *  * grad: Output backprop of shape {@code [batch, depth, rows, cols, channels]}.
- *  * ksize:
- *      1-D tensor of length 5. The size of the window for each dimension of
+ *  * ksize: 1-D tensor of length 5. The size of the window for each dimension of
  *  the input tensor. Must have {@code ksize[0] = ksize[4] = 1}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The backprop for input. */
@@ -31238,6 +32047,15 @@ limitations under the License.
  *  * value: Any number of dimensions.
  *  * bias: 1-D with size the last dimension of {@code value}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the bias tensor will be added to the last dimension
+ *  of the value tensor.
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
+ *  The tensor will be added to "in_channels", the third-to-the-last
+ *      dimension.
+ * 
  *  Returns:
  *  * {@code Output}: Broadcasted sum of {@code value} and {@code bias}. */
 @Namespace("tensorflow::ops") @NoOffset public static class BiasAdd extends Pointer {
@@ -31245,16 +32063,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BiasAdd(Pointer p) { super(p); }
 
-  /** Optional attribute setters for BiasAdd :
-   * 
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the bias tensor will be added to the last dimension
-   *  of the value tensor.
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width].
-   *  The tensor will be added to "in_channels", the third-to-the-last
-   *      dimension. */
+  /** Optional attribute setters for BiasAdd */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -31269,6 +32078,15 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the bias tensor will be added to the last dimension
+     *  of the value tensor.
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     *  The tensor will be added to "in_channels", the third-to-the-last
+     *      dimension.
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -31302,6 +32120,15 @@ limitations under the License.
  *  * scope: A Scope object
  *  * out_backprop: Any number of dimensions.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the bias tensor will be added to the last dimension
+ *  of the value tensor.
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
+ *  The tensor will be added to "in_channels", the third-to-the-last
+ *      dimension.
+ * 
  *  Returns:
  *  * {@code Output}: 1-D with size the feature dimension of {@code out_backprop}. */
 @Namespace("tensorflow::ops") @NoOffset public static class BiasAddGrad extends Pointer {
@@ -31309,16 +32136,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BiasAddGrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for BiasAddGrad :
-   * 
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the bias tensor will be added to the last dimension
-   *  of the value tensor.
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width].
-   *  The tensor will be added to "in_channels", the third-to-the-last
-   *      dimension. */
+  /** Optional attribute setters for BiasAddGrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -31333,6 +32151,15 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the bias tensor will be added to the last dimension
+     *  of the value tensor.
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     *  The tensor will be added to "in_channels", the third-to-the-last
+     *      dimension.
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -31380,11 +32207,16 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * strides:
- *      1-D of length 4.  The stride of the sliding window for each dimension
+ *  * strides: 1-D of length 4.  The stride of the sliding window for each dimension
  *  of {@code input}. Must be in the same order as the dimension specified with format.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the data is stored in the order of:
+ *      [batch, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -31393,15 +32225,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv2D(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Conv2D :
-   * 
-   *  UseCudnnOnGpu(bool): Defaults to true
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the data is stored in the order of:
-   *      [batch, in_height, in_width, in_channels].
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width]. */
+  /** Optional attribute setters for Conv2D */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -31416,8 +32240,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to true */
+    
+    ///
     public native @ByVal Attrs UseCudnnOnGpu(@Cast("bool") boolean x);
 
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the data is stored in the order of:
+     *      [batch, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -31517,12 +32351,17 @@ limitations under the License.
  *  {@code [filter_height, filter_width, in_channels, out_channels]} tensor.
  *  * out_backprop: 4-D with shape {@code [batch, out_height, out_width, out_channels]}.
  *  Gradients w.r.t. the output of the convolution.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  of the convolution. Must be in the same order as the dimension specified with
  *  format.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the data is stored in the order of:
+ *      [batch, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
  * 
  *  Returns:
  *  * {@code Output}: 4-D with shape
@@ -31533,15 +32372,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv2DBackpropFilter(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Conv2DBackpropFilter :
-   * 
-   *  UseCudnnOnGpu(bool): Defaults to true
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the data is stored in the order of:
-   *      [batch, in_height, in_width, in_channels].
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width]. */
+  /** Optional attribute setters for Conv2DBackpropFilter */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -31556,8 +32387,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to true */
+    
+    ///
     public native @ByVal Attrs UseCudnnOnGpu(@Cast("bool") boolean x);
 
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the data is stored in the order of:
+     *      [batch, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -31633,12 +32474,17 @@ limitations under the License.
  *  {@code [filter_height, filter_width, in_channels, out_channels]}.
  *  * out_backprop: 4-D with shape {@code [batch, out_height, out_width, out_channels]}.
  *  Gradients w.r.t. the output of the convolution.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  of the convolution. Must be in the same order as the dimension specified with
  *  format.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the data is stored in the order of:
+ *      [batch, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
  * 
  *  Returns:
  *  * {@code Output}: 4-D with shape {@code [batch, in_height, in_width, in_channels]}.  Gradient
@@ -31648,15 +32494,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv2DBackpropInput(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Conv2DBackpropInput :
-   * 
-   *  UseCudnnOnGpu(bool): Defaults to true
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the data is stored in the order of:
-   *      [batch, in_height, in_width, in_channels].
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width]. */
+  /** Optional attribute setters for Conv2DBackpropInput */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -31671,8 +32509,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to true */
+    
+    ///
     public native @ByVal Attrs UseCudnnOnGpu(@Cast("bool") boolean x);
 
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the data is stored in the order of:
+     *      [batch, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -31751,11 +32599,9 @@ limitations under the License.
  *  * input: Shape {@code [batch, in_depth, in_height, in_width, in_channels]}.
  *  * filter: Shape {@code [filter_depth, filter_height, filter_width, in_channels,
  *  out_channels]}. {@code in_channels} must match between {@code input} and {@code filter}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -31818,11 +32664,9 @@ limitations under the License.
  *  tensor.
  *  * out_backprop: Backprop signal of shape {@code [batch, out_depth, out_rows, out_cols,
  *  out_channels]}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -31873,11 +32717,9 @@ limitations under the License.
  *  {@code in_channels} must match between {@code input} and {@code filter}.
  *  * out_backprop: Backprop signal of shape {@code [batch, out_depth, out_rows, out_cols,
  *  out_channels]}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -31938,11 +32780,9 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * strides:
- *      1-D of length 4.  The stride of the sliding window for each dimension
+ *  * strides: 1-D of length 4.  The stride of the sliding window for each dimension
  *  of {@code input}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -31980,11 +32820,9 @@ limitations under the License.
  *  {@code [filter_height, filter_width, in_channels, depthwise_multiplier]} tensor.
  *  * out_backprop: 4-D with shape {@code [batch, out_height, out_width, out_channels]}.
  *  Gradients w.r.t. the output of the convolution.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  of the convolution.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: 4-D with shape
@@ -32060,11 +32898,9 @@ limitations under the License.
  *  {@code [filter_height, filter_width, in_channels, depthwise_multiplier]}.
  *  * out_backprop: 4-D with shape {@code [batch, out_height, out_width, out_channels]}.
  *  Gradients w.r.t. the output of the convolution.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  of the convolution.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: 4-D with shape {@code [batch, in_height, in_width, in_channels]}.  Gradient
@@ -32159,14 +32995,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: 4-D with shape {@code [batch, in_height, in_width, depth]}.
  *  * filter: 3-D with shape {@code [filter_height, filter_width, depth]}.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  tensor. Must be: {@code [1, stride_height, stride_width, 1]}.
- *  * rates:
- *      The input stride for atrous morphological dilation. Must be:
+ *  * rates: The input stride for atrous morphological dilation. Must be:
  *  {@code [1, rate_height, rate_width, 1]}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: 4-D with shape {@code [batch, out_height, out_width, depth]}. */
@@ -32225,14 +33058,11 @@ limitations under the License.
  *  * input: 4-D with shape {@code [batch, in_height, in_width, depth]}.
  *  * filter: 3-D with shape {@code [filter_height, filter_width, depth]}.
  *  * out_backprop: 4-D with shape {@code [batch, out_height, out_width, depth]}.
- *  * strides:
- *      1-D of length 4. The stride of the sliding window for each dimension of
+ *  * strides: 1-D of length 4. The stride of the sliding window for each dimension of
  *  the input tensor. Must be: {@code [1, stride_height, stride_width, 1]}.
- *  * rates:
- *      1-D of length 4. The input stride for atrous morphological dilation.
+ *  * rates: 1-D of length 4. The input stride for atrous morphological dilation.
  *  Must be: {@code [1, rate_height, rate_width, 1]}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: 3-D with shape {@code [filter_height, filter_width, depth]}. */
@@ -32279,14 +33109,11 @@ limitations under the License.
  *  * input: 4-D with shape {@code [batch, in_height, in_width, depth]}.
  *  * filter: 3-D with shape {@code [filter_height, filter_width, depth]}.
  *  * out_backprop: 4-D with shape {@code [batch, out_height, out_width, depth]}.
- *  * strides:
- *      1-D of length 4. The stride of the sliding window for each dimension of
+ *  * strides: 1-D of length 4. The stride of the sliding window for each dimension of
  *  the input tensor. Must be: {@code [1, stride_height, stride_width, 1]}.
- *  * rates:
- *      1-D of length 4. The input stride for atrous morphological dilation.
+ *  * rates: 1-D of length 4. The input stride for atrous morphological dilation.
  *  Must be: {@code [1, rate_height, rate_width, 1]}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: 4-D with shape {@code [batch, in_height, in_width, depth]}. */
@@ -32360,13 +33187,34 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * value: 4-D with shape {@code [batch, height, width, channels]}.
- *  * pooling_ratio:
- *      Pooling ratio for each dimension of {@code value}, currently only
+ *  * pooling_ratio: Pooling ratio for each dimension of {@code value}, currently only
  *  supports row and col dimension and should be >= 1.0. For example, a valid
  *  pooling ratio looks like [1.0, 1.44, 1.73, 1.0]. The first and last elements
  *  must be 1.0 because we don't allow pooling on batch and channels
  *  dimensions. 1.44 and 1.73 are pooling ratio on height and width dimensions
  *  respectively.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * pseudo_random: When set to True, generates the pooling sequence in a
+ *  pseudorandom fashion, otherwise, in a random fashion. Check paper [Benjamin
+ *  Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071) for
+ *  difference between pseudorandom and random.
+ *  * overlapping: When set to True, it means when pooling, the values at the boundary
+ *  of adjacent pooling cells are used by both cells. For example:
+ * 
+ *  {@code index  0  1  2  3  4}
+ * 
+ *  {@code value  20 5  16 3  7}
+ * 
+ *  If the pooling sequence is [0, 2, 4], then 16, at index 2 will be used twice.
+ *  The result would be [41/3, 26/3] for fractional avg pooling.
+ *  * deterministic: When set to True, a fixed pooling region will be used when
+ *  iterating over a FractionalAvgPool node in the computation graph. Mainly used
+ *  in unit test to make FractionalAvgPool deterministic.
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} output: output tensor after fractional avg pooling.
@@ -32377,33 +33225,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FractionalAvgPool(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FractionalAvgPool :
-   * 
-   *  PseudoRandom(bool): Defaults to false
-   *      When set to True, generates the pooling sequence in a
-   *  pseudorandom fashion, otherwise, in a random fashion. Check paper [Benjamin
-   *  Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071) for
-   *  difference between pseudorandom and random.
-   *  Overlapping(bool): Defaults to false
-   *      When set to True, it means when pooling, the values at the boundary
-   *  of adjacent pooling cells are used by both cells. For example:
-   * 
-   *  {@code index  0  1  2  3  4}
-   * 
-   *  {@code value  20 5  16 3  7}
-   * 
-   *  If the pooling sequence is [0, 2, 4], then 16, at index 2 will be used twice.
-   *  The result would be [41/3, 26/3] for fractional avg pooling.
-   *  Deterministic(bool): Defaults to false
-   *      When set to True, a fixed pooling region will be used when
-   *  iterating over a FractionalAvgPool node in the computation graph. Mainly used
-   *  in unit test to make FractionalAvgPool deterministic.
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for FractionalAvgPool */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -32418,14 +33240,55 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** When set to True, generates the pooling sequence in a
+     *  pseudorandom fashion, otherwise, in a random fashion. Check paper [Benjamin
+     *  Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071) for
+     *  difference between pseudorandom and random.
+     * 
+     *  Defaults to false */
+    
+    ///
+    ///
+    ///
+    ///
     public native @ByVal Attrs PseudoRandom(@Cast("bool") boolean x);
 
+    /** When set to True, it means when pooling, the values at the boundary
+     *  of adjacent pooling cells are used by both cells. For example:
+     * 
+     *  {@code index  0  1  2  3  4}
+     * 
+     *  {@code value  20 5  16 3  7}
+     * 
+     *  If the pooling sequence is [0, 2, 4], then 16, at index 2 will be used twice.
+     *  The result would be [41/3, 26/3] for fractional avg pooling.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Overlapping(@Cast("bool") boolean x);
 
+    /** When set to True, a fixed pooling region will be used when
+     *  iterating over a FractionalAvgPool node in the computation graph. Mainly used
+     *  in unit test to make FractionalAvgPool deterministic.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Deterministic(@Cast("bool") boolean x);
 
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("bool") boolean pseudo_random_(); public native Attrs pseudo_random_(boolean pseudo_random_);
@@ -32504,13 +33367,34 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * value: 4-D with shape {@code [batch, height, width, channels]}.
- *  * pooling_ratio:
- *      Pooling ratio for each dimension of {@code value}, currently only
+ *  * pooling_ratio: Pooling ratio for each dimension of {@code value}, currently only
  *  supports row and col dimension and should be >= 1.0. For example, a valid
  *  pooling ratio looks like [1.0, 1.44, 1.73, 1.0]. The first and last elements
  *  must be 1.0 because we don't allow pooling on batch and channels
  *  dimensions. 1.44 and 1.73 are pooling ratio on height and width dimensions
  *  respectively.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * pseudo_random: When set to True, generates the pooling sequence in a
+ *  pseudorandom fashion, otherwise, in a random fashion. Check paper [Benjamin
+ *  Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071) for
+ *  difference between pseudorandom and random.
+ *  * overlapping: When set to True, it means when pooling, the values at the boundary
+ *  of adjacent pooling cells are used by both cells. For example:
+ * 
+ *  {@code index  0  1  2  3  4}
+ * 
+ *  {@code value  20 5  16 3  7}
+ * 
+ *  If the pooling sequence is [0, 2, 4], then 16, at index 2 will be used twice.
+ *  The result would be [20, 16] for fractional max pooling.
+ *  * deterministic: When set to True, a fixed pooling region will be used when
+ *  iterating over a FractionalMaxPool node in the computation graph. Mainly used
+ *  in unit test to make FractionalMaxPool deterministic.
+ *  * seed: If either seed or seed2 are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: An second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output} output: output tensor after fractional max pooling.
@@ -32521,33 +33405,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FractionalMaxPool(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FractionalMaxPool :
-   * 
-   *  PseudoRandom(bool): Defaults to false
-   *      When set to True, generates the pooling sequence in a
-   *  pseudorandom fashion, otherwise, in a random fashion. Check paper [Benjamin
-   *  Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071) for
-   *  difference between pseudorandom and random.
-   *  Overlapping(bool): Defaults to false
-   *      When set to True, it means when pooling, the values at the boundary
-   *  of adjacent pooling cells are used by both cells. For example:
-   * 
-   *  {@code index  0  1  2  3  4}
-   * 
-   *  {@code value  20 5  16 3  7}
-   * 
-   *  If the pooling sequence is [0, 2, 4], then 16, at index 2 will be used twice.
-   *  The result would be [20, 16] for fractional max pooling.
-   *  Deterministic(bool): Defaults to false
-   *      When set to True, a fixed pooling region will be used when
-   *  iterating over a FractionalMaxPool node in the computation graph. Mainly used
-   *  in unit test to make FractionalMaxPool deterministic.
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      An second seed to avoid seed collision. */
+  /** Optional attribute setters for FractionalMaxPool */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -32562,14 +33420,55 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** When set to True, generates the pooling sequence in a
+     *  pseudorandom fashion, otherwise, in a random fashion. Check paper [Benjamin
+     *  Graham, Fractional Max-Pooling](http://arxiv.org/abs/1412.6071) for
+     *  difference between pseudorandom and random.
+     * 
+     *  Defaults to false */
+    
+    ///
+    ///
+    ///
+    ///
     public native @ByVal Attrs PseudoRandom(@Cast("bool") boolean x);
 
+    /** When set to True, it means when pooling, the values at the boundary
+     *  of adjacent pooling cells are used by both cells. For example:
+     * 
+     *  {@code index  0  1  2  3  4}
+     * 
+     *  {@code value  20 5  16 3  7}
+     * 
+     *  If the pooling sequence is [0, 2, 4], then 16, at index 2 will be used twice.
+     *  The result would be [20, 16] for fractional max pooling.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Overlapping(@Cast("bool") boolean x);
 
+    /** When set to True, a fixed pooling region will be used when
+     *  iterating over a FractionalMaxPool node in the computation graph. Mainly used
+     *  in unit test to make FractionalMaxPool deterministic.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Deterministic(@Cast("bool") boolean x);
 
+    /** If either seed or seed2 are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** An second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("bool") boolean pseudo_random_(); public native Attrs pseudo_random_(boolean pseudo_random_);
@@ -32629,6 +33528,12 @@ limitations under the License.
  *  * variance: A 1D Tensor for population variance. Used for inference only;
  *  must be empty for training.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * epsilon: A small float number added to the variance of x.
+ *  * data_format: The data format for x and y. Either "NHWC" (default) or "NCHW".
+ *  * is_training: A bool value to indicate the operation is for training (default)
+ *  or inference.
+ * 
  *  Returns:
  *  * {@code Output} y: A 4D Tensor for output data.
  *  * {@code Output} batch_mean: A 1D Tensor for the computed batch mean, to be used by TensorFlow
@@ -32644,15 +33549,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FusedBatchNorm(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FusedBatchNorm :
-   * 
-   *  Epsilon(float): Defaults to 0.0001
-   *      A small float number added to the variance of x.
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      The data format for x and y. Either "NHWC" (default) or "NCHW".
-   *  IsTraining(bool): Defaults to true
-   *      A bool value to indicate the operation is for training (default)
-   *  or inference. */
+  /** Optional attribute setters for FusedBatchNorm */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -32667,11 +33564,25 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A small float number added to the variance of x.
+     * 
+     *  Defaults to 0.0001 */
+    
+    ///
     public native @ByVal Attrs Epsilon(float x);
 
+    /** The data format for x and y. Either "NHWC" (default) or "NCHW".
+     * 
+     *  Defaults to "NHWC" */
+    
+    ///
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
+    /** A bool value to indicate the operation is for training (default)
+     *  or inference.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs IsTraining(@Cast("bool") boolean x);
 
     public native float epsilon_(); public native Attrs epsilon_(float epsilon_);
@@ -32718,6 +33629,13 @@ limitations under the License.
  *  * reserve_space_2: A 1D Tensor for the computed batch variance (inverted variance
  *  in the cuDNN case), to be used in the gradient computation.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * epsilon: A small float number added to the variance of x.
+ *  * data_format: The data format for y_backprop, x, x_backprop.
+ *  Either "NHWC" (default) or "NCHW".
+ *  * is_training: A bool value to indicate the operation is for training (default)
+ *  or inference.
+ * 
  *  Returns:
  *  * {@code Output} x_backprop: A 4D Tensor for the gradient with respect to x.
  *  * {@code Output} scale_backprop: A 1D Tensor for the gradient with respect to scale.
@@ -32730,16 +33648,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FusedBatchNormGrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FusedBatchNormGrad :
-   * 
-   *  Epsilon(float): Defaults to 0.0001
-   *      A small float number added to the variance of x.
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      The data format for y_backprop, x, x_backprop.
-   *  Either "NHWC" (default) or "NCHW".
-   *  IsTraining(bool): Defaults to true
-   *      A bool value to indicate the operation is for training (default)
-   *  or inference. */
+  /** Optional attribute setters for FusedBatchNormGrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -32754,11 +33663,26 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A small float number added to the variance of x.
+     * 
+     *  Defaults to 0.0001 */
+    
+    ///
     public native @ByVal Attrs Epsilon(float x);
 
+    /** The data format for y_backprop, x, x_backprop.
+     *  Either "NHWC" (default) or "NCHW".
+     * 
+     *  Defaults to "NHWC" */
+    
+    ///
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
+    /** A bool value to indicate the operation is for training (default)
+     *  or inference.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs IsTraining(@Cast("bool") boolean x);
 
     public native float epsilon_(); public native Attrs epsilon_(float epsilon_);
@@ -32807,11 +33731,9 @@ limitations under the License.
  *  rows must be the same as the rank of {@code input}.
  *  * filter: 4-D with shape
  *  {@code [filter_height, filter_width, in_channels, out_channels]}.
- *  * strides:
- *      1-D of length 4.  The stride of the sliding window for each dimension
+ *  * strides: 1-D of length 4.  The stride of the sliding window for each dimension
  *  of {@code input}. Must be in the same order as the dimension specified with format.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -32897,11 +33819,14 @@ limitations under the License.
  *  rows must be the same as the rank of {@code input}.
  *  * filter: 4-D with shape
  *  {@code [filter_height, filter_width, in_channels, out_channels]}.
- *  * strides:
- *      1-D of length 4.  The stride of the sliding window for each dimension
+ *  * strides: 1-D of length 4.  The stride of the sliding window for each dimension
  *  of {@code input}. Must be in the same order as the dimension specified with format.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * resize_align_corners: If true, rescale input by (new_height - 1) / (height - 1),
+ *  which exactly aligns the 4 corners of images and resized images. If false, rescale
+ *  by new_height / height. Treat similarly the width dimension.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -32910,12 +33835,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FusedResizeAndPadConv2D(Pointer p) { super(p); }
 
-  /** Optional attribute setters for FusedResizeAndPadConv2D :
-   * 
-   *  ResizeAlignCorners(bool): Defaults to false
-   *      If true, rescale input by (new_height - 1) / (height - 1),
-   *  which exactly aligns the 4 corners of images and resized images. If false, rescale
-   *  by new_height / height. Treat similarly the width dimension. */
+  /** Optional attribute setters for FusedResizeAndPadConv2D */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -32930,6 +33850,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, rescale input by (new_height - 1) / (height - 1),
+     *  which exactly aligns the 4 corners of images and resized images. If false, rescale
+     *  by new_height / height. Treat similarly the width dimension.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs ResizeAlignCorners(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean resize_align_corners_(); public native Attrs resize_align_corners_(boolean resize_align_corners_);
@@ -33012,8 +33937,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * predictions: A {@code batch_size} x {@code classes} tensor.
  *  * targets: A {@code batch_size} vector of class ids.
- *  * k:
- *      Number of top elements to look at for computing precision.
+ *  * k: Number of top elements to look at for computing precision.
  * 
  *  Returns:
  *  * {@code Output}: Computed Precision at {@code k} as a {@code bool Tensor}. */
@@ -33077,6 +34001,12 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: 4-D.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * depth_radius: 0-D.  Half-width of the 1-D normalization window.
+ *  * bias: An offset (usually positive to avoid dividing by 0).
+ *  * alpha: A scale factor, usually positive.
+ *  * beta: An exponent.
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class LRN extends Pointer {
@@ -33084,16 +34014,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LRN(Pointer p) { super(p); }
 
-  /** Optional attribute setters for LRN :
-   * 
-   *  DepthRadius(int64): Defaults to 5
-   *      0-D.  Half-width of the 1-D normalization window.
-   *  Bias(float): Defaults to 1
-   *      An offset (usually positive to avoid dividing by 0).
-   *  Alpha(float): Defaults to 1
-   *      A scale factor, usually positive.
-   *  Beta(float): Defaults to 0.5
-   *      An exponent. */
+  /** Optional attribute setters for LRN */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -33108,12 +34029,30 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** 0-D.  Half-width of the 1-D normalization window.
+     * 
+     *  Defaults to 5 */
+    
+    ///
     public native @ByVal Attrs DepthRadius(@Cast("tensorflow::int64") long x);
 
+    /** An offset (usually positive to avoid dividing by 0).
+     * 
+     *  Defaults to 1 */
+    
+    ///
     public native @ByVal Attrs Bias(float x);
 
+    /** A scale factor, usually positive.
+     * 
+     *  Defaults to 1 */
+    
+    ///
     public native @ByVal Attrs Alpha(float x);
 
+    /** An exponent.
+     * 
+     *  Defaults to 0.5 */
     public native @ByVal Attrs Beta(float x);
 
     public native @Cast("tensorflow::int64") long depth_radius_(); public native Attrs depth_radius_(long depth_radius_);
@@ -33168,13 +34107,17 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: 4-D input to pool over.
- *  * ksize:
- *      The size of the window for each dimension of the input tensor.
- *  * strides:
- *      The stride of the sliding window for each dimension of the
+ *  * ksize: The size of the window for each dimension of the input tensor.
+ *  * strides: The stride of the sliding window for each dimension of the
  *  input tensor.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the data is stored in the order of:
+ *      [batch, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
  * 
  *  Returns:
  *  * {@code Output}: The max pooled output tensor. */
@@ -33183,14 +34126,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxPool(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MaxPool :
-   * 
-   *  DataFormat(StringPiece): Defaults to "NHWC"
-   *      Specify the data format of the input and output data. With the
-   *  default format "NHWC", the data is stored in the order of:
-   *      [batch, in_height, in_width, in_channels].
-   *  Alternatively, the format could be "NCHW", the data storage order of:
-   *      [batch, in_channels, in_height, in_width]. */
+  /** Optional attribute setters for MaxPool */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -33205,6 +34141,13 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the data is stored in the order of:
+     *      [batch, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     * 
+     *  Defaults to "NHWC" */
     public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
     public native @ByVal Attrs DataFormat(@StringPiece String x);
 
@@ -33273,14 +34216,11 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: Shape {@code [batch, depth, rows, cols, channels]} tensor to pool over.
- *  * ksize:
- *      1-D tensor of length 5. The size of the window for each dimension of
+ *  * ksize: 1-D tensor of length 5. The size of the window for each dimension of
  *  the input tensor. Must have {@code ksize[0] = ksize[4] = 1}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The max pooled output tensor. */
@@ -33327,14 +34267,11 @@ limitations under the License.
  *  * orig_input: The original input tensor.
  *  * orig_output: The original output tensor.
  *  * grad: Output backprop of shape {@code [batch, depth, rows, cols, channels]}.
- *  * ksize:
- *      1-D tensor of length 5. The size of the window for each dimension of
+ *  * ksize: 1-D tensor of length 5. The size of the window for each dimension of
  *  the input tensor. Must have {@code ksize[0] = ksize[4] = 1}.
- *  * strides:
- *      1-D tensor of length 5. The stride of the sliding window for each
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -33395,13 +34332,10 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: 4-D with shape {@code [batch, height, width, channels]}.  Input to pool over.
- *  * ksize:
- *      The size of the window for each dimension of the input tensor.
- *  * strides:
- *      The stride of the sliding window for each dimension of the
+ *  * ksize: The size of the window for each dimension of the input tensor.
+ *  * strides: The stride of the sliding window for each dimension of the
  *  input tensor.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output} output: The max pooled output tensor.
@@ -33411,9 +34345,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxPoolWithArgmax(Pointer p) { super(p); }
 
-  /** Optional attribute setters for MaxPoolWithArgmax :
-   * 
-   *  Targmax(DataType): Defaults to DT_INT64 */
+  /** Optional attribute setters for MaxPoolWithArgmax */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -33428,6 +34360,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_INT64 */
     public native @ByVal Attrs Targmax(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int Targmax_(); public native Attrs Targmax_(int Targmax_);
@@ -33494,14 +34427,11 @@ limitations under the License.
  *  * input: 4-D with shape {@code [batch, height, width, channels]}.
  *  * min_input: The float value that the lowest quantized input value represents.
  *  * max_input: The float value that the highest quantized input value represents.
- *  * ksize:
- *      The size of the window for each dimension of the input tensor.
+ *  * ksize: The size of the window for each dimension of the input tensor.
  *  The length must be 4 to match the number of dimensions of the input.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  tensor.  The length must be 4 to match the number of dimensions of the input.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output} output
@@ -33583,10 +34513,8 @@ limitations under the License.
  *  with the normalized tensor.
  *  * gamma_min: The value represented by the lowest quantized gamma.
  *  * gamma_max: The value represented by the highest quantized gamma.
- *  * variance_epsilon:
- *      A small float number to avoid dividing by 0.
- *  * scale_after_normalization:
- *      A bool indicating whether the resulted tensor
+ *  * variance_epsilon: A small float number to avoid dividing by 0.
+ *  * scale_after_normalization: A bool indicating whether the resulted tensor
  *  needs to be multiplied with gamma.
  * 
  *  Returns:
@@ -33687,11 +34615,9 @@ limitations under the License.
  *  * max_input: The float value that the highest quantized input value represents.
  *  * min_filter: The float value that the lowest quantized filter value represents.
  *  * max_filter: The float value that the highest quantized filter value represents.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  tensor.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output} output
@@ -33702,9 +34628,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedConv2D(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizedConv2D :
-   * 
-   *  OutType(DataType): Defaults to DT_QINT32 */
+  /** Optional attribute setters for QuantizedConv2D */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -33719,6 +34643,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_QINT32 */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -33834,14 +34759,11 @@ limitations under the License.
  *  * input: The 4D (batch x rows x cols x depth) Tensor to MaxReduce over.
  *  * min_input: The float value that the lowest quantized input value represents.
  *  * max_input: The float value that the highest quantized input value represents.
- *  * ksize:
- *      The size of the window for each dimension of the input tensor.
+ *  * ksize: The size of the window for each dimension of the input tensor.
  *  The length must be 4 to match the number of dimensions of the input.
- *  * strides:
- *      The stride of the sliding window for each dimension of the input
+ *  * strides: The stride of the sliding window for each dimension of the input
  *  tensor. The length must be 4 to match the number of dimensions of the input.
- *  * padding:
- *      The type of padding algorithm to use.
+ *  * padding: The type of padding algorithm to use.
  * 
  *  Returns:
  *  * {@code Output} output
@@ -33910,9 +34832,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedRelu(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizedRelu :
-   * 
-   *  OutType(DataType): Defaults to DT_QUINT8 */
+  /** Optional attribute setters for QuantizedRelu */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -33927,6 +34847,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_QUINT8 */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -33963,9 +34884,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedRelu6(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizedRelu6 :
-   * 
-   *  OutType(DataType): Defaults to DT_QUINT8 */
+  /** Optional attribute setters for QuantizedRelu6 */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -33980,6 +34899,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_QUINT8 */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -34016,9 +34936,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedReluX(Pointer p) { super(p); }
 
-  /** Optional attribute setters for QuantizedReluX :
-   * 
-   *  OutType(DataType): Defaults to DT_QUINT8 */
+  /** Optional attribute setters for QuantizedReluX */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34033,6 +34951,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Defaults to DT_QUINT8 */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -34248,6 +35167,10 @@ limitations under the License.
  *  * k: 0-D.  Number of top elements to look for along the last dimension (along each
  *  row for matrices).
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * sorted: If true the resulting {@code k} elements will be sorted by the values in
+ *  descending order.
+ * 
  *  Returns:
  *  * {@code Output} values: The {@code k} largest elements along each last dimensional slice.
  *  * {@code Output} indices: The indices of {@code values} within the last dimension of {@code input}.
@@ -34259,11 +35182,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TopK(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TopK :
-   * 
-   *  Sorted(bool): Defaults to true
-   *      If true the resulting {@code k} elements will be sorted by the values in
-   *  descending order. */
+  /** Optional attribute setters for TopK */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34278,6 +35197,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true the resulting {@code k} elements will be sorted by the values in
+     *  descending order.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs Sorted(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean sorted_(); public native Attrs sorted_(boolean sorted_);
@@ -34296,6 +35219,8 @@ limitations under the License.
   public native @ByRef Output values(); public native TopK values(Output values);
   public native @ByRef Output indices(); public native TopK indices(Output indices);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
@@ -34319,7 +35244,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Does nothing. Only useful as a placeholder for control edges.
+/** \defgroup no_op No Op
+ *  \{
+ <p>
+ *  Does nothing. Only useful as a placeholder for control edges.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -34337,6 +35265,8 @@ limitations under the License.
 
   public native @ByRef Operation operation(); public native NoOp operation(Operation operation);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
@@ -34360,7 +35290,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Convert CSV records to tensors. Each column maps to one tensor.
+/** \defgroup parsing_ops Parsing Ops
+ *  \{
+ <p>
+ *  Convert CSV records to tensors. Each column maps to one tensor.
  * 
  *  RFC 4180 format is expected for the CSV records.
  *  (https://tools.ietf.org/html/rfc4180)
@@ -34373,6 +35306,9 @@ limitations under the License.
  *  * record_defaults: One tensor per column of the input record, with either a
  *  scalar default value for that column or empty if the column is required.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * field_delim: delimiter to separate fields in a record.
+ * 
  *  Returns:
  *  * {@code OutputList}: Each tensor will have the same shape as records. */
 @Namespace("tensorflow::ops") @NoOffset public static class DecodeCSV extends Pointer {
@@ -34380,10 +35316,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DecodeCSV(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DecodeCSV :
-   * 
-   *  FieldDelim(StringPiece): Defaults to ","
-   *      delimiter to separate fields in a record. */
+  /** Optional attribute setters for DecodeCSV */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34398,6 +35331,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** delimiter to separate fields in a record.
+     * 
+     *  Defaults to "," */
     public native @ByVal Attrs FieldDelim(@StringPiece BytePointer x);
     public native @ByVal Attrs FieldDelim(@StringPiece String x);
 
@@ -34457,6 +35393,11 @@ limitations under the License.
  *  * scope: A Scope object
  *  * bytes: All the elements must have the same length.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * little_endian: Whether the input {@code bytes} are in little-endian order.
+ *  Ignored for {@code out_type} values that are stored in a single byte like
+ *  {@code uint8}.
+ * 
  *  Returns:
  *  * {@code Output}: A Tensor with one more dimension than the input {@code bytes}.  The
  *  added dimension will have size equal to the length of the elements
@@ -34466,12 +35407,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DecodeRaw(Pointer p) { super(p); }
 
-  /** Optional attribute setters for DecodeRaw :
-   * 
-   *  LittleEndian(bool): Defaults to true
-   *      Whether the input {@code bytes} are in little-endian order.
-   *  Ignored for {@code out_type} values that are stored in a single byte like
-   *  {@code uint8}. */
+  /** Optional attribute setters for DecodeRaw */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34486,6 +35422,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Whether the input {@code bytes} are in little-endian order.
+     *  Ignored for {@code out_type} values that are stored in a single byte like
+     *  {@code uint8}.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs LittleEndian(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean little_endian_(); public native Attrs little_endian_(boolean little_endian_);
@@ -34524,13 +35465,11 @@ limitations under the License.
  *  provided for dense_defaults[j], then the Feature dense_keys[j] is required.
  *  The input type is inferred from dense_defaults[j], even when it's empty.
  *  If dense_defaults[j] is not empty, its shape must match dense_shapes[j].
- *  * sparse_types:
- *      A list of Nsparse types; the data types of data in each Feature
+ *  * sparse_types: A list of Nsparse types; the data types of data in each Feature
  *  given in sparse_keys.
  *  Currently the ParseExample supports DT_FLOAT (FloatList),
  *  DT_INT64 (Int64List), and DT_STRING (BytesList).
- *  * dense_shapes:
- *      A list of Ndense shapes; the shapes of data in each Feature
+ *  * dense_shapes: A list of Ndense shapes; the shapes of data in each Feature
  *  given in dense_keys.
  *  The number of elements in the Feature corresponding to dense_key[j]
  *  must always equal dense_shapes[j].NumEntries().
@@ -34596,6 +35535,26 @@ limitations under the License.
  *  purposes, and the presence of values here has no effect on the output.
  *  May also be an empty scalar if no name is available.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * context_sparse_types: A list of Ncontext_sparse types; the data types of data in
+ *  each context Feature given in context_sparse_keys.
+ *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+ *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+ *  * context_dense_shapes: A list of Ncontext_dense shapes; the shapes of data in
+ *  each context Feature given in context_dense_keys.
+ *  The number of elements in the Feature corresponding to context_dense_key[j]
+ *  must always equal context_dense_shapes[j].NumEntries().
+ *  The shape of context_dense_values[j] will match context_dense_shapes[j].
+ *  * feature_list_sparse_types: A list of Nfeature_list_sparse types; the data types
+ *  of data in each FeatureList given in feature_list_sparse_keys.
+ *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+ *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+ *  * feature_list_dense_shapes: A list of Nfeature_list_dense shapes; the shapes of
+ *  data in each FeatureList given in feature_list_dense_keys.
+ *  The shape of each Feature in the FeatureList corresponding to
+ *  feature_list_dense_key[j] must always equal
+ *  feature_list_dense_shapes[j].NumEntries().
+ * 
  *  Returns:
  *  * {@code OutputList} context_sparse_indices
  *  * {@code OutputList} context_sparse_values
@@ -34610,31 +35569,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParseSingleSequenceExample(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ParseSingleSequenceExample :
-   * 
-   *  ContextSparseTypes(const DataTypeSlice&): Defaults to []
-   *      A list of Ncontext_sparse types; the data types of data in
-   *  each context Feature given in context_sparse_keys.
-   *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
-   *  DT_INT64 (Int64List), and DT_STRING (BytesList).
-   *  FeatureListDenseTypes(const DataTypeSlice&): Defaults to []
-   *  ContextDenseShapes(const gtl::ArraySlice<TensorShape>&): Defaults to []
-   *      A list of Ncontext_dense shapes; the shapes of data in
-   *  each context Feature given in context_dense_keys.
-   *  The number of elements in the Feature corresponding to context_dense_key[j]
-   *  must always equal context_dense_shapes[j].NumEntries().
-   *  The shape of context_dense_values[j] will match context_dense_shapes[j].
-   *  FeatureListSparseTypes(const DataTypeSlice&): Defaults to []
-   *      A list of Nfeature_list_sparse types; the data types
-   *  of data in each FeatureList given in feature_list_sparse_keys.
-   *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
-   *  DT_INT64 (Int64List), and DT_STRING (BytesList).
-   *  FeatureListDenseShapes(const gtl::ArraySlice<TensorShape>&): Defaults to []
-   *      A list of Nfeature_list_dense shapes; the shapes of
-   *  data in each FeatureList given in feature_list_dense_keys.
-   *  The shape of each Feature in the FeatureList corresponding to
-   *  feature_list_dense_key[j] must always equal
-   *  feature_list_dense_shapes[j].NumEntries(). */
+  /** Optional attribute setters for ParseSingleSequenceExample */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34649,14 +35584,47 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** A list of Ncontext_sparse types; the data types of data in
+     *  each context Feature given in context_sparse_keys.
+     *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+     *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs ContextSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
 
+    /** Defaults to [] */
+    
+    ///
     public native @ByVal Attrs FeatureListDenseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
 
+    /** A list of Ncontext_dense shapes; the shapes of data in
+     *  each context Feature given in context_dense_keys.
+     *  The number of elements in the Feature corresponding to context_dense_key[j]
+     *  must always equal context_dense_shapes[j].NumEntries().
+     *  The shape of context_dense_values[j] will match context_dense_shapes[j].
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs ContextDenseShapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
 
+    /** A list of Nfeature_list_sparse types; the data types
+     *  of data in each FeatureList given in feature_list_sparse_keys.
+     *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+     *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+     * 
+     *  Defaults to [] */
+    
+    ///
     public native @ByVal Attrs FeatureListSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
 
+    /** A list of Nfeature_list_dense shapes; the shapes of
+     *  data in each FeatureList given in feature_list_dense_keys.
+     *  The shape of each Feature in the FeatureList corresponding to
+     *  feature_list_dense_key[j] must always equal
+     *  feature_list_dense_shapes[j].NumEntries().
+     * 
+     *  Defaults to [] */
     public native @ByVal Attrs FeatureListDenseShapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
 
     public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector context_sparse_types_(); public native Attrs context_sparse_types_(DataTypeVector context_sparse_types_);
@@ -34719,8 +35687,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * serialized: A scalar string containing a serialized TensorProto proto.
- *  * out_type:
- *      The type of the serialized tensor.  The provided type must match the
+ *  * out_type: The type of the serialized tensor.  The provided type must match the
  *  type of the serialized tensor and no implicit conversion will take place.
  * 
  *  Returns:
@@ -34749,6 +35716,9 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * out_type: The numeric type to interpret each string in {@code string_tensor} as.
+ * 
  *  Returns:
  *  * {@code Output}: A Tensor of the same shape as the input {@code string_tensor}. */
 @Namespace("tensorflow::ops") @NoOffset public static class StringToNumber extends Pointer {
@@ -34756,10 +35726,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringToNumber(Pointer p) { super(p); }
 
-  /** Optional attribute setters for StringToNumber :
-   * 
-   *  OutType(DataType): Defaults to DT_FLOAT
-   *      The numeric type to interpret each string in {@code string_tensor} as. */
+  /** Optional attribute setters for StringToNumber */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34774,6 +35741,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The numeric type to interpret each string in {@code string_tensor} as.
+     * 
+     *  Defaults to DT_FLOAT */
     public native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int out_type_);
@@ -34790,6 +35760,8 @@ limitations under the License.
 
   public native @ByRef Output output(); public native StringToNumber output(Output output);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
@@ -34813,13 +35785,21 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Draws samples from a multinomial distribution.
+/** \defgroup random_ops Random Ops
+ *  \{
+ <p>
+ *  Draws samples from a multinomial distribution.
  * 
  *  Arguments:
  *  * scope: A Scope object
  *  * logits: 2-D Tensor with shape {@code [batch_size, num_classes]}.  Each slice {@code [i, :]}
  *  represents the unnormalized log probabilities for all classes.
  *  * num_samples: 0-D.  Number of independent samples to draw for each row slice.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either seed or seed2 is set to be non-zero, the internal random number
+ *  generator is seeded by the given seed.  Otherwise, a random seed is used.
+ *  * seed2: A second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output}: 2-D Tensor with shape {@code [batch_size, num_samples]}.  Each slice {@code [i, :]}
@@ -34829,13 +35809,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Multinomial(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Multinomial :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either seed or seed2 is set to be non-zero, the internal random number
-   *  generator is seeded by the given seed.  Otherwise, a random seed is used.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for Multinomial */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34850,8 +35824,17 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either seed or seed2 is set to be non-zero, the internal random number
+     *  generator is seeded by the given seed.  Otherwise, a random seed is used.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -34889,6 +35872,12 @@ limitations under the License.
  *  * maxvals: The maximum cutoff. May be +infinity, and must be more than the minval
  *  for each batch.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
+ * 
  *  Returns:
  *  * {@code Output}: A matrix of shape num_batches x samples_per_batch, filled with random
  *  truncated normal values using the parameters for each row. */
@@ -34897,14 +35886,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParameterizedTruncatedNormal(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ParameterizedTruncatedNormal :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for ParameterizedTruncatedNormal */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34919,8 +35901,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -34961,6 +35953,12 @@ limitations under the License.
  *  * alpha: A tensor in which each scalar is a "shape" parameter describing the
  *  associated gamma distribution.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
+ * 
  *  Returns:
  *  * {@code Output}: A tensor with shape {@code shape + shape(alpha)}. Each slice
  *  {@code [:, ..., :, i0, i1, ...iN]} contains the samples drawn for
@@ -34970,14 +35968,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomGamma(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RandomGamma :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for RandomGamma */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -34992,8 +35983,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -35033,6 +36034,12 @@ limitations under the License.
  *  * scope: A Scope object
  *  * value: The tensor to be shuffled.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
+ * 
  *  Returns:
  *  * {@code Output}: A tensor of same shape and type as {@code value}, shuffled along its first
  *  dimension. */
@@ -35041,14 +36048,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomShuffle(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RandomShuffle :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for RandomShuffle */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35063,8 +36063,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -35093,8 +36103,13 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * shape: The shape of the output tensor.
- *  * dtype:
- *      The type of the output.
+ *  * dtype: The type of the output.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output}: A tensor of the specified shape filled with random normal values. */
@@ -35103,14 +36118,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomNormal(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RandomNormal :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for RandomNormal */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35125,8 +36133,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -35158,8 +36176,13 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * shape: The shape of the output tensor.
- *  * dtype:
- *      The type of the output.
+ *  * dtype: The type of the output.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output}: A tensor of the specified shape filled with uniform random values. */
@@ -35168,14 +36191,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomUniform(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RandomUniform :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for RandomUniform */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35190,8 +36206,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -35231,6 +36257,12 @@ limitations under the License.
  *  * minval: 0-D.  Inclusive lower bound on the generated integers.
  *  * maxval: 0-D.  Exclusive upper bound on the generated integers.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
+ * 
  *  Returns:
  *  * {@code Output}: A tensor of the specified shape filled with uniform random integers. */
 @Namespace("tensorflow::ops") @NoOffset public static class RandomUniformInt extends Pointer {
@@ -35238,14 +36270,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomUniformInt(Pointer p) { super(p); }
 
-  /** Optional attribute setters for RandomUniformInt :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for RandomUniformInt */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35260,8 +36285,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -35294,8 +36329,13 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * shape: The shape of the output tensor.
- *  * dtype:
- *      The type of the output.
+ *  * dtype: The type of the output.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * seed: If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+ *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+ *  random seed.
+ *  * seed2: A second seed to avoid seed collision.
  * 
  *  Returns:
  *  * {@code Output}: A tensor of the specified shape filled with random truncated normal
@@ -35305,14 +36345,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TruncatedNormal(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TruncatedNormal :
-   * 
-   *  Seed(int64): Defaults to 0
-   *      If either {@code seed} or {@code seed2} are set to be non-zero, the random number
-   *  generator is seeded by the given seed.  Otherwise, it is seeded by a
-   *  random seed.
-   *  Seed2(int64): Defaults to 0
-   *      A second seed to avoid seed collision. */
+  /** Optional attribute setters for TruncatedNormal */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35327,8 +36360,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If either {@code seed} or {@code seed2} are set to be non-zero, the random number
+     *  generator is seeded by the given seed.  Otherwise, it is seeded by a
+     *  random seed.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
 
+    /** A second seed to avoid seed collision.
+     * 
+     *  Defaults to 0 */
     public native @ByVal Attrs Seed2(@Cast("tensorflow::int64") long x);
 
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -35352,6 +36395,8 @@ limitations under the License.
   public native @ByRef Output output(); public native TruncatedNormal output(Output output);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -35374,7 +36419,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Add an {@code N}-minibatch {@code SparseTensor} to a {@code SparseTensorsMap}, return {@code N} handles.
+/** \defgroup sparse_ops Sparse Ops
+ *  \{
+ <p>
+ *  Add an {@code N}-minibatch {@code SparseTensor} to a {@code SparseTensorsMap}, return {@code N} handles.
  * 
  *  A {@code SparseTensor} of rank {@code R} is represented by three tensors: {@code sparse_indices},
  *  {@code sparse_values}, and {@code sparse_shape}, where
@@ -35407,6 +36455,11 @@ limitations under the License.
  *  * sparse_shape: 1-D.  The {@code shape} of the minibatch {@code SparseTensor}.
  *  The minibatch size {@code N == sparse_shape[0]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: The container name for the {@code SparseTensorsMap} created by this op.
+ *  * shared_name: The shared name for the {@code SparseTensorsMap} created by this op.
+ *  If blank, the new Operation's unique name is used.
+ * 
  *  Returns:
  *  * {@code Output}: 1-D.  The handles of the {@code SparseTensor} now stored in the
  *  {@code SparseTensorsMap}.  Shape: {@code [N]}. */
@@ -35415,13 +36468,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AddManySparseToTensorsMap(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AddManySparseToTensorsMap :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      The container name for the {@code SparseTensorsMap} created by this op.
-   *  SharedName(StringPiece): Defaults to ""
-   *      The shared name for the {@code SparseTensorsMap} created by this op.
-   *  If blank, the new Operation's unique name is used. */
+  /** Optional attribute setters for AddManySparseToTensorsMap */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35436,9 +36483,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The container name for the {@code SparseTensorsMap} created by this op.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** The shared name for the {@code SparseTensorsMap} created by this op.
+     *  If blank, the new Operation's unique name is used.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -35488,6 +36544,11 @@ limitations under the License.
  *  * sparse_values: 1-D.  The {@code values} of the {@code SparseTensor}.
  *  * sparse_shape: 1-D.  The {@code shape} of the {@code SparseTensor}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: The container name for the {@code SparseTensorsMap} created by this op.
+ *  * shared_name: The shared name for the {@code SparseTensorsMap} created by this op.
+ *  If blank, the new Operation's unique name is used.
+ * 
  *  Returns:
  *  * {@code Output}: 0-D.  The handle of the {@code SparseTensor} now stored in the
  *  {@code SparseTensorsMap}. */
@@ -35496,13 +36557,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AddSparseToTensorsMap(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AddSparseToTensorsMap :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      The container name for the {@code SparseTensorsMap} created by this op.
-   *  SharedName(StringPiece): Defaults to ""
-   *      The shared name for the {@code SparseTensorsMap} created by this op.
-   *  If blank, the new Operation's unique name is used. */
+  /** Optional attribute setters for AddSparseToTensorsMap */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35517,9 +36572,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The container name for the {@code SparseTensorsMap} created by this op.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** The shared name for the {@code SparseTensorsMap} created by this op.
+     *  If blank, the new Operation's unique name is used.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -35594,8 +36658,7 @@ limitations under the License.
  *  * scope: A Scope object
  *  * serialized_sparse: 2-D, The {@code N} serialized {@code SparseTensor} objects.
  *  Must have 3 columns.
- *  * dtype:
- *      The {@code dtype} of the serialized {@code SparseTensor} objects.
+ *  * dtype: The {@code dtype} of the serialized {@code SparseTensor} objects.
  * 
  *  Returns:
  *  * {@code Output} sparse_indices
@@ -35808,8 +36871,7 @@ limitations under the License.
  *  * indices: 2-D.  Indices of each input {@code SparseTensor}.
  *  * values: 1-D.  Non-empty values of each {@code SparseTensor}.
  *  * shapes: 1-D.  Shapes of each {@code SparseTensor}.
- *  * concat_dim:
- *      Dimension to concatenate along. Must be in range [-rank, rank),
+ *  * concat_dim: Dimension to concatenate along. Must be in range [-rank, rank),
  *  where rank is the number of dimensions in each input {@code SparseTensor}.
  * 
  *  Returns:
@@ -35959,6 +37021,9 @@ limitations under the License.
  *  * input_shape: 1-D.  Shape of the input SparseTensor.
  *  * reduction_axes: 1-D.  Length-{@code K} vector containing the reduction axes.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output}: {@code R-K}-D.  The reduced Tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseReduceSum extends Pointer {
@@ -35966,10 +37031,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseReduceSum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseReduceSum :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for SparseReduceSum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -35984,6 +37046,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -36028,6 +37093,9 @@ limitations under the License.
  *  * input_shape: 1-D.  Shape of the input SparseTensor.
  *  * reduction_axes: 1-D.  Length-{@code K} vector containing the reduction axes.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If true, retain reduced dimensions with length 1.
+ * 
  *  Returns:
  *  * {@code Output} output_indices
  *  * {@code Output} output_values
@@ -36037,10 +37105,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseReduceSumSparse(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseReduceSumSparse :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If true, retain reduced dimensions with length 1. */
+  /** Optional attribute setters for SparseReduceSumSparse */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36055,6 +37120,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, retain reduced dimensions with length 1.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean keep_dims_(); public native Attrs keep_dims_(boolean keep_dims_);
@@ -36294,8 +37362,7 @@ limitations under the License.
  *  * shape: 1-D. tensor represents the shape of the sparse tensor.
  *  output indices: A list of 1-D tensors represents the indices of the output
  *  sparse tensors.
- *  * num_split:
- *      The number of ways to split.
+ *  * num_split: The number of ways to split.
  * 
  *  Returns:
  *  * {@code OutputList} output_indices
@@ -36368,6 +37435,12 @@ limitations under the License.
  *  * a_shape: 1-D.  The {@code shape} of the {@code SparseTensor}, size {@code [2]} Vector.
  *  * b: 2-D.  A dense Matrix.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * adjoint_a: Use the adjoint of A in the matrix multiply.  If A is complex, this
+ *  is transpose(conj(A)).  Otherwise it's transpose(A).
+ *  * adjoint_b: Use the adjoint of B in the matrix multiply.  If B is complex, this
+ *  is transpose(conj(B)).  Otherwise it's transpose(B).
+ * 
  *  Returns:
  *  * {@code Output}: The product tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseTensorDenseMatMul extends Pointer {
@@ -36375,14 +37448,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseTensorDenseMatMul(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseTensorDenseMatMul :
-   * 
-   *  AdjointA(bool): Defaults to false
-   *      Use the adjoint of A in the matrix multiply.  If A is complex, this
-   *  is transpose(conj(A)).  Otherwise it's transpose(A).
-   *  AdjointB(bool): Defaults to false
-   *      Use the adjoint of B in the matrix multiply.  If B is complex, this
-   *  is transpose(conj(B)).  Otherwise it's transpose(B). */
+  /** Optional attribute setters for SparseTensorDenseMatMul */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36397,8 +37463,18 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Use the adjoint of A in the matrix multiply.  If A is complex, this
+     *  is transpose(conj(A)).  Otherwise it's transpose(A).
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs AdjointA(@Cast("bool") boolean x);
 
+    /** Use the adjoint of B in the matrix multiply.  If B is complex, this
+     *  is transpose(conj(B)).  Otherwise it's transpose(B).
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs AdjointB(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean adjoint_a_(); public native Attrs adjoint_a_(boolean adjoint_a_);
@@ -36456,6 +37532,10 @@ limitations under the License.
  *  * default_value: Scalar value to set for indices not specified in
  *  {@code sparse_indices}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * validate_indices: If true, indices are checked to make sure they are sorted in
+ *  lexicographic order and that there are no repeats.
+ * 
  *  Returns:
  *  * {@code Output}: Dense output tensor of shape {@code output_shape}. */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseToDense extends Pointer {
@@ -36463,11 +37543,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseToDense(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseToDense :
-   * 
-   *  ValidateIndices(bool): Defaults to true
-   *      If true, indices are checked to make sure they are sorted in
-   *  lexicographic order and that there are no repeats. */
+  /** Optional attribute setters for SparseToDense */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36482,6 +37558,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, indices are checked to make sure they are sorted in
+     *  lexicographic order and that there are no repeats.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs ValidateIndices(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean validate_indices_(); public native Attrs validate_indices_(boolean validate_indices_);
@@ -36558,9 +37638,14 @@ limitations under the License.
  *  * scope: A Scope object
  *  * sparse_handles: 1-D, The {@code N} serialized {@code SparseTensor} objects.
  *  Shape: {@code [N]}.
- *  * dtype:
- *      The {@code dtype} of the {@code SparseTensor} objects stored in the
+ *  * dtype: The {@code dtype} of the {@code SparseTensor} objects stored in the
  *  {@code SparseTensorsMap}.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: The container name for the {@code SparseTensorsMap} read by this op.
+ *  * shared_name: The shared name for the {@code SparseTensorsMap} read by this op.
+ *  It should not be blank; rather the {@code shared_name} or unique Operation name
+ *  of the Op that created the original {@code SparseTensorsMap} should be used.
  * 
  *  Returns:
  *  * {@code Output} sparse_indices: 2-D.  The {@code indices} of the minibatch {@code SparseTensor}.
@@ -36571,14 +37656,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TakeManySparseFromTensorsMap(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TakeManySparseFromTensorsMap :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      The container name for the {@code SparseTensorsMap} read by this op.
-   *  SharedName(StringPiece): Defaults to ""
-   *      The shared name for the {@code SparseTensorsMap} read by this op.
-   *  It should not be blank; rather the {@code shared_name} or unique Operation name
-   *  of the Op that created the original {@code SparseTensorsMap} should be used. */
+  /** Optional attribute setters for TakeManySparseFromTensorsMap */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36593,9 +37671,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The container name for the {@code SparseTensorsMap} read by this op.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** The shared name for the {@code SparseTensorsMap} read by this op.
+     *  It should not be blank; rather the {@code shared_name} or unique Operation name
+     *  of the Op that created the original {@code SparseTensorsMap} should be used.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -36621,6 +37709,8 @@ limitations under the License.
   public native @ByRef Output sparse_shape(); public native TakeManySparseFromTensorsMap sparse_shape(Output sparse_shape);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -36643,7 +37733,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Update 'ref' by assigning 'value' to it.
+/** \defgroup state_ops State Ops
+ *  \{
+ <p>
+ *  Update 'ref' by assigning 'value' to it.
  * 
  *  This operation outputs "ref" after the assignment is done.
  *  This makes it easier to chain operations that need to use the reset value.
@@ -36653,6 +37746,13 @@ limitations under the License.
  *  * ref: Should be from a {@code Variable} node. May be uninitialized.
  *  * value: The value to be assigned to the variable.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * validate_shape: If true, the operation will validate that the shape
+ *  of 'value' matches the shape of the Tensor being assigned to.  If false,
+ *  'ref' will take on the shape of 'value'.
+ *  * use_locking: If True, the assignment will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as "ref".  Returned as a convenience for operations that want
  *  to use the new value after the variable has been reset. */
@@ -36661,15 +37761,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Assign(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Assign :
-   * 
-   *  ValidateShape(bool): Defaults to true
-   *      If true, the operation will validate that the shape
-   *  of 'value' matches the shape of the Tensor being assigned to.  If false,
-   *  'ref' will take on the shape of 'value'.
-   *  UseLocking(bool): Defaults to true
-   *      If True, the assignment will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for Assign */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36684,8 +37776,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If true, the operation will validate that the shape
+     *  of 'value' matches the shape of the Tensor being assigned to.  If false,
+     *  'ref' will take on the shape of 'value'.
+     * 
+     *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs ValidateShape(@Cast("bool") boolean x);
 
+    /** If True, the assignment will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean validate_shape_(); public native Attrs validate_shape_(boolean validate_shape_);
@@ -36719,6 +37822,10 @@ limitations under the License.
  *  * ref: Should be from a {@code Variable} node.
  *  * value: The value to be added to the variable.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the addition will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as "ref".  Returned as a convenience for operations that want
  *  to use the new value after the variable has been updated. */
@@ -36727,11 +37834,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AssignAdd(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AssignAdd :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the addition will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for AssignAdd */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36746,6 +37849,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the addition will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -36777,6 +37884,10 @@ limitations under the License.
  *  * ref: Should be from a {@code Variable} node.
  *  * value: The value to be subtracted to the variable.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as "ref".  Returned as a convenience for operations that want
  *  to use the new value after the variable has been updated. */
@@ -36785,11 +37896,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AssignSub(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AssignSub :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for AssignSub */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36804,6 +37911,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -36830,8 +37941,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * ref: Should be from a scalar {@code Variable} node.
- *  * limit:
- *      If incrementing ref would bring it above limit, instead generates an
+ *  * limit: If incrementing ref would bring it above limit, instead generates an
  *  'OutOfRange' error.
  * 
  *  Returns:
@@ -36864,8 +37974,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * ref: A reference to the temporary variable tensor.
- *  * var_name:
- *      Name of the temporary variable, usually the name of the matching
+ *  * var_name: Name of the temporary variable, usually the name of the matching
  *  'TemporaryVariable' op.
  * 
  *  Returns:
@@ -36941,6 +38050,10 @@ limitations under the License.
  *  * indices: A tensor of indices into the first dimension of {@code ref}.
  *  * updates: A tensor of updated values to add to {@code ref}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the addition will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -36949,11 +38062,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterAdd(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterAdd :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the addition will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ScatterAdd */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -36968,6 +38077,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the addition will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37016,6 +38129,10 @@ limitations under the License.
  *  * indices: A tensor of indices into the first dimension of {@code ref}.
  *  * updates: A tensor of values that {@code ref} is divided by.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the operation will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -37024,11 +38141,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterDiv(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterDiv :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the operation will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ScatterDiv */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37043,6 +38156,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the operation will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37091,6 +38208,10 @@ limitations under the License.
  *  * indices: A tensor of indices into the first dimension of {@code ref}.
  *  * updates: A tensor of updated values to multiply to {@code ref}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the operation will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -37099,11 +38220,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterMul(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterMul :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the operation will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ScatterMul */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37118,6 +38235,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the operation will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37183,6 +38304,11 @@ limitations under the License.
  *  * updates: A Tensor. Must have the same type as ref. A tensor of updated values
  *  to add to ref.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: An optional bool. Defaults to True. If True, the assignment will
+ *  be protected by a lock; otherwise the behavior is undefined,
+ *  but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as ref. Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -37191,12 +38317,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterNdAdd(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterNdAdd :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      An optional bool. Defaults to True. If True, the assignment will
-   *  be protected by a lock; otherwise the behavior is undefined,
-   *  but may exhibit less contention. */
+  /** Optional attribute setters for ScatterNdAdd */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37211,6 +38332,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** An optional bool. Defaults to True. If True, the assignment will
+     *  be protected by a lock; otherwise the behavior is undefined,
+     *  but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37276,6 +38402,11 @@ limitations under the License.
  *  * updates: A Tensor. Must have the same type as ref. A tensor of updated values
  *  to subtract from ref.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: An optional bool. Defaults to True. If True, the assignment will
+ *  be protected by a lock; otherwise the behavior is undefined,
+ *  but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as ref. Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -37284,12 +38415,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterNdSub(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterNdSub :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      An optional bool. Defaults to True. If True, the assignment will
-   *  be protected by a lock; otherwise the behavior is undefined,
-   *  but may exhibit less contention. */
+  /** Optional attribute setters for ScatterNdSub */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37304,6 +38430,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** An optional bool. Defaults to True. If True, the assignment will
+     *  be protected by a lock; otherwise the behavior is undefined,
+     *  but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37369,6 +38500,11 @@ limitations under the License.
  *  * updates: A Tensor. Must have the same type as ref. A tensor of updated
  *  values to add to ref.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: An optional bool. Defaults to True. If True, the assignment will
+ *  be protected by a lock; otherwise the behavior is undefined,
+ *  but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as ref. Returned as a convenience for operations that want to
  *  use the updated values after the update is done. */
@@ -37377,12 +38513,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterNdUpdate(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterNdUpdate :
-   * 
-   *  UseLocking(bool): Defaults to true
-   *      An optional bool. Defaults to True. If True, the assignment will
-   *  be protected by a lock; otherwise the behavior is undefined,
-   *  but may exhibit less contention. */
+  /** Optional attribute setters for ScatterNdUpdate */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37397,6 +38528,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** An optional bool. Defaults to True. If True, the assignment will
+     *  be protected by a lock; otherwise the behavior is undefined,
+     *  but may exhibit less contention.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37447,6 +38583,10 @@ limitations under the License.
  *  * indices: A tensor of indices into the first dimension of {@code ref}.
  *  * updates: A tensor of updated values to subtract from {@code ref}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -37455,11 +38595,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterSub(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterSub :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ScatterSub */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37474,6 +38610,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37527,6 +38667,10 @@ limitations under the License.
  *  * indices: A tensor of indices into the first dimension of {@code ref}.
  *  * updates: A tensor of updated values to store in {@code ref}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the assignment will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
  *  to use the updated values after the update is done. */
@@ -37535,11 +38679,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScatterUpdate(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ScatterUpdate :
-   * 
-   *  UseLocking(bool): Defaults to true
-   *      If True, the assignment will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ScatterUpdate */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37554,6 +38694,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the assignment will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to true */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -37594,10 +38738,12 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * shape:
- *      The shape of the variable tensor.
- *  * dtype:
- *      The type of elements in the variable tensor.
+ *  * shape: The shape of the variable tensor.
+ *  * dtype: The type of elements in the variable tensor.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * var_name: Overrides the name used for the temporary variable resource. Default
+ *  value is the name of the 'TemporaryVariable' op (which is guaranteed unique).
  * 
  *  Returns:
  *  * {@code Output}: A reference to the variable tensor. */
@@ -37606,11 +38752,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TemporaryVariable(Pointer p) { super(p); }
 
-  /** Optional attribute setters for TemporaryVariable :
-   * 
-   *  VarName(StringPiece): Defaults to ""
-   *      Overrides the name used for the temporary variable resource. Default
-   *  value is the name of the 'TemporaryVariable' op (which is guaranteed unique). */
+  /** Optional attribute setters for TemporaryVariable */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37625,6 +38767,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Overrides the name used for the temporary variable resource. Default
+     *  value is the name of the 'TemporaryVariable' op (which is guaranteed unique).
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs VarName(@StringPiece BytePointer x);
     public native @ByVal Attrs VarName(@StringPiece String x);
 
@@ -37652,10 +38798,14 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * shape:
- *      The shape of the variable tensor.
- *  * dtype:
- *      The type of elements in the variable tensor.
+ *  * shape: The shape of the variable tensor.
+ *  * dtype: The type of elements in the variable tensor.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * container: If non-empty, this variable is placed in the given container.
+ *  Otherwise, a default container is used.
+ *  * shared_name: If non-empty, this variable is named in the given bucket
+ *  with this shared_name. Otherwise, the node name is used instead.
  * 
  *  Returns:
  *  * {@code Output}: A reference to the variable tensor. */
@@ -37664,14 +38814,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Variable(Pointer p) { super(p); }
 
-  /** Optional attribute setters for Variable :
-   * 
-   *  Container(StringPiece): Defaults to ""
-   *      If non-empty, this variable is placed in the given container.
-   *  Otherwise, a default container is used.
-   *  SharedName(StringPiece): Defaults to ""
-   *      If non-empty, this variable is named in the given bucket
-   *  with this shared_name. Otherwise, the node name is used instead. */
+  /** Optional attribute setters for Variable */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37686,9 +38829,19 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If non-empty, this variable is placed in the given container.
+     *  Otherwise, a default container is used.
+     * 
+     *  Defaults to "" */
+    
+    ///
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
+    /** If non-empty, this variable is named in the given bucket
+     *  with this shared_name. Otherwise, the node name is used instead.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
@@ -37713,6 +38866,8 @@ limitations under the License.
   public native @ByRef Output ref(); public native Variable ref(Output ref);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -37735,12 +38890,27 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Converts each entry in the given tensor to strings.  Supports many numeric
+/** \defgroup string_ops String Ops
+ *  \{
+ <p>
+ *  Converts each entry in the given tensor to strings.  Supports many numeric
  * 
  *  types and boolean.
  * 
  *  Arguments:
  *  * scope: A Scope object
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * precision: The post-decimal precision to use for floating point numbers.
+ *  Only used if precision > -1.
+ *  * scientific: Use scientific notation for floating point numbers.
+ *  * shortest: Use shortest representation (either scientific or standard) for
+ *  floating point numbers.
+ *  * width: Pad pre-decimal numbers to this width.
+ *  Applies to both floating point and integer numbers.
+ *  Only used if width > -1.
+ *  * fill: The value to pad if width > -1.  If empty, pads with spaces.
+ *  Another typical value is '0'.  String cannot be longer than 1 character.
  * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
@@ -37749,23 +38919,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AsString(Pointer p) { super(p); }
 
-  /** Optional attribute setters for AsString :
-   * 
-   *  Precision(int64): Defaults to -1
-   *      The post-decimal precision to use for floating point numbers.
-   *  Only used if precision > -1.
-   *  Scientific(bool): Defaults to false
-   *      Use scientific notation for floating point numbers.
-   *  Shortest(bool): Defaults to false
-   *      Use shortest representation (either scientific or standard) for
-   *  floating point numbers.
-   *  Width(int64): Defaults to -1
-   *      Pad pre-decimal numbers to this width.
-   *  Applies to both floating point and integer numbers.
-   *  Only used if width > -1.
-   *  Fill(StringPiece): Defaults to ""
-   *      The value to pad if width > -1.  If empty, pads with spaces.
-   *  Another typical value is '0'.  String cannot be longer than 1 character. */
+  /** Optional attribute setters for AsString */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37780,14 +38934,42 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** The post-decimal precision to use for floating point numbers.
+     *  Only used if precision > -1.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Precision(@Cast("tensorflow::int64") long x);
 
+    /** Use scientific notation for floating point numbers.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Scientific(@Cast("bool") boolean x);
 
+    /** Use shortest representation (either scientific or standard) for
+     *  floating point numbers.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs Shortest(@Cast("bool") boolean x);
 
+    /** Pad pre-decimal numbers to this width.
+     *  Applies to both floating point and integer numbers.
+     *  Only used if width > -1.
+     * 
+     *  Defaults to -1 */
+    
+    ///
     public native @ByVal Attrs Width(@Cast("tensorflow::int64") long x);
 
+    /** The value to pad if width > -1.  If empty, pads with spaces.
+     *  Another typical value is '0'.  String cannot be longer than 1 character.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs Fill(@StringPiece BytePointer x);
     public native @ByVal Attrs Fill(@StringPiece String x);
 
@@ -37853,6 +39035,9 @@ limitations under the License.
  *  * scope: A Scope object
  *  * input: Strings to be encoded.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * pad: Bool whether padding is applied at the ends.
+ * 
  *  Returns:
  *  * {@code Output}: Input strings encoded in base64. */
 @Namespace("tensorflow::ops") @NoOffset public static class EncodeBase64 extends Pointer {
@@ -37860,10 +39045,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EncodeBase64(Pointer p) { super(p); }
 
-  /** Optional attribute setters for EncodeBase64 :
-   * 
-   *  Pad(bool): Defaults to false
-   *      Bool whether padding is applied at the ends. */
+  /** Optional attribute setters for EncodeBase64 */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37878,6 +39060,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** Bool whether padding is applied at the ends.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs Pad(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean pad_(); public native Attrs pad_(boolean pad_);
@@ -37925,6 +39110,10 @@ limitations under the License.
  *  order specified.  Omitting {@code reduction_indices} is equivalent to passing
  *  {@code [n-1, n-2, ..., 0]}.  Negative indices from {@code -n} to {@code -1} are supported.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * keep_dims: If {@code True}, retain reduced dimensions with length {@code 1}.
+ *  * separator: The separator to use when joining.
+ * 
  *  Returns:
  *  * {@code Output}: Has shape equal to that of the input with reduced dimensions removed or
  *  set to {@code 1} depending on {@code keep_dims}. */
@@ -37933,12 +39122,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReduceJoin(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ReduceJoin :
-   * 
-   *  KeepDims(bool): Defaults to false
-   *      If {@code True}, retain reduced dimensions with length {@code 1}.
-   *  Separator(StringPiece): Defaults to ""
-   *      The separator to use when joining. */
+  /** Optional attribute setters for ReduceJoin */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -37953,8 +39137,16 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, retain reduced dimensions with length {@code 1}.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs KeepDims(@Cast("bool") boolean x);
 
+    /** The separator to use when joining.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs Separator(@StringPiece BytePointer x);
     public native @ByVal Attrs Separator(@StringPiece String x);
 
@@ -37990,6 +39182,9 @@ limitations under the License.
  *  or be scalars.  Scalars may be mixed in; these will be broadcast to the shape
  *  of non-scalar inputs.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * separator: string, an optional join separator.
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class StringJoin extends Pointer {
@@ -37997,10 +39192,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringJoin(Pointer p) { super(p); }
 
-  /** Optional attribute setters for StringJoin :
-   * 
-   *  Separator(StringPiece): Defaults to ""
-   *      string, an optional join separator. */
+  /** Optional attribute setters for StringJoin */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38015,6 +39207,9 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** string, an optional join separator.
+     * 
+     *  Defaults to "" */
     public native @ByVal Attrs Separator(@StringPiece BytePointer x);
     public native @ByVal Attrs Separator(@StringPiece String x);
 
@@ -38096,8 +39291,7 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * num_buckets:
- *      The number of buckets.
+ *  * num_buckets: The number of buckets.
  * 
  *  Returns:
  *  * {@code Output}: A Tensor of the same shape as the input {@code string_tensor}. */
@@ -38127,8 +39321,7 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: The strings to assign a hash bucket.
- *  * num_buckets:
- *      The number of buckets.
+ *  * num_buckets: The number of buckets.
  * 
  *  Returns:
  *  * {@code Output}: A Tensor of the same shape as the input {@code string_tensor}. */
@@ -38162,10 +39355,8 @@ limitations under the License.
  *  Arguments:
  *  * scope: A Scope object
  *  * input: The strings to assign a hash bucket.
- *  * num_buckets:
- *      The number of buckets.
- *  * key:
- *      The key for the keyed hash function passed as a list of two uint64
+ *  * num_buckets: The number of buckets.
+ *  * key: The key for the keyed hash function passed as a list of two uint64
  *  elements.
  * 
  *  Returns:
@@ -38288,6 +39479,8 @@ limitations under the License.
   public native @ByRef Output output(); public native Substr output(Output output);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -38310,7 +39503,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Update '*var' according to the adadelta scheme.
+/** \defgroup training_ops Training Ops
+ *  \{
+ <p>
+ *  Update '*var' according to the adadelta scheme.
  * 
  *  accum = rho() * accum + (1 - rho()) * grad.square();
  *  update = (update_accum + epsilon).sqrt() * (accum + epsilon()).rsqrt() * grad;
@@ -38327,6 +39523,10 @@ limitations under the License.
  *  * epsilon: Constant factor. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var, accum and update_accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyAdadelta extends Pointer {
@@ -38334,11 +39534,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyAdadelta(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyAdadelta :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var, accum and update_accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ApplyAdadelta */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38353,6 +39549,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var, accum and update_accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38394,6 +39594,11 @@ limitations under the License.
  *  * lr: Scaling factor. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyAdagrad extends Pointer {
@@ -38401,12 +39606,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ApplyAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38421,6 +39621,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38459,6 +39664,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * global_step: Training step number. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyAdagradDA extends Pointer {
@@ -38466,11 +39675,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyAdagradDA(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyAdagradDA :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ApplyAdagradDA */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38485,6 +39690,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38534,6 +39743,11 @@ limitations under the License.
  *  * epsilon: Ridge term. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, m, and v tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyAdam extends Pointer {
@@ -38541,12 +39755,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyAdam(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyAdam :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, m, and v tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ApplyAdam */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38561,6 +39770,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, m, and v tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38622,6 +39836,11 @@ limitations under the License.
  *  * epsilon: Ridge term. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, mg, ms, and mom tensors is
+ *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyCenteredRMSProp extends Pointer {
@@ -38629,12 +39848,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyCenteredRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyCenteredRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, mg, ms, and mom tensors is
-   *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ApplyCenteredRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38649,6 +39863,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, mg, ms, and mom tensors is
+     *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38703,6 +39922,11 @@ limitations under the License.
  *  * l2: L2 regulariation. Must be a scalar.
  *  * lr_power: Scaling factor. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyFtrl extends Pointer {
@@ -38710,12 +39934,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyFtrl(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyFtrl :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ApplyFtrl */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38730,6 +39949,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38763,6 +39987,10 @@ limitations under the License.
  *  * alpha: Scaling factor. Must be a scalar.
  *  * delta: The change.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyGradientDescent extends Pointer {
@@ -38770,11 +39998,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyGradientDescent(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyGradientDescent :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ApplyGradientDescent */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38789,6 +40013,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38827,6 +40055,14 @@ limitations under the License.
  *  * grad: The gradient.
  *  * momentum: Momentum. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ *  * use_nesterov: If {@code True}, the tensor passed to compute grad will be
+ *  var - lr * momentum * accum, so in the end, the var you get is actually
+ *  var - lr * momentum * accum.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyMomentum extends Pointer {
@@ -38834,16 +40070,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyMomentum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyMomentum :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention.
-   *  UseNesterov(bool): Defaults to false
-   *      If {@code True}, the tensor passed to compute grad will be
-   *  var - lr * momentum * accum, so in the end, the var you get is actually
-   *  var - lr * momentum * accum. */
+  /** Optional attribute setters for ApplyMomentum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38858,8 +40085,20 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
+    /** If {@code True}, the tensor passed to compute grad will be
+     *  var - lr * momentum * accum, so in the end, the var you get is actually
+     *  var - lr * momentum * accum.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38902,6 +40141,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyProximalAdagrad extends Pointer {
@@ -38909,11 +40152,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyProximalAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyProximalAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ApplyProximalAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38928,6 +40167,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -38970,6 +40213,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * delta: The change.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyProximalGradientDescent extends Pointer {
@@ -38977,11 +40224,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyProximalGradientDescent(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyProximalGradientDescent :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ApplyProximalGradientDescent */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -38996,6 +40239,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39040,6 +40287,11 @@ limitations under the License.
  *  * epsilon: Ridge term. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, ms, and mom tensors is protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class ApplyRMSProp extends Pointer {
@@ -39047,12 +40299,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ApplyRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ApplyRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, ms, and mom tensors is protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ApplyRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39067,6 +40314,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, ms, and mom tensors is protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39117,6 +40369,10 @@ limitations under the License.
  *  * epsilon: Constant factor. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var, accum and update_accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyAdadelta extends Pointer {
@@ -39124,11 +40380,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyAdadelta(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyAdadelta :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var, accum and update_accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceApplyAdadelta */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39143,6 +40395,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var, accum and update_accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39170,6 +40426,11 @@ limitations under the License.
  *  * lr: Scaling factor. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyAdagrad extends Pointer {
@@ -39177,12 +40438,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceApplyAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39197,6 +40453,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39233,6 +40494,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * global_step: Training step number. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyAdagradDA extends Pointer {
@@ -39240,11 +40505,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyAdagradDA(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyAdagradDA :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceApplyAdagradDA */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39259,6 +40520,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39310,6 +40575,11 @@ limitations under the License.
  *  * epsilon: Ridge term. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, m, and v tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyAdam extends Pointer {
@@ -39317,12 +40587,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyAdam(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyAdam :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, m, and v tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceApplyAdam */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39337,6 +40602,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, m, and v tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39392,6 +40662,11 @@ limitations under the License.
  *  * epsilon: Ridge term. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, mg, ms, and mom tensors is
+ *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyCenteredRMSProp extends Pointer {
@@ -39399,12 +40674,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyCenteredRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyCenteredRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, mg, ms, and mom tensors is
-   *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceApplyCenteredRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39419,6 +40689,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, mg, ms, and mom tensors is
+     *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39469,6 +40744,11 @@ limitations under the License.
  *  * l2: L2 regulariation. Must be a scalar.
  *  * lr_power: Scaling factor. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyFtrl extends Pointer {
@@ -39476,12 +40756,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyFtrl(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyFtrl :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceApplyFtrl */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39496,6 +40771,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39535,6 +40815,10 @@ limitations under the License.
  *  * alpha: Scaling factor. Must be a scalar.
  *  * delta: The change.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyGradientDescent extends Pointer {
@@ -39542,11 +40826,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyGradientDescent(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyGradientDescent :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceApplyGradientDescent */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39561,6 +40841,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39595,6 +40879,14 @@ limitations under the License.
  *  * grad: The gradient.
  *  * momentum: Momentum. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ *  * use_nesterov: If {@code True}, the tensor passed to compute grad will be
+ *  var - lr * momentum * accum, so in the end, the var you get is actually
+ *  var - lr * momentum * accum.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyMomentum extends Pointer {
@@ -39602,16 +40894,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyMomentum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyMomentum :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention.
-   *  UseNesterov(bool): Defaults to false
-   *      If {@code True}, the tensor passed to compute grad will be
-   *  var - lr * momentum * accum, so in the end, the var you get is actually
-   *  var - lr * momentum * accum. */
+  /** Optional attribute setters for ResourceApplyMomentum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39626,8 +40909,20 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
+    /** If {@code True}, the tensor passed to compute grad will be
+     *  var - lr * momentum * accum, so in the end, the var you get is actually
+     *  var - lr * momentum * accum.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39666,6 +40961,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyProximalAdagrad extends Pointer {
@@ -39673,11 +40972,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyProximalAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyProximalAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceApplyProximalAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39692,6 +40987,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39724,6 +41023,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * delta: The change.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyProximalGradientDescent extends Pointer {
@@ -39731,11 +41034,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyProximalGradientDescent(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyProximalGradientDescent :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceApplyProximalGradientDescent */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39750,6 +41049,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39808,6 +41111,11 @@ limitations under the License.
  *  * epsilon: Ridge term. Must be a scalar.
  *  * grad: The gradient.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, ms, and mom tensors is protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceApplyRMSProp extends Pointer {
@@ -39815,12 +41123,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceApplyRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceApplyRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, ms, and mom tensors is protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceApplyRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39835,6 +41138,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, ms, and mom tensors is protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39878,6 +41186,10 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyAdadelta extends Pointer {
@@ -39885,11 +41197,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyAdadelta(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyAdadelta :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceSparseApplyAdadelta */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39904,6 +41212,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -39949,6 +41261,11 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyAdagrad extends Pointer {
@@ -39956,12 +41273,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceSparseApplyAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -39976,6 +41288,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40017,6 +41334,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * global_step: Training step number. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyAdagradDA extends Pointer {
@@ -40024,11 +41345,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyAdagradDA(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyAdagradDA :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceSparseApplyAdagradDA */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40043,6 +41360,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40101,6 +41422,11 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var, ms and mom.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, mg, ms, and mom tensors is
+ *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyCenteredRMSProp extends Pointer {
@@ -40108,12 +41434,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyCenteredRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyCenteredRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, mg, ms, and mom tensors is
-   *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceSparseApplyCenteredRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40128,6 +41449,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, mg, ms, and mom tensors is
+     *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40188,6 +41514,11 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * lr_power: Scaling factor. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyFtrl extends Pointer {
@@ -40195,12 +41526,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyFtrl(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyFtrl :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceSparseApplyFtrl */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40215,6 +41541,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40248,6 +41579,14 @@ limitations under the License.
  *  * indices: A vector of indices into the first dimension of var and accum.
  *  * momentum: Momentum. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ *  * use_nesterov: If {@code True}, the tensor passed to compute grad will be
+ *  var - lr * momentum * accum, so in the end, the var you get is actually
+ *  var - lr * momentum * accum.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyMomentum extends Pointer {
@@ -40255,16 +41594,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyMomentum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyMomentum :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention.
-   *  UseNesterov(bool): Defaults to false
-   *      If {@code True}, the tensor passed to compute grad will be
-   *  var - lr * momentum * accum, so in the end, the var you get is actually
-   *  var - lr * momentum * accum. */
+  /** Optional attribute setters for ResourceSparseApplyMomentum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40279,8 +41609,20 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
+    /** If {@code True}, the tensor passed to compute grad will be
+     *  var - lr * momentum * accum, so in the end, the var you get is actually
+     *  var - lr * momentum * accum.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40328,6 +41670,10 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyProximalAdagrad extends Pointer {
@@ -40335,11 +41681,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyProximalAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyProximalAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceSparseApplyProximalAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40354,6 +41696,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40396,6 +41742,10 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyProximalGradientDescent extends Pointer {
@@ -40403,11 +41753,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyProximalGradientDescent(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyProximalGradientDescent :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for ResourceSparseApplyProximalGradientDescent */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40422,6 +41768,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40485,6 +41835,11 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var, ms and mom.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, ms, and mom tensors is protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * the created {@code Operation} */
 @Namespace("tensorflow::ops") @NoOffset public static class ResourceSparseApplyRMSProp extends Pointer {
@@ -40492,12 +41847,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceSparseApplyRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for ResourceSparseApplyRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, ms, and mom tensors is protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for ResourceSparseApplyRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40512,6 +41862,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, ms, and mom tensors is protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40555,6 +41910,10 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyAdadelta extends Pointer {
@@ -40562,11 +41921,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyAdadelta(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyAdadelta :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for SparseApplyAdadelta */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40581,6 +41936,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40620,6 +41979,11 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyAdagrad extends Pointer {
@@ -40627,12 +41991,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for SparseApplyAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40647,6 +42006,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40686,6 +42050,10 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * global_step: Training step number. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyAdagradDA extends Pointer {
@@ -40693,11 +42061,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyAdagradDA(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyAdagradDA :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for SparseApplyAdagradDA */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40712,6 +42076,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40782,6 +42150,11 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var, ms and mom.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, mg, ms, and mom tensors is
+ *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyCenteredRMSProp extends Pointer {
@@ -40789,12 +42162,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyCenteredRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyCenteredRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, mg, ms, and mom tensors is
-   *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for SparseApplyCenteredRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40809,6 +42177,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, mg, ms, and mom tensors is
+     *  protected by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40867,6 +42240,11 @@ limitations under the License.
  *  * l2: L2 regularization. Must be a scalar.
  *  * lr_power: Scaling factor. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyFtrl extends Pointer {
@@ -40874,12 +42252,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyFtrl(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyFtrl :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for SparseApplyFtrl */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40894,6 +42267,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -40945,6 +42323,14 @@ limitations under the License.
  *  * indices: A vector of indices into the first dimension of var and accum.
  *  * momentum: Momentum. Must be a scalar.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var and accum tensors will be protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ *  * use_nesterov: If {@code True}, the tensor passed to compute grad will be
+ *  var - lr * momentum * accum, so in the end, the var you get is actually
+ *  var - lr * momentum * accum.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyMomentum extends Pointer {
@@ -40952,16 +42338,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyMomentum(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyMomentum :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var and accum tensors will be protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention.
-   *  UseNesterov(bool): Defaults to false
-   *      If {@code True}, the tensor passed to compute grad will be
-   *  var - lr * momentum * accum, so in the end, the var you get is actually
-   *  var - lr * momentum * accum. */
+  /** Optional attribute setters for SparseApplyMomentum */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -40976,8 +42353,20 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var and accum tensors will be protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
+    /** If {@code True}, the tensor passed to compute grad will be
+     *  var - lr * momentum * accum, so in the end, the var you get is actually
+     *  var - lr * momentum * accum.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -41027,6 +42416,10 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, updating of the var and accum tensors will be protected by
+ *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyProximalAdagrad extends Pointer {
@@ -41034,11 +42427,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyProximalAdagrad(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyProximalAdagrad :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, updating of the var and accum tensors will be protected by
-   *  a lock; otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for SparseApplyProximalAdagrad */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -41053,6 +42442,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, updating of the var and accum tensors will be protected by
+     *  a lock; otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -41101,6 +42494,10 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var and accum.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the subtraction will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyProximalGradientDescent extends Pointer {
@@ -41108,11 +42505,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyProximalGradientDescent(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyProximalGradientDescent :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If True, the subtraction will be protected by a lock;
-   *  otherwise the behavior is undefined, but may exhibit less contention. */
+  /** Optional attribute setters for SparseApplyProximalGradientDescent */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -41127,6 +42520,10 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If True, the subtraction will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -41176,6 +42573,11 @@ limitations under the License.
  *  * grad: The gradient.
  *  * indices: A vector of indices into the first dimension of var, ms and mom.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If {@code True}, updating of the var, ms, and mom tensors is protected
+ *  by a lock; otherwise the behavior is undefined, but may exhibit less
+ *  contention.
+ * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
 @Namespace("tensorflow::ops") @NoOffset public static class SparseApplyRMSProp extends Pointer {
@@ -41183,12 +42585,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseApplyRMSProp(Pointer p) { super(p); }
 
-  /** Optional attribute setters for SparseApplyRMSProp :
-   * 
-   *  UseLocking(bool): Defaults to false
-   *      If {@code True}, updating of the var, ms, and mom tensors is protected
-   *  by a lock; otherwise the behavior is undefined, but may exhibit less
-   *  contention. */
+  /** Optional attribute setters for SparseApplyRMSProp */
   public static class Attrs extends Pointer {
       static { Loader.load(); }
       /** Default native constructor. */
@@ -41203,6 +42600,11 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
+    /** If {@code True}, updating of the var, ms, and mom tensors is protected
+     *  by a lock; otherwise the behavior is undefined, but may exhibit less
+     *  contention.
+     * 
+     *  Defaults to false */
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
@@ -41236,6 +42638,8 @@ limitations under the License.
   public native @ByRef Output out(); public native SparseApplyRMSProp out(Output out);
 }
 
+/** \} */
+
   // namespace ops
   // namespace tensorflow
 
@@ -41258,7 +42662,10 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 
-/** Output a fact about factorials.
+/** \defgroup user_ops User Ops
+ *  \{
+ <p>
+ *  Output a fact about factorials.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -41278,6 +42685,8 @@ limitations under the License.
 
   public native @ByRef Output fact(); public native Fact fact(Output fact);
 }
+
+/** \} */
 
   // namespace ops
   // namespace tensorflow
