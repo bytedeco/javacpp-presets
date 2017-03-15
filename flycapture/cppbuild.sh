@@ -29,7 +29,7 @@ case $PLATFORM in
     windows-*)
         if [[ ! -d "/C/Program Files/Point Grey Research/" ]]; then
             echo "Please install FlyCapture under the default installation directory"
-            exit 1
+            #exit 1
         fi
         ;;
     *)
