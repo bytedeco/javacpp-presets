@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>liquidfun-platform</artifactId>
-            <version>20150401-0708ce1-1.3.2-SNAPSHOT</version>
+            <version>20150401-0708ce1-1.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
