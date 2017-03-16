@@ -30,4 +30,11 @@ java -version
 mvn --version
 
 dir
+
+cl
+
+cd %APPVEYOR_BUILD_FOLDER%\javacpp
+mvn install
+cd %APPVEYOR_BUILD_FOLDER%\javacpp-presets
+mvn install -Djavacpp.platform=windows-x86_64 -pl opencv 
   )
