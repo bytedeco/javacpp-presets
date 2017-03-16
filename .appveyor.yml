@@ -10,22 +10,18 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
-      os: windows
-      env: PROJ=artoolkitplus OS=windows-x86_64
+      PROJ: "artoolkitplus,ffmpeg"
     - COMPILER: msys2
       PLATFORM: x64
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
-      os: windows
-      env: PROJ=ffmpeg OS=windows-x86_64
+      PROJ: "artoolkitplus2,ffmpeg2"
 
 
 init:
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-   - IFS=':' read -ra PROJ <<< "$PROJ"
-
       
 install:
     - 'echo install section'
@@ -38,10 +34,7 @@ install:
 
 build_script:
     - 'echo build step'
-    - for proj in "${PROJ[@]}"; do
-        echo "running for $proj"
-        '%APPVEYOR_BUILD_FOLDER%\build.bat $proj'
-      done
+    - '%APPVEYOR_BUILD_FOLDER%\build.bat $PROJ'
 
 test_script:
     - 'echo no tests'
