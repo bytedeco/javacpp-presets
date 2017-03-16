@@ -33,7 +33,7 @@ install:
     - 'cd ../javacpp-presets'
 
 build_script:
-    - 'echo build step'
+    - 'echo build step echo %PROJ%'
     - '%APPVEYOR_BUILD_FOLDER%\build.bat %PROJ%'
 
 test_script:
