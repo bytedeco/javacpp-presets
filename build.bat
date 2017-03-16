@@ -33,8 +33,14 @@ dir
 
 cl
 
-cd %APPVEYOR_BUILD_FOLDER%\javacpp
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+
+cl
+
+cd ..
+cd javacpp
 mvn install
-cd %APPVEYOR_BUILD_FOLDER%\javacpp-presets
+cd ..
+cd javacpp-presets
 mvn install -Djavacpp.platform=windows-x86_64 -pl opencv 
   )
