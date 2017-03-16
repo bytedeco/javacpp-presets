@@ -1,0 +1,23 @@
+version: '{build}'
+
+environment:
+  matrix:
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      
+install:
+    - 'echo install section'
+
+build_script:
+    - 'echo build step'
+    - 'dir'
+    - 'cd %APPVEYOR_BUILD_FOLDER%\javacpp-presets'
+
+test_script:
+    - 'echo no tests'
+
+
