@@ -1,5 +1,7 @@
 version: '{build}'
 
+os: Visual Studio 2015
+
 environment:
   matrix:
     - COMPILER: msys2
@@ -21,7 +23,7 @@ install:
 build_script:
     - 'echo build step'
     - 'dir'
-    - 'mvn install -Djavacpp.platform=windows-x86_64 -pl opencv'
+    - '%APPVEYOR_BUILD_FOLDER%\build.bat'
 
 test_script:
     - 'echo no tests'
