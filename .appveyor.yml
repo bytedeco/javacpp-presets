@@ -15,7 +15,7 @@ install:
 build_script:
     - 'echo build step'
     - 'dir'
-    - 'cd %APPVEYOR_BUILD_FOLDER%\javacpp-presets'
+    - 'mvn install --Djavacpp.platform=windows-x86_64 -pl opencv'
 
 test_script:
     - 'echo no tests'
