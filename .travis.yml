@@ -10,7 +10,7 @@ matrix:
         env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv:chilitags:flandmark:openblas:mxnet:caffe OS=linux-x86_64
+        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=cuda OS=linux-x86_64
@@ -20,6 +20,9 @@ matrix:
       - jdk: oraclejdk7
         os: linux
         env: PROJ=fftw OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=openblas OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=gsl OS=linux-x86_64
@@ -75,7 +78,7 @@ before_install:
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel" > /dev/null
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "${PROJ[0]}" == "tensorflow" ]; then
            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh"
            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash bazel.sh"
