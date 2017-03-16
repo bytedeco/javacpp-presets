@@ -10,6 +10,9 @@ matrix:
         env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
+        env: PROJ=opencv:openblas OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
         env: PROJ=opencv:chilitags:flandmark:openblas:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
@@ -73,7 +76,7 @@ before_install:
             docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init
           fi
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-          echo "container id is $DOCKER_CONTAINER_ID"
+          echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "${PROJ[0]}" == "tensorflow" ]; then
