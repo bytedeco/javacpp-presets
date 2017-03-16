@@ -17,7 +17,7 @@ install:
     - 'git clone https://github.com/bytedeco/javacpp.git'
     - 'cd javacpp'
     - 'git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2'
-    - 'mvn install'
+#    - 'mvn install'
     - 'cd ../javacpp-presets'
 
 build_script:
