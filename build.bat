@@ -1,7 +1,8 @@
  @echo off
-
+  set projectName=%1
   cd %APPVEYOR_BUILD_FOLDER%
 
+  echo Building %projectName%
   echo Compiler: %COMPILER%
   echo Architecture: %MSYS2_ARCH%
   echo Platform: %PLATFORM%
@@ -42,5 +43,5 @@ cd javacpp
 mvn install
 cd ..
 cd javacpp-presets
-mvn install -Djavacpp.platform=windows-x86_64 -pl opencv 
+mvn install -Djavacpp.platform=windows-x86_64 -pl %projectName% 
   )
