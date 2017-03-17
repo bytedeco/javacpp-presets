@@ -25,9 +25,6 @@ matrix:
         env: PROJ=fftw OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=openblas OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
         env: PROJ=gsl OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
