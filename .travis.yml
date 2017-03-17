@@ -10,10 +10,10 @@ matrix:
         env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv:openblas OS=linux-x86_64
+        env: PROJ=opencv OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv:chilitags:flandmark:openblas:mxnet:caffe OS=linux-x86_64
+        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=cuda OS=linux-x86_64
@@ -23,6 +23,9 @@ matrix:
       - jdk: oraclejdk7
         os: linux
         env: PROJ=fftw OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=openblas OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=gsl OS=linux-x86_64
@@ -70,11 +73,11 @@ before_install:
         fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          if [ "${PROJ[0]}" == "cuda" ] || [ "${PROJ[0]}" == "tensorflow" ]; then
+          #if [ "${PROJ[0]}" == "cuda" ] || [ "${PROJ[0]}" == "tensorflow" ]; then
             docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
-          else
-            docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init
-          fi
+          #else
+          #  docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init
+          #fi
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
@@ -117,7 +120,7 @@ script:
     for proj in "${PROJ[@]}"; do
       echo "running for $proj"
       #if [ "$OS" == "linux-x86" ]; then
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -q -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"; export BUILD_STATUS=$?
+        travis_wait 40 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"; export BUILD_STATUS=$?
         echo "Build status $BUILD_STATUS"
         if [ $BUILD_STATUS -ne 0 ]; then  
           echo "Build Failed"
