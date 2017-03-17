@@ -53,7 +53,7 @@ before_install:
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
-   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+   - mvn install -q -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
@@ -120,7 +120,7 @@ script:
     for proj in "${PROJ[@]}"; do
       echo "running for $proj"
       #if [ "$OS" == "linux-x86" ]; then
-        travis_wait 40 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"; export BUILD_STATUS=$?
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"; export BUILD_STATUS=$?
         echo "Build status $BUILD_STATUS"
         if [ $BUILD_STATUS -ne 0 ]; then  
           echo "Build Failed"
