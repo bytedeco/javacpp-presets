@@ -34,7 +34,7 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - '%APPVEYOR_BUILD_FOLDER%\build.bat %PROJ%'
+    - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%"'
 
 test_script:
     - 'echo no tests'

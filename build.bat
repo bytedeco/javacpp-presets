@@ -1,5 +1,5 @@
  @echo off
-  set projectName=%*1
+  set projectName=%~1
   cd %APPVEYOR_BUILD_FOLDER%
 
   echo Building %projectName%
