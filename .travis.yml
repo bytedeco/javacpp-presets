@@ -80,7 +80,7 @@ before_install:
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
-   - mvn install -q -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
@@ -142,11 +142,11 @@ install:
 script:
    - |
     echo "starting script"
-    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-    echo "container id is $DOCKER_CONTAINER_ID"
     for proj in "${PROJ[@]}"; do
       echo "running for $proj"
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+        DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+        echo "container id is $DOCKER_CONTAINER_ID"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj"; export BUILD_STATUS=$?
         echo "Build status $BUILD_STATUS"
         if [ $BUILD_STATUS -ne 0 ]; then  
@@ -158,6 +158,7 @@ script:
       fi
     done
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
       docker stop $DOCKER_CONTAINER_ID
       docker rm -v $DOCKER_CONTAINER_ID
     fi
