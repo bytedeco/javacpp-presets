@@ -13,7 +13,7 @@ matrix:
         env: PROJ=opencv OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv:chilitags:flandmark:mxnet:caffe OS=linux-x86_64
+        env: PROJ=opencv:chilitags:flandmark:openblas:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=cuda OS=linux-x86_64
@@ -74,7 +74,7 @@ before_install:
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
           #if [ "${PROJ[0]}" == "cuda" ] || [ "${PROJ[0]}" == "tensorflow" ]; then
-            docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
+            docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init > /dev/null
           #else
           #  docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup centos:centos7 /usr/sbin/init
           #fi
