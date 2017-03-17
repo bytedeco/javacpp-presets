@@ -10,14 +10,14 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
-      PROJ: "artoolkitplus,ffmpeg"
+      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,caffe"
     - COMPILER: msys2
       PLATFORM: x64
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
-      PROJ: "artoolkitplus2,ffmpeg2"
+      PROJ: "artoolkitplus"
 
 
 init:

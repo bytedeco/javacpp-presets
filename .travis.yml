@@ -10,9 +10,6 @@ matrix:
         env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
         env: PROJ=opencv:chilitags:flandmark:openblas:mxnet:caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
@@ -28,13 +25,22 @@ matrix:
         env: PROJ=gsl OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
+        env: PROJ=hdf5 OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
         env: PROJ=leptonica:tesseract OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=libdc1394 OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
+        env: PROJ=liquidfun OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
         env: PROJ=libfreenect OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=libfreenect2 OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=llvm OS=linux-x86_64
