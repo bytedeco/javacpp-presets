@@ -116,7 +116,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         brew install caskroom/cask/brew-cask
         brew cask install cuda
-        brew install gcc5 swig bazel cmake libusb maven nasm yasm xz pkg-config
+        brew install gcc5 swig bazel libusb nasm yasm xz pkg-config
       fi
    - |
       if [ "$PROJ" == "tensorflow" ]; then
