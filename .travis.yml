@@ -114,7 +114,8 @@ before_install:
         fi
       fi
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        brew install caskroom/cask/brew-cask
+        brew update
+        #brew install caskroom/cask/brew-cask
         brew cask install cuda
         brew install gcc5 swig bazel libusb nasm yasm xz pkg-config
       fi
@@ -155,7 +156,7 @@ script:
           return $BUILD_STATUS
         fi
       else	
-       mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj; export BUILD_STATUS=$?
+       mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj; export BUILD_STATUS=$?
         echo "Build status $BUILD_STATUS"
         if [ $BUILD_STATUS -ne 0 ]; then
           echo "Build Failed"
