@@ -95,6 +95,8 @@ init:
       
 install:
     - 'echo install section'
+    - ps: Start-FileDownload 'https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe'
+    - 'cuda_8.0.61_windows.exe -s'
     - 'cd ..'
     - 'git clone https://github.com/bytedeco/javacpp.git'
     - 'cd javacpp'

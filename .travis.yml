@@ -109,8 +109,6 @@ before_install:
         #brew install caskroom/cask/brew-cask
         brew cask install cuda
         brew install gcc5 swig bazel libusb nasm yasm xz pkg-config
-        brew tap homebrew/python
-        brew install swig numpy
       fi
    - |
      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
