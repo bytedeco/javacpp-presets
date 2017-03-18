@@ -10,7 +10,7 @@ matrix:
         env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet:caffe OS=linux-x86_64
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,caffe OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=cuda OS=linux-x86_64
