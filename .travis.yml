@@ -154,7 +154,12 @@ script:
           return $BUILD_STATUS
         fi
       else	
-       mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj
+       mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $proj; export BUILD_STATUS=$?
+        echo "Build status $BUILD_STATUS"
+        if [ $BUILD_STATUS -ne 0 ]; then
+          echo "Build Failed"
+          return $BUILD_STATUS
+        fi
       fi
     done
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
