@@ -23,7 +23,7 @@
     bash -lc "pacman -Syu --noconfirm"
 
     REM build tools
-    bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain unzip autoconf automake libtool make patch mingw-w64-x86_64-libtool"
+    bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain base-devel tar nasm yasm pkg-config unzip autoconf automake libtool make patch mingw-w64-x86_64-libtool"
 
 bash --version
 g++ --version
