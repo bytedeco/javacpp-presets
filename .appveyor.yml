@@ -59,6 +59,27 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
+      PROJ: "libfreenect2"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "hdf5"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "liquidfun"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
       PROJ: "llvm"
     - COMPILER: msys2
       PLATFORM: x64
@@ -95,7 +116,8 @@ init:
       
 install:
     - 'echo install section'
-    - ps: Start-FileDownload 'https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe'
+    - 'curl -L -o cuda_8.0.61_windows.exe https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe'
+    - 'dir'
     - 'cuda_8.0.61_windows.exe -s'
     - 'cd ..'
     - 'git clone https://github.com/bytedeco/javacpp.git'
