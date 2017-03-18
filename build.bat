@@ -40,8 +40,8 @@ cl
 
 cd ..
 cd javacpp
-mvn install
+mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 cd ..
 cd javacpp-presets
-mvn install -Djavacpp.platform=windows-x86_64 -pl %projectName% 
+mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-x86_64 -pl %projectName% 
   )
