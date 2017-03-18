@@ -85,7 +85,7 @@ before_install:
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - IFS=':' read -ra PROJ <<< "$PROJ"
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then 
-      export JAVA_HOME=$(/usr/libexec/java_home); 
+      export JAVA_HOME=$(/usr/libexec/java_home) 
       brew install caskroom/cask/brew-cask
       brew cask install cuda 
       brew install gcc5 swig bazel cmake libusb maven nasm yasm xz pkg-config
