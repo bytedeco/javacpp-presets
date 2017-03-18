@@ -86,6 +86,9 @@ before_install:
    - IFS=':' read -ra PROJ <<< "$PROJ"
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then 
       export JAVA_HOME=$(/usr/libexec/java_home); 
+      brew install caskroom/cask/brew-cask
+      brew cask install cuda 
+      brew install gcc5 swig bazel cmake libusb maven nasm yasm xz pkg-config
      fi
    - |
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
@@ -114,17 +117,17 @@ before_install:
            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash bazel.sh"
           fi 
         fi
-      else
-        brew install yasm nasm
+      #else
+      #  brew install yasm nasm
       fi
    - |
       if [ "$PROJ" == "tensorflow" ]; then
         if [ "$TRAVIS_OS_NAME" == "linux" ]; then
           #sudo apt-get install -q -y swig python-numpy
           echo "not needed "
-        else
-          brew tap homebrew/python
-          brew install swig numpy
+        #else
+        #  brew tap homebrew/python
+        #  brew install swig numpy
         fi
       fi
    - |
