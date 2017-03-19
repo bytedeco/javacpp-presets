@@ -84,7 +84,7 @@ matrix:
   - os: osx
     env: PROJ=videoinput OS=macosx-x86_64
 before_install:
-- curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header 'Authorization: Bearer $SECURE1' --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
+- curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header 'Authorization: Bearer "$SECURE1"' --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
 - git clone https://github.com/bytedeco/javacpp.git
 - cd javacpp
 - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2
