@@ -1,6 +1,6 @@
 env:
   global:
-    - secure: "DYbfueb41Hpqthn1A8gnWQJJOBFimk7TT6x0YO+aFgS2/fh0w5aDaOczwkdikHe4Ypt+GVD+gGKmH9G4q4kMYVMnn+DmCBZ8l/9dxvwW1NLuXepAKn/znAM1F4Kur/QM3LoOerdXxrpXGiPeWpkFDLU7raBI30kG489368pCVPfLdd06EX+twy+TjDpNyLBIfL6+g8yjjTUQNJ0oG5BzyLayDOWOLP27TnE8U/RdgAuFwe1huI0FzHrbQcTXdJu/mxutiV5gEulj80JfDj1veUTnmTrbcEhHxrwoDEyKmROxvqYHoMulQOltrkML13xFzqIRXLUxlD0q3Ok9zE6YKvrj8bl26bOHVXo+Bi0Cuxyze5165ysKm1IGocSOc49qmgcCBfHISAr6qMiC+iVjcL+KSJgPOIqRlItUE12AdxJXS92Tc8CeLcTSFiX7kcsh6JoyQtuEsD8Vt/lKgeT1XDLvS5xgFsImKGIO+SJc/857M0ynotuiM2c0WWnWsfTE5dBpzj526U8otRoSFczIQxnGQHl24AyCg3+y4oBQnHfzd3Jk85H6sywEUdsVLGdEjVyJxqa1pQu5K50jBQA4fNCHx1vLBuPwqSoqB/a5cxCFaJGuPn4ksdcrZa6czszhw3APrxIHV8I/qpJv8ZW1kt/4Y0LVhANLaNCnG6IHUG8="
+    - secure: "meC6CCyHs3V+r6BQU4ZddvNJ/9PjAS0iZBEgEENTS3ERLlbQDK88SC3lneI59q/PQPXpuInpn87VEEzljdyZHu7EE4uYxqdS3nQohWcRkkF95Y4LQseXxgvaaEQXaVVC1/10b1r8g1pOrPPgvpHW+/UA7lxpfDJwUyyLVG2TTc8BNcoJxRhdrAHbCheOYP/GkfvBQeT+jqW/+FBQhBMReS66X3isosZ4OmMSB1ed711uIr/e25UikV17AfZ5hyJ3F3+JxBgpVa9glPYyR4/yIvnHQM+Uwb8SoxVneaZ0kVFGl5jNfnrI8DSmoqkVCcA3YSpDILnwz+QFBwN3zhdRX5vGbyKTa4xthCCJlxRyvKle1ldCaIKh1EujvfryndoQtEolk/idwluV2Ic3QgsliUECe+yCX42hYzZBwYi38lnY1AQJ3HKazC7jSzmY31qwEBGHnSQytiPgxLGIHEB1QKo+qX+BLCLLAHorqSybwO2UGlBRhNDI5pa874Q2mf/DXGSDaGUMNNzRQEK9TbtS/RgCSudbuuZ2IeiGi/9Xh1A1u8/EL6KfHXIW7TDJB9OIrZPXexCmM467dhS74TJph21dj+45IamQr2xScaDxgN5xhQ0Yu+/o+hRzdaM6qukjN+3x0tJ0I6dj8N3jM6Pl2lm+YD7/pNrtbxaNG7B8M0k="
 language: java
 sudo: required
 dist: trusty
@@ -134,9 +134,9 @@ install:
 script:
    - |
     echo "download dependencies" 
-    echo $SECURE1
-    echo $TESTVAR
-    curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header 'Authorization: Bearer $SECURE1' --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
+    dir 
+    curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header 'Authorization: Bearer $DROPAUTH' --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
+    dir
     echo "starting script"
     echo "running for $PROJ"
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
