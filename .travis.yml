@@ -1,160 +1,138 @@
+env:
+  global:
+  - TESTV1=A1234
 language: java
 sudo: required
 dist: trusty
 services:
-      - docker
+- docker
 matrix:
-   include:
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=artoolkitplus OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,caffe OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=cuda OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=ffmpeg OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=fftw OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=gsl OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=hdf5 OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=leptonica,tesseract OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libdc1394 OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=liquidfun OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libfreenect OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=libfreenect2 OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=llvm OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=tensorflow OS=linux-x86_64
-      - jdk: oraclejdk7
-        os: linux
-        env: PROJ=videoinput OS=linux-x86_64
-      - os: osx
-        env: PROJ=artoolkitplus OS=macosx-x86_64
-      - os: osx
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,caffe OS=macosx-x86_64
-      - os: osx
-        env: PROJ=cuda OS=macosx-x86_64
-      - os: osx
-        env: PROJ=ffmpeg OS=macosx-x86_64
-      - os: osx
-        env: PROJ=fftw OS=macosx-x86_64
-      - os: osx
-        env: PROJ=gsl OS=macosx-x86_64
-      - os: osx
-        env: PROJ=leptonica,tesseract OS=macosx-x86_64
-      - os: osx
-        env: PROJ=libdc1394 OS=macosx-x86_64
-      - os: osx
-        env: PROJ=libfreenect OS=macosx-x86_64
-      - os: osx
-        env: PROJ=libfreenect2 OS=macosx-x86_64
-      - os: osx
-        env: PROJ=hdf5 OS=macosx-x86_64
-      - os: osx
-        env: PROJ=liquidfun OS=macosx-x86_64
-      - os: osx
-        env: PROJ=llvm OS=macosx-x86_64
-      - os: osx
-        env: PROJ=tensorflow OS=macosx-x86_64
-      - os: osx
-        env: PROJ=videoinput OS=macosx-x86_64
-
+  include:
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=artoolkitplus OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,caffe OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=cuda OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=ffmpeg OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=fftw OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=gsl OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=hdf5 OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=leptonica,tesseract OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=libdc1394 OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=liquidfun OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=libfreenect OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=libfreenect2 OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=llvm OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=tensorflow OS=linux-x86_64
+  - jdk: oraclejdk7
+    os: linux
+    env: PROJ=videoinput OS=linux-x86_64
+  - os: osx
+    env: PROJ=artoolkitplus OS=macosx-x86_64
+  - os: osx
+    env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,caffe OS=macosx-x86_64
+  - os: osx
+    env: PROJ=cuda OS=macosx-x86_64
+  - os: osx
+    env: PROJ=ffmpeg OS=macosx-x86_64
+  - os: osx
+    env: PROJ=fftw OS=macosx-x86_64
+  - os: osx
+    env: PROJ=gsl OS=macosx-x86_64
+  - os: osx
+    env: PROJ=leptonica,tesseract OS=macosx-x86_64
+  - os: osx
+    env: PROJ=libdc1394 OS=macosx-x86_64
+  - os: osx
+    env: PROJ=libfreenect OS=macosx-x86_64
+  - os: osx
+    env: PROJ=libfreenect2 OS=macosx-x86_64
+  - os: osx
+    env: PROJ=hdf5 OS=macosx-x86_64
+  - os: osx
+    env: PROJ=liquidfun OS=macosx-x86_64
+  - os: osx
+    env: PROJ=llvm OS=macosx-x86_64
+  - os: osx
+    env: PROJ=tensorflow OS=macosx-x86_64
+  - os: osx
+    env: PROJ=videoinput OS=macosx-x86_64
 before_install:
-   #maybe this needs to go into new first job
-   - git clone https://github.com/bytedeco/javacpp.git
-   - cd javacpp
-   - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
-   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
-   - cd ..
-   - export PYTHON_BIN_PATH=$(which python) # For tensorflow
-   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
-   - |
-      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-        if [ "$OS" == "linux-x86" ]; then
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-        fi
-        if [ "$OS" == "linux-x86_64" ]; then
-          echo "starting docker"
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init > /dev/null
-          DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-          echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
-          if [ "$PROJ" == "tensorflow" ]; then
-           echo "adding bazel for tensorflow"
-           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh"
-           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash bazel.sh"
-          fi 
-        fi
-      fi
-      if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        brew update
-        #brew install caskroom/cask/brew-cask
-        brew cask install cuda
-        brew install gcc5 swig bazel libusb nasm yasm xz pkg-config
-      fi
-   - |
-     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-       if [ "$OS" == "linux-x86" ]; then
-         sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
-       fi
-       #sudo apt-get install -q -y libblas-dev
-     fi
-
+- curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header 'Authorization: Bearer $SECURE1' --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
+- git clone https://github.com/bytedeco/javacpp.git
+- cd javacpp
+- git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2
+- mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+- cd ..
+- export PYTHON_BIN_PATH=$(which python)
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home);
+  fi
+- "if [ \"$TRAVIS_OS_NAME\" == \"linux\" ]; then\n  if [ \"$OS\" == \"linux-x86\"
+  ]; then\n    sudo dpkg --add-architecture i386\n    sudo apt-get update\n  fi\n
+  \ if [ \"$OS\" == \"linux-x86_64\" ]; then\n    echo \"starting docker\"\n    docker
+  run --privileged -d -ti -e \"container=docker\" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/
+  -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init
+  > /dev/null\n    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')\n
+  \   echo \"container id is $DOCKER_CONTAINER_ID please wait while updates applied\"\n
+  \   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \"yum -y install epel-release\"
+  > /dev/null\n    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \"yum -y install
+  clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget
+  unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel
+  glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel\" > /dev/null\n
+  \   if [ \"$PROJ\" == \"tensorflow\" ]; then\n     echo \"adding bazel for tensorflow\"\n
+  \    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \"curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh
+  -o bazel.sh\"\n     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \"bash bazel.sh\"\n
+  \   fi \n  fi\nfi\nif [ \"$TRAVIS_OS_NAME\" == \"osx\" ]; then\n  brew update\n
+  \ #brew install caskroom/cask/brew-cask\n  brew cask install cuda\n  brew install
+  gcc5 swig bazel libusb nasm yasm xz pkg-config\nfi\n"
+- |
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    if [ "$OS" == "linux-x86" ]; then
+      sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
+    fi
+    #sudo apt-get install -q -y libblas-dev
+  fi
 install:
-###   - ./cppbuild.sh -platform $OS install ${PROJ[@]}
-   - echo "install"
-
+- echo "install"
 script:
-   - |
-    echo "starting script"
-    echo "running for $PROJ"
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-      echo "container id is $DOCKER_CONTAINER_ID"
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
-      echo "Build status $BUILD_STATUS"
-      if [ $BUILD_STATUS -ne 0 ]; then  
-        echo "Build Failed"
-        return $BUILD_STATUS
-      fi
-    else	
-     mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?
-      echo "Build status $BUILD_STATUS"
-      if [ $BUILD_STATUS -ne 0 ]; then
-        echo "Build Failed"
-        return $BUILD_STATUS
-      fi
-    fi
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-      docker stop $DOCKER_CONTAINER_ID
-      docker rm -v $DOCKER_CONTAINER_ID
-    fi
+- "echo \"starting script\"\necho \"running for $PROJ\"\nif [ \"$TRAVIS_OS_NAME\"
+  == \"linux\" ]; then\n  DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print
+  $1}')\n  echo \"container id is $DOCKER_CONTAINER_ID\"\n  docker exec -ti $DOCKER_CONTAINER_ID
+  /bin/bash -xec \"cd /root/build/vb216/javacpp-presets;mvn install -Dmaven.test.skip=true
+  -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ\"; export BUILD_STATUS=$?\n
+  \ echo \"Build status $BUILD_STATUS\"\n  if [ $BUILD_STATUS -ne 0 ]; then  \n    echo
+  \"Build Failed\"\n    return $BUILD_STATUS\n  fi\nelse\t\n mvn clean install -Dmaven.javadoc.skip=true
+  -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?\n  echo \"Build status
+  $BUILD_STATUS\"\n  if [ $BUILD_STATUS -ne 0 ]; then\n    echo \"Build Failed\"\n
+  \   return $BUILD_STATUS\n  fi\nfi\nif [ \"$TRAVIS_OS_NAME\" == \"linux\" ]; then\n
+  \ DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')\n  docker stop
+  $DOCKER_CONTAINER_ID\n  docker rm -v $DOCKER_CONTAINER_ID\nfi\n"
 cache:
-   directories:
-      - $HOME/.m2
-
+  directories:
+  - "$HOME/.m2"
