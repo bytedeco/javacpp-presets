@@ -183,6 +183,42 @@
         </configuration>
         <executions>
           <execution>
+            <id>javacpp.cppbuild.install</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${javacpp.cppbuild.skip}</skip>
+              <buildCommand>
+                <program>bash</program>
+                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>install</argument>
+                <argument>${javacpp.moduleId}</argument>
+                <argument>-platform</argument>
+                <argument>${javacpp.platform}</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}/..</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp.cppbuild.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${javacpp.cppbuild.skip}</skip>
+              <buildCommand>
+                <program>bash</program>
+                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>clean</argument>
+                <argument>${javacpp.moduleId}</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}/..</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
             <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
@@ -308,48 +344,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.5.0</version>
-        <executions>
-          <execution>
-            <id>javacpp.cppbuild.install</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>			
-            <configuration>
-              <arguments>
-                <argument>${project.basedir}/../cppbuild.sh</argument>
-                <argument>install</argument>
-                <argument>${javacpp.moduleId}</argument>
-                <argument>-platform</argument>
-                <argument>${javacpp.platform}</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>javacpp.cppbuild.clean</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>			
-            <configuration>
-              <arguments>
-                <argument>${project.basedir}/../cppbuild.sh</argument>
-                <argument>clean</argument>
-                <argument>${javacpp.moduleId}</argument>
-              </arguments>
-            </configuration>
-          </execution>		  
-        </executions>
-        <configuration>
-          <skip>${javacpp.cppbuild.skip}</skip>
-          <workingDirectory>${project.basedir}/..</workingDirectory>
-          <executable>bash</executable>			
-        </configuration>
       </plugin>
     </plugins>
     </pluginManagement>
