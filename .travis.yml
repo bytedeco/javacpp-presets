@@ -136,14 +136,11 @@ install:
 script:
    - |
     echo "download dependencies" 
-    ls -ltr  
-    echo $DROPAUTHTEST
-    echo "$DROPAUTHTEST"
-    echo '$DROPAUTHTEST'
-    curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
-    ls -ltr
-    cat cudnn-8.0-osx-x64-v5.1.tgz
-    ls -ltr  
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
+      tar xvf cudnn-8.0-osx-x64-v5.1.tgz
+      mv ./cuda/* /usr/local/cuda/
+    fi  
     echo "starting script"
     echo "running for $PROJ"
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
