@@ -118,7 +118,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         brew update
         #brew install caskroom/cask/brew-cask
-        brew cask install cuda
+        brew install Caskroom/cask/cuda
         brew install gcc5 swig bazel libusb nasm yasm xz pkg-config
       fi
    - |
@@ -137,8 +137,12 @@ script:
    - |
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+
       curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
       tar xvf cudnn-8.0-osx-x64-v5.1.tgz
+      ls -ltr
+      ls -ltr ./cuda/lib
       sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
       sudo cp ./cuda/lib/libcudnn.5.dylib /usr/local/cuda/lib/libcudnn.5.dylib
       sudo cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
