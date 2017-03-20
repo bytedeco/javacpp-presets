@@ -12,6 +12,9 @@ matrix:
    include:
       - jdk: oraclejdk7
         os: linux
+        env: PROJ=flycapture OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
         env: PROJ=artoolkitplus OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
@@ -88,6 +91,7 @@ matrix:
 
 before_install:
    #maybe this needs to go into new first job
+   - mkdir $HOME/downloads
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
@@ -103,11 +107,17 @@ before_install:
         fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init > /dev/null
+          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/downloads/:/root/downloads/ -v $HOME/build/:/root/build/ -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn5-devel-centos7 /usr/sbin/init > /dev/null
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
+          if [ "$PROJ" == "flycapture" ]; then
+            curl -L -s -X POST --globoff  -o $HOME/downloads/flycapture2-2.9.3.43-amd64-pkg.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/flycapture2-2.9.3.43-amd64-pkg.tgz"}' https://content.dropboxapi.com/2/files/download
+            ls -ltr $HOME/downloads
+            tar xzvf $HOME/downloads/flycapture2-2.9.3.43-amd64-pkg.tgz
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg -i /root/downloads/flycapture2-2.9.3.43-amd64/*.deb" 
+          fi 
           if [ "$PROJ" == "tensorflow" ]; then
            echo "adding bazel for tensorflow"
            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh"
@@ -117,7 +127,7 @@ before_install:
       fi
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         brew update
-        brew install gcc5 swig bazel libusb nasm yasm xz pkg-config
+        brew install gcc5 swig bazel libusb nasm yasm xz
       fi
    - |
      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
