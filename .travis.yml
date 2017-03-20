@@ -139,7 +139,10 @@ script:
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
       tar xvf cudnn-8.0-osx-x64-v5.1.tgz
-      cp -R ./cuda/* /usr/local/cuda/
+      cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
+      cp ./cuda/lib/libcudnn.5.dylib /usr/local/cuda/lib/libcudnn.5.dylib
+      cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
+      cp ./cuda/lib/libcudnn_static.a /usr/local/cuda/lib/libcudnn_static.a
     fi  
     echo "starting script"
     echo "running for $PROJ"
