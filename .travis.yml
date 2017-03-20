@@ -135,7 +135,7 @@ script:
    - |
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow*]; then 
+      if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ]; then 
         brew install Caskroom/cask/cuda
         curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
 
