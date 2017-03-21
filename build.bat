@@ -14,7 +14,7 @@
   mkdir %APPVEYOR_BUILD_FOLDER%\tmp
   set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 
- REM IF %COMPILER%==msys2 (
+ IF %COMPILER%==msys2 (
     @echo on
     SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
     bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
@@ -25,34 +25,38 @@
     REM build tools
     bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain base-devel tar nasm yasm pkg-config unzip autoconf automake libtool make patch mingw-w64-x86_64-libtool"
 
-bash --version
-g++ --version
-java -version
-mvn --version
+    bash --version
+    g++ --version
+    java -version
+    mvn --version
 
-call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
+    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
+   )
 
-REM echo "Perform download files out of main repo"
-cd .. 
+    echo Perform download files out of main repo
+    cd .. 
 
-IF %projectName%==cuda ( 
-curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
-dir
-cuda_8.0.61_windows.exe -s
-)
+    IF %projectName%==cuda ( 
+       @echo on
+       curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
+       dir
+       cuda_8.0.61_windows.exe -s
+    )
 
-IF %projectName%==hdf5 ( 
-curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win64-vs2013-shared.zip"
-dir
-unzip hdf5.zip 
-cd hdf5
-msiexec /i HDF5-1.10.0-win64.msi /quiet
-cd ..
-)
+    IF %projectName%==hdf5 ( 
+       @echo on
+       curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win64-vs2013-shared.zip"
+       dir
+       unzip hdf5.zip 
+       cd hdf5
+       msiexec /i HDF5-1.10.0-win64.msi /quiet
+       cd ..
+    )
 
-cd javacpp
-mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
-cd ..
-cd javacpp-presets
-mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-x86_64 -pl %projectName% 
-  REM)
+    echo Real install now.. 
+    cd javacpp
+    mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+    cd ..
+    cd javacpp-presets
+    mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-x86_64 -pl %projectName% 
+  )
