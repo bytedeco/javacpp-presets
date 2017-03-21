@@ -2,6 +2,12 @@ env:
   global:
     - secure: "meC6CCyHs3V+r6BQU4ZddvNJ/9PjAS0iZBEgEENTS3ERLlbQDK88SC3lneI59q/PQPXpuInpn87VEEzljdyZHu7EE4uYxqdS3nQohWcRkkF95Y4LQseXxgvaaEQXaVVC1/10b1r8g1pOrPPgvpHW+/UA7lxpfDJwUyyLVG2TTc8BNcoJxRhdrAHbCheOYP/GkfvBQeT+jqW/+FBQhBMReS66X3isosZ4OmMSB1ed711uIr/e25UikV17AfZ5hyJ3F3+JxBgpVa9glPYyR4/yIvnHQM+Uwb8SoxVneaZ0kVFGl5jNfnrI8DSmoqkVCcA3YSpDILnwz+QFBwN3zhdRX5vGbyKTa4xthCCJlxRyvKle1ldCaIKh1EujvfryndoQtEolk/idwluV2Ic3QgsliUECe+yCX42hYzZBwYi38lnY1AQJ3HKazC7jSzmY31qwEBGHnSQytiPgxLGIHEB1QKo+qX+BLCLLAHorqSybwO2UGlBRhNDI5pa874Q2mf/DXGSDaGUMNNzRQEK9TbtS/RgCSudbuuZ2IeiGi/9Xh1A1u8/EL6KfHXIW7TDJB9OIrZPXexCmM467dhS74TJph21dj+45IamQr2xScaDxgN5xhQ0Yu+/o+hRzdaM6qukjN+3x0tJ0I6dj8N3jM6Pl2lm+YD7/pNrtbxaNG7B8M0k="
     - secure: "IsAnYe1kTcfuHkGoDz7HFPcPdY+bmqJFoQZX/8hl6b2sTO5lG1iLmDyZ5NSNxAPGAVzGny/44CVn+w25ITTJ4e8XiSQhClQV33FlEpy7Gxl6TnkaK0k/XvEAgp5MuEnaco2uh5DKEZEJ6NHqrUvoQx+2GFq3WvK8cBfdXH2C+povI+XDgygg5P4hhwzlA9bm1smPTalEEyKshfwuptgMbRAxkLrWCpta3IxuRupgLNxVXER7faHTmW3+JZ1CZop2zDRyZMiFkQnLaR32Mhuj35dyzxY19tRxdGOkfSGFrYD2C8teIdbRidvZqckgmBzKsCAgDBpWM1EI/lU2wjnCY6itrlkK4pqRGxjdUfuganI0JQq72OX/mGZRgcX0Nm/52C3xszMFMi4mGB944H8rF3mX8FfS7ecT4c2R5m/RIEBaNg2iqA27hBgp/kKfVU8SCbb2ushBQCDuXmknfG7JGuzg56+Gkx29P6hD9MHaj/WeSZaAQHcN5wo3+ZGqNZbEXW22uA3DV+/rXRJXLqvI1EvgaIsojaKj262uwkAAU46A9IgeOuPSP0RejkXctOGxIvCi3W6b7nOeUGlH1nsjoLMonndXO2kjIh9fj+7P214XMWg9HCkDryCFmHugRPAZVfEnP5O+oT0Qm3FejQgFkBzOfWaV6w3601s/s5qJUh0="
+addons:
+  artifacts:
+    s3_region: "us-east-1"
+    paths:
+     - ./buildlogs/
+    debug: true
 
 language: java
 sudo: required
@@ -91,6 +97,7 @@ matrix:
 
 before_install:
    #maybe this needs to go into new first job
+   - ls -ltr
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
@@ -149,7 +156,7 @@ script:
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ]; then 
         echo "installing cuda.."
-        brew install Caskroom/cask/cuda > /dev/null
+        brew install Caskroom/cask/cuda 
         curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
 
         curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
@@ -172,6 +179,7 @@ script:
         return $BUILD_STATUS
       fi
     else	
+     echo "test Output" > ./buildlogs/$PROJ.log
      mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?
       echo "Build status $BUILD_STATUS"
       if [ $BUILD_STATUS -ne 0 ]; then
