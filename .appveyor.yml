@@ -116,10 +116,6 @@ init:
       
 install:
     - 'echo install section'
-    - 'curl.exe -L -o cuda_8.0.61_windows.exe https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe'
-    - 'dir'
-    - 'cuda_8.0.61_windows.exe -s'
-    - 'cd ..'
     - 'git clone https://github.com/bytedeco/javacpp.git'
     - 'cd javacpp'
     - 'git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2'
