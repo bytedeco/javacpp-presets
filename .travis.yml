@@ -6,7 +6,7 @@ addons:
   artifacts:
     s3_region: "us-east-1"
     paths:
-     - ./buildlogs/*
+     - $(ls /buildlogs/*| tr "\n" ":") 
     debug: true
 
 language: java
