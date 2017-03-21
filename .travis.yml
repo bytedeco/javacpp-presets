@@ -126,8 +126,9 @@ before_install:
         fi
       fi
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        brew update
-        brew install gcc5 swig bazel libusb nasm yasm xz
+        echo "performing brew update and install of dependencies, please wait.."
+        brew update > /dev/null
+        brew install gcc5 gfortran swig bazel libusb nasm yasm xz > /dev/null
       fi
    - |
      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
@@ -146,7 +147,8 @@ script:
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ]; then 
-        brew install Caskroom/cask/cuda
+        echo "installing cuda.."
+        brew install Caskroom/cask/cuda > /dev/null
         curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
 
         curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
