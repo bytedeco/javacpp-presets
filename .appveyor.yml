@@ -112,11 +112,11 @@ environment:
 
 
 init:
-#    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       
 install:
     - 'echo install section'
-    - 'curl -L -o cuda_8.0.61_windows.exe https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe'
+    - 'curl.exe -L -o cuda_8.0.61_windows.exe https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe'
     - 'dir'
     - 'cuda_8.0.61_windows.exe -s'
     - 'cd ..'
@@ -134,5 +134,5 @@ test_script:
     - 'echo no tests'
 
 on_finish:
-#    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
