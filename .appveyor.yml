@@ -116,6 +116,7 @@ init:
       
 install:
     - 'echo install section'
+    - 'cd ..'
     - 'git clone https://github.com/bytedeco/javacpp.git'
     - 'cd javacpp'
     - 'git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2'
