@@ -14,7 +14,7 @@
   mkdir %APPVEYOR_BUILD_FOLDER%\tmp
   set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 
-  IF %COMPILER%==msys2 (
+ REM IF %COMPILER%==msys2 (
     @echo on
     SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
     bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
@@ -35,12 +35,13 @@ call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd6
 REM echo "Perform download files out of main repo"
 cd .. 
 
-IF "%projectName%"=="cuda"( 
+IF %projectName%==cuda ( 
 curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
 dir
-cuda_8.0.61_windows.exe -s)
+cuda_8.0.61_windows.exe -s
+)
 
-IF "%projectName%"=="hdf5"( 
+IF %projectName%==hdf5 ( 
 curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win64-vs2013-shared.zip"
 dir
 unzip hdf5.zip 
@@ -54,4 +55,4 @@ mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 cd ..
 cd javacpp-presets
 mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-x86_64 -pl %projectName% 
-  )
+  REM)
