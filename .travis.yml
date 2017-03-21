@@ -128,7 +128,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "performing brew update and install of dependencies, please wait.."
         brew update > /dev/null
-        brew install gcc5 gfortran swig bazel libusb nasm yasm xz > /dev/null
+        brew install gcc gcc5 swig bazel libusb nasm yasm xz > /dev/null
       fi
    - |
      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
