@@ -6,7 +6,7 @@ addons:
   artifacts:
     s3_region: "us-east-1"
     paths:
-     - ./buildlogs/
+     - ./buildlogs/*
     debug: true
 
 language: java
@@ -97,6 +97,7 @@ matrix:
 
 before_install:
    #maybe this needs to go into new first job
+   - echo "test" > ./buildlogs/test.log
    - ls -ltr
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
