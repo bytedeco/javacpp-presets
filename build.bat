@@ -1,7 +1,6 @@
  @echo off
   set projectName=%~1
   set DROPAUTH=%~2
-  echo Drop auth test "%DROPAUTH%"
   cd %APPVEYOR_BUILD_FOLDER%
 
   echo Building "%projectName%"
