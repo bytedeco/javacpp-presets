@@ -157,7 +157,13 @@ script:
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ] || [ "$PROJ" == *caffe* ]; then 
         echo "installing cuda.."
-        brew install Caskroom/cask/cuda 
+        brew install Caskroom/cask/cuda; export BREW_STATUS=$? 
+        echo "Brew status $BREW_STATUS"
+        if [ $BREW_STATUS -ne 0 ]; then
+          echo "Brew Failed"
+          return $BREW_STATUS
+        fi
+
         curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
 
         curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
