@@ -129,7 +129,7 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%" "DROP_AUTH_TEST"'
+    - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%" "%DROP_AUTH_TEST%"'
 
 test_script:
     - 'echo no tests'
