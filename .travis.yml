@@ -181,9 +181,10 @@ script:
       fi
     else	
      echo "test Output" > ./buildlogs/$PROJ.log
-     #redirect tensorflow log to an S3 artifact as its too verbose
+     #redirect tensorflow error log to an S3 artifact as its too verbose
      if [ "$PROJ" == *tensorflow* ]; then 
-       travis_wait mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ > ./buildlogs/$PROJ.log; export BUILD_STATUS=$?
+       echo "redirecting tensorflow error output"
+       mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ 2> ./buildlogs/$PROJ_errors.log; export BUILD_STATUS=$?
      else
        mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?
      fi

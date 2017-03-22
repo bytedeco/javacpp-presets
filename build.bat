@@ -33,7 +33,7 @@
     call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
     echo Perform download files out of main repo
     cd ..
-    IF %projectName%==cuda (
+    IF "%projectName%"==cuda (
        @echo on
        curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        dir
@@ -41,7 +41,7 @@
     )
     echo Done cuda
 
-    IF %projectName%==hdf5 ( 
+    IF "%projectName%"==hdf5 ( 
        @echo on
        curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win64-vs2013-shared.zip"
        dir
