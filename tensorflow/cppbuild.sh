@@ -75,6 +75,7 @@ case $PLATFORM in
 esac
 
 ./configure
+echo "Starting bazel step.."
 bazel build -c opt //tensorflow:libtensorflow_cc.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures
 
 case $PLATFORM in

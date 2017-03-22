@@ -155,7 +155,7 @@ script:
    - |
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ]|| [ "$PROJ" == *caffe* ]; then 
+      if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ] || [ "$PROJ" == *caffe* ]; then 
         echo "installing cuda.."
         brew install Caskroom/cask/cuda 
         curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
@@ -184,6 +184,7 @@ script:
      #redirect tensorflow error log to an S3 artifact as its too verbose
      if [ "$PROJ" == *tensorflow* ]; then 
        echo "redirecting tensorflow error output"
+       ./prog.sh &
        mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ 2> ./buildlogs/$PROJ_errors.log; export BUILD_STATUS=$?
      else
        mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?
