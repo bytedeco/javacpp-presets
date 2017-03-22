@@ -32,6 +32,7 @@
 
     call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
     echo Perform download files out of main repo
+    cd ..
     IF %projectName%==cuda (
        @echo on
        curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
