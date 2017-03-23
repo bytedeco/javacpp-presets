@@ -154,7 +154,7 @@ script:
    - |
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      if [[ "$PROJ" =~ cuda ]] || [ "$PROJ" =~ tensorflow ] || [ "$PROJ" =~ caffe ]; then 
+      if [[ "$PROJ" =~ cuda ]] || [ "$PROJ" =~ tensorflow ] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
         brew install Caskroom/cask/cuda; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
