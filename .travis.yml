@@ -98,7 +98,6 @@ matrix:
 before_install:
    #maybe this needs to go into new first job
    - echo "test" > ./buildlogs/test.log
-   - ls -ltr
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    - git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
@@ -155,7 +154,7 @@ script:
    - |
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      if [ "$PROJ" == *cuda* ] || [ "$PROJ" == *tensorflow* ] || [ "$PROJ" == *caffe* ]; then 
+      if [[ "$PROJ" =~ cuda ]] || [ "$PROJ" =~ tensorflow ] || [ "$PROJ" =~ caffe ]; then 
         echo "installing cuda.."
         brew install Caskroom/cask/cuda; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
@@ -164,7 +163,7 @@ script:
           return $BREW_STATUS
         fi
 
-        curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+        #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
 
         curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v5.1.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v5.1.tgz"}' https://content.dropboxapi.com/2/files/download
         tar xvf cudnn-8.0-osx-x64-v5.1.tgz
@@ -190,7 +189,7 @@ script:
      #redirect tensorflow error log to an S3 artifact as its too verbose
      if [ "$PROJ" == *tensorflow* ]; then 
        echo "redirecting tensorflow error output"
-       ./prog.sh &
+       ./javacpp-presets/prog.sh &
        mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ 2> ./buildlogs/$PROJ_errors.log; export BUILD_STATUS=$?
      else
        mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?
