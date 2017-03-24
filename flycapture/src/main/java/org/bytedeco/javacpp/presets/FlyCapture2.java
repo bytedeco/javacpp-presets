@@ -43,9 +43,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target = "org.bytedeco.javacpp.FlyCapture2", value = {
         @Platform(value = {"linux-x86", "linux-arm", "windows"}, include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
                 "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
-                "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>"}),
+                "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>",
+                "<MultiSyncLibraryPlatform.h>", "<MultiSyncLibraryDefs.h>", "<MultiSyncLibrary.h>"}),
         @Platform(value = {"linux-x86", "linux-arm"}, link = "flycapture@.2", includepath = "/usr/include/flycapture/"),
-        @Platform(value = "windows", link = "FlyCapture2",
+        @Platform(value = "windows", link = {"FlyCapture2", "MultiSyncLibrary"},
                 includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/"),
         @Platform(value = "windows-x86",
                 linkpath    = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/",
@@ -57,7 +58,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 preloadpath = "C:/Program Files/Point Grey Research/FlyCapture2/bin64/") })
 public class FlyCapture2 implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("FLYCAPTURE2_API", "FLYCAPTURE2_LOCAL").cppTypes().annotations().cppText(""))
+        infoMap.put(new Info("FLYCAPTURE2_API", "FLYCAPTURE2_LOCAL",
+                "MULTISYNCLIBRARY_API", "MULTISYNCLIBRARY_LOCAL").cppTypes().annotations().cppText(""))
                .put(new Info("defined(WIN32) || defined(WIN64)").define())
                .put(new Info("FlyCapture2::ImageEventCallback").valueTypes("ImageEventCallback")
                        .pointerTypes("@Cast(\"FlyCapture2::ImageEventCallback*\") @ByPtrPtr ImageEventCallback"))
