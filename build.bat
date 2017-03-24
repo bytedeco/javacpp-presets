@@ -38,9 +38,9 @@
        curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v5.1.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v5.1.zip"}' https://content.dropboxapi.com/2/files/download
        @echo on
        unzip cudnn-8.0-windows10-x64-v5.1.zip
-       copy ./cuda/bin/cudnn64_5.dll "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" 
-       copy ./cuda/include/cudnn.h "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" 
-       copy ./cuda/lib/x64/cudnn.lib "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" 
+       move .\cuda\bin\cudnn64_5.dll "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" 
+       move .\cuda\include\cudnn.h "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" 
+       move .\cuda\lib\x64\cudnn.lib "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" 
        curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        dir
        cuda_8.0.61_windows.exe -s
@@ -52,7 +52,7 @@
        curl.exe -L -o CMU.zip "https://www.dropbox.com/s/ufm9eb4d6ui8qbt/CMU.zip?dl=0"
        dir
        unzip CMU.zip
-       mv CMU "/c/Program\ Files\ (x86)\"
+       move CMU "c:\Program Files (x86)"
     )
     echo Done libdc1394
 
