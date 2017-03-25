@@ -39,8 +39,8 @@
        @echo on
        curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        cuda_8.0.61_windows.exe -s 
-       echo Waiting while cuda installs..
-       timeout /T 300
+       echo May need to wait while cuda installs..
+       REM timeout /T 300
        unzip cudnn-8.0-windows10-x64-v5.1.zip
        move .\cuda\bin\cudnn64_5.dll "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" 
        move .\cuda\include\cudnn.h "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" 

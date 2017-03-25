@@ -154,6 +154,9 @@ script:
    - |
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      if [[ "$PROJ" =~ mxnet ]]; then 
+        export PKG_CONFIG_PATH=/Users/travis/build/vb216/javacpp-presets/opencv/cppbuild/macosx-x86_64/lib/pkgconfig
+      fi 
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
         brew install Caskroom/cask/cuda; export BREW_STATUS=$? 
