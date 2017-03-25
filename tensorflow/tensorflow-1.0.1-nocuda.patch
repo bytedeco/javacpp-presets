@@ -1,0 +1,33 @@
+diff -ruN tensorflow-1.0.1/tensorflow/core/platform/default/build_config/BUILD tensorflow-1.0.1-cuda/tensorflow/core/platform/default/build_config/BUILD
+--- tensorflow-1.0.1/tensorflow/core/platform/default/build_config/BUILD	2017-03-08 07:16:05.000000000 +0900
++++ tensorflow-1.0.1-cuda/tensorflow/core/platform/default/build_config/BUILD	2017-03-15 22:03:30.680172564 +0900
+@@ -137,7 +137,7 @@
+ cc_library(
+     name = "cuda",
+     data = [
+-        "@local_config_cuda//cuda:cudart",
++        "@local_config_cuda//cuda:cudart_static",
+     ],
+     linkopts = select({
+         "@local_config_cuda//cuda:darwin": [
+@@ -150,7 +150,7 @@
+         ],
+     }),
+     deps = [
+-        "@local_config_cuda//cuda:cudart",
++        "@local_config_cuda//cuda:cudart_static",
+     ],
+ )
+ 
+diff -ruN tensorflow-1.0.1/third_party/gpus/cuda/BUILD.tpl tensorflow-1.0.1-cuda/third_party/gpus/cuda/BUILD.tpl
+--- tensorflow-1.0.1/third_party/gpus/cuda/BUILD.tpl	2017-03-08 07:16:05.000000000 +0900
++++ tensorflow-1.0.1-cuda/third_party/gpus/cuda/BUILD.tpl	2017-03-15 22:03:13.921791967 +0900
+@@ -106,7 +106,7 @@
+     name = "cuda",
+     deps = [
+         ":cuda_headers",
+-        ":cudart",
++        ":cudart_static",
+         ":cublas",
+         ":cudnn",
+         ":cufft",

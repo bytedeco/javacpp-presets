@@ -23,7 +23,7 @@ export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
-TENSORFLOW_VERSION=1.0.0
+TENSORFLOW_VERSION=1.0.1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -63,10 +63,12 @@ case $PLATFORM in
         export TF_NEED_CUDA=1
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--config=cuda --copt=-m64 --linkopt=-m64"
+        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-nocuda.patch
         ;;
     macosx-*)
         export TF_NEED_CUDA=1
         export BUILDFLAGS="--config=cuda --linkopt=-install_name --linkopt=@rpath/libtensorflow.so"
+        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-nocuda.patch
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -75,8 +77,7 @@ case $PLATFORM in
 esac
 
 ./configure
-echo "Starting bazel step.."
-bazel build -c opt //tensorflow:libtensorflow_cc.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone 
+bazel build -c opt //tensorflow:libtensorflow_cc.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures
 
 case $PLATFORM in
     macosx-*)
