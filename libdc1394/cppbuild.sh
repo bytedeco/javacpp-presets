@@ -54,9 +54,9 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86_64)
-        export C_INCLUDE_PATH="/c/Program\ Files\ (x86)/CMU/1394Camera/include/"
+        export C_INCLUDE_PATH="/c/Program Files (x86)/CMU/1394Camera/include/"
         mkdir -p "$INSTALL_PATH/bin"
-        cp "/c/Program\ Files\ (x86)/CMU/1394Camera/lib64/x64/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
+        cp "/c/Program Files (x86)/CMU/1394Camera/lib64/x64/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
         export LIBRARY_PATH="$INSTALL_PATH/bin/"
         CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
         make -j4
