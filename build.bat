@@ -34,6 +34,13 @@
     call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
     echo Perform download files out of main repo
     cd ..
+    IF "%projectName%"=="flycapture" (
+       curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
+       unzip pgr.zip
+       move "Point Grey Research" "c:\Program Files"
+    )
+    echo "Passed flycapture step"
+
     IF "%projectName%"=="cuda" (
        curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v5.1.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v5.1.zip"}' https://content.dropboxapi.com/2/files/download
        @echo on
