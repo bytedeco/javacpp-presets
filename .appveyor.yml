@@ -14,10 +14,108 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
+      PROJ: "cuda"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "ffmpeg"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "fftw"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "gsl"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "leptonica,tesseract"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
       PROJ: "libdc1394"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "libfreenect"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "libfreenect2"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "hdf5"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "liquidfun"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "llvm"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "videoinput"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "tensorflow"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,caffe"
+    - COMPILER: msys2
+      PLATFORM: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      PROJ: "artoolkitplus"
 
 init:
-    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       
 install:
     - 'echo install section'
@@ -37,5 +135,5 @@ test_script:
     - 'echo no tests'
 
 on_finish:
-    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
