@@ -50,9 +50,9 @@
 
     IF "%projectName%"=="libdc1394" (
        @echo on
-       curl.exe -L -o CMU2.zip "https://www.dropbox.com/s/lol0u3rgz32sgab/CMU2.zip?dl=0"
+       curl.exe -L -o CMU.zip "https://www.dropbox.com/s/97boebrmdza18uu/CMU.zip?dl=0"
        dir
-       unzip CMU2.zip
+       unzip CMU.zip
        move CMU "c:\Program Files (x86)"
     )
     echo Done libdc1394
