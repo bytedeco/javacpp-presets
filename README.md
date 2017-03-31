@@ -115,7 +115,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * OpenBLAS 0.2.19  http://www.openblas.net/
  * FFTW 3.3.5  http://www.fftw.org/download.html
  * GSL 2.2.1  http://www.gnu.org/software/gsl/#downloading
- * LLVM 3.9.1  http://llvm.org/releases/download.html
+ * LLVM 4.0.0  http://llvm.org/releases/download.html
  * Leptonica 1.73  http://www.leptonica.org/download.html
  * Tesseract 3.04.01  https://github.com/tesseract-ocr/tesseract
  * Caffe  https://github.com/BVLC/caffe
