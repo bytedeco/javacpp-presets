@@ -1,0 +1,114 @@
+diff -ruN tensorflow-1.0.0-alpha/tensorflow/BUILD tensorflow-1.0.0-alpha-android/tensorflow/BUILD
+--- tensorflow-1.0.0-alpha/tensorflow/BUILD	2017-01-10 09:17:51.000000000 +0900
++++ tensorflow-1.0.0-alpha-android/tensorflow/BUILD	2017-01-15 10:17:44.194299444 +0900
+@@ -234,12 +234,29 @@
+     ],
+ )
+ 
++
++load("//tensorflow:tensorflow.bzl", "tf_copts")
++
+ cc_binary(
+     name = "libtensorflow_cc.so",
++    copts = tf_copts(),
++    linkopts = [
++        "-landroid",
++        "-ljnigraphics",
++        "-llog",
++        "-lm",
++        "-z defs",
++        "-s",
++        "-ldl",
++        "-Wl,--icf=all",  # Identical Code Folding
++    ],
++    tags = [
++        "manual",
++        "notap",
++    ],
+     linkshared = 1,
++    linkstatic = 1,
+     deps = [
+-        "//tensorflow/c:c_api",
+-        "//tensorflow/cc:cc_ops",
+-        "//tensorflow/core:tensorflow",
++        "//tensorflow/core:android_tensorflow_lib",
+     ],
+ )
+diff -ruN tensorflow-1.0.0-alpha/tensorflow/c/BUILD tensorflow-1.0.0-alpha-android/tensorflow/c/BUILD
+--- tensorflow-1.0.0-alpha/tensorflow/c/BUILD	2017-01-10 09:17:51.000000000 +0900
++++ tensorflow-1.0.0-alpha-android/tensorflow/c/BUILD	2017-01-15 10:17:44.194299444 +0900
+@@ -32,6 +32,19 @@
+     ],
+ )
+ 
++filegroup(
++    name = "c_api_files",
++    srcs = glob(
++        ["**/*"],
++        exclude = [
++            "**/METADATA",
++            "**/OWNERS",
++            "**/*test.cc",
++        ],
++    ),
++    visibility = ["//visibility:public"],
++)
++
+ tf_cuda_library(
+     name = "tf_status_helper",
+     srcs = ["tf_status_helper.cc"],
+diff -ruN tensorflow-1.0.0-alpha/tensorflow/core/BUILD tensorflow-1.0.0-alpha-android/tensorflow/core/BUILD
+--- tensorflow-1.0.0-alpha/tensorflow/core/BUILD	2017-01-10 09:17:51.000000000 +0900
++++ tensorflow-1.0.0-alpha-android/tensorflow/core/BUILD	2017-01-15 10:17:44.196299488 +0900
+@@ -839,7 +839,10 @@
+ # binary size (by packaging a reduced operator set) is a concern.
+ cc_library(
+     name = "android_tensorflow_lib",
+-    srcs = if_android([":android_op_registrations_and_gradients"]),
++    srcs = if_android([
++    	":android_op_registrations_and_gradients",
++    	"//tensorflow/c:c_api_files",
++    ]),
+     copts = tf_copts(),
+     tags = [
+         "manual",
+diff -ruN tensorflow-1.0.0-alpha/tensorflow/core/kernels/BUILD tensorflow-1.0.0-alpha-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.0.0-alpha/tensorflow/core/kernels/BUILD	2017-01-10 09:17:51.000000000 +0900
++++ tensorflow-1.0.0-alpha-android/tensorflow/core/kernels/BUILD	2017-01-15 10:17:44.197299510 +0900
+@@ -3497,6 +3497,7 @@
+         "transpose_op.h",
+         "where_op.h",
+         "xent_op.h",
++        "cwise_op_floor.cc",
+     ],
+ )
+ 
+diff -ruN tensorflow-1.0.0-alpha/tensorflow/tensorflow.bzl tensorflow-1.0.0-alpha-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.0.0-alpha/tensorflow/tensorflow.bzl	2017-01-10 09:17:51.000000000 +0900
++++ tensorflow-1.0.0-alpha-android/tensorflow/tensorflow.bzl	2017-01-15 10:17:44.198299532 +0900
+@@ -131,7 +131,6 @@
+           select({
+               "//tensorflow:android": [
+                   "-std=c++11",
+-                  "-DTF_LEAN_BINARY",
+                   "-O2",
+               ],
+               "//tensorflow:darwin": [],
+diff -ruN tensorflow-1.0.0-alpha/WORKSPACE tensorflow-1.0.0-alpha-android/WORKSPACE
+--- tensorflow-1.0.0-alpha/WORKSPACE	2017-01-10 09:17:51.000000000 +0900
++++ tensorflow-1.0.0-alpha-android/WORKSPACE	2017-01-15 10:17:44.199299553 +0900
+@@ -9,10 +9,10 @@
+ #    path = "<PATH_TO_SDK>",
+ #)
+ #
+-#android_ndk_repository(
+-#    name="androidndk",
+-#    path="<PATH_TO_NDK>",
+-#    api_level=21)
++android_ndk_repository(
++    name="androidndk",
++    path="<PATH_TO_NDK>",
++    api_level=21)
+ 
+ # Please add all new TensorFlow dependencies in workspace.bzl.
+ load("//tensorflow:workspace.bzl", "tf_workspace")

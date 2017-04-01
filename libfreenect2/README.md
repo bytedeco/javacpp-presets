@@ -37,7 +37,7 @@ Here is the full code of the example found in the [`example/`](example/) folder.
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>libfreenect2</artifactId>
-            <version>0.2.0-1.3.2-SNAPSHOT</version>
+            <version>0.2.0-1.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
