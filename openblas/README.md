@@ -19,37 +19,6 @@ Java API documentation is available here:
 &lowast; The JNI bindings actually link with [Intel MKL](https://software.intel.com/intel-mkl) instead if found on the "java.library.path".
 
 
-Android Libraries with LAPACK Support
-------------
-
-1. Download the [gcc-arm-linux-x86_64.tar.bz2](https://github.com/buffer51/android-gfortran/releases/download/r13b/gcc-arm-linux-x86_64.tar.bz2) and [gcc-x86-linux-x86_64.tar.bz2](https://github.com/buffer51/android-gfortran/releases/download/r13b/gcc-x86-linux-x86_64.tar.bz2) toolchains with FORTRAN compiler.
-
-2. Follow the instructions from https://github.com/buffer51/android-gfortran to deploy the toolchains into the NDK folder. Make sure to back-up the previous files.
-
-3. Run the following commands from the repository root folder to generate the .jar libraries.
-
-### android-x86
-
-```
-export ANDROID_NDK=<path-to-ndk-bundle>
-
-bash cppbuild.sh -platform android-x86 install openblas
-
-mvn clean install -Djavacpp.platform=android-x86 -Djavacpp.platform.root=$ANDROID_NDK -Djavacpp.platform.compiler=$ANDROID_NDK/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-gcc --projects .,openblas
-```
-
-
-### android-armv7
-
-```
-export ANDROID_NDK=<path-to-ndk-bundle>
-
-bash cppbuild.sh -platform android-arm install openblas
-
-mvn clean install -Djavacpp.platform=android-arm -Djavacpp.platform.root=$ANDROID_NDK -Djavacpp.platform.compiler=$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc --projects .,openblas
-```
-
-
 Sample Usage
 ------------
 Here is a simple example of LAPACK ported to Java from this C source file:
