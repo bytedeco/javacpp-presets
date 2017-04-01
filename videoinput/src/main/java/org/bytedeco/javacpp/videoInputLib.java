@@ -388,10 +388,9 @@ public static native int comInitCount(); public static native void comInitCount(
 		public static native @ByVal StringVector getDeviceList(); 
 
 		//needs to be called after listDevices - otherwise returns NULL
-		public static native @Cast("char*") BytePointer getDeviceName(int deviceID);
-		public static native int getDeviceIDFromName(@Cast("char*") BytePointer name);
-		public static native int getDeviceIDFromName(@Cast("char*") ByteBuffer name);
-		public static native int getDeviceIDFromName(@Cast("char*") byte[] name);
+		public static native @Cast("const char*") BytePointer getDeviceName(int deviceID);
+		public static native int getDeviceIDFromName(@Cast("const char*") BytePointer name);
+		public static native int getDeviceIDFromName(String name);
 
 		//choose to use callback based capture - or single threaded
 		public native void setUseCallback(@Cast("bool") boolean useCallback);
