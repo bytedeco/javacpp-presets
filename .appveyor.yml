@@ -8,111 +8,13 @@ environment:
   DROP_AUTH_TOK:
     secure: N2IK1SYHi918dXsfMrQRuX9FqrtTapnCW0Vs7H/06AVKslsTNAG99q5RVZ8PVIZ/+6mJ18LzxUdWcf3CoTN7LjmnAI5hwLZTpVMZvCAv2Dk=
   matrix:
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
+   - COMPILER: msys2
+      PLATFORM: x86
+      MSYS2_ARCH: x86
       MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "flycapture"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "cuda"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "ffmpeg"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "fftw"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "gsl"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "leptonica,tesseract"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "libdc1394"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "libfreenect"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "libfreenect2"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "hdf5"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "liquidfun"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "llvm"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "videoinput"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "tensorflow"
-    - COMPILER: msys2
-      PLATFORM: x64
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,caffe"
+      MSYSTEM: MINGW32
+      BIT: 32
+      PROJ: "artoolkitplus"
     - COMPILER: msys2
       PLATFORM: x64
       MSYS2_ARCH: x86_64
@@ -122,6 +24,7 @@ environment:
       PROJ: "artoolkitplus"
 
 init:
+# uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       
 install:
@@ -129,18 +32,17 @@ install:
     - 'cd ..'
     - 'git clone https://github.com/bytedeco/javacpp.git'
     - 'cd javacpp'
-#    - 'git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2'
-#    - 'mvn install'
+    # moved main build into batch file so env variables would be all setup
     - 'cd ../javacpp-presets'
 
 build_script:
     - 'echo build step for %PROJ%'
     - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%" "%DROP_AUTH_TOK%"'
 
-
 test_script:
     - 'echo no tests'
 
 on_finish:
+#    uncomment this for the RDP session to remain active after the build ends
 #    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 

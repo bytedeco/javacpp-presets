@@ -31,29 +31,36 @@
     java -version
     mvn --version
 
-    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
+    IF "%MSYS2_ARCH%"=="x86_64" (
+       echo Callings vcvarsall for amd64
+       call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
+    )
+    IF "%MSYS2_ARCH%"=="x86" (
+       echo Callings vcvarsall for x86
+       call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
+    )
     echo Perform download files out of main repo
     cd ..
     IF "%projectName%"=="flycapture" (
        curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
        unzip pgr.zip
        move "Point Grey Research" "c:\Program Files"
+       echo "Finished flycapture install"
     )
-    echo "Passed flycapture step"
 
     IF "%projectName%"=="cuda" (
-       curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v5.1.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v5.1.zip"}' https://content.dropboxapi.com/2/files/download
+       curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
        @echo on
        curl.exe -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
        REM timeout /T 300
-       unzip cudnn-8.0-windows10-x64-v5.1.zip
+       unzip cudnn-8.0-windows10-x64-v6.0.zip
        move .\cuda\bin\cudnn64_5.dll "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" 
        move .\cuda\include\cudnn.h "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" 
        move .\cuda\lib\x64\cudnn.lib "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" 
+       echo Finished cuda install
     )
-    echo Done cuda
 
     IF "%projectName%"=="libdc1394" (
        @echo on
@@ -61,8 +68,8 @@
        dir
        unzip CMU.zip
        move CMU "c:\Program Files (x86)"
+       echo Finished libdc1394 install
     )
-    echo Done libdc1394
 
     IF "%projectName%"=="hdf5" ( 
        @echo on
@@ -72,12 +79,13 @@
        cd hdf5
        msiexec /i HDF5-1.10.0-win64.msi /quiet
        cd ..
+       echo Finished hd5 install 
     )
 
-    echo Real install now.. 
-    cd javacpp
-    mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+    echo Starting main build now.. 
+    
+    mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
     cd ..
     cd javacpp-presets
-    mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-x86_64 -pl %projectName% 
+    mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl %projectName% 
   )
