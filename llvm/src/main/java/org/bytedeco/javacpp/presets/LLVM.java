@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>", "<llvm-c/LinkTimeOptimizer.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Vectorize.h>"},
-    compiler = "cpp11", link = {"LLVM-3.9", "LTO"}), @Platform(value = "macosx", link = {"LLVM", "LTO"}) })
+    compiler = "cpp11", link = {"LLVM-4.0", "LTO"}), @Platform(value = "macosx", link = {"LLVM", "LTO"}) })
 public class LLVM implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))
