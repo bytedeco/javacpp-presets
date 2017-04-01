@@ -39,6 +39,7 @@
        echo Callings vcvarsall for x86
        call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
     )
+ 
     echo Perform download files out of main repo
     cd ..
     IF "%projectName%"=="flycapture" (
@@ -83,7 +84,7 @@
     )
 
     echo Starting main build now.. 
-    
+    cd javacpp 
     mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
     cd ..
     cd javacpp-presets
