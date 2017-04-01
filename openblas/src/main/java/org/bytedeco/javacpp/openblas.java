@@ -13,42 +13,35 @@ public class openblas extends org.bytedeco.javacpp.presets.openblas {
 
 // #ifndef OPENBLAS_CONFIG_H
 // #define OPENBLAS_CONFIG_H
-public static final int OPENBLAS_OS_LINUX = 1;
-public static final int OPENBLAS_ARCH_X86_64 = 1;
+public static final int OPENBLAS_OS_ANDROID = 1;
+public static final int OPENBLAS_ARCH_X86 = 1;
 public static final int OPENBLAS_C_GCC = 1;
-public static final int OPENBLAS___64BIT__ = 1;
+public static final int OPENBLAS___32BIT__ = 1;
 // #define OPENBLAS_PTHREAD_CREATE_FUNC pthread_create
 // #define OPENBLAS_BUNDERSCORE _
 public static final int OPENBLAS_NEEDBUNDERSCORE = 1;
-// #define OPENBLAS_SANDYBRIDGE 
-public static final int OPENBLAS_L2_SIZE = 262144;
-public static final int OPENBLAS_L2_ASSOCIATIVE = 8;
+// #define OPENBLAS_ATOM 
+public static final int OPENBLAS_L1_DATA_SIZE = 24576;
+public static final int OPENBLAS_L1_DATA_LINESIZE = 64;
+public static final int OPENBLAS_L2_SIZE = 524288;
 public static final int OPENBLAS_L2_LINESIZE = 64;
-public static final int OPENBLAS_ITB_SIZE = 4096;
-public static final int OPENBLAS_ITB_ASSOCIATIVE = 4;
-public static final int OPENBLAS_ITB_ENTRIES = 64;
-public static final int OPENBLAS_DTB_SIZE = 4096;
-public static final int OPENBLAS_DTB_ASSOCIATIVE = 4;
 public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
+public static final int OPENBLAS_DTB_SIZE = 4096;
+public static final int OPENBLAS_L2_ASSOCIATIVE = 4;
 // #define OPENBLAS_HAVE_CMOV 
 // #define OPENBLAS_HAVE_MMX 
 // #define OPENBLAS_HAVE_SSE 
 // #define OPENBLAS_HAVE_SSE2 
 // #define OPENBLAS_HAVE_SSE3 
 // #define OPENBLAS_HAVE_SSSE3 
-// #define OPENBLAS_HAVE_SSE4_1 
-// #define OPENBLAS_HAVE_SSE4_2 
-// #define OPENBLAS_HAVE_AVX 
-// #define OPENBLAS_HAVE_CFLUSH 
-public static final int OPENBLAS_NUM_SHAREDCACHE = 1;
-public static final int OPENBLAS_NUM_CORES = 1;
-// #define OPENBLAS_CORE_SANDYBRIDGE 
-public static final String OPENBLAS_CHAR_CORENAME = "SANDYBRIDGE";
-public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 24576;
-public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 16384;
-public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 32768;
-public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 24576;
+// #define OPENBLAS_CORE_ATOM 
+public static final String OPENBLAS_CHAR_CORENAME = "ATOM";
+public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 16384;
+public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 8192;
+public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 16384;
+public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
+// #define OPENBLAS_EXPRECISION 
 public static final String OPENBLAS_VERSION = " OpenBLAS 0.2.19 ";
 /*This is only for "make install" target.*/
 
@@ -978,9 +971,9 @@ public static native int blas_get_vendor();
 
 // For Android prior to API 21 (no <complex> include)
 // #if defined(__ANDROID__)
-// #if __ANDROID_API__ < 21
+//#if __ANDROID_API__ < 21
 // #define LAPACK_COMPLEX_STRUCTURE
-// #endif
+//#endif
 // #endif
 
 // #ifdef __cplusplus
