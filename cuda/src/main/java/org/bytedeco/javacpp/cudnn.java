@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.cuda.*;
 
-public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
+public class cudnn extends org.bytedeco.javacpp.helper.cudnn {
     static { Loader.load(); }
 
 // Parsed from <cudnn.h>
@@ -69,8 +69,8 @@ public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
 // #if !defined(CUDNN_H_)
 // #define CUDNN_H_
 
-public static final int CUDNN_MAJOR =      5;
-public static final int CUDNN_MINOR =      1;
+public static final int CUDNN_MAJOR =      6;
+public static final int CUDNN_MINOR =      0;
 public static final int CUDNN_PATCHLEVEL = 5;
 
 public static final int CUDNN_VERSION =    (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
@@ -98,25 +98,33 @@ public static final int CUDNN_VERSION =    (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 1
 
 public static native @Cast("size_t") long cudnnGetVersion();
 
+/* Returns CUDA Runtime version statically linked against cudnn */
+public static native @Cast("size_t") long cudnnGetCudartVersion();
+
 /*
  * CUDNN return codes
  */
 /** enum cudnnStatus_t */
 public static final int
-    CUDNN_STATUS_SUCCESS          = 0,
-    CUDNN_STATUS_NOT_INITIALIZED  = 1,
-    CUDNN_STATUS_ALLOC_FAILED     = 2,
-    CUDNN_STATUS_BAD_PARAM        = 3,
-    CUDNN_STATUS_INTERNAL_ERROR   = 4,
-    CUDNN_STATUS_INVALID_VALUE    = 5,
-    CUDNN_STATUS_ARCH_MISMATCH    = 6,
-    CUDNN_STATUS_MAPPING_ERROR    = 7,
-    CUDNN_STATUS_EXECUTION_FAILED = 8,
-    CUDNN_STATUS_NOT_SUPPORTED    = 9,
-    CUDNN_STATUS_LICENSE_ERROR    = 10;
+    CUDNN_STATUS_SUCCESS                      = 0,
+    CUDNN_STATUS_NOT_INITIALIZED              = 1,
+    CUDNN_STATUS_ALLOC_FAILED                 = 2,
+    CUDNN_STATUS_BAD_PARAM                    = 3,
+    CUDNN_STATUS_INTERNAL_ERROR               = 4,
+    CUDNN_STATUS_INVALID_VALUE                = 5,
+    CUDNN_STATUS_ARCH_MISMATCH                = 6,
+    CUDNN_STATUS_MAPPING_ERROR                = 7,
+    CUDNN_STATUS_EXECUTION_FAILED             = 8,
+    CUDNN_STATUS_NOT_SUPPORTED                = 9,
+    CUDNN_STATUS_LICENSE_ERROR                = 10,
+    CUDNN_STATUS_RUNTIME_PREREQUISITE_MISSING = 11;
 
 // human-readable error messages
 public static native @Cast("const char*") BytePointer cudnnGetErrorString(@Cast("cudnnStatus_t") int status);
+
+public static native @Cast("cudnnStatus_t") int cudnnGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
+public static native @Cast("cudnnStatus_t") int cudnnGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
+public static native @Cast("cudnnStatus_t") int cudnnGetProperty(@Cast("libraryPropertyType") int type, int[] value);
 
 public static native @Cast("cudnnStatus_t") int cudnnCreate(@ByPtrPtr cudnnContext handle);
 public static native @Cast("cudnnStatus_t") int cudnnDestroy(cudnnContext handle);
@@ -173,6 +181,12 @@ public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext hand
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnOpTensorStruct(Pointer p) { super(p); }
 }
+@Opaque public static class cudnnReduceTensorStruct extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnReduceTensorStruct() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public cudnnReduceTensorStruct(Pointer p) { super(p); }
+}
 /*
 * CUDNN data type
 */
@@ -180,7 +194,10 @@ public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext hand
 public static final int
     CUDNN_DATA_FLOAT  = 0,
     CUDNN_DATA_DOUBLE = 1,
-    CUDNN_DATA_HALF   = 2;
+    CUDNN_DATA_HALF   = 2,
+    CUDNN_DATA_INT8   = 3,
+    CUDNN_DATA_INT32  = 4,
+    CUDNN_DATA_INT8x4 = 5;
 
 /*
  * CUDNN propagate Nan
@@ -189,6 +206,14 @@ public static final int
 public static final int
     CUDNN_NOT_PROPAGATE_NAN  = 0,
     CUDNN_PROPAGATE_NAN      = 1;
+
+/* 
+ * CUDNN Determinism
+ */
+/** enum cudnnDeterminism_t */
+public static final int
+    CUDNN_NON_DETERMINISTIC = 0,
+    CUDNN_DETERMINISTIC     = 1;
 
 /* Maximum supported number of tensor dimensions */
 public static final int CUDNN_DIM_MAX = 8;
@@ -199,8 +224,9 @@ public static native @Cast("cudnnStatus_t") int cudnnCreateTensorDescriptor(
 
 /** enum cudnnTensorFormat_t */
 public static final int
-    CUDNN_TENSOR_NCHW = 0,   /* row major (wStride = 1, hStride = w) */
-    CUDNN_TENSOR_NHWC = 1;    /* feature maps interleaved ( cStride = 1 )*/
+    CUDNN_TENSOR_NCHW = 0,          /* row major (wStride = 1, hStride = w) */
+    CUDNN_TENSOR_NHWC = 1,          /* feature maps interleaved ( cStride = 1 )*/
+    CUDNN_TENSOR_NCHW_VECT_C = 2;    /* each image point is vector of element of C : the length of the vector is carried by the data type*/
 
 public static native @Cast("cudnnStatus_t") int cudnnSetTensor4dDescriptor(
                                 cudnnTensorStruct tensorDesc,
@@ -258,6 +284,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetTensor4dDescriptor(
                                 int[] hStride,
                                 int[] wStride );
 
+                                
 public static native @Cast("cudnnStatus_t") int cudnnSetTensorNdDescriptor(
                                 cudnnTensorStruct tensorDesc,
                                 @Cast("cudnnDataType_t") int dataType,
@@ -275,7 +302,26 @@ public static native @Cast("cudnnStatus_t") int cudnnSetTensorNdDescriptor(
                                 @Cast("cudnnDataType_t") int dataType,
                                 int nbDims,
                                 @Const int[] dimA,
-                                @Const int[] strideA );
+                                @Const int[] strideA );     
+                                
+public static native @Cast("cudnnStatus_t") int cudnnSetTensorNdDescriptorEx(
+                                cudnnTensorStruct tensorDesc,
+                                @Cast("cudnnTensorFormat_t") int format,
+                                @Cast("cudnnDataType_t") int dataType,
+                                int nbDims,
+                                @Const IntPointer dimA );
+public static native @Cast("cudnnStatus_t") int cudnnSetTensorNdDescriptorEx(
+                                cudnnTensorStruct tensorDesc,
+                                @Cast("cudnnTensorFormat_t") int format,
+                                @Cast("cudnnDataType_t") int dataType,
+                                int nbDims,
+                                @Const IntBuffer dimA );
+public static native @Cast("cudnnStatus_t") int cudnnSetTensorNdDescriptorEx(
+                                cudnnTensorStruct tensorDesc,
+                                @Cast("cudnnTensorFormat_t") int format,
+                                @Cast("cudnnDataType_t") int dataType,
+                                int nbDims,
+                                @Const int[] dimA );                                                           
 
 public static native @Cast("cudnnStatus_t") int cudnnGetTensorNdDescriptor(
                                 cudnnTensorStruct tensorDesc,
@@ -298,6 +344,11 @@ public static native @Cast("cudnnStatus_t") int cudnnGetTensorNdDescriptor(
                                 int[] nbDims,
                                 int[] dimA,
                                 int[] strideA );
+                                
+                                
+public static native @Cast("cudnnStatus_t") int cudnnGetTensorSizeInBytes(
+                                cudnnTensorStruct tensorDesc,
+                                @Cast("size_t*") SizeTPointer size);                                
 
 /* PixelOffset( n, c, h, w ) = n *input_stride + c * feature_stride + h * h_stride + w * w_stride
 
@@ -353,10 +404,11 @@ public static native @Cast("cudnnStatus_t") int cudnnAddTensor(
 */
 /** enum cudnnOpTensorOp_t */
 public static final int
-    CUDNN_OP_TENSOR_ADD = 0,
-    CUDNN_OP_TENSOR_MUL = 1,
-    CUDNN_OP_TENSOR_MIN = 2,
-    CUDNN_OP_TENSOR_MAX = 3;
+    CUDNN_OP_TENSOR_ADD  = 0,
+    CUDNN_OP_TENSOR_MUL  = 1,
+    CUDNN_OP_TENSOR_MIN  = 2,
+    CUDNN_OP_TENSOR_MAX  = 3,
+    CUDNN_OP_TENSOR_SQRT = 4;
 
 public static native @Cast("cudnnStatus_t") int cudnnCreateOpTensorDescriptor(
                                 @ByPtrPtr cudnnOpTensorStruct opTensorDesc );
@@ -396,6 +448,108 @@ public static native @Cast("cudnnStatus_t") int cudnnOpTensor(
                                 @Const Pointer alpha2,
                                 cudnnTensorStruct bDesc,
                                 @Const Pointer B,
+                                @Const Pointer beta,
+                                cudnnTensorStruct cDesc,
+                                Pointer C );
+
+/*
+* CUDNN ReduceTensor op type
+*/
+/** enum cudnnReduceTensorOp_t */
+public static final int
+    CUDNN_REDUCE_TENSOR_ADD   = 0,
+    CUDNN_REDUCE_TENSOR_MUL   = 1,
+    CUDNN_REDUCE_TENSOR_MIN   = 2,
+    CUDNN_REDUCE_TENSOR_MAX   = 3,
+    CUDNN_REDUCE_TENSOR_AMAX  = 4,
+    CUDNN_REDUCE_TENSOR_AVG   = 5,
+    CUDNN_REDUCE_TENSOR_NORM1 = 6,
+    CUDNN_REDUCE_TENSOR_NORM2 = 7;
+
+/*
+* CUDNN ReduceTensor indices type
+*/
+/** enum cudnnReduceTensorIndices_t */
+public static final int
+    CUDNN_REDUCE_TENSOR_NO_INDICES        = 0,
+    CUDNN_REDUCE_TENSOR_FLATTENED_INDICES = 1;
+
+/*
+* CUDNN tensor indices type size (all unsigned)
+* Currently not supported, default is 32 bit unsigned.
+*/
+/** enum cudnnIndicesType_t */
+public static final int
+    CUDNN_32BIT_INDICES = 0,
+    CUDNN_64BIT_INDICES = 1,
+    CUDNN_16BIT_INDICES = 2,
+    CUDNN_8BIT_INDICES  = 3;
+
+public static native @Cast("cudnnStatus_t") int cudnnCreateReduceTensorDescriptor(
+                                @ByPtrPtr cudnnReduceTensorStruct reduceTensorDesc );
+
+public static native @Cast("cudnnStatus_t") int cudnnSetReduceTensorDescriptor(
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                @Cast("cudnnReduceTensorOp_t") int reduceTensorOp,
+                                @Cast("cudnnDataType_t") int reduceTensorCompType,
+                                @Cast("cudnnNanPropagation_t") int reduceTensorNanOpt,
+                                @Cast("cudnnReduceTensorIndices_t") int reduceTensorIndices,
+                                @Cast("cudnnIndicesType_t") int reduceTensorIndicesType );
+
+public static native @Cast("cudnnStatus_t") int cudnnGetReduceTensorDescriptor(
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                @Cast("cudnnReduceTensorOp_t*") IntPointer reduceTensorOp,
+                                @Cast("cudnnDataType_t*") IntPointer reduceTensorCompType,
+                                @Cast("cudnnNanPropagation_t*") IntPointer reduceTensorNanOpt,
+                                @Cast("cudnnReduceTensorIndices_t*") IntPointer reduceTensorIndices,
+                                @Cast("cudnnIndicesType_t*") IntPointer reduceTensorIndicesType );
+public static native @Cast("cudnnStatus_t") int cudnnGetReduceTensorDescriptor(
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                @Cast("cudnnReduceTensorOp_t*") IntBuffer reduceTensorOp,
+                                @Cast("cudnnDataType_t*") IntBuffer reduceTensorCompType,
+                                @Cast("cudnnNanPropagation_t*") IntBuffer reduceTensorNanOpt,
+                                @Cast("cudnnReduceTensorIndices_t*") IntBuffer reduceTensorIndices,
+                                @Cast("cudnnIndicesType_t*") IntBuffer reduceTensorIndicesType );
+public static native @Cast("cudnnStatus_t") int cudnnGetReduceTensorDescriptor(
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                @Cast("cudnnReduceTensorOp_t*") int[] reduceTensorOp,
+                                @Cast("cudnnDataType_t*") int[] reduceTensorCompType,
+                                @Cast("cudnnNanPropagation_t*") int[] reduceTensorNanOpt,
+                                @Cast("cudnnReduceTensorIndices_t*") int[] reduceTensorIndices,
+                                @Cast("cudnnIndicesType_t*") int[] reduceTensorIndicesType );
+
+public static native @Cast("cudnnStatus_t") int cudnnDestroyReduceTensorDescriptor(
+                                cudnnReduceTensorStruct reduceTensorDesc );
+
+ /* Helper function to return the minimum size of the index space to be passed to the reduction given the input and output tensors */
+public static native @Cast("cudnnStatus_t") int cudnnGetReductionIndicesSize(
+                                cudnnContext handle,
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                cudnnTensorStruct aDesc,
+                                cudnnTensorStruct cDesc,
+                                @Cast("size_t*") SizeTPointer sizeInBytes );
+
+ /* Helper function to return the minimum size of the workspace to be passed to the reduction given the input and output tensors */
+public static native @Cast("cudnnStatus_t") int cudnnGetReductionWorkspaceSize(
+                                cudnnContext handle,
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                cudnnTensorStruct aDesc,
+                                cudnnTensorStruct cDesc,
+                                @Cast("size_t*") SizeTPointer sizeInBytes );
+
+/* Tensor operation : C = reduce op( alpha * A ) + beta * C */
+/* The NaN propagation enum applies to only the min and max reduce ops; the other reduce ops propagate NaN as usual. */
+/* The indices space is ignored for reduce ops other than min or max. */
+public static native @Cast("cudnnStatus_t") int cudnnReduceTensor(
+                                cudnnContext handle,
+                                cudnnReduceTensorStruct reduceTensorDesc,
+                                Pointer indices,
+                                @Cast("size_t") long indicesSizeInBytes,
+                                Pointer workspace,
+                                @Cast("size_t") long workspaceSizeInBytes,
+                                @Const Pointer alpha,
+                                cudnnTensorStruct aDesc,
+                                @Const Pointer A,
                                 @Const Pointer beta,
                                 cudnnTensorStruct cDesc,
                                 Pointer C );
@@ -513,84 +667,46 @@ public static native @Cast("cudnnStatus_t") int cudnnDestroyFilterDescriptor(
 public static native @Cast("cudnnStatus_t") int cudnnCreateConvolutionDescriptor(
                                 @ByPtrPtr cudnnConvolutionStruct convDesc );
 
-public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor(
-                                cudnnConvolutionStruct convDesc,
-                                int pad_h,
-                                int pad_w,
-                                int u,
-                                int v,
-                                int upscalex,
-                                int upscaley,
-                                @Cast("cudnnConvolutionMode_t") int mode );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor_v5( cudnnConvolutionStruct convDesc,
+public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor( cudnnConvolutionStruct convDesc,
                                                              int pad_h,
                                                              int pad_w,
                                                              int u,
                                                              int v,
-                                                             int upscalex,
-                                                             int upscaley,
+                                                             int dilation_h,
+                                                             int dilation_w,
                                                              @Cast("cudnnConvolutionMode_t") int mode,
-                                                             @Cast("cudnnDataType_t") int dataType
+                                                             @Cast("cudnnDataType_t") int computeType
                                                            );
                                                            
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor(
-                                cudnnConvolutionStruct convDesc,
-                                IntPointer pad_h,
-                                IntPointer pad_w,
-                                IntPointer u,
-                                IntPointer v,
-                                IntPointer upscalex,
-                                IntPointer upscaley,
-                                @Cast("cudnnConvolutionMode_t*") IntPointer mode );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor(
-                                cudnnConvolutionStruct convDesc,
-                                IntBuffer pad_h,
-                                IntBuffer pad_w,
-                                IntBuffer u,
-                                IntBuffer v,
-                                IntBuffer upscalex,
-                                IntBuffer upscaley,
-                                @Cast("cudnnConvolutionMode_t*") IntBuffer mode );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor(
-                                cudnnConvolutionStruct convDesc,
-                                int[] pad_h,
-                                int[] pad_w,
-                                int[] u,
-                                int[] v,
-                                int[] upscalex,
-                                int[] upscaley,
-                                @Cast("cudnnConvolutionMode_t*") int[] mode );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor(  cudnnConvolutionStruct convDesc,
                                                             IntPointer pad_h,
                                                             IntPointer pad_w,
                                                             IntPointer u,
                                                             IntPointer v,
-                                                            IntPointer upscalex,
-                                                            IntPointer upscaley,
+                                                            IntPointer dilation_h,
+                                                            IntPointer dilation_w,
                                                             @Cast("cudnnConvolutionMode_t*") IntPointer mode,
-                                                            @Cast("cudnnDataType_t*") IntPointer dataType
+                                                            @Cast("cudnnDataType_t*") IntPointer computeType
                                                          );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor(  cudnnConvolutionStruct convDesc,
                                                             IntBuffer pad_h,
                                                             IntBuffer pad_w,
                                                             IntBuffer u,
                                                             IntBuffer v,
-                                                            IntBuffer upscalex,
-                                                            IntBuffer upscaley,
+                                                            IntBuffer dilation_h,
+                                                            IntBuffer dilation_w,
                                                             @Cast("cudnnConvolutionMode_t*") IntBuffer mode,
-                                                            @Cast("cudnnDataType_t*") IntBuffer dataType
+                                                            @Cast("cudnnDataType_t*") IntBuffer computeType
                                                          );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor(  cudnnConvolutionStruct convDesc,
                                                             int[] pad_h,
                                                             int[] pad_w,
                                                             int[] u,
                                                             int[] v,
-                                                            int[] upscalex,
-                                                            int[] upscaley,
+                                                            int[] dilation_h,
+                                                            int[] dilation_w,
                                                             @Cast("cudnnConvolutionMode_t*") int[] mode,
-                                                            @Cast("cudnnDataType_t*") int[] dataType
+                                                            @Cast("cudnnDataType_t*") int[] computeType
                                                          );
                                                          
 /* Helper function to return the dimensions of the output tensor given a convolution descriptor */
@@ -625,25 +741,25 @@ public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionNdDescriptor(
                                 int arrayLength,
                                 @Const IntPointer padA,
                                 @Const IntPointer filterStrideA,
-                                @Const IntPointer upscaleA,
+                                @Const IntPointer dilationA,
                                 @Cast("cudnnConvolutionMode_t") int mode,
-                                @Cast("cudnnDataType_t") int dataType );
+                                @Cast("cudnnDataType_t") int computeType );
 public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionNdDescriptor(
                                 cudnnConvolutionStruct convDesc,
                                 int arrayLength,
                                 @Const IntBuffer padA,
                                 @Const IntBuffer filterStrideA,
-                                @Const IntBuffer upscaleA,
+                                @Const IntBuffer dilationA,
                                 @Cast("cudnnConvolutionMode_t") int mode,
-                                @Cast("cudnnDataType_t") int dataType );
+                                @Cast("cudnnDataType_t") int computeType );
 public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionNdDescriptor(
                                 cudnnConvolutionStruct convDesc,
                                 int arrayLength,
                                 @Const int[] padA,
                                 @Const int[] filterStrideA,
-                                @Const int[] upscaleA,
+                                @Const int[] dilationA,
                                 @Cast("cudnnConvolutionMode_t") int mode,
-                                @Cast("cudnnDataType_t") int dataType );  // convolution data type
+                                @Cast("cudnnDataType_t") int computeType );  // convolution data type
 
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionNdDescriptor(
                                 cudnnConvolutionStruct convDesc,
@@ -651,27 +767,27 @@ public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionNdDescriptor(
                                 IntPointer arrayLength,
                                 IntPointer padA,
                                 IntPointer strideA,
-                                IntPointer upscaleA,
+                                IntPointer dilationA,
                                 @Cast("cudnnConvolutionMode_t*") IntPointer mode,
-                                @Cast("cudnnDataType_t*") IntPointer dataType );
+                                @Cast("cudnnDataType_t*") IntPointer computeType );
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionNdDescriptor(
                                 cudnnConvolutionStruct convDesc,
                                 int arrayLengthRequested,
                                 IntBuffer arrayLength,
                                 IntBuffer padA,
                                 IntBuffer strideA,
-                                IntBuffer upscaleA,
+                                IntBuffer dilationA,
                                 @Cast("cudnnConvolutionMode_t*") IntBuffer mode,
-                                @Cast("cudnnDataType_t*") IntBuffer dataType );
+                                @Cast("cudnnDataType_t*") IntBuffer computeType );
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionNdDescriptor(
                                 cudnnConvolutionStruct convDesc,
                                 int arrayLengthRequested,
                                 int[] arrayLength,
                                 int[] padA,
                                 int[] strideA,
-                                int[] upscaleA,
+                                int[] dilationA,
                                 @Cast("cudnnConvolutionMode_t*") int[] mode,
-                                @Cast("cudnnDataType_t*") int[] dataType );   // convolution data type
+                                @Cast("cudnnDataType_t*") int[] computeType );   // convolution data type
 
 
 /* Helper function to return the dimensions of the output tensor given a convolution descriptor */
@@ -716,7 +832,8 @@ public static final int
     CUDNN_CONVOLUTION_FWD_ALGO_FFT                   = 4,
     CUDNN_CONVOLUTION_FWD_ALGO_FFT_TILING            = 5,
     CUDNN_CONVOLUTION_FWD_ALGO_WINOGRAD              = 6,
-    CUDNN_CONVOLUTION_FWD_ALGO_WINOGRAD_NONFUSED     = 7;
+    CUDNN_CONVOLUTION_FWD_ALGO_WINOGRAD_NONFUSED     = 7,
+    CUDNN_CONVOLUTION_FWD_ALGO_COUNT                 = 8;
 
 public static class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     static { Loader.load(); }
@@ -736,6 +853,9 @@ public static class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     public native @Cast("cudnnStatus_t") int status(); public native cudnnConvolutionFwdAlgoPerf_t status(int status);
     public native float time(); public native cudnnConvolutionFwdAlgoPerf_t time(float time);
     public native @Cast("size_t") long memory(); public native cudnnConvolutionFwdAlgoPerf_t memory(long memory);
+    public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionFwdAlgoPerf_t determinism(int determinism);
+    public native int reserved(int i); public native cudnnConvolutionFwdAlgoPerf_t reserved(int i, int reserved);
+    @MemberGetter public native IntPointer reserved();
 }
 
 public static native @Cast("cudnnStatus_t") int cudnnFindConvolutionForwardAlgorithm(
@@ -871,6 +991,27 @@ public static native @Cast("cudnnStatus_t") int cudnnConvolutionForward(
                                 cudnnTensorStruct yDesc,
                                 Pointer y );
 
+/* Fused conv/bias/activation operation : y = Act( alpha1 * conv(x) + alpha2 * z + bias ) */
+public static native @Cast("cudnnStatus_t") int cudnnConvolutionBiasActivationForward(
+                                cudnnContext handle,
+                                @Const Pointer alpha1,
+                                cudnnTensorStruct xDesc,
+                                @Const Pointer x,
+                                cudnnFilterStruct wDesc,
+                                @Const Pointer w,
+                                cudnnConvolutionStruct convDesc,
+                                @Cast("cudnnConvolutionFwdAlgo_t") int algo,
+                                Pointer workSpace,
+                                @Cast("size_t") long workSpaceSizeInBytes,
+                                @Const Pointer alpha2,
+                                cudnnTensorStruct zDesc,
+                                @Const Pointer z,
+                                cudnnTensorStruct biasDesc,
+                                @Const Pointer bias,
+                                cudnnActivationStruct activationDesc,
+                                cudnnTensorStruct yDesc,
+                                Pointer y );
+
 /* Function to compute the bias gradient for batch convolution */
 public static native @Cast("cudnnStatus_t") int cudnnConvolutionBackwardBias(
                                 cudnnContext handle,
@@ -891,12 +1032,14 @@ public static final int
 
 /** enum cudnnConvolutionBwdFilterAlgo_t */
 public static final int
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0         = 0,  // non-deterministic
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_1         = 1,
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_FFT       = 2,
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_3         = 3,  // non-deterministic, algo0 with workspace
-    // CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD  = 4, // not implemented
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD_NONFUSED = 5;
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0                 = 0,  // non-deterministic
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_1                 = 1,
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_FFT               = 2,
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_3                 = 3,  // non-deterministic, algo0 with workspace
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD          = 4,  // not implemented
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD_NONFUSED = 5,
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_FFT_TILING        = 6,
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_COUNT             = 7;
 
 
 public static class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
@@ -917,6 +1060,9 @@ public static class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
     public native @Cast("cudnnStatus_t") int status(); public native cudnnConvolutionBwdFilterAlgoPerf_t status(int status);
     public native float time(); public native cudnnConvolutionBwdFilterAlgoPerf_t time(float time);
     public native @Cast("size_t") long memory(); public native cudnnConvolutionBwdFilterAlgoPerf_t memory(long memory);
+    public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionBwdFilterAlgoPerf_t determinism(int determinism);
+    public native int reserved(int i); public native cudnnConvolutionBwdFilterAlgoPerf_t reserved(int i, int reserved);
+    @MemberGetter public native IntPointer reserved();
 }
 
 public static native @Cast("cudnnStatus_t") int cudnnFindConvolutionBackwardFilterAlgorithm(
@@ -1062,7 +1208,8 @@ public static final int
     CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT               = 2,
     CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT_TILING        = 3,
     CUDNN_CONVOLUTION_BWD_DATA_ALGO_WINOGRAD          = 4,
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_WINOGRAD_NONFUSED = 5;
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_WINOGRAD_NONFUSED = 5,
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_COUNT             = 6;
 
 public static class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     static { Loader.load(); }
@@ -1082,6 +1229,9 @@ public static class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     public native @Cast("cudnnStatus_t") int status(); public native cudnnConvolutionBwdDataAlgoPerf_t status(int status);
     public native float time(); public native cudnnConvolutionBwdDataAlgoPerf_t time(float time);
     public native @Cast("size_t") long memory(); public native cudnnConvolutionBwdDataAlgoPerf_t memory(long memory);
+    public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionBwdDataAlgoPerf_t determinism(int determinism);
+    public native int reserved(int i); public native cudnnConvolutionBwdDataAlgoPerf_t reserved(int i, int reserved);
+    @MemberGetter public native IntPointer reserved();
 }
 
 
@@ -1269,7 +1419,8 @@ public static native @Cast("cudnnStatus_t") int cudnnSoftmaxBackward(
 public static final int
     CUDNN_POOLING_MAX     = 0,
     CUDNN_POOLING_AVERAGE_COUNT_INCLUDE_PADDING = 1, // count for average includes padded values
-    CUDNN_POOLING_AVERAGE_COUNT_EXCLUDE_PADDING = 2; // count for average does not include padded values
+    CUDNN_POOLING_AVERAGE_COUNT_EXCLUDE_PADDING = 2, // count for average does not include padded values
+    CUDNN_POOLING_MAX_DETERMINISTIC     = 3;
 
 /* Create an instance of pooling descriptor */
 public static native @Cast("cudnnStatus_t") int cudnnCreatePoolingDescriptor(
@@ -1449,7 +1600,8 @@ public static final int
     CUDNN_ACTIVATION_SIGMOID      = 0,
     CUDNN_ACTIVATION_RELU         = 1,
     CUDNN_ACTIVATION_TANH         = 2,
-    CUDNN_ACTIVATION_CLIPPED_RELU = 3;
+    CUDNN_ACTIVATION_CLIPPED_RELU = 3,
+    CUDNN_ACTIVATION_ELU          = 4;
 
 /* Activation functions: All of the form "output = alpha * Op(inputs) + beta * output" */
 public static native @Cast("cudnnStatus_t") int cudnnCreateActivationDescriptor(
@@ -1459,23 +1611,23 @@ public static native @Cast("cudnnStatus_t") int cudnnSetActivationDescriptor(
                                 cudnnActivationStruct activationDesc,
                                 @Cast("cudnnActivationMode_t") int mode,
                                 @Cast("cudnnNanPropagation_t") int reluNanOpt,
-                                double reluCeiling );
+                                double coef ); /* ceiling for clipped RELU, alpha for ELU */
 
 public static native @Cast("cudnnStatus_t") int cudnnGetActivationDescriptor(
                                 cudnnActivationStruct activationDesc,
                                 @Cast("cudnnActivationMode_t*") IntPointer mode,
                                 @Cast("cudnnNanPropagation_t*") IntPointer reluNanOpt,
-                                DoublePointer reluCeiling );
+                                DoublePointer coef );
 public static native @Cast("cudnnStatus_t") int cudnnGetActivationDescriptor(
                                 cudnnActivationStruct activationDesc,
                                 @Cast("cudnnActivationMode_t*") IntBuffer mode,
                                 @Cast("cudnnNanPropagation_t*") IntBuffer reluNanOpt,
-                                DoubleBuffer reluCeiling );
+                                DoubleBuffer coef );
 public static native @Cast("cudnnStatus_t") int cudnnGetActivationDescriptor(
                                 cudnnActivationStruct activationDesc,
                                 @Cast("cudnnActivationMode_t*") int[] mode,
                                 @Cast("cudnnNanPropagation_t*") int[] reluNanOpt,
-                                double[] reluCeiling );
+                                double[] coef ); /* ceiling for clipped RELU, alpha for ELU */
 
 public static native @Cast("cudnnStatus_t") int cudnnDestroyActivationDescriptor(
                                 cudnnActivationStruct activationDesc);
@@ -1845,6 +1997,12 @@ public static final int
    CUDNN_SKIP_INPUT = 1;  
     
   
+/** enum cudnnRNNAlgo_t */
+public static final int
+    CUDNN_RNN_ALGO_STANDARD = 0, 
+    CUDNN_RNN_ALGO_PERSIST_STATIC = 1,
+    CUDNN_RNN_ALGO_PERSIST_DYNAMIC = 2;  
+  
 @Opaque public static class cudnnRNNStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public cudnnRNNStruct() { super((Pointer)null); }
@@ -1855,6 +2013,40 @@ public static final int
 public static native @Cast("cudnnStatus_t") int cudnnCreateRNNDescriptor(@ByPtrPtr cudnnRNNStruct rnnDesc);
 public static native @Cast("cudnnStatus_t") int cudnnDestroyRNNDescriptor(cudnnRNNStruct rnnDesc);
 
+@Opaque public static class cudnnPersistentRNNPlan extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnPersistentRNNPlan() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public cudnnPersistentRNNPlan(Pointer p) { super(p); }
+}
+
+                   
+// Expensive. Creates the plan for the specific settings.
+public static native @Cast("cudnnStatus_t") int cudnnCreatePersistentRNNPlan(cudnnRNNStruct rnnDesc,
+                                             int minibatch,
+                                             @Cast("const cudnnDataType_t") int dataType,
+                                             @ByPtrPtr cudnnPersistentRNNPlan plan);
+                                             
+// Attaches the plan to the descriptor. 
+public static native @Cast("cudnnStatus_t") int cudnnSetPersistentRNNPlan(cudnnRNNStruct rnnDesc,
+                                          cudnnPersistentRNNPlan plan);
+                                          
+public static native @Cast("cudnnStatus_t") int cudnnDestroyPersistentRNNPlan(cudnnPersistentRNNPlan plan);
+                                          
+
+
+public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor_v6(cudnnContext handle, 
+                                                cudnnRNNStruct rnnDesc,
+                                                int hiddenSize, 
+                                                int numLayers, 
+                                                cudnnDropoutStruct dropoutDesc,
+                                                @Cast("cudnnRNNInputMode_t") int inputMode,                                                 
+                                                @Cast("cudnnDirectionMode_t") int direction, 
+                                                @Cast("cudnnRNNMode_t") int mode, 
+                                                @Cast("cudnnRNNAlgo_t") int algo, 
+                                                @Cast("cudnnDataType_t") int dataType);
+
+
 public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor(cudnnRNNStruct rnnDesc,
                                                 int hiddenSize, 
                                                 int numLayers, 
@@ -1863,6 +2055,7 @@ public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor(cudnnRNNSt
                                                 @Cast("cudnnDirectionMode_t") int direction, 
                                                 @Cast("cudnnRNNMode_t") int mode, 
                                                 @Cast("cudnnDataType_t") int dataType);
+
 
 
 // dataType in the RNN descriptor is used to determine math precision
@@ -2002,7 +2195,7 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnConte
                                                 Pointer dcx,
                                                 Pointer workspace,
                                                 @Cast("size_t") long workSpaceSizeInBytes,
-                                                @Const Pointer reserveSpace, 
+                                                Pointer reserveSpace, 
                                                 @Cast("size_t") long reserveSpaceSizeInBytes );
 
 
@@ -2022,382 +2215,91 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnCo
                                                    @Const Pointer reserveSpace, 
                                                    @Cast("size_t") long reserveSpaceSizeInBytes );
                                 
-                                
-                                                                                                                        
+
 /* DEPRECATED routines to be removed next release : 
-   User should use the non-suffixed version (which has the API and functionality of _v4 version)
-   Routines with _v3 suffix has the functionality of the non-suffixed routines in the CUDNN V4
+   User should use the non-suffixed version (which has the API and functionality of _v5 version)
+   Routines with _v4 suffix has the functionality of the non-suffixed routines in the CUDNN V5
  */
-   
-public static native @Cast("cudnnStatus_t") int cudnnSetFilter4dDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                int k,
-                                int c,
-                                int h,
-                                int w );      // width of  each input filter
 
-public static native @Cast("cudnnStatus_t") int cudnnSetFilter4dDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                @Cast("cudnnTensorFormat_t") int format,
-                                int k,
-                                int c,
-                                int h,
-                                int w );      // width of  each input filter
-                                
-public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t*") IntPointer dataType,
-                                IntPointer k,
-                                IntPointer c,
-                                IntPointer h,
-                                IntPointer w );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t*") IntBuffer dataType,
-                                IntBuffer k,
-                                IntBuffer c,
-                                IntBuffer h,
-                                IntBuffer w );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t*") int[] dataType,
-                                int[] k,
-                                int[] c,
-                                int[] h,
-                                int[] w );      // width of  each input filter
+public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                int pad_h,
+                                int pad_w,
+                                int u,
+                                int v,
+                                int dilation_h,
+                                int dilation_w,
+                                @Cast("cudnnConvolutionMode_t") int mode );
 
-public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t*") IntPointer dataType,
-                                @Cast("cudnnTensorFormat_t*") IntPointer format,
-                                IntPointer k,
-                                IntPointer c,
-                                IntPointer h,
-                                IntPointer w );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t*") IntBuffer dataType,
-                                @Cast("cudnnTensorFormat_t*") IntBuffer format,
-                                IntBuffer k,
-                                IntBuffer c,
-                                IntBuffer h,
-                                IntBuffer w );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t*") int[] dataType,
-                                @Cast("cudnnTensorFormat_t*") int[] format,
-                                int[] k,
-                                int[] c,
-                                int[] h,
-                                int[] w );      // width of  each input filter      
-                                
-public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                int nbDims,
-                                @Const IntPointer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                int nbDims,
-                                @Const IntBuffer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                int nbDims,
-                                @Const int[] filterDimA );
+public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor_v5( cudnnConvolutionStruct convDesc,
+                                                             int pad_h,
+                                                             int pad_w,
+                                                             int u,
+                                                             int v,
+                                                             int dilation_h,
+                                                             int dilation_w,
+                                                             @Cast("cudnnConvolutionMode_t") int mode,
+                                                             @Cast("cudnnDataType_t") int computeType
+                                                           );                                
 
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                IntPointer pad_h,
+                                IntPointer pad_w,
+                                IntPointer u,
+                                IntPointer v,
+                                IntPointer dilation_h,
+                                IntPointer dilation_w,
+                                @Cast("cudnnConvolutionMode_t*") IntPointer mode );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                IntBuffer pad_h,
+                                IntBuffer pad_w,
+                                IntBuffer u,
+                                IntBuffer v,
+                                IntBuffer dilation_h,
+                                IntBuffer dilation_w,
+                                @Cast("cudnnConvolutionMode_t*") IntBuffer mode );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                int[] pad_h,
+                                int[] pad_w,
+                                int[] u,
+                                int[] v,
+                                int[] dilation_h,
+                                int[] dilation_w,
+                                @Cast("cudnnConvolutionMode_t*") int[] mode );
 
-public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                @Cast("cudnnTensorFormat_t") int format,
-                                int nbDims,
-                                @Const IntPointer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                @Cast("cudnnTensorFormat_t") int format,
-                                int nbDims,
-                                @Const IntBuffer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                @Cast("cudnnDataType_t") int dataType,
-                                @Cast("cudnnTensorFormat_t") int format,
-                                int nbDims,
-                                @Const int[] filterDimA );   
-                                
-public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnDataType_t*") IntPointer dataType,
-                                IntPointer nbDims,
-                                IntPointer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnDataType_t*") IntBuffer dataType,
-                                IntBuffer nbDims,
-                                IntBuffer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor_v3(
-                                cudnnFilterStruct filterDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnDataType_t*") int[] dataType,
-                                int[] nbDims,
-                                int[] filterDimA );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnDataType_t*") IntPointer dataType,
-                                @Cast("cudnnTensorFormat_t*") IntPointer format,
-                                IntPointer nbDims,
-                                IntPointer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnDataType_t*") IntBuffer dataType,
-                                @Cast("cudnnTensorFormat_t*") IntBuffer format,
-                                IntBuffer nbDims,
-                                IntBuffer filterDimA );
-public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor_v4(
-                                cudnnFilterStruct filterDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnDataType_t*") int[] dataType,
-                                @Cast("cudnnTensorFormat_t*") int[] format,
-                                int[] nbDims,
-                                int[] filterDimA );  
-                                
-public static native @Cast("cudnnStatus_t") int cudnnSetPooling2dDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t") int mode,
-                                int windowHeight,
-                                int windowWidth,
-                                int verticalPadding,
-                                int horizontalPadding,
-                                int verticalStride,
-                                int horizontalStride );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetPooling2dDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t") int mode,
-                                @Cast("cudnnNanPropagation_t") int maxpoolingNanOpt,
-                                int windowHeight,
-                                int windowWidth,
-                                int verticalPadding,
-                                int horizontalPadding,
-                                int verticalStride,
-                                int horizontalStride );                                                                                                              
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t*") IntPointer mode,
-                                IntPointer windowHeight,
-                                IntPointer windowWidth,
-                                IntPointer verticalPadding,
-                                IntPointer horizontalPadding,
-                                IntPointer verticalStride,
-                                IntPointer horizontalStride );
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t*") IntBuffer mode,
-                                IntBuffer windowHeight,
-                                IntBuffer windowWidth,
-                                IntBuffer verticalPadding,
-                                IntBuffer horizontalPadding,
-                                IntBuffer verticalStride,
-                                IntBuffer horizontalStride );
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t*") int[] mode,
-                                int[] windowHeight,
-                                int[] windowWidth,
-                                int[] verticalPadding,
-                                int[] horizontalPadding,
-                                int[] verticalStride,
-                                int[] horizontalStride );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t*") IntPointer mode,
-                                @Cast("cudnnNanPropagation_t*") IntPointer maxpoolingNanOpt,
-                                IntPointer windowHeight,
-                                IntPointer windowWidth,
-                                IntPointer verticalPadding,
-                                IntPointer horizontalPadding,
-                                IntPointer verticalStride,
-                                IntPointer horizontalStride );
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t*") IntBuffer mode,
-                                @Cast("cudnnNanPropagation_t*") IntBuffer maxpoolingNanOpt,
-                                IntBuffer windowHeight,
-                                IntBuffer windowWidth,
-                                IntBuffer verticalPadding,
-                                IntBuffer horizontalPadding,
-                                IntBuffer verticalStride,
-                                IntBuffer horizontalStride );
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("cudnnPoolingMode_t*") int[] mode,
-                                @Cast("cudnnNanPropagation_t*") int[] maxpoolingNanOpt,
-                                int[] windowHeight,
-                                int[] windowWidth,
-                                int[] verticalPadding,
-                                int[] horizontalPadding,
-                                int[] verticalStride,
-                                int[] horizontalStride );   
-
-public static native @Cast("cudnnStatus_t") int cudnnSetPoolingNdDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("const cudnnPoolingMode_t") int mode,
-                                int nbDims,
-                                @Const IntPointer windowDimA,
-                                @Const IntPointer paddingA,
-                                @Const IntPointer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnSetPoolingNdDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("const cudnnPoolingMode_t") int mode,
-                                int nbDims,
-                                @Const IntBuffer windowDimA,
-                                @Const IntBuffer paddingA,
-                                @Const IntBuffer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnSetPoolingNdDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("const cudnnPoolingMode_t") int mode,
-                                int nbDims,
-                                @Const int[] windowDimA,
-                                @Const int[] paddingA,
-                                @Const int[] strideA );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetPoolingNdDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("const cudnnPoolingMode_t") int mode,
-                                @Cast("const cudnnNanPropagation_t") int maxpoolingNanOpt,
-                                int nbDims,
-                                @Const IntPointer windowDimA,
-                                @Const IntPointer paddingA,
-                                @Const IntPointer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnSetPoolingNdDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("const cudnnPoolingMode_t") int mode,
-                                @Cast("const cudnnNanPropagation_t") int maxpoolingNanOpt,
-                                int nbDims,
-                                @Const IntBuffer windowDimA,
-                                @Const IntBuffer paddingA,
-                                @Const IntBuffer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnSetPoolingNdDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                @Cast("const cudnnPoolingMode_t") int mode,
-                                @Cast("const cudnnNanPropagation_t") int maxpoolingNanOpt,
-                                int nbDims,
-                                @Const int[] windowDimA,
-                                @Const int[] paddingA,
-                                @Const int[] strideA );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnPoolingMode_t*") IntPointer mode,
-                                IntPointer nbDims,
-                                IntPointer windowDimA,
-                                IntPointer paddingA,
-                                IntPointer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnPoolingMode_t*") IntBuffer mode,
-                                IntBuffer nbDims,
-                                IntBuffer windowDimA,
-                                IntBuffer paddingA,
-                                IntBuffer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor_v3(
-                                cudnnPoolingStruct poolingDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnPoolingMode_t*") int[] mode,
-                                int[] nbDims,
-                                int[] windowDimA,
-                                int[] paddingA,
-                                int[] strideA );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnPoolingMode_t*") IntPointer mode,
-                                @Cast("cudnnNanPropagation_t*") IntPointer maxpoolingNanOpt,
-                                IntPointer nbDims,
-                                IntPointer windowDimA,
-                                IntPointer paddingA,
-                                IntPointer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnPoolingMode_t*") IntBuffer mode,
-                                @Cast("cudnnNanPropagation_t*") IntBuffer maxpoolingNanOpt,
-                                IntBuffer nbDims,
-                                IntBuffer windowDimA,
-                                IntBuffer paddingA,
-                                IntBuffer strideA );
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor_v4(
-                                cudnnPoolingStruct poolingDesc,
-                                int nbDimsRequested,
-                                @Cast("cudnnPoolingMode_t*") int[] mode,
-                                @Cast("cudnnNanPropagation_t*") int[] maxpoolingNanOpt,
-                                int[] nbDims,
-                                int[] windowDimA,
-                                int[] paddingA,
-                                int[] strideA );
-
-public static native @Cast("cudnnStatus_t") int cudnnActivationForward_v3(
-                                cudnnContext handle,
-                                @Cast("cudnnActivationMode_t") int mode,
-                                @Const Pointer alpha,
-                                cudnnTensorStruct xDesc,
-                                @Const Pointer x,
-                                @Const Pointer beta,
-                                cudnnTensorStruct yDesc,
-                                Pointer y );
-
-public static native @Cast("cudnnStatus_t") int cudnnActivationForward_v4(
-                                cudnnContext handle,
-                                cudnnActivationStruct activationDesc,
-                                @Const Pointer alpha,
-                                cudnnTensorStruct xDesc,
-                                @Const Pointer x,
-                                @Const Pointer beta,
-                                cudnnTensorStruct yDesc,
-                                Pointer y ); 
-                                
-public static native @Cast("cudnnStatus_t") int cudnnActivationBackward_v3(
-                                cudnnContext handle,
-                                @Cast("cudnnActivationMode_t") int mode,
-                                @Const Pointer alpha,
-                                cudnnTensorStruct yDesc,
-                                @Const Pointer y,
-                                cudnnTensorStruct dyDesc,
-                                @Const Pointer dy,
-                                cudnnTensorStruct xDesc,
-                                @Const Pointer x,
-                                @Const Pointer beta,
-                                cudnnTensorStruct dxDesc,
-                                Pointer dx );
-
-public static native @Cast("cudnnStatus_t") int cudnnActivationBackward_v4(
-                                cudnnContext handle,
-                                cudnnActivationStruct activationDesc,
-                                @Const Pointer alpha,
-                                cudnnTensorStruct yDesc,
-                                @Const Pointer y,
-                                cudnnTensorStruct dyDesc,
-                                @Const Pointer dy,
-                                cudnnTensorStruct xDesc,
-                                @Const Pointer x,
-                                @Const Pointer beta,
-                                cudnnTensorStruct dxDesc,
-                                Pointer dx );
-                                                                                                   
-
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+                                                            IntPointer pad_h,
+                                                            IntPointer pad_w,
+                                                            IntPointer u,
+                                                            IntPointer v,
+                                                            IntPointer dilation_h,
+                                                            IntPointer dilation_w,
+                                                            @Cast("cudnnConvolutionMode_t*") IntPointer mode,
+                                                            @Cast("cudnnDataType_t*") IntPointer computeType
+                                                         );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+                                                            IntBuffer pad_h,
+                                                            IntBuffer pad_w,
+                                                            IntBuffer u,
+                                                            IntBuffer v,
+                                                            IntBuffer dilation_h,
+                                                            IntBuffer dilation_w,
+                                                            @Cast("cudnnConvolutionMode_t*") IntBuffer mode,
+                                                            @Cast("cudnnDataType_t*") IntBuffer computeType
+                                                         );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+                                                            int[] pad_h,
+                                                            int[] pad_w,
+                                                            int[] u,
+                                                            int[] v,
+                                                            int[] dilation_h,
+                                                            int[] dilation_w,
+                                                            @Cast("cudnnConvolutionMode_t*") int[] mode,
+                                                            @Cast("cudnnDataType_t*") int[] computeType
+                                                         );                                                                                                                                         
 // #if defined (__cplusplus)
 // #endif
 

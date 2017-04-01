@@ -3,7 +3,7 @@
  * Link TensorFlow statically with `cudart` to avoid dependency on CUDA ([issue #396](https://github.com/bytedeco/javacpp-presets/issues/396))
  * Add missing call to `Loader.load()` in helper class for `opencv_ml` ([issue bytedeco/javacv#638](https://github.com/bytedeco/javacv/issues/638))
  * Work around issues with TensorFlow on some versions of Mac OS X ([issue #335](https://github.com/bytedeco/javacpp-presets/issues/335))
- * Upgrade presets for OpenCV 3.2.0, libdc1394 2.2.5, LLVM 3.9.1 ([pull #343](https://github.com/bytedeco/javacpp-presets/pull/343)), TensorFlow 1.0.1
+ * Upgrade presets for OpenCV 3.2.0, FlyCapture 2.10.3.266 ([pull #400](https://github.com/bytedeco/javacpp-presets/pull/400)), libdc1394 2.2.5, LLVM 4.0.0 ([pull #404](https://github.com/bytedeco/javacpp-presets/pull/404)), cuDNN 6.0, TensorFlow 1.0.1
  * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340)) and LiquidFun ([pull #356](https://github.com/bytedeco/javacpp-presets/pull/356))
  * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))

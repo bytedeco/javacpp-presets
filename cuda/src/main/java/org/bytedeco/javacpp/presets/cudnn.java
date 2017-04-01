@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cudnn.h>", link = "cudnn@.5")},
-        target = "org.bytedeco.javacpp.cudnn")
+    @Platform(include = "<cudnn.h>", link = "cudnn@.6")},
+        target = "org.bytedeco.javacpp.cudnn", helper = "org.bytedeco.javacpp.helper.cudnn")
 public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDNNWINAPI").cppTypes().annotations().cppText(""))
@@ -47,7 +47,9 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnActivationDescriptor_t").valueTypes("cudnnActivationStruct").pointerTypes("@ByPtrPtr cudnnActivationStruct"))
                .put(new Info("cudnnSpatialTransformerDescriptor_t").valueTypes("cudnnSpatialTransformerStruct").pointerTypes("@ByPtrPtr cudnnSpatialTransformerStruct"))
                .put(new Info("cudnnOpTensorDescriptor_t").valueTypes("cudnnOpTensorStruct").pointerTypes("@ByPtrPtr cudnnOpTensorStruct"))
+               .put(new Info("cudnnReduceTensorDescriptor_t").valueTypes("cudnnReduceTensorStruct").pointerTypes("@ByPtrPtr cudnnReduceTensorStruct"))
                .put(new Info("cudnnRNNDescriptor_t").valueTypes("cudnnRNNStruct").pointerTypes("@ByPtrPtr cudnnRNNStruct"))
+               .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
                .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"));
     }
 }

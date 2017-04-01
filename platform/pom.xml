@@ -125,7 +125,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>3.9.1-${project.version}</version>
+      <version>4.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -145,7 +145,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>8.0-${project.version}</version>
+      <version>8.0.61-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -155,7 +155,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.0.0-${project.version}</version>
+      <version>1.0.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
