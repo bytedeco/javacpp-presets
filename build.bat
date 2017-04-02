@@ -5,7 +5,6 @@
   set CI_DEPLOY_PASSWORD=%~4
   cd %APPVEYOR_BUILD_FOLDER%
 
-
   echo Building "%projectName%"
   echo Compiler: %COMPILER%
   echo Architecture: %MSYS2_ARCH%
@@ -69,7 +68,7 @@
        echo May need to wait while cuda installs..
        REM timeout /T 300
        unzip cudnn-8.0-windows10-x64-v6.0.zip
-       move .\cuda\bin\cudnn64_5.dll "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" 
+       move .\cuda\bin\cudnn64_6.dll "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin" 
        move .\cuda\include\cudnn.h "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" 
        move .\cuda\lib\x64\cudnn.lib "c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64" 
        echo Finished cuda install
