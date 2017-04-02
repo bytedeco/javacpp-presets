@@ -7,6 +7,10 @@ environment:
     secure: PtPliCsi+UYMTcvO57ffYRnZsdqYk8te8GSj10S2dAI=
   DROP_AUTH_TOK:
     secure: N2IK1SYHi918dXsfMrQRuX9FqrtTapnCW0Vs7H/06AVKslsTNAG99q5RVZ8PVIZ/+6mJ18LzxUdWcf3CoTN7LjmnAI5hwLZTpVMZvCAv2Dk=
+  CI_DEPLOY_USERNAME:
+    secure: h+E/iABzAKxr7X8+QVPRCg==
+  CI_DEPLOY_PASSWORD:
+    secure: YF4U6jDI6yKTnfvQd95c9g==
   matrix:
     - COMPILER: msys2
       PLATFORM: x86
@@ -136,7 +140,7 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%" "%DROP_AUTH_TOK%"'
+    - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%" "%DROP_AUTH_TOK%" "%CI_DEPLOY_USERNAME%" "%CI_DEPLOY_PASSWORD%"'
 
 test_script:
     - 'echo no tests'

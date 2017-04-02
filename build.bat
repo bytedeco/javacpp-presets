@@ -1,7 +1,10 @@
  @echo off
   set projectName=%~1
   set DROPAUTH=%~2
+  set CI_DEPLOY_USERNAME=%~3
+  set CI_DEPLOY_PASSWORD=%~4
   cd %APPVEYOR_BUILD_FOLDER%
+
 
   echo Building "%projectName%"
   echo Compiler: %COMPILER%
@@ -108,5 +111,5 @@
     mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
     cd ..
     cd javacpp-presets
-    mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl %projectName% 
+    mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings settings.xml  -pl %projectName% 
   )
