@@ -14,6 +14,13 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW32
       BIT: 32
+      PROJ: "hdf5"
+    - COMPILER: msys2
+      PLATFORM: x86
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
       PROJ: "flycapture"
     - COMPILER: msys2
       PLATFORM: x86
@@ -71,13 +78,6 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
       PROJ: "libfreenect2"
-    - COMPILER: msys2
-      PLATFORM: x86
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-      PROJ: "hdf5"
     - COMPILER: msys2
       PLATFORM: x86
       MSYS2_ARCH: x86
