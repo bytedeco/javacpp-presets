@@ -23,7 +23,7 @@ case $PLATFORM in
     windows-*)
         if [[ ! -d "/C/Program Files/NVIDIA GPU Computing Toolkit/CUDA/" ]]; then
             echo "Please install CUDA under the default installation directory"
-            #exit 1
+            exit 1
         fi
         ;;
     *)

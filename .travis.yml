@@ -97,7 +97,7 @@ matrix:
 
 before_install:
    #maybe this needs to go into new first job
-   - echo "test" > ./buildlogs/test.log
+   - mkdir ./buildlogs
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    #- git checkout d7d6af2b4a2d5e5d3ea48cb27248e2f84a031fd2 
@@ -195,7 +195,6 @@ script:
        pwd
        ls -ltr ~/build/vb216/javacpp-presets
        ./prog.sh $PROJ &
-       #mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ 2> ./buildlogs/$PROJ_errors.log; export BUILD_STATUS=$?
        mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l ~/build/vb216/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        tail -50 ~/build/vb216/javacpp-presets/buildlogs/$PROJ.log
      else
