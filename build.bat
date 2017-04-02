@@ -96,7 +96,7 @@
           cd hdf5
           dir 
           msiexec /i HDF5-1.10.0-win32.msi /quiet
-          xcopy "c:\Program Files (x86)\HDF_Group" "c:\Program Files\HDF_Group" /S /E
+          xcopy "c:\Program Files (x86)\HDF_Group" "c:\Program Files\HDF_Group" /S /I /E
        )
 
        cd ..
