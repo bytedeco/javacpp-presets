@@ -43,9 +43,17 @@
     echo Perform download files out of main repo
     cd ..
     IF "%projectName%"=="flycapture" (
-       curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
-       unzip pgr.zip
-       move "Point Grey Research" "c:\Program Files"
+       echo Flycapture install
+       IF "%MSYS2_ARCH%"=="x86_64" (
+           curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
+           unzip pgr.zip
+           move "Point Grey Research" "c:\Program Files"
+       )
+       IF "%MSYS2_ARCH%"=="x86" (
+           curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/pgr32.zip"}' https://content.dropboxapi.com/2/files/download
+           unzip pgr32.zip
+           move "Point Grey Research" "c:\Program Files"
+       )
        echo "Finished flycapture install"
     )
 
@@ -87,6 +95,7 @@
           cd hdf5
           dir 
           msiexec /i HDF5-1.10.0-win32.msi /quiet
+          move "c:\Program Files (x86)\HDF_Group" "c:\Program Files\HDF_Group"
        )
 
        cd ..

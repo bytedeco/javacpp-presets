@@ -58,14 +58,8 @@ case $PLATFORM in
         make install-strip
         ;;
 # Installers available at: https://support.hdfgroup.org/HDF5/release/obtain5110.html
-    windows-x86_64)
+    windows-*)
         if [[ ! -d "/C/Program Files/HDF_Group/HDF5/1.10.0/" ]]; then
-            echo "Please install HDF5 under the default installation directory"
-            exit 1
-        fi
-        ;;
-    windows-x86)
-        if [[ ! -d "/C/Program Files (x86)/HDF_Group/HDF5/1.10.0/" ]]; then
             echo "Please install HDF5 under the default installation directory"
             exit 1
         fi
