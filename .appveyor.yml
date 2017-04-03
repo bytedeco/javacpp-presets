@@ -4,8 +4,7 @@ os: Visual Studio 2013
 
 environment:
   DROP_AUTH_TOK:
-    secure: MjMvFkottVYBFaWIkRt7/mzH6lMHLeTk1Tf+iIcUDTX969TRVqJp0mOSGbHLNmTx2bEH0vLZJFvPmd82I4l8asj
-xOsDAAmCVe4WJTnl2/Ww= 
+    secure: MjMvFkottVYBFaWIkRt7/mzH6lMHLeTk1Tf+iIcUDTX969TRVqJp0mOSGbHLNmTx2bEH0vLZJFvPmd82I4l8asjxOsDAAmCVe4WJTnl2/Ww=
   CI_DEPLOY_USERNAME:
     secure: rGb4Y+doDjUldiZNtcszCA== 
   CI_DEPLOY_PASSWORD:
