@@ -41,11 +41,12 @@ download https://github.com/dmlc/mxnet/archive/master.tar.gz mxnet-$MXNET_VERSIO
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzf ../dmlc-core-$MXNET_VERSION.tar.gz
-tar -xzf ../mshadow-$MXNET_VERSION.tar.gz
-tar -xzf ../ps-lite-$MXNET_VERSION.tar.gz
-tar -xzf ../nnvm-$MXNET_VERSION.tar.gz
-tar -xzf ../mxnet-$MXNET_VERSION.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../dmlc-core-$MXNET_VERSION.tar.gz
+tar --totals -xzf ../mshadow-$MXNET_VERSION.tar.gz
+tar --totals -xzf ../ps-lite-$MXNET_VERSION.tar.gz
+tar --totals -xzf ../nnvm-$MXNET_VERSION.tar.gz
+tar --totals -xzf ../mxnet-$MXNET_VERSION.tar.gz
 cd mxnet-$MXNET_VERSION
 rmdir dmlc-core mshadow ps-lite nnvm || true
 ln -snf ../dmlc-core-$MXNET_VERSION dmlc-core

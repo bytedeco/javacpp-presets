@@ -13,7 +13,8 @@ download https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-$HDF5_VER
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xvf ../hdf5-$HDF5_VERSION.tar.bz2
+echo "Decompressing archives..."
+tar --totals -xvf ../hdf5-$HDF5_VERSION.tar.bz2
 cd hdf5-$HDF5_VERSION
 
 case $PLATFORM in

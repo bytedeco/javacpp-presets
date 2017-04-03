@@ -13,7 +13,8 @@ download http://downloads.sourceforge.net/project/libdc1394/libdc1394-2/$LIBDC13
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../libdc1394-$LIBDC1394_VERSION.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../libdc1394-$LIBDC1394_VERSION.tar.gz
 cd libdc1394-$LIBDC1394_VERSION
 
 case $PLATFORM in

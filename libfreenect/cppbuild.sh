@@ -27,7 +27,8 @@ fi
 
 if [[ $PLATFORM == linux-armhf ]]; then
     download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.19/libusb-1.0.19.tar.bz2/download libusb-1.0.19.tar.bz2
-    tar xvjf libusb-1.0.19.tar.bz2
+    echo "Decompressing archives..."
+    tar xjf libusb-1.0.19.tar.bz2
     cd libusb-1.0.19
     CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
     make

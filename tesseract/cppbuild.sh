@@ -13,7 +13,8 @@ download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.t
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../tesseract-$TESSERACT_VERSION.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
 
 case $PLATFORM in

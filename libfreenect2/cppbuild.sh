@@ -15,7 +15,8 @@ download https://github.com/OpenKinect/libfreenect2/archive/v$LIBFREENECT2_VERSI
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../$LIBJPEG.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../$LIBJPEG.tar.gz
 mkdir -p include lib bin
 unzip -o ../libfreenect2-$LIBFREENECT2_VERSION.zip
 

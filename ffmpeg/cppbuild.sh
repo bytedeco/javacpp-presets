@@ -39,17 +39,18 @@ download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPE
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../$ZLIB.tar.gz
-tar -xzvf ../$LAME.tar.gz
-tar -xzvf ../$SPEEX.tar.gz
-tar -xzvf ../$OPENCORE_AMR.tar.gz
-tar -xzvf ../$OPENSSL.tar.gz
-tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
-tar -xjvf ../last_stable_x264.tar.bz2
-tar -xzvf ../$X265.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../$ZLIB.tar.gz
+tar --totals -xzf ../$LAME.tar.gz
+tar --totals -xzf ../$SPEEX.tar.gz
+tar --totals -xzf ../$OPENCORE_AMR.tar.gz
+tar --totals -xzf ../$OPENSSL.tar.gz
+tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
+tar --totals -xjf ../last_stable_x264.tar.bz2
+tar --totals -xzf ../$X265.tar.gz
 mkdir -p libvpx-$VPX_VERSION
-tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
-tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
+tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
+tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 X264=`echo x264-snapshot-*`
 
 case $PLATFORM in

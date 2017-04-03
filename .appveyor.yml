@@ -243,7 +243,7 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - '%APPVEYOR_BUILD_FOLDER%\build.bat "%PROJ%" "%DROP_AUTH_TOK%" "%CI_DEPLOY_USERNAME%" "%CI_DEPLOY_PASSWORD%"'
+    - '%APPVEYOR_BUILD_FOLDER%\ci\build.bat "%PROJ%" "%DROP_AUTH_TOK%" "%CI_DEPLOY_USERNAME%" "%CI_DEPLOY_PASSWORD%"'
 
 test_script:
     - 'echo no tests'
