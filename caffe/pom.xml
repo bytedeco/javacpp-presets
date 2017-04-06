@@ -26,6 +26,11 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>hdf5</artifactId>
+      <version>1.10.0-patch1-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas</artifactId>
       <version>0.2.19-${project.parent.version}</version>
     </dependency>
@@ -59,6 +64,7 @@
           </propertyKeysAndValues>
           <classPaths>
             <classPath>${basedir}/../opencv/target/classes/</classPath>
+            <classPath>${basedir}/../hdf5/target/classes/</classPath>
             <classPath>${basedir}/../openblas/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
@@ -66,17 +72,21 @@
             <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../hdf5/target/classes/org/bytedeco/javacpp/</includePath>
+            <includePath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/../openblas/target/classes/org/bytedeco/javacpp/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>

@@ -255,7 +255,7 @@ case $PLATFORM in
         ;;
 
     linux-armhf)
-        tar -xjvf ../alsa-lib-$ALSA_VERSION.tar.bz2
+        tar --totals -xjf ../alsa-lib-$ALSA_VERSION.tar.bz2
 
         export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard"
         export CXXFLAGS="$CFLAGS"

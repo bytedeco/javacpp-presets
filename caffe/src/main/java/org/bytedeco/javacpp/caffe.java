@@ -6,12 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.openblas.*;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 import static org.bytedeco.javacpp.opencv_videoio.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.hdf5.*;
+import static org.bytedeco.javacpp.openblas.*;
 
 public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }

@@ -27,6 +27,11 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>hdf5-platform</artifactId>
+      <version>1.10.0-patch1-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas-platform</artifactId>
       <version>0.2.19-${project.parent.version}</version>
     </dependency>
