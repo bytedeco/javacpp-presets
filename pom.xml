@@ -49,6 +49,7 @@
     <module>chilitags</module>
     <module>flandmark</module>
     <module>hdf5</module>
+    <module>mkl</module>
     <module>openblas</module>
     <module>fftw</module>
     <module>gsl</module>
