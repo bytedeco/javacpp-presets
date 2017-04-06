@@ -4,11 +4,11 @@ os: Visual Studio 2013
 
 environment:
   DROP_AUTH_TOK:
-    secure: N2IK1SYHi918dXsfMrQRuX9FqrtTapnCW0Vs7H/06AVKslsTNAG99q5RVZ8PVIZ/+6mJ18LzxUdWcf3CoTN7LjmnAI5hwLZTpVMZvCAv2Dk=
+    secure: MjMvFkottVYBFaWIkRt7/mzH6lMHLeTk1Tf+iIcUDTX969TRVqJp0mOSGbHLNmTx2bEH0vLZJFvPmd82I4l8asjxOsDAAmCVe4WJTnl2/Ww= 
   CI_DEPLOY_USERNAME:
-    secure: h+E/iABzAKxr7X8+QVPRCg==
+    secure: rGb4Y+doDjUldiZNtcszCA== 
   CI_DEPLOY_PASSWORD:
-    secure: YF4U6jDI6yKTnfvQd95c9g==
+    secure: DdnLoqlyxHAklmbxU73HfQ== 
   matrix:
     - COMPILER: msys2
       PLATFORM: x86
@@ -230,7 +230,7 @@ environment:
 
 init:
 # uncomment this if you need to enable RDP for this build run
-    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       
 install:
     - 'echo install section'
@@ -250,5 +250,5 @@ test_script:
 
 on_finish:
 #    uncomment this for the RDP session to remain active after the build ends
-    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
