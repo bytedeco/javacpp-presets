@@ -36,11 +36,11 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals xf ../llvm-$LLVM_VERSION.src.tar.xz
+tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd llvm-$LLVM_VERSION.src
 mkdir -p build tools
 cd tools
-tar --totals xf ../../../cfe-$LLVM_VERSION.src.tar.xz
+tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
 cd ../build
