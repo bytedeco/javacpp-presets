@@ -1,4 +1,5 @@
 
+ * Update presets for Visual Studio 2015 ([issue #298](https://github.com/bytedeco/javacpp-presets/issues/298))
  * Reuse the presets for HDF5 with Caffe
  * Replace the `exec-maven-plugin` with the `javacpp` plugin itself to execute the `cppbuild.sh` script files
  * Link TensorFlow statically with `cudart` to avoid dependency on CUDA ([issue #396](https://github.com/bytedeco/javacpp-presets/issues/396))
