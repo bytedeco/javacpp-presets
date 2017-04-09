@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=3.04.01
+TESSERACT_VERSION=3.05.00
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -15,6 +15,7 @@ cd $PLATFORM
 INSTALL_PATH=`pwd`
 tar -xzvf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
+bash autogen.sh
 
 case $PLATFORM in
     android-arm)

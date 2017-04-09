@@ -39,6 +39,10 @@ public class tesseract extends org.bytedeco.javacpp.presets.tesseract {
 
 // #define DLLSYM
 // #ifdef _WIN32
+// #ifndef NOMINMAX
+// #define NOMINMAX
+// #endif /* NOMINMAX */
+// #define WIN32_LEAN_AND_MEAN
 // #ifdef __GNUC__
 // #define ultoa _ultoa
 // #endif  /* __GNUC__ */
@@ -2165,14 +2169,11 @@ public static final int
   public native float Confidence(@Cast("tesseract::PageIteratorLevel") int level);
 
   // Returns the attributes of the current row.
-  public native void RowAttributes(FloatPointer row_height,
-                       FloatPointer descenders,
+  public native void RowAttributes(FloatPointer row_height, FloatPointer descenders,
                        FloatPointer ascenders);
-  public native void RowAttributes(FloatBuffer row_height,
-                       FloatBuffer descenders,
+  public native void RowAttributes(FloatBuffer row_height, FloatBuffer descenders,
                        FloatBuffer ascenders);
-  public native void RowAttributes(float[] row_height,
-                       float[] descenders,
+  public native void RowAttributes(float[] row_height, float[] descenders,
                        float[] ascenders);
 
   // ============= Functions that refer to words only ============.
@@ -2546,6 +2547,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     // Reads from the given file. Returns false in case of error.
     // If swap is true, assumes a big/little-endian swap is needed.
     public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
+    // As DeSerialize, but only seeks past the data - hence a static method.
+    public static native @Cast("bool") boolean SkipDeSerialize(@Cast("bool") boolean swap, TFile fp);
 
     public native @Cast("BOOL8") byte contains(byte c);
     public native @Cast("inT32") int length();
@@ -2763,6 +2766,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
+  // Skips the deserialization of the vector.
+  
   // Writes a vector of classes to the given file. Assumes the existence of
   // bool T::Serialize(FILE* fp) const that returns false in case of error.
   // Returns false in case of error.
@@ -2774,6 +2779,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // this function. Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
   
+  
+  // Calls SkipDeSerialize on the elements of the vector.
   
 
   // Allocates a new array of double the current_size, copies over the
@@ -2969,6 +2976,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
+  // Skips the deserialization of the vector.
+  public static native @Cast("bool") boolean SkipDeSerialize(@Cast("bool") boolean swap, TFile fp);
   // Writes a vector of classes to the given file. Assumes the existence of
   // bool T::Serialize(FILE* fp) const that returns false in case of error.
   // Returns false in case of error.
@@ -2981,6 +2990,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerializeClasses(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
   public native @Cast("bool") boolean DeSerializeClasses(@Cast("bool") boolean swap, TFile fp);
+  // Calls SkipDeSerialize on the elements of the vector.
+  public static native @Cast("bool") boolean SkipDeSerializeClasses(@Cast("bool") boolean swap, TFile fp);
 
   // Allocates a new array of double the current_size, copies over the
   // information from data to the new location, deletes data and returns
@@ -3165,6 +3176,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
+  // Skips the deserialization of the vector.
+  
   // Writes a vector of classes to the given file. Assumes the existence of
   // bool T::Serialize(FILE* fp) const that returns false in case of error.
   // Returns false in case of error.
@@ -3176,6 +3189,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // this function. Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
   
+  
+  // Calls SkipDeSerialize on the elements of the vector.
   
 
   // Allocates a new array of double the current_size, copies over the
@@ -3397,6 +3412,7 @@ public static class FileWriter extends FunctionPointer {
 
 
 
+
 // Writes a vector of classes to the given file. Assumes the existence of
 // bool T::Serialize(FILE* fp) const that returns false in case of error.
 // Returns false in case of error.
@@ -3408,6 +3424,7 @@ public static class FileWriter extends FunctionPointer {
 // error. Also needs T::T() and T::T(constT&), as init_to_size is used in
 // this function. Returns false in case of error.
 // If swap is true, assumes a big/little-endian swap is needed.
+
 
 
 
@@ -3460,8 +3477,8 @@ public static class FileWriter extends FunctionPointer {
 // #ifndef TESSERACT_API_BASEAPI_H__
 // #define TESSERACT_API_BASEAPI_H__
 
-public static final String TESSERACT_VERSION_STR = "3.04.01";
-public static final int TESSERACT_VERSION = 0x030401;
+public static final String TESSERACT_VERSION_STR = "3.05.00";
+public static final int TESSERACT_VERSION = 0x030500;
 // #define MAKE_VERSION(major, minor, patch) (((major) << 16) | ((minor) << 8) |
 //                                             (patch))
 
@@ -3693,6 +3710,7 @@ public static final int TESSERACT_VERSION = 0x030401;
    * is stored in the PDF so we need that as well.
    */
   public native @Cast("const char*") BytePointer GetInputName();
+  // Takes ownership of the input pix.
   public native void SetInputImage(PIX pix);
   public native PIX GetInputImage();
   public native int GetSourceYResolution();
@@ -3937,9 +3955,7 @@ public static final int TESSERACT_VERSION = 0x030401;
 
   /**
    * Provide an image for Tesseract to recognize. Format is as
-   * TesseractRect above. Does not copy the image buffer, or take
-   * ownership. The source image may be destroyed after Recognize is called,
-   * either explicitly or implicitly via one of the Get*Text functions.
+   * TesseractRect above. Copies the image buffer and converts to Pix.
    * SetImage clears all recognition results, and sets the rectangle to the
    * full image, so it may be followed immediately by a GetUTF8Text, and it
    * will automatically perform recognition.
@@ -3953,13 +3969,11 @@ public static final int TESSERACT_VERSION = 0x030401;
 
   /**
    * Provide an image for Tesseract to recognize. As with SetImage above,
-   * Tesseract doesn't take a copy or ownership or pixDestroy the image, so
-   * it must persist until after Recognize.
+   * Tesseract takes its own copy of the image, so it need not persist until
+   * after Recognize.
    * Pix vs raw, which to use?
-   * Use Pix where possible. A future version of Tesseract may choose to use Pix
-   * as its internal representation and discard IMAGE altogether.
-   * Because of that, an implementation that sources and targets Pix may end up
-   * with less copies than an implementation that does not.
+   * Use Pix where possible. Tesseract uses Pix as its internal representation
+   * and it is therefore more efficient to provide a Pix directly.
    */
   public native void SetImage(PIX pix);
 
@@ -4230,8 +4244,24 @@ public static final int TESSERACT_VERSION = 0x030401;
    * Make a HTML-formatted string with hOCR markup from the internal
    * data structures.
    * page_number is 0-based but will appear in the output as 1-based.
+   * monitor can be used to
+   *  cancel the recognition
+   *  receive progress callbacks
+   */
+  public native @Cast("char*") BytePointer GetHOCRText(ETEXT_DESC monitor, int page_number);
+
+  /**
+   * Make a HTML-formatted string with hOCR markup from the internal
+   * data structures.
+   * page_number is 0-based but will appear in the output as 1-based.
    */
   public native @Cast("char*") BytePointer GetHOCRText(int page_number);
+
+  /**
+   * Make a TSV-formatted string from the internal data structures.
+   * page_number is 0-based but will appear in the output as 1-based.
+   */
+  public native @Cast("char*") BytePointer GetTSVText(int page_number);
 
   /**
    * The recognized text is returned as a char* which is coded in the same
@@ -4248,6 +4278,19 @@ public static final int TESSERACT_VERSION = 0x030401;
    * and must be freed with the delete [] operator.
    */
   public native @Cast("char*") BytePointer GetUNLVText();
+
+  /**
+   * Detect the orientation of the input image and apparent script (alphabet).
+   * orient_deg is the detected clockwise rotation of the input image in degrees (0, 90, 180, 270)
+   * orient_conf is the confidence (15.0 is reasonably confident)
+   * script_name is an ASCII string, the name of the script, e.g. "Latin"
+   * script_conf is confidence level in the script
+   * Returns true on success and writes values to each parameter as an output
+   */
+  public native @Cast("bool") boolean DetectOrientationScript(IntPointer orient_deg, FloatPointer orient_conf, @Cast("const char**") PointerPointer script_name, FloatPointer script_conf);
+  public native @Cast("bool") boolean DetectOrientationScript(IntPointer orient_deg, FloatPointer orient_conf, @Cast("const char**") @ByPtrPtr BytePointer script_name, FloatPointer script_conf);
+  public native @Cast("bool") boolean DetectOrientationScript(IntBuffer orient_deg, FloatBuffer orient_conf, @Cast("const char**") @ByPtrPtr ByteBuffer script_name, FloatBuffer script_conf);
+  public native @Cast("bool") boolean DetectOrientationScript(int[] orient_deg, float[] orient_conf, @Cast("const char**") @ByPtrPtr byte[] script_name, float[] script_conf);
 
   /**
    * The recognized text is returned as a char* which is coded
@@ -4449,8 +4492,25 @@ public static final int TESSERACT_VERSION = 0x030401;
 
 // Parsed from tesseract/capi.h
 
-// #ifndef TESSERACT_API_CAPI_H__
-// #define TESSERACT_API_CAPI_H__
+///////////////////////////////////////////////////////////////////////
+// File:        capi.h
+// Description: C-API TessBaseAPI
+//
+// (C) Copyright 2012, Google Inc.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+///////////////////////////////////////////////////////////////////////
+
+// #ifndef API_CAPI_H_
+// #define API_CAPI_H_
 
 // #ifdef TESS_CAPI_INCLUDE_BASEAPI
 // #   include "baseapi.h"
@@ -4759,7 +4819,19 @@ public static native void TessBaseAPIClearPersistentCache(TessBaseAPI handle);
 public static native void TessBaseAPISetProbabilityInContextFunc(TessBaseAPI handle, @Cast("TessProbabilityInContextFunc") ProbabilityInContextFunc f);
 
 
+
+// Deprecated, no longer working
 public static native @Cast("BOOL") boolean TessBaseAPIDetectOS(TessBaseAPI handle, OSResults results);
+
+// Call TessDeleteText(*best_script_name) to free memory allocated by this function
+public static native @Cast("BOOL") boolean TessBaseAPIDetectOrientationScript(TessBaseAPI handle,
+                                                            IntPointer orient_deg, FloatPointer orient_conf, @Cast("const char**") PointerPointer script_name, FloatPointer script_conf);
+public static native @Cast("BOOL") boolean TessBaseAPIDetectOrientationScript(TessBaseAPI handle,
+                                                            IntPointer orient_deg, FloatPointer orient_conf, @Cast("const char**") @ByPtrPtr BytePointer script_name, FloatPointer script_conf);
+public static native @Cast("BOOL") boolean TessBaseAPIDetectOrientationScript(TessBaseAPI handle,
+                                                            IntBuffer orient_deg, FloatBuffer orient_conf, @Cast("const char**") @ByPtrPtr ByteBuffer script_name, FloatBuffer script_conf);
+public static native @Cast("BOOL") boolean TessBaseAPIDetectOrientationScript(TessBaseAPI handle,
+                                                            int[] orient_deg, float[] orient_conf, @Cast("const char**") @ByPtrPtr byte[] script_name, float[] script_conf);
 
 public static native void TessBaseAPIGetFeaturesForBlob(TessBaseAPI handle, TBLOB blob, INT_FEATURE_STRUCT int_features,
                                                        IntPointer num_features, IntPointer FeatureOutlineIndex);
@@ -4891,7 +4963,7 @@ public static native float TessChoiceIteratorConfidence(@Cast("const TessChoiceI
 // #ifdef __cplusplus
 // #endif
 
-// #endif /* TESSERACT_API_CAPI_H__ */
+// #endif  // API_CAPI_H_
 
 
 }

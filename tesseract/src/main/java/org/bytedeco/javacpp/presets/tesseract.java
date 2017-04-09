@@ -78,6 +78,8 @@ public class tesseract implements InfoMapper {
 
                .put(new Info("GenericVector<char>::delete_data_pointers", "GenericVector<char>::SerializeClasses", "GenericVector<char>::DeSerializeClasses",
                              "GenericVector<int>::delete_data_pointers", "GenericVector<int>::SerializeClasses", "GenericVector<int>::DeSerializeClasses",
+                             "GenericVector<char>::SkipDeSerialize", "GenericVector<char>::SkipDeSerializeClasses",
+                             "GenericVector<int>::SkipDeSerialize", "GenericVector<int>::SkipDeSerializeClasses",
                              "GenericVector<STRING>::contains_index", "GenericVector<STRING>::delete_data_pointers", "GenericVector<STRING>::binary_search",
                              "GenericVector<STRING>::bool_binary_search", "GenericVector<STRING>::choose_nth_item", "GenericVector<STRING>::dot_product",
                              "GenericVector<STRING>::sort", "GenericVectorEqEq<int>::GenericVectorEqEq<int>(int)").skip())

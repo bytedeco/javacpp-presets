@@ -102,7 +102,7 @@ Each child module in turn relies on its corresponding native libraries being alr
 
  * OpenCV 3.2.0  http://opencv.org/downloads.html
  * FFmpeg 3.2.x  http://ffmpeg.org/download.html
- * FlyCapture 2.9.x  http://www.ptgrey.com/flycapture-sdk
+ * FlyCapture 2.10.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
@@ -115,10 +115,10 @@ Each child module in turn relies on its corresponding native libraries being alr
  * MKL 2017.2  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.19  http://www.openblas.net/
  * FFTW 3.3.5  http://www.fftw.org/download.html
- * GSL 2.2.1  http://www.gnu.org/software/gsl/#downloading
+ * GSL 2.3  http://www.gnu.org/software/gsl/#downloading
  * LLVM 4.0.0  http://llvm.org/releases/download.html
- * Leptonica 1.73  http://www.leptonica.org/download.html
- * Tesseract 3.04.01  https://github.com/tesseract-ocr/tesseract
+ * Leptonica 1.74.1  http://www.leptonica.org/download.html
+ * Tesseract 3.05.00  https://github.com/tesseract-ocr/tesseract
  * Caffe  https://github.com/BVLC/caffe
  * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
  * MXnet  https://github.com/dmlc/mxnet
