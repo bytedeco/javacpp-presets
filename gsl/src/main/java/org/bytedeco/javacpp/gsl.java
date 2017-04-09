@@ -1778,9 +1778,9 @@ public static native int gsl_test_summary();
 // #endif
 
 
-public static final String GSL_VERSION = "2.2.1";
+public static final String GSL_VERSION = "2.3";
 public static final int GSL_MAJOR_VERSION = 2;
-public static final int GSL_MINOR_VERSION = 2;
+public static final int GSL_MINOR_VERSION = 3;
 
 @MemberGetter public static native @Cast("const char*") BytePointer gsl_version();
 
@@ -13897,7 +13897,7 @@ public static native int gsl_linalg_LU_refine(@Const gsl_matrix A,
                           @Const gsl_permutation p,
                           @Const gsl_vector b,
                           gsl_vector x,
-                          gsl_vector residual);
+                          gsl_vector work);
 
 public static native int gsl_linalg_LU_invert(@Const gsl_matrix LU,
                           @Const gsl_permutation p,
@@ -13933,7 +13933,7 @@ public static native int gsl_linalg_complex_LU_refine(@Const gsl_matrix_complex 
                                   @Const gsl_permutation p,
                                   @Const gsl_vector_complex b,
                                   gsl_vector_complex x,
-                                  gsl_vector_complex residual);
+                                  gsl_vector_complex work);
 
 public static native int gsl_linalg_complex_LU_invert(@Const gsl_matrix_complex LU,
                                   @Const gsl_permutation p,
@@ -19941,11 +19941,38 @@ public static native int gsl_multifit_linear(@Const gsl_matrix X,
                      double[] chisq,
                      gsl_multifit_linear_workspace work);
 
+public static native int gsl_multifit_linear_tsvd(@Const gsl_matrix X,
+                          @Const gsl_vector y,
+                          double tol,
+                          gsl_vector c,
+                          gsl_matrix cov,
+                          DoublePointer chisq,
+                          @Cast("size_t*") SizeTPointer rank,
+                          gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_tsvd(@Const gsl_matrix X,
+                          @Const gsl_vector y,
+                          double tol,
+                          gsl_vector c,
+                          gsl_matrix cov,
+                          DoubleBuffer chisq,
+                          @Cast("size_t*") SizeTPointer rank,
+                          gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_tsvd(@Const gsl_matrix X,
+                          @Const gsl_vector y,
+                          double tol,
+                          gsl_vector c,
+                          gsl_matrix cov,
+                          double[] chisq,
+                          @Cast("size_t*") SizeTPointer rank,
+                          gsl_multifit_linear_workspace work);
+
 public static native int gsl_multifit_linear_svd(@Const gsl_matrix X,
                          gsl_multifit_linear_workspace work);
 
 public static native int gsl_multifit_linear_bsvd(@Const gsl_matrix X,
                           gsl_multifit_linear_workspace work);
+
+public static native @Cast("size_t") long gsl_multifit_linear_rank(double tol, @Const gsl_multifit_linear_workspace work);
 
 public static native int gsl_multifit_linear_solve(double lambda,
                            @Const gsl_matrix X,
@@ -20079,6 +20106,34 @@ public static native int gsl_multifit_wlinear(@Const gsl_matrix X,
                       double[] chisq,
                       gsl_multifit_linear_workspace work);
 
+public static native int gsl_multifit_wlinear_tsvd(@Const gsl_matrix X,
+                           @Const gsl_vector w,
+                           @Const gsl_vector y,
+                           double tol,
+                           gsl_vector c,
+                           gsl_matrix cov,
+                           DoublePointer chisq,
+                           @Cast("size_t*") SizeTPointer rank,
+                           gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_wlinear_tsvd(@Const gsl_matrix X,
+                           @Const gsl_vector w,
+                           @Const gsl_vector y,
+                           double tol,
+                           gsl_vector c,
+                           gsl_matrix cov,
+                           DoubleBuffer chisq,
+                           @Cast("size_t*") SizeTPointer rank,
+                           gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_wlinear_tsvd(@Const gsl_matrix X,
+                           @Const gsl_vector w,
+                           @Const gsl_vector y,
+                           double tol,
+                           gsl_vector c,
+                           gsl_matrix cov,
+                           double[] chisq,
+                           @Cast("size_t*") SizeTPointer rank,
+                           gsl_multifit_linear_workspace work);
+
 public static native int gsl_multifit_wlinear_svd(@Const gsl_matrix X,
                           @Const gsl_vector w,
                           @Const gsl_vector y,
@@ -20149,6 +20204,72 @@ public static native double gsl_multifit_linear_rcond(@Const gsl_multifit_linear
 
 public static native int gsl_multifit_linear_residuals(@Const gsl_matrix X, @Const gsl_vector y,
                                @Const gsl_vector c, gsl_vector r);
+
+/* gcv.c */
+public static native int gsl_multifit_linear_gcv_init(@Const gsl_vector y,
+                             gsl_vector reg_param,
+                             gsl_vector UTy,
+                             DoublePointer delta0,
+                             gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_gcv_init(@Const gsl_vector y,
+                             gsl_vector reg_param,
+                             gsl_vector UTy,
+                             DoubleBuffer delta0,
+                             gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_gcv_init(@Const gsl_vector y,
+                             gsl_vector reg_param,
+                             gsl_vector UTy,
+                             double[] delta0,
+                             gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_gcv_curve(@Const gsl_vector reg_param,
+                              @Const gsl_vector UTy,
+                              double delta0,
+                              gsl_vector G,
+                              gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_gcv_min(@Const gsl_vector reg_param,
+                            @Const gsl_vector UTy,
+                            @Const gsl_vector G,
+                            double delta0,
+                            DoublePointer lambda,
+                            gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_gcv_min(@Const gsl_vector reg_param,
+                            @Const gsl_vector UTy,
+                            @Const gsl_vector G,
+                            double delta0,
+                            DoubleBuffer lambda,
+                            gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_gcv_min(@Const gsl_vector reg_param,
+                            @Const gsl_vector UTy,
+                            @Const gsl_vector G,
+                            double delta0,
+                            double[] lambda,
+                            gsl_multifit_linear_workspace work);
+
+public static native double gsl_multifit_linear_gcv_calc(double lambda,
+                             @Const gsl_vector UTy,
+                             double delta0,
+                             gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_gcv(@Const gsl_vector y,
+                        gsl_vector reg_param,
+                        gsl_vector G,
+                        DoublePointer lambda,
+                        DoublePointer G_lambda,
+                        gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_gcv(@Const gsl_vector y,
+                        gsl_vector reg_param,
+                        gsl_vector G,
+                        DoubleBuffer lambda,
+                        DoubleBuffer G_lambda,
+                        gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_gcv(@Const gsl_vector y,
+                        gsl_vector reg_param,
+                        gsl_vector G,
+                        double[] lambda,
+                        double[] G_lambda,
+                        gsl_multifit_linear_workspace work);
 
 public static class gsl_multifit_robust_type extends Pointer {
     static { Loader.load(); }
