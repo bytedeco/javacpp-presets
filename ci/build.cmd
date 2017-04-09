@@ -83,28 +83,25 @@
        echo Finished libdc1394 install
     )
 
-    IF "%projectName%"=="hdf5" ( 
-       @echo on
-       IF "%MSYS2_ARCH%"=="x86_64" (
-          curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win64-vs2013-shared.zip"
-          unzip hdf5.zip 
-          cd hdf5
-          msiexec /i HDF5-1.10.0-win64.msi /quiet
-       )
-
-       IF "%MSYS2_ARCH%"=="x86" (
-          echo 32bit copy for hdf5 
-          curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win32-vs2013-shared.zip"
-          unzip hdf5.zip 
-          cd hdf5
-          dir 
-          msiexec /i HDF5-1.10.0-win32.msi /quiet
-          xcopy "c:\Program Files (x86)\HDF_Group" "c:\Program Files\HDF_Group" /S /I /E
-       )
-
-       cd ..
-       echo Finished hd5 install 
+    IF "%MSYS2_ARCH%"=="x86_64" (
+       curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win64-vs2013-shared.zip"
+       unzip hdf5.zip 
+       cd hdf5
+       msiexec /i HDF5-1.10.0-win64.msi /quiet
     )
+
+    IF "%MSYS2_ARCH%"=="x86" (
+       echo 32bit copy for hdf5 
+       curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/hdf5-1.10.0-patch1-win32-vs2013-shared.zip"
+       unzip hdf5.zip 
+       cd hdf5
+       msiexec /i HDF5-1.10.0-win32.msi /quiet
+       xcopy "c:\Program Files (x86)\HDF_Group" "c:\Program Files\HDF_Group" /S /I /E
+    )
+
+    cd ..
+    echo Finished hd5 install 
+    
 
     echo Starting main build now.. 
     cd javacpp 
