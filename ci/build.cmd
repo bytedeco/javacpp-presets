@@ -36,11 +36,11 @@
 
     IF "%MSYS2_ARCH%"=="x86_64" (
        echo Callings vcvarsall for amd64
-       call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
+       call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
     )
     IF "%MSYS2_ARCH%"=="x86" (
        echo Callings vcvarsall for x86
-       call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
+       call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
     )
  
     echo Perform download files out of main repo
