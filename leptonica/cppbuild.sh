@@ -25,6 +25,7 @@ download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz lep
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
+echo "Decompressing archives..."
 tar --totals -xzf ../$ZLIB.tar.gz
 tar --totals -xzf ../$GIFLIB.tar.gz
 tar --totals -xzf ../$LIBJPEG.tar.gz

@@ -111,7 +111,7 @@ before_install:
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make automake cmake3 perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "$PROJ" == "flycapture" ]; then
             curl -L -s -X POST --globoff  -o $HOME/build/flycap.tar.gz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
             tar xzvf $HOME/build/flycap.tar.gz
@@ -127,7 +127,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "performing brew update and install of dependencies, please wait.."
         brew update > /dev/null
-        brew install gcc5 swig automake bazel libusb nasm yasm xz 
+        brew install gcc5 swig bazel libtool libusb nasm yasm xz 
         ln -s /usr/local/opt/gcc\@5 /usr/local/opt/gcc5
       fi
    - |
