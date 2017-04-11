@@ -14,7 +14,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals -xvf ../hdf5-$HDF5_VERSION.tar.bz2
+tar --totals -xf ../hdf5-$HDF5_VERSION.tar.bz2
 cd hdf5-$HDF5_VERSION
 
 case $PLATFORM in

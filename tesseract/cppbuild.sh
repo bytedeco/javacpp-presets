@@ -67,12 +67,14 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
+        patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-windows.patch
         cp vs2010/port/* ccutil/
         ./configure --prefix=$INSTALL_PATH --host="i686-w64-mingw32" CC="gcc -m32" CXX="g++ -m32 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
+        patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-windows.patch
         cp vs2010/port/* ccutil/
         ./configure --prefix=$INSTALL_PATH --host="x86_64-w64-mingw32" CC="gcc -m64" CXX="g++ -m64 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
         make -j $MAKEJ
