@@ -25,13 +25,13 @@ download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz lep
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../$ZLIB.tar.gz
-tar -xzvf ../$GIFLIB.tar.gz
-tar -xzvf ../$LIBJPEG.tar.gz
-tar -xzvf ../$LIBPNG.tar.gz
-tar -xzvf ../$LIBTIFF.tar.gz
-tar -xzvf ../$LIBWEBP.tar.gz
-tar -xzvf ../leptonica-$LEPTONICA_VERSION.tar.gz
+tar --totals -xzf ../$ZLIB.tar.gz
+tar --totals -xzf ../$GIFLIB.tar.gz
+tar --totals -xzf ../$LIBJPEG.tar.gz
+tar --totals -xzf ../$LIBPNG.tar.gz
+tar --totals -xzf ../$LIBTIFF.tar.gz
+tar --totals -xzf ../$LIBWEBP.tar.gz
+tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
 case $PLATFORM in
     android-arm)

@@ -12,7 +12,8 @@ download https://launchpad.net/artoolkitplus/trunk/$ARTOOLKITPLUS_VERSION/+downl
 
 mkdir -p $PLATFORM
 cd $PLATFORM
-tar -xjvf ../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.tar.bz2 --exclude="*/id-markers/*"
+echo "Decompressing archives..."
+tar --totals -xjf ../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.tar.bz2 --exclude="*/id-markers/*"
 cd ARToolKitPlus-$ARTOOLKITPLUS_VERSION
 patch --binary -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch || true
 

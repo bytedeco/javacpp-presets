@@ -15,7 +15,8 @@ case $PLATFORM in
             echo "Please place flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz in the downloads directory"
             exit 1
         fi
-        tar -xzvf ../../downloads/flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz
+        echo "Decompressing archives..."
+        tar -xzf ../../downloads/flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz
         rm -Rf $PLATFORM
         mv flycapture.${FLYCAPTURE_VERSION}_armhf $PLATFORM
         mv $PLATFORM/lib/C/* $PLATFORM/lib

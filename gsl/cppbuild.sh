@@ -13,7 +13,8 @@ download ftp://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../gsl-$GSL_VERSION.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../gsl-$GSL_VERSION.tar.gz
 cd gsl-$GSL_VERSION
 
 case $PLATFORM in

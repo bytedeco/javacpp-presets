@@ -24,7 +24,8 @@ else
     mkdir -p $PLATFORM
     cd $PLATFORM
     INSTALL_PATH=`pwd`
-    tar -xzvf ../fftw-$FFTW_VERSION.tar.gz
+    echo "Decompressing archives..."
+    tar --totals -xzf ../fftw-$FFTW_VERSION.tar.gz
     cd fftw-$FFTW_VERSION
 fi
 
