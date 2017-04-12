@@ -95,7 +95,7 @@ before_install:
    - mkdir ./buildlogs
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
-   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+   - mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
@@ -151,14 +151,16 @@ script:
       fi 
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
+        #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+        while true; do echo .; sleep 60; done & ; export CHILDPID=$!
+        echo "Child PID $CHILDPID"
         brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "Brew Failed"
           return $BREW_STATUS
         fi
-
-        #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+        kill $CHILDPID
 
         curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v6.0.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v6.0.tgz"}' https://content.dropboxapi.com/2/files/download
         tar xvf cudnn-8.0-osx-x64-v6.0.tgz
