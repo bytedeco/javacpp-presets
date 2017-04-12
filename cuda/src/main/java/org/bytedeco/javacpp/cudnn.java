@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.cuda.*;
 
-public class cudnn extends org.bytedeco.javacpp.helper.cudnn {
+public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
     static { Loader.load(); }
 
 // Parsed from <cudnn.h>
@@ -221,6 +221,8 @@ public static final int CUDNN_DIM_MAX = 8;
 /* Create an instance of a generic Tensor descriptor */
 public static native @Cast("cudnnStatus_t") int cudnnCreateTensorDescriptor(
                                 @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct tensorDesc );
+public static native @Cast("cudnnStatus_t") int cudnnCreateTensorDescriptor(
+                                @Cast("cudnnTensorStruct**") PointerPointer tensorDesc );
 
 /** enum cudnnTensorFormat_t */
 public static final int
@@ -2067,11 +2069,23 @@ public static native @Cast("cudnnStatus_t") int cudnnGetRNNWorkspaceSize( cudnnC
                                                     @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
                                                     @Cast("size_t*") SizeTPointer sizeInBytes
                                                     );
+public static native @Cast("cudnnStatus_t") int cudnnGetRNNWorkspaceSize( cudnnContext handle,
+                                                    cudnnRNNStruct rnnDesc,  
+                                                    int seqLength, 
+                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
+                                                    @Cast("size_t*") SizeTPointer sizeInBytes
+                                                    );
                                                       
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNTrainingReserveSize( cudnnContext handle,
                                                           cudnnRNNStruct rnnDesc,  
                                                           int seqLength, 
                                                           @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
+                                                          @Cast("size_t*") SizeTPointer sizeInBytes
+                                                    );
+public static native @Cast("cudnnStatus_t") int cudnnGetRNNTrainingReserveSize( cudnnContext handle,
+                                                          cudnnRNNStruct rnnDesc,  
+                                                          int seqLength, 
+                                                          @Cast("cudnnTensorStruct**") PointerPointer xDesc,
                                                           @Cast("size_t*") SizeTPointer sizeInBytes
                                                     );
 
@@ -2144,6 +2158,25 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNForwardInference( cudnnC
                                                     cudnnTensorStruct cyDesc, 
                                                     Pointer cy, 
                                                     Pointer workspace, 
+                                                    @Cast("size_t") long workSpaceSizeInBytes);
+public static native @Cast("cudnnStatus_t") int cudnnRNNForwardInference( cudnnContext handle, 
+                                                    cudnnRNNStruct rnnDesc, 
+                                                    int seqLength, 
+                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc, 
+                                                    @Const Pointer x, 
+                                                    cudnnTensorStruct hxDesc, 
+                                                    @Const Pointer hx, 
+                                                    cudnnTensorStruct cxDesc, 
+                                                    @Const Pointer cx, 
+                                                    cudnnFilterStruct wDesc, 
+                                                    @Const Pointer w, 
+                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,  
+                                                    Pointer y, 
+                                                    cudnnTensorStruct hyDesc, 
+                                                    Pointer hy, 
+                                                    cudnnTensorStruct cyDesc, 
+                                                    Pointer cy, 
+                                                    Pointer workspace, 
                                                     @Cast("size_t") long workSpaceSizeInBytes);             
 
                                            
@@ -2160,6 +2193,27 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNForwardTraining( cudnnCo
                                                    cudnnFilterStruct wDesc, 
                                                    @Const Pointer w, 
                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,  
+                                                   Pointer y, 
+                                                   cudnnTensorStruct hyDesc, 
+                                                   Pointer hy, 
+                                                   cudnnTensorStruct cyDesc, 
+                                                   Pointer cy, 
+                                                   Pointer workspace, 
+                                                   @Cast("size_t") long workSpaceSizeInBytes,
+                                                   Pointer reserveSpace, 
+                                                   @Cast("size_t") long reserveSpaceSizeInBytes);
+public static native @Cast("cudnnStatus_t") int cudnnRNNForwardTraining( cudnnContext handle, 
+                                                   cudnnRNNStruct rnnDesc, 
+                                                   int seqLength, 
+                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc, 
+                                                   @Const Pointer x, 
+                                                   cudnnTensorStruct hxDesc, 
+                                                   @Const Pointer hx, 
+                                                   cudnnTensorStruct cxDesc, 
+                                                   @Const Pointer cx, 
+                                                   cudnnFilterStruct wDesc, 
+                                                   @Const Pointer w, 
+                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc,  
                                                    Pointer y, 
                                                    cudnnTensorStruct hyDesc, 
                                                    Pointer hy, 
@@ -2197,6 +2251,33 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnConte
                                                 @Cast("size_t") long workSpaceSizeInBytes,
                                                 Pointer reserveSpace, 
                                                 @Cast("size_t") long reserveSpaceSizeInBytes );
+public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnContext handle, 
+                                                cudnnRNNStruct rnnDesc, 
+                                                int seqLength, 
+                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
+                                                @Const Pointer y,                                                
+                                                @Cast("cudnnTensorStruct**") PointerPointer dyDesc, 
+                                                @Const Pointer dy, 
+                                                cudnnTensorStruct dhyDesc, 
+                                                @Const Pointer dhy, 
+                                                cudnnTensorStruct dcyDesc, 
+                                                @Const Pointer dcy, 
+                                                cudnnFilterStruct wDesc, 
+                                                @Const Pointer w, 
+                                                cudnnTensorStruct hxDesc, 
+                                                @Const Pointer hx,                                                                  
+                                                cudnnTensorStruct cxDesc, 
+                                                @Const Pointer cx,                                                 
+                                                @Cast("cudnnTensorStruct**") PointerPointer dxDesc, 
+                                                Pointer dx, 
+                                                cudnnTensorStruct dhxDesc,
+                                                Pointer dhx,
+                                                cudnnTensorStruct dcxDesc,
+                                                Pointer dcx,
+                                                Pointer workspace,
+                                                @Cast("size_t") long workSpaceSizeInBytes,
+                                                Pointer reserveSpace, 
+                                                @Cast("size_t") long reserveSpaceSizeInBytes );
 
 
 public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnContext handle, 
@@ -2214,6 +2295,21 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnCo
                                                    Pointer dw,
                                                    @Const Pointer reserveSpace, 
                                                    @Cast("size_t") long reserveSpaceSizeInBytes );
+public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnContext handle, 
+                                                   cudnnRNNStruct rnnDesc, 
+                                                   int seqLength, 
+                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc, 
+                                                   @Const Pointer x, 
+                                                   cudnnTensorStruct hxDesc, 
+                                                   @Const Pointer hx,                                                   
+                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
+                                                   @Const Pointer y,
+                                                   @Const Pointer workspace, 
+                                                   @Cast("size_t") long workSpaceSizeInBytes, 
+                                                   cudnnFilterStruct dwDesc, 
+                                                   Pointer dw,
+                                                   @Const Pointer reserveSpace, 
+                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
                                 
 
 /* DEPRECATED routines to be removed next release : 
@@ -2221,6 +2317,10 @@ public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnCo
    Routines with _v4 suffix has the functionality of the non-suffixed routines in the CUDNN V5
  */
 
+ public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,
+        int pad_h, int pad_w, int u, int v, int dilation_h, int dilation_w, int mode) {
+    return cudnnSetConvolution2dDescriptor_v4(convDesc, pad_h, pad_w, u, v, dilation_h, dilation_w, mode);
+}
 public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor_v4(
                                 cudnnConvolutionStruct convDesc,
                                 int pad_h,

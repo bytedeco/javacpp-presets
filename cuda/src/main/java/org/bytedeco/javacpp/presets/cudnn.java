@@ -34,12 +34,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = cuda.class, value = {
     @Platform(include = "<cudnn.h>", link = "cudnn@.6")},
-        target = "org.bytedeco.javacpp.cudnn", helper = "org.bytedeco.javacpp.helper.cudnn")
+        target = "org.bytedeco.javacpp.cudnn")
 public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDNNWINAPI").cppTypes().annotations().cppText(""))
                .put(new Info("cudnnHandle_t").valueTypes("cudnnContext").pointerTypes("@ByPtrPtr cudnnContext"))
-               .put(new Info("cudnnTensorDescriptor_t").valueTypes("cudnnTensorStruct").pointerTypes("@Cast(\"cudnnTensorStruct**\") @ByPtrPtr cudnnTensorStruct"))
+               .put(new Info("cudnnTensorDescriptor_t").valueTypes("cudnnTensorStruct")
+                       .pointerTypes("@Cast(\"cudnnTensorStruct**\") @ByPtrPtr cudnnTensorStruct", "@Cast(\"cudnnTensorStruct**\") PointerPointer"))
                .put(new Info("cudnnFilterDescriptor_t").valueTypes("cudnnFilterStruct").pointerTypes("@ByPtrPtr cudnnFilterStruct"))
                .put(new Info("cudnnConvolutionDescriptor_t").valueTypes("cudnnConvolutionStruct").pointerTypes("@ByPtrPtr cudnnConvolutionStruct"))
                .put(new Info("cudnnPoolingDescriptor_t").valueTypes("cudnnPoolingStruct").pointerTypes("@ByPtrPtr cudnnPoolingStruct"))
@@ -50,6 +51,21 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnReduceTensorDescriptor_t").valueTypes("cudnnReduceTensorStruct").pointerTypes("@ByPtrPtr cudnnReduceTensorStruct"))
                .put(new Info("cudnnRNNDescriptor_t").valueTypes("cudnnRNNStruct").pointerTypes("@ByPtrPtr cudnnRNNStruct"))
                .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
-               .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"));
+               .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"))
+
+               .put(new Info("cudnnSetConvolution2dDescriptor_v4").javaText(
+                          " public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,\n"
+                        + "        int pad_h, int pad_w, int u, int v, int dilation_h, int dilation_w, int mode) {\n"
+                        + "    return cudnnSetConvolution2dDescriptor_v4(convDesc, pad_h, pad_w, u, v, dilation_h, dilation_w, mode);\n"
+                        + "}\n"
+                        + "public static native @Cast(\"cudnnStatus_t\") int cudnnSetConvolution2dDescriptor_v4(\n"
+                        + "                                cudnnConvolutionStruct convDesc,\n"
+                        + "                                int pad_h,\n"
+                        + "                                int pad_w,\n"
+                        + "                                int u,\n"
+                        + "                                int v,\n"
+                        + "                                int dilation_h,\n"
+                        + "                                int dilation_w,\n"
+                        + "                                @Cast(\"cudnnConvolutionMode_t\") int mode );\n"));
     }
 }
