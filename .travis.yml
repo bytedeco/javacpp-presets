@@ -152,7 +152,8 @@ script:
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
         #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
-        while true; do echo .; sleep 60; done & ; export CHILDPID=$!
+        while true; do echo .; sleep 60; done &
+        export CHILDPID=$!
         echo "Child PID $CHILDPID"
         brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
