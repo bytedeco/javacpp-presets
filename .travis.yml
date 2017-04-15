@@ -151,7 +151,7 @@ script:
       fi 
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
-        while true; do echo .; ps -ef; sleep 60; done &
+        while true; do echo .; sleep 60; done &
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
         #brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
