@@ -151,11 +151,14 @@ script:
       fi 
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
-        #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
         while true; do echo .; sleep 60; done &
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
-        brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
+        #brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
+        curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+        hdiutil cuda.dmg
+        ls -ltr /Volumes
+        /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --acept-eula --no-window; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "Brew Failed"
