@@ -156,12 +156,11 @@ script:
         echo "Child PID $CHILDPID"
         #brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
         curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
-        sleep 5
         echo "Mount dmg"
         hdiutil mount cuda.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
-        /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
+        sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "Brew Failed"
