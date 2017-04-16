@@ -353,23 +353,23 @@ case $PLATFORM in
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         cd ../$GIFLIB
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic 
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic 
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic 
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic 
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
