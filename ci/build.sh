@@ -51,16 +51,12 @@ if [ "$projectName" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
-if [ "$projectName"=="cuda" ]; then
-       pwd
-       ls -ltr
+if [ "$projectName" == "cuda" ]; then
+       echo Installing cuda 
        curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
-       ls -ltr
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
-       ls -ltr
        ./cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
-       ls -ltr
        unzip cudnn-8.0-windows10-x64-v6.0.zip
        mv ./cuda/bin/cudnn64_6.dll "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin" 
        mv ./cuda/include/cudnn.h "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include" 
@@ -69,15 +65,17 @@ if [ "$projectName"=="cuda" ]; then
 fi 
 
 if [ "$projectName" == "libdc1394" ]; then 
+       echo Installing libdc1394 
        curl -L -o CMU.zip "https://www.dropbox.com/s/97boebrmdza18uu/CMU.zip?dl=0"
        unzip CMU.zip
        mv CMU "/c/Program\ Files\ \(x86\)"
        echo Finished libdc1394 install
 fi
 
-if [[ "$projectName" =~ hdf5 ]]; then
+if [[ "$projectName" =~ "hdf5" ]]; then
        echo Installing HDF5
        if [ "$MSYS2_ARCH" == "x86_64" ]; then 
+          echo 64bit hdf5 
           curl -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win64-vs2015-shared.zip"
           unzip hdf5.zip 
           cd hdf5
