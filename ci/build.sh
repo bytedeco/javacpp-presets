@@ -40,18 +40,54 @@ cd ..
 if [ "$projectName" == "flycapture" ]; then
        echo Flycapture install
        if [ "$MSYS2_ARCH"=="x86_64" ]; then
-           curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr.z
-ip"}' https://content.dropboxapi.com/2/files/download
+           curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
            unzip pgr.zip
-           move "Point Grey Research" "c:\Program Files"
+           mv "Point Grey Research" "/c/Program\ Files"
        elif [ "$MSYS2_ARCH"=="x86" ]; then
-           curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr
-32.zip"}' https://content.dropboxapi.com/2/files/download
+           curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr32.zip"}' https://content.dropboxapi.com/2/files/download
            unzip pgr32.zip
-           move "Point Grey Research" "c:\Program Files"
+           move "Point Grey Research" "/c/Program\ Files"
        fi
        echo "Finished flycapture install"
 fi
+
+if [ "$projectName"=="cuda" ]; then
+       curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
+       cuda_8.0.61_windows.exe -s 
+       echo May need to wait while cuda installs..
+       unzip cudnn-8.0-windows10-x64-v6.0.zip
+       mv ./cuda/bin/cudnn64_6.dll "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin" 
+       mv ./cuda/include/cudnn.h "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include" 
+       mv ./cuda/lib/x64/cudnn.lib "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/lib/x64" 
+       echo Finished cuda install
+fi 
+
+if [ "$projectName" == "libdc1394" ]; then 
+       curl.exe -L -o CMU.zip "https://www.dropbox.com/s/97boebrmdza18uu/CMU.zip?dl=0"
+       unzip CMU.zip
+       mv CMU "/c/Program\ Files\ \(x86\)"
+       echo Finished libdc1394 install
+fi
+
+if [[ "$PROJ" =~ hdf5 ]]; then
+       echo Installing HDF5
+       if [ "$MSYS2_ARCH" == "x86_64" ]; then 
+          curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win64-vs2015-shared.zip"
+          unzip hdf5.zip 
+          cd hdf5
+          msiexec /i HDF5-1.10.0-win64.msi /quiet
+       fi
+       elif [ "$MSYS2_ARCH" == "x86" ]; then
+          echo 32bit copy for hdf5 
+          curl.exe -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win32-vs2015-shared.zip"
+          unzip hdf5.zip 
+          cd hdf5
+          msiexec /i HDF5-1.10.0-win32.msi /quiet
+          mv /c/Program Files\ \(x86\)/HDF_Group /c/Program\ Files/HDF_Group
+       cd ..
+       echo Finished hd5 install 
+fi
+
 
 echo Starting main build now.. 
 cd javacpp 
