@@ -35,3 +35,28 @@ fi
 
 echo done
 
+echo Perform download files out of main repo
+cd ..
+if [ "$projectName" == "flycapture" ]; then
+       echo Flycapture install
+       if [ "$MSYS2_ARCH"=="x86_64" ]; then
+           curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr.z
+ip"}' https://content.dropboxapi.com/2/files/download
+           unzip pgr.zip
+           move "Point Grey Research" "c:\Program Files"
+       elif [ "$MSYS2_ARCH"=="x86" ]; then
+           curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr
+32.zip"}' https://content.dropboxapi.com/2/files/download
+           unzip pgr32.zip
+           move "Point Grey Research" "c:\Program Files"
+       fi
+       echo "Finished flycapture install"
+fi
+
+echo Starting main build now.. 
+cd javacpp 
+mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH -Dmaven.javadoc.skip=true
+cd ..
+cd javacpp-presets
+mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH --settings .\ci\settings.xml  -pl $projectName
+

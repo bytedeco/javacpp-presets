@@ -238,6 +238,7 @@ build_script:
              echo Callings vcvarsall for x86
              cmd /c "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
            } 
+    - set
     - bash -lc "/c/projects/javacpp-presets/ci/build.sh %PROJ% %DROP_AUTH_TOK% %CI_DEPLOY_USERNAME% %CI_DEPLOY_PASSWORD%"
 
 test_script:
