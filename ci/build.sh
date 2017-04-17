@@ -58,5 +58,5 @@ cd javacpp
 mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH -Dmaven.javadoc.skip=true
 cd ..
 cd javacpp-presets
-mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH --settings .\ci\settings.xml  -pl $projectName
+mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH --settings ./ci/settings.xml  -pl $projectName
 
