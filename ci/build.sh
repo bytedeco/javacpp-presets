@@ -52,10 +52,15 @@ if [ "$projectName" == "flycapture" ]; then
 fi
 
 if [ "$projectName"=="cuda" ]; then
+       pwd
+       ls -ltr
        curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
+       ls -ltr
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
+       ls -ltr
        cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
+       ls -ltr
        unzip cudnn-8.0-windows10-x64-v6.0.zip
        mv ./cuda/bin/cudnn64_6.dll "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin" 
        mv ./cuda/include/cudnn.h "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include" 
