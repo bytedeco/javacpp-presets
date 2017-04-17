@@ -14,5 +14,5 @@ IF "%MSYS2_ARCH%"=="x86" (
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
 )
 
-bash -lc"/c/projects/javacpp-presets/ci/build.sh %PROJ% %DROP_AUTH_TOK% %CI_DEPLOY_USERNAME% %CI_DEPLOY_PASSWORD%"
+bash -lc "/c/projects/javacpp-presets/ci/build.sh %PROJ% %DROP_AUTH_TOK% %CI_DEPLOY_USERNAME% %CI_DEPLOY_PASSWORD%"
 
