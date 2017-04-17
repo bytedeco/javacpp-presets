@@ -14,9 +14,9 @@ echo MSYS2 system: $MSYSTEM
 echo Bits: $BIT
 
 #Create a writeable TMPDIR
-mkdir $APPVEYOR_BUILD_FOLDER\tmp
-export TMPDIR=$APPVEYOR_BUILD_FOLDER\tmp
-mkdir $APPVEYOR_BUILD_FOLDER\buildlogs
+mkdir $APPVEYOR_BUILD_FOLDER/tmp
+export TMPDIR=$APPVEYOR_BUILD_FOLDER/tmp
+mkdir $APPVEYOR_BUILD_FOLDER/buildlogs
 
 if [ "$COMPILER" == "msys2" ]; then
     #export PATH="C:\$MSYS2_DIR\$MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
@@ -54,11 +54,11 @@ fi
 if [ "$projectName"=="cuda" ]; then
        pwd
        ls -ltr
-       curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer %DROPAUTH%" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
+       curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
        ls -ltr
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        ls -ltr
-       cuda_8.0.61_windows.exe -s 
+       ./cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
        ls -ltr
        unzip cudnn-8.0-windows10-x64-v6.0.zip
@@ -75,7 +75,7 @@ if [ "$projectName" == "libdc1394" ]; then
        echo Finished libdc1394 install
 fi
 
-if [[ "$PROJ" =~ hdf5 ]]; then
+if [[ "$projectName" =~ hdf5 ]]; then
        echo Installing HDF5
        if [ "$MSYS2_ARCH" == "x86_64" ]; then 
           curl -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win64-vs2015-shared.zip"
