@@ -79,13 +79,13 @@ if [[ "$projectName" =~ "hdf5" ]]; then
           curl -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win64-vs2015-shared.zip"
           unzip hdf5.zip 
           cd hdf5
-          msiexec /i HDF5-1.10.0-win64.msi /quiet
+          msiexec //i HDF5-1.10.0-win64.msi //quiet
        elif [ "$MSYS2_ARCH" == "x86" ]; then
           echo 32bit copy for hdf5 
           curl -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win32-vs2015-shared.zip"
           unzip hdf5.zip 
           cd hdf5
-          msiexec /i HDF5-1.10.0-win32.msi /quiet
+          msiexec //i HDF5-1.10.0-win32.msi //quiet
           mv /c/Program Files\ \(x86\)/HDF_Group /c/Program\ Files/HDF_Group
        fi
        cd ..
