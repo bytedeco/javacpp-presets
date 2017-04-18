@@ -18,22 +18,11 @@ mkdir $APPVEYOR_BUILD_FOLDER/tmp
 export TMPDIR=$APPVEYOR_BUILD_FOLDER/tmp
 mkdir $APPVEYOR_BUILD_FOLDER/buildlogs
 
-if [ "$COMPILER" == "msys2" ]; then
-    #export PATH="C:\$MSYS2_DIR\$MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
-    pacman -S --needed --noconfirm pacman-mirrors
-    pacman -S --needed --noconfirm git
-    pacman -Syu --noconfirm
+bash --version
+g++ --version
+java -version
+mvn --version
 
-    #build tools
-    pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain base-devel tar nasm yasm pkg-config unzip autoconf automake libtool make patch mingw-w64-x86_64-libtool
-
-    bash --version
-    g++ --version
-    java -version
-    mvn --version
-fi
-
-echo done
 
 echo Perform download files out of main repo
 cd ..
@@ -86,7 +75,7 @@ if [[ "$projectName" =~ "hdf5" ]]; then
           unzip hdf5.zip 
           cd hdf5
           msiexec //i HDF5-1.10.0-win32.msi //quiet
-          mv /c/Program\ Files\ \(x86\)/HDF_Group /c/Program\ Files
+          cp -R /c/Program\ Files\ \(x86\)/HDF_Group /c/Program\ Files
        fi
        cd ..
        echo Finished hd5 install 
