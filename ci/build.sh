@@ -42,11 +42,11 @@ if [ "$projectName" == "flycapture" ]; then
        if [ "$MSYS2_ARCH"=="x86_64" ]; then
            curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
            unzip pgr.zip
-           mv "Point Grey Research" "/c/Program\ Files"
+           mv Point\ Grey\ Research /c/Program\ Files
        elif [ "$MSYS2_ARCH"=="x86" ]; then
            curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr32.zip"}' https://content.dropboxapi.com/2/files/download
            unzip pgr32.zip
-           move "Point Grey Research" "/c/Program\ Files"
+           mv Point\ Grey\ Research /c/Program\ Files
        fi
        echo "Finished flycapture install"
 fi
@@ -58,9 +58,9 @@ if [ "$projectName" == "cuda" ]; then
        ./cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
        unzip cudnn-8.0-windows10-x64-v6.0.zip
-       mv ./cuda/bin/cudnn64_6.dll "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin" 
-       mv ./cuda/include/cudnn.h "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include" 
-       mv ./cuda/lib/x64/cudnn.lib "/c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/lib/x64" 
+       mv ./cuda/bin/cudnn64_6.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin
+       mv ./cuda/include/cudnn.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include
+       mv ./cuda/lib/x64/cudnn.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/lib/x64
        echo Finished cuda install
 fi 
 
@@ -68,7 +68,7 @@ if [ "$projectName" == "libdc1394" ]; then
        echo Installing libdc1394 
        curl -L -o CMU.zip "https://www.dropbox.com/s/97boebrmdza18uu/CMU.zip?dl=0"
        unzip CMU.zip
-       mv CMU "/c/Program\ Files\ \(x86\)"
+       mv CMU /c/Program\ Files\ \(x86\)
        echo Finished libdc1394 install
 fi
 
