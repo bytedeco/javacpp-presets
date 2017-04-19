@@ -29,14 +29,17 @@ bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain base-devel t
 bash -lc "/c/projects/javacpp-presets/ci/setup.sh %PROJ% %DROP_AUTH_TOK% %CI_DEPLOY_USERNAME% %CI_DEPLOY_PASSWORD%"
 
 echo Starting main build now.. 
-dir
 cd ..
+dir
 cd javacpp 
+dir
 echo Install javacpp
 mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
 cd ..
+dir
 cd javacpp-presets
+dir
 echo Install %PROJ%
-mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml  -pl %PROJ%
+mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
 
 
