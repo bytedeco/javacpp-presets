@@ -23,7 +23,8 @@ g++ --version
 java -version
 mvn --version
 
-
+export
+ 
 echo Perform download files out of main repo
 cd ..
 if [ "$projectName" == "flycapture" ]; then
@@ -81,11 +82,5 @@ if [[ "$projectName" =~ "hdf5" ]]; then
        echo Finished hd5 install 
 fi
 
-
-echo Starting main build now.. 
-cd javacpp 
-mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH -Dmaven.javadoc.skip=true
-cd ..
-cd javacpp-presets
-mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-$MSYS2_ARCH --settings ./ci/settings.xml  -pl $projectName
+echo Finished setting up env in setup.sh
 
