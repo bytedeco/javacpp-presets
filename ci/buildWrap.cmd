@@ -30,6 +30,7 @@ bash -lc "/c/projects/javacpp-presets/ci/setup.sh %PROJ% %DROP_AUTH_TOK% %CI_DEP
 
 echo Starting main build now.. 
 dir
+cd ..
 cd javacpp 
 echo Install javacpp
 mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
