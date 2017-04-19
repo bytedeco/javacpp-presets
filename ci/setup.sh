@@ -13,18 +13,11 @@ echo MSYS2 directory: $MSYS2_DIR
 echo MSYS2 system: $MSYSTEM
 echo Bits: $BIT
 
-#Create a writeable TMPDIR
-mkdir $APPVEYOR_BUILD_FOLDER/tmp
-export TMPDIR=$APPVEYOR_BUILD_FOLDER/tmp
-mkdir $APPVEYOR_BUILD_FOLDER/buildlogs
-
 bash --version
 g++ --version
 java -version
 mvn --version
 
-export
- 
 echo Perform download files out of main repo
 cd ..
 if [ "$projectName" == "flycapture" ]; then

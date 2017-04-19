@@ -222,9 +222,6 @@ install:
     - 'echo install section'
     - 'cd ..'
     - 'git clone https://github.com/bytedeco/javacpp.git'
-    - 'cd javacpp'
-    # moved main build into batch file so env variables would be all setup
-    - 'cd ../javacpp-presets'
 
 build_script:
     - 'echo build step for %PROJ%'
