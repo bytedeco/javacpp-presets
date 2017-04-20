@@ -22,11 +22,11 @@ echo Perform download files out of main repo
 cd ..
 if [ "$projectName" == "flycapture" ]; then
        echo Flycapture install
-       if [ "$MSYS2_ARCH"=="x86_64" ]; then
+       if [ "$MSYS2_ARCH" == "x86_64" ]; then
            curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
            unzip pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
-       elif [ "$MSYS2_ARCH"=="x86" ]; then
+       elif [ "$MSYS2_ARCH" == "x86" ]; then
            curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr32.zip"}' https://content.dropboxapi.com/2/files/download
            unzip pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
