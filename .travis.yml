@@ -116,7 +116,7 @@ before_install:
             curl -L -s -X POST --globoff  -o $TRAVIS_BUILD_DIR/../flycap.tar.gz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
             pwd
             ls -ltr
-            tar xzvf $HOME/build/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
+            tar xzvf $TRAVIS_BUILD_DIR/../flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
             ls -ltr $TRAVIS_BUILD_DIR/../
             docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr /root; ls -ltr /root/build; mkdir /usr/include/flycapture; cp /root/build/include/* /usr/include/flycapture; cp /root/build/include/C/* /usr/include/flycapture; cp /root/build/include/lib/* /usr/lib" 
           fi 
