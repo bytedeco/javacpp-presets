@@ -118,7 +118,7 @@ before_install:
             ls -ltr
             tar xzvf $TRAVIS_BUILD_DIR/../flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
             ls -ltr $TRAVIS_BUILD_DIR/../
-            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr /root; ls -ltr /root/build; mkdir /usr/include/flycapture; cp /root/build/include/* /usr/include/flycapture; cp /root/build/include/C/* /usr/include/flycapture; cp /root/build/include/lib/* /usr/lib" 
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr /root; ls -ltr /root/build; cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
           fi 
           if [ "$PROJ" == "tensorflow" ]; then
            echo "adding bazel for tensorflow"
