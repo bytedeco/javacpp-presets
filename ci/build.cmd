@@ -32,15 +32,11 @@ IF %COMPILER%==msys2 (
  @echo on
  echo Starting main build now.. 
  cd ..
- dir
  cd javacpp 
- dir
  echo Install javacpp
  mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
  cd ..
- dir
  cd javacpp-presets
- dir
  echo Install %PROJ%
  mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
 
