@@ -11,6 +11,13 @@ environment:
     secure: YF4U6jDI6yKTnfvQd95c9g== 
   matrix:
     - PLATFORM: x86
+      PROJ: "flycapture"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
       PROJ: "leptonica,tesseract"
       COMPILER: msys2
       MSYS2_ARCH: x86
@@ -26,13 +33,6 @@ environment:
       BIT: 32
     - PLATFORM: x86
       PROJ: "cuda"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "flycapture"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
