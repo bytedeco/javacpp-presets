@@ -107,17 +107,17 @@ before_install:
         fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $HOME/build:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "$PROJ" == "flycapture" ]; then
-            curl -L -s -X POST --globoff  -o $HOME/build/flycap.tar.gz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
+            curl -L -s -X POST --globoff  -o $TRAVIS_BUILD_DIR/../flycap.tar.gz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
             pwd
             ls -ltr
-            tar xzvf $HOME/build/flycap.tar.gz -C $HOME/build
-            ls -ltr $HOME/build
+            tar xzvf $HOME/build/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../build
+            ls -ltr $TRAVIS_BUILD_DIR/../
             docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr /root; ls -ltr /root/build; mkdir /usr/include/flycapture; cp /root/build/include/* /usr/include/flycapture; cp /root/build/include/C/* /usr/include/flycapture; cp /root/build/include/lib/* /usr/lib" 
           fi 
           if [ "$PROJ" == "tensorflow" ]; then
