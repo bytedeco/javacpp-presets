@@ -69,7 +69,7 @@ if [[ "$projectName" =~ "hdf5" ]]; then
           unzip hdf5.zip 
           cd hdf5
           msiexec //i HDF5-1.10.0-win32.msi //quiet
-          mv /c/Program\ Files\ \(x86\)/HDF_Group /c/Program\ Files/HDF_Group
+          cp -R /c/Program\ Files\ \(x86\)/HDF_Group /c/Program\ Files
        fi
        cd ..
        echo Finished hd5 install 
