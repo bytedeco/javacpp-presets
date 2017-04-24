@@ -5,6 +5,13 @@ os: Visual Studio 2015
 environment:
   matrix:
     - PLATFORM: x86
+      PROJ: "hdf5"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
       PROJ: "flycapture"
       COMPILER: msys2
       MSYS2_ARCH: x86
