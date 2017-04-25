@@ -1,6 +1,6 @@
 env:
   global:
-    - secure: "M3ulnAtm9fOmkPKeCdU/n0MVcW1XaogJHpa8un0nY6TNDXNQo/sgIGpbQHK71bYsKcNPuHuNho85ow7u+yoY4V1vp4nJKXxAg3BxaNhRvBBLqEtihUG9PIBUY+jCZZ77g/0dxOAZq1TLgadYjaVJHot2O8Tekz/G1mQWqw3Ka/w="
+    - secure: "OE5Ld0CzQ8pcLwzgZblmleMVGJaVbeDGl5Kl+itxdRRUys5igR4JYT2R0gE3wNqM49eoyoI99lsScCz/L7YUy6kMk1E7AqDBErMx+seqQd/FMFcZmgO6YdLnFkeFxV9BuY9T9SU+4L9FzAtRvs+itIwUtMO0v6YC65isxbdr2oY="
 addons:
   artifacts:
     s3_region: "us-east-1"
