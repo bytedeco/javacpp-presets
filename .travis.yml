@@ -1,5 +1,5 @@
 env:
-global:
+  global:
     - secure: "M3ulnAtm9fOmkPKeCdU/n0MVcW1XaogJHpa8un0nY6TNDXNQo/sgIGpbQHK71bYsKcNPuHuNho85ow7u+yoY4V1vp4nJKXxAg3BxaNhRvBBLqEtihUG9PIBUY+jCZZ77g/0dxOAZq1TLgadYjaVJHot2O8Tekz/G1mQWqw3Ka/w="
 addons:
   artifacts:
