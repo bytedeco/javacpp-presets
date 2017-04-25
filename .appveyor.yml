@@ -3,6 +3,12 @@ version: '{build}'
 os: Visual Studio 2015
 
 environment:
+  DROP_AUTH_TOK:
+    secure: MjMvFkottVYBFaWIkRt7/mzH6lMHLeTk1Tf+iIcUDTX969TRVqJp0mOSGbHLNmTx2bEH0vLZJFvPmd82I4l8asjxOsDAAmCVe4WJTnl2/Ww= 
+  CI_DEPLOY_USERNAME:
+    secure: rGb4Y+doDjUldiZNtcszCA== 
+  CI_DEPLOY_PASSWORD:
+    secure: DdnLoqlyxHAklmbxU73HfQ== 
   matrix:
     - PLATFORM: x86
       PROJ: "flycapture"
