@@ -3,11 +3,11 @@ version: '{build}'
 os: Visual Studio 2015
 
 environment:
-  DROP_AUTH_TOK:
+  DROP_AUTH_TOK2:
     secure: MjMvFkottVYBFaWIkRt7/mzH6lMHLeTk1Tf+iIcUDTX969TRVqJp0mOSGbHLNmTx2bEH0vLZJFvPmd82I4l8asjxOsDAAmCVe4WJTnl2/Ww= 
-  CI_DEPLOY_USERNAME:
+  CI_DEPLOY_USERNAME2:
     secure: rGb4Y+doDjUldiZNtcszCA== 
-  CI_DEPLOY_PASSWORD:
+  CI_DEPLOY_PASSWORD2:
     secure: DdnLoqlyxHAklmbxU73HfQ== 
   matrix:
     - PLATFORM: x86
@@ -226,7 +226,7 @@ install:
 build_script:
     - 'echo build step for %PROJ%'
     - SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
-    - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%" "%DROP_AUTH_TOK%" "%CI_DEPLOY_USERNAME%" "%CI_DEPLOY_PASSWORD%"'
+    - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%" "%DROP_AUTH_TOK2%" "%CI_DEPLOY_USERNAME2%" "%CI_DEPLOY_PASSWORD2%"'
 
 test_script:
     - 'echo no tests'
