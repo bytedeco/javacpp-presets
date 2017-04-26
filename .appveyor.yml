@@ -223,7 +223,7 @@ install:
 build_script:
     - 'echo build step for %PROJ%'
     - SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
-    - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%" "%DROP_AUTH_TOK2%" "%CI_DEPLOY_USERNAME2%" "%CI_DEPLOY_PASSWORD2%"'
+    - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%"'
 
 test_script:
     - 'echo no tests'

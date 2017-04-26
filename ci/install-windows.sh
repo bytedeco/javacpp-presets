@@ -15,7 +15,6 @@ g++ --version
 java -version
 mvn --version
 
-ls -ltr /c/Downloads
 mkdir -p /c/Downloads
 
 echo Perform download files out of main repo
@@ -23,8 +22,8 @@ cd ..
 if [ "$projectName" == "flycapture" ]; then
        echo Flycapture install
        if [ "$MSYS2_ARCH" == "x86_64" ]; then
-           curl -L -s -X POST --globoff  -o pgr.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr.zip"}' https://content.dropboxapi.com/2/files/download
-           unzip pgr.zip
+           curl -L -o /c/Downloads/pgr.zip "https://www.dropbox.com/s/vywbsds5difobpq/pgr.zip?dl=0"
+           unzip /c/Downloads/pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
        elif [ "$MSYS2_ARCH" == "x86" ]; then
            #curl -L -o /c/Downloads/pgr32.zip "https://www.dropbox.com/s/mh0p4nej42uzgey/pgr32.zip?dl=0"
@@ -36,11 +35,11 @@ fi
 
 if [ "$projectName" == "cuda" ]; then
        echo Installing cuda 
-       curl -L -s -X POST --globoff  -o cudnn-8.0-windows10-x64-v6.0.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-windows10-x64-v6.0.zip"}' https://content.dropboxapi.com/2/files/download
+       curl -L -o /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip "https://www.dropbox.com/s/wp0x29p2pz60icn/cudnn-8.0-windows10-x64-v6.0.zip?dl=0"
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        ./cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
-       unzip cudnn-8.0-windows10-x64-v6.0.zip
+       unzip /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip
        mv ./cuda/bin/cudnn64_6.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin
        mv ./cuda/include/cudnn.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include
        mv ./cuda/lib/x64/cudnn.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/lib/x64
