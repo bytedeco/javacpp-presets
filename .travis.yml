@@ -117,7 +117,6 @@ before_install:
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "$PROJ" == "flycapture" ]; then
             #curl -L https://www.dropbox.com/s/adm0azs368hq1ar/flycap.tar.gz?dl=0 -o $HOME/downloads/flycap.tar.gz 
-            #curl -L -s -X POST --globoff  -o $TRAVIS_BUILD_DIR/../flycap.tar.gz --header "Authorization: Bearer $DROPAUTH2" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
             tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
             docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
           fi 
@@ -172,8 +171,8 @@ script:
         fi
         kill $CHILDPID
 
-        curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v6.0.tgz --header "Authorization: Bearer $DROPAUTH2" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v6.0.tgz"}' https://content.dropboxapi.com/2/files/download
-        tar xvf cudnn-8.0-osx-x64-v6.0.tgz
+        curl -L https://www.dropbox.com/s/m0kuhq4k09lqj65/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
+        tar xvf $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
         sudo cp ./cuda/lib/libcudnn.6.dylib /usr/local/cuda/lib/libcudnn.6.dylib
         sudo cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
