@@ -1,6 +1,5 @@
-env:
 cache:
-   directories:
+  directories:
       - $HOME/downloads
 addons:
   artifacts:
