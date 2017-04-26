@@ -1,6 +1,9 @@
 env:
   global:
     - secure: "b2e6la+QcHB9EpcPsVg3loZF2+9e76DYsTWx+i2kgDwDS9oaimnSIcdMMNY+TAZ8ZLA/Sx85dK6z7XbHLkTtLOezPZV1tuIc6Fa4EKDA/2n660OATi0vFTQnQrJ/NI3TqiMB3ve8/73W2KuaMcNe4/jAVviNssAmBZtZUCgmeog="
+cache:
+   directories:
+      - $HOME/downloads
 addons:
   artifacts:
     s3_region: "us-east-1"
@@ -106,14 +109,15 @@ before_install:
         fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+          docker run --privileged -d -ti -e "container=docker" -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "$PROJ" == "flycapture" ]; then
-            curl -L -s -X POST --globoff  -o $TRAVIS_BUILD_DIR/../flycap.tar.gz --header "Authorization: Bearer $DROPAUTH2" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
-            tar xzvf $TRAVIS_BUILD_DIR/../flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
+            curl -L https://www.dropbox.com/s/adm0azs368hq1ar/flycap.tar.gz?dl=0 -o $HOME/downloads/flycap.tar.gz 
+            #curl -L -s -X POST --globoff  -o $TRAVIS_BUILD_DIR/../flycap.tar.gz --header "Authorization: Bearer $DROPAUTH2" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
+            tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
             docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
           fi 
           if [ "$PROJ" == "tensorflow" ]; then
@@ -214,8 +218,5 @@ script:
       docker stop $DOCKER_CONTAINER_ID
       docker rm -v $DOCKER_CONTAINER_ID
     fi
-cache:
-   directories:
-      - $HOME/.m2
 
 
