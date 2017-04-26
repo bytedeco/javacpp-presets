@@ -1,9 +1,6 @@
 #!/bin/bash
  
 export projectName=$1
-export DROPAUTH=$2
-export CI_DEPLOY_USERNAME=$3
-export CI_DEPLOY_PASSWORD=$4
 cd $APPVEYOR_BUILD_FOLDER
 
 echo Building $projectName
@@ -27,8 +24,8 @@ if [ "$projectName" == "flycapture" ]; then
            unzip pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
        elif [ "$MSYS2_ARCH" == "x86" ]; then
-           curl -L -s -X POST --globoff  -o pgr32.zip --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/pgr32.zip"}' https://content.dropboxapi.com/2/files/download
-           unzip pgr32.zip
+           curl -L -o /c/Downloads/pgr32.zip "://www.dropbox.com/s/mh0p4nej42uzgey/pgr32.zip?dl=0"
+           unzip /c/Downloads/pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
        fi
        echo "Finished flycapture install"

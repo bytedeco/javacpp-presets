@@ -1,8 +1,5 @@
 @echo off
 set PROJ=%~1
-set DROPAUTH=%~2
-set CI_DEPLOY_USERNAME=%~3
-set CI_DEPLOY_PASSWORD=%~4
 cd %APPVEYOR_BUILD_FOLDER%
 
 REM Create a writeable TMPDIR
@@ -26,7 +23,7 @@ bash -lc "pacman -S --needed --noconfirm git"
 bash -lc "pacman -Syu --noconfirm"
 bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain base-devel tar nasm yasm pkg-config unzip autoconf automake libtool make patch mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git"
 
-bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ% %DROP_AUTH_TOK% %CI_DEPLOY_USERNAME% %CI_DEPLOY_PASSWORD%"
+bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
 
 IF %COMPILER%==msys2 (
  @echo on
@@ -38,6 +35,6 @@ IF %COMPILER%==msys2 (
  cd ..
  cd javacpp-presets
  echo Install %PROJ%
- mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
+ mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
 
 )

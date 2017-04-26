@@ -1,6 +1,4 @@
 env:
-  global:
-    - secure: "b2e6la+QcHB9EpcPsVg3loZF2+9e76DYsTWx+i2kgDwDS9oaimnSIcdMMNY+TAZ8ZLA/Sx85dK6z7XbHLkTtLOezPZV1tuIc6Fa4EKDA/2n660OATi0vFTQnQrJ/NI3TqiMB3ve8/73W2KuaMcNe4/jAVviNssAmBZtZUCgmeog="
 cache:
    directories:
       - $HOME/downloads
@@ -171,7 +169,7 @@ script:
         fi
         kill $CHILDPID
 
-        curl -L https://www.dropbox.com/s/m0kuhq4k09lqj65/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
+        #curl -L https://www.dropbox.com/s/m0kuhq4k09lqj65/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         tar xvf $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
         sudo cp ./cuda/lib/libcudnn.6.dylib /usr/local/cuda/lib/libcudnn.6.dylib
