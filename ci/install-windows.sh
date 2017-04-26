@@ -24,7 +24,7 @@ if [ "$projectName" == "flycapture" ]; then
            unzip pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
        elif [ "$MSYS2_ARCH" == "x86" ]; then
-           curl -L -o /c/Downloads/pgr32.zip "://www.dropbox.com/s/mh0p4nej42uzgey/pgr32.zip?dl=0"
+           curl -L -o /c/Downloads/pgr32.zip "https://www.dropbox.com/s/mh0p4nej42uzgey/pgr32.zip?dl=0"
            unzip /c/Downloads/pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
        fi
