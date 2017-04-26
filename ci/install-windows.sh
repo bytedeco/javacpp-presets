@@ -15,6 +15,8 @@ g++ --version
 java -version
 mvn --version
 
+mkdir -p /c/Downloads
+
 echo Perform download files out of main repo
 cd ..
 if [ "$projectName" == "flycapture" ]; then
