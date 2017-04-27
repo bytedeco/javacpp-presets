@@ -344,7 +344,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=i686-w64-mingw32 --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -373,7 +373,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=x86_64-w64-mingw32 --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;

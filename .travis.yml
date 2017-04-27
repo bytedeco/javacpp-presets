@@ -1,7 +1,6 @@
-env:
-  global:
-    - secure: "meC6CCyHs3V+r6BQU4ZddvNJ/9PjAS0iZBEgEENTS3ERLlbQDK88SC3lneI59q/PQPXpuInpn87VEEzljdyZHu7EE4uYxqdS3nQohWcRkkF95Y4LQseXxgvaaEQXaVVC1/10b1r8g1pOrPPgvpHW+/UA7lxpfDJwUyyLVG2TTc8BNcoJxRhdrAHbCheOYP/GkfvBQeT+jqW/+FBQhBMReS66X3isosZ4OmMSB1ed711uIr/e25UikV17AfZ5hyJ3F3+JxBgpVa9glPYyR4/yIvnHQM+Uwb8SoxVneaZ0kVFGl5jNfnrI8DSmoqkVCcA3YSpDILnwz+QFBwN3zhdRX5vGbyKTa4xthCCJlxRyvKle1ldCaIKh1EujvfryndoQtEolk/idwluV2Ic3QgsliUECe+yCX42hYzZBwYi38lnY1AQJ3HKazC7jSzmY31qwEBGHnSQytiPgxLGIHEB1QKo+qX+BLCLLAHorqSybwO2UGlBRhNDI5pa874Q2mf/DXGSDaGUMNNzRQEK9TbtS/RgCSudbuuZ2IeiGi/9Xh1A1u8/EL6KfHXIW7TDJB9OIrZPXexCmM467dhS74TJph21dj+45IamQr2xScaDxgN5xhQ0Yu+/o+hRzdaM6qukjN+3x0tJ0I6dj8N3jM6Pl2lm+YD7/pNrtbxaNG7B8M0k="
-    - secure: "IsAnYe1kTcfuHkGoDz7HFPcPdY+bmqJFoQZX/8hl6b2sTO5lG1iLmDyZ5NSNxAPGAVzGny/44CVn+w25ITTJ4e8XiSQhClQV33FlEpy7Gxl6TnkaK0k/XvEAgp5MuEnaco2uh5DKEZEJ6NHqrUvoQx+2GFq3WvK8cBfdXH2C+povI+XDgygg5P4hhwzlA9bm1smPTalEEyKshfwuptgMbRAxkLrWCpta3IxuRupgLNxVXER7faHTmW3+JZ1CZop2zDRyZMiFkQnLaR32Mhuj35dyzxY19tRxdGOkfSGFrYD2C8teIdbRidvZqckgmBzKsCAgDBpWM1EI/lU2wjnCY6itrlkK4pqRGxjdUfuganI0JQq72OX/mGZRgcX0Nm/52C3xszMFMi4mGB944H8rF3mX8FfS7ecT4c2R5m/RIEBaNg2iqA27hBgp/kKfVU8SCbb2ushBQCDuXmknfG7JGuzg56+Gkx29P6hD9MHaj/WeSZaAQHcN5wo3+ZGqNZbEXW22uA3DV+/rXRJXLqvI1EvgaIsojaKj262uwkAAU46A9IgeOuPSP0RejkXctOGxIvCi3W6b7nOeUGlH1nsjoLMonndXO2kjIh9fj+7P214XMWg9HCkDryCFmHugRPAZVfEnP5O+oT0Qm3FejQgFkBzOfWaV6w3601s/s5qJUh0="
+cache:
+  directories:
+      - $HOME/downloads
 addons:
   artifacts:
     s3_region: "us-east-1"
@@ -93,9 +92,10 @@ matrix:
 before_install:
    #maybe this needs to go into new first job
    - mkdir ./buildlogs
+   - ls -ltr $HOME/downloads
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
-   - mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+   - mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
@@ -107,15 +107,15 @@ before_install:
         fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          docker run --privileged -d -ti -e "container=docker" -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+          docker run --privileged -d -ti -e "container=docker" -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "$PROJ" == "flycapture" ]; then
-            curl -L -s -X POST --globoff  -o $HOME/build/flycap.tar.gz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/flycap.tar.gz"}' https://content.dropboxapi.com/2/files/download
-            tar xzvf $HOME/build/flycap.tar.gz
-            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mkdir /usr/include/flycapture; cp /root/build/include/* /usr/include/flycapture; cp /root/build/include/C/* /usr/include/flycapture; cp /root/build/include/lib/* /usr/lib" 
+            #curl -L https://www.dropbox.com/s/adm0azs368hq1ar/flycap.tar.gz?dl=0 -o $HOME/downloads/flycap.tar.gz 
+            tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
           fi 
           if [ "$PROJ" == "tensorflow" ]; then
            echo "adding bazel for tensorflow"
@@ -151,17 +151,25 @@ script:
       fi 
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
-        brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
+        while true; do echo .; sleep 60; done &
+        export CHILDPID=$!
+        echo "Child PID $CHILDPID"
+        #brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
+        curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+        echo "Mount dmg"
+        hdiutil mount cuda.dmg
+        sleep 5
+        ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
+        sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
         echo "Brew status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "Brew Failed"
           return $BREW_STATUS
         fi
+        kill $CHILDPID
 
-        #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
-
-        curl -L -s -X POST --globoff  -o cudnn-8.0-osx-x64-v6.0.tgz --header "Authorization: Bearer $DROPAUTH" --header 'Dropbox-API-Arg: {"path": "/cudnn-8.0-osx-x64-v6.0.tgz"}' https://content.dropboxapi.com/2/files/download
-        tar xvf cudnn-8.0-osx-x64-v6.0.tgz
+        #curl -L https://www.dropbox.com/s/m0kuhq4k09lqj65/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
+        tar xvf $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
         sudo cp ./cuda/lib/libcudnn.6.dylib /usr/local/cuda/lib/libcudnn.6.dylib
         sudo cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
@@ -207,8 +215,5 @@ script:
       docker stop $DOCKER_CONTAINER_ID
       docker rm -v $DOCKER_CONTAINER_ID
     fi
-cache:
-   directories:
-      - $HOME/.m2
 
 
