@@ -113,8 +113,10 @@ before_install:
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
           if [ "$PROJ" == "flycapture" ]; then
-            if [ ! -f "$HOME/downloads/flycap.tar.gz" ]; then
-              echo "Downloading flycap as not found in cache" 
+            if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+              echo "Found flycap in cache and size seems ok" 
+            else
+              echo "Downloading flycap as not found in cache or too small" 
               curl -L https://www.dropbox.com/s/amqkku0yrd5rpt1/flycap.tar.gz?dl=0 -o $HOME/downloads/flycap.tar.gz 
             fi
             tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
@@ -171,7 +173,9 @@ script:
         fi
         kill $CHILDPID
 
-        if [ ! -f "$HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz" ]; then
+        if [[ $(find $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found cudnn in cache and size seems ok" 
+        else
           echo "Downloading cudnn as not found in cache" 
           curl -L https://www.dropbox.com/s/jb1vskd4vzf8p3a/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         fi
