@@ -46,6 +46,30 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>opencv</artifactId>
+            <version>3.2.0-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>openblas</artifactId>
+            <version>0.2.19-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>opencv</artifactId>
+            <version>3.2.0-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>openblas</artifactId>
+            <version>0.2.19-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+        </dependencies>
         <configuration>
           <propertyKeysAndValues>
             <property>

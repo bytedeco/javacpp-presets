@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  * @author Samuel Audet
  */
-@Properties(value = @Platform(include = "chilitags/chilitags.hpp", link = "chilitags_static"),
+@Properties(value = @Platform(include = "chilitags/chilitags.hpp", link = "chilitags_static", resource = {"include", "lib"}),
     inherit = {opencv_calib3d.class, opencv_video.class}, target = "org.bytedeco.javacpp.chilitags")
 public class chilitags implements InfoMapper {
     public void map(InfoMap infoMap) {

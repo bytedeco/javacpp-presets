@@ -35,7 +35,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target="org.bytedeco.javacpp.tesseract", inherit=lept.class, value={
     @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
         "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
-        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"}, link="tesseract@.3"),
+        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"},
+        link="tesseract@.3", resource = {"include", "lib"}),
     @Platform(value="android", link="tesseract"),
     @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
 public class tesseract implements InfoMapper {

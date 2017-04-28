@@ -181,6 +181,12 @@
           <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
           <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          <includeResources>
+            <includeResource>/org/bytedeco/javacpp/include/</includeResource>
+            <includeResource>/org/bytedeco/javacpp/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
+          <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
         </configuration>
         <executions>
           <execution>
@@ -241,6 +247,7 @@
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
               <copyLibs>true</copyLibs>
+<!--              <copyResources>true</copyResources>-->
             </configuration>
           </execution>
         </executions>
