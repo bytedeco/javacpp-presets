@@ -22,11 +22,21 @@ cd ..
 if [ "$projectName" == "flycapture" ]; then
        echo Flycapture install
        if [ "$MSYS2_ARCH" == "x86_64" ]; then
-           curl -L -o /c/Downloads/pgr.zip "https://www.dropbox.com/s/vywbsds5difobpq/pgr.zip?dl=0"
+           if [[ $(find /c/Downloads/pgr.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found flycap in cache and size seems ok"
+           else
+             echo "Downloading pgr.zip to cache as not found"
+             curl -L -o /c/Downloads/pgr.zip "https://www.dropbox.com/s/vywbsds5difobpq/pgr.zip?dl=0"
+           fi
            unzip /c/Downloads/pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
        elif [ "$MSYS2_ARCH" == "x86" ]; then
-           curl -L -o /c/Downloads/pgr32.zip "https://www.dropbox.com/s/ofwly7sqdh7667v/pgr32.zip?dl=0"
+           if [[ $(find /c/Downloads/pgr32.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found flycap32 in cache and size seems ok"
+           else
+             echo "Downloading pgr32.zip to cache as not found"
+             curl -L -o /c/Downloads/pgr32.zip "https://www.dropbox.com/s/ofwly7sqdh7667v/pgr32.zip?dl=0"
+           fi
            unzip /c/Downloads/pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
        fi
@@ -35,7 +45,12 @@ fi
 
 if [ "$projectName" == "cuda" ]; then
        echo Installing cuda 
-       curl -L -o /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip "https://www.dropbox.com/s/wp0x29p2pz60icn/cudnn-8.0-windows10-x64-v6.0.zip?dl=0"
+       if [[ $(find /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip -type f -size +1000000c 2>/dev/null) ]]; then
+         echo "Found cudnn in cache and size seems OK"
+       else
+         echo "Downloading cudnn as not found in cache"
+         curl -L -o /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip "https://www.dropbox.com/s/wp0x29p2pz60icn/cudnn-8.0-windows10-x64-v6.0.zip?dl=0"
+       fi
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        ./cuda_8.0.61_windows.exe -s 
        echo May need to wait while cuda installs..
