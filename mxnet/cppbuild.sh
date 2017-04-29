@@ -58,8 +58,8 @@ export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/includ
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/:$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/"
 
-sed -i="" 's/`pkg-config --cflags opencv`//' Makefile
-sed -i="" 's/`pkg-config --libs opencv`/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
+sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
+sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
 cp -a ../mshadow-$MXNET_VERSION/mshadow ../include

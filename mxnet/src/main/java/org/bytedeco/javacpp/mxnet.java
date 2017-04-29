@@ -292,156 +292,134 @@ public static class NDArrayOpInfo extends Pointer {
   public native Pointer p_declare_backward_dependency(); public native NDArrayOpInfo p_declare_backward_dependency(Pointer p_declare_backward_dependency);
 }
 
-public static class CustomOpInfo extends Pointer {
+public static class MXGenericCallback extends FunctionPointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public CustomOpInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CustomOpInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CustomOpInfo(Pointer p) { super(p); }
+    public    MXGenericCallback(Pointer p) { super(p); }
+    protected MXGenericCallback() { allocate(); }
     private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CustomOpInfo position(long position) {
-        return (CustomOpInfo)super.position(position);
-    }
-
-  public static class Forward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Forward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer(Pointer p) { super(p); }
-      protected Forward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(int arg0, @Cast("void**") PointerPointer arg1, IntPointer arg2,
-                    @Const IntPointer arg3, @Cast("const bool") boolean arg4, Pointer arg5);
-  }
-  public native Forward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer forward(); public native CustomOpInfo forward(Forward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer forward);
-  public static class Backward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Backward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer(Pointer p) { super(p); }
-      protected Backward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(int arg0, @Cast("void**") PointerPointer arg1, IntPointer arg2,
-                     @Const IntPointer arg3, @Cast("const bool") boolean arg4, Pointer arg5);
-  }
-  public native Backward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer backward(); public native CustomOpInfo backward(Backward_int_PointerPointer_IntPointer_IntPointer_boolean_Pointer backward);
-  public static class Del_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Del_Pointer(Pointer p) { super(p); }
-      protected Del_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(Pointer arg0);
-  }
-  public native Del_Pointer del(); public native CustomOpInfo del(Del_Pointer del);
-  // all functions also pass a payload void* pointer
-  public native Pointer p_forward(); public native CustomOpInfo p_forward(Pointer p_forward);
-  public native Pointer p_backward(); public native CustomOpInfo p_backward(Pointer p_backward);
-  public native Pointer p_del(); public native CustomOpInfo p_del(Pointer p_del);
+    public native int call();
 }
 
-public static class CustomOpPropInfo extends Pointer {
+public static class MXCallbackList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CustomOpPropInfo() { super((Pointer)null); allocate(); }
+    public MXCallbackList() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CustomOpPropInfo(long size) { super((Pointer)null); allocateArray(size); }
+    public MXCallbackList(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CustomOpPropInfo(Pointer p) { super(p); }
+    public MXCallbackList(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public CustomOpPropInfo position(long position) {
-        return (CustomOpPropInfo)super.position(position);
+    @Override public MXCallbackList position(long position) {
+        return (MXCallbackList)super.position(position);
     }
 
-  public static class List_arguments_PointerPointer_Pointer extends FunctionPointer {
+  public native int num_callbacks(); public native MXCallbackList num_callbacks(int num_callbacks);
+  public static class Int_Callbacks extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    List_arguments_PointerPointer_Pointer(Pointer p) { super(p); }
-      protected List_arguments_PointerPointer_Pointer() { allocate(); }
+      public    Int_Callbacks(Pointer p) { super(p); }
+      protected Int_Callbacks() { allocate(); }
       private native void allocate();
-      public native @Cast("bool") boolean call(@Cast("char***") @ByPtrPtr PointerPointer arg0, Pointer arg1);
+      public native int call();
   }
-  public native List_arguments_PointerPointer_Pointer list_arguments(); public native CustomOpPropInfo list_arguments(List_arguments_PointerPointer_Pointer list_arguments);
-  public static class List_outputs_PointerPointer_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    List_outputs_PointerPointer_Pointer(Pointer p) { super(p); }
-      protected List_outputs_PointerPointer_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(@Cast("char***") @ByPtrPtr PointerPointer arg0, Pointer arg1);
-  }
-  public native List_outputs_PointerPointer_Pointer list_outputs(); public native CustomOpPropInfo list_outputs(List_outputs_PointerPointer_Pointer list_outputs);
-  public static class Infer_shape_int_IntPointer_PointerPointer_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Infer_shape_int_IntPointer_PointerPointer_Pointer(Pointer p) { super(p); }
-      protected Infer_shape_int_IntPointer_PointerPointer_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(int arg0, IntPointer arg1, @Cast("unsigned**") PointerPointer arg2,
-                        Pointer arg3);
-  }
-  public native Infer_shape_int_IntPointer_PointerPointer_Pointer infer_shape(); public native CustomOpPropInfo infer_shape(Infer_shape_int_IntPointer_PointerPointer_Pointer infer_shape);
-  public static class Declare_backward_dependency_IntPointer_IntPointer_IntPointer_IntPointer_PointerPointer_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Declare_backward_dependency_IntPointer_IntPointer_IntPointer_IntPointer_PointerPointer_Pointer(Pointer p) { super(p); }
-      protected Declare_backward_dependency_IntPointer_IntPointer_IntPointer_IntPointer_PointerPointer_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(@Const IntPointer arg0, @Const IntPointer arg1,
-                                        @Const IntPointer arg2, IntPointer arg3,
-                                        @Cast("int**") PointerPointer arg4, Pointer arg5);
-  }
-  public native Declare_backward_dependency_IntPointer_IntPointer_IntPointer_IntPointer_PointerPointer_Pointer declare_backward_dependency(); public native CustomOpPropInfo declare_backward_dependency(Declare_backward_dependency_IntPointer_IntPointer_IntPointer_IntPointer_PointerPointer_Pointer declare_backward_dependency);
-  public static class Create_operator_BytePointer_int_PointerPointer_IntPointer_IntPointer_CustomOpInfo_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Create_operator_BytePointer_int_PointerPointer_IntPointer_IntPointer_CustomOpInfo_Pointer(Pointer p) { super(p); }
-      protected Create_operator_BytePointer_int_PointerPointer_IntPointer_IntPointer_CustomOpInfo_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(@Cast("const char*") BytePointer arg0, int arg1, @Cast("unsigned**") PointerPointer arg2,
-                            IntPointer arg3, IntPointer arg4,
-                            CustomOpInfo arg5, Pointer arg6);
-  }
-  public native Create_operator_BytePointer_int_PointerPointer_IntPointer_IntPointer_CustomOpInfo_Pointer create_operator(); public native CustomOpPropInfo create_operator(Create_operator_BytePointer_int_PointerPointer_IntPointer_IntPointer_CustomOpInfo_Pointer create_operator);
-  public static class List_auxiliary_states_PointerPointer_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    List_auxiliary_states_PointerPointer_Pointer(Pointer p) { super(p); }
-      protected List_auxiliary_states_PointerPointer_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(@Cast("char***") @ByPtrPtr PointerPointer arg0, Pointer arg1);
-  }
-  public native List_auxiliary_states_PointerPointer_Pointer list_auxiliary_states(); public native CustomOpPropInfo list_auxiliary_states(List_auxiliary_states_PointerPointer_Pointer list_auxiliary_states);
-  public static class Del_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Del_Pointer(Pointer p) { super(p); }
-      protected Del_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("bool") boolean call(Pointer arg0);
-  }
-  public native Del_Pointer del(); public native CustomOpPropInfo del(Del_Pointer del);
-  // all functions also pass a payload void* pointer
-  public native Pointer p_list_arguments(); public native CustomOpPropInfo p_list_arguments(Pointer p_list_arguments);
-  public native Pointer p_list_outputs(); public native CustomOpPropInfo p_list_outputs(Pointer p_list_outputs);
-  public native Pointer p_infer_shape(); public native CustomOpPropInfo p_infer_shape(Pointer p_infer_shape);
-  public native Pointer p_declare_backward_dependency(); public native CustomOpPropInfo p_declare_backward_dependency(Pointer p_declare_backward_dependency);
-  public native Pointer p_create_operator(); public native CustomOpPropInfo p_create_operator(Pointer p_create_operator);
-  public native Pointer p_list_auxiliary_states(); public native CustomOpPropInfo p_list_auxiliary_states(Pointer p_list_auxiliary_states);
-  public native Pointer p_del(); public native CustomOpPropInfo p_del(Pointer p_del);
+  public native Int_Callbacks callbacks(int i); public native MXCallbackList callbacks(int i, Int_Callbacks callbacks);
+  @MemberGetter public native @Cast("void**") PointerPointer callbacks();
+  public native Pointer contexts(int i); public native MXCallbackList contexts(int i, Pointer contexts);
+  @MemberGetter public native @Cast("void**") PointerPointer contexts();
 }
 
+/** enum CustomOpCallbacks */
+public static final int
+  kCustomOpDelete = 0,
+  kCustomOpForward = 1,
+  kCustomOpBackward = 2;
+
+/** enum CustomOpPropCallbacks */
+public static final int
+  kCustomOpPropDelete = 0,
+  kCustomOpPropListArguments = 1,
+  kCustomOpPropListOutputs = 2,
+  kCustomOpPropListAuxiliaryStates = 3,
+  kCustomOpPropInferShape = 4,
+  kCustomOpPropDeclareBackwardDependency = 5,
+  kCustomOpPropCreateOperator = 6,
+  kCustomOpPropInferType = 7;
+
+public static class CustomOpFBFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpFBFunc(Pointer p) { super(p); }
+    protected CustomOpFBFunc() { allocate(); }
+    private native void allocate();
+    public native int call(int arg0, @Cast("void**") @ByPtrPtr Pointer arg1, IntPointer arg2,
+                              @Const IntPointer arg3, int arg4,
+                              Pointer arg5);
+}
+public static class CustomOpDelFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpDelFunc(Pointer p) { super(p); }
+    protected CustomOpDelFunc() { allocate(); }
+    private native void allocate();
+    public native int call(Pointer arg0);
+}
+public static class CustomOpListFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpListFunc(Pointer p) { super(p); }
+    protected CustomOpListFunc() { allocate(); }
+    private native void allocate();
+    public native int call(@Cast("char***") @ByPtrPtr PointerPointer arg0, Pointer arg1);
+}
+public static class CustomOpInferShapeFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpInferShapeFunc(Pointer p) { super(p); }
+    protected CustomOpInferShapeFunc() { allocate(); }
+    private native void allocate();
+    public native int call(int arg0, IntPointer arg1,
+                                      @Cast("unsigned**") @ByPtrPtr IntPointer arg2, Pointer arg3);
+}
+public static class CustomOpInferTypeFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpInferTypeFunc(Pointer p) { super(p); }
+    protected CustomOpInferTypeFunc() { allocate(); }
+    private native void allocate();
+    public native int call(int arg0, IntPointer arg1, Pointer arg2);
+}
+public static class CustomOpBwdDepFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpBwdDepFunc(Pointer p) { super(p); }
+    protected CustomOpBwdDepFunc() { allocate(); }
+    private native void allocate();
+    public native int call(@Const IntPointer arg0, @Const IntPointer arg1,
+                                  @Const IntPointer arg2, IntPointer arg3,
+                                  @ByPtrPtr IntPointer arg4, Pointer arg5);
+}
+public static class CustomOpCreateFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomOpCreateFunc(Pointer p) { super(p); }
+    protected CustomOpCreateFunc() { allocate(); }
+    private native void allocate();
+    public native int call(@Cast("const char*") BytePointer arg0, int arg1,
+                                  @Cast("unsigned**") @ByPtrPtr IntPointer arg2, IntPointer arg3,
+                                  IntPointer arg4, MXCallbackList arg5,
+                                  Pointer arg6);
+}
 public static class CustomOpPropCreator extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CustomOpPropCreator(Pointer p) { super(p); }
     protected CustomOpPropCreator() { allocate(); }
     private native void allocate();
-    public native @Cast("bool") boolean call(@Cast("const char*") BytePointer arg0, int arg1,
-                                    @Cast("const char**") @ByPtrPtr BytePointer arg2, @Cast("const char**") @ByPtrPtr BytePointer arg3,
-                                    CustomOpPropInfo arg4);
+    public native int call(@Cast("const char*") BytePointer arg0, int arg1,
+                                     @Cast("const char**") @ByPtrPtr BytePointer arg2, @Cast("const char**") @ByPtrPtr BytePointer arg3,
+                                     MXCallbackList arg4);
 }
 
 /**
@@ -856,13 +834,9 @@ public static native int MXNDArrayGetShape(NDArrayHandle handle,
  * @return 0 when success, -1 when failure happens
  */
 public static native int MXNDArrayGetData(NDArrayHandle handle,
-                               @Cast("mx_float**") PointerPointer out_pdata);
+                               @Cast("void**") PointerPointer out_pdata);
 public static native int MXNDArrayGetData(NDArrayHandle handle,
-                               @Cast("mx_float**") @ByPtrPtr FloatPointer out_pdata);
-public static native int MXNDArrayGetData(NDArrayHandle handle,
-                               @Cast("mx_float**") @ByPtrPtr FloatBuffer out_pdata);
-public static native int MXNDArrayGetData(NDArrayHandle handle,
-                               @Cast("mx_float**") @ByPtrPtr float[] out_pdata);
+                               @Cast("void**") @ByPtrPtr Pointer out_pdata);
 /**
  * \brief get the type of the data in NDArray
  * @param handle the handle to the narray
@@ -1171,7 +1145,55 @@ public static native int MXImperativeInvoke(AtomicSymbolCreator creator,
                                  int num_params,
                                  @Cast("const char**") @ByPtrPtr byte[] param_keys,
                                  @Cast("const char**") @ByPtrPtr byte[] param_vals);
-
+/**
+ * \brief set whether to record operator for autograd
+ * @param is_train 1 when training, 0 when testing
+ * @param prev returns the previous status before this set.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradSetIsTraining(int is_training, IntPointer prev);
+public static native int MXAutogradSetIsTraining(int is_training, IntBuffer prev);
+public static native int MXAutogradSetIsTraining(int is_training, int[] prev);
+/**
+ * \brief mark NDArrays as variables to compute gradient for autograd
+ * @param num_var number of variable NDArrays
+ * @param var_handles variable NDArrays
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradMarkVariables(@Cast("mx_uint") int num_var,
+                                      PointerPointer var_handles,
+                                      @Cast("mx_uint*") IntPointer reqs_array,
+                                      PointerPointer grad_handles);
+public static native int MXAutogradMarkVariables(@Cast("mx_uint") int num_var,
+                                      @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle var_handles,
+                                      @Cast("mx_uint*") IntBuffer reqs_array,
+                                      @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle grad_handles);
+public static native int MXAutogradMarkVariables(@Cast("mx_uint") int num_var,
+                                      PointerPointer var_handles,
+                                      @Cast("mx_uint*") int[] reqs_array,
+                                      PointerPointer grad_handles);
+public static native int MXAutogradMarkVariables(@Cast("mx_uint") int num_var,
+                                      @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle var_handles,
+                                      @Cast("mx_uint*") IntPointer reqs_array,
+                                      @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle grad_handles);
+public static native int MXAutogradMarkVariables(@Cast("mx_uint") int num_var,
+                                      PointerPointer var_handles,
+                                      @Cast("mx_uint*") IntBuffer reqs_array,
+                                      PointerPointer grad_handles);
+public static native int MXAutogradMarkVariables(@Cast("mx_uint") int num_var,
+                                      @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle var_handles,
+                                      @Cast("mx_uint*") int[] reqs_array,
+                                      @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle grad_handles);
+/**
+ * \brief compute the gradient of outputs w.r.t variabels
+ * @param num_output number of output NDArray
+ * @param output_handles output NDArrays
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradComputeGradient(@Cast("mx_uint") int num_output,
+                                        PointerPointer output_handles);
+public static native int MXAutogradComputeGradient(@Cast("mx_uint") int num_output,
+                                        @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle output_handles);
 //--------------------------------------------
 // Part 3: symbolic configuration generation
 //--------------------------------------------
