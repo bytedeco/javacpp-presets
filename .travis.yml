@@ -177,7 +177,7 @@ script:
           echo "Found cudnn in cache and size seems ok" 
         else
           echo "Downloading cudnn as not found in cache" 
-          curl -L https://www.dropbox.com/s/jb1vskd4vzf8p3a/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
+          curl -L https://www.dropbox.com/s/p47724t8efaxw30/cudnn-8.0-osx-x64-v6.0.tgz?dl=0 -o $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         fi
         tar xvf $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
