@@ -87,7 +87,6 @@ public class cublas extends org.bytedeco.javacpp.presets.cublas {
 // #include "driver_types.h"
 // #include "cuComplex.h"   /* import complex data type */
 // #include "cuda_fp16.h"
-// #include "library_types.h"
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
@@ -140,20 +139,13 @@ public static final int
     CUBLAS_ATOMICS_NOT_ALLOWED   = 0,  
     CUBLAS_ATOMICS_ALLOWED       = 1;
 
-/*For different GEMM algorithm */
-/** enum cublasGemmAlgo_t */
+/* Used by cublasSgemmEx */
+/** enum cublasDataType_t */
 public static final int
-    CUBLAS_GEMM_DFALT         = -1,
-    CUBLAS_GEMM_ALGO0         = 0,
-    CUBLAS_GEMM_ALGO1         = 1,
-    CUBLAS_GEMM_ALGO2         = 2,
-    CUBLAS_GEMM_ALGO3         = 3,
-    CUBLAS_GEMM_ALGO4         = 4,
-    CUBLAS_GEMM_ALGO5         = 5,
-    CUBLAS_GEMM_ALGO6         = 6,
-    CUBLAS_GEMM_ALGO7         = 7;
-
-/* For backward compatibility purposes */
+     CUBLAS_DATA_FLOAT    = 0,
+     CUBLAS_DATA_DOUBLE   = 1,
+     CUBLAS_DATA_HALF     = 2,
+     CUBLAS_DATA_INT8     = 3;
 
 /* Opaque structure holding CUBLAS library context */
 @Opaque public static class cublasContext extends Pointer {
@@ -165,14 +157,9 @@ public static final int
 
 public static native @Cast("cublasStatus_t") int cublasCreate_v2(@ByPtrPtr cublasContext handle);
 public static native @Cast("cublasStatus_t") int cublasDestroy_v2(cublasContext handle);
-
 public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasContext handle, IntPointer version);
 public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasContext handle, IntBuffer version);
 public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasContext handle, int[] version);
-public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
-public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
-public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, int[] value);
-
 public static native @Cast("cublasStatus_t") int cublasSetStream_v2(cublasContext handle, CUstream_st streamId); 
 public static native @Cast("cublasStatus_t") int cublasGetStream_v2(cublasContext handle, @ByPtrPtr CUstream_st streamId); 
 
@@ -373,14 +360,6 @@ public static native @Cast("cublasStatus_t") int cublasGetMatrixAsync(int rows, 
 public static native void cublasXerbla(@Cast("const char*") BytePointer srName, int info);
 public static native void cublasXerbla(String srName, int info);
 /* ---------------- CUBLAS BLAS1 functions ---------------- */
-public static native @Cast("cublasStatus_t") int cublasNrm2Ex(cublasContext handle, 
-                                                     int n, 
-                                                     @Const Pointer x, 
-                                                     @Cast("cudaDataType") int xType,
-                                                     int incx, 
-                                                     Pointer result,
-                                                     @Cast("cudaDataType") int resultType,
-                                                     @Cast("cudaDataType") int executionType); /* host or device pointer */
 public static native @Cast("cublasStatus_t") int cublasSnrm2_v2(cublasContext handle, 
                                                      int n, 
                                                      @Const FloatPointer x, 
@@ -444,30 +423,6 @@ public static native @Cast("cublasStatus_t") int cublasDznrm2_v2(cublasContext h
                                                       @Cast("const cuDoubleComplex*") double2 x, 
                                                       int incx, 
                                                       double[] result);  /* host or device pointer */
-
-public static native @Cast("cublasStatus_t") int cublasDotEx(cublasContext handle,
-                                                     int n, 
-                                                     @Const Pointer x,
-                                                     @Cast("cudaDataType") int xType, 
-                                                     int incx, 
-                                                     @Const Pointer y, 
-                                                     @Cast("cudaDataType") int yType,
-                                                     int incy,
-                                                     Pointer result,
-                                                     @Cast("cudaDataType") int resultType,
-                                                     @Cast("cudaDataType") int executionType);
-
-public static native @Cast("cublasStatus_t") int cublasDotcEx(cublasContext handle,
-                                                     int n, 
-                                                     @Const Pointer x,
-                                                     @Cast("cudaDataType") int xType, 
-                                                     int incx, 
-                                                     @Const Pointer y, 
-                                                     @Cast("cudaDataType") int yType,
-                                                     int incy,
-                                                     Pointer result,
-                                                     @Cast("cudaDataType") int resultType,
-                                                     @Cast("cudaDataType") int executionType);
 
 public static native @Cast("cublasStatus_t") int cublasSdot_v2(cublasContext handle,
                                                      int n, 
@@ -545,14 +500,6 @@ public static native @Cast("cublasStatus_t") int cublasZdotc_v2(cublasContext ha
                                                       int incy,
                                                       @Cast("cuDoubleComplex*") double2 result); /* host or device pointer */
 
-public static native @Cast("cublasStatus_t") int cublasScalEx(cublasContext handle, 
-                                                     int n, 
-                                                     @Const Pointer alpha,
-                                                     @Cast("cudaDataType") int alphaType,
-                                                     Pointer x, 
-                                                     @Cast("cudaDataType") int xType,
-                                                     int incx,
-                                                     @Cast("cudaDataType") int executionType);
 public static native @Cast("cublasStatus_t") int cublasSscal_v2(cublasContext handle, 
                                                      int n, 
                                                      @Const FloatPointer alpha,
@@ -628,18 +575,6 @@ public static native @Cast("cublasStatus_t") int cublasZdscal_v2(cublasContext h
                                                       @Const double[] alpha,
                                                       @Cast("cuDoubleComplex*") double2 x, 
                                                       int incx);
-
-public static native @Cast("cublasStatus_t") int cublasAxpyEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer alpha,
-                                                      @Cast("cudaDataType") int alphaType,
-                                                      @Const Pointer x,
-                                                      @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      Pointer y,
-                                                      @Cast("cudaDataType") int yType,
-                                                      int incy,
-                                                      @Cast("cudaDataType") int executiontype);
 
 public static native @Cast("cublasStatus_t") int cublasSaxpy_v2(cublasContext handle,
                                                       int n, 
@@ -2878,37 +2813,7 @@ public static native @Cast("cublasStatus_t") int cublasCgemm_v2(cublasContext ha
                                                       @Cast("const cuComplex*") float2 beta,  
                                                       @Cast("cuComplex*") float2 C,
                                                       int ldc);
-                                                      
-public static native @Cast("cublasStatus_t") int cublasCgemm3m(cublasContext handle, 
-                                                      @Cast("cublasOperation_t") int transa,
-                                                      @Cast("cublasOperation_t") int transb, 
-                                                      int m,
-                                                      int n,
-                                                      int k,
-                                                      @Cast("const cuComplex*") float2 alpha,  
-                                                      @Cast("const cuComplex*") float2 A, 
-                                                      int lda,
-                                                      @Cast("const cuComplex*") float2 B,
-                                                      int ldb, 
-                                                      @Cast("const cuComplex*") float2 beta,  
-                                                      @Cast("cuComplex*") float2 C,
-                                                      int ldc);                                                      
- public static native @Cast("cublasStatus_t") int cublasCgemm3mEx(cublasContext handle, 
-                                                      @Cast("cublasOperation_t") int transa, @Cast("cublasOperation_t") int transb,  
-                                                      int m, int n, int k, 
-                                                      @Cast("const cuComplex*") float2 alpha, 
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype, 
-                                                      int lda, 
-                                                      @Const Pointer B, 
-                                                      @Cast("cudaDataType") int Btype, 
-                                                      int ldb,
-                                                      @Cast("const cuComplex*") float2 beta, 
-                                                      Pointer C, 
-                                                      @Cast("cudaDataType") int Ctype, 
-                                                      int ldc);
-                                       
-
+                                        
 public static native @Cast("cublasStatus_t") int cublasZgemm_v2(cublasContext handle, 
                                                       @Cast("cublasOperation_t") int transa,
                                                       @Cast("cublasOperation_t") int transb, 
@@ -2922,22 +2827,7 @@ public static native @Cast("cublasStatus_t") int cublasZgemm_v2(cublasContext ha
                                                       int ldb, 
                                                       @Cast("const cuDoubleComplex*") double2 beta,  
                                                       @Cast("cuDoubleComplex*") double2 C,
-                                                      int ldc);     
-                                                      
-public static native @Cast("cublasStatus_t") int cublasZgemm3m(cublasContext handle, 
-                                                      @Cast("cublasOperation_t") int transa,
-                                                      @Cast("cublasOperation_t") int transb, 
-                                                      int m,
-                                                      int n,
-                                                      int k,
-                                                      @Cast("const cuDoubleComplex*") double2 alpha,  
-                                                      @Cast("const cuDoubleComplex*") double2 A, 
-                                                      int lda,
-                                                      @Cast("const cuDoubleComplex*") double2 B,
-                                                      int ldb, 
-                                                      @Cast("const cuDoubleComplex*") double2 beta,  
-                                                      @Cast("cuDoubleComplex*") double2 C,
-                                                      int ldc);                                                                   
+                                                      int ldc);             
                                                       
 public static native @Cast("cublasStatus_t") int cublasHgemm(cublasContext handle, 
                                                       @Cast("cublasOperation_t") int transa,
@@ -2962,14 +2852,14 @@ public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext han
                                                       int k,
                                                       @Const FloatPointer alpha,  
                                                       @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
+                                                      @Cast("cublasDataType_t") int Atype,
                                                       int lda,
                                                       @Const Pointer B,
-                                                      @Cast("cudaDataType") int Btype,
+                                                      @Cast("cublasDataType_t") int Btype,
                                                       int ldb, 
                                                       @Const FloatPointer beta,  
                                                       Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
+                                                      @Cast("cublasDataType_t") int Ctype,
                                                       int ldc);
 public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext handle, 
                                                       @Cast("cublasOperation_t") int transa,
@@ -2979,14 +2869,14 @@ public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext han
                                                       int k,
                                                       @Const FloatBuffer alpha,  
                                                       @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
+                                                      @Cast("cublasDataType_t") int Atype,
                                                       int lda,
                                                       @Const Pointer B,
-                                                      @Cast("cudaDataType") int Btype,
+                                                      @Cast("cublasDataType_t") int Btype,
                                                       int ldb, 
                                                       @Const FloatBuffer beta,  
                                                       Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
+                                                      @Cast("cublasDataType_t") int Ctype,
                                                       int ldc);
 public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext handle, 
                                                       @Cast("cublasOperation_t") int transa,
@@ -2996,74 +2886,16 @@ public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext han
                                                       int k,
                                                       @Const float[] alpha,  
                                                       @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
+                                                      @Cast("cublasDataType_t") int Atype,
                                                       int lda,
                                                       @Const Pointer B,
-                                                      @Cast("cudaDataType") int Btype,
+                                                      @Cast("cublasDataType_t") int Btype,
                                                       int ldb, 
                                                       @Const float[] beta,  
                                                       Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
-                                                      int ldc); 
-                                       
-public static native @Cast("cublasStatus_t") int cublasGemmEx(cublasContext handle, 
-                                                      @Cast("cublasOperation_t") int transa,
-                                                      @Cast("cublasOperation_t") int transb, 
-                                                      int m,
-                                                      int n,
-                                                      int k,
-                                                      @Const Pointer alpha,  
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
-                                                      int lda,
-                                                      @Const Pointer B,
-                                                      @Cast("cudaDataType") int Btype,
-                                                      int ldb, 
-                                                      @Const Pointer beta,  
-                                                      Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
-                                                      int ldc,
-                                                      @Cast("cudaDataType") int computeType,
-                                                      @Cast("cublasGemmAlgo_t") int algo); 
- 
-/* IO in Int8 complex/cuComplex, computation in cuComplex */                                                      
-public static native @Cast("cublasStatus_t") int cublasCgemmEx(cublasContext handle, 
-                                                     @Cast("cublasOperation_t") int transa, @Cast("cublasOperation_t") int transb,  
-                                                     int m, int n, int k, 
-                                                     @Cast("const cuComplex*") float2 alpha, 
-                                                     @Const Pointer A, 
-                                                     @Cast("cudaDataType") int Atype, 
-                                                     int lda, 
-                                                     @Const Pointer B, 
-                                                     @Cast("cudaDataType") int Btype, 
-                                                     int ldb,
-                                                     @Cast("const cuComplex*") float2 beta, 
-                                                     Pointer C, 
-                                                     @Cast("cudaDataType") int Ctype, 
-                                                     int ldc);
-                                                                                                                                                                                                                                                                                                   
-public static native @Cast("cublasStatus_t") int cublasUint8gemmBias(cublasContext handle, 
-                                                           @Cast("cublasOperation_t") int transa, @Cast("cublasOperation_t") int transb, @Cast("cublasOperation_t") int transc,  
-                                                           int m, int n, int k, 
-                                                           @Cast("const unsigned char*") BytePointer A, int A_bias, int lda, 
-                                                           @Cast("const unsigned char*") BytePointer B, int B_bias, int ldb,
-                                                                 @Cast("unsigned char*") BytePointer C, int C_bias, int ldc,
-                                                           int C_mult, int C_shift);
-public static native @Cast("cublasStatus_t") int cublasUint8gemmBias(cublasContext handle, 
-                                                           @Cast("cublasOperation_t") int transa, @Cast("cublasOperation_t") int transb, @Cast("cublasOperation_t") int transc,  
-                                                           int m, int n, int k, 
-                                                           @Cast("const unsigned char*") ByteBuffer A, int A_bias, int lda, 
-                                                           @Cast("const unsigned char*") ByteBuffer B, int B_bias, int ldb,
-                                                                 @Cast("unsigned char*") ByteBuffer C, int C_bias, int ldc,
-                                                           int C_mult, int C_shift);
-public static native @Cast("cublasStatus_t") int cublasUint8gemmBias(cublasContext handle, 
-                                                           @Cast("cublasOperation_t") int transa, @Cast("cublasOperation_t") int transb, @Cast("cublasOperation_t") int transc,  
-                                                           int m, int n, int k, 
-                                                           @Cast("const unsigned char*") byte[] A, int A_bias, int lda, 
-                                                           @Cast("const unsigned char*") byte[] B, int B_bias, int ldb,
-                                                                 @Cast("unsigned char*") byte[] C, int C_bias, int ldc,
-                                                           int C_mult, int C_shift);
-                                                                                       
+                                                      @Cast("cublasDataType_t") int Ctype,
+                                                      int ldc);                                                                                                                                                                                            
+                            
 /* SYRK */
 public static native @Cast("cublasStatus_t") int cublasSsyrk_v2(cublasContext handle,
                                                       @Cast("cublasFillMode_t") int uplo,
@@ -3156,36 +2988,6 @@ public static native @Cast("cublasStatus_t") int cublasZsyrk_v2(cublasContext ha
                                                       @Cast("const cuDoubleComplex*") double2 beta,  
                                                       @Cast("cuDoubleComplex*") double2 C, 
                                                       int ldc);
-/* IO in Int8 complex/cuComplex, computation in cuComplex */  
-public static native @Cast("cublasStatus_t") int cublasCsyrkEx( cublasContext handle,
-                                                      @Cast("cublasFillMode_t") int uplo,
-                                                      @Cast("cublasOperation_t") int trans,
-                                                      int n,
-                                                      int k,
-                                                      @Cast("const cuComplex*") float2 alpha,  
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype, 
-                                                      int lda,
-                                                      @Cast("const cuComplex*") float2 beta,  
-                                                      Pointer C, 
-                                                      @Cast("cudaDataType") int Ctype, 
-                                                      int ldc);  
-                                                      
-/* IO in Int8 complex/cuComplex, computation in cuComplex, Gaussian math */                                                          
-public static native @Cast("cublasStatus_t") int cublasCsyrk3mEx(cublasContext handle,
-                                                      @Cast("cublasFillMode_t") int uplo, 
-                                                      @Cast("cublasOperation_t") int trans, 
-                                                      int n, 
-                                                      int k,
-                                                      @Cast("const cuComplex*") float2 alpha, 
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype, 
-                                                      int lda,
-                                                      @Cast("const cuComplex*") float2 beta, 
-                                                      Pointer C, 
-                                                      @Cast("cudaDataType") int Ctype, 
-                                                      int ldc);
-                                                      
 /* HERK */
 public static native @Cast("cublasStatus_t") int cublasCherk_v2(cublasContext handle,
                                                       @Cast("cublasFillMode_t") int uplo,
@@ -3253,89 +3055,8 @@ public static native @Cast("cublasStatus_t") int cublasZherk_v2(cublasContext ha
                                                       int lda,
                                                       @Const double[] beta,  
                                                       @Cast("cuDoubleComplex*") double2 C,
-                                                      int ldc);  
-                                                        
-/* IO in Int8 complex/cuComplex, computation in cuComplex */                                                       
-public static native @Cast("cublasStatus_t") int cublasCherkEx(cublasContext handle,
-                                                      @Cast("cublasFillMode_t") int uplo,
-                                                      @Cast("cublasOperation_t") int trans,
-                                                      int n,
-                                                      int k,
-                                                      @Const FloatPointer alpha,  
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
-                                                      int lda,
-                                                      @Const FloatPointer beta,  
-                                                      Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
-                                                      int ldc);
-public static native @Cast("cublasStatus_t") int cublasCherkEx(cublasContext handle,
-                                                      @Cast("cublasFillMode_t") int uplo,
-                                                      @Cast("cublasOperation_t") int trans,
-                                                      int n,
-                                                      int k,
-                                                      @Const FloatBuffer alpha,  
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
-                                                      int lda,
-                                                      @Const FloatBuffer beta,  
-                                                      Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
-                                                      int ldc);
-public static native @Cast("cublasStatus_t") int cublasCherkEx(cublasContext handle,
-                                                      @Cast("cublasFillMode_t") int uplo,
-                                                      @Cast("cublasOperation_t") int trans,
-                                                      int n,
-                                                      int k,
-                                                      @Const float[] alpha,  
-                                                      @Const Pointer A, 
-                                                      @Cast("cudaDataType") int Atype,
-                                                      int lda,
-                                                      @Const float[] beta,  
-                                                      Pointer C,
-                                                      @Cast("cudaDataType") int Ctype,
-                                                      int ldc);
-                                                      
-/* IO in Int8 complex/cuComplex, computation in cuComplex, Gaussian math */                                                          
-public static native @Cast("cublasStatus_t") int cublasCherk3mEx(cublasContext handle,
-                                                       @Cast("cublasFillMode_t") int uplo, 
-                                                       @Cast("cublasOperation_t") int trans, 
-                                                       int n, 
-                                                       int k,
-                                                       @Const FloatPointer alpha, 
-                                                       @Const Pointer A, @Cast("cudaDataType") int Atype, 
-                                                       int lda,
-                                                       @Const FloatPointer beta, 
-                                                       Pointer C, 
-                                                       @Cast("cudaDataType") int Ctype, 
-                                                       int ldc);
-public static native @Cast("cublasStatus_t") int cublasCherk3mEx(cublasContext handle,
-                                                       @Cast("cublasFillMode_t") int uplo, 
-                                                       @Cast("cublasOperation_t") int trans, 
-                                                       int n, 
-                                                       int k,
-                                                       @Const FloatBuffer alpha, 
-                                                       @Const Pointer A, @Cast("cudaDataType") int Atype, 
-                                                       int lda,
-                                                       @Const FloatBuffer beta, 
-                                                       Pointer C, 
-                                                       @Cast("cudaDataType") int Ctype, 
-                                                       int ldc);
-public static native @Cast("cublasStatus_t") int cublasCherk3mEx(cublasContext handle,
-                                                       @Cast("cublasFillMode_t") int uplo, 
-                                                       @Cast("cublasOperation_t") int trans, 
-                                                       int n, 
-                                                       int k,
-                                                       @Const float[] alpha, 
-                                                       @Const Pointer A, @Cast("cudaDataType") int Atype, 
-                                                       int lda,
-                                                       @Const float[] beta, 
-                                                       Pointer C, 
-                                                       @Cast("cudaDataType") int Ctype, 
-                                                       int ldc);
-                                                       
-                                                       
-                                                                                                             
+                                                      int ldc);    
+
 /* SYR2K */                                     
 public static native @Cast("cublasStatus_t") int cublasSsyr2k_v2(cublasContext handle,
                                                        @Cast("cublasFillMode_t") int uplo,
@@ -4221,37 +3942,6 @@ public static native @Cast("cublasStatus_t") int cublasCgemmBatched(cublasContex
                                                           int ldc,
                                                           int batchCount);
 
-public static native @Cast("cublasStatus_t") int cublasCgemm3mBatched(cublasContext handle,
-                                                          @Cast("cublasOperation_t") int transa,
-                                                          @Cast("cublasOperation_t") int transb, 
-                                                          int m,
-                                                          int n,
-                                                          int k,
-                                                          @Cast("const cuComplex*") float2 alpha, 
-                                                          @Cast("const cuComplex**") PointerPointer Aarray, 
-                                                          int lda,
-                                                          @Cast("const cuComplex**") PointerPointer Barray,
-                                                          int ldb, 
-                                                          @Cast("const cuComplex*") float2 beta, 
-                                                          @Cast("cuComplex**") PointerPointer Carray,
-                                                          int ldc,
-                                                          int batchCount);
-public static native @Cast("cublasStatus_t") int cublasCgemm3mBatched(cublasContext handle,
-                                                          @Cast("cublasOperation_t") int transa,
-                                                          @Cast("cublasOperation_t") int transb, 
-                                                          int m,
-                                                          int n,
-                                                          int k,
-                                                          @Cast("const cuComplex*") float2 alpha, 
-                                                          @Cast("const cuComplex**") @ByPtrPtr float2 Aarray, 
-                                                          int lda,
-                                                          @Cast("const cuComplex**") @ByPtrPtr float2 Barray,
-                                                          int ldb, 
-                                                          @Cast("const cuComplex*") float2 beta, 
-                                                          @Cast("cuComplex**") @ByPtrPtr float2 Carray,
-                                                          int ldc,
-                                                          int batchCount);
-
 public static native @Cast("cublasStatus_t") int cublasZgemmBatched(cublasContext handle,
                                                           @Cast("cublasOperation_t") int transa,
                                                           @Cast("cublasOperation_t") int transb, 
@@ -4282,193 +3972,6 @@ public static native @Cast("cublasStatus_t") int cublasZgemmBatched(cublasContex
                                                           @Cast("cuDoubleComplex**") @ByPtrPtr double2 Carray,
                                                           int ldc,
                                                           int batchCount); 
-
-public static native @Cast("cublasStatus_t") int cublasSgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const FloatPointer alpha,
-                                                                 @Const FloatPointer A,
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const FloatPointer B,
-                                                                 int ldb,
-                                                                 long strideB,
-                                                                 @Const FloatPointer beta,
-                                                                 FloatPointer C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-public static native @Cast("cublasStatus_t") int cublasSgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const FloatBuffer alpha,
-                                                                 @Const FloatBuffer A,
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const FloatBuffer B,
-                                                                 int ldb,
-                                                                 long strideB,
-                                                                 @Const FloatBuffer beta,
-                                                                 FloatBuffer C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-public static native @Cast("cublasStatus_t") int cublasSgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const float[] alpha,
-                                                                 @Const float[] A,
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const float[] B,
-                                                                 int ldb,
-                                                                 long strideB,
-                                                                 @Const float[] beta,
-                                                                 float[] C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-
-public static native @Cast("cublasStatus_t") int cublasDgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const DoublePointer alpha,
-                                                                 @Const DoublePointer A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const DoublePointer B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Const DoublePointer beta,
-                                                                 DoublePointer C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-public static native @Cast("cublasStatus_t") int cublasDgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const DoubleBuffer alpha,
-                                                                 @Const DoubleBuffer A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const DoubleBuffer B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Const DoubleBuffer beta,
-                                                                 DoubleBuffer C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-public static native @Cast("cublasStatus_t") int cublasDgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const double[] alpha,
-                                                                 @Const double[] A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const double[] B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Const double[] beta,
-                                                                 double[] C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-
-public static native @Cast("cublasStatus_t") int cublasCgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Cast("const cuComplex*") float2 alpha,
-                                                                 @Cast("const cuComplex*") float2 A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Cast("const cuComplex*") float2 B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Cast("const cuComplex*") float2 beta,
-                                                                 @Cast("cuComplex*") float2 C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-
-public static native @Cast("cublasStatus_t") int cublasCgemm3mStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Cast("const cuComplex*") float2 alpha,
-                                                                 @Cast("const cuComplex*") float2 A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Cast("const cuComplex*") float2 B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Cast("const cuComplex*") float2 beta,
-                                                                 @Cast("cuComplex*") float2 C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-
-
-public static native @Cast("cublasStatus_t") int cublasZgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Cast("const cuDoubleComplex*") double2 alpha,
-                                                                 @Cast("const cuDoubleComplex*") double2 A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Cast("const cuDoubleComplex*") double2 B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Cast("const cuDoubleComplex*") double2 beta,
-                                                                 @Cast("cuDoubleComplex*") double2 C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
-
-public static native @Cast("cublasStatus_t") int cublasHgemmStridedBatched(cublasContext handle,
-                                                                 @Cast("cublasOperation_t") int transa,
-                                                                 @Cast("cublasOperation_t") int transb, 
-                                                                 int m,
-                                                                 int n,
-                                                                 int k,
-                                                                 @Const __half alpha,
-                                                                 @Const __half A, 
-                                                                 int lda,
-                                                                 long strideA,
-                                                                 @Const __half B,
-                                                                 int ldb, 
-                                                                 long strideB,
-                                                                 @Const __half beta,
-                                                                 __half C,
-                                                                 int ldc,
-                                                                 long strideC,
-                                                                 int batchCount);
 
 /* ---------------- CUBLAS BLAS-like extension ---------------- */
 /* GEAM */

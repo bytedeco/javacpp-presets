@@ -35,14 +35,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(names = {"linux-x86_64", "linux-arm64", "linux-ppc64le", "macosx-x86_64", "windows-x86_64"}, value = {
     @Platform(include = {"<cuda.h>", "<host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
-                       /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "<library_types.h>"},
-              includepath = "/usr/local/cuda-8.0/include/", link = {"cudart@.8.0", "cuda@.8.0"}, linkpath = "/usr/local/cuda-8.0/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-8.0/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-8.0/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-8.0/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/") },
+                       /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>"},
+              includepath = "/usr/local/cuda-7.5/include/", link = {"cudart@.7.5", "cuda@.7.5"}, linkpath = "/usr/local/cuda-7.5/lib/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-7.5/lib64/"),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-7.5/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-7.5/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/x64/") },
         target = "org.bytedeco.javacpp.cuda")
 public class cuda implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -486,24 +486,6 @@ public static native @Cast("curandStatus_t") int curandGetVersion(IntBuffer vers
 public static native @Cast("curandStatus_t") int curandGetVersion(int[] version);
 
 /**
-* \brief Return the value of the curand property.
-*
-* Return in \p *value the number for the property described by \p type of the
-* dynamically linked CURAND library.
-*
-* @param type - CUDA library property
-* @param value - integer value for the requested property
-*
-* @return
-* - CURAND_STATUS_SUCCESS if the property value was successfully returned \n
-* - CURAND_STATUS_OUT_OF_RANGE if the property type is not recognized \n
-*/
-public static native @Cast("curandStatus_t") int curandGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
-public static native @Cast("curandStatus_t") int curandGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
-public static native @Cast("curandStatus_t") int curandGetProperty(@Cast("libraryPropertyType") int type, int[] value);
-
-
-/**
  * \brief Set the current stream for CURAND kernel launches.
  *
  * Set the current stream for CURAND kernel launches.  All library functions
@@ -994,11 +976,6 @@ public static native @Cast("curandStatus_t") int curandGeneratePoissonMethod(cur
                      @Cast("size_t") long n, double lambda, @Cast("curandMethod_t") int method);
 public static native @Cast("curandStatus_t") int curandGeneratePoissonMethod(curandGenerator_st generator, @Cast("unsigned int*") int[] outputPtr,
                      @Cast("size_t") long n, double lambda, @Cast("curandMethod_t") int method);
-
-
-
-// just for internal usage
-
 
 
 /**

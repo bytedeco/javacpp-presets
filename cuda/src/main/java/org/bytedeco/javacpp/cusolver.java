@@ -67,20 +67,6 @@ public class cusolver extends org.bytedeco.javacpp.presets.cusolver {
 // #if !defined(CUSOLVER_COMMON_H_)
 // #define CUSOLVER_COMMON_H_
 
-// #include "cuda_fp16.h"
-// #include "library_types.h"
-
-// #ifndef CUSOLVERAPI
-// #ifdef _WIN32
-// #define CUSOLVERAPI __stdcall
-// #else
-// #define CUSOLVERAPI 
-// #endif
-// #endif
-
-// #if defined(__cplusplus)
-// #endif /* __cplusplus */
-
 /** enum cusolverStatus_t */
 public static final int
     CUSOLVER_STATUS_SUCCESS= 0,
@@ -95,27 +81,6 @@ public static final int
     CUSOLVER_STATUS_NOT_SUPPORTED = 9,
     CUSOLVER_STATUS_ZERO_PIVOT= 10,
     CUSOLVER_STATUS_INVALID_LICENSE= 11;
-
-/** enum cusolverEigType_t */
-public static final int
-    CUSOLVER_EIG_TYPE_1= 1,
-    CUSOLVER_EIG_TYPE_2= 2,
-    CUSOLVER_EIG_TYPE_3= 3 ;
-
-/** enum cusolverEigMode_t */
-public static final int
-    CUSOLVER_EIG_MODE_NOVECTOR= 0,
-    CUSOLVER_EIG_MODE_VECTOR= 1 ;
-
-
-public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
-public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
-public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type, int[] value);
-
-
-// #if defined(__cplusplus)
-// #endif /* __cplusplus */
-
 
 // #endif // CUSOLVER_COMMON_H_
 
@@ -181,13 +146,25 @@ public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("li
 // #if !defined(CUSOLVERDN_H_)
 // #define CUSOLVERDN_H_
 
+// #ifndef CUDENSEAPI
+// #ifdef _WIN32
+// #define CUDENSEAPI __stdcall
+// #else
+// #define CUDENSEAPI 
+// #endif
+// #endif
+
 // #include "driver_types.h"
 // #include "cuComplex.h"   /* import complex data type */
 // #include "cublas_v2.h"
-// #include "cusolver_common.h"
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
+
+// #ifndef CUSOLVER_COMMON
+// #define CUSOLVER_COMMON
+// #include "cusolver_common.h"
+// #endif // CUSOLVER_COMMON
 
 @Opaque public static class cusolverDnContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -980,96 +957,7 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgetrs(
     int ldb, 
     int[] devInfo );
 
-
 /* QR factorization */
-public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    FloatPointer A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    FloatBuffer A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    float[] A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    DoublePointer A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    DoubleBuffer A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    double[] A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    int[] lwork );
-
 public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf( 
     cusolverDnContext handle, 
     int m, 
@@ -1193,419 +1081,6 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf(
     @Cast("cuDoubleComplex*") double2 Workspace, 
     int Lwork, 
     int[] devInfo );
-
-
-/* generate unitary matrix Q from QR factorization */
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Const float[] A,
-    int lda,
-    @Const float[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Const double[] A,
-    int lda,
-    @Const double[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCungqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZungqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungqr_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    FloatPointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    FloatBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    float[] A,
-    int lda,
-    @Const float[] tau,
-    float[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    DoublePointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    DoubleBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    double[] A,
-    int lda,
-    @Const double[] tau,
-    double[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCungqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZungqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungqr(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int k,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info);
-
-
-
-/* compute Q**T*b in solve min||A*x = b|| */
-public static native @Cast("cusolverStatus_t") int cusolverDnSormqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    @Const FloatPointer C,
-    int ldc,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSormqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    @Const FloatBuffer C,
-    int ldc,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSormqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Const float[] A,
-    int lda,
-    @Const float[] tau,
-    @Const float[] C,
-    int ldc,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDormqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    @Const DoublePointer C,
-    int ldc,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDormqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    @Const DoubleBuffer C,
-    int ldc,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDormqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Const double[] A,
-    int lda,
-    @Const double[] tau,
-    @Const double[] C,
-    int ldc,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCunmqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("const cuComplex*") float2 C,
-    int ldc,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCunmqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("const cuComplex*") float2 C,
-    int ldc,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCunmqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("const cuComplex*") float2 C,
-    int ldc,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZunmqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("const cuDoubleComplex*") double2 C,
-    int ldc,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZunmqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("const cuDoubleComplex*") double2 C,
-    int ldc,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZunmqr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side,
-    @Cast("cublasOperation_t") int trans,
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("const cuDoubleComplex*") double2 C,
-    int ldc,
-    int[] lwork);
 
 public static native @Cast("cusolverStatus_t") int cusolverDnSormqr(
     cusolverDnContext handle,
@@ -1792,273 +1267,97 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZunmqr(
     int[] devInfo);
 
 
-/* L*D*L**T,U*D*U**T factorization */
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    FloatPointer A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    FloatBuffer A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    float[] A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    DoublePointer A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    DoubleBuffer A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    double[] A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf_bufferSize(
-    cusolverDnContext handle,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    int[] lwork );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    FloatPointer A,
-    int lda,
-    IntPointer ipiv,
-    FloatPointer work,
-    int lwork,
-    IntPointer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    FloatBuffer A,
-    int lda,
-    IntBuffer ipiv,
-    FloatBuffer work,
-    int lwork,
-    IntBuffer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    float[] A,
-    int lda,
-    int[] ipiv,
-    float[] work,
-    int lwork,
-    int[] info );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    DoublePointer A,
-    int lda,
-    IntPointer ipiv,
-    DoublePointer work,
-    int lwork,
-    IntPointer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    DoubleBuffer A,
-    int lda,
-    IntBuffer ipiv,
-    DoubleBuffer work,
-    int lwork,
-    IntBuffer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    double[] A,
-    int lda,
-    int[] ipiv,
-    double[] work,
-    int lwork,
-    int[] info );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    IntPointer ipiv,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    IntBuffer ipiv,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    int[] ipiv,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info );
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    IntPointer ipiv,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    IntBuffer ipiv,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info );
-public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    int[] ipiv,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info );
-
-
-/* bidiagonal factorization */
-public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+/* QR factorization workspace query */
+public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    FloatPointer A, 
+    int lda, 
     IntPointer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    FloatBuffer A, 
+    int lda, 
     IntBuffer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnSgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    float[] A, 
+    int lda, 
     int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnDgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnDgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    DoublePointer A, 
+    int lda, 
     IntPointer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnDgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    DoubleBuffer A, 
+    int lda, 
     IntBuffer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnDgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    double[] A, 
+    int lda, 
     int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnCgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnCgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
     IntPointer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnCgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
     IntBuffer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnCgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
     int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    @Cast("cuDoubleComplex*") double2 A, 
+    int lda, 
     IntPointer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    @Cast("cuDoubleComplex*") double2 A, 
+    int lda, 
     IntBuffer Lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnZgeqrf_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    @Cast("cuDoubleComplex*") double2 A, 
+    int lda, 
     int[] Lwork );
 
+
+/* bidiagonal */
 public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd( 
     cusolverDnContext handle, 
     int m, 
@@ -2219,866 +1518,210 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd(
     int Lwork, 
     int[] devInfo );
 
-/* generates one of the unitary matrices Q or P**T determined by GEBRD*/
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Const float[] A,
-    int lda,
-    @Const float[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Const double[] A,
-    int lda,
-    @Const double[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCungbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZungbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungbr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    FloatPointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    FloatBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    float[] A,
-    int lda,
-    @Const float[] tau,
-    float[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    DoublePointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    DoubleBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    double[] A,
-    int lda,
-    @Const double[] tau,
-    double[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCungbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZungbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungbr(
-    cusolverDnContext handle,
-    @Cast("cublasSideMode_t") int side, 
-    int m,
-    int n,
-    int k,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info);
-
-
-/* tridiagonal factorization */
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer d,
-    @Const FloatPointer e,
-    @Const FloatPointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer d,
-    @Const FloatBuffer e,
-    @Const FloatBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const float[] A,
-    int lda,
-    @Const float[] d,
-    @Const float[] e,
-    @Const float[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer d,
-    @Const DoublePointer e,
-    @Const DoublePointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer e,
-    @Const DoubleBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const double[] A,
-    int lda,
-    @Const double[] d,
-    @Const double[] e,
-    @Const double[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnChetrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Const FloatPointer d,
-    @Const FloatPointer e,
-    @Cast("const cuComplex*") float2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnChetrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Const FloatBuffer d,
-    @Const FloatBuffer e,
-    @Cast("const cuComplex*") float2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnChetrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Const float[] d,
-    @Const float[] e,
-    @Cast("const cuComplex*") float2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZhetrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Const DoublePointer d,
-    @Const DoublePointer e,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhetrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer e,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhetrd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Const double[] d,
-    @Const double[] e,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    int[] lwork);
-
 
 public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    FloatPointer A,
-    int lda,
-    FloatPointer d,
-    FloatPointer e,
-    FloatPointer tau,
-    FloatPointer work,
-    int lwork,
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    FloatPointer A, 
+    int lda, 
+    FloatPointer D, 
+    FloatPointer E, 
+    FloatPointer tau, 
+    FloatPointer Work, 
+    int Lwork, 
     IntPointer info);
 public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    FloatBuffer A,
-    int lda,
-    FloatBuffer d,
-    FloatBuffer e,
-    FloatBuffer tau,
-    FloatBuffer work,
-    int lwork,
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    FloatBuffer A, 
+    int lda, 
+    FloatBuffer D, 
+    FloatBuffer E, 
+    FloatBuffer tau, 
+    FloatBuffer Work, 
+    int Lwork, 
     IntBuffer info);
 public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    float[] A,
-    int lda,
-    float[] d,
-    float[] e,
-    float[] tau,
-    float[] work,
-    int lwork,
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    float[] A, 
+    int lda, 
+    float[] D, 
+    float[] E, 
+    float[] tau, 
+    float[] Work, 
+    int Lwork, 
     int[] info);
 
 public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    DoublePointer A,
-    int lda,
-    DoublePointer d,
-    DoublePointer e,
-    DoublePointer tau,
-    DoublePointer work,
-    int lwork,
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    DoublePointer A, 
+    int lda, 
+    DoublePointer D, 
+    DoublePointer E, 
+    DoublePointer tau, 
+    DoublePointer Work, 
+    int Lwork, 
     IntPointer info);
 public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    DoubleBuffer A,
-    int lda,
-    DoubleBuffer d,
-    DoubleBuffer e,
-    DoubleBuffer tau,
-    DoubleBuffer work,
-    int lwork,
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    DoubleBuffer A, 
+    int lda, 
+    DoubleBuffer D, 
+    DoubleBuffer E, 
+    DoubleBuffer tau, 
+    DoubleBuffer Work, 
+    int Lwork, 
     IntBuffer info);
 public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    double[] A,
-    int lda,
-    double[] d,
-    double[] e,
-    double[] tau,
-    double[] work,
-    int lwork,
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    double[] A, 
+    int lda, 
+    double[] D, 
+    double[] E, 
+    double[] tau, 
+    double[] Work, 
+    int Lwork, 
     int[] info);
 
-public static native @Cast("cusolverStatus_t") int cusolverDnChetrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    FloatPointer d,
-    FloatPointer e,
-    @Cast("cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnChetrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    FloatBuffer d,
-    FloatBuffer e,
-    @Cast("cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnChetrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    float[] d,
-    float[] e,
-    @Cast("cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info);
+/* bidiagonal factorization workspace query */
+public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnZhetrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    DoublePointer d,
-    DoublePointer e,
-    @Cast("cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhetrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    DoubleBuffer d,
-    DoubleBuffer e,
-    @Cast("cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhetrd(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    double[] d,
-    double[] e,
-    @Cast("cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info);
+public static native @Cast("cusolverStatus_t") int cusolverDnDgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
+public static native @Cast("cusolverStatus_t") int cusolverDnCgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
-
-/* generate unitary Q comes from sytrd */
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const float[] A,
-    int lda,
-    @Const float[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo,
-    int n,
-    @Const double[] A,
-    int lda,
-    @Const double[] tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCungtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZungtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungtr_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    FloatPointer A,
-    int lda,
-    @Const FloatPointer tau,
-    FloatPointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    FloatBuffer A,
-    int lda,
-    @Const FloatBuffer tau,
-    FloatBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSorgtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    float[] A,
-    int lda,
-    @Const float[] tau,
-    float[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    DoublePointer A,
-    int lda,
-    @Const DoublePointer tau,
-    DoublePointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer tau,
-    DoubleBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDorgtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    double[] A,
-    int lda,
-    @Const double[] tau,
-    double[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCungtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCungtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("const cuComplex*") float2 tau,
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZungtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZungtr(
-    cusolverDnContext handle,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 tau,
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info);
-
-
-
-/* compute op(Q)*C or C*op(Q) where Q comes from sytrd */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
 /* singular value decomposition, A = U * Sigma * V^H */
-public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int[] lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int[] lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int[] lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntPointer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    IntBuffer lwork );
-public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize(
-    cusolverDnContext handle,
-    int m,
-    int n,
-    int[] lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize( 
+    cusolverDnContext handle, 
+    int m, 
+    int n, 
+    int[] Lwork );
 
 public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     cusolverDnContext handle, 
@@ -3093,10 +1736,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     int ldu, 
     FloatPointer VT, 
     int ldvt, 
-    FloatPointer work, 
-    int lwork, 
+    FloatPointer Work, 
+    int Lwork, 
     FloatPointer rwork, 
-    IntPointer info );
+    IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3110,10 +1753,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     int ldu, 
     FloatBuffer VT, 
     int ldvt, 
-    FloatBuffer work, 
-    int lwork, 
+    FloatBuffer Work, 
+    int Lwork, 
     FloatBuffer rwork, 
-    IntBuffer info );
+    IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3127,10 +1770,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     int ldu, 
     float[] VT, 
     int ldvt, 
-    float[] work, 
-    int lwork, 
+    float[] Work, 
+    int Lwork, 
     float[] rwork, 
-    int[] info );
+    int[] devInfo );
 
 public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     cusolverDnContext handle, 
@@ -3145,10 +1788,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     int ldu, 
     DoublePointer VT, 
     int ldvt, 
-    DoublePointer work,
-    int lwork, 
+    DoublePointer Work,
+    int Lwork, 
     DoublePointer rwork, 
-    IntPointer info );
+    IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3162,10 +1805,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     int ldu, 
     DoubleBuffer VT, 
     int ldvt, 
-    DoubleBuffer work,
-    int lwork, 
+    DoubleBuffer Work,
+    int Lwork, 
     DoubleBuffer rwork, 
-    IntBuffer info );
+    IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3179,10 +1822,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     int ldu, 
     double[] VT, 
     int ldvt, 
-    double[] work,
-    int lwork, 
+    double[] Work,
+    int Lwork, 
     double[] rwork, 
-    int[] info );
+    int[] devInfo );
 
 public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     cusolverDnContext handle, 
@@ -3197,10 +1840,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     int ldu, 
     @Cast("cuComplex*") float2 VT, 
     int ldvt,
-    @Cast("cuComplex*") float2 work, 
-    int lwork, 
+    @Cast("cuComplex*") float2 Work, 
+    int Lwork, 
     FloatPointer rwork, 
-    IntPointer info );
+    IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3214,10 +1857,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     int ldu, 
     @Cast("cuComplex*") float2 VT, 
     int ldvt,
-    @Cast("cuComplex*") float2 work, 
-    int lwork, 
+    @Cast("cuComplex*") float2 Work, 
+    int Lwork, 
     FloatBuffer rwork, 
-    IntBuffer info );
+    IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3231,10 +1874,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     int ldu, 
     @Cast("cuComplex*") float2 VT, 
     int ldvt,
-    @Cast("cuComplex*") float2 work, 
-    int lwork, 
+    @Cast("cuComplex*") float2 Work, 
+    int Lwork, 
     float[] rwork, 
-    int[] info );
+    int[] devInfo );
 
 public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     cusolverDnContext handle, 
@@ -3249,10 +1892,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     int ldu, 
     @Cast("cuDoubleComplex*") double2 VT, 
     int ldvt, 
-    @Cast("cuDoubleComplex*") double2 work, 
-    int lwork, 
+    @Cast("cuDoubleComplex*") double2 Work, 
+    int Lwork, 
     DoublePointer rwork, 
-    IntPointer info );
+    IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3266,10 +1909,10 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     int ldu, 
     @Cast("cuDoubleComplex*") double2 VT, 
     int ldvt, 
-    @Cast("cuDoubleComplex*") double2 work, 
-    int lwork, 
+    @Cast("cuDoubleComplex*") double2 Work, 
+    int Lwork, 
     DoubleBuffer rwork, 
-    IntBuffer info );
+    IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     cusolverDnContext handle, 
     byte jobu, 
@@ -3283,585 +1926,212 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     int ldu, 
     @Cast("cuDoubleComplex*") double2 VT, 
     int ldvt, 
+    @Cast("cuDoubleComplex*") double2 Work, 
+    int Lwork, 
+    double[] rwork, 
+    int[] devInfo );
+
+/* LDLT,UDUT factorization */
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    FloatPointer A, 
+    int lda, 
+    IntPointer ipiv, 
+    FloatPointer work, 
+    int lwork, 
+    IntPointer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    FloatBuffer A, 
+    int lda, 
+    IntBuffer ipiv, 
+    FloatBuffer work, 
+    int lwork, 
+    IntBuffer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    float[] A, 
+    int lda, 
+    int[] ipiv, 
+    float[] work, 
+    int lwork, 
+    int[] devInfo );
+
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    DoublePointer A, 
+    int lda, 
+    IntPointer ipiv, 
+    DoublePointer work, 
+    int lwork, 
+    IntPointer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    DoubleBuffer A, 
+    int lda, 
+    IntBuffer ipiv, 
+    DoubleBuffer work, 
+    int lwork, 
+    IntBuffer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    double[] A, 
+    int lda, 
+    int[] ipiv, 
+    double[] work, 
+    int lwork, 
+    int[] devInfo );
+
+public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
+    IntPointer ipiv, 
+    @Cast("cuComplex*") float2 work, 
+    int lwork, 
+    IntPointer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
+    IntBuffer ipiv, 
+    @Cast("cuComplex*") float2 work, 
+    int lwork, 
+    IntBuffer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
+    int[] ipiv, 
+    @Cast("cuComplex*") float2 work, 
+    int lwork, 
+    int[] devInfo );
+
+public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    @Cast("cuDoubleComplex*") double2 A, 
+    int lda, 
+    IntPointer ipiv, 
     @Cast("cuDoubleComplex*") double2 work, 
     int lwork, 
-    double[] rwork, 
-    int[] info );
+    IntPointer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    @Cast("cuDoubleComplex*") double2 A, 
+    int lda, 
+    IntBuffer ipiv, 
+    @Cast("cuDoubleComplex*") double2 work, 
+    int lwork, 
+    IntBuffer devInfo );
+public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf( 
+    cusolverDnContext handle, 
+    @Cast("cublasFillMode_t") int uplo, 
+    int n, 
+    @Cast("cuDoubleComplex*") double2 A, 
+    int lda, 
+    int[] ipiv, 
+    @Cast("cuDoubleComplex*") double2 work, 
+    int lwork, 
+    int[] devInfo );
 
-
-/* standard symmetric eigenvalue solver, A*x = lambda*x, by divide-and-conquer  */
-public static native @Cast("cusolverStatus_t") int cusolverDnSsyevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsyevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsyevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const float[] A,
-    int lda,
-    @Const float[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDsyevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsyevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsyevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const double[] A,
-    int lda,
-    @Const double[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCheevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Const FloatPointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCheevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Const FloatBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnCheevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuComplex*") float2 A,
-    int lda,
-    @Const float[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZheevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Const DoublePointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZheevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Const DoubleBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZheevd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Const double[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnSsyevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    FloatPointer A,
-    int lda,
-    FloatPointer W, 
-    FloatPointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsyevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    FloatBuffer A,
-    int lda,
-    FloatBuffer W, 
-    FloatBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsyevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    float[] A,
-    int lda,
-    float[] W, 
-    float[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDsyevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    DoublePointer A,
-    int lda,
-    DoublePointer W, 
-    DoublePointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsyevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    DoubleBuffer A,
-    int lda,
-    DoubleBuffer W, 
-    DoubleBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsyevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    double[] A,
-    int lda,
-    double[] W, 
-    double[] work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnCheevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    FloatPointer W, 
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCheevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    FloatBuffer W, 
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnCheevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    float[] W, 
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZheevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    DoublePointer W, 
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZheevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    DoubleBuffer W, 
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZheevd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Cast("cuDoubleComplex*") double2 A,
-    int lda,
-    double[] W, 
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info);
-
-
-/* generalized symmetric eigenvalue solver, A*x = lambda*B*x, by divide-and-conquer  */
-public static native @Cast("cusolverStatus_t") int cusolverDnSsygvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,
-    @Cast("cusolverEigMode_t") int jobz,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const FloatPointer A, 
-    int lda,
-    @Const FloatPointer B, 
-    int ldb,
-    @Const FloatPointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsygvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,
-    @Cast("cusolverEigMode_t") int jobz,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const FloatBuffer A, 
-    int lda,
-    @Const FloatBuffer B, 
-    int ldb,
-    @Const FloatBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsygvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,
-    @Cast("cusolverEigMode_t") int jobz,
-    @Cast("cublasFillMode_t") int uplo, 
-    int n,
-    @Const float[] A, 
-    int lda,
-    @Const float[] B, 
-    int ldb,
-    @Const float[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnDsygvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype, 
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Const DoublePointer A, 
-    int lda,
-    @Const DoublePointer B, 
-    int ldb,
-    @Const DoublePointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsygvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype, 
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Const DoubleBuffer A, 
-    int lda,
-    @Const DoubleBuffer B, 
-    int ldb,
-    @Const DoubleBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsygvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype, 
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Const double[] A, 
-    int lda,
-    @Const double[] B, 
-    int ldb,
-    @Const double[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnChegvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype, 
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("const cuComplex*") float2 A, 
-    int lda,
-    @Cast("const cuComplex*") float2 B, 
-    int ldb,
-    @Const FloatPointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnChegvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype, 
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("const cuComplex*") float2 A, 
-    int lda,
-    @Cast("const cuComplex*") float2 B, 
-    int ldb,
-    @Const FloatBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnChegvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype, 
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("const cuComplex*") float2 A, 
-    int lda,
-    @Cast("const cuComplex*") float2 B, 
-    int ldb,
-    @Const float[] W,
-    int[] lwork);
-
-public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 B, 
-    int ldb,
-    @Const DoublePointer W,
-    IntPointer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 B, 
-    int ldb,
-    @Const DoubleBuffer W,
-    IntBuffer lwork);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd_bufferSize(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz, 
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("const cuDoubleComplex*") double2 A,
-    int lda,
-    @Cast("const cuDoubleComplex*") double2 B, 
-    int ldb,
-    @Const double[] W,
-    int[] lwork);
-
-
-public static native @Cast("cusolverStatus_t") int cusolverDnSsygvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+/* SYTRF factorization workspace query */
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     FloatPointer A, 
-    int lda,
-    FloatPointer B, 
-    int ldb,
-    FloatPointer W, 
-    FloatPointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsygvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+    int lda, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     FloatBuffer A, 
-    int lda,
-    FloatBuffer B, 
-    int ldb,
-    FloatBuffer W, 
-    FloatBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsygvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+    int lda, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     float[] A, 
-    int lda,
-    float[] B, 
-    int ldb,
-    float[] W, 
-    float[] work,
-    int lwork,
-    int[] info);
+    int lda, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnDsygvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,  
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     DoublePointer A, 
-    int lda,
-    DoublePointer B, 
-    int ldb,
-    DoublePointer W, 
-    DoublePointer work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsygvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,  
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+    int lda, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     DoubleBuffer A, 
-    int lda,
-    DoubleBuffer B, 
-    int ldb,
-    DoubleBuffer W, 
-    DoubleBuffer work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsygvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,  
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+    int lda, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     double[] A, 
-    int lda,
-    double[] B, 
-    int ldb,
-    double[] W, 
-    double[] work,
-    int lwork,
-    int[] info);
+    int lda, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnChegvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("cuComplex*") float2 B, 
-    int ldb,
-    FloatPointer W, 
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnChegvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("cuComplex*") float2 B, 
-    int ldb,
-    FloatBuffer W, 
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnChegvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
-    @Cast("cuComplex*") float2 A,
-    int lda,
-    @Cast("cuComplex*") float2 B, 
-    int ldb,
-    float[] W, 
-    @Cast("cuComplex*") float2 work,
-    int lwork,
-    int[] info);
+public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnCsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
+    @Cast("cuComplex*") float2 A, 
+    int lda, 
+    int[] Lwork );
 
-public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     @Cast("cuDoubleComplex*") double2 A, 
-    int lda,
-    @Cast("cuDoubleComplex*") double2 B, 
-    int ldb,
-    DoublePointer W, 
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+    int lda, 
+    IntPointer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     @Cast("cuDoubleComplex*") double2 A, 
-    int lda,
-    @Cast("cuDoubleComplex*") double2 B, 
-    int ldb,
-    DoubleBuffer W, 
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd(
-    cusolverDnContext handle,
-    @Cast("cusolverEigType_t") int itype,   
-    @Cast("cusolverEigMode_t") int jobz,  
-    @Cast("cublasFillMode_t") int uplo,  
-    int n,
+    int lda, 
+    IntBuffer Lwork );
+public static native @Cast("cusolverStatus_t") int cusolverDnZsytrf_bufferSize( 
+    cusolverDnContext handle, 
+    int n, 
     @Cast("cuDoubleComplex*") double2 A, 
-    int lda,
-    @Cast("cuDoubleComplex*") double2 B, 
-    int ldb,
-    double[] W, 
-    @Cast("cuDoubleComplex*") double2 work,
-    int lwork,
-    int[] info);
-
-
+    int lda, 
+    int[] Lwork );
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
@@ -3924,12 +2194,21 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZhegvd(
 // #if !defined(CUSOLVERRF_H_)
 // #define CUSOLVERRF_H_
 
+// #ifndef CRFWINAPI
+// #ifdef _WIN32
+// #define CRFWINAPI __stdcall
+// #else
+// #define CRFWINAPI 
+// #endif
+// #endif
+
 // #include "driver_types.h"
 // #include "cuComplex.h"   
-// #include "cusolver_common.h"
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
+
+// #include "cusolver_common.h"
 
 /* CUSOLVERRF mode */
 /** enum cusolverRfResetValuesFastMode_t */
@@ -4543,14 +2822,23 @@ public static native @Cast("cusolverStatus_t") int cusolverRfBatchZeroPivot(
  * Users Notice.
  */
 
+// #ifndef CUSOLVERAPI
+// #ifdef _WIN32
+// #define CUSOLVERAPI __stdcall
+// #else
+// #define CUSOLVERAPI 
+// #endif
+// #endif
+
 // #if !defined(CUSOLVERSP_H_)
 // #define CUSOLVERSP_H_
 
 // #include "cusparse.h"
-// #include "cusolver_common.h"
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
+
+// #include "cusolver_common.h"
 
 @Opaque public static class cusolverSpContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -4566,10 +2854,12 @@ public static native @Cast("cusolverStatus_t") int cusolverRfBatchZeroPivot(
     public csrqrInfo(Pointer p) { super(p); }
 }
 
+
 public static native @Cast("cusolverStatus_t") int cusolverSpCreate(@ByPtrPtr cusolverSpContext handle);
 public static native @Cast("cusolverStatus_t") int cusolverSpDestroy(cusolverSpContext handle);
 public static native @Cast("cusolverStatus_t") int cusolverSpSetStream(cusolverSpContext handle, CUstream_st streamId);
 public static native @Cast("cusolverStatus_t") int cusolverSpGetStream(cusolverSpContext handle, @ByPtrPtr CUstream_st streamId);
+
 
 public static native @Cast("cusolverStatus_t") int cusolverSpXcsrissymHost(
     cusolverSpContext handle,
