@@ -4450,6 +4450,7 @@ public static native @Cast("cublasStatus_t") int cublasZgemmStridedBatched(cubla
                                                                  int ldc,
                                                                  long strideC,
                                                                  int batchCount);
+
 public static native @Cast("cublasStatus_t") int cublasHgemmStridedBatched(cublasContext handle,
                                                                  @Cast("cublasOperation_t") int transa,
                                                                  @Cast("cublasOperation_t") int transb, 

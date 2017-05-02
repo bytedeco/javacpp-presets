@@ -1486,9 +1486,9 @@ public static final int
     /**
      * While executing a kernel, the device encountered a
      * load or store instruction on an invalid memory address.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_ILLEGAL_ADDRESS                = 700,
 
@@ -1506,11 +1506,10 @@ public static final int
     /**
      * This indicates that the device kernel took too long to execute. This can
      * only occur if timeouts are enabled - see the device attribute
-     * ::CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT for more information. The
-     * context cannot be used (and must be destroyed similar to
-     * ::CUDA_ERROR_LAUNCH_FAILED). All existing device memory allocations from
-     * this context are invalid and must be reconstructed if the program is to
-     * continue using CUDA.
+     * ::CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT for more information.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_LAUNCH_TIMEOUT                 = 702,
 
@@ -1577,26 +1576,26 @@ public static final int
     /**
      * While executing a kernel, the device encountered a stack error.
      * This can be due to stack corruption or exceeding the stack size limit.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_HARDWARE_STACK_ERROR           = 714,
 
     /**
      * While executing a kernel, the device encountered an illegal instruction.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_ILLEGAL_INSTRUCTION            = 715,
 
     /**
      * While executing a kernel, the device encountered a load or store instruction
      * on a memory address which is not aligned.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_MISALIGNED_ADDRESS             = 716,
 
@@ -1605,27 +1604,27 @@ public static final int
      * which can only operate on memory locations in certain address spaces
      * (global, shared, or local), but was supplied a memory address not
      * belonging to an allowed address space.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_INVALID_ADDRESS_SPACE          = 717,
 
     /**
      * While executing a kernel, the device program counter wrapped its address space.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_INVALID_PC                     = 718,
 
     /**
      * An exception occurred on the device while executing a kernel. Common
      * causes include dereferencing an invalid device pointer and accessing
-     * out of bounds shared memory. The context cannot be used, so it must
-     * be destroyed (and a new one should be created). All existing device
-     * memory allocations from this context are invalid and must be
-     * reconstructed if the program is to continue using CUDA.
+     * out of bounds shared memory.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     CUDA_ERROR_LAUNCH_FAILED                  = 719,
 
@@ -12436,9 +12435,10 @@ public static final int
      * This indicates that the device kernel took too long to execute. This can
      * only occur if timeouts are enabled - see the device property
      * \ref ::cudaDeviceProp::kernelExecTimeoutEnabled "kernelExecTimeoutEnabled"
-     * for more information. The device cannot be used until ::cudaThreadExit()
-     * is called. All existing device memory allocations are invalid and must be
-     * reconstructed if the program is to continue using CUDA.
+     * for more information.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorLaunchTimeout                = 6,
   
@@ -12897,26 +12897,26 @@ public static final int
     /**
      * Device encountered an error in the call stack during kernel execution,
      * possibly due to stack corruption or exceeding the stack size limit.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorHardwareStackError           = 72,
 
     /**
      * The device encountered an illegal instruction during kernel execution
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorIllegalInstruction           = 73,
 
     /**
      * The device encountered a load or store instruction
      * on a memory address which is not aligned.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorMisalignedAddress            = 74,
 
@@ -12925,25 +12925,25 @@ public static final int
      * which can only operate on memory locations in certain address spaces
      * (global, shared, or local), but was supplied a memory address not
      * belonging to an allowed address space.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorInvalidAddressSpace          = 75,
 
     /**
      * The device encountered an invalid program counter.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorInvalidPc                    = 76,
 
     /**
      * The device encountered a load or store instruction on an invalid memory address.
-     * The context cannot be used, so it must be destroyed (and a new one should be created).
-     * All existing device memory allocations from this context are invalid
-     * and must be reconstructed if the program is to continue using CUDA.
+     * This leaves the process in an inconsistent state and any further CUDA work
+     * will return the same error. To continue using CUDA, the process must be terminated
+     * and relaunched.
      */
     cudaErrorIllegalAddress               = 77,
 
@@ -25082,20 +25082,20 @@ public static final int warpSize =    32;
 
 /** enum cudaDataType */
 public static final int
-	CUDA_R_16F= 2, // real as a half 
-	CUDA_C_16F= 6, // complex as a pair of half numbers
-	CUDA_R_32F= 0, // real as a float
-	CUDA_C_32F= 4, // complex as a pair of float numbers
-	CUDA_R_64F= 1, // real as a double 
-	CUDA_C_64F= 5, // complex as a pair of double numbers
-	CUDA_R_8I= 3,  // real as a signed char 
-	CUDA_C_8I= 7,   // complex as a pair of signed char numbers
-	CUDA_R_8U= 8,  // real as a unsigned char 
-	CUDA_C_8U= 9,  // complex as a pair of unsigned char numbers
-	CUDA_R_32I= 10,  // real as a signed int
-	CUDA_C_32I= 11,  // complex as a pair of signed int numbers
-	CUDA_R_32U= 12,  // real as a unsigned int
-	CUDA_C_32U= 13;   // complex as a pair of unsigned int numbers 
+	CUDA_R_16F= 2,  /* real as a half */
+	CUDA_C_16F= 6,  /* complex as a pair of half numbers */
+	CUDA_R_32F= 0,  /* real as a float */
+	CUDA_C_32F= 4,  /* complex as a pair of float numbers */
+	CUDA_R_64F= 1,  /* real as a double */
+	CUDA_C_64F= 5,  /* complex as a pair of double numbers */
+	CUDA_R_8I = 3,  /* real as a signed char */
+	CUDA_C_8I = 7,  /* complex as a pair of signed char numbers */
+	CUDA_R_8U = 8,  /* real as a unsigned char */
+	CUDA_C_8U = 9,  /* complex as a pair of unsigned char numbers */
+	CUDA_R_32I= 10, /* real as a signed int */
+	CUDA_C_32I= 11, /* complex as a pair of signed int numbers */
+	CUDA_R_32U= 12, /* real as a unsigned int */
+	CUDA_C_32U= 13;  /* complex as a pair of unsigned int numbers */ 
 
 
 /** enum libraryPropertyType */
