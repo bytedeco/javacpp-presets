@@ -142,7 +142,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" == "android" ]; then
         echo "Install android requirements.."
         curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o ~/ndk.zip
-        unzip ~/ndk.zip -d ~/
+        unzip -qq ~/ndk.zip -d ~/
         ln -s ~/android-ndk-r14b ~/android-ndk
         if [ "$OS" == "android-arm" ]; then
            echo "Setting build for android-arm"
