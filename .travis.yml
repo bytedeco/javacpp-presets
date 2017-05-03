@@ -19,6 +19,48 @@ matrix:
         os: android
         env: PROJ=artoolkitplus OS=android-arm
       - jdk: oraclejdk7
+        os: android
+        env: PROJ=flycapture OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=cuda OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=ffmpeg OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=fftw OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=gsl OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=leptonica,tesseract OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=libdc1394 OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=liquidfun OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=libfreenect OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=libfreenect2 OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=llvm OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=videoinput OS=android-arm
+      - jdk: oraclejdk7
+        os: android
+        env: PROJ=tensorflow OS=android-arm
+      - jdk: oraclejdk7
         os: linux
         env: PROJ=flycapture OS=linux-x86_64
       - jdk: oraclejdk7
