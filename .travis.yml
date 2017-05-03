@@ -138,12 +138,12 @@ before_install:
         brew install gcc5 swig bazel libtool libusb nasm yasm xz 
         ln -s /usr/local/opt/gcc\@5 /usr/local/opt/gcc5
       fi
-
       if [ "$TRAVIS_OS_NAME" == "android" ]; then
         echo "Install android requirements.."
         curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o ~/ndk.zip
         unzip -qq ~/ndk.zip -d ~/
         ln -s ~/android-ndk-r14b ~/android-ndk
+        echo "Android NDK setup done"
         if [ "$OS" == "android-arm" ]; then
            echo "Setting build for android-arm"
            export ANDROID_FLAGS="-Djavacpp.platform.root=~/android-ndk/ -Djavacpp.platform.compiler=~/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++"
@@ -187,7 +187,6 @@ script:
         fi
         kill $CHILDPID
 
-        if [[ $(find $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
         if [[ $(find $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found cudnn in cache and size seems ok" 
         else
