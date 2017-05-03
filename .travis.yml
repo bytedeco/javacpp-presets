@@ -146,6 +146,7 @@ before_install:
         echo "Android NDK setup done"
         if [ "$OS" == "android-arm" ]; then
            echo "Setting build for android-arm"
+           export ANDROID_NDK=$HOME/android-ndk
            export ANDROID_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++"
         fi
       fi
