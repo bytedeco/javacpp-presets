@@ -242,6 +242,12 @@ before_install:
            export ANDROID_NDK=$HOME/android-ndk
            export ANDROID_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++"
         fi
+        if [ "$PROJ" == "tensorflow" ]; then
+           echo "adding bazel for tensorflow"
+           curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh
+           sudo bash bazel.sh
+        fi
+
       fi
    - |
      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
