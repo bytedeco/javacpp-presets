@@ -264,7 +264,7 @@ script:
      if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
        echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
        while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
-       mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+       mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        #mvn clean install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ; export BUILD_STATUS=$?
        #tail -50 ~/build/vb216/javacpp-presets/buildlogs/$PROJ.log
      else

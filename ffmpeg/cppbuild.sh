@@ -101,7 +101,7 @@ case $PLATFORM in
         make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --sdk-path=$ANDROID_NDK --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-tools --sdk-path=$ANDROID_NDK --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
