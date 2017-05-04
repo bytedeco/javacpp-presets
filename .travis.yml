@@ -60,7 +60,7 @@ matrix:
       - jdk: oraclejdk7
         os: android
         env: PROJ=tensorflow OS=android-x86
-      - jdk: oraclejdk7
+      - jdk: oraclejdk8
         os: android
         env: PROJ=artoolkitplus OS=android-arm
       - jdk: oraclejdk7
