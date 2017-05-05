@@ -26,7 +26,7 @@ if [ "$projectName" == "flycapture" ]; then
              echo "Found flycap in cache and size seems ok"
            else
              echo "Downloading pgr.zip to cache as not found"
-             curl -L -o /c/Downloads/pgr.zip "https://www.dropbox.com/s/vywbsds5difobpq/pgr.zip?dl=0"
+             $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr.zip 
            fi
            unzip /c/Downloads/pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
@@ -35,7 +35,7 @@ if [ "$projectName" == "flycapture" ]; then
              echo "Found flycap32 in cache and size seems ok"
            else
              echo "Downloading pgr32.zip to cache as not found"
-             curl -L -o /c/Downloads/pgr32.zip "https://www.dropbox.com/s/ofwly7sqdh7667v/pgr32.zip?dl=0"
+             $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr32.zip 
            fi
            unzip /c/Downloads/pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
@@ -49,7 +49,7 @@ if [ "$projectName" == "cuda" ]; then
          echo "Found cudnn in cache and size seems OK"
        else
          echo "Downloading cudnn as not found in cache"
-         curl -L -o /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip "https://www.dropbox.com/s/wp0x29p2pz60icn/cudnn-8.0-windows10-x64-v6.0.zip?dl=0"
+         $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShc2J1UGZyenhWREU /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip 
        fi
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        ./cuda_8.0.61_windows.exe -s 
@@ -63,7 +63,7 @@ fi
 
 if [ "$projectName" == "libdc1394" ]; then 
        echo Installing libdc1394 
-       curl -L -o CMU.zip "https://www.dropbox.com/s/97boebrmdza18uu/CMU.zip?dl=0"
+       $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShVnNJM3JCclpuTE0 CMU.zip
        unzip CMU.zip
        mv CMU /c/Program\ Files\ \(x86\)
        echo Finished libdc1394 install
