@@ -327,7 +327,7 @@ script:
         while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 /root/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
         if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
           echo "Not a pull request so attempting to deploy"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy --settings .\ci\settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
         else
           echo "Pull request so install only"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn instal -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
@@ -335,7 +335,7 @@ script:
       else
         if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
           echo "Not a pull request so attempting to deploy"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy --settings .\ci\settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
         else
           echo "Pull request so install only"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
@@ -352,7 +352,7 @@ script:
        while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
          echo "Not a pull request so attempting to deploy"
-         mvn deploy --settings .\ci\settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+         mvn deploy --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
          mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
@@ -362,7 +362,7 @@ script:
        echo $ANDROID_FLAGS
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
          echo "Not a pull request so attempting to deploy"
-         mvn deploy --settings .\ci\settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+         mvn deploy --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
          mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
