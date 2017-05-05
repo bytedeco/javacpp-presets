@@ -14,6 +14,7 @@ bash --version
 g++ --version
 java -version
 mvn --version
+pip install requests
 
 mkdir -p /c/Downloads
 
