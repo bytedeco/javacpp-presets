@@ -183,6 +183,7 @@ before_install:
    #maybe this needs to go into new first job
    - mkdir ./buildlogs
    - ls -ltr $HOME/downloads
+   - pip install requests
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
    - mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
@@ -275,7 +276,8 @@ script:
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
         #brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
-        curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
+        $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM cuda.dmg
+        #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
         echo "Mount dmg"
         hdiutil mount cuda.dmg
         sleep 5
