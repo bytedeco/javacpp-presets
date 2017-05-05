@@ -31,6 +31,7 @@ def save_response_content(response, destination):
                 f.write(chunk)
 
 if __name__ == "__main__":
+print 'Running google drive downloader..' 
     if len(sys.argv) == 3:
        file_id = sys.argv[1]
        destination = sys.argv[2]

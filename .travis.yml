@@ -215,8 +215,13 @@ before_install:
           fi 
           if [ "$PROJ" == "tensorflow" ]; then
            echo "adding bazel for tensorflow"
-           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh"
-           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash bazel.sh"
+           curl -L https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+           if [ "$CURL_STATUS" != "0" ]; then
+             echo "Download failed here, so can't proceed with the build.. Failing.."
+             return 1
+           fi
+           #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh"
+           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash /root/downloads/bazel.sh"
           fi 
         fi
       fi
@@ -230,7 +235,12 @@ before_install:
         echo "Install android requirements.."
         sudo apt-get -y install yasm nasm 
         pip install numpy
-        curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip
+        curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
+        if [ "$CURL_STATUS" != "0" ]; then
+         echo "Download failed here, so can't proceed with the build.. Failing.."
+         return 1
+        fi
+
         unzip -qq $HOME/ndk.zip -d $HOME/
         ln -s $HOME/android-ndk-r14b $HOME/android-ndk
         echo "Android NDK setup done"
@@ -246,7 +256,11 @@ before_install:
         fi
         if [ "$PROJ" == "tensorflow" ]; then
            echo "adding bazel for tensorflow"
-           curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh
+           curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh; export CURL_STATUS=$?
+           if [ "$CURL_STATUS" != "0" ]; then
+            echo "Download failed here, so can't proceed with the build.. Failing.."
+            return 1
+           fi
            sudo bash bazel.sh
         fi
 
