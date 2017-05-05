@@ -229,6 +229,7 @@ public class opencv_core implements InfoMapper {
 
                .put(new Info("cv::Vec2i").pointerTypes("Point"))
                .put(new Info("cv::Vec2d").pointerTypes("Point2d"))
+               .put(new Info("cv::Vec3i").pointerTypes("Point3i"))
                .put(new Info("cv::Vec3d").pointerTypes("Point3d"))
                .put(new Info("cv::Vec4i").pointerTypes("Scalar4i"))
 
@@ -254,10 +255,11 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::MinProblemSolver", "cv::DownhillSolver", "cv::ConjGradSolver").purify())
                .put(new Info("cv::MinProblemSolver::Function").virtualize())
 
-               .put(new Info("HAVE_OPENCV_CUDA", "HAVE_OPENCV_CUDAIMGPROC", "HAVE_OPENCV_CUDAOPTFLOW", "HAVE_OPENCV_CUDAWARPING",
+               .put(new Info("HAVE_OPENCV_CUDAOPTFLOW", "HAVE_OPENCV_CUDAWARPING",
                              "HAVE_OPENCV_CUDALEGACY", "HAVE_OPENCV_XFEATURES2D", "defined(HAVE_OPENCV_CUDAWARPING)",
                              "defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDAOPTFLOW)",
                              "defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAWARPING)").define(false))
+               .put(new Info("cv::cuda::Stream").skip())
 
                .put(new Info("cv::Ptr").skip().annotations("@Ptr"))
                .put(new Info("cv::String").skip().annotations("@Str").valueTypes("BytePointer", "String"));

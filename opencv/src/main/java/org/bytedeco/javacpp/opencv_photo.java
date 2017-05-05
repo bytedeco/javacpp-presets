@@ -1301,19 +1301,7 @@ BORDER_REPLICATE , BORDER_CONSTANT , BORDER_REFLECT and BORDER_WRAP are supporte
    fastNlMeansDenoising
  */
 @Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal Mat src, @ByVal Mat dst,
-                              float h,
-                              int search_window/*=21*/,
-                              int block_size/*=7*/,
-                              int borderMode/*=cv::BORDER_DEFAULT*/,
-                              @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal Mat src, @ByVal Mat dst,
                               float h);
-@Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal UMat src, @ByVal UMat dst,
-                              float h,
-                              int search_window/*=21*/,
-                              int block_size/*=7*/,
-                              int borderMode/*=cv::BORDER_DEFAULT*/,
-                              @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal UMat src, @ByVal UMat dst,
                               float h);
 
@@ -1339,17 +1327,7 @@ FastNonLocalMeansDenoising::labMethod.
    fastNlMeansDenoising
  */
 @Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal Mat src, @ByVal Mat dst,
-                                     float h,
-                                     int search_window/*=21*/,
-                                     int block_size/*=7*/,
-                                     @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal Mat src, @ByVal Mat dst,
                                      float h);
-@Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal UMat src, @ByVal UMat dst,
-                                     float h,
-                                     int search_window/*=21*/,
-                                     int block_size/*=7*/,
-                                     @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal UMat src, @ByVal UMat dst,
                                      float h);
 
@@ -1375,17 +1353,7 @@ with given h parameters using FastNonLocalMeansDenoising::simpleMethod function.
    fastNlMeansDenoisingColored
  */
 @Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal Mat src, @ByVal Mat dst,
-                                            float h_luminance, float photo_render,
-                                            int search_window/*=21*/,
-                                            int block_size/*=7*/,
-                                            @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal Mat src, @ByVal Mat dst,
                                             float h_luminance, float photo_render);
-@Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal UMat src, @ByVal UMat dst,
-                                            float h_luminance, float photo_render,
-                                            int search_window/*=21*/,
-                                            int block_size/*=7*/,
-                                            @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal UMat src, @ByVal UMat dst,
                                             float h_luminance, float photo_render);
 

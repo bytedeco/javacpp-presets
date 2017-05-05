@@ -780,6 +780,7 @@ public static final int
 // #include "opencv2/videostab/outlier_rejection.hpp"
 
 // #ifdef HAVE_OPENCV_CUDAIMGPROC
+// #  include "opencv2/cudaimgproc.hpp"
 // #endif
 
 /** \addtogroup videostab_motion

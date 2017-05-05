@@ -397,8 +397,9 @@ F.L. Bookstein (PAMI 1989). :
 
 /** \brief An Chi based cost extraction. :
  */
-@Namespace("cv") public static class ChiHistogramCostExtractor extends HistogramCostExtractor {
-    static { Loader.load(); }
+@Namespace("cv") @Opaque public static class ChiHistogramCostExtractor extends HistogramCostExtractor {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ChiHistogramCostExtractor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChiHistogramCostExtractor(Pointer p) { super(p); }
 }
@@ -408,8 +409,9 @@ F.L. Bookstein (PAMI 1989). :
 
 /** \brief An EMD-L1 based cost extraction. :
  */
-@Namespace("cv") public static class EMDL1HistogramCostExtractor extends HistogramCostExtractor {
-    static { Loader.load(); }
+@Namespace("cv") @Opaque public static class EMDL1HistogramCostExtractor extends HistogramCostExtractor {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EMDL1HistogramCostExtractor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EMDL1HistogramCostExtractor(Pointer p) { super(p); }
 }

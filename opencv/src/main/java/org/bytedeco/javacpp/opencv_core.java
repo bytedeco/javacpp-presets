@@ -2794,12 +2794,6 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public HostMem(Pointer p) { super(p); }
     }
-    @Namespace("cv::cuda") @Opaque public static class Stream extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public Stream() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Stream(Pointer p) { super(p); }
-    }
     @Namespace("cv::cuda") @Opaque public static class Event extends Pointer {
         /** Empty constructor. Calls {@code super((Pointer)null)}. */
         public Event() { super((Pointer)null); }
