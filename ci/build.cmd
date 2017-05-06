@@ -17,9 +17,7 @@ IF "%MSYS2_ARCH%"=="x86" (
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
 )
 
-pip install requests
 SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
-pip install requests
 bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
 bash -lc "pacman -S --needed --noconfirm git"
 bash -lc "pacman -Syu --noconfirm"

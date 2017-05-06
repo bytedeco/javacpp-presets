@@ -14,7 +14,6 @@ bash --version
 g++ --version
 java -version
 mvn --version
-python --version
 /c/python27/python --version
 pip --version
 
@@ -40,7 +39,7 @@ if [ "$projectName" == "flycapture" ]; then
              echo "Found flycap32 in cache and size seems ok"
            else
              echo "Downloading pgr32.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr32.zip 
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShQlpQSEFhZkUwc0U /c/Downloads/pgr32.zip 
            fi
            unzip /c/Downloads/pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
