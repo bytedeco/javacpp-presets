@@ -13,6 +13,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_core.class,
     value = {
         @Platform(
+            value = {"linux-x86_64", "linux-arm64", "linux-ppc64le", "macosx-x86_64", "windows-x86_64"},
             include = "<opencv2/core/cuda.hpp>",
             link = "opencv_core@.3.2"
         )
