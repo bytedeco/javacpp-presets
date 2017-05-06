@@ -7,6 +7,7 @@ mkdir %APPVEYOR_BUILD_FOLDER%\tmp
 set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 mkdir %APPVEYOR_BUILD_FOLDER%\buildlogs
 
+echo %APPVEYOR_REPO_BRANCH%
 
 IF "%MSYS2_ARCH%"=="x86_64" (
    echo Callings vcvarsall for amd64

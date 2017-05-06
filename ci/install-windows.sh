@@ -9,6 +9,7 @@ echo Architecture: $MSYS2_ARCH
 echo MSYS2 directory: $MSYS2_DIR
 echo MSYS2 system: $MSYSTEM
 echo Bits: $BIT
+echo Branch: $APPVEYOR_REPO_BRANCH
 
 bash --version
 g++ --version
