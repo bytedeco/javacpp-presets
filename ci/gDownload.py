@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import sys,requests
 
 def download_file_from_google_drive(id, destination):

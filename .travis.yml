@@ -208,7 +208,7 @@ before_install:
               echo "Found flycap in cache and size seems ok" 
             else
               echo "Downloading flycap as not found in cache or too small" 
-              $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShS1I1MzN0SmQ1MHc $HOME/downloads/flycap.tar.gz 
+              python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShS1I1MzN0SmQ1MHc $HOME/downloads/flycap.tar.gz 
             fi
             tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
             docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
@@ -290,7 +290,7 @@ script:
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
         #brew install -v Caskroom/cask/cuda; export BREW_STATUS=$? 
-        $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM cuda.dmg
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM cuda.dmg
         #curl -L  https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_mac-dmg -o cuda.dmg
         echo "Mount dmg"
         hdiutil mount cuda.dmg
@@ -308,7 +308,7 @@ script:
           echo "Found cudnn in cache and size seems ok" 
         else
           echo "Downloading cudnn as not found in cache" 
-           $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShc2JlWXNjNTlIVnc $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShc2JlWXNjNTlIVnc $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         fi
         tar xvf $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
         sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
