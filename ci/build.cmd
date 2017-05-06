@@ -35,7 +35,7 @@ IF %COMPILER%==msys2 (
  mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
  cd ..
  cd javacpp-presets
- IF %APPVEYOR_REPO_BRANCH%=="master" (
+ IF "%APPVEYOR_REPO_BRANCH%"=="master" (
   echo Deploy snaphot for %PROJ%
   mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
   )
