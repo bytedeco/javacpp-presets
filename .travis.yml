@@ -2,6 +2,10 @@ cache:
   directories:
       - $HOME/downloads
 addons:
+  apt:
+    packages:
+      - nasm
+      - yasm
   artifacts:
     s3_region: "us-east-1"
     paths:
@@ -9,7 +13,8 @@ addons:
     debug: true
 
 language: java
-sudo: required
+sudo: false
+#sudo: required
 dist: trusty
 services:
       - docker
@@ -192,13 +197,14 @@ before_install:
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
    - |
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-        if [ "$OS" == "linux-x86" ]; then
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-        fi
+        #if [ "$OS" == "linux-x86" ]; then
+        #  sudo dpkg --add-architecture i386
+        #  sudo apt-get update
+        #fi
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          docker run --privileged -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+          #docker run --privileged -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+          docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
@@ -233,7 +239,7 @@ before_install:
       fi
       if [ "$TRAVIS_OS_NAME" == "android" ]; then
         echo "Install android requirements.."
-        sudo apt-get -y install yasm nasm 
+        #sudo apt-get -y install yasm nasm 
         pip install numpy
         curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
@@ -267,12 +273,12 @@ before_install:
 
       fi
    - |
-     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-       if [ "$OS" == "linux-x86" ]; then
-         sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
-       fi
+     #if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+     #  if [ "$OS" == "linux-x86" ]; then
+     #    sudo apt-get install -q -y yasm:i386 nasm:i386 libc6:i386 libncurses5:i386 libstdc++6:i386 gcc-multilib g++-multilib libglib2.0-0:i386 libglib2.0-dev:i386
+     #  fi
        #sudo apt-get install -q -y libblas-dev
-     fi
+     #fi
 
 install:
 ###   - ./cppbuild.sh -platform $OS install ${PROJ[@]}
