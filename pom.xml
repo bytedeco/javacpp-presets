@@ -178,15 +178,29 @@
             </property>
           </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
-          <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+          </includePaths>
           <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          <resourcePaths>
+            <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
+            <resourcePath>${basedir}/target/classes/org/bytedeco/javacpp/</resourcePath>
+          </resourcePaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/javacpp/${javacpp.platform}/</buildResource>
+          </buildResources>
           <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
             <includeResource>/org/bytedeco/javacpp/include/</includeResource>
             <includeResource>/org/bytedeco/javacpp/${javacpp.platform}/include/</includeResource>
           </includeResources>
-          <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
-          <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
           <execution>
@@ -285,7 +299,7 @@
                 <include>org/bytedeco/javacpp/presets/*</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/*.h</exclude>
+                <exclude>org/bytedeco/javacpp/include/</exclude>
                 <exclude>org/bytedeco/javacpp/linux-*/</exclude>
                 <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
                 <exclude>org/bytedeco/javacpp/windows-*/</exclude>
@@ -307,9 +321,9 @@
                 <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
               </includes>
               <excludes>
-                <exclude>**/*.exp</exclude>
-                <exclude>**/*.lib</exclude>
-                <exclude>**/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>

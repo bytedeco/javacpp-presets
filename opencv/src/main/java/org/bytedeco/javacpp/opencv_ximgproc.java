@@ -1447,11 +1447,11 @@ the use of this software, even if advised of the possibility of such damage.
                     /** \brief Color-based strategy for the selective search segmentation algorithm
                         The class is implemented from the algorithm described in \cite uijlings2013selective.
                      */
-                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyColor extends SelectiveSearchSegmentationStrategy {
-                        static { Loader.load(); }
+                    @Namespace("cv::ximgproc::segmentation") @Opaque public static class SelectiveSearchSegmentationStrategyColor extends SelectiveSearchSegmentationStrategy {
+                        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+                        public SelectiveSearchSegmentationStrategyColor() { super((Pointer)null); }
                         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                         public SelectiveSearchSegmentationStrategyColor(Pointer p) { super(p); }
-                    
                     }
 
                     /** \brief Create a new color-based strategy */
@@ -1460,11 +1460,11 @@ the use of this software, even if advised of the possibility of such damage.
                     /** \brief Size-based strategy for the selective search segmentation algorithm
                         The class is implemented from the algorithm described in \cite uijlings2013selective.
                      */
-                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategySize extends SelectiveSearchSegmentationStrategy {
-                        static { Loader.load(); }
+                    @Namespace("cv::ximgproc::segmentation") @Opaque public static class SelectiveSearchSegmentationStrategySize extends SelectiveSearchSegmentationStrategy {
+                        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+                        public SelectiveSearchSegmentationStrategySize() { super((Pointer)null); }
                         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                         public SelectiveSearchSegmentationStrategySize(Pointer p) { super(p); }
-                    
                     }
 
                     /** \brief Create a new size-based strategy */
@@ -1473,11 +1473,11 @@ the use of this software, even if advised of the possibility of such damage.
                     /** \brief Texture-based strategy for the selective search segmentation algorithm
                         The class is implemented from the algorithm described in \cite uijlings2013selective.
                      */
-                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyTexture extends SelectiveSearchSegmentationStrategy {
-                        static { Loader.load(); }
+                    @Namespace("cv::ximgproc::segmentation") @Opaque public static class SelectiveSearchSegmentationStrategyTexture extends SelectiveSearchSegmentationStrategy {
+                        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+                        public SelectiveSearchSegmentationStrategyTexture() { super((Pointer)null); }
                         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                         public SelectiveSearchSegmentationStrategyTexture(Pointer p) { super(p); }
-                    
                     }
 
                     /** \brief Create a new size-based strategy */
@@ -1486,11 +1486,11 @@ the use of this software, even if advised of the possibility of such damage.
                     /** \brief Fill-based strategy for the selective search segmentation algorithm
                         The class is implemented from the algorithm described in \cite uijlings2013selective.
                      */
-                    @Namespace("cv::ximgproc::segmentation") public static class SelectiveSearchSegmentationStrategyFill extends SelectiveSearchSegmentationStrategy {
-                        static { Loader.load(); }
+                    @Namespace("cv::ximgproc::segmentation") @Opaque public static class SelectiveSearchSegmentationStrategyFill extends SelectiveSearchSegmentationStrategy {
+                        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+                        public SelectiveSearchSegmentationStrategyFill() { super((Pointer)null); }
                         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                         public SelectiveSearchSegmentationStrategyFill(Pointer p) { super(p); }
-                    
                     }
 
                     /** \brief Create a new fill-based strategy */
