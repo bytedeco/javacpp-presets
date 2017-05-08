@@ -284,6 +284,7 @@ matrix:
 before_install:
    - mkdir ./buildlogs
    - ls -ltr $HOME/downloads
+   - ls -ltr $HOME/.m2
    - pip install requests
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
