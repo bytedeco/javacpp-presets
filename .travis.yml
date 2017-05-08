@@ -1,6 +1,7 @@
 cache:
   directories:
       - $HOME/downloads
+      - $HOME/.m2
 addons:
   apt:
     packages:
@@ -21,34 +22,16 @@ matrix:
    include:
       - jdk: oraclejdk8
         os: android
-        env: PROJ=artoolkitplus OS=android-x86
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=flycapture OS=android-x86
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=cuda OS=android-x86
+        env: PROJ=opencv OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=ffmpeg OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=fftw OS=android-x86
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=gsl OS=android-x86
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=leptonica,tesseract OS=android-x86
+        env: PROJ=flycapture OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=libdc1394 OS=android-x86
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=liquidfun OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=libfreenect OS=android-x86
@@ -57,43 +40,70 @@ matrix:
         env: PROJ=libfreenect2 OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=llvm OS=android-x86
+        env: PROJ=librealsense OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=videoinput OS=android-x86
       - jdk: oraclejdk8
         os: android
+        env: PROJ=artoolkitplus OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=chilitags OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=flandmark OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=hdf5 OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=mkl OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=openblas OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=fftw OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=gsl OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=llvm OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=leptonica OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=tesseract OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=caffe OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=cuda OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=mxnet OS=android-x86
+      - jdk: oraclejdk8
+        os: android
         env: PROJ=tensorflow OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=artoolkitplus OS=android-arm
+        env: PROJ=liquidfun OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=flycapture OS=android-arm
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=cuda OS=android-arm
+        env: PROJ=opencv OS=android-arm
       - jdk: oraclejdk8
         os: android
         env: PROJ=ffmpeg OS=android-arm
       - jdk: oraclejdk8
         os: android
-        env: PROJ=fftw OS=android-arm
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=gsl OS=android-arm
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=leptonica,tesseract OS=android-arm
+        env: PROJ=flycapture OS=android-arm
       - jdk: oraclejdk8
         os: android
         env: PROJ=libdc1394 OS=android-arm
-      - jdk: oraclejdk8
-        os: android
-        env: PROJ=liquidfun OS=android-arm
       - jdk: oraclejdk8
         os: android
         env: PROJ=libfreenect OS=android-arm
@@ -102,43 +112,70 @@ matrix:
         env: PROJ=libfreenect2 OS=android-arm
       - jdk: oraclejdk8
         os: android
-        env: PROJ=llvm OS=android-arm
+        env: PROJ=librealsense OS=android-arm
       - jdk: oraclejdk8
         os: android
         env: PROJ=videoinput OS=android-arm
       - jdk: oraclejdk8
         os: android
+        env: PROJ=artoolkitplus OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=chilitags OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=flandmark OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=hdf5 OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=mkl OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=openblas OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=fftw OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=gsl OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=llvm OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=leptonica OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=tesseract OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=caffe OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=cuda OS=android-arm
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=mxnet OS=android-arm
+      - jdk: oraclejdk8
+        os: android
         env: PROJ=tensorflow OS=android-arm
       - jdk: oraclejdk8
-        os: linux
-        env: PROJ=flycapture OS=linux-x86_64
+        os: android
+        env: PROJ=liquidfun OS=android-arm
       - jdk: oraclejdk8
         os: linux
-        env: PROJ=artoolkitplus OS=linux-x86_64
-      - jdk: oraclejdk8
-        os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-x86_64
-      - jdk: oraclejdk8
-        os: linux
-        env: PROJ=cuda OS=linux-x86_64
+        env: PROJ=opencv OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
         env: PROJ=ffmpeg OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
-        env: PROJ=fftw OS=linux-x86_64
-      - jdk: oraclejdk8
-        os: linux
-        env: PROJ=gsl OS=linux-x86_64
-      - jdk: oraclejdk8
-        os: linux
-        env: PROJ=leptonica,tesseract OS=linux-x86_64
+        env: PROJ=flycapture OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
         env: PROJ=libdc1394 OS=linux-x86_64
-      - jdk: oraclejdk8
-        os: linux
-        env: PROJ=liquidfun OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
         env: PROJ=libfreenect OS=linux-x86_64
@@ -147,41 +184,130 @@ matrix:
         env: PROJ=libfreenect2 OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
+        env: PROJ=librealsense OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=videoinput OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=artoolkitplus OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=chilitags OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=flandmark OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=hdf5 OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=mkl OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=openblas OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=fftw OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=gsl OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
         env: PROJ=llvm OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=leptonica OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=tesseract OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=caffe OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=cuda OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=mxnet OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
         env: PROJ=tensorflow OS=linux-x86_64
       - jdk: oraclejdk8
         os: linux
-        env: PROJ=videoinput OS=linux-x86_64
-      - os: osx
-        env: PROJ=artoolkitplus OS=macosx-x86_64
-      - os: osx
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=macosx-x86_64
-      - os: osx
-        env: PROJ=cuda OS=macosx-x86_64
-      - os: osx
+        env: PROJ=liquidfun OS=linux-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=opencv OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
         env: PROJ=ffmpeg OS=macosx-x86_64
-      - os: osx
-        env: PROJ=fftw OS=macosx-x86_64
-      - os: osx
-        env: PROJ=gsl OS=macosx-x86_64
-      - os: osx
-        env: PROJ=leptonica,tesseract OS=macosx-x86_64
-      - os: osx
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=flycapture OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
         env: PROJ=libdc1394 OS=macosx-x86_64
-      - os: osx
+      - jdk: oraclejdk8
+        os: osx
         env: PROJ=libfreenect OS=macosx-x86_64
-      - os: osx
+      - jdk: oraclejdk8
+        os: osx
         env: PROJ=libfreenect2 OS=macosx-x86_64
-      - os: osx
-        env: PROJ=liquidfun OS=macosx-x86_64
-      - os: osx
-        env: PROJ=llvm OS=macosx-x86_64
-      - os: osx
-        env: PROJ=tensorflow OS=macosx-x86_64
-      - os: osx
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=librealsense OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
         env: PROJ=videoinput OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=artoolkitplus OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=chilitags OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=flandmark OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=hdf5 OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=mkl OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=openblas OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=fftw OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=gsl OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=llvm OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=leptonica OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=tesseract OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=caffe OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=cuda OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=mxnet OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=tensorflow OS=macosx-x86_64
+      - jdk: oraclejdk8
+        os: osx
+        env: PROJ=liquidfun OS=macosx-x86_64
 
 before_install:
    - mkdir ./buildlogs
@@ -197,7 +323,7 @@ before_install:
       if [ "$TRAVIS_OS_NAME" == "linux" ]; then
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
-          docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+          docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:/root/.m2 -v $HOME/downloads:/root/downloads -v $HOME/.m2/:/root/.m2/ -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
           DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
           echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
@@ -315,18 +441,18 @@ script:
         while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 /root/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
         if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
           echo "Not a pull request so attempting to deploy"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
         else
           echo "Pull request so install only"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn instal -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
         fi
       else
         if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
           echo "Not a pull request so attempting to deploy"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
         else
           echo "Pull request so install only"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
         fi
       fi
       echo "Build status $BUILD_STATUS"
@@ -340,20 +466,20 @@ script:
        while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
          echo "Not a pull request so attempting to deploy"
-         mvn deploy --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+         mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
-         mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+         mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        fi
      else
        echo "Building $PROJ"
        echo $ANDROID_FLAGS
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
          echo "Not a pull request so attempting to deploy"
-         mvn deploy --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+         mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
-         mvn install -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+         mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
        fi
      fi
       echo "Build status $BUILD_STATUS"
