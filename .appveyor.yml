@@ -3,10 +3,25 @@ version: '{build}'
 os: Visual Studio 2015
 
 cache:
-  - C:\Downloads -> .appveyor.yml
+  - C:\Downloads 
+  - C:\Users\appveyor\.m2
 
 environment:
   matrix:
+    - PLATFORM: x86
+      PROJ: "opencv"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "ffmpeg"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
     - PLATFORM: x86
       PROJ: "flycapture"
       COMPILER: msys2
@@ -15,48 +30,6 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
-      PROJ: "leptonica,tesseract"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "cuda"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "ffmpeg"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "fftw"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "gsl"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
       PROJ: "libdc1394"
       COMPILER: msys2
       MSYS2_ARCH: x86
@@ -78,14 +51,7 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
-      PROJ: "liquidfun"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "llvm"
+      PROJ: "librealsense"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
@@ -99,6 +65,104 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
+      PROJ: "artoolkitplus"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "chilitags"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "flandmark"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "hdf5"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "mkl"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "openblas"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "fftw"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "gsl"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "llvm"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "leptonica"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "tesseract"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "caffe"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "cuda"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "mxnet"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
       PROJ: "tensorflow"
       COMPILER: msys2
       MSYS2_ARCH: x86
@@ -106,21 +170,14 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
-      PROJ: "artoolkitplus"
+      PROJ: "liquidfun"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x64
-      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
-      COMPILER: msys2
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-    - PLATFORM: x64
-      PROJ: "cuda"
+      PROJ: "opencv"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
@@ -134,21 +191,7 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
     - PLATFORM: x64
-      PROJ: "fftw"
-      COMPILER: msys2
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-    - PLATFORM: x64
-      PROJ: "gsl"
-      COMPILER: msys2
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-    - PLATFORM: x64
-      PROJ: "leptonica,tesseract"
+      PROJ: "flycapture"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
@@ -176,14 +219,7 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
     - PLATFORM: x64
-      PROJ: "liquidfun"
-      COMPILER: msys2
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-    - PLATFORM: x64
-      PROJ: "llvm"
+      PROJ: "librealsense"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
@@ -197,6 +233,104 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
     - PLATFORM: x64
+      PROJ: "artoolkitplus"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "chilitags"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "flandmark"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "hdf5"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "mkl"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "openblas"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "fftw"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "gsl"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "llvm"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "leptonica"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "tesseract"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "caffe"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "cuda"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "mxnet"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
       PROJ: "tensorflow"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
@@ -204,7 +338,7 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
     - PLATFORM: x64
-      PROJ: "artoolkitplus"
+      PROJ: "liquidfun"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
