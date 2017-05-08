@@ -16,13 +16,16 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xzf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
+if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
+    export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
+fi
 bash autogen.sh
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
-    IFS="$PATH_SEPARATOR"
+    IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ -d "$P/include/leptonica" ]]; then
             LEPTONICA_PATH="$P"
@@ -31,6 +34,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
+LEPTONICA_PATH="${LEPTONICA_PATH//\\//}"
 
 case $PLATFORM in
     android-arm)

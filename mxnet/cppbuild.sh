@@ -47,7 +47,7 @@ OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
-    IFS="$PATH_SEPARATOR"
+    IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ -d "$P/include/opencv2" ]]; then
             OPENCV_PATH="$P"

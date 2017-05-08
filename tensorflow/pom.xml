@@ -44,6 +44,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/protobuf/src/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
           <linkPaths>
              <linkPath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/</linkPath>
