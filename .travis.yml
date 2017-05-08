@@ -3,10 +3,6 @@ cache:
       - $HOME/downloads
       - $HOME/.m2
 addons:
-  apt:
-    packages:
-      - nasm
-      - yasm
   artifacts:
     s3_region: "us-east-1"
     paths:
@@ -14,7 +10,7 @@ addons:
     debug: true
 
 language: java
-sudo: false
+sudo: required
 dist: trusty
 services:
       - docker
@@ -357,6 +353,7 @@ before_install:
       fi
       if [ "$TRAVIS_OS_NAME" == "android" ]; then
         echo "Install android requirements.."
+        sudo apt-get install yasm nasm
         pip install numpy
         curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
