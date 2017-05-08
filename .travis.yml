@@ -18,76 +18,76 @@ matrix:
    include:
       - jdk: oraclejdk8
         os: android
-        env: PROJ=opencv OS=android-x86
+        env: PROJ=opencv CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=ffmpeg OS=android-x86
+        env: PROJ=ffmpeg CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=flycapture OS=android-x86
+        env: PROJ=flycapture CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=libdc1394 OS=android-x86
+        env: PROJ=libdc1394 CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=libfreenect OS=android-x86
+        env: PROJ=libfreenect CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=libfreenect2 OS=android-x86
+        env: PROJ=libfreenect2 CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=librealsense OS=android-x86
+        env: PROJ=librealsense CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=videoinput OS=android-x86
+        env: PROJ=videoinput CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=artoolkitplus OS=android-x86
+        env: PROJ=artoolkitplus CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=chilitags OS=android-x86
+        env: PROJ=chilitags CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=flandmark OS=android-x86
+        env: PROJ=flandmark CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=hdf5 OS=android-x86
+        env: PROJ=hdf5 CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=mkl OS=android-x86
+        env: PROJ=mkl CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=openblas OS=android-x86
+        env: PROJ=openblas CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=fftw OS=android-x86
+        env: PROJ=fftw CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=gsl OS=android-x86
+        env: PROJ=gsl CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=llvm OS=android-x86
+        env: PROJ=llvm CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=leptonica OS=android-x86
+        env: PROJ=leptonica CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=tesseract OS=android-x86
+        env: PROJ=tesseract CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=caffe OS=android-x86
+        env: PROJ=caffe CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=cuda OS=android-x86
+        env: PROJ=cuda CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=mxnet OS=android-x86
+        env: PROJ=mxnet CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=tensorflow OS=android-x86
+        env: PROJ=tensorflow CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
-        env: PROJ=liquidfun OS=android-x86
+        env: PROJ=liquidfun CACHE_NAME=main OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=opencv OS=android-arm
