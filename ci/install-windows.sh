@@ -48,7 +48,7 @@ if [ "$projectName" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
-if [ "$projectName" == "cuda" ]; then
+if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
        echo Installing cuda 
        if [[ $(find /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip -type f -size +1000000c 2>/dev/null) ]]; then
          echo "Found cudnn in cache and size seems OK"
