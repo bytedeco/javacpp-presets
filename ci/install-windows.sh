@@ -48,6 +48,13 @@ if [ "$projectName" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
+if [ "$projectName" == "mkl" ]; then
+       echo Installing mkl 
+       curl _l -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11564/w_mkl_2017.3.210.exe"
+       ./mkl.exe install output=mkllog.txt -eula=accept
+       echo Finished mkl 
+fi
+
 if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
        echo Installing cuda 
        if [[ $(find /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip -type f -size +1000000c 2>/dev/null) ]]; then
