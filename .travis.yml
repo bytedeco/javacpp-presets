@@ -239,7 +239,7 @@ before_install:
             curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11306/l_mkl_2017.2.174.tgz -o $HOME/mkl.tgz
             tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
             sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2017.2.174/silent.cfg
-            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "/root/build/l_mkl_2017.2.174/install.sh -s silent.cfg"
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "/root/build/l_mkl_2017.2.174/install.sh -s /root/build/l_mkl_2017.2.174/silent.cfg"
           fi
           if [ "$PROJ" == "tensorflow" ]; then
            echo "adding bazel for tensorflow"
@@ -273,13 +273,13 @@ before_install:
         echo "Android NDK setup done"
         if [ "$OS" == "android-arm" ]; then
            echo "Setting build for android-arm"
-           export ANDROID_NDK=$HOME/android-ndk
+           export ANDROID_NDK=$HOME/android-ndk/
            export PATH=$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
            export ANDROID_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++"
         fi
         if [ "$OS" == "android-x86" ]; then
            echo "Setting build for android-x86"
-           export ANDROID_NDK=$HOME/android-ndk
+           export ANDROID_NDK=$HOME/android-ndk/
            export ANDROID_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++"
         fi
         if [ "$PROJ" == "tensorflow" ]; then
