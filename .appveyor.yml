@@ -8,7 +8,7 @@ cache:
 
 environment:
   matrix:
-   - PLATFORM: x86
+    - PLATFORM: x86
       PROJ: "mkl"
       COMPILER: msys2
       MSYS2_ARCH: x86
