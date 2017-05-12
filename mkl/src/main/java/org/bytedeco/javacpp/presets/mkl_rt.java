@@ -108,6 +108,10 @@ public class mkl_rt implements InfoMapper {
                .put(new Info("DFTI_DESCRIPTOR_DM_HANDLE").valueTypes("_DFTI_DESCRIPTOR_DM").pointerTypes("@ByPtrPtr _DFTI_DESCRIPTOR_DM"))
 
                .put(new Info("cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "mklfreetls", "MKLFREETLS", "MKLFreeTls",
+                             "MKL_MIC_Enable", "MKL_MIC_Disable", "MKL_MIC_Get_Device_Count", "MKL_MIC_Get_Cpuinfo", "MKL_MIC_Get_Meminfo",
+                             "MKL_MIC_Set_Workdivision", "MKL_MIC_Get_Workdivision", "MKL_MIC_Set_Max_Memory", "MKL_MIC_Free_Memory",
+                             "MKL_MIC_Set_Offload_Report", "MKL_MIC_Set_Device_Num_Threads", "MKL_MIC_Set_Resource_Limit", "MKL_MIC_Get_Resource_Limit",
+                             "MKL_MIC_Get_Flags", "MKL_MIC_Set_Flags", "MKL_MIC_Get_Status", "MKL_MIC_Clear_Status",
                              "VSLCONVCopyTask", "VSLCONVDeleteTask", "VSLCORRCopyTask", "VSLCORRDeleteTask").skip());
     }
 }
