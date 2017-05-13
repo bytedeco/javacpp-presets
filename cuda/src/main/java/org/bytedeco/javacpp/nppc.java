@@ -146,7 +146,7 @@ public class nppc extends org.bytedeco.javacpp.presets.nppc {
 
 public static final int NPP_VERSION_MAJOR = 8;
 public static final int NPP_VERSION_MINOR = 0;
-public static final int NPP_VERSION_BUILD = 44;
+public static final int NPP_VERSION_BUILD = 61;
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif

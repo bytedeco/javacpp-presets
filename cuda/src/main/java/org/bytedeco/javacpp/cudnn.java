@@ -71,7 +71,7 @@ public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
 
 public static final int CUDNN_MAJOR =      6;
 public static final int CUDNN_MINOR =      0;
-public static final int CUDNN_PATCHLEVEL = 5;
+public static final int CUDNN_PATCHLEVEL = 21;
 
 public static final int CUDNN_VERSION =    (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
 
@@ -121,6 +121,16 @@ public static final int
 
 // human-readable error messages
 public static native @Cast("const char*") BytePointer cudnnGetErrorString(@Cast("cudnnStatus_t") int status);
+
+// #ifndef __LIBRARY_TYPES_H__
+
+/** enum libraryPropertyType */
+public static final int
+    MAJOR_VERSION = 0,
+    MINOR_VERSION = 1,
+    PATCH_LEVEL = 2;
+
+// #endif
 
 public static native @Cast("cudnnStatus_t") int cudnnGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
 public static native @Cast("cudnnStatus_t") int cudnnGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
@@ -440,7 +450,8 @@ public static native @Cast("cudnnStatus_t") int cudnnGetOpTensorDescriptor(
 public static native @Cast("cudnnStatus_t") int cudnnDestroyOpTensorDescriptor(
                                 cudnnOpTensorStruct opTensorDesc );
 
-/* Tensor Bias operation : C = op( alpha1 * A, alpha2 * B ) + beta * C */
+/* Tensor operation : C = op( alpha1 * A, alpha2 * B ) + beta * C */
+/* B tensor is ignored for CUDNN_OP_TENSOR_SQRT. */
 public static native @Cast("cudnnStatus_t") int cudnnOpTensor(
                                 cudnnContext handle,
                                 cudnnOpTensorStruct opTensorDesc,

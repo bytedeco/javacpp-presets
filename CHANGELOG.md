@@ -1,4 +1,5 @@
 
+ * Use the new `BUILD_PATH` environment variable passed by the `javacpp` plugin to the `cppbuild.sh` script files
  * Let presets pick up `include` or `link` paths from cached resources ([pull #101](https://github.com/bytedeco/javacpp-presets/pull/101))
  * Update presets for Visual Studio 2015 ([issue #298](https://github.com/bytedeco/javacpp-presets/issues/298))
  * Reuse the presets for HDF5 with Caffe
@@ -6,7 +7,7 @@
  * Link TensorFlow statically with `cudart` to avoid dependency on CUDA ([issue #396](https://github.com/bytedeco/javacpp-presets/issues/396))
  * Add missing call to `Loader.load()` in helper class for `opencv_ml` ([issue bytedeco/javacv#638](https://github.com/bytedeco/javacv/issues/638))
  * Work around issues with TensorFlow on some versions of Mac OS X ([issue #335](https://github.com/bytedeco/javacpp-presets/issues/335))
- * Upgrade presets for OpenCV 3.2.0, FFmpeg 3.2.4, FlyCapture 2.10.3.266 ([pull #400](https://github.com/bytedeco/javacpp-presets/pull/400)), libdc1394 2.2.5, GSL 2.3, LLVM 4.0.0 ([pull #404](https://github.com/bytedeco/javacpp-presets/pull/404)), Leptonica 1.74.1, Tesseract 3.05.00, cuDNN 6.0, TensorFlow 1.0.1, and their dependencies
+ * Upgrade presets for OpenCV 3.2.0, FFmpeg 3.2.4, FlyCapture 2.10.3.266 ([pull #400](https://github.com/bytedeco/javacpp-presets/pull/400)), libdc1394 2.2.5, GSL 2.3, LLVM 4.0.0 ([pull #404](https://github.com/bytedeco/javacpp-presets/pull/404)), Leptonica 1.74.1, Tesseract 3.05.00, cuDNN 6.0, TensorFlow 1.1.0, and their dependencies
  * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340)), MKL ([issue #112](https://github.com/bytedeco/javacpp-presets/issues/112)), and LiquidFun ([pull #356](https://github.com/bytedeco/javacpp-presets/pull/356))
  * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))

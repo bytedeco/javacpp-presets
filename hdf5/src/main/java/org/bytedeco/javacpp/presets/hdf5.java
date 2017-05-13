@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h", "H5ArrayType.h",
         "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
             link = {"hdf5@.100", "hdf5_hl@.100", "hdf5_cpp@.100"}, resource = {"include", "lib"}),
-    @Platform(value = "windows", link = {"libhdf5", "libhdf5_hl", "libhdf5_cpp", "libszip", "libzlib"}, preload = {"msvcp120", "msvcr120"}),
+    @Platform(value = "windows", link = {"libhdf5", "libhdf5_hl", "libhdf5_cpp", "libszip", "libzlib"}, preload = {"msvcp140", "vcruntime140"}),
     @Platform(value = "windows-x86",    includepath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/include/",
                                         preloadpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/bin/",
                                            linkpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/lib/"),

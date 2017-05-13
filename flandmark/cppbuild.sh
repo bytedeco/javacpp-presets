@@ -19,6 +19,17 @@ cd flandmark-$FLANDMARK_VERSION
 
 OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -d "$P/include/opencv2" ]]; then
+            OPENCV_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
 case $PLATFORM in
     android-arm)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=$INSTALL_PATH/../../android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/

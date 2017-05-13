@@ -104,6 +104,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/edgeset.h",
                         "tensorflow/core/lib/gtl/iterator_range.h",
                         //        "tensorflow/core/lib/gtl/inlined_vector.h",
+                        "tensorflow/core/framework/function.h",
                         "tensorflow/core/graph/graph.h",
                         "tensorflow/core/graph/tensor_id.h",
                         "tensorflow/core/framework/node_def_builder.h",
@@ -113,9 +114,11 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/graph_def_builder.h",
                         "tensorflow/core/graph/default_device.h",
                         "tensorflow/core/graph/graph_constructor.h",
+                        "tensorflow/core/graph/gradients.h",
                         "tensorflow/cc/framework/scope.h",
                         "tensorflow/cc/framework/ops.h",
                         "tensorflow/cc/framework/cc_op_gen.h",
+                        "tensorflow/cc/framework/gradients.h",
                         "tensorflow_adapters.h",
                         "tensorflow/cc/ops/standard_ops.h",
                         "tensorflow/cc/ops/const_op.h",
@@ -190,6 +193,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/types.h",
                         "tensorflow/core/graph/edgeset.h",
                         "tensorflow/core/lib/gtl/iterator_range.h",
+                        "tensorflow/core/framework/function.h",
                         "tensorflow/core/graph/graph.h",
                         "tensorflow/core/graph/tensor_id.h",
                         "tensorflow/core/framework/node_def_builder.h",
@@ -207,7 +211,7 @@ public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
                .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_DEPRECATED_ATTR",
-                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT").cppTypes().annotations())
+                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT", "TF_EXPORT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
@@ -223,8 +227,9 @@ public class tensorflow implements InfoMapper {
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("std::initializer_list").skip())
-               .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
-               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::string", "tensorflow::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("std::vector<std::string>", "std::vector<tensorflow::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::string> >").pointerTypes("StringStringPairVector").define())
                .put(new Info("std::condition_variable", "std::mutex", "std::unique_lock<std::mutex>", "tensorflow::condition_variable", "tensorflow::mutex_lock").cast().pointerTypes("Pointer"))
 
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
@@ -234,6 +239,20 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::Arena", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Message",
                              "google::protobuf::Metadata", "google::protobuf::io::CodedInputStream", "google::protobuf::io::CodedOutputStream").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "::google::protobuf::internal::ExplicitlyConstructed").skip())
+
+               .put(new Info("tensorflow::DebugOptionsDefaultTypeInternal", "tensorflow::DebugTensorWatchDefaultTypeInternal", "tensorflow::AllocatorMemoryUsedDefaultTypeInternal",
+                             "tensorflow::ConfigProtoDefaultTypeInternal", "tensorflow::CostGraphDefDefaultTypeInternal", "tensorflow::CostGraphDef_NodeDefaultTypeInternal",
+                             "tensorflow::CostGraphDef_Node_InputInfoDefaultTypeInternal", "tensorflow::CostGraphDef_Node_OutputInfoDefaultTypeInternal", "tensorflow::DeviceStepStatsDefaultTypeInternal",
+                             "tensorflow::GPUOptionsDefaultTypeInternal", "tensorflow::GraphDefDefaultTypeInternal", "tensorflow::GraphOptionsDefaultTypeInternal", "tensorflow::MemoryStatsDefaultTypeInternal",
+                             "tensorflow::NodeExecStatsDefaultTypeInternal", "tensorflow::NodeOutputDefaultTypeInternal", "tensorflow::OptimizerOptionsDefaultTypeInternal",
+                             "tensorflow::RPCOptionsDefaultTypeInternal", "tensorflow::RewriterConfigDefaultTypeInternal", "tensorflow::RunMetadataDefaultTypeInternal",
+                             "tensorflow::RunOptionsDefaultTypeInternal", "tensorflow::StepStatsDefaultTypeInternal", "tensorflow::ThreadPoolOptionProtoDefaultTypeInternal",
+                             "tensorflow::TensorShapeProtoDefaultTypeInternal", "tensorflow::TensorShapeProto_DimDefaultTypeInternal", "tensorflow::AllocationDescriptionDefaultTypeInternal",
+                             "tensorflow::TensorDescriptionDefaultTypeInternal", "tensorflow::VersionDefDefaultTypeInternal", "tensorflow::ResourceHandleDefaultTypeInternal",
+                             "tensorflow::TensorProtoDefaultTypeInternal", "tensorflow::AttrValueDefaultTypeInternal", "tensorflow::AttrValue_ListValueDefaultTypeInternal",
+                             "tensorflow::NameAttrListDefaultTypeInternal", "tensorflow::NodeDefDefaultTypeInternal", "tensorflow::OpDefDefaultTypeInternal", "tensorflow::OpDef_ArgDefDefaultTypeInternal",
+                             "tensorflow::OpDef_AttrDefDefaultTypeInternal", "tensorflow::OpDeprecationDefaultTypeInternal", "tensorflow::OpListDefaultTypeInternal",
+                             "tensorflow::FunctionDefDefaultTypeInternal", "tensorflow::FunctionDefLibraryDefaultTypeInternal", "tensorflow::GradientDefDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -255,17 +274,25 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
-               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
+               .put(new Info("std::vector<std::pair<tensorflow::Node*,int> >").pointerTypes("NodeIntPairVector").define())
+
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>",
+                             "tensorflow::protobuf::Map<tensorflow::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
+               .put(new Info("tensorflow::FunctionDefHelper::AttrValueWrapper").pointerTypes("FunctionDefHelper.AttrValueWrapper"))
+               .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >",
+                             "tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >").cast().pointerTypes("StringAttrPairVector").define())
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
 
+               .put(new Info("tensorflow::FunctionLibraryRuntime::Options::runner").javaText(""))
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
                .put(new Info("tensorflow::ops::Cast").cppTypes("class tensorflow::ops::Cast").pointerTypes("CastOp"))
                .put(new Info("tensorflow::ops::Const").cppTypes("class tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
-               .put(new Info("tensorflow::gtl::ArraySlice<std::string>").cast().pointerTypes("StringVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<std::string>", "tensorflow::gtl::ArraySlice<tensorflow::string>").cast().pointerTypes("StringVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >").cast().pointerTypes("StringStringPairVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>").cast().pointerTypes("TensorShapeVector"))
@@ -285,18 +312,19 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())
                .put(new Info("std::vector<const tensorflow::shape_inference::Dimension*>").pointerTypes("ConstDimensionPtrVector").define())
 
-               .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
+               .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >",
+                             "std::vector<std::pair<tensorflow::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
+               .put(new Info("std::vector<const tensorflow::Edge*>").pointerTypes("EdgeVector").define())
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
                .put(new Info("tensorflow::EdgeSet::const_iterator", "tensorflow::EdgeSet::iterator").pointerTypes("EdgeSetIterator"))
 
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").pointerTypes("TrueOpDefBuilderWrapper"))
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))
 
-               .put(new Info("protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap"))
-
                .put(new Info("std::pair<tensorflow::StringPiece,int>").pointerTypes("StringPieceIntPair").define())
                .put(new Info("std::map<tensorflow::TensorId,tensorflow::TensorId>").pointerTypes("TensorIdTensorIdMap").define())
                .put(new Info("std::vector<tensorflow::Input>::iterator", "std::vector<tensorflow::Input>::const_iterator").skip())
+               .put(new Info("TF_WhileParams").purify())
                .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))

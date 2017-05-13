@@ -41,6 +41,23 @@ download https://github.com/dmlc/mxnet/archive/master.tar.gz mxnet-$MXNET_VERSIO
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
+
+OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
+OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -d "$P/include/opencv2" ]]; then
+            OPENCV_PATH="$P"
+        elif [[ -f "$P/include/openblas_config.h" ]]; then
+            OPENBLAS_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
 echo "Decompressing archives..."
 tar --totals -xzf ../dmlc-core-$MXNET_VERSION.tar.gz
 tar --totals -xzf ../mshadow-$MXNET_VERSION.tar.gz
@@ -54,9 +71,9 @@ ln -snf ../mshadow-$MXNET_VERSION mshadow
 ln -snf ../ps-lite-$MXNET_VERSION ps-lite
 ln -snf ../nnvm-$MXNET_VERSION nnvm
 
-export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/:$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/include/"
+export C_INCLUDE_PATH="$OPENBLAS_PATH/include/:$OPENCV_PATH/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/:$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/"
+export LIBRARY_PATH="$OPENBLAS_PATH/lib/:$OPENCV_PATH/lib/"
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile

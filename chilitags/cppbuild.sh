@@ -19,14 +19,25 @@ cd chilitags-$CHILITAGS_VERSION
 
 OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -d "$P/include/opencv2" ]]; then
+            OPENCV_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
 case $PLATFORM in
     android-arm)
-        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=armeabi-v7a ANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 $CMAKE -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/opencv-3.2.0/platforms/android/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/
+        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=armeabi-v7a ANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 $CMAKE -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/sdk/native/jni/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/
         make -j4
         make install
         ;;
     android-x86)
-        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=x86 ANDROID_TOOLCHAIN_NAME=x86-4.9 $CMAKE -DANDROID_ABI=x86 -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/opencv-3.2.0/platforms/android/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/
+        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=x86 ANDROID_TOOLCHAIN_NAME=x86-4.9 $CMAKE -DANDROID_ABI=x86 -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/sdk/native/jni/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/
         make -j4
         make install
         ;;

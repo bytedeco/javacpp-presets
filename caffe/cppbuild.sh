@@ -66,6 +66,22 @@ mkdir -p include lib bin
 
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
 HDF5_PATH="$INSTALL_PATH/../../../hdf5/cppbuild/$PLATFORM/"
+OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -d "$P/include/opencv2" ]]; then
+            OPENCV_PATH="$P"
+        elif [[ -f "$P/include/hdf5.h" ]]; then
+            HDF5_PATH="$P"
+        elif [[ -f "$P/include/openblas_config.h" ]]; then
+            OPENBLAS_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
 
 echo "Decompressing archives..."
 tar --totals -xf ../glog-$GLOG.tar.gz || true
@@ -127,9 +143,9 @@ cd ..
 ln -sf libboost_thread.a lib/libboost_thread-mt.a
 
 # OSX has Accelerate, but...
-export C_INCLUDE_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/include/"
+export C_INCLUDE_PATH="$OPENBLAS_PATH/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/lib/"
+export LIBRARY_PATH="$OPENBLAS_PATH/lib/"
 
 cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch
