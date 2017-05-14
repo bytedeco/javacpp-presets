@@ -25,22 +25,21 @@ case $PLATFORM in
 esac
 
 SKIA_VERSION=53d672981d2f4535d61da05befa793a73103c4fd
-download "https://github.com/mono/skia/archive/$SKIA_VERSION.zip" skia-$SKIA_VERSION.zip
+download "https://github.com/mono/skia/archive/$SKIA_VERSION.zip" "skia-$SKIA_VERSION.zip"
 
 if [ ! -d depot_tools ]; then
     echo "Fetching depot_tools..."
     git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git' depot_tools
 fi
-export PATH="${PWD}/depot_tools:${PATH}"
+export PATH="$PWD/depot_tools:$PATH"
 
-mkdir -p $PLATFORM
-cd $PLATFORM
-INSTALL_PATH=`pwd`
-echo "Decompressing archives..."
-if [ ! -d skia-$SKIA_VERSION ]; then
-    unzip ../skia-$SKIA_VERSION.zip
+mkdir -p "$PLATFORM"
+cd "$PLATFORM"
+if [ ! -d "skia-$SKIA_VERSION" ]; then
+    echo "Decompressing archives..."
+    unzip "../skia-$SKIA_VERSION.zip"
 fi
-cd skia-$SKIA_VERSION
+cd "skia-$SKIA_VERSION"
 python tools/git-sync-deps
 
 bin/gn gen out/Shared --args='is_official_build=false is_component_build=true extra_cflags=["-DSKIA_C_DLL"]'

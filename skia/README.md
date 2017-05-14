@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>skia-platform</artifactId>
-            <version>0.1.0-1.3.3-SNAPSHOT</version>
+            <version>20170514-53d6729-1.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
