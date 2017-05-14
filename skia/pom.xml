@@ -15,7 +15,8 @@
   <name>JavaCPP Presets for Skia</name>
 
   <properties>
-    <skia.version>master</skia.version>
+    <!-- Must be kept in sync with SKIA_VERSION in cppbuild.sh -->
+    <skia.version>53d672981d2f4535d61da05befa793a73103c4fd</skia.version>
   </properties>
 
   <dependencies>

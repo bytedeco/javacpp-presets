@@ -24,6 +24,7 @@ case $PLATFORM in
         ;;
 esac
 
+# Must be kept in sync with skia.version in pom.xml
 SKIA_VERSION=53d672981d2f4535d61da05befa793a73103c4fd
 download "https://github.com/mono/skia/archive/$SKIA_VERSION.zip" "skia-$SKIA_VERSION.zip"
 
