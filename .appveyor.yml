@@ -112,6 +112,13 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW32
       BIT: 32
+    - PLATFORM: x86
+      PROJ: "skia"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
     - PLATFORM: x64
       PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
       COMPILER: msys2
@@ -205,6 +212,13 @@ environment:
       BIT: 64
     - PLATFORM: x64
       PROJ: "artoolkitplus"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "skia"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64

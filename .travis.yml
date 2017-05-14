@@ -60,6 +60,9 @@ matrix:
       - jdk: oraclejdk7
         os: linux
         env: PROJ=videoinput OS=linux-x86_64
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=skia OS=linux-x86_64
       - os: osx
         env: PROJ=artoolkitplus OS=macosx-x86_64
       - os: osx
@@ -88,6 +91,8 @@ matrix:
         env: PROJ=tensorflow OS=macosx-x86_64
       - os: osx
         env: PROJ=videoinput OS=macosx-x86_64
+      - os: osx
+        env: PROJ=skia OS=macosx-x86_64
 
 before_install:
    #maybe this needs to go into new first job
