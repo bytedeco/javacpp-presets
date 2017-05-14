@@ -3450,6 +3450,13 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * - decoding: set by user through AVOptions (NO direct access)
      */
     public native @Cast("char*") BytePointer protocol_blacklist(); public native AVFormatContext protocol_blacklist(BytePointer protocol_blacklist);
+
+    /**
+     * The maximum number of streams.
+     * - encoding: unused
+     * - decoding: set by user through AVOptions (NO direct access)
+     */
+    public native int max_streams(); public native AVFormatContext max_streams(int max_streams);
 }
 
 @NoException public static native int av_format_get_probe_score(@Const AVFormatContext s);

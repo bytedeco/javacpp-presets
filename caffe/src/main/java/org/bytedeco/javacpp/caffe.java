@@ -20071,12 +20071,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   /**
    * \brief Returns the scalar loss associated with a top blob at a given index.
    */
-  public native float loss(int top_index);
+  public native float loss(@Const int top_index);
 
   /**
    * \brief Sets the loss associated with a top blob at a given index.
    */
-  public native void set_loss(int top_index, float value);
+  public native void set_loss(@Const int top_index, @Const float value);
 
   /**
    * \brief Returns the layer type.
@@ -20158,7 +20158,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * setting and backpropagate to blob i only if it needs gradient information
    * (as is done when force_backward == false).
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
 
   /**
    * \brief Specifies whether the layer should compute gradients w.r.t. a
@@ -20167,12 +20167,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * You can safely ignore false values and always compute gradients
    * for all parameters, but possibly with wasteful computation.
    */
-  public native @Cast("bool") boolean param_propagate_down(int param_id);
+  public native @Cast("bool") boolean param_propagate_down(@Const int param_id);
   /**
    * \brief Sets whether the layer should compute gradients w.r.t. a
    *        parameter at a particular index given by param_id.
    */
-  public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
+  public native void set_param_propagate_down(@Const int param_id, @Cast("const bool") boolean value);
   @Virtual(true) protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
@@ -20310,12 +20310,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   /**
    * \brief Returns the scalar loss associated with a top blob at a given index.
    */
-  public native double loss(int top_index);
+  public native double loss(@Const int top_index);
 
   /**
    * \brief Sets the loss associated with a top blob at a given index.
    */
-  public native void set_loss(int top_index, double value);
+  public native void set_loss(@Const int top_index, @Const double value);
 
   /**
    * \brief Returns the layer type.
@@ -20397,7 +20397,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * setting and backpropagate to blob i only if it needs gradient information
    * (as is done when force_backward == false).
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
 
   /**
    * \brief Specifies whether the layer should compute gradients w.r.t. a
@@ -20406,12 +20406,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * You can safely ignore false values and always compute gradients
    * for all parameters, but possibly with wasteful computation.
    */
-  public native @Cast("bool") boolean param_propagate_down(int param_id);
+  public native @Cast("bool") boolean param_propagate_down(@Const int param_id);
   /**
    * \brief Sets whether the layer should compute gradients w.r.t. a
    *        parameter at a particular index given by param_id.
    */
-  public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
+  public native void set_param_propagate_down(@Const int param_id, @Cast("const bool") boolean value);
   @Virtual(true) protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
@@ -20575,7 +20575,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * We usually cannot backpropagate to the labels; ignore force_backward for
    * these inputs.
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
 }
 @Name("caffe::LossLayer<double>") public static class DoubleLossLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -20603,7 +20603,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * We usually cannot backpropagate to the labels; ignore force_backward for
    * these inputs.
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
 }
 
   // namespace caffe
@@ -20664,7 +20664,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
    * to the first two inputs.
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
   @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
@@ -20690,7 +20690,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
    * to the first two inputs.
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
   @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
@@ -20760,7 +20760,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * Unlike most loss layers, in the EuclideanLossLayer we can backpropagate
    * to both inputs -- override to return true and always allow force_backward.
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
   @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
@@ -20785,7 +20785,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    * Unlike most loss layers, in the EuclideanLossLayer we can backpropagate
    * to both inputs -- override to return true and always allow force_backward.
    */
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
   @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
@@ -23982,9 +23982,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual(true) protected native void ApplyUpdate();
-  @Virtual(true) protected native void SnapshotSolverState(@StdString BytePointer model_filename);
-  @Virtual(true) protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
-  @Virtual(true) protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
+  @Virtual(true) protected native void SnapshotSolverState(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual(true) protected native void RestoreSolverStateFromHDF5(@Const @StdString @ByRef BytePointer state_file);
+  @Virtual(true) protected native void RestoreSolverStateFromBinaryProto(@Const @StdString @ByRef BytePointer state_file);
 }
 @Name("caffe::Solver<double>") @NoOffset public static class DoubleSolver extends Pointer {
     static { Loader.load(); }
@@ -24037,9 +24037,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual(true) protected native void ApplyUpdate();
-  @Virtual(true) protected native void SnapshotSolverState(@StdString BytePointer model_filename);
-  @Virtual(true) protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
-  @Virtual(true) protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
+  @Virtual(true) protected native void SnapshotSolverState(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual(true) protected native void RestoreSolverStateFromHDF5(@Const @StdString @ByRef BytePointer state_file);
+  @Virtual(true) protected native void RestoreSolverStateFromBinaryProto(@Const @StdString @ByRef BytePointer state_file);
 }
 
   // namespace caffe
@@ -24236,10 +24236,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatSGDSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public FloatSGDSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public FloatSGDSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public FloatSGDSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public FloatSGDSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
 
   public native @Const @ByRef FloatBlobSharedVector history();
@@ -24248,11 +24248,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Regularize(int param_id);
   @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
   @Virtual protected native void ClipGradients();
-  @Virtual protected native void SnapshotSolverState(@StdString BytePointer model_filename);
-  @Virtual protected native void SnapshotSolverStateToBinaryProto(@StdString BytePointer model_filename);
-  @Virtual protected native void SnapshotSolverStateToHDF5(@StdString BytePointer model_filename);
-  @Virtual protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
-  @Virtual protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
+  @Virtual protected native void SnapshotSolverState(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToBinaryProto(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToHDF5(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual protected native void RestoreSolverStateFromHDF5(@Const @StdString @ByRef BytePointer state_file);
+  @Virtual protected native void RestoreSolverStateFromBinaryProto(@Const @StdString @ByRef BytePointer state_file);
 }
 @Name("caffe::SGDSolver<double>") @NoOffset public static class DoubleSGDSolver extends DoubleSolver {
     static { Loader.load(); }
@@ -24261,10 +24261,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleSGDSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public DoubleSGDSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public DoubleSGDSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public DoubleSGDSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public DoubleSGDSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
 
   public native @Const @ByRef DoubleBlobSharedVector history();
@@ -24273,11 +24273,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Regularize(int param_id);
   @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
   @Virtual protected native void ClipGradients();
-  @Virtual protected native void SnapshotSolverState(@StdString BytePointer model_filename);
-  @Virtual protected native void SnapshotSolverStateToBinaryProto(@StdString BytePointer model_filename);
-  @Virtual protected native void SnapshotSolverStateToHDF5(@StdString BytePointer model_filename);
-  @Virtual protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
-  @Virtual protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
+  @Virtual protected native void SnapshotSolverState(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToBinaryProto(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToHDF5(@Const @StdString @ByRef BytePointer model_filename);
+  @Virtual protected native void RestoreSolverStateFromHDF5(@Const @StdString @ByRef BytePointer state_file);
+  @Virtual protected native void RestoreSolverStateFromBinaryProto(@Const @StdString @ByRef BytePointer state_file);
 }
 
 @Name("caffe::NesterovSolver<float>") public static class FloatNesterovSolver extends FloatSGDSolver {
@@ -24287,10 +24287,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatNesterovSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public FloatNesterovSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public FloatNesterovSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public FloatNesterovSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public FloatNesterovSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
@@ -24302,10 +24302,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleNesterovSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public DoubleNesterovSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public DoubleNesterovSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public DoubleNesterovSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public DoubleNesterovSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
@@ -24317,10 +24317,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatAdaGradSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public FloatAdaGradSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public FloatAdaGradSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public FloatAdaGradSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public FloatAdaGradSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
@@ -24332,10 +24332,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleAdaGradSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public DoubleAdaGradSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public DoubleAdaGradSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public DoubleAdaGradSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public DoubleAdaGradSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
@@ -24348,10 +24348,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatRMSPropSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public FloatRMSPropSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public FloatRMSPropSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public FloatRMSPropSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public FloatRMSPropSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
@@ -24364,10 +24364,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleRMSPropSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public DoubleRMSPropSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public DoubleRMSPropSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public DoubleRMSPropSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public DoubleRMSPropSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
@@ -24379,10 +24379,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatAdaDeltaSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public FloatAdaDeltaSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public FloatAdaDeltaSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public FloatAdaDeltaSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public FloatAdaDeltaSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
@@ -24394,10 +24394,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleAdaDeltaSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public DoubleAdaDeltaSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public DoubleAdaDeltaSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public DoubleAdaDeltaSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public DoubleAdaDeltaSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
@@ -24417,10 +24417,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatAdamSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public FloatAdamSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public FloatAdamSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public FloatAdamSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public FloatAdamSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
@@ -24431,10 +24431,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleAdamSolver(@Const @ByRef SolverParameter param) { super((Pointer)null); allocate(param); }
   private native void allocate(@Const @ByRef SolverParameter param);
-  public DoubleAdamSolver(@StdString BytePointer param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString BytePointer param_file);
-  public DoubleAdamSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
-  private native void allocate(@StdString String param_file);
+  public DoubleAdamSolver(@Const @StdString @ByRef BytePointer param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef BytePointer param_file);
+  public DoubleAdamSolver(@Const @StdString @ByRef String param_file) { super((Pointer)null); allocate(param_file); }
+  private native void allocate(@Const @StdString @ByRef String param_file);
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
@@ -25274,8 +25274,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
-  @Virtual protected native @ByVal LayerParameter GetPoolingParam(int pyramid_level,
-        int bottom_h, int bottom_w, @Const @ByVal SPPParameter spp_param);
+  @Virtual protected native @ByVal LayerParameter GetPoolingParam(@Const int pyramid_level,
+        @Const int bottom_h, @Const int bottom_w, @Const @ByVal SPPParameter spp_param);
 }
 @Name("caffe::SPPLayer<double>") @NoOffset public static class DoubleSPPLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -25296,8 +25296,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
-  @Virtual protected native @ByVal LayerParameter GetPoolingParam(int pyramid_level,
-        int bottom_h, int bottom_w, @Const @ByVal SPPParameter spp_param);
+  @Virtual protected native @ByVal LayerParameter GetPoolingParam(@Const int pyramid_level,
+        @Const int bottom_h, @Const int bottom_w, @Const @ByVal SPPParameter spp_param);
 }
 
   // namespace caffe
@@ -25343,7 +25343,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MaxBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
 
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
   @Virtual(true) protected native void FillUnrolledNet(NetParameter net_param);
   @Virtual(true) protected native void RecurrentInputBlobNames(StringVector names);
   @Virtual(true) protected native void RecurrentInputShapes(@Cast({"caffe::BlobShape*", "std::vector<caffe::BlobShape>*"}) @StdVector BlobShape shapes);
@@ -25372,7 +25372,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MaxBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
 
-  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(@Const int bottom_index);
   @Virtual(true) protected native void FillUnrolledNet(NetParameter net_param);
   @Virtual(true) protected native void RecurrentInputBlobNames(StringVector names);
   @Virtual(true) protected native void RecurrentInputShapes(@Cast({"caffe::BlobShape*", "std::vector<caffe::BlobShape>*"}) @StdVector BlobShape shapes);

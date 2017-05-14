@@ -2914,13 +2914,13 @@ public static native int MXRecordIOReaderFree(RecordIOHandle handle);
  * @return 0 when success, -1 when failure happens
 */
 public static native int MXRecordIOReaderReadRecord(RecordIOHandle handle,
-                                        @Cast("char const**") PointerPointer buf, @Cast("size_t*") SizeTPointer size);
+                                        @Cast("const char**") PointerPointer buf, @Cast("size_t*") SizeTPointer size);
 public static native int MXRecordIOReaderReadRecord(RecordIOHandle handle,
-                                        @Cast("char const**") @ByPtrPtr BytePointer buf, @Cast("size_t*") SizeTPointer size);
+                                        @Cast("const char**") @ByPtrPtr BytePointer buf, @Cast("size_t*") SizeTPointer size);
 public static native int MXRecordIOReaderReadRecord(RecordIOHandle handle,
-                                        @Cast("char const**") @ByPtrPtr ByteBuffer buf, @Cast("size_t*") SizeTPointer size);
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer buf, @Cast("size_t*") SizeTPointer size);
 public static native int MXRecordIOReaderReadRecord(RecordIOHandle handle,
-                                        @Cast("char const**") @ByPtrPtr byte[] buf, @Cast("size_t*") SizeTPointer size);
+                                        @Cast("const char**") @ByPtrPtr byte[] buf, @Cast("size_t*") SizeTPointer size);
 
 /**
  * \brief Set the current reader pointer position

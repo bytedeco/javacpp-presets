@@ -2255,6 +2255,7 @@ public static native LLVMValueRef LLVMConstNSWMul(LLVMValueRef LHSConstant, LLVM
 public static native LLVMValueRef LLVMConstNUWMul(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstFMul(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstUDiv(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
+public static native LLVMValueRef LLVMConstExactUDiv(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstSDiv(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstExactSDiv(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstFDiv(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
@@ -2540,7 +2541,6 @@ public static native void LLVMSetGC(LLVMValueRef Fn, String Name);
  *
  * @see llvm::Function::addAttribute()
  */
-
 public static native void LLVMAddAttributeAtIndex(LLVMValueRef F, @Cast("LLVMAttributeIndex") int Idx,
                              LLVMAttributeRef A);
 public static native @Cast("unsigned") int LLVMGetAttributeCountAtIndex(LLVMValueRef F, @Cast("LLVMAttributeIndex") int Idx);
@@ -3532,6 +3532,10 @@ public static native LLVMValueRef LLVMBuildUDiv(LLVMBuilderRef arg0, LLVMValueRe
                            @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildUDiv(LLVMBuilderRef arg0, LLVMValueRef LHS, LLVMValueRef RHS,
                            String Name);
+public static native LLVMValueRef LLVMBuildExactUDiv(LLVMBuilderRef arg0, LLVMValueRef LHS, LLVMValueRef RHS,
+                                @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildExactUDiv(LLVMBuilderRef arg0, LLVMValueRef LHS, LLVMValueRef RHS,
+                                String Name);
 public static native LLVMValueRef LLVMBuildSDiv(LLVMBuilderRef arg0, LLVMValueRef LHS, LLVMValueRef RHS,
                            @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildSDiv(LLVMBuilderRef arg0, LLVMValueRef LHS, LLVMValueRef RHS,
@@ -4908,7 +4912,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
  * \{
  */
 
-public static final int LTO_API_VERSION = 20;
+public static final int LTO_API_VERSION = 21;
 
 /**
  * @since prior to LTO_API_VERSION=3
@@ -5021,10 +5025,10 @@ public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_for_t
 public static native @Cast("lto_bool_t") boolean lto_module_has_objc_category(@Const Pointer mem, @Cast("size_t") long length);
 
 /**
-* Checks if a buffer is a loadable object file.
-*
-* @since prior to LTO_API_VERSION=3
-*/
+ * Checks if a buffer is a loadable object file.
+ *
+ * @since prior to LTO_API_VERSION=3
+ */
 public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_in_memory(@Const Pointer mem,
                                                       @Cast("size_t") long length);
 
@@ -5527,6 +5531,29 @@ public static native @ByVal LTOObjectBuffer thinlto_module_get_object(thinlto_co
                                                  @Cast("unsigned int") int index);
 
 /**
+ * Returns the number of object files produced by the ThinLTO CodeGenerator.
+ *
+ * It usually matches the number of input files, but this is not a guarantee of
+ * the API and may change in future implementation, so the client should not
+ * assume it.
+ *
+ * @since LTO_API_VERSION=21
+ */
+public static native @Cast("unsigned int") int thinlto_module_get_num_object_files(thinlto_code_gen_t cg);
+
+/**
+ * Returns the path to the ith object file produced by the ThinLTO
+ * CodeGenerator.
+ *
+ * Client should use \p thinlto_module_get_num_object_files() to get the number
+ * of available objects.
+ *
+ * @since LTO_API_VERSION=21
+ */
+public static native @Cast("const char*") BytePointer thinlto_module_get_object_file(thinlto_code_gen_t cg,
+                                           @Cast("unsigned int") int index);
+
+/**
  * Sets which PIC code model to generate.
  * Returns true on error (check lto_get_error_message() for details).
  *
@@ -5617,6 +5644,19 @@ public static native void thinlto_codegen_set_savetemps_dir(thinlto_code_gen_t c
                                               @Cast("const char*") BytePointer save_temps_dir);
 public static native void thinlto_codegen_set_savetemps_dir(thinlto_code_gen_t cg,
                                               String save_temps_dir);
+
+/**
+ * Set the path to a directory where to save generated object files. This
+ * path can be used by a linker to request on-disk files instead of in-memory
+ * buffers. When set, results are available through
+ * thinlto_module_get_object_file() instead of thinlto_module_get_object().
+ *
+ * @since LTO_API_VERSION=21
+ */
+public static native void thinlto_set_generated_objects_dir(thinlto_code_gen_t cg,
+                                       @Cast("const char*") BytePointer save_temps_dir);
+public static native void thinlto_set_generated_objects_dir(thinlto_code_gen_t cg,
+                                       String save_temps_dir);
 
 /**
  * Sets the cpu to generate code for.
@@ -6864,6 +6904,9 @@ public static native void LLVMAddMergedLoadStoreMotionPass(LLVMPassManagerRef PM
 /** See llvm::createGVNPass function. */
 public static native void LLVMAddGVNPass(LLVMPassManagerRef PM);
 
+/** See llvm::createGVNPass function. */
+public static native void LLVMAddNewGVNPass(LLVMPassManagerRef PM);
+
 /** See llvm::createIndVarSimplifyPass function. */
 public static native void LLVMAddIndVarSimplifyPass(LLVMPassManagerRef PM);
 
@@ -6942,6 +6985,9 @@ public static native void LLVMAddCorrelatedValuePropagationPass(LLVMPassManagerR
 
 /** See llvm::createEarlyCSEPass function */
 public static native void LLVMAddEarlyCSEPass(LLVMPassManagerRef PM);
+
+/** See llvm::createEarlyCSEPass function */
+public static native void LLVMAddEarlyCSEMemSSAPass(LLVMPassManagerRef PM);
 
 /** See llvm::createLowerExpectIntrinsicPass function */
 public static native void LLVMAddLowerExpectIntrinsicPass(LLVMPassManagerRef PM);
