@@ -1,3 +1,7 @@
+#!/bin/bash 
+set -vx
+export
+
 mkdir ./buildlogs
 ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2

@@ -1,3 +1,7 @@
+#!/bin/bash 
+set -vx
+export
+
     echo "download dependencies" 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ mxnet ]]; then 
