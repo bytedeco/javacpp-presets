@@ -237,8 +237,8 @@ before_install:
    - cd ..
    - export PYTHON_BIN_PATH=$(which python) # For tensorflow
    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
-   - |
-      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+   - |  
+      if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
         if [ "$OS" == "linux-x86_64" ]; then
           echo "starting docker"
           docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:/root/.m2 -v $HOME/downloads:/root/downloads -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
@@ -359,7 +359,7 @@ script:
     fi  
     echo "starting script"
     echo "running for $PROJ"
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
       DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
       echo "container id is $DOCKER_CONTAINER_ID"
       if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
@@ -418,7 +418,7 @@ script:
         return $BUILD_STATUS
       fi
     fi
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
       DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
       docker stop $DOCKER_CONTAINER_ID
       docker rm -v $DOCKER_CONTAINER_ID
