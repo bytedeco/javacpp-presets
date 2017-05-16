@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * [mono/skia](https://github.com/mono/skia) 53d672981d2f4535d61da05befa793a73103c4fd  https://skia.org/
+ * [mono/skia](https://github.com/mono/skia) branch `update-master` as of 2017-05-11  https://skia.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>skia-platform</artifactId>
-            <version>20170514-53d6729-1.3.3-SNAPSHOT</version>
+            <version>20170511-53d6729-1.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
