@@ -75,9 +75,9 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>intNexus</id>
+      <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
-      <url>http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt/</url>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
     <repository>
       <id>sonatype-nexus-staging</id>
@@ -381,7 +381,7 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
+        <version>1.6.6</version>
         <executions>
           <execution>
             <id>default-deploy</id>

@@ -162,8 +162,6 @@ fi
        while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
          echo "Not a pull request so attempting to deploy"
-         #sed -i -e 's/sonatype-nexus-snapshots/intNexus/g' pom.xml
-         #sed -i -e 's|https://oss.sonatype.org/content/repositories/snapshots/|http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt/|g' pom.xml
          mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
@@ -174,8 +172,6 @@ fi
        echo $ANDROID_FLAGS
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
          echo "Not a pull request so attempting to deploy"
-         #sed -i -e 's/sonatype-nexus-snapshots/intNexus/g' pom.xml
-         #sed -i -e 's|https://oss.sonatype.org/content/repositories/snapshots/|http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt/|g' pom.xml
          mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
