@@ -230,7 +230,6 @@ before_install:
    - mkdir ./buildlogs
    - ls -ltr $HOME/downloads
    - ls -ltr $HOME/.m2
-   - dig +short myip.opendns.com @resolver1.opendns.com
    - pip install requests
    - git clone https://github.com/bytedeco/javacpp.git
    - cd javacpp
