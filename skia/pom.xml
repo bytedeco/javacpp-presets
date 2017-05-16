@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>skia</artifactId>
-  <version>20170514-53d6729-${project.parent.version}</version>
+  <version>20170511-53d6729-${project.parent.version}</version>
   <name>JavaCPP Presets for Skia</name>
 
   <properties>
