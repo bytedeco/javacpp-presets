@@ -3,6 +3,10 @@ cache:
       - $HOME/downloads
       - $HOME/.m2
 addons:
+  apt:
+    packages:
+    - yasm
+    - nasm
   artifacts:
     s3_region: "us-east-1"
     paths:
@@ -10,42 +14,54 @@ addons:
     debug: true
 
 language: java
-sudo: required
+sudo: false
 dist: trusty
 services:
       - docker
 matrix:
    include:
       - jdk: oraclejdk8
-        os: android
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-x86
+        os: linux 
+        env: PROJ=opencv OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=ffmpeg OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=flycapture OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=libdc1394 OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=libfreenect OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=libfreenect2 OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=librealsense OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=videoinput OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=artoolkitplus OS=android-x86
       - jdk: oraclejdk8
-        os: android
+        os: linux 
+        env: PROJ=chilitags OS=android-x86
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=flandmark OS=android-x86
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=hdf5 OS=android-x86
+      - jdk: oraclejdk8
+        os: linux 
         env: PROJ=mkl OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=openblas OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=fftw OS=android-x86
@@ -60,7 +76,13 @@ matrix:
         env: PROJ=leptonica,tesseract OS=android-x86
       - jdk: oraclejdk8
         os: android
+        env: PROJ=caffe OS=android-x86
+      - jdk: oraclejdk8
+        os: android
         env: PROJ=cuda OS=android-x86
+      - jdk: oraclejdk8
+        os: android
+        env: PROJ=mxnet OS=android-x86
       - jdk: oraclejdk8
         os: android
         env: PROJ=tensorflow OS=android-x86
@@ -258,9 +280,9 @@ before_install:
         brew install gcc5 swig bazel libtool libusb nasm yasm xz 
         ln -s /usr/local/opt/gcc\@5 /usr/local/opt/gcc5
       fi
-      if [ "$TRAVIS_OS_NAME" == "android" ]; then
+      if [[ "$OS" =~ android ]]; then
         echo "Install android requirements.."
-        sudo apt-get install yasm nasm
+        #sudo apt-get install yasm nasm
         pip install numpy
         curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
@@ -370,6 +392,8 @@ script:
        while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
          echo "Not a pull request so attempting to deploy"
+         sed -i -e 's/sonatype-nexus-snapshots/intNexus/g' pom.xml
+         sed -i -e 's|https://oss.sonatype.org/content/repositories/snapshots/|http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt/|g' pom.xml
          mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"
@@ -380,6 +404,8 @@ script:
        echo $ANDROID_FLAGS
        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
          echo "Not a pull request so attempting to deploy"
+         sed -i -e 's/sonatype-nexus-snapshots/intNexus/g' pom.xml
+         sed -i -e 's|https://oss.sonatype.org/content/repositories/snapshots/|http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt/|g' pom.xml
          mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
        else
          echo "Pull request so install only"

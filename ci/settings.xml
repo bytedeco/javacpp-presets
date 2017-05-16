@@ -5,5 +5,29 @@
       <username>${env.CI_DEPLOY_USERNAME}</username>
       <password>${env.CI_DEPLOY_PASSWORD}</password>
     </server>
+    <server>
+      <id>intNexus</id>
+      <username>intnex</username>
+      <password>intnex</password>
+    </server>
   </servers>
+
+ <profiles>
+  <profile>
+   <id>int-snapshots</id>
+   <activation><activeByDefault>true</activeByDefault></activation>
+   <repositories>
+     <repository>
+       <id>intNexus</id>
+       <url>http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt</url>
+       <releases><enabled>false</enabled></releases>
+       <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+       </snapshots>
+     </repository>
+   </repositories>
+  </profile>
+ </profiles>
+
 </settings>
