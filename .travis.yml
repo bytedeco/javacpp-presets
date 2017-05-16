@@ -1,17 +1,40 @@
 dist: trusty
 sudo: false
+cache:
+  directories:
+      - $HOME/downloads
+      - $HOME/.m2
+addons:
+  apt:
+    packages:
+    - yasm
+    - nasm
+  artifacts:
+    s3_region: "us-east-1"
+    paths:
+     - $(ls ./buildlogs/*| tr "\n" ":") 
+    debug: true
+language: java
+services:
+      - docker
 
 jobs:
     include:
       - stage: android-opencv 
+        jdk: oraclejdk8
+        os: linux 
         env: PROJ=opencv OS=android-x86
         before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
       - stage: android-bundle
+        jdk: oraclejdk8
+        os: linux 
         env: PROJ=chilitags OS=android-x86
         before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
       - stage: android-bundle
+        jdk: oraclejdk8
+        os: linux 
         env: PROJ=hdf5 OS=android-x86
         before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
