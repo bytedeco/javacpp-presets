@@ -43,7 +43,7 @@ fi
 cd "skia-$SKIA_VERSION"
 python tools/git-sync-deps
 
-bin/gn gen out/Shared --args='is_official_build=false is_component_build=true extra_cflags=["-DSKIA_C_DLL"]'
+bin/gn gen out/Shared --args='is_official_build=false is_debug=false is_component_build=true extra_cflags=["-DSKIA_C_DLL"]'
 ninja -C out/Shared
 
 cd ../..
