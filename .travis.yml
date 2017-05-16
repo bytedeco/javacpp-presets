@@ -24,18 +24,15 @@ jobs:
         jdk: oraclejdk8
         os: linux 
         env: PROJ=opencv OS=android-x86
-        before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
       - stage: android-bundle
         jdk: oraclejdk8
         os: linux 
         env: PROJ=chilitags OS=android-x86
-        before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
       - stage: android-bundle
         jdk: oraclejdk8
         os: linux 
         env: PROJ=hdf5 OS=android-x86
-        before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
 
