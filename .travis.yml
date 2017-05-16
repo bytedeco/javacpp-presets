@@ -4,12 +4,15 @@ sudo: false
 jobs:
     include:
       - stage: android-opencv 
-        env: PROJ=chilitags OS=android-x86
+        env: PROJ=opencv OS=android-x86
+        before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
       - stage: android-bundle
         env: PROJ=chilitags OS=android-x86
+        before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
       - stage: android-bundle
         env: PROJ=hdf5 OS=android-x86
+        before_install: bash ./ci/travis-setup.sh
         script: bash ./ci/travis-install.sh
 
