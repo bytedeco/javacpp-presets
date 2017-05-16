@@ -18,8 +18,6 @@ case $PLATFORM in
         ;;
     macosx-*)
         ;;
-    windows-*)
-        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         return 0
