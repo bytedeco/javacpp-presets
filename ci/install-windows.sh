@@ -24,10 +24,6 @@ mkdir -p /c/Downloads
 ls -ltr /c/Users/appveyor
 ls -ltr /c/Users/appveyor/.m2
 
-#sed -i -e 's/sonatype-nexus-snapshots/intNexus/g' $APPVEYOR_BUILD_FOLDER/pom.xml
-#sed -i -e 's|https://oss.sonatype.org/content/repositories/snapshots/|http://bytedeconexus.ddns.net:15081/nexus/content/repositories/bytedecoInt/|g' $APPVEYOR_BUILD_FOLDER/pom.xml
-
-
 echo Perform download files out of main repo
 cd ..
 if [ "$projectName" == "flycapture" ]; then
