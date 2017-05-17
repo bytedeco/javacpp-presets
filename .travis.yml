@@ -9,11 +9,6 @@ addons:
     packages:
     - yasm
     - nasm
-  artifacts:
-    s3_region: "us-east-1"
-    paths:
-     - $(ls ./buildlogs/*| tr "\n" ":") 
-    debug: true
 language: java
 services:
       - docker
