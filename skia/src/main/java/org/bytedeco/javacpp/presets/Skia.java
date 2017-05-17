@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
     target = "org.bytedeco.javacpp.Skia",
     value = {
         @Platform(
-            value = {"linux-x86", "macosx", "windows"},
+            value = {"linux-x86", "macosx"},
             include = {
                 "sk_types.h",
                 "gr_context.h",
