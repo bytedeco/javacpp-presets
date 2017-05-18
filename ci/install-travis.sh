@@ -58,7 +58,6 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
 if [[ "$OS" =~ android ]]; then
    echo "Install android requirements.."
-   #sudo apt-get install yasm nasm
    pip install numpy
    curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
