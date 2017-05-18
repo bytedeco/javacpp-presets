@@ -42,7 +42,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
         curl -L https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
-          return 1
+          exit 1  
         fi
          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash /root/downloads/bazel.sh"
       fi 
@@ -62,7 +62,7 @@ if [[ "$OS" =~ android ]]; then
    curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
     echo "Download failed here, so can't proceed with the build.. Failing.."
-    return 1
+    exit 1
    fi
 
    unzip -qq $HOME/ndk.zip -d $HOME/
@@ -84,7 +84,7 @@ if [[ "$OS" =~ android ]]; then
       curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh; export CURL_STATUS=$?
       if [ "$CURL_STATUS" != "0" ]; then
         echo "Download failed here, so can't proceed with the build.. Failing.."
-        return 1
+        exit 1
       fi
       sudo bash bazel.sh
    fi
@@ -109,7 +109,7 @@ fi
         echo "Brew status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "Brew Failed"
-          return $BREW_STATUS
+          exit $BREW_STATUS
         fi
         kill $CHILDPID
 
@@ -153,7 +153,7 @@ fi
       echo "Build status $BUILD_STATUS"
       if [ $BUILD_STATUS -ne 0 ]; then  
         echo "Build Failed"
-        return $BUILD_STATUS
+        exit $BUILD_STATUS
       fi
     else	
      if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
@@ -180,7 +180,7 @@ fi
       echo "Build status $BUILD_STATUS"
       if [ $BUILD_STATUS -ne 0 ]; then
         echo "Build Failed"
-        return $BUILD_STATUS
+        exit $BUILD_STATUS
       fi
     fi
     if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
