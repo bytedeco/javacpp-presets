@@ -72,122 +72,122 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=fftw OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=gsl OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=llvm OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=leptonica,tesseract OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=cuda OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=tensorflow OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=liquidfun OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=ffmpeg OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=flycapture OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=libdc1394 OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=libfreenect OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=libfreenect2 OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=librealsense OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=videoinput OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=artoolkitplus OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=mkl OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=fftw OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=gsl OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=llvm OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=leptonica,tesseract OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=cuda OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=tensorflow OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-        os: android
+        os: linux 
         env: PROJ=liquidfun OS=android-arm
         install: true
         script: ./ci/install-travis.sh

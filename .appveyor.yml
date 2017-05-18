@@ -9,14 +9,7 @@ cache:
 environment:
   matrix:
     - PLATFORM: x86
-      PROJ: "opencv"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-    - PLATFORM: x86
-      PROJ: "chilitags"
+      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
