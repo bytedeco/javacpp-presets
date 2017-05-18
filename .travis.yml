@@ -25,12 +25,12 @@ matrix:
         os: linux 
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-x86
         install: true
-        script: ./ci/install-travis.sh
+        script: . ./ci/install-travis.sh
       - jdk: oraclejdk8
         os: linux 
         env: PROJ=ffmpeg OS=android-x86
         install: true
-        script: ./ci/install-travis.sh
+        script: . ./ci/install-travis.sh
       - jdk: oraclejdk8
         os: linux 
         env: PROJ=flycapture OS=android-x86
@@ -39,6 +39,8 @@ matrix:
       - jdk: oraclejdk8
         os: linux 
         env: PROJ=libdc1394 OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
       - jdk: oraclejdk8
         os: linux 
         env: PROJ=libfreenect OS=android-x86
@@ -238,7 +240,7 @@ matrix:
         os: linux
         env: PROJ=mkl OS=linux-x86_64
         install: true
-        script: ./ci/install-travis.sh
+        script: . ./ci/install-travis.sh
       - jdk: oraclejdk8
         os: linux
         env: PROJ=fftw OS=linux-x86_64
