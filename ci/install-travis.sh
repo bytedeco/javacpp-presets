@@ -93,8 +93,8 @@ if [[ "$OS" =~ android ]]; then
    fi
 fi
 
-    echo "download dependencies" 
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+echo "Download dependencies" 
+if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ mxnet ]]; then 
         export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/opencv/cppbuild/macosx-x86_64/lib/pkgconfig
       fi 
@@ -128,67 +128,72 @@ fi
         sudo cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
         sudo cp ./cuda/lib/libcudnn_static.a /usr/local/cuda/lib/libcudnn_static.a
       fi  
-    fi  
-    echo "starting script"
-    echo "running for $PROJ"
-    if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
-      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-      echo "container id is $DOCKER_CONTAINER_ID"
-      if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
-        echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
-        while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 /root/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
-        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
-          echo "Not a pull request so attempting to deploy"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
-        else
-          echo "Pull request so install only"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
-        fi
-      else
-        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
-          echo "Not a pull request so attempting to deploy"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
-        else
-          echo "Pull request so install only"
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
-        fi
-      fi
-      echo "Build status $BUILD_STATUS"
-      if [ $BUILD_STATUS -ne 0 ]; then  
-        echo "Build Failed"
-        exit $BUILD_STATUS
-      fi
-    else	
-     if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
-       echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
-       while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
-       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
-         echo "Not a pull request so attempting to deploy"
-         mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
-       else
-         echo "Pull request so install only"
-         mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
-       fi
+fi  
+
+echo "Running install for $PROJ"
+if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
+   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+   echo "container id is $DOCKER_CONTAINER_ID"
+   if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
+     echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
+     while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 /root/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
+     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
+       echo "Not a pull request so attempting to deploy"
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
      else
-       echo "Building $PROJ"
-       echo $ANDROID_FLAGS
-       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-         echo "Not a pull request so attempting to deploy"
-         mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
-       else
-         echo "Pull request so install only"
-         mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
-       fi
+       echo "Pull request so install only"
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
      fi
-      echo "Build status $BUILD_STATUS"
-      if [ $BUILD_STATUS -ne 0 ]; then
-        echo "Build Failed"
-        exit $BUILD_STATUS
-      fi
+   else
+     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
+       echo "Not a pull request so attempting to deploy"
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+     else
+       echo "Pull request so install only"
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+     fi
+   fi
+   echo "Build status $BUILD_STATUS"
+   if [ $BUILD_STATUS -ne 0 ]; then  
+     echo "Build Failed"
+     exit $BUILD_STATUS
+   fi
+
+#not a container build, so most likely android for example
+else	
+  if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
+    echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
+    while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
+    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
+      echo "Not a pull request so attempting to deploy"
+      mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+    else
+      echo "Pull request so install only"
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
     fi
-    if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
-      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-      docker stop $DOCKER_CONTAINER_ID
-      docker rm -v $DOCKER_CONTAINER_ID
+  else
+    echo "Building $PROJ"
+    echo $ANDROID_FLAGS
+    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+      echo "Not a pull request so attempting to deploy"
+      mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+    else
+      echo "Pull request so install only"
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
     fi
+  fi
+   echo "Build status $BUILD_STATUS"
+   if [ $BUILD_STATUS -ne 0 ]; then
+     echo "Build Failed"
+     exit $BUILD_STATUS
+   fi
+fi
+
+
+#finally, shutdown any container used for docker builds
+if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
+   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+   docker stop $DOCKER_CONTAINER_ID
+   docker rm -v $DOCKER_CONTAINER_ID
+fi
 
