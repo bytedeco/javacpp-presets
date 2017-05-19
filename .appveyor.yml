@@ -8,13 +8,6 @@ cache:
 
 environment:
   matrix:
-    - PLATFORM: x64
-      PROJ: "libfreenect2"
-      COMPILER: msys2
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
     - PLATFORM: x86
       PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
       COMPILER: msys2
@@ -256,7 +249,7 @@ environment:
 
 init:
 # uncomment this if you need to enable RDP for this build run
-    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       
 install:
     - 'echo install section'
@@ -273,5 +266,5 @@ test_script:
 
 on_finish:
 #    uncomment this for the RDP session to remain active after the build ends
-    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
