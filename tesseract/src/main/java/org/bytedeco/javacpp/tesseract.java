@@ -650,7 +650,7 @@ public static class TessClosure extends Pointer {
   @Virtual(true) public native @Cast("bool") boolean Run(int arg0);
 }
 
-@Name("TessResultCallback2<bool,char const&,char const&>") public static class CharCompareCallback extends Pointer {
+@Name("TessResultCallback2<bool,const char&,const char&>") public static class CharCompareCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CharCompareCallback() { super((Pointer)null); allocate(); }
@@ -664,10 +664,10 @@ public static class TessClosure extends Pointer {
         return (CharCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("char const*") @ByRef BytePointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("const char") @ByRef byte arg0,@Cast("const char") @ByRef byte arg1);
 }
 
-@Name("TessResultCallback2<bool,FILE*,char const&>") public static class CharWriteCallback extends Pointer {
+@Name("TessResultCallback2<bool,FILE*,const char&>") public static class CharWriteCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CharWriteCallback() { super((Pointer)null); allocate(); }
@@ -681,10 +681,10 @@ public static class TessClosure extends Pointer {
         return (CharWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("const char") @ByRef byte arg1);
 }
 
-@Name("TessResultCallback2<bool,STRING const&,STRING const&>") public static class StringCompareCallback extends Pointer {
+@Name("TessResultCallback2<bool,const STRING&,const STRING&>") public static class StringCompareCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public StringCompareCallback() { super((Pointer)null); allocate(); }
@@ -698,10 +698,10 @@ public static class TessClosure extends Pointer {
         return (StringCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Const({false, true}) @ByRef STRING arg0,@Const({false, true}) @ByRef STRING arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Const @ByRef STRING arg0,@Const @ByRef STRING arg1);
 }
 
-@Name("TessResultCallback2<bool,FILE*,STRING const&>") public static class StringWriteCallback extends Pointer {
+@Name("TessResultCallback2<bool,FILE*,const STRING&>") public static class StringWriteCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public StringWriteCallback() { super((Pointer)null); allocate(); }
@@ -715,10 +715,10 @@ public static class TessClosure extends Pointer {
         return (StringWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef STRING arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const @ByRef STRING arg1);
 }
 
-@Name("TessResultCallback2<bool,int const&,int const&>") public static class IntCompareCallback extends Pointer {
+@Name("TessResultCallback2<bool,const int&,const int&>") public static class IntCompareCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IntCompareCallback() { super((Pointer)null); allocate(); }
@@ -732,10 +732,10 @@ public static class TessClosure extends Pointer {
         return (IntCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Const({false, true}) @ByRef IntPointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Const @ByRef int arg0,@Const @ByRef int arg1);
 }
 
-@Name("TessResultCallback2<bool,FILE*,int const&>") public static class IntWriteCallback extends Pointer {
+@Name("TessResultCallback2<bool,FILE*,const int&>") public static class IntWriteCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IntWriteCallback() { super((Pointer)null); allocate(); }
@@ -749,7 +749,7 @@ public static class TessClosure extends Pointer {
         return (IntWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const @ByRef int arg1);
 }
 
 @Name("TessCallback3<const UNICHARSET&,int,PAGE_RES*>") public static class TruthCallback3 extends Pointer {

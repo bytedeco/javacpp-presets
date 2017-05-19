@@ -630,7 +630,7 @@ public native void setPersistence(float persistence);
  *
  * @param covariance 7x7 covariance matrix
  */
-public native void setFilterProcessNoiseCovariance(@Const({false, true}) @ByRef Mat covariance);
+public native void setFilterProcessNoiseCovariance(@Const @ByRef Mat covariance);
 
 /**
  * \brief Sets the observation noise covariance matrix a.k.a R for the Kalman filter
@@ -648,7 +648,7 @@ public native void setFilterProcessNoiseCovariance(@Const({false, true}) @ByRef 
  *
  * @param covariance 7x7 covariance matrix
  */
-public native void setFilterObservationNoiseCovariance(@Const({false, true}) @ByRef Mat covariance);
+public native void setFilterObservationNoiseCovariance(@Const @ByRef Mat covariance);
 
 /**
     For accurate results, Chilitags3D can be provided the calibration data of
@@ -893,7 +893,7 @@ public native void setPersistence(double persistence);
  *
  * @param covariance 7x7 covariance matrix
  */
-public native void setFilterProcessNoiseCovariance(@Const({false, true}) @ByRef Mat covariance);
+public native void setFilterProcessNoiseCovariance(@Const @ByRef Mat covariance);
 
 /**
  * \brief Sets the observation noise covariance matrix a.k.a R for the Kalman filter
@@ -911,7 +911,7 @@ public native void setFilterProcessNoiseCovariance(@Const({false, true}) @ByRef 
  *
  * @param covariance 7x7 covariance matrix
  */
-public native void setFilterObservationNoiseCovariance(@Const({false, true}) @ByRef Mat covariance);
+public native void setFilterObservationNoiseCovariance(@Const @ByRef Mat covariance);
 
 /**
     For accurate results, Chilitags3D can be provided the calibration data of

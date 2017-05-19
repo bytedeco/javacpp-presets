@@ -126,6 +126,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * MXnet  https://github.com/dmlc/mxnet
  * TensorFlow 1.1.0  https://github.com/tensorflow/tensorflow
  * LiquidFun  http://google.github.io/liquidfun/
+ * Skia  https://skia.org
 
 Once everything installed and configured, simply execute
 ```bash

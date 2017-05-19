@@ -39,6 +39,7 @@
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
     <module>../liquidfun/platform</module>
+    <module>../skia/platform</module>
   </modules>
 
   <dependencies>
@@ -167,6 +168,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>liquidfun-platform</artifactId>
       <version>20150401-0708ce1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>skia-platform</artifactId>
+      <version>20170511-53d6729-${project.version}</version>
     </dependency>
   </dependencies>
 
