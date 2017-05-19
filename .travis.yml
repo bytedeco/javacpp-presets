@@ -273,18 +273,14 @@ matrix:
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
         os: linux
-<<<<<<< HEAD
         env: PROJ=liquidfun OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
-=======
-        env: PROJ=videoinput OS=linux-x86_64
       - jdk: oraclejdk7
         os: linux
         env: PROJ=skia OS=linux-x86_64
-      - os: osx
-        env: PROJ=artoolkitplus OS=macosx-x86_64
->>>>>>> upstream/master
+        install: true
+        script: ./ci/install-travis.sh
       - os: osx
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=macosx-x86_64
         install: true
@@ -350,14 +346,13 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-<<<<<<< HEAD
         env: PROJ=liquidfun OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
-=======
-        env: PROJ=videoinput OS=macosx-x86_64
       - os: osx
         env: PROJ=skia OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 
 before_install:
    #maybe this needs to go into new first job
