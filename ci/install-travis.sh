@@ -12,15 +12,19 @@ mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 cd ..
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
-  if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
-    if [ "$OS" == "linux-x86_64" ]; then
-      echo "starting docker"
+
+if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
+  #if [ "$OS" == "linux-x86_64" ]; then
+      echo "Starting docker for x86_64 and x86 linux"
       docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:/root/.m2 -v $HOME/downloads:/root/downloads -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
       DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-      echo "container id is $DOCKER_CONTAINER_ID please wait while updates applied"
+      echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
-      if [ "$PROJ" == "flycapture" ]; then
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install `rpm -qa | sed s/.x86_64$/.i686/`"
+  #fi
+  
+  if [ "$PROJ" == "flycapture" ]; then
         if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap in cache and size seems ok" 
         else
@@ -29,15 +33,15 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
         fi
           tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
-      fi 
-      if [ "$PROJ" == "mkl" ]; then
+  fi 
+  if [ "$PROJ" == "mkl" ]; then
          #don't put in download dir as will be cached and we can use direct url instead
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11306/l_mkl_2017.2.174.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
          sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2017.2.174/silent.cfg
          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "/root/build/l_mkl_2017.2.174/install.sh -s /root/build/l_mkl_2017.2.174/silent.cfg"
-      fi
-      if [ "$PROJ" == "tensorflow" ]; then
+  fi
+  if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
         curl -L https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
@@ -45,8 +49,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
           exit 1  
         fi
          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash /root/downloads/bazel.sh"
-      fi 
-  fi
+  fi 
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
