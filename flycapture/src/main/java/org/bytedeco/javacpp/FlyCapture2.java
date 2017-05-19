@@ -12,24 +12,24 @@ public class FlyCapture2 extends org.bytedeco.javacpp.presets.FlyCapture2 {
 // Parsed from <FlyCapture2Platform.h>
 
 //=============================================================================
-// Copyright Â© 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright Â© 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: FlyCapture2Platform.h 284515 2016-06-02 18:11:05Z erich $
+// $Id: FlyCapture2Platform.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_FLYCAPTURE2PLATFORM_H
@@ -89,24 +89,24 @@ public class FlyCapture2 extends org.bytedeco.javacpp.presets.FlyCapture2 {
 // Parsed from <FlyCapture2Defs.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: FlyCapture2Defs.h 286572 2016-06-15 01:49:45Z matthewg $
+// $Id: FlyCapture2Defs.h 318533 2017-03-09 22:41:16Z corinal $
 //=============================================================================
 
 // #ifndef PGR_FC2_FLYCAPTURE2DEFS_H
@@ -651,6 +651,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		IPP = 6,
 		/** Best quality but much faster than rigorous. */
 		DIRECTIONAL_FILTER = 7,
+		/** Weighted pixel average from different directions*/
+		WEIGHTED_DIRECTIONAL_FILTER = 8,
 
 		COLOR_PROCESSING_ALGORITHM_FORCE_32BITS =  FULL_32BIT_VALUE;
 
@@ -1166,7 +1168,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		/** Grab mode for the camera. The default is DROP_FRAMES. */
 		public native @Cast("FlyCapture2::GrabMode") int grabMode(); public native FC2Config grabMode(int grabMode);
 
-		/** This parameter enables RetireveBuffer to run in high
+		/** This parameter enables RetrieveBuffer to run in high
 		 *	performance mode.  This means that any interaction
 		 *  with the camera, other then grabbing the image is disabled.
 		 *	Currently Retrieve buffer reads registers on the camera to
@@ -2226,24 +2228,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <Error.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: Error.h 244578 2015-08-21 23:30:57Z matthewg $
+// $Id: Error.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_ERROR_H
@@ -2382,24 +2384,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <BusManager.h>
 
 //=============================================================================
-// Copyright Â© 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright Â© 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: BusManager.h 244578 2015-08-21 23:30:57Z matthewg $
+// $Id: BusManager.h 317385 2017-02-28 18:28:29Z corinal $
 //=============================================================================
 
 // #ifndef PGR_FC2_BUSMANAGER_H
@@ -2737,8 +2739,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 			/**
 			 * Force the camera with the specific MAC address to the specified
 			 * IP address, subnet mask and default gateway. This is useful in
-			 * situations where a GigE Vision camera is using Persistent IP and the
-			 * application's subnet is different from the device subnet.
+			 * situations where GigE Vision cameras are using IP addresses 
+			 * in a subnet different from the host's subnet.
 			 *
 			 * @param macAddress MAC address of the camera.
 			 * @param ipAddress IP address to set on the camera.
@@ -2756,9 +2758,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 			/**
 			 * Force all cameras on the network to be assigned sequential IP addresses
 			 * on the same subnet as the netowrk adapters that they are connected to.
-			 * This is useful in situations where a GigE Vision cameras are using
-			 * Persistent IP addresses and the application's subnet is different from
-			 * the devices.
+			 * This is useful in situations where GigE Vision cameras are using
+			 * IP addresses in a subnet different from the host's subnet.
 			 *
 			 * @return An Error indicating the success or failure of the function.
 			 */
@@ -2821,24 +2822,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <CameraBase.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: CameraBase.h 297567 2016-09-02 20:03:45Z erich $
+// $Id: CameraBase.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_CAMERABASE_H_
@@ -3837,24 +3838,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <Camera.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: Camera.h 278996 2016-04-27 20:31:09Z matthewg $
+// $Id: Camera.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_CAMERA_H_
@@ -4291,24 +4292,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <GigECamera.h>
 
 //=============================================================================
-// Copyright © 2010 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: GigECamera.h 278996 2016-04-27 20:31:09Z matthewg $
+// $Id: GigECamera.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_GIGECAMERA_H_
@@ -4892,24 +4893,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <Image.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: Image.h 244578 2015-08-21 23:30:57Z matthewg $
+// $Id: Image.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_IMAGE_H
@@ -5660,24 +5661,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <Utilities.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: Utilities.h 244578 2015-08-21 23:30:57Z matthewg $
+// $Id: Utilities.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_UTILITIES_H_
@@ -5907,24 +5908,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <AVIRecorder.h>
 
 //=============================================================================
-// Copyright Â© 2009 Point Grey Research, Inc. All Rights Reserved.
+// Copyright Â© 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: AVIRecorder.h 244578 2015-08-21 23:30:57Z matthewg $
+// $Id: AVIRecorder.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_AVIRECORDER_H
@@ -6046,24 +6047,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <TopologyNode.h>
 
 //=============================================================================
-// Copyright  2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: TopologyNode.h 285597 2016-06-08 23:29:31Z erich $
+// $Id: TopologyNode.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_TOPOLOGYNODE_H
@@ -6253,24 +6254,24 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <ImageStatistics.h>
 
 //=============================================================================
-// Copyright 2009 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
 
 //=============================================================================
-// $Id: ImageStatistics.h 244578 2015-08-21 23:30:57Z matthewg $
+// $Id: ImageStatistics.h 316355 2017-02-20 23:02:28Z alin $
 //=============================================================================
 
 // #ifndef PGR_FC2_IMAGESTATISTICS_H
@@ -6563,18 +6564,18 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <MultiSyncLibraryPlatform.h>
 
 //=============================================================================
-// Copyright © 2011 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
@@ -6627,18 +6628,18 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <MultiSyncLibraryDefs.h>
 
 //=============================================================================
-// Copyright © 2011 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with Point Grey Research, Inc. (PGR).
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
 // SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
@@ -6712,18 +6713,18 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // Parsed from <MultiSyncLibrary.h>
 
 //=============================================================================
-// Copyright © 2011 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with PGR.
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
-// SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================

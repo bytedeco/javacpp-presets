@@ -12,18 +12,18 @@ public class FlyCapture2_C extends org.bytedeco.javacpp.presets.FlyCapture2_C {
 // Parsed from <FlyCapture2Defs_C.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with PGR.
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
-// SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
@@ -643,6 +643,8 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_IPP = 6,
 		/** Best quality but much faster than rigorous. */
 		FC2_DIRECTIONAL = 7,
+		/** Weighted pixel average from different directions*/
+		FC2_WEIGHTED_DIRECTIONAL = 8,
 		FC2_COLOR_PROCESSING_ALGORITHM_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Bayer tile formats. */
@@ -2374,18 +2376,18 @@ public static final int MAX_STRING_LENGTH =   512;
 // Parsed from <FlyCapture2_C.h>
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with PGR.
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
-// SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
@@ -2795,9 +2797,8 @@ public static final int MAX_STRING_LENGTH =   512;
 	/**
 	 * Force all cameras on the network to be assigned sequential IP addresses
 	 * on the same subnet as the network adapters that they are connected to.
-	 * This is useful in situations where a GigE Vision cameras are using
-	 * Persistent IP addresses and the application's subnet is different from
-	 * the devices.
+	 * This is useful in situations where GigE Vision cameras are using
+	 * IP addresses in a subnet different from the host's subnet.
 	 *
 	 * @return An Error indicating the success or failure of the function.
 	 */
@@ -2806,9 +2807,8 @@ public static final int MAX_STRING_LENGTH =   512;
 	/**
 	 * Force cameras on the network to be assigned sequential IP addresses
 	 * on the same subnet as the network adapters that it is connected to.
-	 * This is useful in situations where a GigE Vision cameras is using
-	 * Persistent IP addresses and the application's subnet is different from
-	 * the device.
+	 * This is useful in situations where GigE Vision cameras are using
+	 * IP addresses in a subnet different from the host's subnet.
 	 *
 	 * @return An Error indicating the success or failure of the function.
 	 */
@@ -2877,6 +2877,10 @@ public static final int MAX_STRING_LENGTH =   512;
 
 	/**
 	 * Connects the fc2Context to the camera specified by the GUID.
+	 *
+	 * Be aware that calling fc2CreateGUIContext() releases the CCP acquired
+	 * for GigE cameras in fc2Connect(). Consider calling fc2Connect() after 
+	 * fc2CreateGUIContext().
 	 *
 	 * @param context The fc2Context to be used.
 	 * @param guid The unique identifier for a specific camera on the PC.
@@ -5828,18 +5832,18 @@ public static final int MAX_STRING_LENGTH =   512;
 // Parsed from MultiSyncLibraryDefs_C.h
 
 //=============================================================================
-// Copyright © 2011 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with PGR.
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
-// SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
@@ -5924,18 +5928,18 @@ public static final int MAX_STRING_LENGTH =   512;
 // Parsed from MultiSyncLibrary_C.h
 
 //=============================================================================
-// Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
+// Copyright © 2017 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
 //
-// This software is the confidential and proprietary information of Point
-// Grey Research, Inc. ("Confidential Information").  You shall not
-// disclose such Confidential Information and shall use it only in
+// This software is the confidential and proprietary information of FLIR
+// Integrated Imaging Solutions, Inc. ("Confidential Information"). You
+// shall not disclose such Confidential Information and shall use it only in
 // accordance with the terms of the license agreement you entered into
-// with PGR.
+// with FLIR Integrated Imaging Solutions, Inc. (FLIR).
 //
-// PGR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
-// SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// FLIR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE
+// SOFTWARE, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-// PURPOSE, OR NON-INFRINGEMENT. PGR SHALL NOT BE LIABLE FOR ANY DAMAGES
+// PURPOSE, OR NON-INFRINGEMENT. FLIR SHALL NOT BE LIABLE FOR ANY DAMAGES
 // SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================
