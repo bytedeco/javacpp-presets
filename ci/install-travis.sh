@@ -1,6 +1,6 @@
 #!/bin/bash 
-set -vx
-export
+#set -vx
+#export
 
 mkdir ./buildlogs
 ls -ltr $HOME/downloads
@@ -14,15 +14,15 @@ export PYTHON_BIN_PATH=$(which python) # For tensorflow
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
-  #if [ "$OS" == "linux-x86_64" ]; then
-      echo "Starting docker for x86_64 and x86 linux"
-      docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:/root/.m2 -v $HOME/downloads:/root/downloads -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
-      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-      echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -y install"
-  #fi
+  echo "Starting docker for x86_64 and x86 linux"
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:/root/.m2 -v $HOME/downloads:/root/downloads -v $TRAVIS_BUILD_DIR/../:/root/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+  DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+  echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel openblas-devel" > /dev/null
+  if [ "$OS" == "linux-x86" ]; then
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -y install > /dev/null"
+  fi
   
   if [ "$PROJ" == "flycapture" ]; then
         if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
