@@ -419,7 +419,6 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
-      - jdk: oraclejdk8
         os: linux
         env: PROJ=cuda OS=linux-x86
         install: true
