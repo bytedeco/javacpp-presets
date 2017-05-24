@@ -39,7 +39,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
           echo "Found flycap32 in cache and size seems ok" 
         else
           echo "Downloading flycap32 as not found in cache or too small" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShU2Y1d0VZUWZkdEk $HOME/downloads/flycaplinux32.tar.gz 
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShaDhTN1FOUTE3UkE $HOME/downloads/flycaplinux32.tar.gz 
         fi
         tar xzvf $HOME/downloads/flycaplinux32.tar.gz -C $TRAVIS_BUILD_DIR/../
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
