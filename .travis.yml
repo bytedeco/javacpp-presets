@@ -17,6 +17,11 @@ services:
 matrix:
    include:
       - jdk: oraclejdk8
+        os: linux
+        env: PROJ=flycapture OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
         os: linux 
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-x86
         install: true

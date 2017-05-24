@@ -25,14 +25,25 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
   fi
   
   if [ "$PROJ" == "flycapture" ]; then
+    if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
-          echo "Found flycap in cache and size seems ok" 
+          echo "Found flycap64 in cache and size seems ok" 
         else
-          echo "Downloading flycap as not found in cache or too small" 
+          echo "Downloading flycap64 as not found in cache or too small" 
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShS1I1MzN0SmQ1MHc $HOME/downloads/flycap.tar.gz 
         fi
-          tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
+        tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
+    elif [ "$OS" == "linux-x86" ]; then
+        if [[ $(find $HOME/downloads/flycaplinux32.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found flycap32 in cache and size seems ok" 
+        else
+          echo "Downloading flycap32 as not found in cache or too small" 
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShU2Y1d0VZUWZkdEk $HOME/downloads/flycaplinux32.tar.gz 
+        fi
+        tar xzvf $HOME/downloads/flycaplinux32.tar.gz -C $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /root/build/include/* /usr/include; cp -R /root/build/lib/* /usr/lib" 
+    fi 
   fi 
   if [ "$PROJ" == "mkl" ]; then
          #don't put in download dir as will be cached and we can use direct url instead
