@@ -109,6 +109,21 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ mxnet ]]; then 
         export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/opencv/cppbuild/macosx-x86_64/lib/pkgconfig
       fi 
+      if [ "$PROJ" == "mkl" ]; then
+        #don't put in download dir as will be cached and we can use direct url instead
+        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11563/m_mkl_2017.3.181.dmg -o $HOME/mkl.dmg
+        echo "Mount mkl dmg"
+        hdiutil mount mkl.dmg
+        sleep 10
+        sed -i -e 's/decline/accept/g' /Volumes/m_mkl_2017.3.181/m_mkl_2017.3.181.app/Contents/MacOS/silent.cfg
+        sudo /Volumes/m_mkl_2017.3.181/m_mkl_2017.3.181.app/Contents/MacOS/install.sh -s i/Volumes/m_mkl_2017.3.181/m_mkl_2017.3.181.app/Contents/MacOS/silent.cfg; export BREW_STATUS=$?
+        echo "mkl status $BREW_STATUS"
+        if [ $BREW_STATUS -ne 0 ]; then
+          echo "mkl Failed"
+          exit $BREW_STATUS
+        fi
+      fi
+
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then 
         echo "installing cuda.."
         while true; do echo .; sleep 60; done &
