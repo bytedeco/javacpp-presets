@@ -34,7 +34,8 @@ call mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Djavacpp.platfo
 cd ..
 cd javacpp-presets
 echo Building for "%APPVEYOR_REPO_BRANCH%"
-IF /I "%APPVEYOR_REPO_BRANCH%"=="master" (
+echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
+IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
 ) ELSE (
