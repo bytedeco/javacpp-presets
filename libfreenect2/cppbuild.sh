@@ -8,28 +8,35 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 LIBJPEG=libjpeg-turbo-1.5.1
+GLFW_VERSION=3.2.1
 LIBFREENECT2_VERSION=0.2.0
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download https://github.com/OpenKinect/libfreenect2/archive/v$LIBFREENECT2_VERSION.zip libfreenect2-$LIBFREENECT2_VERSION.zip
+download https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.zip glfw-$GLFW_VERSION.zip
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xzf ../$LIBJPEG.tar.gz
+unzip -o ../glfw-$GLFW_VERSION.zip
 mkdir -p include lib bin
 unzip -o ../libfreenect2-$LIBFREENECT2_VERSION.zip
 
 case $PLATFORM in
     linux-x86)
         export CC="$OLDCC -m32 -fPIC"
-        cd $LIBJPEG
+        cd glfw-$GLFW_VERSION
+	CC="gcc -m32" CXX="g++ -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../libfreenect2-$LIBFREENECT2_VERSION
 #	patch -Np1 < ../../../libfreenect2-$LIBFREENECT2_VERSION.patch
-        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DGLFW3_LIBRARY=../lib/libglfw3.a -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a
         make -j4
         make install
         patch -Np1 < ../../../libfreenect2-$LIBFREENECT2_VERSION.patch

@@ -9,13 +9,20 @@ echo Architecture: $MSYS2_ARCH
 echo MSYS2 directory: $MSYS2_DIR
 echo MSYS2 system: $MSYSTEM
 echo Bits: $BIT
+echo Branch: $APPVEYOR_REPO_BRANCH
 
 bash --version
 g++ --version
 java -version
 mvn --version
+/c/python27/python --version
+pip --version
+
+pip install requests
 
 mkdir -p /c/Downloads
+ls -ltr /c/Users/appveyor
+ls -ltr /c/Users/appveyor/.m2
 
 echo Perform download files out of main repo
 cd ..
@@ -26,7 +33,7 @@ if [ "$projectName" == "flycapture" ]; then
              echo "Found flycap in cache and size seems ok"
            else
              echo "Downloading pgr.zip to cache as not found"
-             curl -L -o /c/Downloads/pgr.zip "https://www.dropbox.com/s/vywbsds5difobpq/pgr.zip?dl=0"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr.zip 
            fi
            unzip /c/Downloads/pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
@@ -35,7 +42,7 @@ if [ "$projectName" == "flycapture" ]; then
              echo "Found flycap32 in cache and size seems ok"
            else
              echo "Downloading pgr32.zip to cache as not found"
-             curl -L -o /c/Downloads/pgr32.zip "https://www.dropbox.com/s/ofwly7sqdh7667v/pgr32.zip?dl=0"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShQlpQSEFhZkUwc0U /c/Downloads/pgr32.zip 
            fi
            unzip /c/Downloads/pgr32.zip
            mv Point\ Grey\ Research /c/Program\ Files
@@ -43,13 +50,22 @@ if [ "$projectName" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
-if [ "$projectName" == "cuda" ]; then
+if [ "$projectName" == "mkl" ]; then
+       echo Installing mkl 
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11564/w_mkl_2017.3.210.exe"
+       ./mkl.exe --s --x --f .
+       ./setup.exe install --output=mkllog.txt -eula=accept
+       sleep 60
+       echo Finished mkl 
+fi
+
+if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
        echo Installing cuda 
        if [[ $(find /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip -type f -size +1000000c 2>/dev/null) ]]; then
          echo "Found cudnn in cache and size seems OK"
        else
          echo "Downloading cudnn as not found in cache"
-         curl -L -o /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip "https://www.dropbox.com/s/wp0x29p2pz60icn/cudnn-8.0-windows10-x64-v6.0.zip?dl=0"
+         /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShc2J1UGZyenhWREU /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip 
        fi
        curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
        ./cuda_8.0.61_windows.exe -s 
@@ -63,7 +79,7 @@ fi
 
 if [ "$projectName" == "libdc1394" ]; then 
        echo Installing libdc1394 
-       curl -L -o CMU.zip "https://www.dropbox.com/s/97boebrmdza18uu/CMU.zip?dl=0"
+       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShVnNJM3JCclpuTE0 CMU.zip
        unzip CMU.zip
        mv CMU /c/Program\ Files\ \(x86\)
        echo Finished libdc1394 install

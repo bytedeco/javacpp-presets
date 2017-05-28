@@ -18,7 +18,7 @@ ZLIB=zlib-1.2.11
 LAME=lame-3.99.5
 SPEEX=speex-1.2rc2
 OPENCORE_AMR=opencore-amr-0.1.3
-OPENSSL=openssl-1.0.2k
+OPENSSL=openssl-1.0.2l
 OPENH264_VERSION=1.6.0
 X265=x265_2.3
 VPX_VERSION=v1.6.1
@@ -101,7 +101,7 @@ case $PLATFORM in
         make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --sdk-path=$ANDROID_NDK --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION

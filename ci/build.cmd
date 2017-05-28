@@ -7,7 +7,6 @@ mkdir %APPVEYOR_BUILD_FOLDER%\tmp
 set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 mkdir %APPVEYOR_BUILD_FOLDER%\buildlogs
 
-
 IF "%MSYS2_ARCH%"=="x86_64" (
    echo Callings vcvarsall for amd64
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
@@ -25,16 +24,22 @@ bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain base-devel t
 
 bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
 
-IF %COMPILER%==msys2 (
- @echo on
- echo Starting main build now.. 
- cd ..
- cd javacpp 
- echo Install javacpp
- mvn install -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
- cd ..
- cd javacpp-presets
- echo Install %PROJ%
- mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
 
+@echo on
+echo Starting main build now.. 
+cd ..
+cd javacpp 
+echo Install javacpp
+call mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
+cd ..
+cd javacpp-presets
+echo Building for "%APPVEYOR_REPO_BRANCH%"
+echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
+IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
+   echo Deploy snaphot for %PROJ%
+   call mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
+) ELSE (
+   echo Install %PROJ%
+   call mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl %PROJ%
 )
+
