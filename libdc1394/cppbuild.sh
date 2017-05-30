@@ -67,6 +67,5 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
-cat config.log
 
 cd ../..
