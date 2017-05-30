@@ -70,6 +70,7 @@ if [ "$OS" == "linux-armhf" ]; then
 	git -C $HOME clone https://github.com/raspberrypi/tools
 	ls -ltr $HOME
 	ls -ltr $HOME/tools	
+	ls -ltr /home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 	arm-linux-gnueabihf-g++
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++"
