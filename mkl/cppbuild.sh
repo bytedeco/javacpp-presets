@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 case $PLATFORM in
-    linux-*)
+    linux-x86*)
         if [[ ! -d "/opt/intel/mkl/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1

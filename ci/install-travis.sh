@@ -232,8 +232,9 @@ else
   fi
    echo "Build status $BUILD_STATUS"
    if [ $BUILD_STATUS -ne 0 ]; then
-     echo "Build Failed, dump of config.log output files found follows:"
-     find . -name config.log | xargs cat
+     echo "Build Failed"
+     #echo "Dump of config.log output files found follows:"
+     #find . -name config.log | xargs cat
      exit $BUILD_STATUS
    fi
 fi
