@@ -1,5 +1,5 @@
 #!/bin/bash 
-#set -vx
+set -vx
 #export
 
 mkdir ./buildlogs
