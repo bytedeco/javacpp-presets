@@ -67,7 +67,7 @@ fi
 
 if [ "$OS" == "linux-armhf" ]; then
 	echo "Setting up tools for linux-armhf build"
-	git -C $HOME/tmp clone https://github.com/raspberrypi/tools
+	git -C $HOME clone https://github.com/raspberrypi/tools
 	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++"
 fi
