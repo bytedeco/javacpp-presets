@@ -30,6 +30,7 @@ case $PLATFORM in
         ;;
     linux-armhf)
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
+	cat config.log
         make -j4
         make install-strip
         ;;
