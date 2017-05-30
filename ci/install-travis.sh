@@ -11,6 +11,7 @@ cd javacpp
 mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 cd ..
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
+
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
@@ -63,6 +64,14 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
   fi 
 fi
 
+
+if [ "$OS" == "linux-armhf" ]; then
+	echo "Setting up tools for linux-armhf build"
+	git -C $HOME/tmp clone https://github.com/raspberrypi/tools
+	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/
+	export BUILD_FLAGS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++"
+fi
+
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update > /dev/null
@@ -86,12 +95,12 @@ if [[ "$OS" =~ android ]]; then
       echo "Setting build for android-arm"
       export ANDROID_NDK=$HOME/android-ndk/
       export PATH=$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
-      export ANDROID_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++"
+      export BUILD_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++"
    fi
    if [ "$OS" == "android-x86" ]; then
       echo "Setting build for android-x86"
       export ANDROID_NDK=$HOME/android-ndk/
-      export ANDROID_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++"
+      export BUILD_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++"
    fi
    if [ "$PROJ" == "tensorflow" ]; then
       echo "adding bazel for tensorflow"
@@ -103,6 +112,7 @@ if [[ "$OS" =~ android ]]; then
       sudo bash bazel.sh
    fi
 fi
+
 
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -157,6 +167,8 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       fi  
 fi  
 
+
+
 echo "Running install for $PROJ"
 if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
@@ -193,20 +205,19 @@ else
     while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
       echo "Not a pull request so attempting to deploy"
-      mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+      mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
     else
       echo "Pull request so install only"
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
     fi
   else
-    echo "Building $PROJ"
-    echo $ANDROID_FLAGS
+    echo "Building $PROJ, with additional build flags $BUILD_FLAGS"
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
-      mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+      mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
     else
       echo "Pull request so install only"
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $ANDROID_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
     fi
   fi
    echo "Build status $BUILD_STATUS"

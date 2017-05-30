@@ -13,14 +13,515 @@ addons:
 language: java
 services:
       - docker
-jdk:
-      - oraclejdk8
-env:
-      - OS=android-x86
-      - OS=android-arm
-      - PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe
-      - PROJ=ffmpeg
-install: true
-script: ./ci/install-travis.sh
+
+matrix:
+   include:
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=ffmpeg OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=flycapture OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libdc1394 OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libfreenect OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libfreenect2 OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=librealsense OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=videoinput OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=artoolkitplus OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=mkl OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=fftw OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=gsl OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=llvm OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=leptonica,tesseract OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=cuda OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=tensorflow OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=liquidfun OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=ffmpeg OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=flycapture OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libdc1394 OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libfreenect OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libfreenect2 OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=librealsense OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=videoinput OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=artoolkitplus OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=mkl OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=fftw OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=gsl OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=llvm OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=leptonica,tesseract OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=cuda OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=tensorflow OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=liquidfun OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=ffmpeg OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=flycapture OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libdc1394 OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libfreenect OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=libfreenect2 OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=librealsense OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=videoinput OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=artoolkitplus OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=mkl OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=fftw OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=gsl OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=llvm OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=leptonica,tesseract OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=cuda OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=tensorflow OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux 
+        env: PROJ=liquidfun OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=ffmpeg OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=flycapture OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libdc1394 OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect2 OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=librealsense OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=videoinput OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=artoolkitplus OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=mkl OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=fftw OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=gsl OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=llvm OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=leptonica,tesseract OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=cuda OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=tensorflow OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=liquidfun OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=skia OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=ffmpeg OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=flycapture OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=libdc1394 OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=libfreenect OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=libfreenect2 OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=librealsense OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=videoinput OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=artoolkitplus OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=mkl OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=fftw OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=gsl OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=llvm OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=leptonica,tesseract OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=cuda OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=tensorflow OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=liquidfun OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        env: PROJ=skia OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=ffmpeg OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=flycapture OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libdc1394 OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect2 OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=librealsense OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=videoinput OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=artoolkitplus OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=mkl OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=fftw OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=gsl OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=llvm OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=leptonica,tesseract OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=cuda OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=tensorflow OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=liquidfun OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk7
+        os: linux
+        env: PROJ=skia OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
 
 
