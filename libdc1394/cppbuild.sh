@@ -35,7 +35,7 @@ case $PLATFORM in
         ;;
     linux-ppc64le)
         sed -i s/elf64ppc/elf64lppc/ configure
-        CC="$OLDCC -m64" ./configure --prefix=$INSTALL_PATH
+        CC=powerpc-linux-gnu-gcc CXX=powerpc-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --host=powerpc64-linux-gnu
         make -j4
         make install-strip
         ;;

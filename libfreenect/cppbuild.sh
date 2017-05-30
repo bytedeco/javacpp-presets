@@ -1,5 +1,6 @@
 #!/bin/bash
 # This file is meant to be included by the parent cppbuild.sh script
+set -vx
 if [[ -z "$PLATFORM" ]]; then
     pushd ..
     bash cppbuild.sh "$@" libfreenect
@@ -30,10 +31,21 @@ if [[ $PLATFORM == linux-armhf ]]; then
     echo "Decompressing archives..."
     tar --totals -xjf libusb-1.0.19.tar.bz2
     cd libusb-1.0.19
-    CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
+    CC=powerpc-linux-gnu-gcc CXX=powerpc-linux-gnu-g++ CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
     make
     make install
     cd .. 
+fi
+
+if [[ $PLATFORM ==  linux-ppc64le ]]; then
+    download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.19/libusb-1.0.19.tar.bz2/download libusb-1.0.19.tar.bz2
+    echo "Decompressing archives..."
+    tar --totals -xjf libusb-1.0.19.tar.bz2
+    cd libusb-1.0.19
+    CFLAGS="-march=ppc64le" CXXFLAGS="-march=ppc64le" CPPFLAGS="-march=ppc64le" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc-linux-gnu --disable-udev
+    make
+    make install
+    cd ..
 fi
 
 cd libfreenect-$LIBFREENECT_VERSION
@@ -55,7 +67,7 @@ case $PLATFORM in
         make install
         ;;
     linux-ppc64le)
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+        CC=powerpc-linux-gnu-gcc CXX=powerpc-linux-gnu-g++ CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;

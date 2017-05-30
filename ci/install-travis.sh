@@ -67,12 +67,16 @@ fi
 
 if [ "$OS" == "linux-armhf" ]; then
 	echo "Setting up tools for linux-armhf build"
+	sudo dpkg --add-architecture i386
+	sudo apt-get update
+	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386
 	git -C $HOME clone https://github.com/raspberrypi/tools
 	ls -ltr $HOME
 	ls -ltr $HOME/tools	
 	ls -ltr /home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 	/home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-g++
+	file /home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-g++
 	arm-linux-gnueabihf-g++
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++"
 fi
