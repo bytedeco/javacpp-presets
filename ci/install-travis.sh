@@ -70,6 +70,7 @@ if [ "$OS" == "linux-armhf" ]; then
 	sudo dpkg --add-architecture i386
 	sudo apt-get update
 	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386
+	sudo apt-get install clang git file  wget unzip tar bzip2 gzip  patch automake libtool perl nasm yasm libasound2-dev freeglut3-dev libglfw3-dev libgtk2.0-dev libusb-dev zlib1g
 	git -C $HOME clone https://github.com/raspberrypi/tools
 	ls -ltr $HOME
 	ls -ltr $HOME/tools	
