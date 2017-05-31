@@ -3,6 +3,7 @@ set -vx
 #export
 
 mkdir ./buildlogs
+mkdir $TRAVIS_BUILD_DIR/downloads
 ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
 pip install requests
@@ -80,6 +81,32 @@ if [ "$OS" == "linux-armhf" ]; then
 	file /home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-g++
 	arm-linux-gnueabihf-g++
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++"
+	if [ "$PROJ" == "flycapture" ]; then
+          if [[ $(find $HOME/downloads/flycapture.2.11.3.121_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+            echo "Found flycap-armhf in cache and size seems ok" 
+          else
+            echo "Downloading flycap-armhf as not found in cache or too small" 
+            python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShMjVXZFlveXpyWE0 $HOME/downloads/flycapture.2.11.3.121_armhf.tar.gz
+          fi
+	  cp $HOME/downloads/flycapture.2.11.3.121_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/ 
+        fi
+
+fi
+
+if [ "$OS" == "linux-ppc64le" ]; then
+        echo "Setting up tools for linux-ppc64le  build"
+	sudo apt-get install linux-libc-dev-ppc64el-cross binutils-multiarch
+	sudo dpkg --add-architecture ppc64el
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse"
+	sudo apt-get update
+	sudo apt-get install libfreetype6-dev:ppc64el libasound2-dev:ppc64el freeglut3-dev:ppc64el libglfw3-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el
+	sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
+	sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
+	export BUILD_FLAGS="-Dpowerpc64le-linux-gnu-g++"
+
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
