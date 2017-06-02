@@ -91,10 +91,10 @@ if [ "$OS" == "linux-ppc64le" ]; then
         echo "Setting up tools for linux-ppc64le  build"
 	sudo apt-get install linux-libc-dev-ppc64el-cross binutils-multiarch
 	sudo dpkg --add-architecture ppc64el
-	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"
-	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"
-	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse"
-	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-updates main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-backports main restricted universe multiverse"
+	sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-security main restricted universe multiverse"
 	sudo apt-get update
 	sudo apt-get install libfreetype6-dev:ppc64el libasound2-dev:ppc64el freeglut3-dev:ppc64el libglfw3-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el
 	sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
