@@ -20,16 +20,13 @@ public static final int OPENBLAS___64BIT__ = 1;
 // #define OPENBLAS_PTHREAD_CREATE_FUNC pthread_create
 // #define OPENBLAS_BUNDERSCORE _
 public static final int OPENBLAS_NEEDBUNDERSCORE = 1;
-// #define OPENBLAS_SANDYBRIDGE 
+// #define OPENBLAS_HASWELL 
+public static final int OPENBLAS_L1_DATA_SIZE = 32768;
+public static final int OPENBLAS_L1_DATA_LINESIZE = 64;
 public static final int OPENBLAS_L2_SIZE = 262144;
-public static final int OPENBLAS_L2_ASSOCIATIVE = 8;
 public static final int OPENBLAS_L2_LINESIZE = 64;
-public static final int OPENBLAS_ITB_SIZE = 4096;
-public static final int OPENBLAS_ITB_ASSOCIATIVE = 4;
-public static final int OPENBLAS_ITB_ENTRIES = 64;
-public static final int OPENBLAS_DTB_SIZE = 4096;
-public static final int OPENBLAS_DTB_ASSOCIATIVE = 4;
 public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
+public static final int OPENBLAS_DTB_SIZE = 4096;
 // #define OPENBLAS_HAVE_CMOV 
 // #define OPENBLAS_HAVE_MMX 
 // #define OPENBLAS_HAVE_SSE 
@@ -39,15 +36,13 @@ public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
 // #define OPENBLAS_HAVE_SSE4_1 
 // #define OPENBLAS_HAVE_SSE4_2 
 // #define OPENBLAS_HAVE_AVX 
-// #define OPENBLAS_HAVE_CFLUSH 
-public static final int OPENBLAS_NUM_SHAREDCACHE = 1;
-public static final int OPENBLAS_NUM_CORES = 1;
-// #define OPENBLAS_CORE_SANDYBRIDGE 
-public static final String OPENBLAS_CHAR_CORENAME = "SANDYBRIDGE";
+// #define OPENBLAS_FMA3 
+// #define OPENBLAS_CORE_HASWELL 
+public static final String OPENBLAS_CHAR_CORENAME = "HASWELL";
 public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 24576;
-public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 16384;
-public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 32768;
-public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 24576;
+public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
+public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 12288;
+public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
 public static final String OPENBLAS_VERSION = " OpenBLAS 0.2.19 ";
 /*This is only for "make install" target.*/

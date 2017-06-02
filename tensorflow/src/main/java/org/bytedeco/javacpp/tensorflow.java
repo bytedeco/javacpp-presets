@@ -13433,9 +13433,9 @@ public static native void TF_ImportGraphDefOptionsAddInputMapping(
 // replaced with `dst`. `src_name` refers to a node in the graph to be imported,
 // `dst` references an operation already existing in the graph being imported
 // into.
-public static native void TF_GraphImportGraphDefOptionsRemapControlDependency(
+public static native @Platform(not="android") void TF_GraphImportGraphDefOptionsRemapControlDependency(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer src_name, TF_Operation dst);
-public static native void TF_GraphImportGraphDefOptionsRemapControlDependency(
+public static native @Platform(not="android") void TF_GraphImportGraphDefOptionsRemapControlDependency(
     TF_ImportGraphDefOptions opts, String src_name, TF_Operation dst);
 
 // Cause the imported graph to have a control dependency on `oper`. `oper`
