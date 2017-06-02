@@ -7,14 +7,17 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export TARGET_CPU=
 case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
         export CXX="g++ -m32"
+        export TARGET_CPU="x86"
         ;;
     linux-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -m64"
+        export TARGET_CPU="x64"
         ;;
     macosx-*)
         ;;
@@ -26,24 +29,24 @@ esac
 
 # Must be kept in sync with skia.version in pom.xml
 SKIA_VERSION=53d672981d2f4535d61da05befa793a73103c4fd
-download "https://github.com/mono/skia/archive/$SKIA_VERSION.zip" "skia-$SKIA_VERSION.zip"
-
-if [ ! -d depot_tools ]; then
-    echo "Fetching depot_tools..."
-    git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git' depot_tools
-fi
-export PATH="$PWD/depot_tools:$PATH"
+download "https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz" "depot_tools.tar.gz"
+download "https://github.com/mono/skia/archive/$SKIA_VERSION.tar.gz" "skia-$SKIA_VERSION.tar.gz"
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
-if [ ! -d "skia-$SKIA_VERSION" ]; then
-    echo "Decompressing archives..."
-    unzip "../skia-$SKIA_VERSION.zip"
-fi
-cd "skia-$SKIA_VERSION"
+
+echo "Decompressing archives..."
+mkdir -p depot_tools
+tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
+tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
+
+sed -i="" /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
+export PATH="$PWD/depot_tools:$PATH"
+
+cd skia-$SKIA_VERSION
 python tools/git-sync-deps
 
-bin/gn gen out/Shared --args='is_official_build=false is_debug=false is_component_build=true extra_cflags=["-DSKIA_C_DLL"]'
+bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-DSKIA_C_DLL\"]"
 ninja -C out/Shared
 
 cd ../..
