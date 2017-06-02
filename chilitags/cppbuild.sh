@@ -57,7 +57,7 @@ case $PLATFORM in
         make install
         ;;
     linux-ppc64le)
-        CXX="g++ -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CXX="powerpc64le-linux-gnu-g++ -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
         make -j4
         make install
         ;;

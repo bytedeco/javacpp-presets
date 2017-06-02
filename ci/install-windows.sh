@@ -21,8 +21,6 @@ pip --version
 pip install requests
 
 mkdir -p /c/Downloads
-ls -ltr /c/Users/appveyor
-ls -ltr /c/Users/appveyor/.m2
 
 echo Perform download files out of main repo
 cd ..

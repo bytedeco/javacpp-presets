@@ -79,7 +79,7 @@ case $PLATFORM in
         ;;
     linux-ppc64le)
         patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-linux.patch
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" LIBLEPT_HEADERSDIR="$LEPTONICA_PATH/include/" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/"
+        ./configure --prefix=$INSTALL_PATH CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" LIBLEPT_HEADERSDIR="$LEPTONICA_PATH/include/" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/"
         make -j $MAKEJ
         make install-strip
         ;;

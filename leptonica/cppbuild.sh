@@ -258,32 +258,32 @@ case $PLATFORM in
     linux-ppc64le)
         export CC="$OLDCC -m64 -fPIC"
         cd $ZLIB
-        ./configure --prefix=$INSTALL_PATH --static
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
         make install
         cd ../$GIFLIB
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux --disable-lzma
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux --disable-lzma
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --build=ppc64le-linux --disable-programs
+        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --build=ppc64le-linux --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
