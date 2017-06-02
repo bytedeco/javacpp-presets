@@ -326,6 +326,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::Input>::iterator", "std::vector<tensorflow::Input>::const_iterator").skip())
                .put(new Info("TF_WhileParams").purify())
                .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
+               .put(new Info("TF_GraphImportGraphDefOptionsRemapControlDependency").annotations("@Platform(not=\"android\")").javaNames("TF_GraphImportGraphDefOptionsRemapControlDependency"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))

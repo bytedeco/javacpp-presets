@@ -157,7 +157,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>master-${project.version}</version>
+      <version>0.10.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

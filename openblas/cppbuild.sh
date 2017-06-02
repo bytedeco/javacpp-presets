@@ -61,12 +61,14 @@ case $PLATFORM in
         export FC="$OLDFC -m32"
         export BINARY=32
         export DYNAMIC_ARCH=1
+        export TARGET=CORE2
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
+        export TARGET=HASWELL
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
@@ -89,6 +91,7 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/opt/gcc?/lib/gcc/?/libquadmath.a"
+        export TARGET=HASWELL
         ;;
     windows-x86)
         export CC="$OLDCC -m32"
@@ -96,6 +99,7 @@ case $PLATFORM in
         export BINARY=32
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export TARGET=CORE2
         ;;
     windows-x86_64)
         export CC="$OLDCC -m64"
@@ -103,6 +107,7 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export TARGET=HASWELL
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

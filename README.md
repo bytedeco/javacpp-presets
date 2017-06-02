@@ -104,7 +104,7 @@ Each child module in turn relies on its corresponding native libraries being alr
 
  * OpenCV 3.2.0  http://opencv.org/downloads.html
  * FFmpeg 3.2.x  http://ffmpeg.org/download.html
- * FlyCapture 2.10.x  http://www.ptgrey.com/flycapture-sdk
+ * FlyCapture 2.11.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
@@ -123,7 +123,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * Tesseract 3.05.00  https://github.com/tesseract-ocr/tesseract
  * Caffe  https://github.com/BVLC/caffe
  * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
- * MXnet  https://github.com/dmlc/mxnet
+ * MXnet 0.10.0  https://github.com/dmlc/mxnet
  * TensorFlow 1.1.0  https://github.com/tensorflow/tensorflow
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org

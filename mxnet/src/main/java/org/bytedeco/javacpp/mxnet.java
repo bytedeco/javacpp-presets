@@ -472,6 +472,9 @@ public static native int MXSetProfilerState(int state);
 /** \brief Save profile and stop profiler */
 public static native int MXDumpProfile();
 
+/** \brief Set the number of OMP threads to use */
+public static native int MXSetNumOMPThreads(int thread_num);
+
 //-------------------------------------
 // Part 1: NDArray creation and deletion
 //-------------------------------------

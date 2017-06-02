@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet  http://mxnet.readthedocs.org/
+ * MXNet 0.10.0  http://mxnet.io/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -22,7 +22,7 @@ Sample Usage
 ------------
 Here is a simple example of the predict API of MXNet ported to Java from this C++ source file and for this data:
 
- * https://github.com/dmlc/mxnet/blob/master/example/cpp/image-classification/image-classification-predict.cc
+ * https://github.com/dmlc/mxnet/blob/master/example/image-classification/predict-cpp/image-classification-predict.cc
  * http://data.dmlc.ml/mxnet/models/imagenet/inception-bn.tar.gz
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ImageClassificationPredict.java` source files below, simply execute on the command line:
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.3</version>
+    <version>1.3.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>master-1.3</version>
+            <version>0.10.0-1.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
