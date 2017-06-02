@@ -73,13 +73,7 @@ if [ "$OS" == "linux-armhf" ]; then
 	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
 	sudo apt-get -y install clang git file  wget unzip tar bzip2 gzip  patch automake libtool perl nasm yasm libasound2-dev freeglut3-dev libglfw3-dev libgtk2.0-dev libusb-dev zlib1g
 	git -C $HOME clone https://github.com/raspberrypi/tools
-	ls -ltr $HOME
-	ls -ltr $HOME/tools	
-	ls -ltr /home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
-	/home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-g++
-	file /home/travis/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-g++
-	arm-linux-gnueabihf-g++
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++"
 	if [ "$PROJ" == "flycapture" ]; then
           if [[ $(find $HOME/downloads/flycapture.2.11.3.121_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
@@ -177,9 +171,15 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         while true; do echo .; sleep 60; done &
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM cuda.dmg
+        if [[ $(find $HOME/downloads/cuda.dmg -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found cuda in cache and size seems ok" 
+        else
+          echo "Downloading cuda as not found in cache" 
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM $HOME/downloads/cuda.dmg
+        fi
+
         echo "Mount dmg"
-        hdiutil mount cuda.dmg
+        hdiutil mount $HOME/downloads/cuda.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
