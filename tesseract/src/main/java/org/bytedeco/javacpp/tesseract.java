@@ -664,7 +664,7 @@ public static class TessClosure extends Pointer {
         return (CharCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("const char") @ByRef byte arg0,@Cast("const char") @ByRef byte arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("const char") byte arg0,@Cast("const char") byte arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,const char&>") public static class CharWriteCallback extends Pointer {
@@ -681,7 +681,7 @@ public static class TessClosure extends Pointer {
         return (CharWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("const char") @ByRef byte arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("const char") byte arg1);
 }
 
 @Name("TessResultCallback2<bool,const STRING&,const STRING&>") public static class StringCompareCallback extends Pointer {
@@ -732,7 +732,7 @@ public static class TessClosure extends Pointer {
         return (IntCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Const @ByRef int arg0,@Const @ByRef int arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(int arg0,int arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,const int&>") public static class IntWriteCallback extends Pointer {
@@ -749,7 +749,7 @@ public static class TessClosure extends Pointer {
         return (IntWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const @ByRef int arg1);
+  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,int arg1);
 }
 
 @Name("TessCallback3<const UNICHARSET&,int,PAGE_RES*>") public static class TruthCallback3 extends Pointer {
@@ -2730,7 +2730,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Add a callback to be called to compare the elements when needed (contains,
   // get_id, ...)
-  public native void set_compare_callback(CharCompareCallback cb);
+  public native void set_compare_callback(TessResultCallback2<bool,char const&,char const&> cb);
 
   // Clear the array, calling the clear callback function if any.
   // All the owned callbacks are also deleted.
@@ -2753,7 +2753,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // fread (and swapping)/fwrite.
   // Returns false on error or if the callback returns false.
   // DEPRECATED. Use [De]Serialize[Classes] instead.
-  public native @Cast("bool") boolean write(@Cast("FILE*") Pointer f, CharWriteCallback cb);
+  public native @Cast("bool") boolean write(@Cast("FILE*") Pointer f, TessResultCallback2<bool,FILE*,char const&> cb);
   public native @Cast("bool") boolean read(@Cast("FILE*") Pointer f, CharReadCallback cb, @Cast("bool") boolean swap);
   // Writes a vector of simple types to the given file. Assumes that bitwise
   // read/write of T will work. Returns false in case of error.
@@ -2940,7 +2940,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Add a callback to be called to compare the elements when needed (contains,
   // get_id, ...)
-  public native void set_compare_callback(StringCompareCallback cb);
+  public native void set_compare_callback(TessResultCallback2<bool,STRING const&,STRING const&> cb);
 
   // Clear the array, calling the clear callback function if any.
   // All the owned callbacks are also deleted.
@@ -2963,7 +2963,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // fread (and swapping)/fwrite.
   // Returns false on error or if the callback returns false.
   // DEPRECATED. Use [De]Serialize[Classes] instead.
-  public native @Cast("bool") boolean write(@Cast("FILE*") Pointer f, StringWriteCallback cb);
+  public native @Cast("bool") boolean write(@Cast("FILE*") Pointer f, TessResultCallback2<bool,FILE*,STRING const&> cb);
   public native @Cast("bool") boolean read(@Cast("FILE*") Pointer f, StringReadCallback cb, @Cast("bool") boolean swap);
   // Writes a vector of simple types to the given file. Assumes that bitwise
   // read/write of T will work. Returns false in case of error.
@@ -3140,7 +3140,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Add a callback to be called to compare the elements when needed (contains,
   // get_id, ...)
-  public native void set_compare_callback(IntCompareCallback cb);
+  public native void set_compare_callback(TessResultCallback2<bool,int const&,int const&> cb);
 
   // Clear the array, calling the clear callback function if any.
   // All the owned callbacks are also deleted.
@@ -3163,7 +3163,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // fread (and swapping)/fwrite.
   // Returns false on error or if the callback returns false.
   // DEPRECATED. Use [De]Serialize[Classes] instead.
-  public native @Cast("bool") boolean write(@Cast("FILE*") Pointer f, IntWriteCallback cb);
+  public native @Cast("bool") boolean write(@Cast("FILE*") Pointer f, TessResultCallback2<bool,FILE*,int const&> cb);
   public native @Cast("bool") boolean read(@Cast("FILE*") Pointer f, IntReadCallback cb, @Cast("bool") boolean swap);
   // Writes a vector of simple types to the given file. Assumes that bitwise
   // read/write of T will work. Returns false in case of error.

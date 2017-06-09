@@ -101,6 +101,12 @@ if [ "$OS" == "linux-ppc64le" ]; then
 	sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
 
+      if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
+        echo "installing cuda.."
+	curl -L -o $HOME/downloads/cuda.deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/ppc64el/cuda-repo-ubuntu1604_8.0.61-1_ppc64el.deb
+	sudo dpkg -i $HOME/downloads/cuda.deb
+	sudo apt-get update
+	sudo apt-get install cuda
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
