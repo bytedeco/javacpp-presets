@@ -102,11 +102,12 @@ if [ "$OS" == "linux-ppc64le" ]; then
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
 
       if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
-        echo "installing cuda.."
+	echo "installing cuda.."
 	curl -L -o $HOME/downloads/cuda.deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/ppc64el/cuda-repo-ubuntu1604_8.0.61-1_ppc64el.deb
 	sudo dpkg -i $HOME/downloads/cuda.deb
 	sudo apt-get update
 	sudo apt-get install cuda
+      fi
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -258,15 +259,15 @@ else
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
       mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
-      if [ $BUILD_STATUS -ne 0 ]; then
-        echo "Deploying platform step"
-        for i in ${$PROJ//,/ }
-        do
-          cd $i
-          mvn -f platform -Djavacpp.platform=$OS --settings ./ci/settings.xml deploy; export BUILD_STATUS=$?
-          cd ..
-        done
-      fi
+      #if [ $BUILD_STATUS -eq 0 ]; then
+      #  echo "Deploying platform step"
+      #  for i in ${$PROJ//,/ }
+      #  do
+      #    cd $i
+      #    mvn -f platform -Djavacpp.platform=$OS --settings ./ci/settings.xml deploy; export BUILD_STATUS=$?
+      #    cd ..
+      #  done
+      #fi
     else
       echo "Pull request so install only"
       mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?

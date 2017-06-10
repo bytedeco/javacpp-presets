@@ -43,7 +43,6 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy platform 
    cd %%a
    call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml deploy
-   cd ..
    )
 ) ELSE (
    echo Install %PROJ%
