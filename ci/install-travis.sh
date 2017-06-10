@@ -261,7 +261,7 @@ else
       mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
       if [ $BUILD_STATUS -eq 0 ]; then
         echo "Deploying platform step"
-        for i in ${$PROJ//,/ }
+        for i in ${PROJ//,/ }
         do
           cd $i
           mvn -f platform -Djavacpp.platform=$OS --settings ./ci/settings.xml deploy; export BUILD_STATUS=$?
