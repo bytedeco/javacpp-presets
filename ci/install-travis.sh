@@ -249,7 +249,7 @@ else
     while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
       echo "Not a pull request so attempting to deploy"
-      mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+      mvn deploy -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
     else
       echo "Pull request so install only"
       mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
@@ -258,13 +258,13 @@ else
     echo "Building $PROJ, with additional build flags $BUILD_FLAGS"
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
-      mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+      mvn deploy --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
       if [ $BUILD_STATUS -eq 0 ]; then
         echo "Deploying platform step"
         for i in ${PROJ//,/ }
         do
           cd $i
-          mvn -f platform -Djavacpp.platform=$OS --settings ./ci/settings.xml deploy; export BUILD_STATUS=$?
+          mvn -f platform -Djavacpp.platform=$OS --settings $TRAVIS_BUILD_DIR/ci/settings.xml deploy; export BUILD_STATUS=$?
           cd ..
         done
       fi
