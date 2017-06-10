@@ -259,15 +259,15 @@ else
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
       mvn deploy --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
-      #if [ $BUILD_STATUS -eq 0 ]; then
-      #  echo "Deploying platform step"
-      #  for i in ${$PROJ//,/ }
-      #  do
-      #    cd $i
-      #    mvn -f platform -Djavacpp.platform=$OS --settings ./ci/settings.xml deploy; export BUILD_STATUS=$?
-      #    cd ..
-      #  done
-      #fi
+      if [ $BUILD_STATUS -eq 0 ]; then
+        echo "Deploying platform step"
+        for i in ${$PROJ//,/ }
+        do
+          cd $i
+          mvn -f platform -Djavacpp.platform=$OS --settings ./ci/settings.xml deploy; export BUILD_STATUS=$?
+          cd ..
+        done
+      fi
     else
       echo "Pull request so install only"
       mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?

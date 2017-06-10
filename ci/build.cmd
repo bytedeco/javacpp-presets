@@ -36,6 +36,7 @@ cd ..
 cd javacpp-presets
 echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
+echo XXXXXXX WARNING NOT CREATING CORRECT ERROR RETURN YET, USES STATUS OF LAST COMMAND..
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
@@ -43,6 +44,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy platform 
    cd %%a
    call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml deploy
+   cd ..
    )
 ) ELSE (
    echo Install %PROJ%
