@@ -39,6 +39,12 @@ echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl %PROJ%
+   FOR %%a in ("%PROJ,=" "%") do (
+   echo Deploy platform 
+   cd %%a
+   call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml deploy
+   cd ..
+   )
 ) ELSE (
    echo Install %PROJ%
    call mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl %PROJ%
