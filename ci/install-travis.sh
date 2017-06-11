@@ -7,10 +7,10 @@ mkdir $TRAVIS_BUILD_DIR/downloads
 ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
 pip install requests
-git clone https://github.com/bytedeco/javacpp.git
-cd javacpp
-mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
-cd ..
+#git clone https://github.com/bytedeco/javacpp.git
+#cd javacpp
+#mvn install -l javacppBuild.log -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+#cd ..
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
@@ -222,18 +222,18 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
      while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 /root/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl $PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    else
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl $PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    fi
    echo "Build status $BUILD_STATUS"
@@ -249,28 +249,28 @@ else
     while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
       echo "Not a pull request so attempting to deploy"
-      mvn deploy -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+      mvn deploy -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
     else
       echo "Pull request so install only"
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl $PROJ; export BUILD_STATUS=$?
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
     fi
   else
     echo "Building $PROJ, with additional build flags $BUILD_FLAGS"
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
-      mvn deploy --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+      mvn deploy --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -pl .,$PROJ; export BUILD_STATUS=$?
       if [ $BUILD_STATUS -eq 0 ]; then
         echo "Deploying platform step"
         for i in ${PROJ//,/ }
         do
-          cd $i
+	  cd $i
           mvn -f platform -Djavacpp.platform=$OS --settings $TRAVIS_BUILD_DIR/ci/settings.xml deploy; export BUILD_STATUS=$?
           cd ..
         done
       fi
     else
       echo "Pull request so install only"
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -pl $PROJ; export BUILD_STATUS=$?
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -pl .,$PROJ; export BUILD_STATUS=$?
     fi
   fi
    echo "Build status $BUILD_STATUS"
