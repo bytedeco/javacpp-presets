@@ -46,7 +46,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
-    call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml deploy
+    call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings ..\ci\settings.xml deploy
     IF errorlevel 1 (
       exit /b %errorlevel%
     )
