@@ -241,7 +241,7 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
          echo "Deploying platform"
          for i in ${PROJ//,/ }
          do
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets/$i; mvn -f platform -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets/$i; mvn -f platform/pom.xml -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
           if [ $BUILD_STATUS -ne 0 ]; then
            echo "Build Failed"
            exit $BUILD_STATUS
