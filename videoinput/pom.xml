@@ -20,6 +20,12 @@
     <javacpp.compiler.skip>true</javacpp.compiler.skip>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>

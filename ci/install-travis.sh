@@ -106,7 +106,14 @@ if [ "$OS" == "linux-ppc64le" ]; then
 	curl -L -o $HOME/downloads/cuda.deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/ppc64el/cuda-repo-ubuntu1604_8.0.61-1_ppc64el.deb
 	sudo dpkg -i $HOME/downloads/cuda.deb
 	sudo apt-get update
-	sudo apt-get install cuda
+	sudo apt-get install cuda-8-0:ppc64el cuda-toolkit-8-0:ppc64el cuda-runtime-8-0:ppc64el cuda-drivers:ppc64el cuda-core-8-0:ppc64el cuda-command-line-tools-8-0:ppc64el cuda-samples-8-0:ppc64el cuda-documentation-8-0:ppc64el cuda-visual-tools-8-0:ppc64el build-essential:ppc64el nvidia-375:ppc64el nvidia-375-dev:ppc64el g++:ppc64el build-essential:ppc64el
+        if [[ $(find $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found cudnn in cache and size seems ok" 
+        else
+          echo "Downloading cudnn as not found in cache" 
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFJveFVxWlF3UnM $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz
+        fi
+
       fi
 fi
 
@@ -130,7 +137,6 @@ if [[ "$OS" =~ android ]]; then
    ln -s $HOME/android-ndk-r14b $HOME/android-ndk
    echo "Android NDK setup done"
    if [ "$OS" == "android-arm" ]; then
-      echo "Setting build for android-arm"
       export ANDROID_NDK=$HOME/android-ndk/
       export PATH=$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
       export BUILD_FLAGS="-Djavacpp.platform.root=$HOME/android-ndk/ -Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++"
@@ -231,6 +237,18 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+       if [ $BUILD_STATUS -eq 0 ]; then
+         echo "Deploying platform"
+         for i in ${PROJ//,/ }
+         do
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets/$i; mvn -f platform -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
+          if [ $BUILD_STATUS -ne 0 ]; then
+           echo "Build Failed"
+           exit $BUILD_STATUS
+          fi
+         done
+       fi
+        
      else
        echo "Pull request so install using docker"
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?

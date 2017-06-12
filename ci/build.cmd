@@ -40,14 +40,25 @@ echo XXXXXXX WARNING NOT CREATING CORRECT ERROR RETURN YET, USES STATUS OF LAST 
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl .,%PROJ%
-   FOR %%a in ("%PROJ,=" "%") do (
-   echo Deploy platform 
-   cd %%a
-   call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml deploy
-   cd ..
+   IF errorlevel 1 (
+     exit /b %errorlevel%
+   )
+   FOR %%a in ("%PROJ:,=" "%") do (
+    echo Deploy platform %%a 
+    cd %%a
+    call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml deploy
+    IF errorlevel 1 (
+      exit /b %errorlevel%
+    )
+
+    cd ..
    )
 ) ELSE (
    echo Install %PROJ%
    call mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl .,%PROJ%
+   IF errorlevel 1 (
+      exit /b %errorlevel%
+   )
+
 )
 
