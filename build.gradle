@@ -1,0 +1,83 @@
+buildscript {
+    ext {
+        javacpp_version = "1.3.3-SNAPSHOT"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.bmuschko:gradle-nexus-plugin:2.3.1"
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.7.0"
+    }
+}
+
+allprojects {
+
+    group = "org.bytedeco"
+    version = javacpp_version
+
+    apply plugin: "java"
+    apply plugin: "maven"
+    apply plugin: "signing"
+    apply plugin: "com.bmuschko.nexus"
+
+    repositories {
+        mavenLocal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        mavenCentral()
+    }
+
+    dependencies {
+        compile "org.bytedeco:javacpp:${javacpp_version}"
+    }
+
+    modifyPom {
+        project {
+            url "http://bytedeco.org/javacpp-presets/"
+
+            scm {
+                url "https://github.com/bytedeco/javacpp-presets"
+                connection "scm:git:git://github.com/bytedeco/javacpp-presets.git"
+                developerConnection "scm:git:ssh://git@github.com/bytedeco/javacpp-presets.git"
+            }
+
+            developers {
+                developer {
+                    name "Samuel Audet"
+                    email "samuel.audet@gmail.com"
+                    organizationUrl "http://bytedeco.org"
+                }
+            }
+        }
+    }
+}
+
+apply plugin: "io.codearte.nexus-staging"
+
+archivesBaseName = "javacpp-presets"
+description = """The missing bridge between Java and native C++ libraries"""
+
+dependencies {
+    compile project("openblas")
+}
+
+defaultTasks "install"
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "3.5"
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+modifyPom {
+    project {
+        name project.archivesBaseName
+        description project.description
+        licenses {
+            license {
+                name "GNU General Public License, version 2"
+                url "https://www.gnu.org/licenses/gpl-2.0.html"
+                distribution "repo"
+            }
+        }
+    }
+}
