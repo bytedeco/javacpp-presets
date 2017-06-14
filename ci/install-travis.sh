@@ -101,19 +101,22 @@ if [ "$OS" == "linux-ppc64le" ]; then
 	sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
 	export BUILD_FLAGS="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
 
-      if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
+      #if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
+      if [[ "$PROJ" =~ cuda ]]; then
 	echo "installing cuda.."
-	curl -L -o $HOME/downloads/cuda.deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/ppc64el/cuda-repo-ubuntu1604_8.0.61-1_ppc64el.deb
-	sudo dpkg -i $HOME/downloads/cuda.deb
-	sudo apt-get update
-	sudo apt-get install cuda-8-0:ppc64el cuda-toolkit-8-0:ppc64el cuda-runtime-8-0:ppc64el cuda-drivers:ppc64el cuda-core-8-0:ppc64el cuda-command-line-tools-8-0:ppc64el cuda-samples-8-0:ppc64el cuda-documentation-8-0:ppc64el cuda-visual-tools-8-0:ppc64el build-essential:ppc64el nvidia-375:ppc64el nvidia-375-dev:ppc64el g++:ppc64el build-essential:ppc64el
+	curl -L -o cuda.deb https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2v2_8.0.61-1_ppc64el-deb 
+        ar x cuda-repo-ubuntu1604-8-0-local-ga2v2_8.0.61-1_ppc64el.deb
+        tar xvf data.tar.gz
+        sudo dpkg --force-all -i ./var/cuda-repo-8-0-local-ga2v2/*.deb
         if [[ $(find $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found cudnn in cache and size seems ok" 
         else
           echo "Downloading cudnn as not found in cache" 
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFJveFVxWlF3UnM $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz
         fi
-
+        tar xvf $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz
+        mv ./cuda/targets/ppc64le-linux/include/* /usr/local/cuda/targets/ppc64le-linux/include
+        mv ./cuda/targets/ppc64le-linux/lib/* /usr/local/cuda/targets/ppc64le-linux/lib
       fi
 fi
 
