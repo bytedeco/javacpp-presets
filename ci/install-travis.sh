@@ -115,8 +115,8 @@ if [ "$OS" == "linux-ppc64le" ]; then
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFJveFVxWlF3UnM $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz
         fi
         tar xvf $HOME/downloads/cudnn-8.0-linux-ppc64le-v6.0.tgz
-        mv ./cuda/targets/ppc64le-linux/include/* /usr/local/cuda/targets/ppc64le-linux/include
-        mv ./cuda/targets/ppc64le-linux/lib/* /usr/local/cuda/targets/ppc64le-linux/lib
+        sudo mv ./cuda/targets/ppc64le-linux/include/* /usr/local/cuda/targets/ppc64le-linux/include
+        sudo mv ./cuda/targets/ppc64le-linux/lib/* /usr/local/cuda/targets/ppc64le-linux/lib
       fi
 fi
 
