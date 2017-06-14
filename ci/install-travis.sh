@@ -100,6 +100,11 @@ if [ "$OS" == "linux-ppc64le" ]; then
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
       export BUILD_FLAGS="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
+      
+      if [[ "$PROJ" =~ hdf5 ]]; then
+        echo "Disabling full build of HDF5 as it doesn't support cross compiling right now"
+        export BUILD_FLAGS="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++ -Djavacpp.compiler.skip=true -Djavacpp.cppbuild.skip=true  -Djavacpp.parser.skip=true"
+      fi
 
       #if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
       if [[ "$PROJ" =~ cuda ]]; then
