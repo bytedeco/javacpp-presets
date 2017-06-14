@@ -37,6 +37,7 @@
   </developers>
 
   <modules>
+    <module>zlib</module>
     <module>opencv</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
