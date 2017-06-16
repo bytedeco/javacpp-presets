@@ -91,10 +91,10 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-ppc64le)
-        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=powerpc64le-linux-gnu --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
         make -j $MAKEJ
         make install-strip
-        CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64"  ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=powerpc64le-linux-gnu --build=ppc64le-linux --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
         make -j $MAKEJ
         make install-strip
         ;;

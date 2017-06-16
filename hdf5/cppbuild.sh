@@ -48,11 +48,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-    linux-ppc64le)
-        CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --enable-cxx --disable-shared --with-pic --build=ppc64le-linux 
-        make -j $MAKEJ
-        make install-strip
-        ;;
+#    linux-ppc64le)
+#        CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --enable-cxx --disable-shared --with-pic --build=ppc64le-linux 
+#        make -j $MAKEJ
+#        make install-strip
+#        ;;
     macosx-*)
         patch -Np1 < ../../../hdf5-$HDF5_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH --enable-cxx
