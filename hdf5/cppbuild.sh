@@ -1,6 +1,5 @@
 #!/bin/bash
 # This file is meant to be included by the parent cppbuild.sh script
-set -vx
 if [[ -z "$PLATFORM" ]]; then
     pushd ..
     bash cppbuild.sh "$@" hdf5
@@ -48,11 +47,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-#    linux-ppc64le)
-#        CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --enable-cxx --disable-shared --with-pic --build=ppc64le-linux 
-#        make -j $MAKEJ
-#        make install-strip
-#        ;;
+    linux-ppc64le)
+        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
+        make -j $MAKEJ
+        make install-strip
+        ;;
     macosx-*)
         patch -Np1 < ../../../hdf5-$HDF5_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH --enable-cxx
