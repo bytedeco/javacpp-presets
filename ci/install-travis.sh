@@ -239,7 +239,7 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn deploy -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /root/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    else
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
@@ -259,7 +259,7 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
         
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /root/build/javacpp-presets;mvn install --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    fi
    echo "Build status $BUILD_STATUS"
@@ -278,7 +278,7 @@ else
       mvn deploy -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
     else
       echo "Pull request so install only"
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.platform=$OS $BUILD_FLAGS -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
     fi
   else
     echo "Building $PROJ, with additional build flags $BUILD_FLAGS"
@@ -296,7 +296,7 @@ else
       fi
     else
       echo "Pull request so install only"
-      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources -Djavacpp.platform=$OS $BUILD_FLAGS -pl .,$PROJ; export BUILD_STATUS=$?
+      mvn install -Dmaven.javadoc.skip=true -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.platform=$OS $BUILD_FLAGS -pl .,$PROJ; export BUILD_STATUS=$?
     fi
   fi
    echo "Build status $BUILD_STATUS"
