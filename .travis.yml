@@ -14,7 +14,7 @@ services:
       - docker
 
 jobs:
-   include:
+   allow_failures:
       - stage: Android-X86
         jdk: oraclejdk8
         os: linux 
