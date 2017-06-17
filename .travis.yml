@@ -117,7 +117,8 @@ jobs:
         env: PROJ=liquidfun OS=android-x86
         install: true
         script: ./ci/install-travis.sh
-      - stage: Android-X86
+
+      - stage: Android-Arm
         jdk: oraclejdk8
         os: linux 
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
