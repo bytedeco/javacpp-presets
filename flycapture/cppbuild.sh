@@ -20,6 +20,7 @@ case $PLATFORM in
         rm -Rf $PLATFORM
         mv flycapture.${FLYCAPTURE_VERSION}_armhf $PLATFORM
         mv $PLATFORM/lib/C/* $PLATFORM/lib
+        mv $PLATFORM/include/C/* $PLATFORM/include
         ;;
     linux-x86*)
         if [[ ! -d "/usr/include/flycapture/" ]]; then
