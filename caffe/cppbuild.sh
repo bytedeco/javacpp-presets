@@ -41,14 +41,14 @@ case $PLATFORM in
         ;;
 esac
 
-GLOG=0.3.4
-GFLAGS=2.1.2
-PROTO=3.1.0
-LEVELDB=1.19
-SNAPPY=1.1.3
-LMDB=0.9.18
-BOOST=1_62_0
-CAFFE_VERSION=master
+GLOG=0.3.5
+GFLAGS=2.2.0
+PROTO=3.3.0
+LEVELDB=1.20
+SNAPPY=1.1.4
+LMDB=0.9.21
+BOOST=1_63_0
+CAFFE_VERSION=1.0
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
 download https://github.com/gflags/gflags/archive/v$GFLAGS.tar.gz gflags-$GFLAGS.tar.gz
@@ -152,7 +152,7 @@ patch -Np1 < ../../../caffe-nogpu.patch
 cp Makefile.config.example Makefile.config
 export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
-export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
+export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include -Xcompiler -std=c++98"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH/lib -L$HDF5_PATH/lib"
 make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. lib
 # Manual deploy to avoid Caffe's python build

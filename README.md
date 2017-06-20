@@ -122,7 +122,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * LLVM 4.0.0  http://llvm.org/releases/download.html
  * Leptonica 1.74.1  http://www.leptonica.org/download.html
  * Tesseract 3.05.00  https://github.com/tesseract-ocr/tesseract
- * Caffe  https://github.com/BVLC/caffe
+ * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
  * MXnet 0.10.0  https://github.com/dmlc/mxnet
  * TensorFlow 1.1.0  https://github.com/tensorflow/tensorflow
