@@ -192,10 +192,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         while true; do echo .; sleep 60; done &
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
-        if [[ $(find $HOME/downloads/cuda.dmg -type f -size +1000000c 2>/dev/null) ]]; then
-          echo "Found cuda in cache and size seems ok" 
+        #if [[ $(find $HOME/downloads/cuda.dmg -type f -size +1000000c 2>/dev/null) ]]; then
+        if [[ $(hdiutil verify $HOME/downloads/cuda.dmg) ]]; then
+          echo "Found cuda in cache and verified image ok" 
         else
-          echo "Downloading cuda as not found in cache" 
+          echo "Downloading cuda as problem in cache" 
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM $HOME/downloads/cuda.dmg
         fi
 
