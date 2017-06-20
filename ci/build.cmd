@@ -26,27 +26,19 @@ bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x8
 
 bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
 
-
-echo Starting main build now.. 
-REM cd ..
-REM cd javacpp 
-REM echo Install javacpp
-REM call mvn install -Djavacpp.copyResources -Dmaven.test.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Dmaven.javadoc.skip=true
-REM cd ..
-REM cd javacpp-presets
 echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
 echo XXXXXXX WARNING NOT CREATING CORRECT ERROR RETURN YET, USES STATUS OF LAST COMMAND..
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
-   call mvn deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl .,%PROJ%
+   call mvn deploy -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl .,%PROJ%
    IF errorlevel 1 (
      exit /b %errorlevel%
    )
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
-    call mvn -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings ..\ci\settings.xml deploy
+    call mvn -U -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings ..\ci\settings.xml deploy
     IF errorlevel 1 (
       exit /b %errorlevel%
     )
@@ -55,7 +47,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    )
 ) ELSE (
    echo Install %PROJ%
-   call mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl .,%PROJ%
+   call mvn install -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl .,%PROJ%
    IF errorlevel 1 (
       exit /b %errorlevel%
    )
