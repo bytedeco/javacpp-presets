@@ -138,7 +138,7 @@ cd ../../..
 
 cd boost_$BOOST
 ./bootstrap.sh --with-libraries=filesystem,system,thread
-./b2 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
+./b2 -d0 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
 cd ..
 ln -sf libboost_thread.a lib/libboost_thread-mt.a
 

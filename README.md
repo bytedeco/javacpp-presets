@@ -114,7 +114,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * HDF5 1.10.0  https://support.hdfgroup.org/HDF5/
+ * HDF5 1.10.1  https://support.hdfgroup.org/HDF5/
  * MKL 2017.2  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.19  http://www.openblas.net/
  * FFTW 3.3.5  http://www.fftw.org/download.html
