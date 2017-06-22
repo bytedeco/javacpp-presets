@@ -107,7 +107,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.10.0-patch1-${project.version}</version>
+      <version>1.10.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -147,7 +147,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>caffe-platform</artifactId>
-      <version>master-${project.version}</version>
+      <version>1.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

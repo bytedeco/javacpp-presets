@@ -38,8 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_highgui.class, hdf5.class, openblas.class}, target = "org.bytedeco.javacpp.caffe", value = {
     @Platform(value = {"linux-x86", "macosx"}, define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
-        "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h",
-        "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", /*"caffe/data_reader.hpp",*/ "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
+        "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h", "caffe/common.hpp",
+        "google/protobuf/generated_message_table_driven.h", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", /*"caffe/data_reader.hpp",*/ "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
         "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/layers/base_data_layer.hpp", "caffe/layers/data_layer.hpp",
         "caffe/layers/dummy_data_layer.hpp", "caffe/layers/hdf5_data_layer.hpp", "caffe/layers/hdf5_output_layer.hpp", "caffe/layers/image_data_layer.hpp", "caffe/layers/memory_data_layer.hpp",
         "caffe/layers/window_data_layer.hpp", "caffe/layer_factory.hpp", "caffe/layer.hpp", "caffe/layers/accuracy_layer.hpp", "caffe/layers/loss_layer.hpp", "caffe/layers/contrastive_loss_layer.hpp",
@@ -56,15 +56,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "caffe/layers/lrn_layer.hpp", "caffe/layers/cudnn_lrn_layer.hpp", "caffe/layers/cudnn_lcn_layer.hpp", "caffe/layers/pooling_layer.hpp", "caffe/layers/cudnn_pooling_layer.hpp",
         "caffe/layers/spp_layer.hpp", "caffe/layers/recurrent_layer.hpp", "caffe/layers/lstm_layer.hpp", "caffe/layers/rnn_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp",
         "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
-        "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe@.1.0.0-rc5", resource = {"include", "lib"}, includepath = {"/usr/local/cuda/include/",
+        "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe@.1.0.0", resource = {"include", "lib"}, includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
     @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}) })
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPROTOBUF_EXPORT", "LIBPROTOC_EXPORT", "GOOGLE_PROTOBUF_VERIFY_VERSION", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_DEPRECATED",
-                             "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK").cppTypes().annotations())
+                             "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR").cppTypes().annotations())
                .put(new Info("NDEBUG", "CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG").define())
-               .put(new Info("USE_CUDNN", "defined(_WIN32) && defined(GetMessage)").define(false))
+               .put(new Info("USE_CUDNN", "defined(_WIN32) && defined(GetMessage)", "LANG_CXX11").define(false))
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
                .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t").cast().valueTypes("int"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
@@ -80,7 +80,25 @@ public class caffe implements InfoMapper {
                .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "MDB_env", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
-                             "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip());
+                             "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip())
+
+               .put(new Info("caffe::AccuracyParameterDefaultTypeInternal", "caffe::ArgMaxParameterDefaultTypeInternal", "caffe::BatchNormParameterDefaultTypeInternal",
+                             "caffe::BiasParameterDefaultTypeInternal", "caffe::BlobProtoDefaultTypeInternal", "caffe::BlobProtoVectorDefaultTypeInternal", "caffe::BlobShapeDefaultTypeInternal",
+                             "caffe::ConcatParameterDefaultTypeInternal", "caffe::ContrastiveLossParameterDefaultTypeInternal", "caffe::ConvolutionParameterDefaultTypeInternal",
+                             "caffe::CropParameterDefaultTypeInternal", "caffe::DataParameterDefaultTypeInternal", "caffe::DatumDefaultTypeInternal", "caffe::DropoutParameterDefaultTypeInternal",
+                             "caffe::DummyDataParameterDefaultTypeInternal", "caffe::ELUParameterDefaultTypeInternal", "caffe::EltwiseParameterDefaultTypeInternal", "caffe::EmbedParameterDefaultTypeInternal",
+                             "caffe::ExpParameterDefaultTypeInternal", "caffe::FillerParameterDefaultTypeInternal", "caffe::FlattenParameterDefaultTypeInternal", "caffe::HDF5DataParameterDefaultTypeInternal",
+                             "caffe::HDF5OutputParameterDefaultTypeInternal", "caffe::HingeLossParameterDefaultTypeInternal", "caffe::ImageDataParameterDefaultTypeInternal",
+                             "caffe::InfogainLossParameterDefaultTypeInternal", "caffe::InnerProductParameterDefaultTypeInternal", "caffe::InputParameterDefaultTypeInternal",
+                             "caffe::LRNParameterDefaultTypeInternal", "caffe::LayerParameterDefaultTypeInternal", "caffe::LogParameterDefaultTypeInternal", "caffe::LossParameterDefaultTypeInternal",
+                             "caffe::MVNParameterDefaultTypeInternal", "caffe::MemoryDataParameterDefaultTypeInternal", "caffe::NetParameterDefaultTypeInternal", "caffe::NetStateDefaultTypeInternal",
+                             "caffe::NetStateRuleDefaultTypeInternal", "caffe::PReLUParameterDefaultTypeInternal", "caffe::ParamSpecDefaultTypeInternal", "caffe::ParameterParameterDefaultTypeInternal",
+                             "caffe::PoolingParameterDefaultTypeInternal", "caffe::PowerParameterDefaultTypeInternal", "caffe::PythonParameterDefaultTypeInternal", "caffe::ReLUParameterDefaultTypeInternal",
+                             "caffe::RecurrentParameterDefaultTypeInternal", "caffe::ReductionParameterDefaultTypeInternal", "caffe::ReshapeParameterDefaultTypeInternal", "caffe::SPPParameterDefaultTypeInternal",
+                             "caffe::ScaleParameterDefaultTypeInternal", "caffe::SigmoidParameterDefaultTypeInternal", "caffe::SliceParameterDefaultTypeInternal", "caffe::SoftmaxParameterDefaultTypeInternal",
+                             "caffe::SolverParameterDefaultTypeInternal", "caffe::SolverStateDefaultTypeInternal", "caffe::TanHParameterDefaultTypeInternal", "caffe::ThresholdParameterDefaultTypeInternal",
+                             "caffe::TileParameterDefaultTypeInternal", "caffe::TransformationParameterDefaultTypeInternal", "caffe::V0LayerParameterDefaultTypeInternal",
+                             "caffe::V1LayerParameterDefaultTypeInternal", "caffe::WindowDataParameterDefaultTypeInternal").skip());
 
         String[] functionTemplates = { "caffe_cpu_gemm", "caffe_cpu_gemv", "caffe_axpy", "caffe_cpu_axpby", "caffe_copy", "caffe_set", "caffe_add_scalar",
                 "caffe_scal", "caffe_sqr", "caffe_add", "caffe_sub", "caffe_mul", "caffe_div", "caffe_powx", "caffe_nextafter", "caffe_rng_uniform",

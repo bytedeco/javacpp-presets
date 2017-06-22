@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>caffe</artifactId>
-  <version>master-${project.parent.version}</version>
+  <version>1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Caffe</name>
 
   <properties>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>hdf5</artifactId>
-      <version>1.10.0-patch1-${project.parent.version}</version>
+      <version>1.10.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -60,7 +60,7 @@
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>hdf5</artifactId>
-            <version>1.10.0-patch1-${project.parent.version}</version>
+            <version>1.10.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -76,7 +76,7 @@
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>hdf5</artifactId>
-            <version>1.10.0-patch1-${project.parent.version}</version>
+            <version>1.10.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>

@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * HDF5 1.10.0-patch1  https://support.hdfgroup.org/HDF5/
+ * HDF5 1.10.1  https://support.hdfgroup.org/HDF5/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.3</version>
+    <version>1.3.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>hdf5-platform</artifactId>
-            <version>1.10.0-patch1-1.3</version>
+            <version>1.10.1-1.3.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

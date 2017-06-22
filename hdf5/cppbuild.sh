@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-HDF5_VERSION=1.10.0-patch1
+HDF5_VERSION=1.10.1
 download https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2 hdf5-$HDF5_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
@@ -58,15 +58,15 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-# Installers available at: https://support.hdfgroup.org/HDF5/release/obtain5110.html
+# Installers available at: https://www.hdfgroup.org/downloads/hdf5/
     windows-x86)
-        if [[ ! -d "/C/Program Files (x86)/HDF_Group/HDF5/1.10.0/" ]]; then
+        if [[ ! -d "/C/Program Files (x86)/HDF_Group/HDF5/1.10.1/" ]]; then
             echo "Please install HDF5 under the default installation directory"
             exit 1
         fi
         ;;
     windows-x86_64)
-        if [[ ! -d "/C/Program Files/HDF_Group/HDF5/1.10.0/" ]]; then
+        if [[ ! -d "/C/Program Files/HDF_Group/HDF5/1.10.1/" ]]; then
             echo "Please install HDF5 under the default installation directory"
             exit 1
         fi

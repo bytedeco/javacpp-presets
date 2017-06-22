@@ -14,11 +14,6 @@
   <version>2.11.3.121-${project.parent.version}</version>
   <name>JavaCPP Presets for FlyCapture</name>
 
-  <properties>
-    <!-- Skip on non-Windows system (see profile below) -->
-    <javacpp.parser.skip>true</javacpp.parser.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -40,6 +35,9 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <encoding>ISO-8859-1</encoding>
+        </configuration>
         <executions>
           <execution>
             <id>javacpp.compiler</id>
@@ -70,17 +68,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os><family>windows</family></os>
-      </activation>
-      <properties>
-        <javacpp.parser.skip>false</javacpp.parser.skip>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>
