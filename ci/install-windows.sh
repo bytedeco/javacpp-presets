@@ -94,7 +94,8 @@ if [[ "$projectName" =~ "hdf5" ]]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShTEtPYjU5SDhIZWM /c/Downloads/hdf5-64.zip 
           fi
           unzip /c/Downloads/hdf5-64.zip 
-          msiexec //i ./hdf5/HDF5-1.10.1-win64.msi //quiet
+          cd hdf 
+          msiexec //i HDF5-1.10.1-win64.msi //quiet
        elif [ "$MSYS2_ARCH" == "x86" ]; then
           echo 32bit copy for hdf5 
           if [[ $(find /c/Downloads/hdf5-32.zip -type f -size +1000000c 2>/dev/null) ]]; then
@@ -104,9 +105,9 @@ if [[ "$projectName" =~ "hdf5" ]]; then
           fi
           unzip /c/Downloads/hdf5-32.zip 
           ls -ltr 
-          ls -ltr /c/Downloads
-          ls -ltr /c/Downloads/hdf5
-          msiexec //i ./hdf/HDF5-1.10.1-win32.msi //quiet
+          cd hdf 
+          ls -ltr 
+          msiexec //i HDF5-1.10.1-win32.msi //quiet
        fi
        cd ..
        echo Finished hd5 install 
