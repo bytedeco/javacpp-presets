@@ -31,15 +31,17 @@ echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn deploy -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl .,%PROJ%
-   IF errorlevel 1 (
-     exit /b %errorlevel%
+   IF ERRORLEVEL 1 (
+     echo Quitting with error  
+     exit /b 1
    )
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
     call mvn -U -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings ..\ci\settings.xml deploy
-    IF errorlevel 1 (
-      exit /b %errorlevel%
+    IF ERRORLEVEL 1 (
+      echo Quitting with error  
+      exit /b 1
     )
 
     cd ..
@@ -47,9 +49,9 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
 ) ELSE (
    echo Install %PROJ%
    call mvn install -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl .,%PROJ%
-   IF errorlevel 1 (
-      echo Quitting with error level %errorlevel%
-      exit /b %errorlevel%
+   IF ERRORLEVEL 1 (
+      echo Quitting with error  
+      exit /b 1 
    )
 
 )
