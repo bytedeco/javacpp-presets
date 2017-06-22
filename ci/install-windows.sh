@@ -104,9 +104,7 @@ if [[ "$projectName" =~ "hdf5" ]]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShU1BzVTd1YzZGczg /c/Downloads/hdf5-32.zip 
           fi
           unzip /c/Downloads/hdf5-32.zip 
-          ls -ltr 
           cd hdf 
-          ls -ltr 
           msiexec //i HDF5-1.10.1-win32.msi //quiet
        fi
        cd ..
