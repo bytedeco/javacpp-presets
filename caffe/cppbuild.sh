@@ -103,12 +103,10 @@ make install
 cd ..
 
 cd gflags-$GFLAGS
-mkdir -p build
-cd build
-"$CMAKE" -DBUILD_SHARED_LIBS=OFF "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" ..
+"$CMAKE" -DBUILD_SHARED_LIBS=OFF "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH"
 make -j $MAKEJ
 make install
-cd ../..
+cd ..
 
 cd protobuf-$PROTO
 ./configure "--prefix=$INSTALL_PATH" --disable-shared
@@ -125,6 +123,7 @@ cp -a include/leveldb "$INSTALL_PATH/include/"
 cd ..
 
 cd snappy-$SNAPPY
+sed -i="" 's/#ifdef __SSE2__/#if 0/' snappy.cc
 ./configure "--prefix=$INSTALL_PATH" --disable-shared
 make -j $MAKEJ
 make install
