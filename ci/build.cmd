@@ -48,6 +48,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Install %PROJ%
    call mvn install -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl .,%PROJ%
    IF errorlevel 1 (
+      echo Quitting with error level %errorlevel%
       exit /b %errorlevel%
    )
 
