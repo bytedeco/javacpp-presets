@@ -117,8 +117,8 @@ Each child module in turn relies on its corresponding native libraries being alr
  * HDF5 1.10.1  https://support.hdfgroup.org/HDF5/
  * MKL 2017.2  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.19  http://www.openblas.net/
- * FFTW 3.3.5  http://www.fftw.org/download.html
- * GSL 2.3  http://www.gnu.org/software/gsl/#downloading
+ * FFTW 3.3.6  http://www.fftw.org/download.html
+ * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 4.0.0  http://llvm.org/releases/download.html
  * Leptonica 1.74.1  http://www.leptonica.org/download.html
  * Tesseract 3.05.00  https://github.com/tesseract-ocr/tesseract

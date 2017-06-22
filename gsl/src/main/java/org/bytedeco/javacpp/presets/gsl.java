@@ -96,9 +96,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"}, 
-                               link={"gslcblas@.0", "gsl@.19"}),
+                               link={"gslcblas@.0", "gsl@.23"}),
     @Platform(value="android", link={"gslcblas",    "gsl"}),
-    @Platform(value="windows", preload={"libgslcblas-0", "libgsl-19"}) })
+    @Platform(value="windows", preload={"libgslcblas-0", "libgsl-23"}) })
 public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
@@ -144,6 +144,7 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_sf_result_struct").pointerTypes("gsl_sf_result"))
                .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"))
                .put(new Info("gsl_sf_legendre_Plm_array", "gsl_sf_legendre_Plm_deriv_array", "gsl_sf_legendre_sphPlm_array", "gsl_sf_legendre_sphPlm_deriv_array",
-                             "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf").skip());
+                             "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf",
+                             "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e").skip());
     }
 }

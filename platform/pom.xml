@@ -122,12 +122,12 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>fftw-platform</artifactId>
-      <version>3.3.5-${project.version}</version>
+      <version>3.3.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>gsl-platform</artifactId>
-      <version>2.3-${project.version}</version>
+      <version>2.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
