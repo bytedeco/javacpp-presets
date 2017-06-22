@@ -28,7 +28,6 @@ bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
 
 echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
-echo XXXXXXX WARNING NOT CREATING CORRECT ERROR RETURN YET, USES STATUS OF LAST COMMAND..
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn deploy -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl .,%PROJ%

@@ -17,6 +17,7 @@ java -version
 mvn --version
 /c/python27/python --version
 pip --version
+unzip --version
 
 pip install requests
 
