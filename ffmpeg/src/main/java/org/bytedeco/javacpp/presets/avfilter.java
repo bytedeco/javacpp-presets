@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value="windows", preload="avfilter-6") })
 public class avfilter implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts").cast().pointerTypes("Pointer"))
+        infoMap.put(new Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts", "FFFrameQueue").cast().pointerTypes("Pointer"))
                .put(new Info("AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(true))
-               .put(new Info("!FF_API_FOO_COUNT").define(false));
+               .put(new Info("!FF_API_FOO_COUNT", "FF_INTERNAL_FIELDS").define(false));
     }
 }

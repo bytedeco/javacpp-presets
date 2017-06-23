@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-bzlib --disable-lzma"
+DISABLE="--disable-w32threads --disable-iconv --disable-opencl --disable-sdl --disable-bzlib --disable-lzma"
 ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
@@ -16,14 +16,14 @@ ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enabl
 
 ZLIB=zlib-1.2.11
 LAME=lame-3.99.5
-SPEEX=speex-1.2rc2
-OPENCORE_AMR=opencore-amr-0.1.3
-OPENSSL=openssl-1.0.2l
-OPENH264_VERSION=1.6.0
-X265=x265_2.3
+SPEEX=speex-1.2.0
+OPENCORE_AMR=opencore-amr-0.1.5
+OPENSSL=openssl-1.1.0f
+OPENH264_VERSION=1.7.0
+X265=x265_2.4
 VPX_VERSION=v1.6.1
-ALSA_VERSION=1.1.3
-FFMPEG_VERSION=3.2.4
+ALSA_VERSION=1.1.4.1
+FFMPEG_VERSION=3.3.2
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
@@ -86,7 +86,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android-armv7 $CFLAGS no-shared
+        ./Configure --prefix=$INSTALL_PATH android-armeabi $CFLAGS no-shared
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
@@ -204,9 +204,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
         ;;
@@ -247,9 +246,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
         ;;
@@ -329,13 +327,12 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
         else
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         fi
         make -j $MAKEJ
         make install
@@ -377,9 +374,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
         ;;
