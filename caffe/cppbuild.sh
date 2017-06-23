@@ -16,6 +16,7 @@ case $PLATFORM in
         export TOOLSET=`echo $OLDCC | sed 's/\([a-zA-Z]*\)\([0-9]\)\([0-9]\)/\1-\2.\3/'`
         export BINARY=32
         export BLAS=open
+        export CUDAFLAGS=
         ;;
     linux-x86_64)
         export CPU_ONLY=0
@@ -25,6 +26,7 @@ case $PLATFORM in
         export TOOLSET=`echo $OLDCC | sed 's/\([a-zA-Z]*\)\([0-9]\)\([0-9]\)/\1-\2.\3/'`
         export BINARY=64
         export BLAS=open
+        export CUDAFLAGS="-Xcompiler -std=c++98"
         ;;
     macosx-*)
         export CPU_ONLY=0
@@ -34,6 +36,7 @@ case $PLATFORM in
         export TOOLSET="clang"
         export BINARY=64
         export BLAS=atlas
+        export CUDAFLAGS=
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -151,7 +154,7 @@ patch -Np1 < ../../../caffe-nogpu.patch
 cp Makefile.config.example Makefile.config
 export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
-export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include -Xcompiler -std=c++98"
+export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH/lib -L$HDF5_PATH/lib"
 make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. lib
 # Manual deploy to avoid Caffe's python build
