@@ -7,27 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
-    FFTW_VERSION=3.3.5
-    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll$BITS.zip fftw-$FFTW_VERSION-dll$BITS.zip
+FFTW_VERSION=3.3.6-pl2
+download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    mkdir -p include lib
-    unzip -o ../fftw-$FFTW_VERSION-dll$BITS.zip -d fftw-$FFTW_VERSION-dll$BITS
-    cd fftw-$FFTW_VERSION-dll$BITS
-else
-    FFTW_VERSION=3.3.5
-    download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    INSTALL_PATH=`pwd`
-    echo "Decompressing archives..."
-    tar --totals -xzf ../fftw-$FFTW_VERSION.tar.gz
-    cd fftw-$FFTW_VERSION
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+echo "Decompressing archives..."
+tar --totals -xzf ../fftw-$FFTW_VERSION.tar.gz
+cd fftw-$FFTW_VERSION
 
 case $PLATFORM in
     android-arm)
@@ -108,12 +96,20 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        cp *.h ../include
-        cp *.dll ../lib
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32" --with-our-malloc
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32" --with-our-malloc --enable-float
+        make -j $MAKEJ
+        make install-strip
         ;;
     windows-x86_64)
-        cp *.h ../include
-        cp *.dll ../lib
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m64" --with-our-malloc
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m64" --with-our-malloc --enable-float
+        make -j $MAKEJ
+        make install-strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

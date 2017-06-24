@@ -105,7 +105,7 @@ public class avcodec extends org.bytedeco.javacpp.presets.avcodec {
  * - Send valid input:
  *   - For decoding, call avcodec_send_packet() to give the decoder raw
  *     compressed data in an AVPacket.
- *   - For encoding, call avcodec_send_frame() to give the decoder an AVFrame
+ *   - For encoding, call avcodec_send_frame() to give the encoder an AVFrame
  *     containing uncompressed audio or video.
  *   In both cases, it is recommended that AVPackets and AVFrames are
  *   refcounted, or libavcodec might have to copy the input data. (libavformat
@@ -127,6 +127,12 @@ public class avcodec extends org.bytedeco.javacpp.presets.avcodec {
  * input frames/packets without returning a frame, until its internal buffers
  * are filled. This situation is handled transparently if you follow the steps
  * outlined above.
+ *
+ * In theory, sending input can result in EAGAIN - this should happen only if
+ * not all output was received. You can use this to structure alternative decode
+ * or encode loops other than the one suggested above. For example, you could
+ * try sending new input on each iteration, and try to receive output if that
+ * returns EAGAIN.
  *
  * End of stream situations. These require "flushing" (aka draining) the codec,
  * as the codec might buffer multiple frames or packets internally for
@@ -152,8 +158,9 @@ public class avcodec extends org.bytedeco.javacpp.presets.avcodec {
  *
  * Not all codecs will follow a rigid and predictable dataflow; the only
  * guarantee is that an AVERROR(EAGAIN) return value on a send/receive call on
- * one end implies that a receive/send call on the other end will succeed. In
- * general, no codec will permit unlimited buffering of input or output.
+ * one end implies that a receive/send call on the other end will succeed, or
+ * at least will not fail with AVERROR(EAGAIN). In general, no codec will
+ * permit unlimited buffering of input or output.
  *
  * This API replaces the following legacy functions:
  * - avcodec_decode_video2() and avcodec_decode_audio4():
@@ -162,7 +169,8 @@ public class avcodec extends org.bytedeco.javacpp.presets.avcodec {
  *   Unlike with the old video decoding API, multiple frames might result from
  *   a packet. For audio, splitting the input packet into frames by partially
  *   decoding packets becomes transparent to the API user. You never need to
- *   feed an AVPacket to the API twice.
+ *   feed an AVPacket to the API twice (unless it is rejected with AVERROR(EAGAIN) - then
+ *   no data was read from the packet).
  *   Additionally, sending a flush/draining packet is required only once.
  * - avcodec_encode_video2()/avcodec_encode_audio2():
  *   Use avcodec_send_frame() to feed input to the encoder, then use
@@ -175,7 +183,22 @@ public class avcodec extends org.bytedeco.javacpp.presets.avcodec {
  * and will result in undefined behavior.
  *
  * Some codecs might require using the new API; using the old API will return
- * an error when calling it.
+ * an error when calling it. All codecs support the new API.
+ *
+ * A codec is not allowed to return AVERROR(EAGAIN) for both sending and receiving. This
+ * would be an invalid state, which could put the codec user into an endless
+ * loop. The API has no concept of time either: it cannot happen that trying to
+ * do avcodec_send_packet() results in AVERROR(EAGAIN), but a repeated call 1 second
+ * later accepts the packet (with no other receive/flush API calls involved).
+ * The API is a strict state machine, and the passage of time is not supposed
+ * to influence it. Some timing-dependent behavior might still be deemed
+ * acceptable in certain cases. But it must never result in both send/receive
+ * returning EAGAIN at the same time at any point. It must also absolutely be
+ * avoided that the current state is "unstable" and can "flip-flop" between
+ * the send/receive APIs allowing progress. For example, it's not allowed that
+ * the codec randomly decides that it actually wants to consume a packet now
+ * instead of returning a frame, after it just returned AVERROR(EAGAIN) on an
+ * avcodec_send_packet() call.
  * \}
  */
 
@@ -431,6 +454,14 @@ public static final int
     AV_CODEC_ID_MAGICYUV =  0x8000 + 19,
     AV_CODEC_ID_SHEERVIDEO =  0x8000 + 20,
     AV_CODEC_ID_YLC =  0x8000 + 21,
+    AV_CODEC_ID_PSD =  0x8000 + 22,
+    AV_CODEC_ID_PIXLET =  0x8000 + 23,
+    AV_CODEC_ID_SPEEDHQ =  0x8000 + 24,
+    AV_CODEC_ID_FMVC =  0x8000 + 25,
+    AV_CODEC_ID_SCPR =  0x8000 + 26,
+    AV_CODEC_ID_CLEARVIDEO =  0x8000 + 27,
+    AV_CODEC_ID_XPM =  0x8000 + 28,
+    AV_CODEC_ID_AV1 =  0x8000 + 29,
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -469,6 +500,8 @@ public static final int
 
     AV_CODEC_ID_PCM_S64LE =  0x10800,
     AV_CODEC_ID_PCM_S64BE =  0x10800 + 1,
+    AV_CODEC_ID_PCM_F16LE =  0x10800 + 2,
+    AV_CODEC_ID_PCM_F24LE =  0x10800 + 3,
 
     /* various ADPCM codecs */
     AV_CODEC_ID_ADPCM_IMA_QT =  0x11000,
@@ -621,6 +654,8 @@ public static final int
     AV_CODEC_ID_XMA1 =  0x15800 + 11,
     AV_CODEC_ID_XMA2 =  0x15800 + 12,
     AV_CODEC_ID_DST =  0x15800 + 13,
+    AV_CODEC_ID_ATRAC3AL =  0x15800 + 14,
+    AV_CODEC_ID_ATRAC3PAL =  0x15800 + 15,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -1463,6 +1498,11 @@ public static final int AV_GET_BUFFER_FLAG_REF = (1 << 0);
  */
 /** enum AVPacketSideDataType */
 public static final int
+    /**
+     * An AV_PKT_DATA_PALETTE side data packet contains exactly AVPALETTE_SIZE
+     * bytes worth of palette. This side data signals that a new palette is
+     * present.
+     */
     AV_PKT_DATA_PALETTE = 0,
 
     /**
@@ -1639,7 +1679,23 @@ public static final int
      * should be associated with a video stream and containts data in the form
      * of the AVMasteringDisplayMetadata struct.
      */
-    AV_PKT_DATA_MASTERING_DISPLAY_METADATA = 79;
+    AV_PKT_DATA_MASTERING_DISPLAY_METADATA = 79,
+
+    /**
+     * This side data should be associated with a video stream and corresponds
+     * to the AVSphericalMapping structure.
+     */
+    AV_PKT_DATA_SPHERICAL = 80,
+
+    /**
+     * The number of side data elements (in fact a bit more than it).
+     * This is not part of the public API/ABI in the sense that it may
+     * change when new side data types are added.
+     * This must stay the last enum value.
+     * If its value becomes huge, some code using it
+     * needs to be updated as it assumes it to be smaller than other limits.
+     */
+    AV_PKT_DATA_NB = 81;
 
 public static final int AV_PKT_DATA_QUALITY_FACTOR = AV_PKT_DATA_QUALITY_STATS; //DEPRECATED
 
@@ -1800,7 +1856,7 @@ public static final int
  * New fields can be added to the end with minor version bumps.
  * Removal, reordering and changes to existing fields require a major
  * version bump.
- * Please use AVOptions (av_opt* / av_set/get*()) to access these fields from user
+ * You can use AVOptions (av_opt* / av_set/get*()) to access these fields from user
  * applications.
  * The name string for AVOptions options matches the associated command line
  * parameter name and can be found in libavcodec/options_table.h
@@ -3094,9 +3150,7 @@ public static final int FF_DEBUG_ER =          0x00000400;
 public static final int FF_DEBUG_MMCO =        0x00000800;
 public static final int FF_DEBUG_BUGS =        0x00001000;
 // #if FF_API_DEBUG_MV
-/** only access through AVOptions from outside libavcodec */
 public static final int FF_DEBUG_VIS_QP =      0x00002000;
-/** only access through AVOptions from outside libavcodec */
 public static final int FF_DEBUG_VIS_MB_TYPE = 0x00004000;
 // #endif
 public static final int FF_DEBUG_BUFFERS =     0x00008000;
@@ -3107,7 +3161,6 @@ public static final int FF_DEBUG_NOMC =        0x01000000;
 // #if FF_API_DEBUG_MV
     /**
      * debug
-     * Code outside libavcodec should access this field using AVOptions
      * - encoding: Set by user.
      * - decoding: Set by user.
      */
@@ -3250,8 +3303,6 @@ public static final int FF_IDCT_SIMPLEAUTO =    128;
      * low resolution decoding, 1-> 1/2 size, 2->1/4 size
      * - encoding: unused
      * - decoding: Set by user.
-     * Code outside libavcodec should access this field using:
-     * av_codec_{get,set}_lowres(avctx)
      */
      public native int lowres(); public native AVCodecContext lowres(int lowres);
 // #endif
@@ -3583,8 +3634,6 @@ public static final int FF_LEVEL_UNKNOWN = -99;
 
     /**
      * Timebase in which pkt_dts/pts and AVPacket.dts/pts are.
-     * Code outside libavcodec should access this field using:
-     * av_codec_{get,set}_pkt_timebase(avctx)
      * - encoding unused.
      * - decoding set by user.
      */
@@ -3592,8 +3641,6 @@ public static final int FF_LEVEL_UNKNOWN = -99;
 
     /**
      * AVCodecDescriptor
-     * Code outside libavcodec should access this field using:
-     * av_codec_{get,set}_codec_descriptor(avctx)
      * - encoding: unused.
      * - decoding: set by libavcodec.
      */
@@ -3641,7 +3688,6 @@ public static final int FF_SUB_CHARENC_MODE_PRE_DECODER =  1;
      * However for formats that do not use pre-multiplied alpha
      * there might be serious artefacts (though e.g. libswscale currently
      * assumes pre-multiplied alpha anyway).
-     * Code outside libavcodec should access this field using AVOptions
      *
      * - decoding: set by user
      * - encoding: unused
@@ -3660,7 +3706,6 @@ public static final int FF_SUB_CHARENC_MODE_PRE_DECODER =  1;
 
     /**
      * custom intra quantization matrix
-     * Code outside libavcodec should access this field using av_codec_g/set_chroma_intra_matrix()
      * - encoding: Set by user, can be NULL.
      * - decoding: unused.
      */
@@ -3669,8 +3714,6 @@ public static final int FF_SUB_CHARENC_MODE_PRE_DECODER =  1;
     /**
      * dump format separator.
      * can be ", " or "\n      " or anything else
-     * Code outside libavcodec should access this field using AVOptions
-     * (NO direct access).
      * - encoding: Set by user.
      * - decoding: Set by user.
      */
@@ -3680,13 +3723,12 @@ public static final int FF_SUB_CHARENC_MODE_PRE_DECODER =  1;
      * ',' separated list of allowed decoders.
      * If NULL then all are allowed
      * - encoding: unused
-     * - decoding: set by user through AVOPtions (NO direct access)
+     * - decoding: set by user
      */
     public native @Cast("char*") BytePointer codec_whitelist(); public native AVCodecContext codec_whitelist(BytePointer codec_whitelist);
 
     /*
      * Properties of the stream that gets decoded
-     * To be accessed through av_codec_get_properties() (NO direct access)
      * - encoding: unused
      * - decoding: set by libavcodec
      */
@@ -3706,7 +3748,8 @@ public static final int FF_CODEC_PROPERTY_CLOSED_CAPTIONS = 0x00000002;
     /**
      * A reference to the AVHWFramesContext describing the input (for encoding)
      * or output (decoding) frames. The reference is set by the caller and
-     * afterwards owned (and freed) by libavcodec.
+     * afterwards owned (and freed) by libavcodec - it should never be read by
+     * the caller after being set.
      *
      * - decoding: This field should be set by the caller from the get_format()
      *             callback. The previous reference (if any) will always be
@@ -3748,6 +3791,44 @@ public static final int FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS = 1;
      */
     public native int trailing_padding(); public native AVCodecContext trailing_padding(int trailing_padding);
 
+    /**
+     * The number of pixels per image to maximally accept.
+     *
+     * - decoding: set by user
+     * - encoding: set by user
+     */
+    public native @Cast("int64_t") long max_pixels(); public native AVCodecContext max_pixels(long max_pixels);
+
+    /**
+     * A reference to the AVHWDeviceContext describing the device which will
+     * be used by a hardware encoder/decoder.  The reference is set by the
+     * caller and afterwards owned (and freed) by libavcodec.
+     *
+     * This should be used if either the codec device does not require
+     * hardware frames or any that are used are to be allocated internally by
+     * libavcodec.  If the user wishes to supply any of the frames used as
+     * encoder input or decoder output then hw_frames_ctx should be used
+     * instead.  When hw_frames_ctx is set in get_format() for a decoder, this
+     * field will be ignored while decoding the associated stream segment, but
+     * may again be used on a following one after another get_format() call.
+     *
+     * For both encoders and decoders this field should be set before
+     * avcodec_open2() is called and must not be written to thereafter.
+     *
+     * Note that some decoders may require this field to be set initially in
+     * order to support hw_frames_ctx at all - in that case, all frames
+     * contexts used must be created on the same device.
+     */
+    public native AVBufferRef hw_device_ctx(); public native AVCodecContext hw_device_ctx(AVBufferRef hw_device_ctx);
+
+    /**
+     * Bit set of AV_HWACCEL_FLAG_* flags, which affect hardware accelerated
+     * decoding (if active).
+     * - encoding: unused
+     * - decoding: Set by user (either before avcodec_open2(), or in the
+     *             AVCodecContext.get_format callback)
+     */
+    public native int hwaccel_flags(); public native AVCodecContext hwaccel_flags(int hwaccel_flags);
 }
 
 @NoException public static native @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
@@ -3844,7 +3925,7 @@ public static class AVCodec extends Pointer {
     @MemberGetter public native @Cast("const AVSampleFormat*") IntPointer sample_fmts();
     /** array of support channel layouts, or NULL if unknown. array is terminated by 0 */
     @MemberGetter public native @Cast("const uint64_t*") LongPointer channel_layouts();
-    /** maximum value for lowres supported by the decoder, no direct access, use av_codec_get_max_lowres() */
+    /** maximum value for lowres supported by the decoder */
     public native @Cast("uint8_t") byte max_lowres(); public native AVCodec max_lowres(byte max_lowres);
     /** AVClass for the private context */
     @MemberGetter public native @Const AVClass priv_class();
@@ -4252,6 +4333,11 @@ public static class AVHWAccel extends Pointer {
      * AVCodecInternal.hwaccel_priv_data.
      */
     public native int priv_data_size(); public native AVHWAccel priv_data_size(int priv_data_size);
+
+    /**
+     * Internal hwaccel capabilities.
+     */
+    public native int caps_internal(); public native AVHWAccel caps_internal(int caps_internal);
 }
 
 /**
@@ -4845,7 +4931,7 @@ public static class AVCodecParameters extends Pointer {
  * @see av_packet_alloc
  * @see av_packet_ref
  */
-@NoException public static native AVPacket av_packet_clone(AVPacket src);
+@NoException public static native AVPacket av_packet_clone(@Const AVPacket src);
 
 /**
  * Free the packet, if the packet is reference counted, it will be
@@ -4991,16 +5077,18 @@ public static class AVCodecParameters extends Pointer {
  * @param size pointer for side information size to store (optional)
  * @return pointer to data if present or NULL otherwise
  */
-@NoException public static native @Cast("uint8_t*") BytePointer av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") BytePointer av_packet_get_side_data(@Const AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  IntPointer size);
-@NoException public static native @Cast("uint8_t*") ByteBuffer av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") ByteBuffer av_packet_get_side_data(@Const AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  IntBuffer size);
-@NoException public static native @Cast("uint8_t*") byte[] av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") byte[] av_packet_get_side_data(@Const AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  int[] size);
 
-@NoException public static native int av_packet_merge_side_data(AVPacket pkt);
+// #if FF_API_MERGE_SD_API
+@NoException public static native @Deprecated int av_packet_merge_side_data(AVPacket pkt);
 
-@NoException public static native int av_packet_split_side_data(AVPacket pkt);
+@NoException public static native @Deprecated int av_packet_split_side_data(AVPacket pkt);
+// #endif
 
 @NoException public static native @Cast("const char*") BytePointer av_packet_side_data_name(@Cast("AVPacketSideDataType") int type);
 
@@ -5387,8 +5475,10 @@ public static class AVCodecParameters extends Pointer {
  *                  a flush packet.
  *
  * @return 0 on success, otherwise negative error code:
- *      AVERROR(EAGAIN):   input is not accepted right now - the packet must be
- *                         resent after trying to read output
+ *      AVERROR(EAGAIN):   input is not accepted in the current state - user
+ *                         must read output with avcodec_receive_frame() (once
+ *                         all output is read, the packet should be resent, and
+ *                         the call will not fail with EAGAIN).
  *      AVERROR_EOF:       the decoder has been flushed, and no new packets can
  *                         be sent to it (also returned if more than 1 flush
  *                         packet is sent)
@@ -5409,7 +5499,7 @@ public static class AVCodecParameters extends Pointer {
  *
  * @return
  *      0:                 success, a frame was returned
- *      AVERROR(EAGAIN):   output is not available right now - user must try
+ *      AVERROR(EAGAIN):   output is not available in this state - user must try
  *                         to send new input
  *      AVERROR_EOF:       the decoder has been fully flushed, and there will be
  *                         no more output frames
@@ -5442,8 +5532,10 @@ public static class AVCodecParameters extends Pointer {
  *                  avctx->frame_size for all frames except the last.
  *                  The final frame may be smaller than avctx->frame_size.
  * @return 0 on success, otherwise negative error code:
- *      AVERROR(EAGAIN):   input is not accepted right now - the frame must be
- *                         resent after trying to read output packets
+ *      AVERROR(EAGAIN):   input is not accepted in the current state - user
+ *                         must read output with avcodec_receive_packet() (once
+ *                         all output is read, the packet should be resent, and
+ *                         the call will not fail with EAGAIN).
  *      AVERROR_EOF:       the encoder has been flushed, and no new frames can
  *                         be sent to it
  *      AVERROR(EINVAL):   codec not opened, refcounted_frames not set, it is a
@@ -5461,8 +5553,8 @@ public static class AVCodecParameters extends Pointer {
  *              encoder. Note that the function will always call
  *              av_frame_unref(frame) before doing anything else.
  * @return 0 on success, otherwise negative error code:
- *      AVERROR(EAGAIN):   output is not available right now - user must try
- *                         to send input
+ *      AVERROR(EAGAIN):   output is not available in the current state - user
+ *                         must try to send input
  *      AVERROR_EOF:       the encoder has been fully flushed, and there will be
  *                         no more output packets
  *      AVERROR(EINVAL):   codec not opened, or it is an encoder
@@ -6220,6 +6312,7 @@ public static class AVCodecParser extends Pointer {
 @NoException public static native @Deprecated void avcodec_set_dimensions(AVCodecContext s, int width, int height);
 // #endif
 
+// #if FF_API_TAG_STRING
 /**
  * Put a string representing the codec tag codec_tag in buf.
  *
@@ -6228,10 +6321,13 @@ public static class AVCodecParser extends Pointer {
  * @param codec_tag codec tag to assign
  * @return the length of the string that would have been generated if
  * enough space had been available, excluding the trailing null
+ *
+ * @deprecated see av_fourcc_make_string() and av_fourcc2str().
  */
-@NoException public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") BytePointer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
-@NoException public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") ByteBuffer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
-@NoException public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") byte[] buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+@NoException public static native @Cast("size_t") @Deprecated long av_get_codec_tag_string(@Cast("char*") BytePointer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+@NoException public static native @Cast("size_t") @Deprecated long av_get_codec_tag_string(@Cast("char*") ByteBuffer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+@NoException public static native @Cast("size_t") @Deprecated long av_get_codec_tag_string(@Cast("char*") byte[] buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+// #endif
 
 @NoException public static native void avcodec_string(@Cast("char*") BytePointer buf, int buf_size, AVCodecContext enc, int encode);
 @NoException public static native void avcodec_string(@Cast("char*") ByteBuffer buf, int buf_size, AVCodecContext enc, int encode);
@@ -6385,7 +6481,7 @@ public static class AVBitStreamFilterContext extends Pointer {
     }
 
     public native Pointer priv_data(); public native AVBitStreamFilterContext priv_data(Pointer priv_data);
-    public native AVBitStreamFilter filter(); public native AVBitStreamFilterContext filter(AVBitStreamFilter filter);
+    @MemberGetter public native @Const AVBitStreamFilter filter();
     public native AVCodecParserContext parser(); public native AVBitStreamFilterContext parser(AVCodecParserContext parser);
     public native AVBitStreamFilterContext next(); public native AVBitStreamFilterContext next(AVBitStreamFilterContext next);
     /**
@@ -6450,12 +6546,15 @@ public static class AVBSFContext extends Pointer {
     public native Pointer priv_data(); public native AVBSFContext priv_data(Pointer priv_data);
 
     /**
-     * Parameters of the input stream. Set by the caller before av_bsf_init().
+     * Parameters of the input stream. This field is allocated in
+     * av_bsf_alloc(), it needs to be filled by the caller before
+     * av_bsf_init().
      */
     public native AVCodecParameters par_in(); public native AVBSFContext par_in(AVCodecParameters par_in);
 
     /**
-     * Parameters of the output stream. Set by the filter in av_bsf_init().
+     * Parameters of the output stream. This field is allocated in
+     * av_bsf_alloc(), it is set by the filter in av_bsf_init().
      */
     public native AVCodecParameters par_out(); public native AVBSFContext par_out(AVCodecParameters par_out);
 

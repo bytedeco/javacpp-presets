@@ -58,7 +58,7 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
  * (de)muxers in libavdevice are of the AVFMT_NOFILE type (they use their own
  * I/O functions). The filename passed to avformat_open_input() often does not
  * refer to an actually existing file, but has some special device-specific
- * meaning - e.g. for x11grab it is the display name.
+ * meaning - e.g. for xcbgrab it is the display name.
  *
  * To use libavdevice, simply call avdevice_register_all() to register all
  * compiled muxers and demuxers. They all use standard libavformat API.
@@ -88,7 +88,6 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
 
 /**
  * Initialize libavdevice and register all the input and output devices.
- * \warning This function is not thread safe.
  */
 @NoException public static native void avdevice_register_all();
 

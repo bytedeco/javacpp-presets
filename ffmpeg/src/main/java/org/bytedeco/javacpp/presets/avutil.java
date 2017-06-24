@@ -45,7 +45,7 @@ public class avutil implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("NAN", "INFINITY").cppTypes("double"))
-               .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").cppTypes())
+               .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID", "AVCOL_SPC_YCGCO", "AVCOL_SPC_YCOCG").cppTypes())
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result").cppTypes().annotations())
