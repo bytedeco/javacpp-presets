@@ -13,7 +13,7 @@ LIBJPEG=libjpeg-turbo-1.5.1
 LIBPNG=libpng-1.6.29
 LIBTIFF=tiff-4.0.7
 LIBWEBP=libwebp-0.6.0
-LEPTONICA_VERSION=1.74.1
+LEPTONICA_VERSION=1.74.4
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
