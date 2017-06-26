@@ -52,7 +52,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.5.1/bazel-0.5.1-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
@@ -134,6 +134,8 @@ if [[ "$OS" =~ android ]]; then
 
    unzip -qq $HOME/ndk.zip -d $HOME/
    ln -s $HOME/android-ndk-r14b $HOME/android-ndk
+   echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
+   sed -i 's/14/12/g' $HOME/android-ndk/source.properties
    echo "Android NDK setup done"
    if [ "$OS" == "android-arm" ]; then
       export ANDROID_NDK=$HOME/android-ndk/
@@ -147,7 +149,7 @@ if [[ "$OS" =~ android ]]; then
    fi
    if [ "$PROJ" == "tensorflow" ]; then
       echo "adding bazel for tensorflow"
-      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-installer-linux-x86_64.sh -o bazel.sh; export CURL_STATUS=$?
+      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.5.1/bazel-0.5.1-installer-linux-x86_64.sh -o bazel.sh; export CURL_STATUS=$?
       if [ "$CURL_STATUS" != "0" ]; then
         echo "Download failed here, so can't proceed with the build.. Failing.."
         exit 1
