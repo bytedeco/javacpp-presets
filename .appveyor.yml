@@ -8,6 +8,15 @@ cache:
 environment:
   matrix:
     - PLATFORM: x86
+      PROJ: "ffmpeg"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+
+
+    - PLATFORM: x86
       PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
       COMPILER: msys2
       MSYS2_ARCH: x86
@@ -257,7 +266,7 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;c:\perl\bin;%PATH%"
+    - SET "PATH=c:\perl\bin;C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
     - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%"'
 
 test_script:
