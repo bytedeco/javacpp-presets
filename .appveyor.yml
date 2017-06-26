@@ -8,15 +8,6 @@ cache:
 environment:
   matrix:
     - PLATFORM: x86
-      PROJ: "ffmpeg"
-      COMPILER: msys2
-      MSYS2_ARCH: x86
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW32
-      BIT: 32
-
-
-    - PLATFORM: x86
       PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
       COMPILER: msys2
       MSYS2_ARCH: x86
@@ -257,12 +248,10 @@ environment:
 
 init:
 # uncomment this if you need to enable RDP for this build run
-    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       
 install:
     - 'echo install section'
-    - 'cd ..'
-    - 'git clone https://github.com/bytedeco/javacpp.git'
 
 build_script:
     - 'echo build step for %PROJ%'
@@ -274,5 +263,5 @@ test_script:
 
 on_finish:
 #    uncomment this for the RDP session to remain active after the build ends
-    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
