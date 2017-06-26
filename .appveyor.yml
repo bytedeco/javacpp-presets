@@ -257,7 +257,7 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+    - SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;c:\perl\bin;%PATH%"
     - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%"'
 
 test_script:

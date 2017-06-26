@@ -16,7 +16,7 @@ IF "%MSYS2_ARCH%"=="x86" (
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
 )
 
-SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;c:\perl\bin;%PATH%"
 bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
 bash -lc "pacman -Sy --noconfirm pacman"
 bash -lc "pacman -Syu --noconfirm"
