@@ -134,8 +134,10 @@ if [[ "$OS" =~ android ]]; then
 
    unzip -qq $HOME/ndk.zip -d $HOME/
    ln -s $HOME/android-ndk-r14b $HOME/android-ndk
-   echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
-   sed -i 's/14/12/g' $HOME/android-ndk/source.properties
+   if [ "$PROJ" == "tensorflow" ]; then
+     echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
+     sed -i 's/14/12/g' $HOME/android-ndk/source.properties
+   fi
    echo "Android NDK setup done"
    if [ "$OS" == "android-arm" ]; then
       export ANDROID_NDK=$HOME/android-ndk/
