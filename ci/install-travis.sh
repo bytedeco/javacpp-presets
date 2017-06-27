@@ -124,19 +124,22 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
  fi
 
 if [[ "$OS" =~ android ]]; then
+   echo "Update host env.."
+   sudo apt-get update
+   sudo apt-get -y upgrade
    echo "Install android requirements.."
    pip install numpy
-   curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
+   curl -L https://dl.google.com/android/repository/android-ndk-r15b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
     echo "Download failed here, so can't proceed with the build.. Failing.."
     exit 1
    fi
 
    unzip -qq $HOME/ndk.zip -d $HOME/
-   ln -s $HOME/android-ndk-r14b $HOME/android-ndk
+   ln -s $HOME/android-ndk-r15b $HOME/android-ndk
    if [ "$PROJ" == "tensorflow" ]; then
      echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
-     sed -i 's/14/12/g' $HOME/android-ndk/source.properties
+     sed -i 's/15/12/g' $HOME/android-ndk/source.properties
    fi
    echo "Android NDK setup done"
    if [ "$OS" == "android-arm" ]; then
@@ -298,8 +301,8 @@ else
    echo "Build status $BUILD_STATUS"
    if [ $BUILD_STATUS -ne 0 ]; then
      echo "Build Failed"
-     echo "Dump of config.log output files found follows:"
-     find . -name config.log | xargs cat
+     #echo "Dump of config.log output files found follows:"
+     #find . -name config.log | xargs cat
      exit $BUILD_STATUS
    fi
 fi
