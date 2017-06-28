@@ -141,16 +141,16 @@ if [[ "$OS" =~ android ]]; then
      sed -i 's/15/12/g' $HOME/android-ndk/source.properties
    fi
    echo "Android NDK setup done"
-   echo "export ANDROID_NDK=$HOME/android-ndk/" | tee --append $HOME/vars.list
+   echo "export ANDROID_NDK=\$HOME/android-ndk/" | tee --append $HOME/vars.list
    cat $HOME/vars.list
-   echo "export BUILD_ROOT=-Djavacpp.platform.root=$HOME/android-ndk/" | tee --append $HOME/vars.list
+   echo "export BUILD_ROOT=-Djavacpp.platform.root=\$HOME/android-ndk/" | tee --append $HOME/vars.list
    if [ "$OS" == "android-arm" ]; then
       echo "export PATH=\$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin" | tee --append $HOME/vars.list
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++" | tee --append $HOME/vars.list
+      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=\$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++" | tee --append $HOME/vars.list
    fi
    if [ "$OS" == "android-x86" ]; then
       echo "Setting build for android-x86"
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++" | tee --append $HOME/vars.list
+      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=\$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++" | tee --append $HOME/vars.list
    fi
    if [ "$PROJ" == "tensorflow" ]; then
       echo "adding bazel for tensorflow"

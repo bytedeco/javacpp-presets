@@ -75,7 +75,7 @@ case $PLATFORM in
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -119,7 +119,7 @@ case $PLATFORM in
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs 
         make -j $MAKEJ
         make install-strip
         ;;
