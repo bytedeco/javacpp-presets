@@ -13,7 +13,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:/home/ubuntu/.m2 -v $HOME/downloads:/home/ubuntu/downloads -v $TRAVIS_BUILD_DIR/../:/home/ubuntu/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME/.m2:$HOME/.m2 -v $HOME/downloads:$HOME/downloads -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos7 /usr/sbin/init > /dev/null
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install epel-release" > /dev/null
@@ -31,7 +31,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShS1I1MzN0SmQ1MHc $HOME/downloads/flycap.tar.gz 
         fi
         tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /home/ubuntu/build/include/* /usr/include; cp -R /home/ubuntu/build/lib/* /usr/lib" 
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     elif [ "$OS" == "linux-x86" ]; then
         if [[ $(find $HOME/downloads/flycaplinux32.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap32 in cache and size seems ok" 
@@ -40,7 +40,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShaDhTN1FOUTE3UkE $HOME/downloads/flycaplinux32.tar.gz 
         fi
         tar xzvf $HOME/downloads/flycaplinux32.tar.gz -C $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R /home/ubuntu/build/include/* /usr/include; cp -R /home/ubuntu/build/lib/* /usr/lib" 
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     fi 
   fi 
   if [ "$PROJ" == "mkl" ]; then
@@ -48,7 +48,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11306/l_mkl_2017.2.174.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
          sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2017.2.174/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "/home/ubuntu/build/l_mkl_2017.2.174/install.sh -s /home/ubuntu/build/l_mkl_2017.2.174/silent.cfg"
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2017.2.174/install.sh -s $HOME/build/l_mkl_2017.2.174/silent.cfg"
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
@@ -57,7 +57,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
         fi
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash /home/ubuntu/downloads/bazel.sh"
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
   fi 
 fi
 
@@ -143,7 +143,7 @@ if [[ "$OS" =~ android ]]; then
    echo "Android NDK setup done"
    export ANDROID_NDK=$HOME/android-ndk/
    if [ "$OS" == "android-arm" ]; then
-      export PATH=$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
+      export PATH_ADDITIONAL=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
       export BUILD_ROOT=-Djavacpp.platform.root=$HOME/android-ndk/
       export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++
    fi
@@ -159,7 +159,7 @@ if [[ "$OS" =~ android ]]; then
         echo "Download failed here, so can't proceed with the build.. Failing.."
         exit 1
       fi
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sudo bash /home/ubuntu/bazel.sh"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sudo bash $HOME/bazel.sh"
    fi
 fi
 
@@ -232,23 +232,23 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
    echo "container id is $DOCKER_CONTAINER_ID"
    if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
      echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
-     while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 /home/ubuntu/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
+     while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 $HOME/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd /home/ubuntu/build/javacpp-presets;mvn deploy -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /home/ubuntu/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd $HOME/build/javacpp-presets;mvn deploy -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd /home/ubuntu/build/javacpp-presets;mvn install -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l /home/ubuntu/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd $HOME/build/javacpp-presets;mvn install -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    else
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd /home/ubuntu/build/javacpp-presets;mvn deploy -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd $HOME/build/javacpp-presets;mvn deploy -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
        if [ $BUILD_STATUS -eq 0 ]; then
          echo "Deploying platform"
          for i in ${PROJ//,/ }
          do
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /home/ubuntu/build/javacpp-presets/$i; mvn -U -f platform/pom.xml -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn -U -f platform/pom.xml -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
           if [ $BUILD_STATUS -ne 0 ]; then
            echo "Build Failed"
            exit $BUILD_STATUS
@@ -258,7 +258,7 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
         
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd /home/ubuntu/build/javacpp-presets;mvn install -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "export $PATH; export $BUILD_COMPILER; export $BUILD_ROOT; cd $HOME/build/javacpp-presets;mvn install -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    fi
    echo "Build status $BUILD_STATUS"
