@@ -7,15 +7,6 @@ cache:
 
 environment:
   matrix:
-    - PLATFORM: x64
-      PROJ: "ffmpeg"
-      COMPILER: msys2
-      MSYS2_ARCH: x86_64
-      MSYS2_DIR: msys64
-      MSYSTEM: MINGW64
-      BIT: 64
-
-
     - PLATFORM: x86
       PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
       COMPILER: msys2
