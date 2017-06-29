@@ -8,6 +8,7 @@ ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
 pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
+touch $HOME/vars.list
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
 
@@ -126,7 +127,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 if [[ "$OS" =~ android ]]; then
    echo "Install android requirements.."
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip install numpy" 
+   #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip install numpy" 
 
    curl -L https://dl.google.com/android/repository/android-ndk-r15b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
