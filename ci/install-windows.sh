@@ -17,12 +17,11 @@ java -version
 mvn --version
 /c/python27/python --version
 pip --version
+unzip --version
 
 pip install requests
 
 mkdir -p /c/Downloads
-ls -ltr /c/Users/appveyor
-ls -ltr /c/Users/appveyor/.m2
 
 echo Perform download files out of main repo
 cd ..
@@ -89,16 +88,24 @@ if [[ "$projectName" =~ "hdf5" ]]; then
        echo Installing HDF5
        if [ "$MSYS2_ARCH" == "x86_64" ]; then 
           echo 64bit hdf5 
-          curl -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win64-vs2015-shared.zip"
-          unzip hdf5.zip 
-          cd hdf5
-          msiexec //i HDF5-1.10.0-win64.msi //quiet
+          if [[ $(find /c/Downloads/hdf5-64.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found hdf5-64 in cache and size seems OK"
+          else
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShTEtPYjU5SDhIZWM /c/Downloads/hdf5-64.zip 
+          fi
+          unzip /c/Downloads/hdf5-64.zip 
+          cd hdf 
+          msiexec //i HDF5-1.10.1-win64.msi //quiet
        elif [ "$MSYS2_ARCH" == "x86" ]; then
           echo 32bit copy for hdf5 
-          curl -L -o hdf5.zip "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/windows/extra/hdf5-1.10.0-patch1-win32-vs2015-shared.zip"
-          unzip hdf5.zip 
-          cd hdf5
-          msiexec //i HDF5-1.10.0-win32.msi //quiet
+          if [[ $(find /c/Downloads/hdf5-32.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found hdf5-32 in cache and size seems OK"
+          else
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShU1BzVTd1YzZGczg /c/Downloads/hdf5-32.zip 
+          fi
+          unzip /c/Downloads/hdf5-32.zip 
+          cd hdf 
+          msiexec //i HDF5-1.10.1-win32.msi //quiet
        fi
        cd ..
        echo Finished hd5 install 

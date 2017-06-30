@@ -88,7 +88,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-armeabi $CFLAGS no-shared
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
         cd ../$X264
@@ -145,7 +145,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-x86 $CFLAGS no-shared
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
         cd ../$X264
@@ -188,7 +188,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No libraries install-static
         cd ../$X264
@@ -230,7 +230,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No libraries install-static
         cd ../$X264
@@ -292,7 +292,7 @@ case $PLATFORM in
           ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH
         fi
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf USE_ASM=No libraries install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
         cd ../$X264
@@ -330,9 +330,9 @@ case $PLATFORM in
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
         else
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         fi
         make -j $MAKEJ
         make install
@@ -358,7 +358,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=ppc64le USE_ASM=No libraries install-static
         cd ../$X264
@@ -400,7 +400,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar USE_ASM=No libraries install-static
         cd ../$X264
@@ -440,7 +440,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No libraries install-static
         cd ../$X264
@@ -457,7 +457,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
@@ -480,7 +480,7 @@ case $PLATFORM in
         cd ../$OPENSSL
         ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
-        make install
+        make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No libraries install-static
         cd ../$X264
@@ -497,7 +497,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;

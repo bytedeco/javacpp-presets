@@ -13,7 +13,7 @@ LIBJPEG=libjpeg-turbo-1.5.1
 LIBPNG=libpng-1.6.29
 LIBTIFF=tiff-4.0.7
 LIBWEBP=libwebp-0.6.0
-LEPTONICA_VERSION=1.74.1
+LEPTONICA_VERSION=1.74.4
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
@@ -75,7 +75,7 @@ case $PLATFORM in
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -119,7 +119,7 @@ case $PLATFORM in
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs 
         make -j $MAKEJ
         make install-strip
         ;;
