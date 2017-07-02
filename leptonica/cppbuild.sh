@@ -10,14 +10,14 @@ fi
 ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
 LIBJPEG=libjpeg-turbo-1.5.1
-LIBPNG=libpng-1.6.29
-LIBTIFF=tiff-4.0.7
+LIBPNG=libpng-1.6.30
+LIBTIFF=tiff-4.0.8
 LIBWEBP=libwebp-0.6.0
 LEPTONICA_VERSION=1.74.4
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.29/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.30/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
@@ -61,7 +61,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
+        rm contrib/arm-neon/android-ndk.c
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-arm-neon
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
@@ -69,12 +70,13 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT"
+        patch -Np1 < ../../../libwebp-arm.patch
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT" --disable-neon
         cd src
         make -j $MAKEJ
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
-        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
+        patch -Np1 < ../../../leptonica-android.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
         make -j $MAKEJ
         make install-strip
@@ -105,6 +107,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
+        rm contrib/arm-neon/android-ndk.c
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install
@@ -118,7 +121,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
-        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
+        patch -Np1 < ../../../leptonica-android.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs 
         make -j $MAKEJ
         make install-strip
@@ -204,7 +207,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf
+        rm contrib/arm-neon/android-ndk.c
+        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-arm-neon
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
@@ -212,7 +216,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        patch -Np1 < ../../../libwebp-arm.patch
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-neon
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
@@ -314,7 +319,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-macosx.patch
+        patch -Np1 < ../../../leptonica-macosx.patch
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
