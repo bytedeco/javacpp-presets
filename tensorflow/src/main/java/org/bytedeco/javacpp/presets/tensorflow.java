@@ -318,8 +318,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::Edge*>", "std::vector<const tensorflow::Edge*>").cast().pointerTypes("EdgeVector").define())
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
                .put(new Info("tensorflow::EdgeSet::const_iterator", "tensorflow::EdgeSet::iterator").pointerTypes("EdgeSetIterator"))
-               .put(new Info("std::vector<tensorflow::GraphEdgesIterable::value_type>::const_iterator")
-                        .valueTypes("@Cast(\"std::vector<tensorflow::Edge*>::const_iterator)(tensorflow::Edge* const*\") PointerPointer"))
+               .put(new Info("tensorflow::GraphEdgesIterable::const_iterator").purify())
 
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").pointerTypes("TrueOpDefBuilderWrapper"))
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))

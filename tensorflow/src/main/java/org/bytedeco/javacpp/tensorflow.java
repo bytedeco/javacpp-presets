@@ -15970,10 +15970,6 @@ limitations under the License.
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public const_iterator(Pointer p) { super(p); }
   
-    public const_iterator(@Cast("std::vector<tensorflow::Edge*>::const_iterator)(tensorflow::Edge* const*") PointerPointer iter,
-                       @Cast("std::vector<tensorflow::Edge*>::const_iterator)(tensorflow::Edge* const*") PointerPointer end) { super((Pointer)null); allocate(iter, end); }
-    private native void allocate(@Cast("std::vector<tensorflow::Edge*>::const_iterator)(tensorflow::Edge* const*") PointerPointer iter,
-                       @Cast("std::vector<tensorflow::Edge*>::const_iterator)(tensorflow::Edge* const*") PointerPointer end);
 
     public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef const_iterator other);
 

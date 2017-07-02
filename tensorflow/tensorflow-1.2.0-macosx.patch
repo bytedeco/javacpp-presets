@@ -1,0 +1,19 @@
+diff -ruN tensorflow-1.2.0/third_party/gpus/cuda/BUILD.tpl tensorflow-1.2.0-macosx/third_party/gpus/cuda/BUILD.tpl
+--- tensorflow-1.2.0/third_party/gpus/cuda/BUILD.tpl	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-macosx/third_party/gpus/cuda/BUILD.tpl	2017-06-26 12:03:11.692653625 +0900
+@@ -58,7 +58,6 @@
+         ":freebsd": [],
+         "//conditions:default": ["-ldl"],
+     }) + [
+-        "-lpthread",
+         %{cudart_static_linkopt}
+     ],
+     visibility = ["//visibility:public"],
+@@ -95,7 +94,6 @@
+     data = ["lib/%{cusolver_lib}"],
+     includes = ["include"],
+     linkstatic = 1,
+-    linkopts = ["-lgomp"],
+     visibility = ["//visibility:public"],
+ )
+ 

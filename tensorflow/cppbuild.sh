@@ -73,7 +73,7 @@ case $PLATFORM in
     macosx-*)
         export TF_NEED_CUDA=1
         export BUILDFLAGS="--config=cuda --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
-        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-nocuda.patch
+        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-macosx.patch
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
