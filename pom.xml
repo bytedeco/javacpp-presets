@@ -60,6 +60,7 @@
     <module>cuda</module>
     <module>mxnet</module>
     <module>tensorflow</module>
+    <module>ale</module>
     <module>liquidfun</module>
     <module>skia</module>
   </modules>
