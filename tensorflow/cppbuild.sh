@@ -26,7 +26,7 @@ export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
-TENSORFLOW_VERSION=1.2.0
+TENSORFLOW_VERSION=1.2.1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -45,14 +45,14 @@ case $PLATFORM in
     android-arm)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
-        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
+        patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
         ;;
     android-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
-        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-android.patch
+        patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain"
         ;;
@@ -68,12 +68,13 @@ case $PLATFORM in
         export TF_NEED_CUDA=1
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--config=cuda --copt=-m64 --linkopt=-m64"
-        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-nocuda.patch
+        patch -Np1 < ../../../tensorflow-nocuda.patch
         ;;
     macosx-*)
         export TF_NEED_CUDA=1
         export BUILDFLAGS="--config=cuda --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
-        patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION-macosx.patch
+        export DYLD_LIBRARY_PATH=/usr/local/cuda/lib/
+        patch -Np1 < ../../../tensorflow-macosx.patch
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

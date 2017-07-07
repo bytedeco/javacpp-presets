@@ -125,7 +125,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
  * MXnet 0.10.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.2.0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.2.1  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
