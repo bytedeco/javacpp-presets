@@ -72,8 +72,11 @@ case $PLATFORM in
         ;;
     macosx-*)
         export TF_NEED_CUDA=1
-        export BUILDFLAGS="--config=cuda --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
-        export DYLD_LIBRARY_PATH=/usr/local/cuda/lib/
+        export BUILDFLAGS="--config=cuda --config=opt --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
+        export CUDA_HOME=/usr/local/cuda
+        export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
+        export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
+        export PATH=$DYLD_LIBRARY_PATH:$PATH
         patch -Np1 < ../../../tensorflow-macosx.patch
         ;;
     *)

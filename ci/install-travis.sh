@@ -210,6 +210,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
         kill $CHILDPID
+        sudo cp /usr/local/cuda/lib/* /usr/local/lib
 
         if [[ $(find $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found cudnn in cache and size seems ok" 
