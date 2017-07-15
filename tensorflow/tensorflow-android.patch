@@ -1,0 +1,120 @@
+diff -ruN tensorflow-1.2.0/tensorflow/BUILD tensorflow-1.2.0-android/tensorflow/BUILD
+--- tensorflow-1.2.0/tensorflow/BUILD	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-android/tensorflow/BUILD	2017-06-25 21:56:46.565244004 +0900
+@@ -500,14 +500,29 @@
+     ],
+ )
+ 
++
++load("//tensorflow:tensorflow.bzl", "tf_copts")
++
+ cc_binary(
+     name = "libtensorflow_cc.so",
++    copts = tf_copts(),
++    linkopts = [
++        "-landroid",
++        "-ljnigraphics",
++        "-llog",
++        "-lm",
++        "-z defs",
++        "-s",
++        "-ldl",
++        "-Wl,--icf=all",  # Identical Code Folding
++    ],
++    tags = [
++        "manual",
++        "notap",
++    ],
+     linkshared = 1,
++    linkstatic = 1,
+     deps = [
+-        "//tensorflow/c:c_api",
+-        "//tensorflow/cc:cc_ops",
+-        "//tensorflow/cc:client_session",
+-        "//tensorflow/cc:scope",
+-        "//tensorflow/core:tensorflow",
++        "//tensorflow/core:android_tensorflow_lib",
+     ],
+ )
+diff -ruN tensorflow-1.2.0/tensorflow/c/BUILD tensorflow-1.2.0-android/tensorflow/c/BUILD
+--- tensorflow-1.2.0/tensorflow/c/BUILD	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-android/tensorflow/c/BUILD	2017-06-25 21:56:46.565244004 +0900
+@@ -75,6 +75,19 @@
+     visibility = ["//visibility:public"],
+ )
+ 
++filegroup(
++    name = "c_api_files",
++    srcs = glob(
++        ["**/*"],
++        exclude = [
++            "**/METADATA",
++            "**/OWNERS",
++            "**/*test.cc",
++        ],
++    ),
++    visibility = ["//visibility:public"],
++)
++
+ tf_cuda_library(
+     name = "tf_status_helper",
+     srcs = ["tf_status_helper.cc"],
+diff -ruN tensorflow-1.2.0/tensorflow/core/BUILD tensorflow-1.2.0-android/tensorflow/core/BUILD
+--- tensorflow-1.2.0/tensorflow/core/BUILD	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-android/tensorflow/core/BUILD	2017-06-25 21:56:46.566244005 +0900
+@@ -983,7 +983,10 @@
+ # binary size (by packaging a reduced operator set) is a concern.
+ cc_library(
+     name = "android_tensorflow_lib",
+-    srcs = if_android([":android_op_registrations_and_gradients"]),
++    srcs = if_android([
++    	":android_op_registrations_and_gradients",
++    	"//tensorflow/c:c_api_files",
++    ]),
+     copts = tf_copts(),
+     tags = [
+         "manual",
+diff -ruN tensorflow-1.2.0/tensorflow/core/kernels/BUILD tensorflow-1.2.0-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.2.0/tensorflow/core/kernels/BUILD	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-android/tensorflow/core/kernels/BUILD	2017-06-25 21:56:46.566244005 +0900
+@@ -4089,6 +4089,7 @@
+         "warn_about_ints.h",
+         "where_op.h",
+         "xent_op.h",
++        "cwise_op_floor.cc",
+     ],
+ )
+ 
+diff -ruN tensorflow-1.2.0/tensorflow/tensorflow.bzl tensorflow-1.2.0-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.2.0/tensorflow/tensorflow.bzl	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-android/tensorflow/tensorflow.bzl	2017-06-25 21:58:44.668160797 +0900
+@@ -132,7 +132,6 @@
+       ["-mfpu=neon"]) + if_x86(["-msse3"]) + select({
+           clean_dep("//tensorflow:android"): [
+               "-std=c++11",
+-              "-DTF_LEAN_BINARY",
+               "-O2",
+           ],
+           clean_dep("//tensorflow:darwin"): [],
+diff -ruN tensorflow-1.2.0/WORKSPACE tensorflow-1.2.0-android/WORKSPACE
+--- tensorflow-1.2.0/WORKSPACE	2017-06-15 04:02:07.000000000 +0900
++++ tensorflow-1.2.0-android/WORKSPACE	2017-06-25 21:57:38.895319329 +0900
+@@ -28,12 +28,12 @@
+ #)
+ #
+ # Android NDK r12b is recommended (higher may cause issues with Bazel)
+-#android_ndk_repository(
+-#    name="androidndk",
+-#    path="<PATH_TO_NDK>",
+-#    # This needs to be 14 or higher to compile TensorFlow. 
+-#    # Note that the NDK version is not the API level.
+-#    api_level=14)
++android_ndk_repository(
++    name="androidndk",
++    path="<PATH_TO_NDK>",
++    # This needs to be 14 or higher to compile TensorFlow. 
++    # Note that the NDK version is not the API level.
++    api_level=14)
+ 
+ # Please add all new TensorFlow dependencies in workspace.bzl.
+ tf_workspace()

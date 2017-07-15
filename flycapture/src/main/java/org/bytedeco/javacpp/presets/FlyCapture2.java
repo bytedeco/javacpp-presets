@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet, Jarek Sacha
+ * Copyright (C) 2014-2017 Samuel Audet, Jarek Sacha
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,8 +44,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = {"linux-x86", "linux-arm", "windows"}, include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
                 "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
                 "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>",
-                "<MultiSyncLibraryPlatform.h>", "<MultiSyncLibraryDefs.h>", "<MultiSyncLibrary.h>"}),
-        @Platform(value = {"linux-x86", "linux-arm"}, link = "flycapture@.2", includepath = "/usr/include/flycapture/"),
+                "<MultiSyncLibraryPlatform.h>", "<MultiSyncLibraryDefs.h>", "<MultiSyncLibrary.h>"},
+                link = {"flycapture@.2", "multisync@.2"}, includepath = "/usr/include/flycapture/"),
+        @Platform(value = "linux-arm", include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
+                "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
+                "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>"}, link = "flycapture@.2"),
         @Platform(value = "windows", link = {"FlyCapture2", "MultiSyncLibrary"},
                 includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/"),
         @Platform(value = "windows-x86",

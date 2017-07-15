@@ -131,6 +131,12 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  *
  * \}
  *
+ * \defgroup lavu_video Video related
+ *
+ * \{
+ *
+ * \}
+ *
  * \defgroup lavu_audio Audio related
  *
  * \{
@@ -360,6 +366,22 @@ public static final int
  * Return the fractional representation of the internal time base.
  */
 @NoException public static native @ByVal AVRational av_get_time_base_q();
+
+public static final int AV_FOURCC_MAX_STRING_SIZE = 32;
+
+// #define av_fourcc2str(fourcc) av_fourcc_make_string((char[AV_FOURCC_MAX_STRING_SIZE]){0}, fourcc)
+
+/**
+ * Fill the provided buffer with a string containing a FourCC (four-character
+ * code) representation.
+ *
+ * @param buf    a buffer with size in bytes of at least AV_FOURCC_MAX_STRING_SIZE
+ * @param fourcc the fourcc to represent
+ * @return the buffer in input
+ */
+@NoException public static native @Cast("char*") BytePointer av_fourcc_make_string(@Cast("char*") BytePointer buf, @Cast("uint32_t") int fourcc);
+@NoException public static native @Cast("char*") ByteBuffer av_fourcc_make_string(@Cast("char*") ByteBuffer buf, @Cast("uint32_t") int fourcc);
+@NoException public static native @Cast("char*") byte[] av_fourcc_make_string(@Cast("char*") byte[] buf, @Cast("uint32_t") int fourcc);
 
 /**
  * \}
@@ -646,7 +668,10 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 //     #define DECLARE_ASM_CONST(n,t,v)
 //         AV_PRAGMA(DATA_ALIGN(v,n))
 //         static const t __attribute__((aligned(n))) v
-// #elif defined(__GNUC__)
+// #elif defined(__DJGPP__)
+//     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (FFMIN(n, 16)))) v
+//     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (FFMIN(n, 16)))) v
+// #elif defined(__GNUC__) || defined(__clang__)
 //     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
 //     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (n))) v
 // #elif defined(_MSC_VER)
@@ -2516,9 +2541,10 @@ public static class Alloc_int extends FunctionPointer {
  * @param alloc a function that will be used to allocate new buffers when the
  *              pool is empty.
  * @param pool_free a function that will be called immediately before the pool
- *                  is freed. I.e. after av_buffer_pool_can_uninit() is called
- *                  by the pool and all the frames are returned to the pool and
- *                  freed. It is intended to uninitialize the user opaque data.
+ *                  is freed. I.e. after av_buffer_pool_uninit() is called
+ *                  by the caller and all the frames are returned to the pool
+ *                  and freed. It is intended to uninitialize the user opaque
+ *                  data.
  * @return newly created buffer pool on success, NULL on error.
  */
 public static class Alloc_Pointer_int extends FunctionPointer {
@@ -3047,8 +3073,22 @@ public static final int
     /** hardware decoding through MediaCodec */
     AV_PIX_FMT_MEDIACODEC = 0x123+4 + 46,
 
+    /**        Y        , 12bpp, big-endian */
+    AV_PIX_FMT_GRAY12BE = 0x123+4 + 47,
+    /**        Y        , 12bpp, little-endian */
+    AV_PIX_FMT_GRAY12LE = 0x123+4 + 48,
+    /**        Y        , 10bpp, big-endian */
+    AV_PIX_FMT_GRAY10BE = 0x123+4 + 49,
+    /**        Y        , 10bpp, little-endian */
+    AV_PIX_FMT_GRAY10LE = 0x123+4 + 50,
+
+    /** like NV12, with 16bpp per component, little-endian */
+    AV_PIX_FMT_P016LE = 0x123+4 + 51,
+    /** like NV12, with 16bpp per component, big-endian */
+    AV_PIX_FMT_P016BE = 0x123+4 + 52,
+
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 47;
+    AV_PIX_FMT_NB = 0x123+4 + 53;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -3069,6 +3109,10 @@ public static final int AV_PIX_FMT_0RGB32 = AV_PIX_FMT_0RGB32();
 public static native @MemberGetter int AV_PIX_FMT_0BGR32();
 public static final int AV_PIX_FMT_0BGR32 = AV_PIX_FMT_0BGR32();
 
+public static native @MemberGetter int AV_PIX_FMT_GRAY10();
+public static final int AV_PIX_FMT_GRAY10 = AV_PIX_FMT_GRAY10();
+public static native @MemberGetter int AV_PIX_FMT_GRAY12();
+public static final int AV_PIX_FMT_GRAY12 = AV_PIX_FMT_GRAY12();
 public static native @MemberGetter int AV_PIX_FMT_GRAY16();
 public static final int AV_PIX_FMT_GRAY16 = AV_PIX_FMT_GRAY16();
 public static native @MemberGetter int AV_PIX_FMT_YA16();
@@ -3183,6 +3227,8 @@ public static native @MemberGetter int AV_PIX_FMT_AYUV64();
 public static final int AV_PIX_FMT_AYUV64 = AV_PIX_FMT_AYUV64();
 public static native @MemberGetter int AV_PIX_FMT_P010();
 public static final int AV_PIX_FMT_P010 = AV_PIX_FMT_P010();
+public static native @MemberGetter int AV_PIX_FMT_P016();
+public static final int AV_PIX_FMT_P016 = AV_PIX_FMT_P016();
 
 /**
   * Chromaticity coordinates of the source primaries.
@@ -3208,13 +3254,16 @@ public static final int
     /** ITU-R BT2020 */
     AVCOL_PRI_BT2020      = 9,
     /** SMPTE ST 428-1 (CIE 1931 XYZ) */
-    AVCOL_PRI_SMPTEST428_1 = 10,
-    /** SMPTE ST 431-2 (2011) */
+    AVCOL_PRI_SMPTE428    = 10,
+    AVCOL_PRI_SMPTEST428_1 =  AVCOL_PRI_SMPTE428,
+    /** SMPTE ST 431-2 (2011) / DCI P3 */
     AVCOL_PRI_SMPTE431    = 11,
-    /** SMPTE ST 432-1 D65 (2010) */
+    /** SMPTE ST 432-1 (2010) / P3 D65 / Display P3 */
     AVCOL_PRI_SMPTE432    = 12,
+    /** JEDEC P22 phosphors */
+    AVCOL_PRI_JEDEC_P22   = 22,
     /** Not part of ABI */
-    AVCOL_PRI_NB = 13;
+    AVCOL_PRI_NB = 23;
 
 /**
  * Color Transfer Characteristic.
@@ -3250,9 +3299,11 @@ public static final int
     /** ITU-R BT2020 for 12-bit system */
     AVCOL_TRC_BT2020_12    = 15,
     /** SMPTE ST 2084 for 10-, 12-, 14- and 16-bit systems */
-    AVCOL_TRC_SMPTEST2084  = 16,
+    AVCOL_TRC_SMPTE2084    = 16,
+    AVCOL_TRC_SMPTEST2084  =  AVCOL_TRC_SMPTE2084,
     /** SMPTE ST 428-1 */
-    AVCOL_TRC_SMPTEST428_1 = 17,
+    AVCOL_TRC_SMPTE428     = 17,
+    AVCOL_TRC_SMPTEST428_1 =  AVCOL_TRC_SMPTE428,
     /** ARIB STD-B67, known as "Hybrid log-gamma" */
     AVCOL_TRC_ARIB_STD_B67 = 18,
     /** Not part of ABI */
@@ -3278,7 +3329,8 @@ public static final int
     /** functionally identical to above */
     AVCOL_SPC_SMPTE240M   = 7,
     /** Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16 */
-    AVCOL_SPC_YCOCG       = 8,
+    AVCOL_SPC_YCGCO       = 8,
+    AVCOL_SPC_YCOCG       =  AVCOL_SPC_YCGCO,
     /** ITU-R BT2020 non-constant luminance system */
     AVCOL_SPC_BT2020_NCL  = 9,
     /** ITU-R BT2020 constant luminance system */
@@ -3287,7 +3339,7 @@ public static final int
     AVCOL_SPC_SMPTE2085   = 11,
     /** Not part of ABI */
     AVCOL_SPC_NB = 12;
-public static final int AVCOL_SPC_YCGCO = AVCOL_SPC_YCOCG;
+// #define AVCOL_SPC_YCGCO AVCOL_SPC_YCOCG
 
 
 /**
@@ -3461,7 +3513,13 @@ public static final int
      * The GOP timecode in 25 bit timecode format. Data format is 64-bit integer.
      * This is set on the first frame of a GOP that has a temporal reference of 0.
      */
-    AV_FRAME_DATA_GOP_TIMECODE = 12;
+    AV_FRAME_DATA_GOP_TIMECODE = 12,
+
+    /**
+     * The data represents the AVSphericalMapping structure defined in
+     * libavutil/spherical.h.
+     */
+    AV_FRAME_DATA_SPHERICAL = 13;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3526,9 +3584,6 @@ public static class AVFrameSideData extends Pointer {
  *
  * sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
  * to the end with a minor bump.
- * Similarly fields that are marked as to be only accessed by
- * av_opt_ptr() can be reordered. This allows 2 forks to add fields
- * without breaking compatibility with each other.
  *
  * Fields can be accessed through AVOptions, the name string used, matches the
  * C structure field name for fields accessible through AVOptions. The AVClass
@@ -3786,8 +3841,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
 
     /**
      * MPEG vs JPEG YUV range.
-     * It must be accessed using av_frame_get_color_range() and
-     * av_frame_set_color_range().
      * - encoding: Set by user
      * - decoding: Set by libavcodec
      */
@@ -3799,8 +3852,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
 
     /**
      * YUV colorspace type.
-     * It must be accessed using av_frame_get_colorspace() and
-     * av_frame_set_colorspace().
      * - encoding: Set by user
      * - decoding: Set by libavcodec
      */
@@ -3810,8 +3861,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
 
     /**
      * frame timestamp estimated using various heuristics, in stream time base
-     * Code outside libavutil should access this field using:
-     * av_frame_get_best_effort_timestamp(frame)
      * - encoding: unused
      * - decoding: set by libavcodec, read by user.
      */
@@ -3819,8 +3868,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
 
     /**
      * reordered pos from the last AVPacket that has been input into the decoder
-     * Code outside libavutil should access this field using:
-     * av_frame_get_pkt_pos(frame)
      * - encoding: unused
      * - decoding: Read by user.
      */
@@ -3829,8 +3876,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
     /**
      * duration of the corresponding packet, expressed in
      * AVStream->time_base units, 0 if unknown.
-     * Code outside libavutil should access this field using:
-     * av_frame_get_pkt_duration(frame)
      * - encoding: unused
      * - decoding: Read by user.
      */
@@ -3838,8 +3883,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
 
     /**
      * metadata.
-     * Code outside libavutil should access this field using:
-     * av_frame_get_metadata(frame)
      * - encoding: Set by user.
      * - decoding: Set by libavcodec.
      */
@@ -3849,8 +3892,6 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
      * decode error flags of the frame, set to a combination of
      * FF_DECODE_ERROR_xxx flags if the decoder produced a frame, but there
      * were errors during the decoding.
-     * Code outside libavutil should access this field using:
-     * av_frame_get_decode_error_flags(frame)
      * - encoding: unused
      * - decoding: set by libavcodec, read by user.
      */
@@ -3860,8 +3901,6 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
 
     /**
      * number of audio channels, only used for audio.
-     * Code outside libavutil should access this field using:
-     * av_frame_get_channels(frame)
      * - encoding: unused
      * - decoding: Read by user.
      */
@@ -3869,8 +3908,7 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
 
     /**
      * size of the corresponding packet containing the compressed
-     * frame. It must be accessed using av_frame_get_pkt_size() and
-     * av_frame_set_pkt_size().
+     * frame.
      * It is set to a negative value if unknown.
      * - encoding: unused
      * - decoding: set by libavcodec, read by user.
@@ -3880,20 +3918,15 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
 // #if FF_API_FRAME_QP
     /**
      * QP table
-     * Not to be accessed directly from outside libavutil
      */
     public native @Deprecated BytePointer qscale_table(); public native AVFrame qscale_table(BytePointer qscale_table);
     /**
      * QP store stride
-     * Not to be accessed directly from outside libavutil
      */
     public native @Deprecated int qstride(); public native AVFrame qstride(int qstride);
 
     public native @Deprecated int qscale_type(); public native AVFrame qscale_type(int qscale_type);
 
-    /**
-     * Not to be accessed directly from outside libavutil
-     */
     public native AVBufferRef qp_table_buf(); public native AVFrame qp_table_buf(AVBufferRef qp_table_buf);
 // #endif
     /**
@@ -3901,12 +3934,22 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
      * AVHWFramesContext describing the frame.
      */
     public native AVBufferRef hw_frames_ctx(); public native AVFrame hw_frames_ctx(AVBufferRef hw_frames_ctx);
+
+    /**
+     * AVBufferRef for free use by the API user. FFmpeg will never check the
+     * contents of the buffer ref. FFmpeg calls av_buffer_unref() on it when
+     * the frame is unreferenced. av_frame_copy_props() calls create a new
+     * reference with av_buffer_ref() for the target frame's opaque_ref field.
+     *
+     * This is unrelated to the opaque field, although it serves a similar
+     * purpose.
+     */
+    public native AVBufferRef opaque_ref(); public native AVFrame opaque_ref(AVBufferRef opaque_ref);
 }
 
 /**
- * Accessors for some AVFrame fields.
- * The position of these field in the structure is not part of the ABI,
- * they should not be accessed directly outside libavutil.
+ * Accessors for some AVFrame fields. These used to be provided for ABI
+ * compatibility, and do not need to be used anymore.
  */
 @NoException public static native @Cast("int64_t") long av_frame_get_best_effort_timestamp(@Const AVFrame frame);
 @NoException public static native void av_frame_set_best_effort_timestamp(AVFrame frame, @Cast("int64_t") long val);
@@ -4597,21 +4640,35 @@ public static final int
  *   5.0(side), 5.1, 5.1(side), 7.1, 7.1(wide), downmix);
  * - the name of a single channel (FL, FR, FC, LFE, BL, BR, FLC, FRC, BC,
  *   SL, SR, TC, TFL, TFC, TFR, TBL, TBC, TBR, DL, DR);
- * - a number of channels, in decimal, optionally followed by 'c', yielding
+ * - a number of channels, in decimal, followed by 'c', yielding
  *   the default channel layout for that number of channels (@see
  *   av_get_default_channel_layout);
  * - a channel layout mask, in hexadecimal starting with "0x" (see the
  *   AV_CH_* macros).
  *
- * \warning Starting from the next major bump the trailing character
- * 'c' to specify a number of channels will be required, while a
- * channel layout mask could also be specified as a decimal number
- * (if and only if not followed by "c").
- *
  * Example: "stereo+FC" = "2c+FC" = "2c+1c" = "0x7"
  */
 @NoException public static native @Cast("uint64_t") long av_get_channel_layout(@Cast("const char*") BytePointer name);
 @NoException public static native @Cast("uint64_t") long av_get_channel_layout(String name);
+
+/**
+ * Return a channel layout and the number of channels based on the specified name.
+ *
+ * This function is similar to (@see av_get_channel_layout), but can also parse
+ * unknown channel layout specifications.
+ *
+ * @param [in]  name             channel layout specification string
+ * @param [out] channel_layout   parsed channel layout (0 if unknown)
+ * @param [out] nb_channels      number of channels
+ *
+ * @return 0 on success, AVERROR(EINVAL) if the parsing fails.
+ */
+@NoException public static native int av_get_extended_channel_layout(@Cast("const char*") BytePointer name, @Cast("uint64_t*") LongPointer channel_layout, IntPointer nb_channels);
+@NoException public static native int av_get_extended_channel_layout(String name, @Cast("uint64_t*") LongBuffer channel_layout, IntBuffer nb_channels);
+@NoException public static native int av_get_extended_channel_layout(@Cast("const char*") BytePointer name, @Cast("uint64_t*") long[] channel_layout, int[] nb_channels);
+@NoException public static native int av_get_extended_channel_layout(String name, @Cast("uint64_t*") LongPointer channel_layout, IntPointer nb_channels);
+@NoException public static native int av_get_extended_channel_layout(@Cast("const char*") BytePointer name, @Cast("uint64_t*") LongBuffer channel_layout, IntBuffer nb_channels);
+@NoException public static native int av_get_extended_channel_layout(String name, @Cast("uint64_t*") long[] channel_layout, int[] nb_channels);
 
 /**
  * Return a description of a channel layout.
@@ -4757,6 +4814,8 @@ public static final int AV_CPU_FLAG_SSE3 =         0x0040;
 public static final int AV_CPU_FLAG_SSE3SLOW = 0x20000000;
 /** Conroe SSSE3 functions */
 public static final int AV_CPU_FLAG_SSSE3 =        0x0080;
+/** SSSE3 supported, but usually not faster */
+public static final int AV_CPU_FLAG_SSSE3SLOW = 0x4000000;
 /** Atom processor, some SSSE3 instructions are slower */
 public static final int AV_CPU_FLAG_ATOM =     0x10000000;
 /** Penryn SSE4.1 functions */
@@ -4820,8 +4879,6 @@ public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
  * Set a mask on flags returned by av_get_cpu_flags().
  * This function is mainly useful for testing.
  * Please use av_force_cpu_flags() and av_get_cpu_flags() instead which are more flexible
- *
- * \warning this function is not thread safe.
  */
 @NoException public static native @Deprecated void av_set_cpu_flags_mask(int mask);
 
@@ -5340,6 +5397,7 @@ public static final int
     /** offset must point to a pointer immediately followed by an int for the length */
     AV_OPT_TYPE_BINARY = 7,
     AV_OPT_TYPE_DICT = 8,
+    AV_OPT_TYPE_UINT64 = 9,
     AV_OPT_TYPE_CONST = 128;
 public static native @MemberGetter int AV_OPT_TYPE_IMAGE_SIZE();
 public static final int
@@ -6395,6 +6453,11 @@ public static final int AV_PIX_FMT_FLAG_PSEUDOPAL =    (1 << 6);
 public static final int AV_PIX_FMT_FLAG_ALPHA =        (1 << 7);
 
 /**
+ * The pixel format is following a Bayer pattern
+ */
+public static final int AV_PIX_FMT_FLAG_BAYER =        (1 << 8);
+
+/**
  * Return the number of bits per pixel used by the pixel format
  * described by pixdesc. Note that this is not the same as the number
  * of bits per sample.
@@ -6811,6 +6874,33 @@ public static final int FF_LOSS_CHROMA =      0x0020;
                    @Cast("AVPixelFormat") int pix_fmt, int width, int height);
 
 /**
+ * Copy image data located in uncacheable (e.g. GPU mapped) memory. Where
+ * available, this function will use special functionality for reading from such
+ * memory, which may result in greatly improved performance compared to plain
+ * av_image_copy().
+ *
+ * The data pointers and the linesizes must be aligned to the maximum required
+ * by the CPU architecture.
+ *
+ * \note The linesize parameters have the type ptrdiff_t here, while they are
+ *       int for av_image_copy().
+ * \note On x86, the linesizes currently need to be aligned to the cacheline
+ *       size (i.e. 64) to get improved performance.
+ */
+@NoException public static native void av_image_copy_uc_from(@Cast("uint8_t**") PointerPointer dst_data,       @Cast("const ptrdiff_t*") SizeTPointer dst_linesizes,
+                           @Cast("const uint8_t**") PointerPointer src_data, @Cast("const ptrdiff_t*") SizeTPointer src_linesizes,
+                           @Cast("AVPixelFormat") int pix_fmt, int width, int height);
+@NoException public static native void av_image_copy_uc_from(@Cast("uint8_t**") @ByPtrPtr BytePointer dst_data,       @Cast("const ptrdiff_t*") SizeTPointer dst_linesizes,
+                           @Cast("const uint8_t**") @ByPtrPtr BytePointer src_data, @Cast("const ptrdiff_t*") SizeTPointer src_linesizes,
+                           @Cast("AVPixelFormat") int pix_fmt, int width, int height);
+@NoException public static native void av_image_copy_uc_from(@Cast("uint8_t**") @ByPtrPtr ByteBuffer dst_data,       @Cast("const ptrdiff_t*") SizeTPointer dst_linesizes,
+                           @Cast("const uint8_t**") @ByPtrPtr ByteBuffer src_data, @Cast("const ptrdiff_t*") SizeTPointer src_linesizes,
+                           @Cast("AVPixelFormat") int pix_fmt, int width, int height);
+@NoException public static native void av_image_copy_uc_from(@Cast("uint8_t**") @ByPtrPtr byte[] dst_data,       @Cast("const ptrdiff_t*") SizeTPointer dst_linesizes,
+                           @Cast("const uint8_t**") @ByPtrPtr byte[] src_data, @Cast("const ptrdiff_t*") SizeTPointer src_linesizes,
+                           @Cast("AVPixelFormat") int pix_fmt, int width, int height);
+
+/**
  * Setup the data pointers and linesizes based on the specified image
  * parameters and the provided array.
  *
@@ -6901,7 +6991,8 @@ public static final int FF_LOSS_CHROMA =      0x0020;
 
 /**
  * Check if the given dimension of an image is valid, meaning that all
- * bytes of the image can be addressed with a signed int.
+ * bytes of a plane of an image with the specified pix_fmt can be addressed
+ * with a signed int.
  *
  * @param w the width of the picture
  * @param h the height of the picture
@@ -7265,7 +7356,7 @@ public static class AVStereo3D extends Pointer {
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "3.2.4";
+public static final String FFMPEG_VERSION = "3.3.2";
 // #endif /* AVUTIL_FFVERSION_H */
 
 

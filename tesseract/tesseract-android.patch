@@ -1,0 +1,21 @@
+diff -ruN tesseract-3.05.01/api/Makefile.am tesseract-3.05.01-android/api/Makefile.am
+--- tesseract-3.05.01/api/Makefile.am	2017-06-02 03:06:24.000000000 +0900
++++ tesseract-3.05.01-android/api/Makefile.am	2017-07-02 21:50:58.478578965 +0900
+@@ -20,7 +20,7 @@
+ noinst_LTLIBRARIES = libtesseract_api.la
+ else
+ lib_LTLIBRARIES += libtesseract_api.la
+-libtesseract_api_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION)
++libtesseract_api_la_LDFLAGS = -avoid-version
+ libtesseract_api_la_LIBADD = \
+     ../ccmain/libtesseract_main.la \
+     ../textord/libtesseract_textord.la \
+@@ -67,7 +67,7 @@
+         ../neural_networks/runtime/libtesseract_neural.la
+ endif
+ 
+-libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) -no-undefined
++libtesseract_la_LDFLAGS += -avoid-version -no-undefined
+ 
+ bin_PROGRAMS = tesseract
+ tesseract_SOURCES = tesseractmain.cpp

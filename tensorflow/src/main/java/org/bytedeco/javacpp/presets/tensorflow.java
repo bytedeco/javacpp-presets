@@ -240,7 +240,8 @@ public class tensorflow implements InfoMapper {
                              "google::protobuf::Metadata", "google::protobuf::io::CodedInputStream", "google::protobuf::io::CodedOutputStream").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "::google::protobuf::internal::ExplicitlyConstructed").skip())
 
-               .put(new Info("tensorflow::DebugOptionsDefaultTypeInternal", "tensorflow::DebugTensorWatchDefaultTypeInternal", "tensorflow::AllocatorMemoryUsedDefaultTypeInternal",
+               .put(new Info("tensorflow::AutoParallelOptionsDefaultTypeInternal", "tensorflow::ClusterDefDefaultTypeInternal", "tensorflow::JobDefDefaultTypeInternal",
+                             "tensorflow::DebugOptionsDefaultTypeInternal", "tensorflow::DebugTensorWatchDefaultTypeInternal", "tensorflow::AllocatorMemoryUsedDefaultTypeInternal",
                              "tensorflow::ConfigProtoDefaultTypeInternal", "tensorflow::CostGraphDefDefaultTypeInternal", "tensorflow::CostGraphDef_NodeDefaultTypeInternal",
                              "tensorflow::CostGraphDef_Node_InputInfoDefaultTypeInternal", "tensorflow::CostGraphDef_Node_OutputInfoDefaultTypeInternal", "tensorflow::DeviceStepStatsDefaultTypeInternal",
                              "tensorflow::GPUOptionsDefaultTypeInternal", "tensorflow::GraphDefDefaultTypeInternal", "tensorflow::GraphOptionsDefaultTypeInternal", "tensorflow::MemoryStatsDefaultTypeInternal",
@@ -314,9 +315,10 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >",
                              "std::vector<std::pair<tensorflow::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
-               .put(new Info("std::vector<const tensorflow::Edge*>").pointerTypes("EdgeVector").define())
+               .put(new Info("std::vector<tensorflow::Edge*>", "std::vector<const tensorflow::Edge*>").cast().pointerTypes("EdgeVector").define())
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
                .put(new Info("tensorflow::EdgeSet::const_iterator", "tensorflow::EdgeSet::iterator").pointerTypes("EdgeSetIterator"))
+               .put(new Info("tensorflow::GraphEdgesIterable::const_iterator").purify())
 
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").pointerTypes("TrueOpDefBuilderWrapper"))
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))

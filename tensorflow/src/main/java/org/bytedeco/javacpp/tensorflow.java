@@ -442,7 +442,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
-@Name("std::vector<const tensorflow::Edge*>") public static class EdgeVector extends Pointer {
+@Name("std::vector<tensorflow::Edge*>") public static class EdgeVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeVector(Pointer p) { super(p); }
@@ -456,7 +456,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public native long size();
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @Const Edge get(@Cast("size_t") long i);
+    @Index public native Edge get(@Cast("size_t") long i);
     public native EdgeVector put(@Cast("size_t") long i, Edge value);
 
     public EdgeVector put(Edge ... array) {
@@ -872,13 +872,13 @@ limitations under the License.
 
 // Control visiblity outside .so
 // #if defined(COMPILER_MSVC)
-// # ifdef TF_COMPILE_LIBRARY
-// #  define TF_EXPORT __declspec(dllexport)
-// # else
-// #  define TF_EXPORT __declspec(dllimport)
-// # endif   // TF_COMPILE_LIBRARY
+// #ifdef TF_COMPILE_LIBRARY
+// #define TF_EXPORT __declspec(dllexport)
 // #else
-// # define TF_EXPORT __attribute__((visibility("default")))
+// #define TF_EXPORT __declspec(dllimport)
+// #endif  // TF_COMPILE_LIBRARY
+// #else
+// #define TF_EXPORT __attribute__((visibility("default")))
 // #endif  // COMPILER_MSVC
 
 // GCC can be told that a certain branch is not likely to be taken (for
@@ -1113,15 +1113,6 @@ limitations under the License.
 // #else
 // #include "tensorflow/core/platform/default/logging.h"
 // #endif
-
-// Some platforms require that filenames be of a certain form when
-// used for logging.  This function is invoked to allow platforms to
-// adjust the filename used for logging appropriately, if necessary
-// (most ports can just do nothing).  If any changes are necessary, the
-// implementation should mutate "*filename" appropriately.
-@Namespace("tensorflow::port") public static native void AdjustFilenameForLogging(@StdString @Cast({"char*", "std::string*"}) BytePointer filename);
-
-  // namespace port
 // Emit "message" as a log message to the log for the specified
 // "severity" as if it came from a LOG call at "fname:line"
 @Namespace("tensorflow::internal") public static native void LogString(@Cast("const char*") BytePointer fname, int line, int severity,
@@ -2685,8 +2676,27 @@ limitations under the License.
 // #include "tensorflow/core/framework/graph.pb.h"
 // #include "tensorflow/core/framework/step_stats.pb.h"
 // #include "tensorflow/core/protobuf/debug.pb.h"
+// #include "tensorflow/core/protobuf/cluster.pb.h"
 // #include "tensorflow/core/protobuf/rewriter_config.pb.h"
 // @@protoc_insertion_point(includes)
+@Namespace("tensorflow") @Opaque public static class AutoParallelOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AutoParallelOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AutoParallelOptions(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class ClusterDef extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ClusterDef() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ClusterDef(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class JobDef extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public JobDef() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public JobDef(Pointer p) { super(p); }
+}
 @Namespace("tensorflow") @Opaque public static class RewriterConfig extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public RewriterConfig() { super((Pointer)null); }
@@ -2887,6 +2897,13 @@ public static final int
   public native @Cast("google::protobuf::int64") long deferred_deletion_bytes();
   public native void set_deferred_deletion_bytes(@Cast("google::protobuf::int64") long value);
 
+  // int32 polling_active_delay_usecs = 6;
+  public native void clear_polling_active_delay_usecs();
+  @MemberGetter public static native int kPollingActiveDelayUsecsFieldNumber();
+  public static final int kPollingActiveDelayUsecsFieldNumber = kPollingActiveDelayUsecsFieldNumber();
+  public native @Cast("google::protobuf::int32") int polling_active_delay_usecs();
+  public native void set_polling_active_delay_usecs(@Cast("google::protobuf::int32") int value);
+
   // bool allow_growth = 4;
   public native void clear_allow_growth();
   @MemberGetter public static native int kAllowGrowthFieldNumber();
@@ -2894,12 +2911,12 @@ public static final int
   public native @Cast("bool") boolean allow_growth();
   public native void set_allow_growth(@Cast("bool") boolean value);
 
-  // int32 polling_active_delay_usecs = 6;
-  public native void clear_polling_active_delay_usecs();
-  @MemberGetter public static native int kPollingActiveDelayUsecsFieldNumber();
-  public static final int kPollingActiveDelayUsecsFieldNumber = kPollingActiveDelayUsecsFieldNumber();
-  public native @Cast("google::protobuf::int32") int polling_active_delay_usecs();
-  public native void set_polling_active_delay_usecs(@Cast("google::protobuf::int32") int value);
+  // bool force_gpu_compatible = 8;
+  public native void clear_force_gpu_compatible();
+  @MemberGetter public static native int kForceGpuCompatibleFieldNumber();
+  public static final int kForceGpuCompatibleFieldNumber = kForceGpuCompatibleFieldNumber();
+  public native @Cast("bool") boolean force_gpu_compatible();
+  public native void set_force_gpu_compatible(@Cast("bool") boolean value);
 
   // int32 polling_inactive_delay_msecs = 7;
   public native void clear_polling_inactive_delay_msecs();
@@ -3490,6 +3507,19 @@ public static final int
   public native void unsafe_arena_set_allocated_rpc_options(
         RPCOptions rpc_options);
 
+  // .tensorflow.ClusterDef cluster_def = 14;
+  public native @Cast("bool") boolean has_cluster_def();
+  public native void clear_cluster_def();
+  @MemberGetter public static native int kClusterDefFieldNumber();
+  public static final int kClusterDefFieldNumber = kClusterDefFieldNumber();
+  public native @Const @ByRef ClusterDef cluster_def();
+  public native ClusterDef mutable_cluster_def();
+  public native ClusterDef release_cluster_def();
+  public native void set_allocated_cluster_def(ClusterDef cluster_def);
+  public native ClusterDef unsafe_arena_release_cluster_def();
+  public native void unsafe_arena_set_allocated_cluster_def(
+        ClusterDef cluster_def);
+
   // int32 intra_op_parallelism_threads = 2;
   public native void clear_intra_op_parallelism_threads();
   @MemberGetter public static native int kIntraOpParallelismThreadsFieldNumber();
@@ -3831,6 +3861,11 @@ public static final int
 
 
 
+// bool force_gpu_compatible = 8;
+
+
+
+
 // -------------------------------------------------------------------
 
 // OptimizerOptions
@@ -4027,6 +4062,14 @@ public static final int
 
 
 // .tensorflow.RPCOptions rpc_options = 13;
+
+
+
+
+
+
+
+// .tensorflow.ClusterDef cluster_def = 14;
 
 
 
@@ -6499,6 +6542,43 @@ limitations under the License.
 
 
 
+// An implementation of Allocator that delegates all calls to another Allocator.
+//
+// Useful to clients who want to override part of the functionality of another
+// allocator.
+@Namespace("tensorflow") @NoOffset public static class AllocatorWrapper extends Allocator {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AllocatorWrapper(Pointer p) { super(p); }
+
+  public AllocatorWrapper(Allocator wrapped) { super((Pointer)null); allocate(wrapped); }
+  private native void allocate(Allocator wrapped);
+
+  // Returns the wrapped allocator to which all calls are delegated.
+  public native Allocator wrapped();
+
+  public native @StdString BytePointer Name();
+
+  public native Pointer AllocateRaw(@Cast("size_t") long alignment, @Cast("size_t") long num_bytes);
+
+  public native Pointer AllocateRaw(@Cast("size_t") long alignment, @Cast("size_t") long num_bytes,
+                      @Const @ByRef AllocationAttributes allocation_attr);
+
+  public native void DeallocateRaw(Pointer ptr);
+
+  public native @Cast("bool") boolean TracksAllocationSizes();
+
+  public native @Cast("bool") boolean ShouldAllocateEmptyTensors();
+
+  public native @Cast("size_t") long RequestedSize(Pointer ptr);
+
+  public native @Cast("size_t") long AllocatedSize(Pointer ptr);
+
+  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
+
+  public native @Cast("size_t") long AllocatedSizeSlow(Pointer ptr);
+}
+
 // A tensorflow Op may need access to different kinds of memory that
 // are not simply a function of the device to which the Op has been
 // assigned.  For example, an Op executing on a GPU may still need
@@ -8346,9 +8426,9 @@ limitations under the License.
   public Tensor(@Const @ByRef Tensor other) { super((Pointer)null); allocate(other); }
   private native void allocate(@Const @ByRef Tensor other);
 
-  /** \brief Move constructor. After this call, <other> is safely destructible and can
-   *  be assigned to, but other calls on it (e.g. shape manipulation) are not
-   *  valid. */
+  /** \brief Move constructor. After this call, <other> is safely destructible
+   *  and can be assigned to, but other calls on it (e.g. shape manipulation)
+   *  are not valid. */
 
   /** Returns the data type. */
   public native @Cast("tensorflow::DataType") int dtype();
@@ -8515,6 +8595,13 @@ limitations under the License.
    *  result. If NDIMS > dims() then trailing dimensions of size 1 will be
    *  added to make the output rank NDIMS. */
 
+  /** Returns the data as an Eigen::Tensor with NDIMS dimensions, collapsing the
+   *  first 'begin' Tensor dimensions into the first dimension of the result and
+   *  the Tensor dimensions of the last dims() - 'begin' - NDIMS into the last
+   *  dimension of the result. If 'begin' < 0 then the the |'begin'| leading
+   *  dimensions of size 1 will be added. If 'begin' + NDIMS > dims() then
+   *  'begin' + NDIMS - dims() trailing dimensions of size 1 will be added. */
+
   /** \brief Return the tensor data to an {@code Eigen::Tensor} with the new
    *  shape specified in {@code new_sizes} and cast to a new dtype {@code T}.
    * 
@@ -8600,7 +8687,14 @@ limitations under the License.
   // Fill metadata about the allocation into the proto.
   public native void FillAllocationDescription(
         AllocationDescription proto);
+
+  // Whether this TensorBuffer owns the underlying memory.
+  public native @Cast("bool") boolean OwnsMemory();
 }
+
+
+
+
 
 
 
@@ -11421,7 +11515,12 @@ limitations under the License.
   // On error, additional context is provided in the error message.
   public native @ByVal Status Run(@ByVal ShapeInferenceFn fn);
 
-  public native @ByVal ShapeHandle input(int idx);
+  // Merge the stored shape of the input in position idx with the specified
+  // shape. This requires idx to be in the [0, num_inputs) range. If the merge
+  // is successful and the new shape differs from the old one, store the new
+  // shape and return true. Return false otherwise.
+  public native @Cast("bool") boolean MergeInput(int idx, @ByVal ShapeHandle shape);
+  public native @ByVal ShapeHandle input(@Cast("tensorflow::int64") long idx);
   public native @ByVal Status input(@StringPiece BytePointer input_name, @StdVector ShapeHandle output);
   public native @ByVal Status input(@StringPiece String input_name, @StdVector ShapeHandle output);
   public native int num_inputs();
@@ -11457,7 +11556,7 @@ limitations under the License.
 
   // idx can be negative for an offset from end of dimensions.
   // idx must be in the range [-1 * s.rank, s.rank).
-  public native @ByVal DimensionHandle Dim(@ByVal ShapeHandle s, int idx);
+  public native @ByVal DimensionHandle Dim(@ByVal ShapeHandle s, @Cast("tensorflow::int64") long idx);
   public native int Rank(@ByVal ShapeHandle s);
   public native @Cast("bool") boolean RankKnown(@ByVal ShapeHandle s);
   public native @Cast("tensorflow::int64") long Value(@ByVal DimensionOrConstant d);
@@ -11480,11 +11579,11 @@ limitations under the License.
   // the shape with asserted rank in <*out>. Otherwise return an error.
   //
   // Note that <*out> may be set to <shape>.
-  public native @ByVal Status WithRank(@ByVal ShapeHandle shape, int rank,
+  public native @ByVal Status WithRank(@ByVal ShapeHandle shape, @Cast("tensorflow::int64") long rank,
                     ShapeHandle out);
-  public native @ByVal Status WithRankAtLeast(@ByVal ShapeHandle shape, int rank,
+  public native @ByVal Status WithRankAtLeast(@ByVal ShapeHandle shape, @Cast("tensorflow::int64") long rank,
                            ShapeHandle out);
-  public native @ByVal Status WithRankAtMost(@ByVal ShapeHandle shape, int rank,
+  public native @ByVal Status WithRankAtMost(@ByVal ShapeHandle shape, @Cast("tensorflow::int64") long rank,
                           ShapeHandle out);
 
   // If <dim> has value <value>, or its value is unknown, returns OK and returns
@@ -11535,7 +11634,7 @@ limitations under the License.
 
   // Returns in <out> the shape from replacing <s.dim[dim_index]> with
   // <new_dim>.
-  public native @ByVal Status ReplaceDim(@ByVal ShapeHandle s, int dim_index, @ByVal DimensionHandle new_dim,
+  public native @ByVal Status ReplaceDim(@ByVal ShapeHandle s, @Cast("tensorflow::int64") long dim_index, @ByVal DimensionHandle new_dim,
                       ShapeHandle out);
 
   // Returns a new shape with the given dims. The returned value is owned by
@@ -11546,7 +11645,7 @@ limitations under the License.
   public native @ByVal ShapeHandle UnknownShape();
 
   // Returns a shape with specified rank but unknown dims.
-  public native @ByVal ShapeHandle UnknownShapeOfRank(int rank);
+  public native @ByVal ShapeHandle UnknownShapeOfRank(@Cast("tensorflow::int64") long rank);
 
   // Returns a new shape of zero dimensions.
   public native @ByVal ShapeHandle Scalar();
@@ -11631,10 +11730,34 @@ limitations under the License.
   // and dtypes of tensors which can be accessed via the handle. These methods
   // propagate that information. Output handle dtypes and shapes are ignored if
   // the output tensor is not of type DT_RESOURCE.
+
+  // Merge the stored shape corresponding to the input handle in position idx
+  // with the specified shape. This requires idx to be in the [0, num_inputs)
+  // range. If the merge is successful and the new shape differs from the old
+  // one, store the new shape and return true. Return false otherwise.
+  public native @Cast("bool") boolean MergeInputHandleShape(int idx, @ByVal ShapeHandle shape);
+
+  // Set the type corresponding to the resource in position idx. This requires
+  // idx to be in the [0, num_inputs) range. Returns true iff the stored type
+  // has been updated.
+  public native @Cast("bool") boolean set_input_handle_dtype(int idx, @Cast("tensorflow::DataType") int dtype);
   public native @ByVal ShapeHandle input_handle_shape(int idx);
   public native @Cast("tensorflow::DataType") int input_handle_dtype(int idx);
+
+  // Merge the stored shape corresponding to the output handle in position idx
+  // with the specified shape. This requires idx to be in the [0, num_outputs)
+  // range. If the merge is successful and the new shape differs from the old
+  // one, store the new shape and return true. Return false otherwise.
+
+  public native @Cast("bool") boolean MergeOutputHandleShape(int idx, @ByVal ShapeHandle shape);
+  // Overwrite the shape corresponding to the output handle in position idx with
+  // the specified shape.
   public native void set_output_handle_shape(int idx, @ByVal ShapeHandle shape);
-  public native void set_output_handle_dtype(int idx, @Cast("tensorflow::DataType") int dtype);
+
+  // Set the type corresponding to the resource in position idx. This requires
+  // idx to be in the [0, num_outputs) range. Returns true iff the stored type
+  // has been updated.
+  public native @Cast("bool") boolean set_output_handle_dtype(int idx, @Cast("tensorflow::DataType") int dtype);
   public native @ByVal ShapeHandle output_handle_shape(int idx);
   public native @Cast("tensorflow::DataType") int output_handle_dtype(int idx);
 
@@ -11737,8 +11860,12 @@ limitations under the License.
   private native void allocate(@Cast("tensorflow::int64*") @ArraySlice long... dim_sizes);
 
   /** REQUIRES: {@code IsValid(proto)} */
-  public PartialTensorShape(@Const @ByRef TensorShapeProto proto) { super((Pointer)null); allocate(proto); }
-  private native void allocate(@Const @ByRef TensorShapeProto proto);
+  public PartialTensorShape(
+        @Const @ByRef TensorShapeProto proto) { super((Pointer)null); allocate(proto); }
+  private native void allocate(
+        @Const @ByRef TensorShapeProto proto);            // NOLINT(runtime/explicit)
+  public PartialTensorShape(@Const @ByRef TensorShape shape) { super((Pointer)null); allocate(shape); }
+  private native void allocate(@Const @ByRef TensorShape shape);  // NOLINT(runtime/explicit)
 
   /** Returns {@code true} iff {@code proto} is a valid partial tensor shape. */
   public static native @Cast("bool") boolean IsValid(@Const @ByRef TensorShapeProto proto);
@@ -12165,6 +12292,16 @@ limitations under the License.
 //   and the API just provides high level controls over the number of
 //   devices of each type.
 
+// Macro to control visibility of exported symbols in the shared library (.so,
+// .dylib, .dll).
+// This duplicates the TF_EXPORT macro definition in
+// tensorflow/core/platform/macros.h in order to keep this .h file independent
+// of any other includes.$a
+// #ifdef SWIG
+// #define TF_CAPI_EXPORT
+// #else
+// #endif  // SWIG
+
 // #ifdef __cplusplus
 // #endif
 
@@ -12246,8 +12383,10 @@ public static native void TF_DeleteStatus(TF_Status arg0);
 
 // Record <code, msg> in *s.  Any previous information is lost.
 // A common use is to clear a status: TF_SetStatus(s, TF_OK, "");
-public static native void TF_SetStatus(TF_Status s, @Cast("TF_Code") int code, @Cast("const char*") BytePointer msg);
-public static native void TF_SetStatus(TF_Status s, @Cast("TF_Code") int code, String msg);
+public static native void TF_SetStatus(TF_Status s, @Cast("TF_Code") int code,
+                                        @Cast("const char*") BytePointer msg);
+public static native void TF_SetStatus(TF_Status s, @Cast("TF_Code") int code,
+                                        String msg);
 
 // Return the code record in *s.
 public static native @Cast("TF_Code") int TF_GetCode(@Const TF_Status s);
@@ -12295,7 +12434,8 @@ public static class TF_Buffer extends Pointer {
 
 // Makes a copy of the input and sets an appropriate deallocator.  Useful for
 // passing in read-only, input protobufs.
-public static native TF_Buffer TF_NewBufferFromString(@Const Pointer proto, @Cast("size_t") long proto_len);
+public static native TF_Buffer TF_NewBufferFromString(@Const Pointer proto,
+                                                        @Cast("size_t") long proto_len);
 
 // Useful for passing *out* a protobuf.
 public static native TF_Buffer TF_NewBuffer();
@@ -12340,21 +12480,20 @@ public static class Deallocator_Pointer_long_Pointer extends FunctionPointer {
     public    Deallocator_Pointer_long_Pointer(Pointer p) { super(p); }
     protected Deallocator_Pointer_long_Pointer() { allocate(); }
     private native void allocate();
-    public native void call(Pointer data, @Cast("size_t") long len,
-                                                   Pointer arg);
+    public native void call(Pointer data, @Cast("size_t") long len, Pointer arg);
 }
-public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongPointer dims, int num_dims,
-                               Pointer data, @Cast("size_t") long len,
-                               Deallocator_Pointer_long_Pointer deallocator,
-                               Pointer deallocator_arg);
-public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongBuffer dims, int num_dims,
-                               Pointer data, @Cast("size_t") long len,
-                               Deallocator_Pointer_long_Pointer deallocator,
-                               Pointer deallocator_arg);
-public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") long[] dims, int num_dims,
-                               Pointer data, @Cast("size_t") long len,
-                               Deallocator_Pointer_long_Pointer deallocator,
-                               Pointer deallocator_arg);
+public static native TF_Tensor TF_NewTensor(
+    @Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongPointer dims, int num_dims, Pointer data, @Cast("size_t") long len,
+    Deallocator_Pointer_long_Pointer deallocator,
+    Pointer deallocator_arg);
+public static native TF_Tensor TF_NewTensor(
+    @Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongBuffer dims, int num_dims, Pointer data, @Cast("size_t") long len,
+    Deallocator_Pointer_long_Pointer deallocator,
+    Pointer deallocator_arg);
+public static native TF_Tensor TF_NewTensor(
+    @Cast("TF_DataType") int arg0, @Cast("const int64_t*") long[] dims, int num_dims, Pointer data, @Cast("size_t") long len,
+    Deallocator_Pointer_long_Pointer deallocator,
+    Pointer deallocator_arg);
 
 // Allocate and return a new Tensor.
 //
@@ -12365,12 +12504,19 @@ public static native TF_Tensor TF_NewTensor(@Cast("TF_DataType") int arg0, @Cast
 //
 // The caller must set the Tensor values by writing them to the pointer returned
 // by TF_TensorData with length TF_TensorByteSize.
-public static native TF_Tensor TF_AllocateTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongPointer dims,
-                                    int num_dims, @Cast("size_t") long len);
-public static native TF_Tensor TF_AllocateTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") LongBuffer dims,
-                                    int num_dims, @Cast("size_t") long len);
-public static native TF_Tensor TF_AllocateTensor(@Cast("TF_DataType") int arg0, @Cast("const int64_t*") long[] dims,
-                                    int num_dims, @Cast("size_t") long len);
+public static native TF_Tensor TF_AllocateTensor(@Cast("TF_DataType") int arg0,
+                                                   @Cast("const int64_t*") LongPointer dims,
+                                                   int num_dims, @Cast("size_t") long len);
+public static native TF_Tensor TF_AllocateTensor(@Cast("TF_DataType") int arg0,
+                                                   @Cast("const int64_t*") LongBuffer dims,
+                                                   int num_dims, @Cast("size_t") long len);
+public static native TF_Tensor TF_AllocateTensor(@Cast("TF_DataType") int arg0,
+                                                   @Cast("const int64_t*") long[] dims,
+                                                   int num_dims, @Cast("size_t") long len);
+
+// Deletes `tensor` and returns a new TF_Tensor with the same content if
+// possible. Returns nullptr and leaves `tensor` untouched if not.
+public static native TF_Tensor TF_TensorMaybeMove(TF_Tensor tensor);
 
 // Destroy a tensor.
 public static native void TF_DeleteTensor(TF_Tensor arg0);
@@ -12399,18 +12545,24 @@ public static native Pointer TF_TensorData(@Const TF_Tensor arg0);
 //
 // On success returns the size in bytes of the encoded string.
 // Returns an error into `status` otherwise.
-public static native @Cast("size_t") long TF_StringEncode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("char*") BytePointer dst,
-                              @Cast("size_t") long dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("size_t") long src_len, @Cast("char*") ByteBuffer dst,
-                              @Cast("size_t") long dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringEncode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("char*") byte[] dst,
-                              @Cast("size_t") long dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("size_t") long src_len, @Cast("char*") BytePointer dst,
-                              @Cast("size_t") long dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringEncode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("char*") ByteBuffer dst,
-                              @Cast("size_t") long dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("size_t") long src_len, @Cast("char*") byte[] dst,
-                              @Cast("size_t") long dst_len, TF_Status status);
+public static native @Cast("size_t") long TF_StringEncode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("char*") BytePointer dst, @Cast("size_t") long dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("size_t") long src_len,
+                                             @Cast("char*") ByteBuffer dst, @Cast("size_t") long dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringEncode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("char*") byte[] dst, @Cast("size_t") long dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("size_t") long src_len,
+                                             @Cast("char*") BytePointer dst, @Cast("size_t") long dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringEncode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("char*") ByteBuffer dst, @Cast("size_t") long dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("size_t") long src_len,
+                                             @Cast("char*") byte[] dst, @Cast("size_t") long dst_len,
+                                             TF_Status status);
 
 // Decode a string encoded using TF_StringEncode.
 //
@@ -12420,20 +12572,27 @@ public static native @Cast("size_t") long TF_StringEncode(String src, @Cast("siz
 // `*dst` and `*dst_len` are undefined and an error is set in `status`.
 //
 // Does not read memory more than `src_len` bytes beyond `src`.
-public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("const char**") PointerPointer dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("const char**") @ByPtrPtr BytePointer dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringDecode(String src, @Cast("size_t") long src_len, @Cast("const char**") @ByPtrPtr ByteBuffer dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("const char**") @ByPtrPtr byte[] dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringDecode(String src, @Cast("size_t") long src_len, @Cast("const char**") @ByPtrPtr BytePointer dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len, @Cast("const char**") @ByPtrPtr ByteBuffer dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
-public static native @Cast("size_t") long TF_StringDecode(String src, @Cast("size_t") long src_len, @Cast("const char**") @ByPtrPtr byte[] dst,
-                              @Cast("size_t*") SizeTPointer dst_len, TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") PointerPointer dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") @ByPtrPtr BytePointer dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(String src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") @ByPtrPtr ByteBuffer dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") @ByPtrPtr byte[] dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(String src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") @ByPtrPtr BytePointer dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(@Cast("const char*") BytePointer src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") @ByPtrPtr ByteBuffer dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
+public static native @Cast("size_t") long TF_StringDecode(String src, @Cast("size_t") long src_len,
+                                             @Cast("const char**") @ByPtrPtr byte[] dst, @Cast("size_t*") SizeTPointer dst_len,
+                                             TF_Status status);
 
 // Return the size in bytes required to encode a string `len` bytes long into a
 // TF_STRING tensor.
@@ -12457,15 +12616,18 @@ public static native TF_SessionOptions TF_NewSessionOptions();
 // "local"
 // ip:port
 // host:port
-public static native void TF_SetTarget(TF_SessionOptions options, @Cast("const char*") BytePointer target);
-public static native void TF_SetTarget(TF_SessionOptions options, String target);
+public static native void TF_SetTarget(TF_SessionOptions options,
+                                        @Cast("const char*") BytePointer target);
+public static native void TF_SetTarget(TF_SessionOptions options,
+                                        String target);
 
 // Set the config in TF_SessionOptions.options.
 // config should be a serialized tensorflow.ConfigProto proto.
 // If config was not parsed successfully as a ConfigProto, record the
 // error information in *status.
-public static native void TF_SetConfig(TF_SessionOptions options, @Const Pointer proto,
-                         @Cast("size_t") long proto_len, TF_Status status);
+public static native void TF_SetConfig(TF_SessionOptions options,
+                                        @Const Pointer proto, @Cast("size_t") long proto_len,
+                                        TF_Status status);
 
 // Destroy an options object.
 public static native void TF_DeleteSessionOptions(TF_SessionOptions arg0);
@@ -12564,15 +12726,21 @@ public static class TF_Output extends Pointer {
 //   * `output` is not in `graph`.
 //   * An invalid shape is being set (e.g., the shape being set
 //     is incompatible with the existing shape).
-public static native void TF_GraphSetTensorShape(TF_Graph graph, @ByVal TF_Output output,
-                                   @Cast("const int64_t*") LongPointer dims, int num_dims,
-                                   TF_Status status);
-public static native void TF_GraphSetTensorShape(TF_Graph graph, @ByVal TF_Output output,
-                                   @Cast("const int64_t*") LongBuffer dims, int num_dims,
-                                   TF_Status status);
-public static native void TF_GraphSetTensorShape(TF_Graph graph, @ByVal TF_Output output,
-                                   @Cast("const int64_t*") long[] dims, int num_dims,
-                                   TF_Status status);
+public static native void TF_GraphSetTensorShape(TF_Graph graph,
+                                                  @ByVal TF_Output output,
+                                                  @Cast("const int64_t*") LongPointer dims,
+                                                  int num_dims,
+                                                  TF_Status status);
+public static native void TF_GraphSetTensorShape(TF_Graph graph,
+                                                  @ByVal TF_Output output,
+                                                  @Cast("const int64_t*") LongBuffer dims,
+                                                  int num_dims,
+                                                  TF_Status status);
+public static native void TF_GraphSetTensorShape(TF_Graph graph,
+                                                  @ByVal TF_Output output,
+                                                  @Cast("const int64_t*") long[] dims,
+                                                  int num_dims,
+                                                  TF_Status status);
 
 // Returns the number of dimensions of the Tensor referenced by `output`
 // in `graph`.
@@ -12581,8 +12749,9 @@ public static native void TF_GraphSetTensorShape(TF_Graph graph, @ByVal TF_Outpu
 //
 // Returns an error into `status` if:
 //   * `output` is not in `graph`.
-public static native int TF_GraphGetTensorNumDims(TF_Graph graph, @ByVal TF_Output output,
-                                    TF_Status status);
+public static native int TF_GraphGetTensorNumDims(TF_Graph graph,
+                                                   @ByVal TF_Output output,
+                                                   TF_Status status);
 
 // Returns the shape of the Tensor referenced by `output` in `graph`
 // into `dims`. `dims` must be an array large enough to hold `num_dims`
@@ -12596,30 +12765,33 @@ public static native int TF_GraphGetTensorNumDims(TF_Graph graph, @ByVal TF_Outp
 // Returns an error into `status` if:
 //   * `output` is not in `graph`.
 //   * `num_dims` does not match the actual number of dimensions.
-public static native void TF_GraphGetTensorShape(TF_Graph graph, @ByVal TF_Output output,
-                                   @Cast("int64_t*") LongPointer dims, int num_dims,
-                                   TF_Status status);
-public static native void TF_GraphGetTensorShape(TF_Graph graph, @ByVal TF_Output output,
-                                   @Cast("int64_t*") LongBuffer dims, int num_dims,
-                                   TF_Status status);
-public static native void TF_GraphGetTensorShape(TF_Graph graph, @ByVal TF_Output output,
-                                   @Cast("int64_t*") long[] dims, int num_dims,
-                                   TF_Status status);
+public static native void TF_GraphGetTensorShape(TF_Graph graph,
+                                                  @ByVal TF_Output output,
+                                                  @Cast("int64_t*") LongPointer dims, int num_dims,
+                                                  TF_Status status);
+public static native void TF_GraphGetTensorShape(TF_Graph graph,
+                                                  @ByVal TF_Output output,
+                                                  @Cast("int64_t*") LongBuffer dims, int num_dims,
+                                                  TF_Status status);
+public static native void TF_GraphGetTensorShape(TF_Graph graph,
+                                                  @ByVal TF_Output output,
+                                                  @Cast("int64_t*") long[] dims, int num_dims,
+                                                  TF_Status status);
 
 // Operation will only be added to *graph when TF_FinishOperation() is
 // called (assuming TF_FinishOperation() does not return an error).
 // *graph must not be deleted until after TF_FinishOperation() is
 // called.
-public static native TF_OperationDescription TF_NewOperation(TF_Graph graph,
-                                                @Cast("const char*") BytePointer op_type,
-                                                @Cast("const char*") BytePointer oper_name);
-public static native TF_OperationDescription TF_NewOperation(TF_Graph graph,
-                                                String op_type,
-                                                String oper_name);
+public static native TF_OperationDescription TF_NewOperation(
+    TF_Graph graph, @Cast("const char*") BytePointer op_type, @Cast("const char*") BytePointer oper_name);
+public static native TF_OperationDescription TF_NewOperation(
+    TF_Graph graph, String op_type, String oper_name);
 
 // Specify the device for `desc`.  Defaults to empty, meaning unconstrained.
-public static native void TF_SetDevice(TF_OperationDescription desc, @Cast("const char*") BytePointer device);
-public static native void TF_SetDevice(TF_OperationDescription desc, String device);
+public static native void TF_SetDevice(TF_OperationDescription desc,
+                                        @Cast("const char*") BytePointer device);
+public static native void TF_SetDevice(TF_OperationDescription desc,
+                                        String device);
 
 // The calls to TF_AddInput and TF_AddInputList must match (in number,
 // order, and type) the op declaration.  For example, the "Concat" op
@@ -12642,23 +12814,26 @@ public static native void TF_SetDevice(TF_OperationDescription desc, String devi
 //   TF_AddInputList(desc, values_inputs, 5);
 
 // For inputs that take a single tensor.
-public static native void TF_AddInput(TF_OperationDescription desc, @ByVal TF_Output input);
+public static native void TF_AddInput(TF_OperationDescription desc,
+                                       @ByVal TF_Output input);
 
 // For inputs that take a list of tensors.
 // inputs must point to TF_Output[num_inputs].
 public static native void TF_AddInputList(TF_OperationDescription desc,
-                            @Const TF_Output inputs, int num_inputs);
+                                           @Const TF_Output inputs,
+                                           int num_inputs);
 
 // Call once per control input to `desc`.
 public static native void TF_AddControlInput(TF_OperationDescription desc,
-                               TF_Operation input);
+                                              TF_Operation input);
 
 // Request that `desc` be co-located on the device where `op`
 // is placed.
 //
 // Use of this is discouraged since the implementation of device placement is
 // subject to change. Primarily intended for internal libraries
-public static native void TF_ColocateWith(TF_OperationDescription desc, TF_Operation op);
+public static native void TF_ColocateWith(TF_OperationDescription desc,
+                                           TF_Operation op);
 
 // Call some TF_SetAttr*() function for every attr that is not
 // inferred from an input and doesn't have a default value you wish to
@@ -12666,222 +12841,266 @@ public static native void TF_ColocateWith(TF_OperationDescription desc, TF_Opera
 
 // `value` must point to a string of length `length` bytes.
 public static native void TF_SetAttrString(TF_OperationDescription desc,
-                             @Cast("const char*") BytePointer attr_name, @Const Pointer value,
-                             @Cast("size_t") long length);
+                                            @Cast("const char*") BytePointer attr_name,
+                                            @Const Pointer value, @Cast("size_t") long length);
 public static native void TF_SetAttrString(TF_OperationDescription desc,
-                             String attr_name, @Const Pointer value,
-                             @Cast("size_t") long length);
+                                            String attr_name,
+                                            @Const Pointer value, @Cast("size_t") long length);
 // `values` and `lengths` each must have lengths `num_values`.
 // `values[i]` must point to a string of length `lengths[i]` bytes.
 public static native void TF_SetAttrStringList(TF_OperationDescription desc,
-                                 @Cast("const char*") BytePointer attr_name,
-                                 @Cast("const void*const*") PointerPointer values,
-                                 @Cast("const size_t*") SizeTPointer lengths, int num_values);
+                                                @Cast("const char*") BytePointer attr_name,
+                                                @Cast("const void*const*") PointerPointer values,
+                                                @Cast("const size_t*") SizeTPointer lengths,
+                                                int num_values);
 public static native void TF_SetAttrStringList(TF_OperationDescription desc,
-                                 @Cast("const char*") BytePointer attr_name,
-                                 @Cast("const void*const*") @ByPtrPtr Pointer values,
-                                 @Cast("const size_t*") SizeTPointer lengths, int num_values);
+                                                @Cast("const char*") BytePointer attr_name,
+                                                @Cast("const void*const*") @ByPtrPtr Pointer values,
+                                                @Cast("const size_t*") SizeTPointer lengths,
+                                                int num_values);
 public static native void TF_SetAttrStringList(TF_OperationDescription desc,
-                                 String attr_name,
-                                 @Cast("const void*const*") @ByPtrPtr Pointer values,
-                                 @Cast("const size_t*") SizeTPointer lengths, int num_values);
-public static native void TF_SetAttrInt(TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
-                          @Cast("int64_t") long value);
-public static native void TF_SetAttrInt(TF_OperationDescription desc, String attr_name,
-                          @Cast("int64_t") long value);
+                                                String attr_name,
+                                                @Cast("const void*const*") @ByPtrPtr Pointer values,
+                                                @Cast("const size_t*") SizeTPointer lengths,
+                                                int num_values);
+public static native void TF_SetAttrInt(TF_OperationDescription desc,
+                                         @Cast("const char*") BytePointer attr_name, @Cast("int64_t") long value);
+public static native void TF_SetAttrInt(TF_OperationDescription desc,
+                                         String attr_name, @Cast("int64_t") long value);
 public static native void TF_SetAttrIntList(TF_OperationDescription desc,
-                              @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongPointer values,
-                              int num_values);
+                                             @Cast("const char*") BytePointer attr_name,
+                                             @Cast("const int64_t*") LongPointer values,
+                                             int num_values);
 public static native void TF_SetAttrIntList(TF_OperationDescription desc,
-                              String attr_name, @Cast("const int64_t*") LongBuffer values,
-                              int num_values);
+                                             String attr_name,
+                                             @Cast("const int64_t*") LongBuffer values,
+                                             int num_values);
 public static native void TF_SetAttrIntList(TF_OperationDescription desc,
-                              @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") long[] values,
-                              int num_values);
+                                             @Cast("const char*") BytePointer attr_name,
+                                             @Cast("const int64_t*") long[] values,
+                                             int num_values);
 public static native void TF_SetAttrIntList(TF_OperationDescription desc,
-                              String attr_name, @Cast("const int64_t*") LongPointer values,
-                              int num_values);
+                                             String attr_name,
+                                             @Cast("const int64_t*") LongPointer values,
+                                             int num_values);
 public static native void TF_SetAttrIntList(TF_OperationDescription desc,
-                              @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongBuffer values,
-                              int num_values);
+                                             @Cast("const char*") BytePointer attr_name,
+                                             @Cast("const int64_t*") LongBuffer values,
+                                             int num_values);
 public static native void TF_SetAttrIntList(TF_OperationDescription desc,
-                              String attr_name, @Cast("const int64_t*") long[] values,
-                              int num_values);
+                                             String attr_name,
+                                             @Cast("const int64_t*") long[] values,
+                                             int num_values);
 public static native void TF_SetAttrFloat(TF_OperationDescription desc,
-                            @Cast("const char*") BytePointer attr_name, float value);
+                                           @Cast("const char*") BytePointer attr_name, float value);
 public static native void TF_SetAttrFloat(TF_OperationDescription desc,
-                            String attr_name, float value);
+                                           String attr_name, float value);
 public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name, @Const FloatPointer values,
-                                int num_values);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Const FloatPointer values,
+                                               int num_values);
 public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
-                                String attr_name, @Const FloatBuffer values,
-                                int num_values);
+                                               String attr_name,
+                                               @Const FloatBuffer values,
+                                               int num_values);
 public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name, @Const float[] values,
-                                int num_values);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Const float[] values,
+                                               int num_values);
 public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
-                                String attr_name, @Const FloatPointer values,
-                                int num_values);
+                                               String attr_name,
+                                               @Const FloatPointer values,
+                                               int num_values);
 public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name, @Const FloatBuffer values,
-                                int num_values);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Const FloatBuffer values,
+                                               int num_values);
 public static native void TF_SetAttrFloatList(TF_OperationDescription desc,
-                                String attr_name, @Const float[] values,
-                                int num_values);
-public static native void TF_SetAttrBool(TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
-                           @Cast("unsigned char") byte value);
-public static native void TF_SetAttrBool(TF_OperationDescription desc, String attr_name,
-                           @Cast("unsigned char") byte value);
+                                               String attr_name,
+                                               @Const float[] values,
+                                               int num_values);
+public static native void TF_SetAttrBool(TF_OperationDescription desc,
+                                          @Cast("const char*") BytePointer attr_name,
+                                          @Cast("unsigned char") byte value);
+public static native void TF_SetAttrBool(TF_OperationDescription desc,
+                                          String attr_name,
+                                          @Cast("unsigned char") byte value);
 public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
-                               @Cast("const char*") BytePointer attr_name,
-                               @Cast("const unsigned char*") BytePointer values, int num_values);
+                                              @Cast("const char*") BytePointer attr_name,
+                                              @Cast("const unsigned char*") BytePointer values,
+                                              int num_values);
 public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
-                               String attr_name,
-                               @Cast("const unsigned char*") ByteBuffer values, int num_values);
+                                              String attr_name,
+                                              @Cast("const unsigned char*") ByteBuffer values,
+                                              int num_values);
 public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
-                               @Cast("const char*") BytePointer attr_name,
-                               @Cast("const unsigned char*") byte[] values, int num_values);
+                                              @Cast("const char*") BytePointer attr_name,
+                                              @Cast("const unsigned char*") byte[] values,
+                                              int num_values);
 public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
-                               String attr_name,
-                               @Cast("const unsigned char*") BytePointer values, int num_values);
+                                              String attr_name,
+                                              @Cast("const unsigned char*") BytePointer values,
+                                              int num_values);
 public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
-                               @Cast("const char*") BytePointer attr_name,
-                               @Cast("const unsigned char*") ByteBuffer values, int num_values);
+                                              @Cast("const char*") BytePointer attr_name,
+                                              @Cast("const unsigned char*") ByteBuffer values,
+                                              int num_values);
 public static native void TF_SetAttrBoolList(TF_OperationDescription desc,
-                               String attr_name,
-                               @Cast("const unsigned char*") byte[] values, int num_values);
-public static native void TF_SetAttrType(TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
-                           @Cast("TF_DataType") int value);
-public static native void TF_SetAttrType(TF_OperationDescription desc, String attr_name,
-                           @Cast("TF_DataType") int value);
+                                              String attr_name,
+                                              @Cast("const unsigned char*") byte[] values,
+                                              int num_values);
+public static native void TF_SetAttrType(TF_OperationDescription desc,
+                                          @Cast("const char*") BytePointer attr_name,
+                                          @Cast("TF_DataType") int value);
+public static native void TF_SetAttrType(TF_OperationDescription desc,
+                                          String attr_name,
+                                          @Cast("TF_DataType") int value);
 public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
-                               @Cast("const char*") BytePointer attr_name, @Cast("const TF_DataType*") IntPointer values,
-                               int num_values);
+                                              @Cast("const char*") BytePointer attr_name,
+                                              @Cast("const TF_DataType*") IntPointer values,
+                                              int num_values);
 public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
-                               String attr_name, @Cast("const TF_DataType*") IntBuffer values,
-                               int num_values);
+                                              String attr_name,
+                                              @Cast("const TF_DataType*") IntBuffer values,
+                                              int num_values);
 public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
-                               @Cast("const char*") BytePointer attr_name, @Cast("const TF_DataType*") int[] values,
-                               int num_values);
+                                              @Cast("const char*") BytePointer attr_name,
+                                              @Cast("const TF_DataType*") int[] values,
+                                              int num_values);
 public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
-                               String attr_name, @Cast("const TF_DataType*") IntPointer values,
-                               int num_values);
+                                              String attr_name,
+                                              @Cast("const TF_DataType*") IntPointer values,
+                                              int num_values);
 public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
-                               @Cast("const char*") BytePointer attr_name, @Cast("const TF_DataType*") IntBuffer values,
-                               int num_values);
+                                              @Cast("const char*") BytePointer attr_name,
+                                              @Cast("const TF_DataType*") IntBuffer values,
+                                              int num_values);
 public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
-                               String attr_name, @Cast("const TF_DataType*") int[] values,
-                               int num_values);
+                                              String attr_name,
+                                              @Cast("const TF_DataType*") int[] values,
+                                              int num_values);
 
 // Set `num_dims` to -1 to represent "unknown rank".  Otherwise,
 // `dims` points to an array of length `num_dims`.  `dims[i]` must be
 // >= -1, with -1 meaning "unknown dimension".
 public static native void TF_SetAttrShape(TF_OperationDescription desc,
-                            @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongPointer dims,
-                            int num_dims);
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const int64_t*") LongPointer dims, int num_dims);
 public static native void TF_SetAttrShape(TF_OperationDescription desc,
-                            String attr_name, @Cast("const int64_t*") LongBuffer dims,
-                            int num_dims);
+                                           String attr_name,
+                                           @Cast("const int64_t*") LongBuffer dims, int num_dims);
 public static native void TF_SetAttrShape(TF_OperationDescription desc,
-                            @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") long[] dims,
-                            int num_dims);
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const int64_t*") long[] dims, int num_dims);
 public static native void TF_SetAttrShape(TF_OperationDescription desc,
-                            String attr_name, @Cast("const int64_t*") LongPointer dims,
-                            int num_dims);
+                                           String attr_name,
+                                           @Cast("const int64_t*") LongPointer dims, int num_dims);
 public static native void TF_SetAttrShape(TF_OperationDescription desc,
-                            @Cast("const char*") BytePointer attr_name, @Cast("const int64_t*") LongBuffer dims,
-                            int num_dims);
+                                           @Cast("const char*") BytePointer attr_name,
+                                           @Cast("const int64_t*") LongBuffer dims, int num_dims);
 public static native void TF_SetAttrShape(TF_OperationDescription desc,
-                            String attr_name, @Cast("const int64_t*") long[] dims,
-                            int num_dims);
+                                           String attr_name,
+                                           @Cast("const int64_t*") long[] dims, int num_dims);
 // `dims` and `num_dims` must point to arrays of length `num_shapes`.
 // Set `num_dims[i]` to -1 to represent "unknown rank".  Otherwise,
 // `dims[i]` points to an array of length `num_dims[i]`.  `dims[i][j]`
 // must be >= -1, with -1 meaning "unknown dimension".
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name,
-                                @Cast("const int64_t*const*") PointerPointer dims, @Const IntPointer num_dims,
-                                int num_shapes);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Cast("const int64_t*const*") PointerPointer dims,
+                                               @Const IntPointer num_dims,
+                                               int num_shapes);
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name,
-                                @Cast("const int64_t*const*") @ByPtrPtr LongPointer dims, @Const IntPointer num_dims,
-                                int num_shapes);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Cast("const int64_t*const*") @ByPtrPtr LongPointer dims,
+                                               @Const IntPointer num_dims,
+                                               int num_shapes);
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                String attr_name,
-                                @Cast("const int64_t*const*") @ByPtrPtr LongBuffer dims, @Const IntBuffer num_dims,
-                                int num_shapes);
+                                               String attr_name,
+                                               @Cast("const int64_t*const*") @ByPtrPtr LongBuffer dims,
+                                               @Const IntBuffer num_dims,
+                                               int num_shapes);
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name,
-                                @Cast("const int64_t*const*") @ByPtrPtr long[] dims, @Const int[] num_dims,
-                                int num_shapes);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Cast("const int64_t*const*") @ByPtrPtr long[] dims,
+                                               @Const int[] num_dims,
+                                               int num_shapes);
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                String attr_name,
-                                @Cast("const int64_t*const*") @ByPtrPtr LongPointer dims, @Const IntPointer num_dims,
-                                int num_shapes);
+                                               String attr_name,
+                                               @Cast("const int64_t*const*") @ByPtrPtr LongPointer dims,
+                                               @Const IntPointer num_dims,
+                                               int num_shapes);
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                @Cast("const char*") BytePointer attr_name,
-                                @Cast("const int64_t*const*") @ByPtrPtr LongBuffer dims, @Const IntBuffer num_dims,
-                                int num_shapes);
+                                               @Cast("const char*") BytePointer attr_name,
+                                               @Cast("const int64_t*const*") @ByPtrPtr LongBuffer dims,
+                                               @Const IntBuffer num_dims,
+                                               int num_shapes);
 public static native void TF_SetAttrShapeList(TF_OperationDescription desc,
-                                String attr_name,
-                                @Cast("const int64_t*const*") @ByPtrPtr long[] dims, @Const int[] num_dims,
-                                int num_shapes);
+                                               String attr_name,
+                                               @Cast("const int64_t*const*") @ByPtrPtr long[] dims,
+                                               @Const int[] num_dims,
+                                               int num_shapes);
 // `proto` must point to an array of `proto_len` bytes representing a
 // binary-serialized TensorShapeProto.
-public static native void TF_SetAttrTensorShapeProto(TF_OperationDescription desc,
-                                       @Cast("const char*") BytePointer attr_name, @Const Pointer proto,
-                                       @Cast("size_t") long proto_len, TF_Status status);
-public static native void TF_SetAttrTensorShapeProto(TF_OperationDescription desc,
-                                       String attr_name, @Const Pointer proto,
-                                       @Cast("size_t") long proto_len, TF_Status status);
+public static native void TF_SetAttrTensorShapeProto(
+    TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name, @Const Pointer proto,
+    @Cast("size_t") long proto_len, TF_Status status);
+public static native void TF_SetAttrTensorShapeProto(
+    TF_OperationDescription desc, String attr_name, @Const Pointer proto,
+    @Cast("size_t") long proto_len, TF_Status status);
 // `protos` and `proto_lens` must point to arrays of length `num_shapes`.
 // `protos[i]` must point to an array of `proto_lens[i]` bytes
 // representing a binary-serialized TensorShapeProto.
-public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
-                                           @Cast("const char*") BytePointer attr_name,
-                                           @Cast("const void*const*") PointerPointer protos,
-                                           @Cast("const size_t*") SizeTPointer proto_lens,
-                                           int num_shapes, TF_Status status);
-public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
-                                           @Cast("const char*") BytePointer attr_name,
-                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
-                                           @Cast("const size_t*") SizeTPointer proto_lens,
-                                           int num_shapes, TF_Status status);
-public static native void TF_SetAttrTensorShapeProtoList(TF_OperationDescription desc,
-                                           String attr_name,
-                                           @Cast("const void*const*") @ByPtrPtr Pointer protos,
-                                           @Cast("const size_t*") SizeTPointer proto_lens,
-                                           int num_shapes, TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(
+    TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
+    @Cast("const void*const*") PointerPointer protos, @Cast("const size_t*") SizeTPointer proto_lens, int num_shapes,
+    TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(
+    TF_OperationDescription desc, @Cast("const char*") BytePointer attr_name,
+    @Cast("const void*const*") @ByPtrPtr Pointer protos, @Cast("const size_t*") SizeTPointer proto_lens, int num_shapes,
+    TF_Status status);
+public static native void TF_SetAttrTensorShapeProtoList(
+    TF_OperationDescription desc, String attr_name,
+    @Cast("const void*const*") @ByPtrPtr Pointer protos, @Cast("const size_t*") SizeTPointer proto_lens, int num_shapes,
+    TF_Status status);
 
 public static native void TF_SetAttrTensor(TF_OperationDescription desc,
-                             @Cast("const char*") BytePointer attr_name, TF_Tensor value,
-                             TF_Status status);
+                                            @Cast("const char*") BytePointer attr_name,
+                                            TF_Tensor value,
+                                            TF_Status status);
 public static native void TF_SetAttrTensor(TF_OperationDescription desc,
-                             String attr_name, TF_Tensor value,
-                             TF_Status status);
+                                            String attr_name,
+                                            TF_Tensor value,
+                                            TF_Status status);
 public static native void TF_SetAttrTensorList(TF_OperationDescription desc,
-                                 @Cast("const char*") BytePointer attr_name,
-                                 @Cast("TF_Tensor*const*") PointerPointer values, int num_values,
-                                 TF_Status status);
+                                                @Cast("const char*") BytePointer attr_name,
+                                                @Cast("TF_Tensor*const*") PointerPointer values,
+                                                int num_values,
+                                                TF_Status status);
 public static native void TF_SetAttrTensorList(TF_OperationDescription desc,
-                                 @Cast("const char*") BytePointer attr_name,
-                                 @ByPtrPtr TF_Tensor values, int num_values,
-                                 TF_Status status);
+                                                @Cast("const char*") BytePointer attr_name,
+                                                @ByPtrPtr TF_Tensor values,
+                                                int num_values,
+                                                TF_Status status);
 public static native void TF_SetAttrTensorList(TF_OperationDescription desc,
-                                 String attr_name,
-                                 @ByPtrPtr TF_Tensor values, int num_values,
-                                 TF_Status status);
+                                                String attr_name,
+                                                @ByPtrPtr TF_Tensor values,
+                                                int num_values,
+                                                TF_Status status);
 
 // `proto` should point to a sequence of bytes of length `proto_len`
 // representing a binary serialization of an AttrValue protocol
 // buffer.
 public static native void TF_SetAttrValueProto(TF_OperationDescription desc,
-                                 @Cast("const char*") BytePointer attr_name, @Const Pointer proto,
-                                 @Cast("size_t") long proto_len, TF_Status status);
+                                                @Cast("const char*") BytePointer attr_name,
+                                                @Const Pointer proto,
+                                                @Cast("size_t") long proto_len,
+                                                TF_Status status);
 public static native void TF_SetAttrValueProto(TF_OperationDescription desc,
-                                 String attr_name, @Const Pointer proto,
-                                 @Cast("size_t") long proto_len, TF_Status status);
+                                                String attr_name,
+                                                @Const Pointer proto,
+                                                @Cast("size_t") long proto_len,
+                                                TF_Status status);
 
 // If this function succeeds:
 //   * *status is set to an OK value,
@@ -12893,8 +13112,8 @@ public static native void TF_SetAttrValueProto(TF_OperationDescription desc,
 //   * the graph is not modified,
 //   * a null value is returned.
 // In either case, it deletes `desc`.
-public static native TF_Operation TF_FinishOperation(TF_OperationDescription desc,
-                                        TF_Status status);
+public static native TF_Operation TF_FinishOperation(
+    TF_OperationDescription desc, TF_Status status);
 
 // TF_Operation functions.  Operations are immutable once created, so
 // these are all query functions.
@@ -12906,18 +13125,20 @@ public static native @Cast("const char*") BytePointer TF_OperationDevice(TF_Oper
 public static native int TF_OperationNumOutputs(TF_Operation oper);
 public static native @Cast("TF_DataType") int TF_OperationOutputType(@ByVal TF_Output oper_out);
 public static native int TF_OperationOutputListLength(TF_Operation oper,
-                                        @Cast("const char*") BytePointer arg_name,
-                                        TF_Status status);
+                                                       @Cast("const char*") BytePointer arg_name,
+                                                       TF_Status status);
 public static native int TF_OperationOutputListLength(TF_Operation oper,
-                                        String arg_name,
-                                        TF_Status status);
+                                                       String arg_name,
+                                                       TF_Status status);
 
 public static native int TF_OperationNumInputs(TF_Operation oper);
 public static native @Cast("TF_DataType") int TF_OperationInputType(@ByVal TF_Input oper_in);
-public static native int TF_OperationInputListLength(TF_Operation oper, @Cast("const char*") BytePointer arg_name,
-                                       TF_Status status);
-public static native int TF_OperationInputListLength(TF_Operation oper, String arg_name,
-                                       TF_Status status);
+public static native int TF_OperationInputListLength(TF_Operation oper,
+                                                      @Cast("const char*") BytePointer arg_name,
+                                                      TF_Status status);
+public static native int TF_OperationInputListLength(TF_Operation oper,
+                                                      String arg_name,
+                                                      TF_Status status);
 
 // In this code:
 //   TF_Output producer = TF_OperationInput(consumer);
@@ -12937,8 +13158,9 @@ public static native int TF_OperationOutputNumConsumers(@ByVal TF_Output oper_ou
 // modification of the graph can increase the number of consumers of
 // an operation.  Returns the number of output consumers (should match
 // TF_OperationOutputNumConsumers(oper_out)).
-public static native int TF_OperationOutputConsumers(@ByVal TF_Output oper_out, TF_Input consumers,
-                                       int max_consumers);
+public static native int TF_OperationOutputConsumers(@ByVal TF_Output oper_out,
+                                                      TF_Input consumers,
+                                                      int max_consumers);
 
 // Get the number of control inputs to an operation.
 public static native int TF_OperationNumControlInputs(TF_Operation oper);
@@ -12947,12 +13169,10 @@ public static native int TF_OperationNumControlInputs(TF_Operation oper);
 // point to an array of length `max_control_inputs` (ideally set to
 // TF_OperationNumControlInputs(oper)).  Returns the number of control
 // inputs (should match TF_OperationNumControlInputs(oper)).
-public static native int TF_OperationGetControlInputs(TF_Operation oper,
-                                        @Cast("TF_Operation**") PointerPointer control_inputs,
-                                        int max_control_inputs);
-public static native int TF_OperationGetControlInputs(TF_Operation oper,
-                                        @ByPtrPtr TF_Operation control_inputs,
-                                        int max_control_inputs);
+public static native int TF_OperationGetControlInputs(
+    TF_Operation oper, @Cast("TF_Operation**") PointerPointer control_inputs, int max_control_inputs);
+public static native int TF_OperationGetControlInputs(
+    TF_Operation oper, @ByPtrPtr TF_Operation control_inputs, int max_control_inputs);
 
 // Get the number of operations that have `*oper` as a control input.
 // Note that this number can change when new operations are added to
@@ -12966,12 +13186,12 @@ public static native int TF_OperationNumControlOutputs(TF_Operation oper);
 // modification of the graph can increase the number of control
 // outputs.  Returns the number of control outputs (should match
 // TF_OperationNumControlOutputs(oper)).
-public static native int TF_OperationGetControlOutputs(TF_Operation oper,
-                                         @Cast("TF_Operation**") PointerPointer control_outputs,
-                                         int max_control_outputs);
-public static native int TF_OperationGetControlOutputs(TF_Operation oper,
-                                         @ByPtrPtr TF_Operation control_outputs,
-                                         int max_control_outputs);
+public static native int TF_OperationGetControlOutputs(
+    TF_Operation oper, @Cast("TF_Operation**") PointerPointer control_outputs,
+    int max_control_outputs);
+public static native int TF_OperationGetControlOutputs(
+    TF_Operation oper, @ByPtrPtr TF_Operation control_outputs,
+    int max_control_outputs);
 
 // TF_AttrType describes the type of the value of an attribute on an operation.
 /** enum TF_AttrType */
@@ -13031,23 +13251,25 @@ public static class TF_AttrMetadata extends Pointer {
 }
 
 // Returns metadata about the value of the attribute `attr_name` of `oper`.
-public static native @ByVal TF_AttrMetadata TF_OperationGetAttrMetadata(TF_Operation oper,
-                                                   @Cast("const char*") BytePointer attr_name,
-                                                   TF_Status status);
-public static native @ByVal TF_AttrMetadata TF_OperationGetAttrMetadata(TF_Operation oper,
-                                                   String attr_name,
-                                                   TF_Status status);
+public static native @ByVal TF_AttrMetadata TF_OperationGetAttrMetadata(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, TF_Status status);
+public static native @ByVal TF_AttrMetadata TF_OperationGetAttrMetadata(
+    TF_Operation oper, String attr_name, TF_Status status);
 
 // Fills in `value` with the value of the attribute `attr_name`.  `value` must
 // point to an array of length at least `max_length` (ideally set to
 // TF_AttrMetadata.total_size from TF_OperationGetAttrMetadata(oper,
 // attr_name)).
-public static native void TF_OperationGetAttrString(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                      Pointer value, @Cast("size_t") long max_length,
-                                      TF_Status status);
-public static native void TF_OperationGetAttrString(TF_Operation oper, String attr_name,
-                                      Pointer value, @Cast("size_t") long max_length,
-                                      TF_Status status);
+public static native void TF_OperationGetAttrString(TF_Operation oper,
+                                                     @Cast("const char*") BytePointer attr_name,
+                                                     Pointer value,
+                                                     @Cast("size_t") long max_length,
+                                                     TF_Status status);
+public static native void TF_OperationGetAttrString(TF_Operation oper,
+                                                     String attr_name,
+                                                     Pointer value,
+                                                     @Cast("size_t") long max_length,
+                                                     TF_Status status);
 
 // Get the list of strings in the value of the attribute `attr_name`.  Fills in
 // `values` and `lengths`, each of which must point to an array of length at
@@ -13060,199 +13282,289 @@ public static native void TF_OperationGetAttrString(TF_Operation oper, String at
 // attr_name).
 //
 // Fails if storage_size is too small to hold the requested number of strings.
-public static native void TF_OperationGetAttrStringList(TF_Operation oper,
-                                          @Cast("const char*") BytePointer attr_name, @Cast("void**") PointerPointer values,
-                                          @Cast("size_t*") SizeTPointer lengths, int max_values,
-                                          Pointer storage, @Cast("size_t") long storage_size,
-                                          TF_Status status);
-public static native void TF_OperationGetAttrStringList(TF_Operation oper,
-                                          @Cast("const char*") BytePointer attr_name, @Cast("void**") @ByPtrPtr Pointer values,
-                                          @Cast("size_t*") SizeTPointer lengths, int max_values,
-                                          Pointer storage, @Cast("size_t") long storage_size,
-                                          TF_Status status);
-public static native void TF_OperationGetAttrStringList(TF_Operation oper,
-                                          String attr_name, @Cast("void**") @ByPtrPtr Pointer values,
-                                          @Cast("size_t*") SizeTPointer lengths, int max_values,
-                                          Pointer storage, @Cast("size_t") long storage_size,
-                                          TF_Status status);
+public static native void TF_OperationGetAttrStringList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("void**") PointerPointer values, @Cast("size_t*") SizeTPointer lengths,
+    int max_values, Pointer storage, @Cast("size_t") long storage_size, TF_Status status);
+public static native void TF_OperationGetAttrStringList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("void**") @ByPtrPtr Pointer values, @Cast("size_t*") SizeTPointer lengths,
+    int max_values, Pointer storage, @Cast("size_t") long storage_size, TF_Status status);
+public static native void TF_OperationGetAttrStringList(
+    TF_Operation oper, String attr_name, @Cast("void**") @ByPtrPtr Pointer values, @Cast("size_t*") SizeTPointer lengths,
+    int max_values, Pointer storage, @Cast("size_t") long storage_size, TF_Status status);
 
-public static native void TF_OperationGetAttrInt(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                   @Cast("int64_t*") LongPointer value, TF_Status status);
-public static native void TF_OperationGetAttrInt(TF_Operation oper, String attr_name,
-                                   @Cast("int64_t*") LongBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrInt(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                   @Cast("int64_t*") long[] value, TF_Status status);
-public static native void TF_OperationGetAttrInt(TF_Operation oper, String attr_name,
-                                   @Cast("int64_t*") LongPointer value, TF_Status status);
-public static native void TF_OperationGetAttrInt(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                   @Cast("int64_t*") LongBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrInt(TF_Operation oper, String attr_name,
-                                   @Cast("int64_t*") long[] value, TF_Status status);
+public static native void TF_OperationGetAttrInt(TF_Operation oper,
+                                                  @Cast("const char*") BytePointer attr_name,
+                                                  @Cast("int64_t*") LongPointer value,
+                                                  TF_Status status);
+public static native void TF_OperationGetAttrInt(TF_Operation oper,
+                                                  String attr_name,
+                                                  @Cast("int64_t*") LongBuffer value,
+                                                  TF_Status status);
+public static native void TF_OperationGetAttrInt(TF_Operation oper,
+                                                  @Cast("const char*") BytePointer attr_name,
+                                                  @Cast("int64_t*") long[] value,
+                                                  TF_Status status);
+public static native void TF_OperationGetAttrInt(TF_Operation oper,
+                                                  String attr_name,
+                                                  @Cast("int64_t*") LongPointer value,
+                                                  TF_Status status);
+public static native void TF_OperationGetAttrInt(TF_Operation oper,
+                                                  @Cast("const char*") BytePointer attr_name,
+                                                  @Cast("int64_t*") LongBuffer value,
+                                                  TF_Status status);
+public static native void TF_OperationGetAttrInt(TF_Operation oper,
+                                                  String attr_name,
+                                                  @Cast("int64_t*") long[] value,
+                                                  TF_Status status);
 
 // Fills in `values` with the value of the attribute `attr_name` of `oper`.
 // `values` must point to an array of length at least `max_values` (ideally set
 // TF_AttrMetadata.list_size from TF_OperationGetAttrMetadata(oper,
 // attr_name)).
 public static native void TF_OperationGetAttrIntList(TF_Operation oper,
-                                       @Cast("const char*") BytePointer attr_name, @Cast("int64_t*") LongPointer values,
-                                       int max_values, TF_Status status);
+                                                      @Cast("const char*") BytePointer attr_name,
+                                                      @Cast("int64_t*") LongPointer values,
+                                                      int max_values,
+                                                      TF_Status status);
 public static native void TF_OperationGetAttrIntList(TF_Operation oper,
-                                       String attr_name, @Cast("int64_t*") LongBuffer values,
-                                       int max_values, TF_Status status);
+                                                      String attr_name,
+                                                      @Cast("int64_t*") LongBuffer values,
+                                                      int max_values,
+                                                      TF_Status status);
 public static native void TF_OperationGetAttrIntList(TF_Operation oper,
-                                       @Cast("const char*") BytePointer attr_name, @Cast("int64_t*") long[] values,
-                                       int max_values, TF_Status status);
+                                                      @Cast("const char*") BytePointer attr_name,
+                                                      @Cast("int64_t*") long[] values,
+                                                      int max_values,
+                                                      TF_Status status);
 public static native void TF_OperationGetAttrIntList(TF_Operation oper,
-                                       String attr_name, @Cast("int64_t*") LongPointer values,
-                                       int max_values, TF_Status status);
+                                                      String attr_name,
+                                                      @Cast("int64_t*") LongPointer values,
+                                                      int max_values,
+                                                      TF_Status status);
 public static native void TF_OperationGetAttrIntList(TF_Operation oper,
-                                       @Cast("const char*") BytePointer attr_name, @Cast("int64_t*") LongBuffer values,
-                                       int max_values, TF_Status status);
+                                                      @Cast("const char*") BytePointer attr_name,
+                                                      @Cast("int64_t*") LongBuffer values,
+                                                      int max_values,
+                                                      TF_Status status);
 public static native void TF_OperationGetAttrIntList(TF_Operation oper,
-                                       String attr_name, @Cast("int64_t*") long[] values,
-                                       int max_values, TF_Status status);
+                                                      String attr_name,
+                                                      @Cast("int64_t*") long[] values,
+                                                      int max_values,
+                                                      TF_Status status);
 
-public static native void TF_OperationGetAttrFloat(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                     FloatPointer value, TF_Status status);
-public static native void TF_OperationGetAttrFloat(TF_Operation oper, String attr_name,
-                                     FloatBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrFloat(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                     float[] value, TF_Status status);
-public static native void TF_OperationGetAttrFloat(TF_Operation oper, String attr_name,
-                                     FloatPointer value, TF_Status status);
-public static native void TF_OperationGetAttrFloat(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                     FloatBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrFloat(TF_Operation oper, String attr_name,
-                                     float[] value, TF_Status status);
+public static native void TF_OperationGetAttrFloat(TF_Operation oper,
+                                                    @Cast("const char*") BytePointer attr_name,
+                                                    FloatPointer value,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrFloat(TF_Operation oper,
+                                                    String attr_name,
+                                                    FloatBuffer value,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrFloat(TF_Operation oper,
+                                                    @Cast("const char*") BytePointer attr_name,
+                                                    float[] value,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrFloat(TF_Operation oper,
+                                                    String attr_name,
+                                                    FloatPointer value,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrFloat(TF_Operation oper,
+                                                    @Cast("const char*") BytePointer attr_name,
+                                                    FloatBuffer value,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrFloat(TF_Operation oper,
+                                                    String attr_name,
+                                                    float[] value,
+                                                    TF_Status status);
 
 // Fills in `values` with the value of the attribute `attr_name` of `oper`.
 // `values` must point to an array of length at least `max_values` (ideally set
 // to TF_AttrMetadata.list_size from TF_OperationGetAttrMetadata(oper,
 // attr_name)).
 public static native void TF_OperationGetAttrFloatList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, FloatPointer values,
-                                         int max_values, TF_Status status);
+                                                        @Cast("const char*") BytePointer attr_name,
+                                                        FloatPointer values,
+                                                        int max_values,
+                                                        TF_Status status);
 public static native void TF_OperationGetAttrFloatList(TF_Operation oper,
-                                         String attr_name, FloatBuffer values,
-                                         int max_values, TF_Status status);
+                                                        String attr_name,
+                                                        FloatBuffer values,
+                                                        int max_values,
+                                                        TF_Status status);
 public static native void TF_OperationGetAttrFloatList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, float[] values,
-                                         int max_values, TF_Status status);
+                                                        @Cast("const char*") BytePointer attr_name,
+                                                        float[] values,
+                                                        int max_values,
+                                                        TF_Status status);
 public static native void TF_OperationGetAttrFloatList(TF_Operation oper,
-                                         String attr_name, FloatPointer values,
-                                         int max_values, TF_Status status);
+                                                        String attr_name,
+                                                        FloatPointer values,
+                                                        int max_values,
+                                                        TF_Status status);
 public static native void TF_OperationGetAttrFloatList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, FloatBuffer values,
-                                         int max_values, TF_Status status);
+                                                        @Cast("const char*") BytePointer attr_name,
+                                                        FloatBuffer values,
+                                                        int max_values,
+                                                        TF_Status status);
 public static native void TF_OperationGetAttrFloatList(TF_Operation oper,
-                                         String attr_name, float[] values,
-                                         int max_values, TF_Status status);
+                                                        String attr_name,
+                                                        float[] values,
+                                                        int max_values,
+                                                        TF_Status status);
 
-public static native void TF_OperationGetAttrBool(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                    @Cast("unsigned char*") BytePointer value, TF_Status status);
-public static native void TF_OperationGetAttrBool(TF_Operation oper, String attr_name,
-                                    @Cast("unsigned char*") ByteBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrBool(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                    @Cast("unsigned char*") byte[] value, TF_Status status);
-public static native void TF_OperationGetAttrBool(TF_Operation oper, String attr_name,
-                                    @Cast("unsigned char*") BytePointer value, TF_Status status);
-public static native void TF_OperationGetAttrBool(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                    @Cast("unsigned char*") ByteBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrBool(TF_Operation oper, String attr_name,
-                                    @Cast("unsigned char*") byte[] value, TF_Status status);
-
-// Fills in `values` with the value of the attribute `attr_name` of `oper`.
-// `values` must point to an array of length at least `max_values` (ideally set
-// to TF_AttrMetadata.list_size from TF_OperationGetAttrMetadata(oper,
-// attr_name)).
-public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
-                                        @Cast("const char*") BytePointer attr_name,
-                                        @Cast("unsigned char*") BytePointer values, int max_values,
-                                        TF_Status status);
-public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
-                                        String attr_name,
-                                        @Cast("unsigned char*") ByteBuffer values, int max_values,
-                                        TF_Status status);
-public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
-                                        @Cast("const char*") BytePointer attr_name,
-                                        @Cast("unsigned char*") byte[] values, int max_values,
-                                        TF_Status status);
-public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
-                                        String attr_name,
-                                        @Cast("unsigned char*") BytePointer values, int max_values,
-                                        TF_Status status);
-public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
-                                        @Cast("const char*") BytePointer attr_name,
-                                        @Cast("unsigned char*") ByteBuffer values, int max_values,
-                                        TF_Status status);
-public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
-                                        String attr_name,
-                                        @Cast("unsigned char*") byte[] values, int max_values,
-                                        TF_Status status);
-
-public static native void TF_OperationGetAttrType(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                    @Cast("TF_DataType*") IntPointer value, TF_Status status);
-public static native void TF_OperationGetAttrType(TF_Operation oper, String attr_name,
-                                    @Cast("TF_DataType*") IntBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrType(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                    @Cast("TF_DataType*") int[] value, TF_Status status);
-public static native void TF_OperationGetAttrType(TF_Operation oper, String attr_name,
-                                    @Cast("TF_DataType*") IntPointer value, TF_Status status);
-public static native void TF_OperationGetAttrType(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                    @Cast("TF_DataType*") IntBuffer value, TF_Status status);
-public static native void TF_OperationGetAttrType(TF_Operation oper, String attr_name,
-                                    @Cast("TF_DataType*") int[] value, TF_Status status);
+public static native void TF_OperationGetAttrBool(TF_Operation oper,
+                                                   @Cast("const char*") BytePointer attr_name,
+                                                   @Cast("unsigned char*") BytePointer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrBool(TF_Operation oper,
+                                                   String attr_name,
+                                                   @Cast("unsigned char*") ByteBuffer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrBool(TF_Operation oper,
+                                                   @Cast("const char*") BytePointer attr_name,
+                                                   @Cast("unsigned char*") byte[] value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrBool(TF_Operation oper,
+                                                   String attr_name,
+                                                   @Cast("unsigned char*") BytePointer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrBool(TF_Operation oper,
+                                                   @Cast("const char*") BytePointer attr_name,
+                                                   @Cast("unsigned char*") ByteBuffer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrBool(TF_Operation oper,
+                                                   String attr_name,
+                                                   @Cast("unsigned char*") byte[] value,
+                                                   TF_Status status);
 
 // Fills in `values` with the value of the attribute `attr_name` of `oper`.
 // `values` must point to an array of length at least `max_values` (ideally set
 // to TF_AttrMetadata.list_size from TF_OperationGetAttrMetadata(oper,
 // attr_name)).
+public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
+                                                       @Cast("const char*") BytePointer attr_name,
+                                                       @Cast("unsigned char*") BytePointer values,
+                                                       int max_values,
+                                                       TF_Status status);
+public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
+                                                       String attr_name,
+                                                       @Cast("unsigned char*") ByteBuffer values,
+                                                       int max_values,
+                                                       TF_Status status);
+public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
+                                                       @Cast("const char*") BytePointer attr_name,
+                                                       @Cast("unsigned char*") byte[] values,
+                                                       int max_values,
+                                                       TF_Status status);
+public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
+                                                       String attr_name,
+                                                       @Cast("unsigned char*") BytePointer values,
+                                                       int max_values,
+                                                       TF_Status status);
+public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
+                                                       @Cast("const char*") BytePointer attr_name,
+                                                       @Cast("unsigned char*") ByteBuffer values,
+                                                       int max_values,
+                                                       TF_Status status);
+public static native void TF_OperationGetAttrBoolList(TF_Operation oper,
+                                                       String attr_name,
+                                                       @Cast("unsigned char*") byte[] values,
+                                                       int max_values,
+                                                       TF_Status status);
+
+public static native void TF_OperationGetAttrType(TF_Operation oper,
+                                                   @Cast("const char*") BytePointer attr_name,
+                                                   @Cast("TF_DataType*") IntPointer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrType(TF_Operation oper,
+                                                   String attr_name,
+                                                   @Cast("TF_DataType*") IntBuffer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrType(TF_Operation oper,
+                                                   @Cast("const char*") BytePointer attr_name,
+                                                   @Cast("TF_DataType*") int[] value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrType(TF_Operation oper,
+                                                   String attr_name,
+                                                   @Cast("TF_DataType*") IntPointer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrType(TF_Operation oper,
+                                                   @Cast("const char*") BytePointer attr_name,
+                                                   @Cast("TF_DataType*") IntBuffer value,
+                                                   TF_Status status);
+public static native void TF_OperationGetAttrType(TF_Operation oper,
+                                                   String attr_name,
+                                                   @Cast("TF_DataType*") int[] value,
+                                                   TF_Status status);
+
+// Fills in `values` with the value of the attribute `attr_name` of `oper`.
+// `values` must point to an array of length at least `max_values` (ideally set
+// to TF_AttrMetadata.list_size from TF_OperationGetAttrMetadata(oper,
+// attr_name)).
 public static native void TF_OperationGetAttrTypeList(TF_Operation oper,
-                                        @Cast("const char*") BytePointer attr_name,
-                                        @Cast("TF_DataType*") IntPointer values, int max_values,
-                                        TF_Status status);
+                                                       @Cast("const char*") BytePointer attr_name,
+                                                       @Cast("TF_DataType*") IntPointer values,
+                                                       int max_values,
+                                                       TF_Status status);
 public static native void TF_OperationGetAttrTypeList(TF_Operation oper,
-                                        String attr_name,
-                                        @Cast("TF_DataType*") IntBuffer values, int max_values,
-                                        TF_Status status);
+                                                       String attr_name,
+                                                       @Cast("TF_DataType*") IntBuffer values,
+                                                       int max_values,
+                                                       TF_Status status);
 public static native void TF_OperationGetAttrTypeList(TF_Operation oper,
-                                        @Cast("const char*") BytePointer attr_name,
-                                        @Cast("TF_DataType*") int[] values, int max_values,
-                                        TF_Status status);
+                                                       @Cast("const char*") BytePointer attr_name,
+                                                       @Cast("TF_DataType*") int[] values,
+                                                       int max_values,
+                                                       TF_Status status);
 public static native void TF_OperationGetAttrTypeList(TF_Operation oper,
-                                        String attr_name,
-                                        @Cast("TF_DataType*") IntPointer values, int max_values,
-                                        TF_Status status);
+                                                       String attr_name,
+                                                       @Cast("TF_DataType*") IntPointer values,
+                                                       int max_values,
+                                                       TF_Status status);
 public static native void TF_OperationGetAttrTypeList(TF_Operation oper,
-                                        @Cast("const char*") BytePointer attr_name,
-                                        @Cast("TF_DataType*") IntBuffer values, int max_values,
-                                        TF_Status status);
+                                                       @Cast("const char*") BytePointer attr_name,
+                                                       @Cast("TF_DataType*") IntBuffer values,
+                                                       int max_values,
+                                                       TF_Status status);
 public static native void TF_OperationGetAttrTypeList(TF_Operation oper,
-                                        String attr_name,
-                                        @Cast("TF_DataType*") int[] values, int max_values,
-                                        TF_Status status);
+                                                       String attr_name,
+                                                       @Cast("TF_DataType*") int[] values,
+                                                       int max_values,
+                                                       TF_Status status);
 
 // Fills in `value` with the value of the attribute `attr_name` of `oper`.
 // `values` must point to an array of length at least `num_dims` (ideally set to
 // TF_Attr_Meta.size from TF_OperationGetAttrMetadata(oper, attr_name)).
-public static native void TF_OperationGetAttrShape(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                     @Cast("int64_t*") LongPointer value, int num_dims,
-                                     TF_Status status);
-public static native void TF_OperationGetAttrShape(TF_Operation oper, String attr_name,
-                                     @Cast("int64_t*") LongBuffer value, int num_dims,
-                                     TF_Status status);
-public static native void TF_OperationGetAttrShape(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                     @Cast("int64_t*") long[] value, int num_dims,
-                                     TF_Status status);
-public static native void TF_OperationGetAttrShape(TF_Operation oper, String attr_name,
-                                     @Cast("int64_t*") LongPointer value, int num_dims,
-                                     TF_Status status);
-public static native void TF_OperationGetAttrShape(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                     @Cast("int64_t*") LongBuffer value, int num_dims,
-                                     TF_Status status);
-public static native void TF_OperationGetAttrShape(TF_Operation oper, String attr_name,
-                                     @Cast("int64_t*") long[] value, int num_dims,
-                                     TF_Status status);
+public static native void TF_OperationGetAttrShape(TF_Operation oper,
+                                                    @Cast("const char*") BytePointer attr_name,
+                                                    @Cast("int64_t*") LongPointer value,
+                                                    int num_dims,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrShape(TF_Operation oper,
+                                                    String attr_name,
+                                                    @Cast("int64_t*") LongBuffer value,
+                                                    int num_dims,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrShape(TF_Operation oper,
+                                                    @Cast("const char*") BytePointer attr_name,
+                                                    @Cast("int64_t*") long[] value,
+                                                    int num_dims,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrShape(TF_Operation oper,
+                                                    String attr_name,
+                                                    @Cast("int64_t*") LongPointer value,
+                                                    int num_dims,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrShape(TF_Operation oper,
+                                                    @Cast("const char*") BytePointer attr_name,
+                                                    @Cast("int64_t*") LongBuffer value,
+                                                    int num_dims,
+                                                    TF_Status status);
+public static native void TF_OperationGetAttrShape(TF_Operation oper,
+                                                    String attr_name,
+                                                    @Cast("int64_t*") long[] value,
+                                                    int num_dims,
+                                                    TF_Status status);
 
 // Fills in `dims` with the list of shapes in the attribute `attr_name` of
 // `oper` and `num_dims` with the corresponding number of dimensions. On return,
@@ -13267,83 +13579,67 @@ public static native void TF_OperationGetAttrShape(TF_Operation oper, String att
 // attr_name).
 //
 // Fails if storage_size is insufficient to hold the requested shapes.
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") PointerPointer dims,
-                                         IntPointer num_dims, int num_shapes,
-                                         @Cast("int64_t*") LongPointer storage, int storage_size,
-                                         TF_Status status);
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") @ByPtrPtr LongPointer dims,
-                                         IntPointer num_dims, int num_shapes,
-                                         @Cast("int64_t*") LongPointer storage, int storage_size,
-                                         TF_Status status);
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         String attr_name, @Cast("int64_t**") @ByPtrPtr LongBuffer dims,
-                                         IntBuffer num_dims, int num_shapes,
-                                         @Cast("int64_t*") LongBuffer storage, int storage_size,
-                                         TF_Status status);
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") @ByPtrPtr long[] dims,
-                                         int[] num_dims, int num_shapes,
-                                         @Cast("int64_t*") long[] storage, int storage_size,
-                                         TF_Status status);
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         String attr_name, @Cast("int64_t**") @ByPtrPtr LongPointer dims,
-                                         IntPointer num_dims, int num_shapes,
-                                         @Cast("int64_t*") LongPointer storage, int storage_size,
-                                         TF_Status status);
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") @ByPtrPtr LongBuffer dims,
-                                         IntBuffer num_dims, int num_shapes,
-                                         @Cast("int64_t*") LongBuffer storage, int storage_size,
-                                         TF_Status status);
-public static native void TF_OperationGetAttrShapeList(TF_Operation oper,
-                                         String attr_name, @Cast("int64_t**") @ByPtrPtr long[] dims,
-                                         int[] num_dims, int num_shapes,
-                                         @Cast("int64_t*") long[] storage, int storage_size,
-                                         TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") PointerPointer dims, IntPointer num_dims,
+    int num_shapes, @Cast("int64_t*") LongPointer storage, int storage_size, TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") @ByPtrPtr LongPointer dims, IntPointer num_dims,
+    int num_shapes, @Cast("int64_t*") LongPointer storage, int storage_size, TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, String attr_name, @Cast("int64_t**") @ByPtrPtr LongBuffer dims, IntBuffer num_dims,
+    int num_shapes, @Cast("int64_t*") LongBuffer storage, int storage_size, TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") @ByPtrPtr long[] dims, int[] num_dims,
+    int num_shapes, @Cast("int64_t*") long[] storage, int storage_size, TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, String attr_name, @Cast("int64_t**") @ByPtrPtr LongPointer dims, IntPointer num_dims,
+    int num_shapes, @Cast("int64_t*") LongPointer storage, int storage_size, TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("int64_t**") @ByPtrPtr LongBuffer dims, IntBuffer num_dims,
+    int num_shapes, @Cast("int64_t*") LongBuffer storage, int storage_size, TF_Status status);
+public static native void TF_OperationGetAttrShapeList(
+    TF_Operation oper, String attr_name, @Cast("int64_t**") @ByPtrPtr long[] dims, int[] num_dims,
+    int num_shapes, @Cast("int64_t*") long[] storage, int storage_size, TF_Status status);
 
 // Sets `value` to the binary-serialized TensorShapeProto of the value of
 // `attr_name` attribute of `oper`'.
-public static native void TF_OperationGetAttrTensorShapeProto(TF_Operation oper,
-                                                @Cast("const char*") BytePointer attr_name,
-                                                TF_Buffer value,
-                                                TF_Status status);
-public static native void TF_OperationGetAttrTensorShapeProto(TF_Operation oper,
-                                                String attr_name,
-                                                TF_Buffer value,
-                                                TF_Status status);
+public static native void TF_OperationGetAttrTensorShapeProto(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, TF_Buffer value,
+    TF_Status status);
+public static native void TF_OperationGetAttrTensorShapeProto(
+    TF_Operation oper, String attr_name, TF_Buffer value,
+    TF_Status status);
 
 // Fills in `values` with binary-serialized TensorShapeProto values of the
 // attribute `attr_name` of `oper`. `values` must point to an array of length at
 // least `num_values` (ideally set to TF_AttrMetadata.list_size from
 // TF_OperationGetAttrMetadata(oper, attr_name)).
-public static native void TF_OperationGetAttrTensorShapeProtoList(TF_Operation oper,
-                                                    @Cast("const char*") BytePointer attr_name,
-                                                    @Cast("TF_Buffer**") PointerPointer values,
-                                                    int max_values,
-                                                    TF_Status status);
-public static native void TF_OperationGetAttrTensorShapeProtoList(TF_Operation oper,
-                                                    @Cast("const char*") BytePointer attr_name,
-                                                    @ByPtrPtr TF_Buffer values,
-                                                    int max_values,
-                                                    TF_Status status);
-public static native void TF_OperationGetAttrTensorShapeProtoList(TF_Operation oper,
-                                                    String attr_name,
-                                                    @ByPtrPtr TF_Buffer values,
-                                                    int max_values,
-                                                    TF_Status status);
+public static native void TF_OperationGetAttrTensorShapeProtoList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @Cast("TF_Buffer**") PointerPointer values,
+    int max_values, TF_Status status);
+public static native void TF_OperationGetAttrTensorShapeProtoList(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, @ByPtrPtr TF_Buffer values,
+    int max_values, TF_Status status);
+public static native void TF_OperationGetAttrTensorShapeProtoList(
+    TF_Operation oper, String attr_name, @ByPtrPtr TF_Buffer values,
+    int max_values, TF_Status status);
 
 // Gets the TF_Tensor valued attribute of `attr_name` of `oper`.
 //
 // Allocates a new TF_Tensor which the caller is expected to take
 // ownership of (and can deallocate using TF_DeleteTensor).
-public static native void TF_OperationGetAttrTensor(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                      @Cast("TF_Tensor**") PointerPointer value, TF_Status status);
-public static native void TF_OperationGetAttrTensor(TF_Operation oper, @Cast("const char*") BytePointer attr_name,
-                                      @ByPtrPtr TF_Tensor value, TF_Status status);
-public static native void TF_OperationGetAttrTensor(TF_Operation oper, String attr_name,
-                                      @ByPtrPtr TF_Tensor value, TF_Status status);
+public static native void TF_OperationGetAttrTensor(TF_Operation oper,
+                                                     @Cast("const char*") BytePointer attr_name,
+                                                     @Cast("TF_Tensor**") PointerPointer value,
+                                                     TF_Status status);
+public static native void TF_OperationGetAttrTensor(TF_Operation oper,
+                                                     @Cast("const char*") BytePointer attr_name,
+                                                     @ByPtrPtr TF_Tensor value,
+                                                     TF_Status status);
+public static native void TF_OperationGetAttrTensor(TF_Operation oper,
+                                                     String attr_name,
+                                                     @ByPtrPtr TF_Tensor value,
+                                                     TF_Status status);
 
 // Fills in `values` with the TF_Tensor values of the attribute `attr_name` of
 // `oper`. `values` must point to an array of TF_Tensor* of length at least
@@ -13353,35 +13649,36 @@ public static native void TF_OperationGetAttrTensor(TF_Operation oper, String at
 // The caller takes ownership of all the non-null TF_Tensor* entries in `values`
 // (which can be deleted using TF_DeleteTensor(values[i])).
 public static native void TF_OperationGetAttrTensorList(TF_Operation oper,
-                                          @Cast("const char*") BytePointer attr_name,
-                                          @Cast("TF_Tensor**") PointerPointer values, int max_values,
-                                          TF_Status status);
+                                                         @Cast("const char*") BytePointer attr_name,
+                                                         @Cast("TF_Tensor**") PointerPointer values,
+                                                         int max_values,
+                                                         TF_Status status);
 public static native void TF_OperationGetAttrTensorList(TF_Operation oper,
-                                          @Cast("const char*") BytePointer attr_name,
-                                          @ByPtrPtr TF_Tensor values, int max_values,
-                                          TF_Status status);
+                                                         @Cast("const char*") BytePointer attr_name,
+                                                         @ByPtrPtr TF_Tensor values,
+                                                         int max_values,
+                                                         TF_Status status);
 public static native void TF_OperationGetAttrTensorList(TF_Operation oper,
-                                          String attr_name,
-                                          @ByPtrPtr TF_Tensor values, int max_values,
-                                          TF_Status status);
+                                                         String attr_name,
+                                                         @ByPtrPtr TF_Tensor values,
+                                                         int max_values,
+                                                         TF_Status status);
 
 // Sets `output_attr_value` to the binary-serialized AttrValue proto
 // representation of the value of the `attr_name` attr of `oper`.
-public static native void TF_OperationGetAttrValueProto(TF_Operation oper,
-                                          @Cast("const char*") BytePointer attr_name,
-                                          TF_Buffer output_attr_value,
-                                          TF_Status status);
-public static native void TF_OperationGetAttrValueProto(TF_Operation oper,
-                                          String attr_name,
-                                          TF_Buffer output_attr_value,
-                                          TF_Status status);
+public static native void TF_OperationGetAttrValueProto(
+    TF_Operation oper, @Cast("const char*") BytePointer attr_name, TF_Buffer output_attr_value,
+    TF_Status status);
+public static native void TF_OperationGetAttrValueProto(
+    TF_Operation oper, String attr_name, TF_Buffer output_attr_value,
+    TF_Status status);
 
 // Returns the operation in the graph with `oper_name`. Returns nullptr if
 // no operation found.
-public static native TF_Operation TF_GraphOperationByName(TF_Graph graph,
-                                             @Cast("const char*") BytePointer oper_name);
-public static native TF_Operation TF_GraphOperationByName(TF_Graph graph,
-                                             String oper_name);
+public static native TF_Operation TF_GraphOperationByName(
+    TF_Graph graph, @Cast("const char*") BytePointer oper_name);
+public static native TF_Operation TF_GraphOperationByName(
+    TF_Graph graph, String oper_name);
 
 // Iterate through the operations of a graph.  To use:
 // size_t pos = 0;
@@ -13389,7 +13686,8 @@ public static native TF_Operation TF_GraphOperationByName(TF_Graph graph,
 // while ((oper = TF_GraphNextOperation(graph, &pos)) != nullptr) {
 //   DoSomethingWithOperation(oper);
 // }
-public static native TF_Operation TF_GraphNextOperation(TF_Graph graph, @Cast("size_t*") SizeTPointer pos);
+public static native TF_Operation TF_GraphNextOperation(TF_Graph graph,
+                                                          @Cast("size_t*") SizeTPointer pos);
 
 // Write out a serialized representation of `graph` (as a GraphDef protocol
 // message) to `output_graph_def` (allocated by TF_NewBuffer()).
@@ -13397,8 +13695,9 @@ public static native TF_Operation TF_GraphNextOperation(TF_Graph graph, @Cast("s
 // is called.
 //
 // May fail on very large graphs in the future.
-public static native void TF_GraphToGraphDef(TF_Graph graph, TF_Buffer output_graph_def,
-                               TF_Status status);
+public static native void TF_GraphToGraphDef(TF_Graph graph,
+                                              TF_Buffer output_graph_def,
+                                              TF_Status status);
 
 // TF_ImportGraphDefOptions holds options that can be passed to
 // TF_GraphImportGraphDef.
@@ -13410,14 +13709,15 @@ public static native void TF_GraphToGraphDef(TF_Graph graph, TF_Buffer output_gr
 }
 
 public static native TF_ImportGraphDefOptions TF_NewImportGraphDefOptions();
-public static native void TF_DeleteImportGraphDefOptions(TF_ImportGraphDefOptions opts);
+public static native void TF_DeleteImportGraphDefOptions(
+    TF_ImportGraphDefOptions opts);
 
 // Set the prefix to be prepended to the names of nodes in `graph_def` that will
 // be imported into `graph`.
-public static native void TF_ImportGraphDefOptionsSetPrefix(TF_ImportGraphDefOptions opts,
-                                              @Cast("const char*") BytePointer prefix);
-public static native void TF_ImportGraphDefOptionsSetPrefix(TF_ImportGraphDefOptions opts,
-                                              String prefix);
+public static native void TF_ImportGraphDefOptionsSetPrefix(
+    TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer prefix);
+public static native void TF_ImportGraphDefOptionsSetPrefix(
+    TF_ImportGraphDefOptions opts, String prefix);
 
 // Set any imported nodes with input `src_name:src_index` to have that input
 // replaced with `dst`. `src_name` refers to a node in the graph to be imported,
@@ -13433,9 +13733,9 @@ public static native void TF_ImportGraphDefOptionsAddInputMapping(
 // replaced with `dst`. `src_name` refers to a node in the graph to be imported,
 // `dst` references an operation already existing in the graph being imported
 // into.
-public static native @Platform(not="android") void TF_GraphImportGraphDefOptionsRemapControlDependency(
+public static native void TF_ImportGraphDefOptionsRemapControlDependency(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer src_name, TF_Operation dst);
-public static native @Platform(not="android") void TF_GraphImportGraphDefOptionsRemapControlDependency(
+public static native void TF_ImportGraphDefOptionsRemapControlDependency(
     TF_ImportGraphDefOptions opts, String src_name, TF_Operation dst);
 
 // Cause the imported graph to have a control dependency on `oper`. `oper`
@@ -13469,15 +13769,15 @@ public static native void TF_GraphImportGraphDefWithReturnOutputs(
 
 // Import the graph serialized in `graph_def` into `graph`.
 // Convenience function for when no return outputs have been added.
-public static native void TF_GraphImportGraphDef(TF_Graph graph, @Const TF_Buffer graph_def,
-                                   @Const TF_ImportGraphDefOptions options,
-                                   TF_Status status);
+public static native void TF_GraphImportGraphDef(
+    TF_Graph graph, @Const TF_Buffer graph_def,
+    @Const TF_ImportGraphDefOptions options, TF_Status status);
 
 // Note: The following function may fail on very large protos in the future.
 
 public static native void TF_OperationToNodeDef(TF_Operation oper,
-                                  TF_Buffer output_node_def,
-                                  TF_Status status);
+                                                 TF_Buffer output_node_def,
+                                                 TF_Status status);
 
 public static class TF_WhileParams extends Pointer {
     static { Loader.load(); }
@@ -13521,12 +13821,13 @@ public static class TF_WhileParams extends Pointer {
 // TF_FinishWhile() or TF_AbortWhile().
 //
 // Missing functionality (TODO):
-// - Gradients (not yet implmented for any ops)
+// - Gradients
 // - Reference-type inputs
 // - Directly referencing external tensors from the cond/body graphs (this is
 //   possible in the Python API)
-public static native @ByVal TF_WhileParams TF_NewWhile(TF_Graph g, TF_Output inputs, int ninputs,
-                           TF_Status status);
+public static native @ByVal TF_WhileParams TF_NewWhile(TF_Graph g, TF_Output inputs,
+                                                 int ninputs,
+                                                 TF_Status status);
 
 // Builds the while loop specified by `params` and returns the output tensors of
 // the while loop in `outputs`. `outputs` should be allocated to size
@@ -13536,15 +13837,32 @@ public static native @ByVal TF_WhileParams TF_NewWhile(TF_Graph g, TF_Output inp
 //
 // Either this or TF_AbortWhile() must be called after a successful
 // TF_NewWhile() call.
-public static native void TF_FinishWhile(@Const TF_WhileParams params, TF_Status status,
-                    TF_Output outputs);
+public static native void TF_FinishWhile(@Const TF_WhileParams params,
+                                          TF_Status status,
+                                          TF_Output outputs);
 
 // Frees `params`s resources without building a while loop. `params` is no
 // longer valid after this returns. Either this or TF_FinishWhile() must be
 // called after a successful TF_NewWhile() call.
 public static native void TF_AbortWhile(@Const TF_WhileParams params);
 
-// TODO(andydavis): Function to add gradients to a graph.
+// Adds operations to compute the partial derivatives of sum of `y`s w.r.t `x`s,
+// i.e., d(y_1 + y_2 + ...)/dx_1, d(y_1 + y_2 + ...)/dx_2...
+// `dx` are used as initial gradients (which represent the symbolic partial
+// derivatives of some loss function `L` w.r.t. `y`).
+// `dx` must be nullptr or have size `ny`.
+// If `dx` is nullptr, the implementation will use dx of `OnesLike` for all
+// shapes in `y`.
+// The partial derivatives are returned in `dy`. `dy` should be allocated to
+// size `nx`.
+//
+// WARNING: This function does not yet support all the gradients that python
+// supports. See
+// https://www.tensorflow.org/code/tensorflow/cc/gradients/README.md
+// for instructions on how to add C++ more gradients.
+public static native void TF_AddGradients(TF_Graph g, TF_Output y, int ny,
+                                    TF_Output x, int nx, TF_Output dx,
+                                    TF_Status status, TF_Output dy);
 
 // TODO(josh11b): Register OpDef, available to all operations added
 // to this graph.
@@ -13568,8 +13886,9 @@ public static native void TF_AbortWhile(@Const TF_WhileParams params);
 // *graph must be a valid graph (not deleted or nullptr).  This function will
 // prevent the graph from being deleted until TF_DeleteSession() is called.
 // Does not take ownership of opts.
-public static native TF_Session TF_NewSession(TF_Graph graph, @Const TF_SessionOptions opts,
-                                 TF_Status status);
+public static native TF_Session TF_NewSession(TF_Graph graph,
+                                                @Const TF_SessionOptions opts,
+                                                TF_Status status);
 
 // This function creates a new TF_Session (which is created on success) using
 // `session_options`, and then initializes state (restoring tensors and other
@@ -13652,24 +13971,22 @@ public static native void TF_DeleteSession(TF_Session arg0, TF_Status status);
 // to the caller, which must eventually call TF_DeleteTensor on them.
 //
 // On failure, output_values[] contains NULLs.
-public static native void TF_SessionRun(TF_Session session,
-                          @Const TF_Buffer run_options,
-                          @Const TF_Output inputs,
-                          @Cast("TF_Tensor*const*") PointerPointer input_values, int ninputs,
-                          @Const TF_Output outputs, @Cast("TF_Tensor**") PointerPointer output_values,
-                          int noutputs,
-                          @Cast("const TF_Operation*const*") PointerPointer target_opers, int ntargets,
-                          TF_Buffer run_metadata,
-                          TF_Status arg11);
-public static native void TF_SessionRun(TF_Session session,
-                          @Const TF_Buffer run_options,
-                          @Const TF_Output inputs,
-                          @ByPtrPtr TF_Tensor input_values, int ninputs,
-                          @Const TF_Output outputs, @ByPtrPtr TF_Tensor output_values,
-                          int noutputs,
-                          @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
-                          TF_Buffer run_metadata,
-                          TF_Status arg11);
+public static native void TF_SessionRun(
+    TF_Session session,
+    @Const TF_Buffer run_options,
+    @Const TF_Output inputs, @Cast("TF_Tensor*const*") PointerPointer input_values, int ninputs,
+    @Const TF_Output outputs, @Cast("TF_Tensor**") PointerPointer output_values, int noutputs,
+    @Cast("const TF_Operation*const*") PointerPointer target_opers, int ntargets,
+    TF_Buffer run_metadata,
+    TF_Status arg11);
+public static native void TF_SessionRun(
+    TF_Session session,
+    @Const TF_Buffer run_options,
+    @Const TF_Output inputs, @ByPtrPtr TF_Tensor input_values, int ninputs,
+    @Const TF_Output outputs, @ByPtrPtr TF_Tensor output_values, int noutputs,
+    @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+    TF_Buffer run_metadata,
+    TF_Status arg11);
 
 // Set up the graph with the intended feeds (inputs) and fetches (outputs) for a
 // sequence of partial run calls.
@@ -13681,62 +13998,56 @@ public static native void TF_SessionRun(TF_Session session,
 // On failure, out_status contains a tensorflow::Status with an error
 // message.
 // NOTE: This is EXPERIMENTAL and subject to change.
-public static native void TF_SessionPRunSetup(TF_Session arg0,
-                                @Const TF_Output inputs, int ninputs,
-                                @Const TF_Output outputs, int noutputs,
-                                @Cast("const TF_Operation*const*") PointerPointer target_opers,
-                                int ntargets,
-                                @Cast("const char**") PointerPointer handle,
-                                TF_Status arg8);
-public static native void TF_SessionPRunSetup(TF_Session arg0,
-                                @Const TF_Output inputs, int ninputs,
-                                @Const TF_Output outputs, int noutputs,
-                                @Const @ByPtrPtr TF_Operation target_opers,
-                                int ntargets,
-                                @Cast("const char**") @ByPtrPtr BytePointer handle,
-                                TF_Status arg8);
-public static native void TF_SessionPRunSetup(TF_Session arg0,
-                                @Const TF_Output inputs, int ninputs,
-                                @Const TF_Output outputs, int noutputs,
-                                @Const @ByPtrPtr TF_Operation target_opers,
-                                int ntargets,
-                                @Cast("const char**") @ByPtrPtr ByteBuffer handle,
-                                TF_Status arg8);
-public static native void TF_SessionPRunSetup(TF_Session arg0,
-                                @Const TF_Output inputs, int ninputs,
-                                @Const TF_Output outputs, int noutputs,
-                                @Const @ByPtrPtr TF_Operation target_opers,
-                                int ntargets,
-                                @Cast("const char**") @ByPtrPtr byte[] handle,
-                                TF_Status arg8);
+public static native void TF_SessionPRunSetup(
+    TF_Session arg0,
+    @Const TF_Output inputs, int ninputs,
+    @Const TF_Output outputs, int noutputs,
+    @Cast("const TF_Operation*const*") PointerPointer target_opers, int ntargets,
+    @Cast("const char**") PointerPointer handle,
+    TF_Status arg8);
+public static native void TF_SessionPRunSetup(
+    TF_Session arg0,
+    @Const TF_Output inputs, int ninputs,
+    @Const TF_Output outputs, int noutputs,
+    @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+    @Cast("const char**") @ByPtrPtr BytePointer handle,
+    TF_Status arg8);
+public static native void TF_SessionPRunSetup(
+    TF_Session arg0,
+    @Const TF_Output inputs, int ninputs,
+    @Const TF_Output outputs, int noutputs,
+    @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+    @Cast("const char**") @ByPtrPtr ByteBuffer handle,
+    TF_Status arg8);
+public static native void TF_SessionPRunSetup(
+    TF_Session arg0,
+    @Const TF_Output inputs, int ninputs,
+    @Const TF_Output outputs, int noutputs,
+    @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+    @Cast("const char**") @ByPtrPtr byte[] handle,
+    TF_Status arg8);
 
 // Continue to run the graph with additional feeds and fetches. The
 // execution state is uniquely identified by the handle.
 // NOTE: This is EXPERIMENTAL and subject to change.
-public static native void TF_SessionPRun(TF_Session arg0, @Cast("const char*") BytePointer handle,
-                           @Const TF_Output inputs,
-                           @Cast("TF_Tensor*const*") PointerPointer input_values, int ninputs,
-                           @Const TF_Output outputs, @Cast("TF_Tensor**") PointerPointer output_values,
-                           int noutputs,
-                           @Cast("const TF_Operation*const*") PointerPointer target_opers,
-                           int ntargets,
-                           TF_Status arg10);
-public static native void TF_SessionPRun(TF_Session arg0, @Cast("const char*") BytePointer handle,
-                           @Const TF_Output inputs,
-                           @ByPtrPtr TF_Tensor input_values, int ninputs,
-                           @Const TF_Output outputs, @ByPtrPtr TF_Tensor output_values,
-                           int noutputs,
-                           @Const @ByPtrPtr TF_Operation target_opers,
-                           int ntargets,
-                           TF_Status arg10);
-public static native void TF_SessionPRun(TF_Session arg0, String handle,
-                           @Const TF_Output inputs,
-                           @ByPtrPtr TF_Tensor input_values, int ninputs,
-                           @Const TF_Output outputs, @ByPtrPtr TF_Tensor output_values,
-                           int noutputs,
-                           @Const @ByPtrPtr TF_Operation target_opers,
-                           int ntargets,
-                           TF_Status arg10);
+public static native void TF_SessionPRun(
+    TF_Session arg0, @Cast("const char*") BytePointer handle,
+    @Const TF_Output inputs, @Cast("TF_Tensor*const*") PointerPointer input_values, int ninputs,
+    @Const TF_Output outputs, @Cast("TF_Tensor**") PointerPointer output_values, int noutputs,
+    @Cast("const TF_Operation*const*") PointerPointer target_opers, int ntargets,
+    TF_Status arg10);
+public static native void TF_SessionPRun(
+    TF_Session arg0, @Cast("const char*") BytePointer handle,
+    @Const TF_Output inputs, @ByPtrPtr TF_Tensor input_values, int ninputs,
+    @Const TF_Output outputs, @ByPtrPtr TF_Tensor output_values, int noutputs,
+    @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+    TF_Status arg10);
+public static native void TF_SessionPRun(
+    TF_Session arg0, String handle,
+    @Const TF_Output inputs, @ByPtrPtr TF_Tensor input_values, int ninputs,
+    @Const TF_Output outputs, @ByPtrPtr TF_Tensor output_values, int noutputs,
+    @Const @ByPtrPtr TF_Operation target_opers, int ntargets,
+    TF_Status arg10);
 
 // Deletes a handle allocated by TF_SessionPRunSetup.
 // Once called, no more calls to TF_SessionPRun should be made.
@@ -13755,102 +14066,131 @@ public static native void TF_DeletePRunHandle(String handle);
     public TF_DeprecatedSession(Pointer p) { super(p); }
 }
 
-public static native TF_DeprecatedSession TF_NewDeprecatedSession(@Const TF_SessionOptions arg0,
+public static native TF_DeprecatedSession TF_NewDeprecatedSession(
+    @Const TF_SessionOptions arg0, TF_Status status);
+public static native void TF_CloseDeprecatedSession(TF_DeprecatedSession arg0,
                                                      TF_Status status);
-public static native void TF_CloseDeprecatedSession(TF_DeprecatedSession arg0, TF_Status status);
 public static native void TF_DeleteDeprecatedSession(TF_DeprecatedSession arg0,
-                                       TF_Status status);
-public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") PointerPointer containers,
-                     int ncontainers, TF_Status status);
-public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") @ByPtrPtr BytePointer containers,
-                     int ncontainers, TF_Status status);
-public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") @ByPtrPtr ByteBuffer containers,
-                     int ncontainers, TF_Status status);
-public static native void TF_Reset(@Const TF_SessionOptions opt, @Cast("const char**") @ByPtrPtr byte[] containers,
-                     int ncontainers, TF_Status status);
+                                                      TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt,
+                                    @Cast("const char**") PointerPointer containers, int ncontainers,
+                                    TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt,
+                                    @Cast("const char**") @ByPtrPtr BytePointer containers, int ncontainers,
+                                    TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt,
+                                    @Cast("const char**") @ByPtrPtr ByteBuffer containers, int ncontainers,
+                                    TF_Status status);
+public static native void TF_Reset(@Const TF_SessionOptions opt,
+                                    @Cast("const char**") @ByPtrPtr byte[] containers, int ncontainers,
+                                    TF_Status status);
 // Treat the bytes proto[0,proto_len-1] as a serialized GraphDef and
 // add the nodes in that GraphDef to the graph for the session.
 //
 // Prefer use of TF_Session and TF_GraphImportGraphDef over this.
-public static native void TF_ExtendGraph(TF_DeprecatedSession arg0, @Const Pointer proto,
-                           @Cast("size_t") long proto_len, TF_Status arg3);
+public static native void TF_ExtendGraph(TF_DeprecatedSession arg0,
+                                          @Const Pointer proto, @Cast("size_t") long proto_len,
+                                          TF_Status arg3);
 
 // See TF_SessionRun() above.
-public static native void TF_Run(TF_DeprecatedSession arg0, @Const TF_Buffer run_options,
-                   @Cast("const char**") PointerPointer input_names, @Cast("TF_Tensor**") PointerPointer inputs, int ninputs,
-                   @Cast("const char**") PointerPointer output_names, @Cast("TF_Tensor**") PointerPointer outputs, int noutputs,
-                   @Cast("const char**") PointerPointer target_oper_names, int ntargets,
-                   TF_Buffer run_metadata, TF_Status arg11);
-public static native void TF_Run(TF_DeprecatedSession arg0, @Const TF_Buffer run_options,
-                   @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                   @Cast("const char**") @ByPtrPtr BytePointer output_names, @ByPtrPtr TF_Tensor outputs, int noutputs,
-                   @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
-                   TF_Buffer run_metadata, TF_Status arg11);
-public static native void TF_Run(TF_DeprecatedSession arg0, @Const TF_Buffer run_options,
-                   @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                   @Cast("const char**") @ByPtrPtr ByteBuffer output_names, @ByPtrPtr TF_Tensor outputs, int noutputs,
-                   @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
-                   TF_Buffer run_metadata, TF_Status arg11);
-public static native void TF_Run(TF_DeprecatedSession arg0, @Const TF_Buffer run_options,
-                   @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                   @Cast("const char**") @ByPtrPtr byte[] output_names, @ByPtrPtr TF_Tensor outputs, int noutputs,
-                   @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
-                   TF_Buffer run_metadata, TF_Status arg11);
+public static native void TF_Run(TF_DeprecatedSession arg0,
+                                  @Const TF_Buffer run_options,
+                                  @Cast("const char**") PointerPointer input_names, @Cast("TF_Tensor**") PointerPointer inputs,
+                                  int ninputs, @Cast("const char**") PointerPointer output_names,
+                                  @Cast("TF_Tensor**") PointerPointer outputs, int noutputs,
+                                  @Cast("const char**") PointerPointer target_oper_names, int ntargets,
+                                  TF_Buffer run_metadata, TF_Status arg11);
+public static native void TF_Run(TF_DeprecatedSession arg0,
+                                  @Const TF_Buffer run_options,
+                                  @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs,
+                                  int ninputs, @Cast("const char**") @ByPtrPtr BytePointer output_names,
+                                  @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                  @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                                  TF_Buffer run_metadata, TF_Status arg11);
+public static native void TF_Run(TF_DeprecatedSession arg0,
+                                  @Const TF_Buffer run_options,
+                                  @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs,
+                                  int ninputs, @Cast("const char**") @ByPtrPtr ByteBuffer output_names,
+                                  @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                  @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                                  TF_Buffer run_metadata, TF_Status arg11);
+public static native void TF_Run(TF_DeprecatedSession arg0,
+                                  @Const TF_Buffer run_options,
+                                  @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs,
+                                  int ninputs, @Cast("const char**") @ByPtrPtr byte[] output_names,
+                                  @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                  @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                                  TF_Buffer run_metadata, TF_Status arg11);
 
 // See TF_SessionPRunSetup() above.
-public static native void TF_PRunSetup(TF_DeprecatedSession arg0, @Cast("const char**") PointerPointer input_names,
-                         int ninputs, @Cast("const char**") PointerPointer output_names, int noutputs,
-                         @Cast("const char**") PointerPointer target_oper_names, int ntargets,
-                         @Cast("const char**") PointerPointer handle, TF_Status arg8);
-public static native void TF_PRunSetup(TF_DeprecatedSession arg0, @Cast("const char**") @ByPtrPtr BytePointer input_names,
-                         int ninputs, @Cast("const char**") @ByPtrPtr BytePointer output_names, int noutputs,
-                         @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
-                         @Cast("const char**") @ByPtrPtr BytePointer handle, TF_Status arg8);
-public static native void TF_PRunSetup(TF_DeprecatedSession arg0, @Cast("const char**") @ByPtrPtr ByteBuffer input_names,
-                         int ninputs, @Cast("const char**") @ByPtrPtr ByteBuffer output_names, int noutputs,
-                         @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
-                         @Cast("const char**") @ByPtrPtr ByteBuffer handle, TF_Status arg8);
-public static native void TF_PRunSetup(TF_DeprecatedSession arg0, @Cast("const char**") @ByPtrPtr byte[] input_names,
-                         int ninputs, @Cast("const char**") @ByPtrPtr byte[] output_names, int noutputs,
-                         @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
-                         @Cast("const char**") @ByPtrPtr byte[] handle, TF_Status arg8);
+public static native void TF_PRunSetup(TF_DeprecatedSession arg0,
+                                        @Cast("const char**") PointerPointer input_names, int ninputs,
+                                        @Cast("const char**") PointerPointer output_names, int noutputs,
+                                        @Cast("const char**") PointerPointer target_oper_names,
+                                        int ntargets, @Cast("const char**") PointerPointer handle,
+                                        TF_Status arg8);
+public static native void TF_PRunSetup(TF_DeprecatedSession arg0,
+                                        @Cast("const char**") @ByPtrPtr BytePointer input_names, int ninputs,
+                                        @Cast("const char**") @ByPtrPtr BytePointer output_names, int noutputs,
+                                        @Cast("const char**") @ByPtrPtr BytePointer target_oper_names,
+                                        int ntargets, @Cast("const char**") @ByPtrPtr BytePointer handle,
+                                        TF_Status arg8);
+public static native void TF_PRunSetup(TF_DeprecatedSession arg0,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer input_names, int ninputs,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer output_names, int noutputs,
+                                        @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names,
+                                        int ntargets, @Cast("const char**") @ByPtrPtr ByteBuffer handle,
+                                        TF_Status arg8);
+public static native void TF_PRunSetup(TF_DeprecatedSession arg0,
+                                        @Cast("const char**") @ByPtrPtr byte[] input_names, int ninputs,
+                                        @Cast("const char**") @ByPtrPtr byte[] output_names, int noutputs,
+                                        @Cast("const char**") @ByPtrPtr byte[] target_oper_names,
+                                        int ntargets, @Cast("const char**") @ByPtrPtr byte[] handle,
+                                        TF_Status arg8);
 
 // See TF_SessionPRun above.
 public static native void TF_PRun(TF_DeprecatedSession arg0, @Cast("const char*") BytePointer handle,
-                    @Cast("const char**") PointerPointer input_names, @Cast("TF_Tensor**") PointerPointer inputs, int ninputs,
-                    @Cast("const char**") PointerPointer output_names, @Cast("TF_Tensor**") PointerPointer outputs,
-                    int noutputs, @Cast("const char**") PointerPointer target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") PointerPointer input_names, @Cast("TF_Tensor**") PointerPointer inputs,
+                                   int ninputs, @Cast("const char**") PointerPointer output_names,
+                                   @Cast("TF_Tensor**") PointerPointer outputs, int noutputs,
+                                   @Cast("const char**") PointerPointer target_oper_names, int ntargets,
+                                   TF_Status arg10);
 public static native void TF_PRun(TF_DeprecatedSession arg0, @Cast("const char*") BytePointer handle,
-                    @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                    @Cast("const char**") @ByPtrPtr BytePointer output_names, @ByPtrPtr TF_Tensor outputs,
-                    int noutputs, @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs,
+                                   int ninputs, @Cast("const char**") @ByPtrPtr BytePointer output_names,
+                                   @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                   @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                                   TF_Status arg10);
 public static native void TF_PRun(TF_DeprecatedSession arg0, String handle,
-                    @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                    @Cast("const char**") @ByPtrPtr ByteBuffer output_names, @ByPtrPtr TF_Tensor outputs,
-                    int noutputs, @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs,
+                                   int ninputs, @Cast("const char**") @ByPtrPtr ByteBuffer output_names,
+                                   @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                   @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                                   TF_Status arg10);
 public static native void TF_PRun(TF_DeprecatedSession arg0, @Cast("const char*") BytePointer handle,
-                    @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                    @Cast("const char**") @ByPtrPtr byte[] output_names, @ByPtrPtr TF_Tensor outputs,
-                    int noutputs, @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs,
+                                   int ninputs, @Cast("const char**") @ByPtrPtr byte[] output_names,
+                                   @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                   @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                                   TF_Status arg10);
 public static native void TF_PRun(TF_DeprecatedSession arg0, String handle,
-                    @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                    @Cast("const char**") @ByPtrPtr BytePointer output_names, @ByPtrPtr TF_Tensor outputs,
-                    int noutputs, @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") @ByPtrPtr BytePointer input_names, @ByPtrPtr TF_Tensor inputs,
+                                   int ninputs, @Cast("const char**") @ByPtrPtr BytePointer output_names,
+                                   @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                   @Cast("const char**") @ByPtrPtr BytePointer target_oper_names, int ntargets,
+                                   TF_Status arg10);
 public static native void TF_PRun(TF_DeprecatedSession arg0, @Cast("const char*") BytePointer handle,
-                    @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                    @Cast("const char**") @ByPtrPtr ByteBuffer output_names, @ByPtrPtr TF_Tensor outputs,
-                    int noutputs, @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") @ByPtrPtr ByteBuffer input_names, @ByPtrPtr TF_Tensor inputs,
+                                   int ninputs, @Cast("const char**") @ByPtrPtr ByteBuffer output_names,
+                                   @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                   @Cast("const char**") @ByPtrPtr ByteBuffer target_oper_names, int ntargets,
+                                   TF_Status arg10);
 public static native void TF_PRun(TF_DeprecatedSession arg0, String handle,
-                    @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs, int ninputs,
-                    @Cast("const char**") @ByPtrPtr byte[] output_names, @ByPtrPtr TF_Tensor outputs,
-                    int noutputs, @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
-                    TF_Status arg10);
+                                   @Cast("const char**") @ByPtrPtr byte[] input_names, @ByPtrPtr TF_Tensor inputs,
+                                   int ninputs, @Cast("const char**") @ByPtrPtr byte[] output_names,
+                                   @ByPtrPtr TF_Tensor outputs, int noutputs,
+                                   @Cast("const char**") @ByPtrPtr byte[] target_oper_names, int ntargets,
+                                   TF_Status arg10);
 
 // --------------------------------------------------------------------------
 // Load plugins containing custom ops and kernels
@@ -13875,9 +14215,9 @@ public static native void TF_PRun(TF_DeprecatedSession arg0, String handle,
 //
 // On failure, place an error status in status and return NULL.
 public static native TF_Library TF_LoadLibrary(@Cast("const char*") BytePointer library_filename,
-                                  TF_Status status);
+                                                 TF_Status status);
 public static native TF_Library TF_LoadLibrary(String library_filename,
-                                  TF_Status status);
+                                                 TF_Status status);
 
 // Get the OpList of OpDefs defined in the library pointed by lib_handle.
 //
@@ -14444,6 +14784,18 @@ limitations under the License.
 //           ::tensorflow::register_op::OpDefBuilderWrapper<SHOULD_REGISTER_OP(
 //               name)>(name)
 
+// The `REGISTER_SYSTEM_OP()` macro acts as `REGISTER_OP()` except
+// that the op is registered unconditionally even when selective
+// registration is used.
+// #define REGISTER_SYSTEM_OP(name)
+//   REGISTER_SYSTEM_OP_UNIQ_HELPER(__COUNTER__, name)
+// #define REGISTER_SYSTEM_OP_UNIQ_HELPER(ctr, name)
+//   REGISTER_SYSTEM_OP_UNIQ(ctr, name)
+// #define REGISTER_SYSTEM_OP_UNIQ(ctr, name)
+//   static ::tensorflow::register_op::OpDefBuilderReceiver register_op##ctr
+//       TF_ATTRIBUTE_UNUSED =
+//           ::tensorflow::register_op::OpDefBuilderWrapper<true>(name)
+
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_FRAMEWORK_OP_H_
@@ -14525,7 +14877,7 @@ public static final int
 
 // Convert the enums to strings for errors:
 @Namespace("tensorflow") public static native @StdString BytePointer DataTypeString(@Cast("tensorflow::DataType") int dtype);
-@Namespace("tensorflow") public static native @StdString BytePointer DeviceTypeString(@ByVal DeviceType device_type);
+@Namespace("tensorflow") public static native @StdString BytePointer DeviceTypeString(@Const @ByRef DeviceType device_type);
 @Namespace("tensorflow") public static native @StdString BytePointer DataTypeSliceString(@ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector dtypes);
 @Namespace("tensorflow") public static native @StdString BytePointer DataTypeVectorString(@Const @ByRef DataTypeVector dtypes);
 
@@ -15113,6 +15465,10 @@ limitations under the License.
 // its supporting functions defined in its library).
 @Namespace("tensorflow") public static native @StdString BytePointer DebugStringWhole(@Const @ByRef GraphDef gdef);
 
+// Returns true if f1 == f2. Compares all fields, including descriptions. Order
+// of NodeDefs doesn't matter.
+@Namespace("tensorflow") public static native @Cast("bool") boolean FunctionDefsEqual(@Const @ByRef FunctionDef f1, @Const @ByRef FunctionDef f2);
+
 // Returns a canonicalized string for the instantiation of the
 // function of the given "name" and attributes "attrs".
 //
@@ -15144,6 +15500,7 @@ limitations under the License.
   // Caller methods.
   public native @ByVal Status SetArgs(@ByVal TensorVector args);
   public native @ByVal Status GetRetvals(TensorVector rets);
+  public native @ByVal Status ConsumeRetvals(TensorVector rets);
 
   // Callee methods.
   public native @ByVal Status GetArg(int index, Tensor val);
@@ -15184,6 +15541,9 @@ limitations under the License.
 
   // Adds the functions and gradients in 'other' to this function library.
   public native @ByVal Status AddLibrary(@Const @ByRef FunctionLibraryDefinition other);
+
+  // Adds the functions and gradients in 'lib_def' to this function library.
+  public native @ByVal Status AddLibrary(@Const @ByRef FunctionDefLibrary lib_def);
 
   // If the gradient function for 'func' is specified explicitly in
   // the library, returns the gradient function name.  Otherwise,
@@ -15563,7 +15923,7 @@ limitations under the License.
 
   // Returns into '*edges' the input data edges of this Node, indexed by input
   // number. Does not return control edges.
-  public native @ByVal Status input_edges(EdgeVector edges);
+  public native @ByVal Status input_edges(@Cast("std::vector<const tensorflow::Edge*>*") EdgeVector edges);
 
   // Returns into '*n' the node that has an output connected to the
   // 'idx' input of this Node.
@@ -15593,6 +15953,38 @@ limitations under the License.
   // Return true iff this is an edge that indicates a control-flow
   // (as opposed to a data-flow) dependency.
   public native @Cast("bool") boolean IsControlEdge();
+}
+
+// Allows for iteration of the edges of a Graph, by iterating the underlying
+// Graph.edges_ vector while skipping over null entries.
+@Namespace("tensorflow") @NoOffset public static class GraphEdgesIterable extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GraphEdgesIterable(Pointer p) { super(p); }
+
+  public GraphEdgesIterable(@Cast("const std::vector<tensorflow::Edge*>*") @ByRef EdgeVector edges) { super((Pointer)null); allocate(edges); }
+  private native void allocate(@Cast("const std::vector<tensorflow::Edge*>*") @ByRef EdgeVector edges);
+
+  @NoOffset public static class const_iterator extends Pointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public const_iterator(Pointer p) { super(p); }
+  
+
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef const_iterator other);
+
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef const_iterator other);
+
+    // This is the prefix increment operator (++x), which is the operator
+    // used by C++ range iteration (for (x : y) ...).  We intentionally do not
+    // provide a postfix increment operator.
+    public native @ByRef @Name("operator ++") const_iterator increment();
+
+    public native @Cast("tensorflow::GraphEdgesIterable::value_type") @Name("operator *") Edge multiply();
+  }
+
+  public native @ByVal const_iterator begin();
+  public native @ByVal const_iterator end();
 }
 
 // Thread compatible but not thread safe.
@@ -15654,6 +16046,12 @@ limitations under the License.
   // REQUIRES: The edge must exist.
   public native void RemoveEdge(@Const Edge edge);
 
+  // Adds the function and gradient definitions in `fdef_lib` to this graph's op
+  // registry. Ignores duplicate functions, and returns a bad status if an
+  // imported function differs from an existing function or op with the same
+  // name.
+  public native @ByVal Status AddFunctionLibrary(@Const @ByRef FunctionDefLibrary fdef_lib);
+
   // The number of live nodes in the graph.
   //
   // Because nodes can be removed from the graph, num_nodes() is often
@@ -15705,7 +16103,7 @@ limitations under the License.
 
   // Access to the set of all edges.  Example usage:
   //   for (const Edge* e : graph.edges()) { ... }
-  public native @Const @ByRef EdgeSet edges();
+  public native @ByVal GraphEdgesIterable edges();
 
   // The pre-defined nodes.
   /** enum tensorflow::Graph:: */
@@ -16197,6 +16595,25 @@ limitations under the License.
                    @Const @ByPtrPtr NameAttrList value);
 @Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
                    @Const @ByPtrPtr NameAttrList value);  // type: "func"  // type: "list(func)"
+
+// Look up the attr with name attr_name and set *value to its value.  If no
+// attr with attr_name is found in node_def, or the attr does not have
+// a matching type, false is returned.
+@Namespace("tensorflow") public static native @Cast("bool") boolean GetNodeAttrSimple(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                       @StdString @Cast({"char*", "std::string*"}) BytePointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean GetNodeAttrSimple(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                       @StdString @Cast({"char*", "std::string*"}) BytePointer value);  // type: "string"
+@Namespace("tensorflow") public static native @Cast("bool") boolean GetNodeAttrSimple(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                       StringVector value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean GetNodeAttrSimple(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                       StringVector value);  // type: "string"
+
+// Look up the attr with name attr_name and return a reference to its value.
+// If no attr with attr_name is found in node_def, or the attr does not have
+// a matching type, a reference to an empty string is returned.
+// REQUIRES: Must not use the returned value beyond the lifetime of node_def.
+@Namespace("tensorflow") public static native @StdString BytePointer GetNodeAttrString(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name);
+@Namespace("tensorflow") public static native @StdString String GetNodeAttrString(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name);
 
 // Computes the input and output types for a specific node.
 // REQUIRES: ValidateOpDef(op_def).ok()
@@ -16779,28 +17196,6 @@ limitations under the License.
     public ShapeRefiner(Pointer p) { super(p); }
 }
 
-// Options specific to constant folding optimizations.
-//
-// TODO(ashankar,vrv): This should move to where constant folding is done.
-@Namespace("tensorflow") public static class ConstantFoldingOptions extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public ConstantFoldingOptions() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ConstantFoldingOptions(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ConstantFoldingOptions(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public ConstantFoldingOptions position(long position) {
-        return (ConstantFoldingOptions)super.position(position);
-    }
-
-  // If "consider" is not a nullptr, then only constant fold a node "n" if
-  // consider(n) returns true.
-  @MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);
-}
-
 // Construct a Graph *g out of a GraphDef gdef. Returns non-OK on
 // error, in which case *g is left in an incomplete state.
 //
@@ -16903,8 +17298,6 @@ limitations under the License.
   // with ops that are not defined in the binary calling ImportGraphDef.
   // Similar to the producer_op_list argument to import_graph_def in the
   // python API.
-
-  // TODO(skyewm): Enable importing functions
 }
 
 // Each `return_tensors` entry is the requested node and output index. The index
@@ -17279,7 +17672,7 @@ limitations under the License.
 
   public native Node node();
 
-  public native @Cast("tensorflow::uint64") long hash(@Cast("tensorflow::int64") long index);
+  public native @Cast("tensorflow::uint64") long hash(int index);
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Operation other);
 }
@@ -17300,14 +17693,14 @@ limitations under the License.
   private native void allocate();
   public Output(Node n) { super((Pointer)null); allocate(n); }
   private native void allocate(Node n);
-  public Output(Node n, @Cast("tensorflow::int64") long index) { super((Pointer)null); allocate(n, index); }
-  private native void allocate(Node n, @Cast("tensorflow::int64") long index);
-  public Output(@Const @ByRef Operation op, @Cast("tensorflow::int64") long index) { super((Pointer)null); allocate(op, index); }
-  private native void allocate(@Const @ByRef Operation op, @Cast("tensorflow::int64") long index);
+  public Output(Node n, int index) { super((Pointer)null); allocate(n, index); }
+  private native void allocate(Node n, int index);
+  public Output(@Const @ByRef Operation op, int index) { super((Pointer)null); allocate(op, index); }
+  private native void allocate(@Const @ByRef Operation op, int index);
 
   public native @ByVal Operation op();
   public native Node node();
-  public native @Cast("tensorflow::int64") long index();
+  public native int index();
   public native @Cast("tensorflow::DataType") int type();
   public native @StdString BytePointer name();
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Output other);
@@ -17513,15 +17906,18 @@ limitations under the License.
  *  Given initial gradients 'grad_inputs' (which represent the symbolic partial
  *  derivatives of some loss function 'L' w.r.t 'outputs'), adds gradient nodes
  *  to the graph associated with 'scope', which compute (and return in
- *  'grad_outputs') the symbolic partial derivatives of 'L' w.r.t 'inputs'.
- *  */
-
-// TODO(andydavis) Add overload of this function with no 'grad_inputs' arg.
-// Implementation will fill in 'OnesLike' for all shapes in 'outputs'.
+ *  'grad_outputs') the symbolic partial derivatives of 'L' w.r.t 'inputs'. */
 @Namespace("tensorflow") public static native @ByVal Status AddSymbolicGradients(@Const @ByRef Scope scope,
                             @StdVector Output outputs,
                             @StdVector Output inputs,
                             @StdVector Output grad_inputs,
+                            @StdVector Output grad_outputs);
+
+// Same as above, but uses 'OnesLike' for all shapes in
+// 'outputs' as grad_inputs.
+@Namespace("tensorflow") public static native @ByVal Status AddSymbolicGradients(@Const @ByRef Scope scope,
+                            @StdVector Output outputs,
+                            @StdVector Output inputs,
                             @StdVector Output grad_outputs);
 
 /** Returns a sentinel Output that represents 'no gradient' (i.e. no gradient
@@ -17701,32 +18097,32 @@ limitations under the License.
  * 
  *  (1) For the following input of shape {@code [4, 1, 1, 1]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[[1]]], [[[2]]], [[[3]]], [[[4]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [1, 2, 2, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [2]], [[3], [4]]]]
  *  }</pre>
  * 
  *  (2) For the following input of shape {@code [4, 1, 1, 3]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [1, 2, 2, 3]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3], [4, 5, 6]],
  *        [[7, 8, 9], [10, 11, 12]]]]
  *  }</pre>
  * 
  *  (3) For the following input of shape {@code [4, 2, 2, 1]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]], [[9], [11]]],
  *       [[[2], [4]], [[10], [12]]],
  *       [[[5], [7]], [[13], [15]]],
@@ -17735,7 +18131,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [1, 4, 4, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[1],   [2],  [3],  [4]],
  *       [[5],   [6],  [7],  [8]],
  *       [[9],  [10], [11],  [12]],
@@ -17744,14 +18140,14 @@ limitations under the License.
  * 
  *  (4) For the following input of shape {@code [8, 1, 2, 1]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]]], [[[9], [11]]], [[[2], [4]]], [[[10], [12]]],
  *       [[[5], [7]]], [[[13], [15]]], [[[6], [8]]], [[[14], [16]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [2, 2, 4, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]], [[5], [7]]],
  *       [[[2], [4]], [[10], [12]]],
  *       [[[5], [7]], [[13], [15]]],
@@ -17835,26 +18231,26 @@ limitations under the License.
  *  (1) For the following input of shape {@code [4, 1, 1, 1]}, {@code block_shape = [2, 2]}, and
  *      {@code crops = [[0, 0], [0, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[[1]]], [[[2]]], [[[3]]], [[[4]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [1, 2, 2, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [2]], [[3], [4]]]]
  *  }</pre>
  * 
  *  (2) For the following input of shape {@code [4, 1, 1, 3]}, {@code block_shape = [2, 2]}, and
  *      {@code crops = [[0, 0], [0, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [1, 2, 2, 3]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3], [4, 5, 6]],
  *        [[7, 8, 9], [10, 11, 12]]]]
  *  }</pre>
@@ -17862,7 +18258,7 @@ limitations under the License.
  *  (3) For the following input of shape {@code [4, 2, 2, 1]}, {@code block_shape = [2, 2]}, and
  *      {@code crops = [[0, 0], [0, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]], [[9], [11]]],
  *       [[[2], [4]], [[10], [12]]],
  *       [[[5], [7]], [[13], [15]]],
@@ -17871,7 +18267,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [1, 4, 4, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[1],   [2],  [3],  [4]],
  *       [[5],   [6],  [7],  [8]],
  *       [[9],  [10], [11],  [12]],
@@ -17881,7 +18277,7 @@ limitations under the License.
  *  (4) For the following input of shape {@code [8, 1, 3, 1]}, {@code block_shape = [2, 2]}, and
  *      {@code crops = [[0, 0], [2, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[0], [1], [3]]], [[[0], [9], [11]]],
  *       [[[0], [2], [4]]], [[[0], [10], [12]]],
  *       [[[0], [5], [7]]], [[[0], [13], [15]]],
@@ -17890,7 +18286,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [2, 2, 4, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1],   [2],  [3],  [4]],
  *        [[5],   [6],  [7],  [8]]],
  *       [[[9],  [10], [11],  [12]],
@@ -18065,14 +18461,14 @@ limitations under the License.
  * 
  *  For example, given this input of shape {@code [1, 1, 1, 4]}, and a block size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3, 4]]]]
  * 
  *  }</pre>
  * 
  *  This operation will output a tensor of shape {@code [1, 2, 2, 1]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *     [[[[1], [2]],
  *       [[3], [4]]]]
  *  }</pre>
@@ -18084,14 +18480,14 @@ limitations under the License.
  * 
  *  For an input tensor with larger depth, here of shape {@code [1, 1, 1, 12]}, e.g.
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]
  *  }</pre>
  * 
  *  This operation, for block size of 2, will return the following tensor of shape
  *  {@code [1, 2, 2, 3]}
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *     [[[[1, 2, 3], [4, 5, 6]],
  *       [[7, 8, 9], [10, 11, 12]]]]
  * 
@@ -18099,7 +18495,7 @@ limitations under the License.
  * 
  *  Similarly, for the following input of shape {@code [1 2 2 4]}, and a block size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x =  [[[[1, 2, 3, 4],
  *         [5, 6, 7, 8]],
  *        [[9, 10, 11, 12],
@@ -18108,7 +18504,7 @@ limitations under the License.
  * 
  *  the operator will return the following tensor of shape {@code [1 4 4 1]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[ [1],   [2],  [5],  [6]],
  *       [ [3],   [4],  [7],  [8]],
  *       [ [9],  [10], [13],  [14]],
@@ -18162,7 +18558,7 @@ limitations under the License.
  * 
  *  If the mode is 'MIN_FIRST', then this approach is used:
  * 
- *  <pre>{@code
+ *  <pre>{@code c++
  *  number_of_steps = 1 << (# of bits in T)
  *  range_adjust = number_of_steps / (number_of_steps - 1)
  *  range = (range_max - range_min) * range_adjust
@@ -18234,7 +18630,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 'diagonal' is [1, 2, 3, 4]
  *  tf.diag(diagonal) ==> [[1, 0, 0, 0]
  *                         [0, 2, 0, 0]
@@ -18274,7 +18670,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 'input' is [[1, 0, 0, 0]
  *                [0, 2, 0, 0]
  *                [0, 0, 3, 0]
@@ -18426,7 +18822,7 @@ limitations under the License.
  * 
  *  Other examples:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is a tensor of shape [2]
  *  shape(expand_dims(t, 0)) ==> [1, 2]
  *  shape(expand_dims(t, 1)) ==> [2, 1]
@@ -18525,6 +18921,7 @@ limitations under the License.
  *  Attributes [min; max] define the clamping range for the 'inputs' data.  Op
  *  divides this range into 255 steps (total of 256 values), then replaces each
  *  'inputs' value with the closest of the quantized step values.
+ *  'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.
  * 
  *  Quantization is called fake since the output is still in floating point.
  * 
@@ -18559,8 +18956,12 @@ limitations under the License.
     /** Defaults to 6 */
     public native @ByVal Attrs Max(float x);
 
+    /** Defaults to 8 */
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
     public native float min_(); public native Attrs min_(float min_);
     public native float max_(); public native Attrs max_(float max_);
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
   }
   public FakeQuantWithMinMaxArgs(@Const @ByRef Scope scope, @ByVal Input inputs) { super((Pointer)null); allocate(scope, inputs); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input inputs);
@@ -18572,6 +18973,7 @@ limitations under the License.
 
   public static native @ByVal Attrs Min(float x);
   public static native @ByVal Attrs Max(float x);
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Output outputs(); public native FakeQuantWithMinMaxArgs outputs(Output outputs);
 }
@@ -18612,8 +19014,12 @@ limitations under the License.
     /** Defaults to 6 */
     public native @ByVal Attrs Max(float x);
 
+    /** Defaults to 8 */
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
     public native float min_(); public native Attrs min_(float min_);
     public native float max_(); public native Attrs max_(float max_);
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
   }
   public FakeQuantWithMinMaxArgsGradient(@Const @ByRef Scope scope,
                                   @ByVal Input gradients,
@@ -18633,6 +19039,7 @@ limitations under the License.
 
   public static native @ByVal Attrs Min(float x);
   public static native @ByVal Attrs Max(float x);
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Output backprops(); public native FakeQuantWithMinMaxArgsGradient backprops(Output backprops);
 }
@@ -18644,6 +19051,7 @@ limitations under the License.
  *  [min; max] is the clamping range for the 'inputs' data.  Op divides this range
  *  into 255 steps (total of 256 values), then replaces each 'inputs' value with the
  *  closest of the quantized step values.
+ *  'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.
  * 
  *  This operation has a gradient and thus allows for training {@code min} and {@code max} values.
  * 
@@ -18657,11 +19065,35 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FakeQuantWithMinMaxVars(Pointer p) { super(p); }
 
+  /** Optional attribute setters for FakeQuantWithMinMaxVars */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to 8 */
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
+  }
   public FakeQuantWithMinMaxVars(@Const @ByRef Scope scope, @ByVal Input inputs, @ByVal Input min, @ByVal Input max) { super((Pointer)null); allocate(scope, inputs, min, max); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input inputs, @ByVal Input min, @ByVal Input max);
+  public FakeQuantWithMinMaxVars(@Const @ByRef Scope scope, @ByVal Input inputs, @ByVal Input min, @ByVal Input max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, inputs, min, max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input inputs, @ByVal Input min, @ByVal Input max, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Output outputs(); public native FakeQuantWithMinMaxVars outputs(Output outputs);
 }
@@ -18673,6 +19105,9 @@ limitations under the License.
  *  * gradients: Backpropagated gradients above the FakeQuantWithMinMaxVars operation.
  *  * inputs: Values passed as inputs to the FakeQuantWithMinMaxVars operation.
  *  min, max: Quantization interval, scalar floats.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * num_bits: The bitwidth of the quantization; between 2 and 8, inclusive.
  * 
  *  Returns:
  *  * {@code Output} backprops_wrt_input: Backpropagated gradients w.r.t. inputs:
@@ -18686,12 +19121,42 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FakeQuantWithMinMaxVarsGradient(Pointer p) { super(p); }
 
+  /** Optional attribute setters for FakeQuantWithMinMaxVarsGradient */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The bitwidth of the quantization; between 2 and 8, inclusive.
+     * 
+     *  Defaults to 8 */
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
+  }
   public FakeQuantWithMinMaxVarsGradient(@Const @ByRef Scope scope,
                                   @ByVal Input gradients,
                                   @ByVal Input inputs, @ByVal Input min, @ByVal Input max) { super((Pointer)null); allocate(scope, gradients, inputs, min, max); }
   private native void allocate(@Const @ByRef Scope scope,
                                   @ByVal Input gradients,
                                   @ByVal Input inputs, @ByVal Input min, @ByVal Input max);
+  public FakeQuantWithMinMaxVarsGradient(@Const @ByRef Scope scope,
+                                  @ByVal Input gradients,
+                                  @ByVal Input inputs, @ByVal Input min, @ByVal Input max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, gradients, inputs, min, max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                  @ByVal Input gradients,
+                                  @ByVal Input inputs, @ByVal Input min, @ByVal Input max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Output backprops_wrt_input(); public native FakeQuantWithMinMaxVarsGradient backprops_wrt_input(Output backprops_wrt_input);
   public native @ByRef Output backprop_wrt_min(); public native FakeQuantWithMinMaxVarsGradient backprop_wrt_min(Output backprop_wrt_min);
@@ -18706,6 +19171,7 @@ limitations under the License.
  *  [min; max] is the clamping range for the 'inputs' data in the corresponding
  *  depth channel.  Op divides this range into 255 steps (total of 256 values), then
  *  replaces each 'inputs' value with the closest of the quantized step values.
+ *  'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.
  * 
  *  This operation has a gradient and thus allows for training {@code min} and {@code max} values.
  * 
@@ -18719,15 +19185,43 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FakeQuantWithMinMaxVarsPerChannel(Pointer p) { super(p); }
 
+  /** Optional attribute setters for FakeQuantWithMinMaxVarsPerChannel */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to 8 */
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
+  }
   public FakeQuantWithMinMaxVarsPerChannel(@Const @ByRef Scope scope,
                                     @ByVal Input inputs,
                                     @ByVal Input min, @ByVal Input max) { super((Pointer)null); allocate(scope, inputs, min, max); }
   private native void allocate(@Const @ByRef Scope scope,
                                     @ByVal Input inputs,
                                     @ByVal Input min, @ByVal Input max);
+  public FakeQuantWithMinMaxVarsPerChannel(@Const @ByRef Scope scope,
+                                    @ByVal Input inputs,
+                                    @ByVal Input min, @ByVal Input max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, inputs, min, max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                    @ByVal Input inputs,
+                                    @ByVal Input min, @ByVal Input max, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Output outputs(); public native FakeQuantWithMinMaxVarsPerChannel outputs(Output outputs);
 }
@@ -18742,6 +19236,9 @@ limitations under the License.
  *    same as {@code gradients}.
  *  min, max: Quantization interval, floats of shape {@code [d]}.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * num_bits: The bitwidth of the quantization; between 2 and 8, inclusive.
+ * 
  *  Returns:
  *  * {@code Output} backprops_wrt_input: Backpropagated gradients w.r.t. inputs, shape same as
  *  {@code inputs}:
@@ -18755,6 +19252,28 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FakeQuantWithMinMaxVarsPerChannelGradient(Pointer p) { super(p); }
 
+  /** Optional attribute setters for FakeQuantWithMinMaxVarsPerChannelGradient */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The bitwidth of the quantization; between 2 and 8, inclusive.
+     * 
+     *  Defaults to 8 */
+    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
+  }
   public FakeQuantWithMinMaxVarsPerChannelGradient(@Const @ByRef Scope scope,
                                             @ByVal Input gradients,
                                             @ByVal Input inputs,
@@ -18765,6 +19284,18 @@ limitations under the License.
                                             @ByVal Input inputs,
                                             @ByVal Input min,
                                             @ByVal Input max);
+  public FakeQuantWithMinMaxVarsPerChannelGradient(@Const @ByRef Scope scope,
+                                            @ByVal Input gradients,
+                                            @ByVal Input inputs,
+                                            @ByVal Input min,
+                                            @ByVal Input max, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, gradients, inputs, min, max, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                                            @ByVal Input gradients,
+                                            @ByVal Input inputs,
+                                            @ByVal Input min,
+                                            @ByVal Input max, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Output backprops_wrt_input(); public native FakeQuantWithMinMaxVarsPerChannelGradient backprops_wrt_input(Output backprops_wrt_input);
   public native @ByRef Output backprop_wrt_min(); public native FakeQuantWithMinMaxVarsPerChannelGradient backprop_wrt_min(Output backprop_wrt_min);
@@ -18777,7 +19308,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # Output tensor has shape [2, 3].
  *  fill([2, 3], 9) ==> [[9, 9, 9]
  *                       [9, 9, 9]]
@@ -18829,8 +19360,13 @@ limitations under the License.
  *  If {@code indices} is a permutation and {@code len(indices) == params.shape[0]} then
  *  this operation will permute {@code params} accordingly.
  * 
+ *  {@code validate_indices}: DEPRECATED. If this operation is assigned to CPU, values in
+ *  {@code indices} are always validated to be within range. If assigned to GPU,
+ *  out-of-bound indices result in safe but unspecified behavior, which may include
+ *  raising an error.
+ * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/Gather.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/Gather.png" alt>
  *  </div>
  * 
  *  Arguments:
@@ -18882,20 +19418,17 @@ limitations under the License.
 
 /** Gather values or slices from {@code params} according to {@code indices}.
  * 
- *  {@code params} is a Tensor of rank {@code P} and {@code indices} is a Tensor of rank {@code Q}.
+ *  {@code indices} is an integer tensor containing indices into {@code params}.  The last
+ *  dimension of {@code indices} can be at most the rank of {@code params}:
  * 
- *  {@code indices} must be integer tensor, containing indices into {@code params}.
- *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ *      indices.shape[-1] <= params.rank
  * 
- *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
- *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
- *  dimension of {@code params}.
+ *  The last dimension of {@code indices} corresponds to elements
+ *  (if {@code indices.shape[-1] = params.rank}) or slices
+ *  (if {@code indices.shape[-1] < params.rank}) along dimension {@code indices.shape[-1]}
+ *  of {@code params}.  The output tensor has shape
  * 
- *  Produces an output tensor with shape
- * 
- *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, params.shape[K], ..., params.shape[P-1]].
- *  }</pre>
+ *      indices.shape[:-1] + params.shape[indices.shape[-1]:]
  * 
  *  Some examples below.
  * 
@@ -18976,12 +19509,12 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * params: {@code P-D}.  The tensor from which to gather values.
- *  * indices: {@code Q-D}.  Index tensor having shape {@code [d_0, ..., d_{Q-2}, K]}.
+ *  * params: The tensor from which to gather values.
+ *  * indices: Index tensor.
  * 
  *  Returns:
- *  * {@code Output}: {@code (P+Q-K-1)-D}.  Values from {@code params} gathered from indices given by
- *  {@code indices}. */
+ *  * {@code Output}: Values from {@code params} gathered from indices given by {@code indices}, with
+ *  shape {@code indices.shape[:-1] + params.shape[indices.shape[-1]:]}. */
 @Namespace("tensorflow::ops") @NoOffset public static class GatherNd extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -19037,10 +19570,14 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImmutableConst(Pointer p) { super(p); }
 
-  public ImmutableConst(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece BytePointer memory_region_name) { super((Pointer)null); allocate(scope, dtype, shape, memory_region_name); }
-  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece BytePointer memory_region_name);
-  public ImmutableConst(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece String memory_region_name) { super((Pointer)null); allocate(scope, dtype, shape, memory_region_name); }
-  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @StringPiece String memory_region_name);
+  public ImmutableConst(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
+                 @ByVal PartialTensorShape shape, @StringPiece BytePointer memory_region_name) { super((Pointer)null); allocate(scope, dtype, shape, memory_region_name); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
+                 @ByVal PartialTensorShape shape, @StringPiece BytePointer memory_region_name);
+  public ImmutableConst(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
+                 @ByVal PartialTensorShape shape, @StringPiece String memory_region_name) { super((Pointer)null); allocate(scope, dtype, shape, memory_region_name); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
+                 @ByVal PartialTensorShape shape, @StringPiece String memory_region_name);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -19061,7 +19598,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # tensor `x` is [3, 4, 0, 2, 1]
  *  invert_permutation(x) ==> [2, 4, 3, 0, 1]
  *  }</pre>
@@ -19098,14 +19635,14 @@ limitations under the License.
  * 
  *  For example, given this input:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [1, 2, 3, 4, 5, 6]
  *  y = [1, 3, 5]
  *  }</pre>
  * 
  *  This operation would return:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  out ==> [2, 4, 6]
  *  idx ==> [1, 3, 5]
  *  }</pre>
@@ -19175,7 +19712,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # if 'input' is [[ 0,  1,  2, 3]
  *                   [-1,  0,  1, 2]
  *                   [-2, -1,  0, 1]
@@ -19194,7 +19731,7 @@ limitations under the License.
  * 
  *  Useful special cases:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *   tf.matrix_band_part(input, 0, -1) ==> Upper triangular part.
  *   tf.matrix_band_part(input, -1, 0) ==> Lower triangular part.
  *   tf.matrix_band_part(input, 0, 0) ==> Diagonal.
@@ -19238,7 +19775,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  }{@code }prettyprint
+ *  }{@code }
  *  # 'diagonal' is [[1, 2, 3, 4], [5, 6, 7, 8]]
  * 
  *  and diagonal.shape = (2, 4)
@@ -19289,7 +19826,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 'input' is [[[1, 0, 0, 0]
  *                 [0, 2, 0, 0]
  *                 [0, 0, 3, 0]
@@ -19382,7 +19919,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is [[1, 2, 3], [4, 5, 6]].
  *  # 'paddings' is [[1, 1]], [2, 2]].
  *  # 'mode' is SYMMETRIC.
@@ -19577,6 +20114,28 @@ limitations under the License.
   public native @ByRef Output output(); public native OneHot output(Output output);
 }
 
+/** Returns a tensor of ones with the same shape and type as x.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * x: a tensor of type T.
+ * 
+ *  Returns:
+ *  * {@code Output}: a tensor of the same shape and type as x but filled with ones. */
+@Namespace("tensorflow::ops") @NoOffset public static class OnesLike extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OnesLike(Pointer p) { super(p); }
+
+  public OnesLike(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native OnesLike y(Output y);
+}
+
 /** Packs a list of {@code N} rank-{@code R} tensors into one rank-{@code (R+1)} tensor.
  * 
  *  Packs the {@code N} tensors in {@code values} into a tensor with rank one higher than each
@@ -19589,7 +20148,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 'x' is [1, 4]
  *  # 'y' is [2, 5]
  *  # 'z' is [3, 6]
@@ -19665,7 +20224,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is [[1, 1], [2, 2]]
  *  # 'paddings' is [[1, 1], [2, 2]]
  *  # rank of 't' is 2
@@ -19702,7 +20261,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 'x' is [[1, 4]]
  *  # 'y' is [[2, 5]]
  *  # 'z' is [[3, 6]]
@@ -19729,8 +20288,8 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParallelConcat(Pointer p) { super(p); }
 
-  public ParallelConcat(@Const @ByRef Scope scope, @ByVal InputList values, @ByVal TensorShape shape) { super((Pointer)null); allocate(scope, values, shape); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList values, @ByVal TensorShape shape);
+  public ParallelConcat(@Const @ByRef Scope scope, @ByVal InputList values, @ByVal PartialTensorShape shape) { super((Pointer)null); allocate(scope, values, shape); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList values, @ByVal PartialTensorShape shape);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -19777,10 +20336,10 @@ limitations under the License.
     /** (Optional) The shape of the tensor. If the shape has 0 dimensions, the
      *  shape is unconstrained.
      * 
-     *  Defaults to [] */
-    public native @ByVal Attrs Shape(@ByVal TensorShape x);
+     *  Defaults to <unknown> */
+    public native @ByVal Attrs Shape(@ByVal PartialTensorShape x);
 
-    public native @ByRef TensorShape shape_(); public native Attrs shape_(TensorShape shape_);
+    public native @ByRef PartialTensorShape shape_(); public native Attrs shape_(PartialTensorShape shape_);
   }
   public Placeholder(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, dtype); }
   private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype);
@@ -19790,12 +20349,14 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
-  public static native @ByVal Attrs Shape(@ByVal TensorShape x);
+  public static native @ByVal Attrs Shape(@ByVal PartialTensorShape x);
 
   public native @ByRef Output output(); public native Placeholder output(Output output);
 }
 
 /** A placeholder op for a value that will be fed into the computation.
+ *  DEPRECATED at GraphDef version 23:
+ *  Placeholder now behaves the same as PlaceholderV2..
  * 
  *  N.B. This operation will fail with an error if it is executed. It is
  *  intended as a way to represent a value that will always be fed, and to
@@ -19814,8 +20375,10 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlaceholderV2(Pointer p) { super(p); }
 
-  public PlaceholderV2(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape) { super((Pointer)null); allocate(scope, dtype, shape); }
-  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape);
+  public PlaceholderV2(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
+                @ByVal PartialTensorShape shape) { super((Pointer)null); allocate(scope, dtype, shape); }
+  private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
+                @ByVal PartialTensorShape shape);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -19837,8 +20400,8 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlaceholderWithDefault(Pointer p) { super(p); }
 
-  public PlaceholderWithDefault(@Const @ByRef Scope scope, @ByVal Input input, @ByVal TensorShape shape) { super((Pointer)null); allocate(scope, input, shape); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal TensorShape shape);
+  public PlaceholderWithDefault(@Const @ByRef Scope scope, @ByVal Input input, @ByVal PartialTensorShape shape) { super((Pointer)null); allocate(scope, input, shape); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal PartialTensorShape shape);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -19909,73 +20472,6 @@ limitations under the License.
   public static native @ByVal Attrs Message(@StringPiece String x);
 
   public native @ByRef Output output(); public native PreventGradient output(Output output);
-}
-
-/** Use QuantizeAndDequantizeV2 instead.
- *  DEPRECATED at GraphDef version 22:
- *  Replaced by QuantizeAndDequantizeV2.
- * 
- *  Arguments:
- *  * scope: A Scope object
- * 
- *  Returns:
- *  * {@code Output}: The output tensor. */
-@Namespace("tensorflow::ops") @NoOffset public static class QuantizeAndDequantize extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public QuantizeAndDequantize(Pointer p) { super(p); }
-
-  /** Optional attribute setters for QuantizeAndDequantize */
-  public static class Attrs extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public Attrs() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public Attrs(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public Attrs position(long position) {
-          return (Attrs)super.position(position);
-      }
-  
-    /** Defaults to true */
-    public native @ByVal Attrs SignedInput(@Cast("bool") boolean x);
-
-    /** Defaults to 8 */
-    public native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
-
-    /** Defaults to false */
-    public native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
-
-    /** Defaults to 0 */
-    public native @ByVal Attrs InputMin(float x);
-
-    /** Defaults to 0 */
-    public native @ByVal Attrs InputMax(float x);
-
-    public native @Cast("bool") boolean signed_input_(); public native Attrs signed_input_(boolean signed_input_);
-    public native @Cast("tensorflow::int64") long num_bits_(); public native Attrs num_bits_(long num_bits_);
-    public native @Cast("bool") boolean range_given_(); public native Attrs range_given_(boolean range_given_);
-    public native float input_min_(); public native Attrs input_min_(float input_min_);
-    public native float input_max_(); public native Attrs input_max_(float input_max_);
-  }
-  public QuantizeAndDequantize(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
-  public QuantizeAndDequantize(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, attrs); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @Const @ByRef Attrs attrs);
-  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
-  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
-  public native Node node();
-
-  public static native @ByVal Attrs SignedInput(@Cast("bool") boolean x);
-  public static native @ByVal Attrs NumBits(@Cast("tensorflow::int64") long x);
-  public static native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
-  public static native @ByVal Attrs InputMin(float x);
-  public static native @ByVal Attrs InputMax(float x);
-
-  public native @ByRef Output output(); public native QuantizeAndDequantize output(Output output);
 }
 
 /** Quantizes then dequantizes a tensor.
@@ -20388,7 +20884,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
  *  # shape of tensor 't' is [2, 2, 3]
  *  rank(t) ==> 3
@@ -20432,7 +20928,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
  *  # tensor 't' has shape [9]
  *  reshape(t, [3, 3]) ==> [[1, 2, 3],
@@ -20498,6 +20994,84 @@ limitations under the License.
   public native @ByRef Output output(); public native Reshape output(Output output);
 }
 
+/** Assign {@code value} to the sliced l-value reference of {@code ref}.
+ * 
+ *  The values of {@code value} are assigned to the positions in the variable
+ *  {@code ref} that are selected by the slice parameters. The slice parameters
+ *  {@code begin, }end{@code , }strides{@code , etc. work exactly as in }StridedSlice{@code .
+ * 
+ *  NOTE this op currently does not support broadcasting and so }value{@code 's
+ *  shape must be exactly the shape produced by the slice of }ref{@code .
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ * 
+ *  Returns:
+ *  * the created }Operation{@code  */
+@Namespace("tensorflow::ops") @NoOffset public static class ResourceStridedSliceAssign extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ResourceStridedSliceAssign(Pointer p) { super(p); }
+
+  /** Optional attribute setters for ResourceStridedSliceAssign */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to 0 */
+    public native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    public native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    public native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    public native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    public native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long begin_mask_(); public native Attrs begin_mask_(long begin_mask_);
+    public native @Cast("tensorflow::int64") long end_mask_(); public native Attrs end_mask_(long end_mask_);
+    public native @Cast("tensorflow::int64") long ellipsis_mask_(); public native Attrs ellipsis_mask_(long ellipsis_mask_);
+    public native @Cast("tensorflow::int64") long new_axis_mask_(); public native Attrs new_axis_mask_(long new_axis_mask_);
+    public native @Cast("tensorflow::int64") long shrink_axis_mask_(); public native Attrs shrink_axis_mask_(long shrink_axis_mask_);
+  }
+  public ResourceStridedSliceAssign(@Const @ByRef Scope scope,
+                             @ByVal Input ref, @ByVal Input begin,
+                             @ByVal Input end, @ByVal Input strides, @ByVal Input value) { super((Pointer)null); allocate(scope, ref, begin, end, strides, value); }
+  private native void allocate(@Const @ByRef Scope scope,
+                             @ByVal Input ref, @ByVal Input begin,
+                             @ByVal Input end, @ByVal Input strides, @ByVal Input value);
+  public ResourceStridedSliceAssign(@Const @ByRef Scope scope,
+                             @ByVal Input ref, @ByVal Input begin,
+                             @ByVal Input end, @ByVal Input strides, @ByVal Input value, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, ref, begin, end, strides, value, attrs); }
+  private native void allocate(@Const @ByRef Scope scope,
+                             @ByVal Input ref, @ByVal Input begin,
+                             @ByVal Input end, @ByVal Input strides, @ByVal Input value, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Operation") Operation asOperation();
+
+  public static native @ByVal Attrs BeginMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs EndMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs EllipsisMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NewAxisMask(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs ShrinkAxisMask(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Operation operation(); public native ResourceStridedSliceAssign operation(Operation operation);
+}
+
 /** Reverses variable length slices.
  * 
  *  This op first slices {@code input} along the dimension {@code batch_dim}, and for each
@@ -20513,7 +21087,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # Given this:
  *  batch_dim = 0
  *  seq_dim = 1
@@ -20535,7 +21109,7 @@ limitations under the License.
  * 
  *  In contrast, if:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # Given this:
  *  batch_dim = 2
  *  seq_dim = 0
@@ -20626,7 +21200,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # tensor 't' is [[[[ 0,  1,  2,  3],
  *  #                  [ 4,  5,  6,  7],
  *  #                  [ 8,  9, 10, 11]],
@@ -20683,47 +21257,46 @@ limitations under the License.
   public native @ByRef Output output(); public native Reverse output(Output output);
 }
 
-/** Creates a new tensor by applying sparse {@code updates} to individual
+/** Scatter {@code updates} into a new (initially zero) tensor according to {@code indices}.
  * 
- *  values or slices within a zero tensor of the given {@code shape} tensor according to
+ *  Creates a new tensor by applying sparse {@code updates} to individual
+ *  values or slices within a zero tensor of the given {@code shape} according to
  *  indices.  This operator is the inverse of the [tf.gather_nd](#gather_nd)
  *  operator which extracts values or slices from a given tensor.
  * 
- *  TODO(simister): Add a link to Variable.__getitem__ documentation on slice
- *  syntax.
+ *  **WARNING**: The order in which updates are applied is nondeterministic, so the
+ *  output will be nondeterministic if {@code indices} contains duplicates.
  * 
- *  {@code shape} is a {@code TensorShape} with rank {@code P} and {@code indices} is a {@code Tensor} of rank
- *  {@code Q}.
+ *  {@code indices} is an integer tensor containing indices into a new tensor of shape
+ *  {@code shape}.  The last dimension of {@code indices} can be at most the rank of {@code shape}:
  * 
- *  {@code indices} must be integer tensor, containing indices into {@code shape}.
- *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ *      indices.shape[-1] <= shape.rank
  * 
- *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
- *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
- *  dimension of {@code shape}.
+ *  The last dimension of {@code indices} corresponds to indices into elements
+ *  (if {@code indices.shape[-1] = shape.rank}) or slices
+ *  (if {@code indices.shape[-1] < shape.rank}) along dimension {@code indices.shape[-1]} of
+ *  {@code shape}.  {@code updates} is a tensor with shape
  * 
- *  {@code updates} is Tensor of rank {@code Q-1+P-K} with shape:
- * 
- *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, shape[K], ..., shape[P-1]].
- *  }</pre>
+ *      indices.shape[:-1] + shape[indices.shape[-1]:]
  * 
  *  The simplest form of scatter is to insert individual elements in a tensor by
  *  index. For example, say we want to insert 4 scattered elements in a rank-1
  *  tensor with 8 elements.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/ScatterNd1.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterNd1.png" alt>
  *  </div>
  * 
  *  In Python, this scatter operation would look like this:
  * 
+ *  <pre>{@code python
  *      indices = tf.constant([[4], [3], [1], [7]])
  *      updates = tf.constant([9, 10, 11, 12])
  *      shape = tf.constant([8])
  *      scatter = tf.scatter_nd(indices, updates, shape)
  *      with tf.Session() as sess:
- *        print sess.run(scatter)
+ *        print(sess.run(scatter))
+ *  }</pre>
  * 
  *  The resulting tensor would look like this:
  * 
@@ -20734,11 +21307,12 @@ limitations under the License.
  *  rank-3 tensor with two matrices of new values.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/ScatterNd2.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterNd2.png" alt>
  *  </div>
  * 
  *  In Python, this scatter operation would look like this:
  * 
+ *  <pre>{@code python
  *      indices = tf.constant([[0], [2]])
  *      updates = tf.constant([[[5, 5, 5, 5], [6, 6, 6, 6],
  *                              [7, 7, 7, 7], [8, 8, 8, 8]],
@@ -20747,7 +21321,8 @@ limitations under the License.
  *      shape = tf.constant([4, 4, 4])
  *      scatter = tf.scatter_nd(indices, updates, shape)
  *      with tf.Session() as sess:
- *        print sess.run(scatter)
+ *        print(sess.run(scatter))
+ *  }</pre>
  * 
  *  The resulting tensor would look like this:
  * 
@@ -20758,11 +21333,9 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * indices: A Tensor. Must be one of the following types: int32, int64.
- *  A tensor of indices into ref.
- *  * updates: A Tensor. Must have the same type as tensor. A tensor of updated values
- *  to store in ref.
- *  * shape: A vector. The shape of the resulting tensor.
+ *  * indices: Index tensor.
+ *  * updates: Updates to scatter into output.
+ *  * shape: 1-D. The shape of the resulting tensor.
  * 
  *  Returns:
  *  * {@code Output}: A new tensor with the given shape and updates applied according
@@ -20789,7 +21362,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
  *  shape(t) ==> [2, 2, 3]
  *  }</pre>
@@ -20853,7 +21426,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is [[[1, 1,, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]]
  *  size(t) ==> 12
  *  }</pre>
@@ -20976,32 +21549,32 @@ limitations under the License.
  * 
  *  (1) For the following input of shape {@code [1, 2, 2, 1]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [2]], [[3], [4]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [4, 1, 1, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[[1]]], [[[2]]], [[[3]]], [[[4]]]]
  *  }</pre>
  * 
  *  (2) For the following input of shape {@code [1, 2, 2, 3]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3], [4, 5, 6]],
  *        [[7, 8, 9], [10, 11, 12]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [4, 1, 1, 3]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]
  *  }</pre>
  * 
  *  (3) For the following input of shape {@code [1, 4, 4, 1]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1],   [2],  [3],  [4]],
  *        [[5],   [6],  [7],  [8]],
  *        [[9],  [10], [11],  [12]],
@@ -21010,7 +21583,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [4, 2, 2, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]], [[9], [11]]],
  *       [[[2], [4]], [[10], [12]]],
  *       [[[5], [7]], [[13], [15]]],
@@ -21019,7 +21592,7 @@ limitations under the License.
  * 
  *  (4) For the following input of shape {@code [2, 2, 4, 1]} and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1],   [2],  [3],  [4]],
  *        [[5],   [6],  [7],  [8]]],
  *       [[[9],  [10], [11],  [12]],
@@ -21028,7 +21601,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [8, 1, 2, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]]], [[[9], [11]]], [[[2], [4]]], [[[10], [12]]],
  *       [[[5], [7]]], [[[13], [15]]], [[[6], [8]]], [[[14], [16]]]]
  *  }</pre>
@@ -21114,34 +21687,34 @@ limitations under the License.
  *  (1) For the following input of shape {@code [1, 2, 2, 1]}, {@code block_shape = [2, 2]}, and
  *      {@code paddings = [[0, 0], [0, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [2]], [[3], [4]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [4, 1, 1, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[[1]]], [[[2]]], [[[3]]], [[[4]]]]
  *  }</pre>
  * 
  *  (2) For the following input of shape {@code [1, 2, 2, 3]}, {@code block_shape = [2, 2]}, and
  *      {@code paddings = [[0, 0], [0, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3], [4, 5, 6]],
  *        [[7, 8, 9], [10, 11, 12]]]]
  *  }</pre>
  * 
  *  The output tensor has shape {@code [4, 1, 1, 3]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]
  *  }</pre>
  * 
  *  (3) For the following input of shape {@code [1, 4, 4, 1]}, {@code block_shape = [2, 2]}, and
  *      {@code paddings = [[0, 0], [0, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1],   [2],  [3],  [4]],
  *        [[5],   [6],  [7],  [8]],
  *        [[9],  [10], [11],  [12]],
@@ -21150,7 +21723,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [4, 2, 2, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [3]], [[9], [11]]],
  *       [[[2], [4]], [[10], [12]]],
  *       [[[5], [7]], [[13], [15]]],
@@ -21160,7 +21733,7 @@ limitations under the License.
  *  (4) For the following input of shape {@code [2, 2, 4, 1]}, block_shape = {@code [2, 2]}, and
  *      paddings = {@code [[0, 0], [2, 0]]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1],   [2],  [3],  [4]],
  *        [[5],   [6],  [7],  [8]]],
  *       [[[9],  [10], [11],  [12]],
@@ -21169,7 +21742,7 @@ limitations under the License.
  * 
  *  The output tensor has shape {@code [8, 1, 3, 1]} and value:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[0], [1], [3]]], [[[0], [9], [11]]],
  *       [[[0], [2], [4]]], [[[0], [10], [12]]],
  *       [[[0], [5], [7]]], [[[0], [13], [15]]],
@@ -21223,14 +21796,14 @@ limitations under the License.
  * 
  *  For example, given this input of shape {@code [1, 2, 2, 1]}, and block_size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1], [2]],
  *        [[3], [4]]]]
  *  }</pre>
  * 
  *  This operation will output a tensor of shape {@code [1, 1, 1, 4]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[[1, 2, 3, 4]]]]
  *  }</pre>
  * 
@@ -21241,7 +21814,7 @@ limitations under the License.
  * 
  *  For an input tensor with larger depth, here of shape {@code [1, 2, 2, 3]}, e.g.
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3], [4, 5, 6]],
  *        [[7, 8, 9], [10, 11, 12]]]]
  *  }</pre>
@@ -21249,13 +21822,13 @@ limitations under the License.
  *  This operation, for block_size of 2, will return the following tensor of shape
  *  {@code [1, 1, 1, 12]}
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]
  *  }</pre>
  * 
  *  Similarly, for the following input of shape {@code [1 4 4 1]}, and a block size of 2:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1],   [2],  [5],  [6]],
  *        [[3],   [4],  [7],  [8]],
  *        [[9],  [10], [13],  [14]],
@@ -21264,7 +21837,7 @@ limitations under the License.
  * 
  *  the operator will return the following tensor of shape {@code [1 2 2 4]}:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  x = [[[[1, 2, 3, 4],
  *         [5, 6, 7, 8]],
  *        [[9, 10, 11, 12],
@@ -21359,14 +21932,14 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
  *  shape(squeeze(t)) ==> [2, 3]
  *  }</pre>
  * 
  *  Or, to remove specific size 1 dimensions:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
  *  shape(squeeze(t, [2, 4])) ==> [1, 2, 3, 1]
  *  }</pre>
@@ -21515,7 +22088,7 @@ limitations under the License.
  *  particular,
  *  {@code foo[1, 2:4, None, ..., :-3:-1, :]} will be encoded as
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  begin = [1, 2, x, x, 0, x] # x denotes don't care (usually 0)
  *  end = [2, 4, x, x, -3, x]
  *  strides = [1, 1, x, x, -1, 1]
@@ -21930,7 +22503,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
  *  y, idx = unique(x)
  *  y ==> [1, 2, 4, 7, 8]
@@ -21992,7 +22565,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
  *  y, idx, count = unique_with_counts(x)
  *  y ==> [1, 2, 4, 7, 8]
@@ -22123,7 +22696,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code prettyprint
+ *  <pre>{@code
  *  # 'input' tensor is [[True, False]
  *  #                    [True, False]]
  *  # 'input' has two true values, so output has two coordinates.
@@ -22231,7 +22804,7 @@ limitations under the License.
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
  *  * num_true: Number of true labels per context.
- *  * num_sampled: Number of candidates to produce per batch.
+ *  * num_sampled: Number of candidates to produce.
  *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
@@ -22403,7 +22976,7 @@ limitations under the License.
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
  *  * num_true: Number of true labels per context.
- *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * num_sampled: Number of candidates to randomly sample.
  *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
@@ -22602,7 +23175,7 @@ limitations under the License.
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
  *  * num_true: Number of true labels per context.
- *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * num_sampled: Number of candidates to randomly sample.
  *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
@@ -22695,7 +23268,7 @@ limitations under the License.
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
  *  * num_true: Number of true labels per context.
- *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * num_sampled: Number of candidates to randomly sample.
  *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
@@ -22794,7 +23367,7 @@ limitations under the License.
  *  * true_classes: A batch_size * num_true matrix, in which each row contains the
  *  IDs of the num_true target_classes in the corresponding original label.
  *  * num_true: Number of true labels per context.
- *  * num_sampled: Number of candidates to randomly sample per batch.
+ *  * num_sampled: Number of candidates to randomly sample.
  *  * unique: If unique is true, we sample with rejection, so that all sampled
  *  candidates in a batch are unique. This requires some approximation to
  *  estimate the post-rejection sampling probabilities.
@@ -22893,7 +23466,10 @@ limitations under the License.
 /** \defgroup control_flow_ops Control Flow Ops
  *  \{
  <p>
- *  Raise a exception to abort the process when called. If exit_without_error is true, the process will exit normally, otherwise it will exit with a SIGABORT signal.
+ *  Raise a exception to abort the process when called.
+ * 
+ *  If exit_without_error is true, the process will exit normally,
+ *  otherwise it will exit with a SIGABORT signal.
  * 
  *  Returns nothing but an exception.
  * 
@@ -23001,7 +23577,7 @@ limitations under the License.
  *  {@code Merge} waits for at least one of the tensors in {@code inputs} to become available.
  *  It is usually combined with {@code Switch} to implement branching.
  * 
- *  {@code Merge} forwards the first tensor for become available to {@code output}, and sets
+ *  {@code Merge} forwards the first tensor to become available to {@code output}, and sets
  *  {@code value_index} to its index in {@code inputs}.
  * 
  *  Arguments:
@@ -23177,9 +23753,9 @@ limitations under the License.
 /** \defgroup data_flow_ops Data Flow Ops
  *  \{
  <p>
- *  Applies a gradient to a given accumulator. Does not add if local_step is lesser
+ *  Applies a gradient to a given accumulator.
  * 
- *  than the accumulator's global_step.
+ *  Does not add if local_step is lesser than the accumulator's global_step.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -23225,9 +23801,10 @@ limitations under the License.
   public native @ByRef Output num_accumulated(); public native AccumulatorNumAccumulated num_accumulated(Output num_accumulated);
 }
 
-/** Updates the accumulator with a new value for global_step. Logs warning if the
+/** Updates the accumulator with a new value for global_step.
  * 
- *  accumulator's value is already higher than new_global_step.
+ *  Logs warning if the accumulator's value is already higher than
+ *  new_global_step.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -23248,14 +23825,13 @@ limitations under the License.
   public native @ByRef Operation operation(); public native AccumulatorSetGlobalStep operation(Operation operation);
 }
 
-/** Extracts the average gradient in the given ConditionalAccumulator, provided
+/** Extracts the average gradient in the given ConditionalAccumulator.
  * 
- *  that sufficient (i.e., more than num_required) gradients have been accumulated.
- *  The op blocks until sufficient gradients have been accumulated.
- *  If the accumulator has already aggregated more than num_required gradients, it
- *  returns the average of the accumulated gradients.
- *  Also automatically increments the recorded global_step in the accumulator by 1,
- *  and resets the aggregate to 0.
+ *  The op blocks until sufficient (i.e., more than num_required)
+ *  gradients have been accumulated.  If the accumulator has already
+ *  aggregated more than num_required gradients, it returns the average of
+ *  the accumulated gradients.  Also automatically increments the recorded
+ *  global_step in the accumulator by 1, and resets the aggregate to 0.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -23335,7 +23911,7 @@ limitations under the License.
      *  Defaults to [] */
     
     ///
-    public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+    public native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
 
     /** The capacity of the barrier.  The default capacity is MAX_INT32,
      *  which is the largest capacity of the underlying queue.
@@ -23361,7 +23937,7 @@ limitations under the License.
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
-    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") TensorShapeVector shapes_(); public native Attrs shapes_(TensorShapeVector shapes_);
+    public native @ArraySlice PartialTensorShape shapes_(); public native Attrs shapes_(PartialTensorShape shapes_);
     public native @Cast("tensorflow::int64") long capacity_(); public native Attrs capacity_(long capacity_);
     public native @StringPiece BytePointer container_(); public native Attrs container_(BytePointer container_);
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
@@ -23376,7 +23952,7 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
-  public static native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+  public static native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
   public static native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs Container(@StringPiece BytePointer x);
   public static native @ByVal Attrs Container(@StringPiece String x);
@@ -23616,13 +24192,14 @@ limitations under the License.
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector values(); public native BarrierTakeMany values(StringVector values);
 }
 
-/** A conditional accumulator for aggregating gradients. The accumulator accepts
+/** A conditional accumulator for aggregating gradients.
  * 
- *  gradients marked with local_step greater or equal to the most recent global_step
- *  known to the accumulator. The average can be extracted from the accumulator,
- *  provided sufficient gradients have been accumulated. Extracting the average
- *  automatically resets the aggregate to 0, and increments the global_step recorded
- *  by the accumulator.
+ *  The accumulator accepts gradients marked with local_step greater or
+ *  equal to the most recent global_step known to the accumulator. The
+ *  average can be extracted from the accumulator, provided sufficient
+ *  gradients have been accumulated. Extracting the average automatically
+ *  resets the aggregate to 0, and increments the global_step recorded by
+ *  the accumulator.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -23632,8 +24209,8 @@ limitations under the License.
  *  Optional attributes (see {@code Attrs}):
  *  * container: If non-empty, this accumulator is placed in the given container.
  *  Otherwise, a default container is used.
- *  * shared_name: If non-empty, this accumulator will be shared under the given name
- *  across multiple sessions.
+ *  * shared_name: If non-empty, this accumulator will be shared under the
+ *  given name across multiple sessions.
  * 
  *  Returns:
  *  * {@code Output}: The handle to the accumulator. */
@@ -23666,8 +24243,8 @@ limitations under the License.
     public native @ByVal Attrs Container(@StringPiece BytePointer x);
     public native @ByVal Attrs Container(@StringPiece String x);
 
-    /** If non-empty, this accumulator will be shared under the given name
-     *  across multiple sessions.
+    /** If non-empty, this accumulator will be shared under the
+     *  given name across multiple sessions.
      * 
      *  Defaults to "" */
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
@@ -23677,13 +24254,13 @@ limitations under the License.
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
   }
   public ConditionalAccumulator(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                         @ByVal TensorShape shape) { super((Pointer)null); allocate(scope, dtype, shape); }
+                         @ByVal PartialTensorShape shape) { super((Pointer)null); allocate(scope, dtype, shape); }
   private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                         @ByVal TensorShape shape);
+                         @ByVal PartialTensorShape shape);
   public ConditionalAccumulator(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                         @ByVal TensorShape shape, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, dtype, shape, attrs); }
+                         @ByVal PartialTensorShape shape, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, dtype, shape, attrs); }
   private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                         @ByVal TensorShape shape, @Const @ByRef Attrs attrs);
+                         @ByVal PartialTensorShape shape, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -23750,8 +24327,10 @@ limitations under the License.
  *      outputs[1] = [30, 40]
  *  }</pre>
  * 
+ *  See {@code dynamic_stitch} for an example on how to merge partitions back.
+ * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/DynamicPartition.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/DynamicPartition.png" alt>
  *  </div>
  * 
  *  Arguments:
@@ -23818,8 +24397,26 @@ limitations under the License.
  *                [51, 52], [61, 62]]
  *  }</pre>
  * 
+ *  This method can be used to merge partitions created by {@code dynamic_partition}
+ *  as illustrated on the following example:
+ * 
+ *  <pre>{@code python
+ *      # Apply function (increments x_i) on elements for which a certain condition
+ *      # apply (x_i != -1 in this example).
+ *      x=tf.constant([0.1, -1., 5.2, 4.3, -1., 7.4])
+ *      condition_mask=tf.not_equal(x,tf.constant(-1.))
+ *      partitioned_data = tf.dynamic_partition(
+ *          x, tf.cast(condition_mask, tf.int32) , 2)
+ *      partitioned_data[1] = partitioned_data[1] + 1.0
+ *      condition_indices = tf.dynamic_partition(
+ *          tf.range(tf.shape(x)[0]), tf.cast(condition_mask, tf.int32) , 2)
+ *      x = tf.dynamic_stitch(condition_indices, partitioned_data)
+ *      # Here x=[1.1, -1., 6.2, 5.3, -1, 8.4], the -1. values remain
+ *      # unchanged.
+ *  }</pre>
+ * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/DynamicStitch.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/DynamicStitch.png" alt>
  *  </div>
  * 
  *  Arguments:
@@ -23889,7 +24486,7 @@ limitations under the License.
      *  Defaults to [] */
     
     ///
-    public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+    public native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
 
     /** The upper bound on the number of elements in this queue.
      *  Negative numbers mean no limit.
@@ -23915,7 +24512,7 @@ limitations under the License.
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
-    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") TensorShapeVector shapes_(); public native Attrs shapes_(TensorShapeVector shapes_);
+    public native @ArraySlice PartialTensorShape shapes_(); public native Attrs shapes_(PartialTensorShape shapes_);
     public native @Cast("tensorflow::int64") long capacity_(); public native Attrs capacity_(long capacity_);
     public native @StringPiece BytePointer container_(); public native Attrs container_(BytePointer container_);
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
@@ -23928,7 +24525,7 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
-  public static native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+  public static native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
   public static native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs Container(@StringPiece BytePointer x);
   public static native @ByVal Attrs Container(@StringPiece String x);
@@ -23938,14 +24535,15 @@ limitations under the License.
   public native @ByRef Output handle(); public native FIFOQueue handle(Output handle);
 }
 
-/** DEPRECATED at GraphDef version 23:
- *  Use GetSessionHandleV2.
+/** Store the input tensor in the state of the current session.
  * 
  *  Arguments:
  *  * scope: A Scope object
+ *  * value: The tensor to be stored.
  * 
  *  Returns:
- *  * {@code Output}: The handle tensor. */
+ *  * {@code Output}: The handle for the tensor stored in the session state, represented
+ *  as a string. */
 @Namespace("tensorflow::ops") @NoOffset public static class GetSessionHandle extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -24008,27 +24606,6 @@ limitations under the License.
   public native @ByRef Output value(); public native GetSessionTensor value(Output value);
 }
 
-/** Outputs all keys and values in the table.
- * 
- *  Arguments:
- *  * scope: A Scope object
- *  * table_handle: Handle to the table.
- * 
- *  Returns:
- *  * {@code Output} keys: Vector of all keys present in the table.
- *  * {@code Output} values: Tensor of all values in the table. Indexed in parallel with {@code keys}. */
-@Namespace("tensorflow::ops") @NoOffset public static class LookupTableExport extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LookupTableExport(Pointer p) { super(p); }
-
-  public LookupTableExport(@Const @ByRef Scope scope, @ByVal Input table_handle, @Cast("tensorflow::DataType") int Tkeys, @Cast("tensorflow::DataType") int Tvalues) { super((Pointer)null); allocate(scope, table_handle, Tkeys, Tvalues); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input table_handle, @Cast("tensorflow::DataType") int Tkeys, @Cast("tensorflow::DataType") int Tvalues);
-
-  public native @ByRef Output keys(); public native LookupTableExport keys(Output keys);
-  public native @ByRef Output values(); public native LookupTableExport values(Output values);
-}
-
 /** A queue that produces elements in first-in first-out order.
  * 
  *  Variable-size shapes are allowed by setting the corresponding shape dimensions
@@ -24089,7 +24666,7 @@ limitations under the License.
      *  Defaults to [] */
     
     ///
-    public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+    public native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
 
     /** The upper bound on the number of elements in this queue.
      *  Negative numbers mean no limit.
@@ -24115,7 +24692,7 @@ limitations under the License.
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
-    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") TensorShapeVector shapes_(); public native Attrs shapes_(TensorShapeVector shapes_);
+    public native @ArraySlice PartialTensorShape shapes_(); public native Attrs shapes_(PartialTensorShape shapes_);
     public native @Cast("tensorflow::int64") long capacity_(); public native Attrs capacity_(long capacity_);
     public native @StringPiece BytePointer container_(); public native Attrs container_(BytePointer container_);
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
@@ -24128,7 +24705,7 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
-  public static native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+  public static native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
   public static native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs Container(@StringPiece BytePointer x);
   public static native @ByVal Attrs Container(@StringPiece String x);
@@ -24220,10 +24797,10 @@ limitations under the License.
     public native @StringPiece BytePointer container_(); public native Attrs container_(BytePointer container_);
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
   }
-  public PriorityQueue(@Const @ByRef Scope scope, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector shapes) { super((Pointer)null); allocate(scope, shapes); }
-  private native void allocate(@Const @ByRef Scope scope, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector shapes);
-  public PriorityQueue(@Const @ByRef Scope scope, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector shapes, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shapes, attrs); }
-  private native void allocate(@Const @ByRef Scope scope, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector shapes, @Const @ByRef Attrs attrs);
+  public PriorityQueue(@Const @ByRef Scope scope, @ArraySlice PartialTensorShape shapes) { super((Pointer)null); allocate(scope, shapes); }
+  private native void allocate(@Const @ByRef Scope scope, @ArraySlice PartialTensorShape shapes);
+  public PriorityQueue(@Const @ByRef Scope scope, @ArraySlice PartialTensorShape shapes, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shapes, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ArraySlice PartialTensorShape shapes, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -24295,20 +24872,20 @@ limitations under the License.
   public native @ByRef Operation operation(); public native QueueClose operation(Operation operation);
 }
 
-/** Dequeues n tuples of one or more tensors from the given queue.
+/** Dequeues {@code n} tuples of one or more tensors from the given queue.
  * 
- *  If the queue is closed and there are fewer than n elements, then an
+ *  If the queue is closed and there are fewer than {@code n} elements, then an
  *  OutOfRange error is returned.
  * 
  *  This operation concatenates queue-element component tensors along the
  *  0th dimension to make a single component tensor.  All of the components
- *  in the dequeued tuple will have size n in the 0th dimension.
+ *  in the dequeued tuple will have size {@code n} in the 0th dimension.
  * 
- *  This operation has k outputs, where k is the number of components in
- *  the tuples stored in the given queue, and output i is the ith
+ *  This operation has {@code k} outputs, where {@code k} is the number of components in
+ *  the tuples stored in the given queue, and output {@code i} is the ith
  *  component of the dequeued tuple.
  * 
- *  N.B. If the queue is empty, this operation will block until n elements
+ *  N.B. If the queue is empty, this operation will block until {@code n} elements
  *  have been dequeued (or 'timeout_ms' elapses, if specified).
  * 
  *  Arguments:
@@ -24371,24 +24948,24 @@ limitations under the License.
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector components(); public native QueueDequeueMany components(StringVector components);
 }
 
-/** Dequeues n tuples of one or more tensors from the given queue.
+/** Dequeues {@code n} tuples of one or more tensors from the given queue.
  * 
  *  This operation is not supported by all queues.  If a queue does not support
  *  DequeueUpTo, then an Unimplemented error is returned.
  * 
- *  If the queue is closed and there are more than 0 but less than n elements
- *  remaining, then instead of returning an OutOfRange error like
- *  QueueDequeueMany, less than {@code n} elements are returned immediately.  If the queue
- *  is closed and there are 0 elements left in the queue, then an OutOfRange
- *  error is returned just like in QueueDequeueMany.  Otherwise the behavior
- *  is identical to QueueDequeueMany:
+ *  If the queue is closed and there are more than 0 but less than {@code n}
+ *  elements remaining, then instead of returning an OutOfRange error like
+ *  QueueDequeueMany, less than {@code n} elements are returned immediately.  If
+ *  the queue is closed and there are 0 elements left in the queue, then
+ *  an OutOfRange error is returned just like in QueueDequeueMany.
+ *  Otherwise the behavior is identical to QueueDequeueMany:
  * 
  *  This operation concatenates queue-element component tensors along the
  *  0th dimension to make a single component tensor.  All of the components
  *  in the dequeued tuple will have size n in the 0th dimension.
  * 
- *  This operation has k outputs, where k is the number of components in
- *  the tuples stored in the given queue, and output i is the ith
+ *  This operation has {@code k} outputs, where {@code k} is the number of components in
+ *  the tuples stored in the given queue, and output {@code i} is the ith
  *  component of the dequeued tuple.
  * 
  *  Arguments:
@@ -24726,7 +25303,7 @@ limitations under the License.
      *  Defaults to [] */
     
     ///
-    public native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+    public native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
 
     /** The upper bound on the number of elements in this queue.
      *  Negative numbers mean no limit.
@@ -24776,7 +25353,7 @@ limitations under the License.
     public native @ByVal Attrs SharedName(@StringPiece BytePointer x);
     public native @ByVal Attrs SharedName(@StringPiece String x);
 
-    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") TensorShapeVector shapes_(); public native Attrs shapes_(TensorShapeVector shapes_);
+    public native @ArraySlice PartialTensorShape shapes_(); public native Attrs shapes_(PartialTensorShape shapes_);
     public native @Cast("tensorflow::int64") long capacity_(); public native Attrs capacity_(long capacity_);
     public native @Cast("tensorflow::int64") long min_after_dequeue_(); public native Attrs min_after_dequeue_(long min_after_dequeue_);
     public native @Cast("tensorflow::int64") long seed_(); public native Attrs seed_(long seed_);
@@ -24792,7 +25369,7 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
-  public static native @ByVal Attrs Shapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+  public static native @ByVal Attrs Shapes(@ArraySlice PartialTensorShape x);
   public static native @ByVal Attrs Capacity(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs MinAfterDequeue(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs Seed(@Cast("tensorflow::int64") long x);
@@ -24902,9 +25479,10 @@ limitations under the License.
   public native @ByRef Output records(); public native RecordInput records(Output records);
 }
 
-/** Applies a sparse gradient to a given accumulator. Does not add if local_step is
+/** Applies a sparse gradient to a given accumulator.
  * 
- *  lesser than the accumulator's global_step.
+ *  Does not add if local_step is smaller than the accumulator's
+ *  global_step.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -24935,14 +25513,14 @@ limitations under the License.
   public native @ByRef Operation operation(); public native SparseAccumulatorApplyGradient operation(Operation operation);
 }
 
-/** Extracts the average sparse gradient in the given SparseConditionalAccumulator,
+/** Extracts the average sparse gradient in a SparseConditionalAccumulator.
  * 
- *  provided that sufficient (i.e., more than num_required) gradients have been
- *  accumulated. The op will blocks until sufficient gradients have been
- *  accumulated. If the accumulator has already aggregated more than num_required
- *  gradients, it will return its average of the accumulated gradients.
- *  Also automatically increments the recorded global_step in the accumulator by 1,
- *  and resets the aggregate to 0.
+ *  The op will blocks until sufficient (i.e., more than num_required)
+ *  gradients have been accumulated. If the accumulator has already
+ *  aggregated more than num_required gradients, it will return its
+ *  average of the accumulated gradients.  Also automatically increments
+ *  the recorded global_step in the accumulator by 1, and resets the
+ *  aggregate to 0.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -24970,13 +25548,14 @@ limitations under the License.
   public native @ByRef Output shape(); public native SparseAccumulatorTakeGradient shape(Output shape);
 }
 
-/** A conditional accumulator for aggregating sparse gradients. The accumulator
+/** A conditional accumulator for aggregating sparse gradients.
  * 
- *  accepts gradients marked with local_step greater or equal to the most recent
- *  global_step known to the accumulator. The average can be extracted from the
- *  accumulator, provided sufficient gradients have been accumulated. Extracting the
- *  average automatically resets the aggregate to 0, and increments the global_step
- *  recorded by the accumulator.
+ *  The accumulator accepts gradients marked with local_step greater or
+ *  equal to the most recent global_step known to the accumulator. The
+ *  average can be extracted from the accumulator, provided sufficient
+ *  gradients have been accumulated. Extracting the average automatically
+ *  resets the aggregate to 0, and increments the global_step recorded by
+ *  the accumulator.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -25031,13 +25610,13 @@ limitations under the License.
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
   }
   public SparseConditionalAccumulator(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                               @ByVal TensorShape shape) { super((Pointer)null); allocate(scope, dtype, shape); }
+                               @ByVal PartialTensorShape shape) { super((Pointer)null); allocate(scope, dtype, shape); }
   private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                               @ByVal TensorShape shape);
+                               @ByVal PartialTensorShape shape);
   public SparseConditionalAccumulator(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                               @ByVal TensorShape shape, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, dtype, shape, attrs); }
+                               @ByVal PartialTensorShape shape, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, dtype, shape, attrs); }
   private native void allocate(@Const @ByRef Scope scope, @Cast("tensorflow::DataType") int dtype,
-                               @ByVal TensorShape shape, @Const @ByRef Attrs attrs);
+                               @ByVal PartialTensorShape shape, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -25050,10 +25629,10 @@ limitations under the License.
   public native @ByRef Output handle(); public native SparseConditionalAccumulator handle(Output handle);
 }
 
-/** Stage values similar to a lightweight Enqueue.  The basic functionality of this
+/** Stage values similar to a lightweight Enqueue.
  * 
- *  Op is similar to a queue with many fewer capabilities and options.  This Op is
- *  optimized for performance.
+ *  The basic functionality of this Op is similar to a queue with many
+ *  fewer capabilities and options.  This Op is optimized for performance.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -25118,9 +25697,10 @@ limitations under the License.
   public native @ByRef Operation operation(); public native Stage operation(Operation operation);
 }
 
-/** Delete the TensorArray from its resource container.  This enables
+/** Delete the TensorArray from its resource container.
  * 
- *  the user to close and release the resource in the middle of a step/run.
+ *  This enables the user to close and release the resource in the middle
+ *  of a step/run.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -25198,9 +25778,9 @@ limitations under the License.
      *  zero-size TensorArrays is an error.
      * 
      *  Defaults to <unknown> */
-    public native @ByVal Attrs ElementShapeExcept0(@ByVal TensorShape x);
+    public native @ByVal Attrs ElementShapeExcept0(@ByVal PartialTensorShape x);
 
-    public native @ByRef TensorShape element_shape_except0_(); public native Attrs element_shape_except0_(TensorShape element_shape_except0_);
+    public native @ByRef PartialTensorShape element_shape_except0_(); public native Attrs element_shape_except0_(PartialTensorShape element_shape_except0_);
   }
   public TensorArrayConcat(@Const @ByRef Scope scope, @ByVal Input handle,
                     @ByVal Input flow_in, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, handle, flow_in, dtype); }
@@ -25211,7 +25791,7 @@ limitations under the License.
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input handle,
                     @ByVal Input flow_in, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
 
-  public static native @ByVal Attrs ElementShapeExcept0(@ByVal TensorShape x);
+  public static native @ByVal Attrs ElementShapeExcept0(@ByVal PartialTensorShape x);
 
   public native @ByRef Output value(); public native TensorArrayConcat value(Output value);
   public native @ByRef Output lengths(); public native TensorArrayConcat lengths(Output lengths);
@@ -25261,9 +25841,9 @@ limitations under the License.
      *  fully specified, gathering zero-size TensorArrays is an error.
      * 
      *  Defaults to <unknown> */
-    public native @ByVal Attrs ElementShape(@ByVal TensorShape x);
+    public native @ByVal Attrs ElementShape(@ByVal PartialTensorShape x);
 
-    public native @ByRef TensorShape element_shape_(); public native Attrs element_shape_(TensorShape element_shape_);
+    public native @ByRef PartialTensorShape element_shape_(); public native Attrs element_shape_(PartialTensorShape element_shape_);
   }
   public TensorArrayGather(@Const @ByRef Scope scope, @ByVal Input handle,
                     @ByVal Input indices, @ByVal Input flow_in,
@@ -25281,7 +25861,7 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
-  public static native @ByVal Attrs ElementShape(@ByVal TensorShape x);
+  public static native @ByVal Attrs ElementShape(@ByVal PartialTensorShape x);
 
   public native @ByRef Output value(); public native TensorArrayGather value(Output value);
 }
@@ -25481,9 +26061,9 @@ limitations under the License.
   public native @ByRef Output flow_out(); public native TensorArraySplit flow_out(Output flow_out);
 }
 
-/** An array of Tensors of given size, with data written via Write and read
+/** An array of Tensors of given size.
  * 
- *  via Read or Pack.
+ *  Write data via Write and read via Read or Pack.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -25533,7 +26113,7 @@ limitations under the License.
      *  Defaults to <unknown> */
     
     ///
-    public native @ByVal Attrs ElementShape(@ByVal TensorShape x);
+    public native @ByVal Attrs ElementShape(@ByVal PartialTensorShape x);
 
     /** A boolean that determines whether writes to the TensorArray
      *  are allowed to grow the size.  By default, this is not allowed.
@@ -25560,7 +26140,7 @@ limitations under the License.
     public native @ByVal Attrs TensorArrayName(@StringPiece BytePointer x);
     public native @ByVal Attrs TensorArrayName(@StringPiece String x);
 
-    public native @ByRef TensorShape element_shape_(); public native Attrs element_shape_(TensorShape element_shape_);
+    public native @ByRef PartialTensorShape element_shape_(); public native Attrs element_shape_(PartialTensorShape element_shape_);
     public native @Cast("bool") boolean dynamic_size_(); public native Attrs dynamic_size_(boolean dynamic_size_);
     public native @Cast("bool") boolean clear_after_read_(); public native Attrs clear_after_read_(boolean clear_after_read_);
     public native @StringPiece BytePointer tensor_array_name_(); public native Attrs tensor_array_name_(BytePointer tensor_array_name_);
@@ -25574,7 +26154,7 @@ limitations under the License.
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input size,
               @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
 
-  public static native @ByVal Attrs ElementShape(@ByVal TensorShape x);
+  public static native @ByVal Attrs ElementShape(@ByVal PartialTensorShape x);
   public static native @ByVal Attrs DynamicSize(@Cast("bool") boolean x);
   public static native @ByVal Attrs ClearAfterRead(@Cast("bool") boolean x);
   public static native @ByVal Attrs TensorArrayName(@StringPiece BytePointer x);
@@ -25613,10 +26193,10 @@ limitations under the License.
   public native @ByRef Output flow_out(); public native TensorArrayWrite flow_out(Output flow_out);
 }
 
-/** Op is similar to a lightweight Dequeue.  The basic funtionality is similar to
+/** Op is similar to a lightweight Dequeue.
  * 
- *  dequeue with many fewer capabilities and options.  This Op is optimized for
- *  performance.
+ *  The basic funtionality is similar to dequeue with many fewer
+ *  capabilities and options.  This Op is optimized for performance.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -26040,7 +26620,10 @@ limitations under the License.
  *  GIF with frame or transparency compression are not supported
  *  convert animated GIF from compressed to uncompressed by:
  * 
- *  convert $src.gif -coalesce $dst.gif
+ *      convert $src.gif -coalesce $dst.gif
+ * 
+ *  This op also supports decoding JPEGs and PNGs, though it is cleaner to use
+ *  {@code tf.image.decode_image}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -26079,6 +26662,9 @@ limitations under the License.
  *  The attr {@code ratio} allows downscaling the image by an integer factor during
  *  decoding.  Allowed values are: 1, 2, 4, and 8.  This is much faster than
  *  downscaling the image later.
+ * 
+ *  This op also supports decoding PNGs and non-animated GIFs since the interface is
+ *  the same, though it is cleaner to use {@code tf.image.decode_image}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -26211,6 +26797,9 @@ limitations under the License.
  * 
  *  If needed, the PNG-encoded image is transformed to match the requested number
  *  of color channels.
+ * 
+ *  This op also supports decoding JPEGs and non-animated GIFs since the interface
+ *  is the same, though it is cleaner to use {@code tf.image.decode_image}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -27245,8 +27834,13 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
+ *  * record_bytes: Number of bytes in the record.
  * 
  *  Optional attributes (see {@code Attrs}):
+ *  * header_bytes: Number of bytes in the header, defaults to 0.
+ *  * footer_bytes: Number of bytes in the footer, defaults to 0.
+ *  * hop_bytes: Number of bytes to hop before each read. Default of 0 means using
+ *  record_bytes.
  *  * container: If non-empty, this reader is placed in the given container.
  *  Otherwise, a default container is used.
  *  * shared_name: If non-empty, this reader is named in the given bucket
@@ -27274,13 +27868,27 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
-    /** Defaults to 0 */
+    /** Number of bytes in the header, defaults to 0.
+     * 
+     *  Defaults to 0 */
+    
+    ///
     public native @ByVal Attrs HeaderBytes(@Cast("tensorflow::int64") long x);
 
-    /** Defaults to 0 */
+    /** Number of bytes in the footer, defaults to 0.
+     * 
+     *  Defaults to 0 */
     
     ///
     public native @ByVal Attrs FooterBytes(@Cast("tensorflow::int64") long x);
+
+    /** Number of bytes to hop before each read. Default of 0 means using
+     *  record_bytes.
+     * 
+     *  Defaults to 0 */
+    
+    ///
+    public native @ByVal Attrs HopBytes(@Cast("tensorflow::int64") long x);
 
     /** If non-empty, this reader is placed in the given container.
      *  Otherwise, a default container is used.
@@ -27300,6 +27908,7 @@ limitations under the License.
 
     public native @Cast("tensorflow::int64") long header_bytes_(); public native Attrs header_bytes_(long header_bytes_);
     public native @Cast("tensorflow::int64") long footer_bytes_(); public native Attrs footer_bytes_(long footer_bytes_);
+    public native @Cast("tensorflow::int64") long hop_bytes_(); public native Attrs hop_bytes_(long hop_bytes_);
     public native @StringPiece BytePointer container_(); public native Attrs container_(BytePointer container_);
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
   }
@@ -27315,6 +27924,7 @@ limitations under the License.
 
   public static native @ByVal Attrs HeaderBytes(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs FooterBytes(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs HopBytes(@Cast("tensorflow::int64") long x);
   public static native @ByVal Attrs Container(@StringPiece BytePointer x);
   public static native @ByVal Attrs Container(@StringPiece String x);
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
@@ -29724,6 +30334,8 @@ limitations under the License.
 
 /** Returns the index with the largest value across dimensions of a tensor.
  * 
+ *  Note that in case of ties the identity of the return value is not guaranteed.
+ * 
  *  Arguments:
  *  * scope: A Scope object
  *  * dimension: int32, 0 <= dimension < rank(input).  Describes which dimension
@@ -29748,6 +30360,8 @@ limitations under the License.
 }
 
 /** Returns the index with the smallest value across dimensions of a tensor.
+ * 
+ *  Note that in case of ties the identity of the return value is not guaranteed.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -29814,6 +30428,35 @@ limitations under the License.
   public native @ByRef Output y(); public native Atan y(Output y);
 }
 
+/** Computes arctangent of {@code y/x} element-wise, respecting signs of the arguments.
+ * 
+ *  This is the angle \( \theta \in [-\pi, \pi] \) such that
+ *  \[ x = r \cos(\theta) \]
+ *  and
+ *  \[ y = r \sin(\theta) \]
+ *  where \(r = \sqrt(x^2 + y^2) \).
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ * 
+ *  Returns:
+ *  * {@code Output}: The z tensor. */
+@Namespace("tensorflow::ops") @NoOffset public static class Atan2 extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Atan2(Pointer p) { super(p); }
+
+  public Atan2(@Const @ByRef Scope scope, @ByVal Input y,
+        @ByVal Input x) { super((Pointer)null); allocate(scope, y, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input y,
+        @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native Atan2 z(Output z);
+}
+
 /** Multiplies slices of two tensors in batches.
  * 
  *  Multiplies all slices of {@code Tensor} {@code x} and {@code y} (each slice can be
@@ -29823,10 +30466,10 @@ limitations under the License.
  *  means to transpose and conjugate it) before multiplication by setting
  *  the {@code adj_x} or {@code adj_y} flag to {@code True}, which are by default {@code False}.
  * 
- *  The input tensors {@code x} and {@code y} are 3-D or higher with shape {@code [..., r_x, c_x]}
+ *  The input tensors {@code x} and {@code y} are 2-D or higher with shape {@code [..., r_x, c_x]}
  *  and {@code [..., r_y, c_y]}.
  * 
- *  The output tensor is 3-D or higher with shape {@code [..., r_o, c_o]}, where:
+ *  The output tensor is 2-D or higher with shape {@code [..., r_o, c_o]}, where:
  * 
  *      r_o = c_x if adj_x else r_x
  *      c_o = r_y if adj_y else c_y
@@ -29837,8 +30480,8 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * x: 3-D or higher with shape {@code [..., r_x, c_x]}.
- *  * y: 3-D or higher with shape {@code [..., r_y, c_y]}.
+ *  * x: 2-D or higher with shape {@code [..., r_x, c_x]}.
+ *  * y: 2-D or higher with shape {@code [..., r_y, c_y]}.
  * 
  *  Optional attributes (see {@code Attrs}):
  *  * adj_x: If {@code True}, adjoint the slices of {@code x}. Defaults to {@code False}.
@@ -29903,14 +30546,14 @@ limitations under the License.
  * 
  *  The regularized incomplete beta integral is defined as:
  * 
- *  <pre>{@code
- *  I_x(a, b) = \frac{B(x; a, b)}{B(a, b)}
- *  }</pre>
+ * 
+ *  \\(I_x(a, b) = \frac{B(x; a, b)}{B(a, b)}\\)
+ * 
  *  where
  * 
- *  <pre>{@code
- *  B(x; a, b) = \int_0^x t^{a-1} (1 - t)^{b-1} dt
- *  }</pre>
+ * 
+ *  \\(B(x; a, b) = \int_0^x t^{a-1} (1 - t)^{b-1} dt\\)
+ * 
  * 
  *  is the incomplete beta function and \\(B(a, b)\\) is the *complete*
  *  beta function.
@@ -29971,6 +30614,48 @@ limitations under the License.
   public native Node node();
 
   public native @ByRef Output bins(); public native Bincount bins(Output bins);
+}
+
+/** Bucketizes 'input' based on 'boundaries'.
+ * 
+ *  For example, if the inputs are
+ *      boundaries = [0, 10, 100]
+ *      input = [[-5, 10000]
+ *               [150,   10]
+ *               [5,    100]]
+ * 
+ *  then the output will be
+ *      output = [[0, 3]
+ *                [3, 2]
+ *                [1, 3]]
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * input: Any shape of Tensor contains with int or float type.
+ *  * boundaries: A sorted list of floats gives the boundary of the buckets.
+ * 
+ *  Returns:
+ *  * {@code Output}: Same shape with 'input', each value of input replaced with bucket index.
+ * 
+ *  \compatibility(numpy)
+ *  Equivalent to np.digitize.
+ *  \end_compatibility */
+@Namespace("tensorflow::ops") @NoOffset public static class Bucketize extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Bucketize(Pointer p) { super(p); }
+
+  public Bucketize(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice FloatPointer boundaries) { super((Pointer)null); allocate(scope, input, boundaries); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice FloatPointer boundaries);
+  public Bucketize(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice FloatBuffer boundaries) { super((Pointer)null); allocate(scope, input, boundaries); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice FloatBuffer boundaries);
+  public Bucketize(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice float... boundaries) { super((Pointer)null); allocate(scope, input, boundaries); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice float... boundaries);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native Bucketize output(Output output);
 }
 
 /** Cast x of type SrcT to y of DstT.
@@ -30663,13 +31348,13 @@ limitations under the License.
  * 
  *  The lower regularized incomplete Gamma function is defined as:
  * 
- *  <pre>{@code
- *  P(a, x) = gamma(a, x) / Gamma(a) = 1 - Q(a, x)
- *  }</pre>
+ * 
+ *  \\(P(a, x) = gamma(a, x) / Gamma(a) = 1 - Q(a, x)\\)
+ * 
  *  where
- *  <pre>{@code
- *  gamma(a, x) = int_{0}^{x} t^{a-1} exp(-t) dt
- *  }</pre>
+ * 
+ *  \\(gamma(a, x) = int_{0}^{x} t^{a-1} exp(-t) dt\\)
+ * 
  *  is the lower incomplete Gamma function.
  * 
  *  Note, above {@code Q(a, x)} ({@code Igammac}) is the upper regularized complete
@@ -30700,13 +31385,12 @@ limitations under the License.
  * 
  *  The upper regularized incomplete Gamma function is defined as:
  * 
- *  <pre>{@code
- *  Q(a, x) = Gamma(a, x) / Gamma(a) = 1 - P(a, x)
- *  }</pre>
+ *  \\(Q(a, x) = Gamma(a, x) / Gamma(a) = 1 - P(a, x)\\)
+ * 
  *  where
- *  <pre>{@code
- *  Gamma(a, x) = int_{x}^{\infty} t^{a-1} exp(-t) dt
- *  }</pre>
+ * 
+ *  \\(Gamma(a, x) = int_{x}^{\infty} t^{a-1} exp(-t) dt\\)
+ * 
  *  is the upper incomplete Gama function.
  * 
  *  Note, above {@code P(a, x)} ({@code Igamma}) is the lower regularized complete
@@ -31423,7 +32107,10 @@ limitations under the License.
   public native @ByRef Output z(); public native Minimum z(Output z);
 }
 
-/** Returns element-wise remainder of division.
+/** Returns element-wise remainder of division. This emulates C semantics in that
+ * 
+ *  the result here is consistent with a truncating divide. E.g. {@code truncate(x / y) *
+ *  y + truncate_mod(x, y) = x}.
  * 
  *  *NOTE*: {@code Mod} supports broadcasting. More about broadcasting
  *  [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
@@ -31543,9 +32230,9 @@ limitations under the License.
  * 
  *  The polygamma function is defined as:
  * 
- *  <pre>{@code
- *  \psi^{(n)}(x) = \frac{d^n}{dx^n} \psi(x)
- *  }</pre>
+ * 
+ *  \\(\psi^{(n)}(x) = \frac{d^n}{dx^n} \psi(x)\\)
+ * 
  *  where \\(\psi(x)\\) is the digamma function.
  * 
  *  Arguments:
@@ -33000,12 +33687,12 @@ limitations under the License.
   public native @ByRef Output z(); public native TruncateDiv z(Output z);
 }
 
-/** Returns element-wise remainder of division. This emulates C semantics where
+/** Returns element-wise remainder of division. This emulates C semantics in that
  * 
- *  true, this follows C semantics in that the result here is consistent
- *  with a flooring divide. E.g. {@code floor(x / y) * y + mod(x, y) = x}.
+ *  the result here is consistent with a truncating divide. E.g. {@code truncate(x / y) *
+ *  y + truncate_mod(x, y) = x}.
  * 
- *  *NOTE*: {@code Mod} supports broadcasting. More about broadcasting
+ *  *NOTE*: {@code TruncateMod} supports broadcasting. More about broadcasting
  *  [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
  * 
  *  Arguments:
@@ -33119,9 +33806,8 @@ limitations under the License.
  * 
  *  The Hurwitz zeta function is defined as:
  * 
- *  <pre>{@code
- *  \zeta(x, q) = \sum_{n=0}^{\infty} (q + n)^{-x}
- *  }</pre>
+ * 
+ *  \\(\zeta(x, q) = \sum_{n=0}^{\infty} (q + n)^{-x}\\)
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -33293,6 +33979,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The average pooled output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class AvgPool3D extends Pointer {
@@ -33300,6 +33993,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AvgPool3D(Pointer p) { super(p); }
 
+  /** Optional attribute setters for AvgPool3D */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
             @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, ksize, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
@@ -33324,9 +34044,36 @@ limitations under the License.
             @StringPiece String padding) { super((Pointer)null); allocate(scope, input, ksize, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
             @StringPiece String padding);
+  public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public AvgPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
 
   public native @ByRef Output output(); public native AvgPool3D output(Output output);
 }
@@ -33343,6 +34090,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The backprop for input. */
 @Namespace("tensorflow::ops") @NoOffset public static class AvgPool3DGrad extends Pointer {
@@ -33350,6 +34104,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AvgPool3DGrad(Pointer p) { super(p); }
 
+  /** Optional attribute setters for AvgPool3DGrad */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
                 @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
@@ -33374,9 +34155,36 @@ limitations under the License.
                 @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
                 @StringPiece String padding);
+  public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public AvgPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input_shape, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input_shape, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
 
   public native @ByRef Output output(); public native AvgPool3DGrad output(Output output);
 }
@@ -33953,6 +34761,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class Conv3D extends Pointer {
@@ -33960,6 +34775,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv3D(Pointer p) { super(p); }
 
+  /** Optional attribute setters for Conv3D */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
          @ByVal Input filter, @ArraySlice IntPointer strides,
          @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, filter, strides, padding); }
@@ -33996,9 +34838,48 @@ limitations under the License.
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
          @ByVal Input filter, @ArraySlice int[] strides,
          @StringPiece String padding);
+  public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntPointer strides,
+         @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntPointer strides,
+         @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntBuffer strides,
+         @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntBuffer strides,
+         @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice int[] strides,
+         @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice int[] strides,
+         @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntPointer strides,
+         @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntPointer strides,
+         @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntBuffer strides,
+         @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice IntBuffer strides,
+         @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public Conv3D(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice int[] strides,
+         @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+         @ByVal Input filter, @ArraySlice int[] strides,
+         @StringPiece String padding, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
 
   public native @ByRef Output output(); public native Conv3D output(Output output);
 }
@@ -34018,6 +34899,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class Conv3DBackpropFilterV2 extends Pointer {
@@ -34025,6 +34913,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv3DBackpropFilterV2(Pointer p) { super(p); }
 
+  /** Optional attribute setters for Conv3DBackpropFilterV2 */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
                          @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
@@ -34049,9 +34964,48 @@ limitations under the License.
                          @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
                          @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding);
+  public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece BytePointer padding,
+                         @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece BytePointer padding,
+                         @Const @ByRef Attrs attrs);
+  public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece String padding,
+                         @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece String padding,
+                         @Const @ByRef Attrs attrs);
+  public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece BytePointer padding,
+                         @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece BytePointer padding,
+                         @Const @ByRef Attrs attrs);
+  public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece String padding,
+                         @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece String padding,
+                         @Const @ByRef Attrs attrs);
+  public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding,
+                         @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding,
+                         @Const @ByRef Attrs attrs);
+  public Conv3DBackpropFilterV2(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding,
+                         @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, filter_sizes, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter_sizes,
+                         @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding,
+                         @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
 
   public native @ByRef Output output(); public native Conv3DBackpropFilterV2 output(Output output);
 }
@@ -34071,6 +35025,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class Conv3DBackpropInputV2 extends Pointer {
@@ -34078,6 +35039,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv3DBackpropInputV2(Pointer p) { super(p); }
 
+  /** Optional attribute setters for Conv3DBackpropInputV2 */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
                         @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
@@ -34102,9 +35090,36 @@ limitations under the License.
                         @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
                         @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding);
+  public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public Conv3DBackpropInputV2(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input_sizes, filter, out_backprop, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input_sizes, @ByVal Input filter,
+                        @ByVal Input out_backprop, @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
 
   public native @ByRef Output output(); public native Conv3DBackpropInputV2 output(Output output);
 }
@@ -35800,6 +36815,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The max pooled output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class MaxPool3D extends Pointer {
@@ -35807,6 +36829,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxPool3D(Pointer p) { super(p); }
 
+  /** Optional attribute setters for MaxPool3D */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
             @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, ksize, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
@@ -35831,9 +36880,36 @@ limitations under the License.
             @StringPiece String padding) { super((Pointer)null); allocate(scope, input, ksize, strides, padding); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
             @StringPiece String padding);
+  public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+            @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPool3D(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+            @StringPiece String padding, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
 
   public native @ByRef Output output(); public native MaxPool3D output(Output output);
 }
@@ -35851,6 +36927,13 @@ limitations under the License.
  *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
  *  * padding: The type of padding algorithm to use.
  * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
  *  Returns:
  *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class MaxPool3DGrad extends Pointer {
@@ -35858,6 +36941,33 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxPool3DGrad(Pointer p) { super(p); }
 
+  /** Optional attribute setters for MaxPool3DGrad */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
   public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
                 @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
                 @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
@@ -35894,11 +37004,372 @@ limitations under the License.
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
                 @ByVal Input orig_output, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
                 @StringPiece String padding);
+  public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPool3DGrad(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input,
+                @ByVal Input orig_output, @ByVal Input grad, @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                @StringPiece String padding, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
+
   public native @ByRef Output output(); public native MaxPool3DGrad output(Output output);
+}
+
+/** Computes second-order gradients of the maxpooling function.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * orig_input: The original input tensor.
+ *  * orig_output: The original output tensor.
+ *  * grad: Output backprop of shape {@code [batch, depth, rows, cols, channels]}.
+ *  * ksize: 1-D tensor of length 5. The size of the window for each dimension of
+ *  the input tensor. Must have {@code ksize[0] = ksize[4] = 1}.
+ *  * strides: 1-D tensor of length 5. The stride of the sliding window for each
+ *  dimension of {@code input}. Must have {@code strides[0] = strides[4] = 1}.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: The data format of the input and output data. With the
+ *  default format "NDHWC", the data is stored in the order of:
+ *      [batch, in_depth, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCDHW", the data storage order is:
+ *      [batch, in_channels, in_depth, in_height, in_width].
+ * 
+ *  Returns:
+ *  * {@code Output}: Gradients of gradients w.r.t. the input to {@code max_pool}. */
+@Namespace("tensorflow::ops") @NoOffset public static class MaxPool3DGradGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MaxPool3DGradGrad(Pointer p) { super(p); }
+
+  /** Optional attribute setters for MaxPool3DGradGrad */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** The data format of the input and output data. With the
+     *  default format "NDHWC", the data is stored in the order of:
+     *      [batch, in_depth, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCDHW", the data storage order is:
+     *      [batch, in_channels, in_depth, in_height, in_width].
+     * 
+     *  Defaults to "NDHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece BytePointer padding);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece String padding);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece BytePointer padding);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece String padding);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece BytePointer padding);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece String padding);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece BytePointer padding,
+                    @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece BytePointer padding,
+                    @Const @ByRef Attrs attrs);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece String padding,
+                    @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece String padding,
+                    @Const @ByRef Attrs attrs);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece BytePointer padding,
+                    @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece BytePointer padding,
+                    @Const @ByRef Attrs attrs);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece String padding,
+                    @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntPointer ksize,
+                    @ArraySlice IntPointer strides, @StringPiece String padding,
+                    @Const @ByRef Attrs attrs);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece BytePointer padding,
+                    @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                    @ArraySlice IntBuffer strides, @StringPiece BytePointer padding,
+                    @Const @ByRef Attrs attrs);
+  public MaxPool3DGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece String padding,
+                    @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                    @ByVal Input grad, @ArraySlice int[] ksize,
+                    @ArraySlice int[] strides, @StringPiece String padding,
+                    @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
+
+  public native @ByRef Output output(); public native MaxPool3DGradGrad output(Output output);
+}
+
+/** Computes second-order gradients of the maxpooling function.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * orig_input: The original input tensor.
+ *  * orig_output: The original output tensor.
+ *  * grad: 4-D.  Gradients of gradients w.r.t. the input of {@code max_pool}.
+ *  * ksize: The size of the window for each dimension of the input tensor.
+ *  * strides: The stride of the sliding window for each dimension of the
+ *  input tensor.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * data_format: Specify the data format of the input and output data. With the
+ *  default format "NHWC", the data is stored in the order of:
+ *      [batch, in_height, in_width, in_channels].
+ *  Alternatively, the format could be "NCHW", the data storage order of:
+ *      [batch, in_channels, in_height, in_width].
+ * 
+ *  Returns:
+ *  * {@code Output}: Gradients of gradients w.r.t. the input to {@code max_pool}. */
+@Namespace("tensorflow::ops") @NoOffset public static class MaxPoolGradGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MaxPoolGradGrad(Pointer p) { super(p); }
+
+  /** Optional attribute setters for MaxPoolGradGrad */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Specify the data format of the input and output data. With the
+     *  default format "NHWC", the data is stored in the order of:
+     *      [batch, in_height, in_width, in_channels].
+     *  Alternatively, the format could be "NCHW", the data storage order of:
+     *      [batch, in_channels, in_height, in_width].
+     * 
+     *  Defaults to "NHWC" */
+    public native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+    public native @ByVal Attrs DataFormat(@StringPiece String x);
+
+    public native @StringPiece BytePointer data_format_(); public native Attrs data_format_(BytePointer data_format_);
+  }
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece BytePointer padding);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece String padding);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece BytePointer padding);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece String padding);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece BytePointer padding);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece String padding);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntPointer ksize,
+                  @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice IntBuffer ksize,
+                  @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef Attrs attrs);
+  public MaxPoolGradGrad(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, orig_input, orig_output, grad, ksize, strides, padding, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input orig_input, @ByVal Input orig_output,
+                  @ByVal Input grad, @ArraySlice int[] ksize,
+                  @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs DataFormat(@StringPiece BytePointer x);
+  public static native @ByVal Attrs DataFormat(@StringPiece String x);
+
+  public native @ByRef Output output(); public native MaxPoolGradGrad output(Output output);
+}
+
+/** Computes second-order gradients of the maxpooling function.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * input: The original input.
+ *  * grad: 4-D with shape {@code [batch, height, width, channels]}.  Gradients w.r.t. the
+ *  input of {@code max_pool}.
+ *  * argmax: The indices of the maximum values chosen for each output of {@code max_pool}.
+ *  * ksize: The size of the window for each dimension of the input tensor.
+ *  * strides: The stride of the sliding window for each dimension of the
+ *  input tensor.
+ *  * padding: The type of padding algorithm to use.
+ * 
+ *  Returns:
+ *  * {@code Output}: Gradients of gradients w.r.t. the input of {@code max_pool}. */
+@Namespace("tensorflow::ops") @NoOffset public static class MaxPoolGradGradWithArgmax extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MaxPoolGradGradWithArgmax(Pointer p) { super(p); }
+
+  public MaxPoolGradGradWithArgmax(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, grad, argmax, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece BytePointer padding);
+  public MaxPoolGradGradWithArgmax(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, input, grad, argmax, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece String padding);
+  public MaxPoolGradGradWithArgmax(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, grad, argmax, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece BytePointer padding);
+  public MaxPoolGradGradWithArgmax(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, input, grad, argmax, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece String padding);
+  public MaxPoolGradGradWithArgmax(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding) { super((Pointer)null); allocate(scope, input, grad, argmax, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding);
+  public MaxPoolGradGradWithArgmax(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece String padding) { super((Pointer)null); allocate(scope, input, grad, argmax, ksize, strides, padding); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input grad, @ByVal Input argmax, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece String padding);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native MaxPoolGradGradWithArgmax output(Output output);
 }
 
 /** Performs max pooling on the input and outputs both max values and indices.
@@ -37075,10 +38546,10 @@ limitations under the License.
 
   public ParseExample(@Const @ByRef Scope scope, @ByVal Input serialized,
                @ByVal Input names, @ByVal InputList sparse_keys,
-               @ByVal InputList dense_keys, @ByVal InputList dense_defaults, @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector sparse_types, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector dense_shapes) { super((Pointer)null); allocate(scope, serialized, names, sparse_keys, dense_keys, dense_defaults, sparse_types, dense_shapes); }
+               @ByVal InputList dense_keys, @ByVal InputList dense_defaults, @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector sparse_types, @ArraySlice PartialTensorShape dense_shapes) { super((Pointer)null); allocate(scope, serialized, names, sparse_keys, dense_keys, dense_defaults, sparse_types, dense_shapes); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input serialized,
                @ByVal Input names, @ByVal InputList sparse_keys,
-               @ByVal InputList dense_keys, @ByVal InputList dense_defaults, @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector sparse_types, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector dense_shapes);
+               @ByVal InputList dense_keys, @ByVal InputList dense_defaults, @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector sparse_types, @ArraySlice PartialTensorShape dense_shapes);
 
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector sparse_indices(); public native ParseExample sparse_indices(StringVector sparse_indices);
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector sparse_values(); public native ParseExample sparse_values(StringVector sparse_values);
@@ -37192,7 +38663,7 @@ limitations under the License.
      *  Defaults to [] */
     
     ///
-    public native @ByVal Attrs ContextDenseShapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+    public native @ByVal Attrs ContextDenseShapes(@ArraySlice PartialTensorShape x);
 
     /** A list of Nfeature_list_sparse types; the data types
      *  of data in each FeatureList given in feature_list_sparse_keys.
@@ -37211,13 +38682,13 @@ limitations under the License.
      *  feature_list_dense_shapes[j].NumEntries().
      * 
      *  Defaults to [] */
-    public native @ByVal Attrs FeatureListDenseShapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+    public native @ByVal Attrs FeatureListDenseShapes(@ArraySlice PartialTensorShape x);
 
     public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector context_sparse_types_(); public native Attrs context_sparse_types_(DataTypeVector context_sparse_types_);
     public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector feature_list_dense_types_(); public native Attrs feature_list_dense_types_(DataTypeVector feature_list_dense_types_);
-    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") TensorShapeVector context_dense_shapes_(); public native Attrs context_dense_shapes_(TensorShapeVector context_dense_shapes_);
+    public native @ArraySlice PartialTensorShape context_dense_shapes_(); public native Attrs context_dense_shapes_(PartialTensorShape context_dense_shapes_);
     public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector feature_list_sparse_types_(); public native Attrs feature_list_sparse_types_(DataTypeVector feature_list_sparse_types_);
-    public native @ByRef @Cast("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") TensorShapeVector feature_list_dense_shapes_(); public native Attrs feature_list_dense_shapes_(TensorShapeVector feature_list_dense_shapes_);
+    public native @ArraySlice PartialTensorShape feature_list_dense_shapes_(); public native Attrs feature_list_dense_shapes_(PartialTensorShape feature_list_dense_shapes_);
   }
   public ParseSingleSequenceExample(@Const @ByRef Scope scope,
                              @ByVal Input serialized, @ByVal Input feature_list_dense_missing_assumed_empty,
@@ -37254,9 +38725,9 @@ limitations under the License.
 
   public static native @ByVal Attrs ContextSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
   public static native @ByVal Attrs FeatureListDenseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
-  public static native @ByVal Attrs ContextDenseShapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+  public static native @ByVal Attrs ContextDenseShapes(@ArraySlice PartialTensorShape x);
   public static native @ByVal Attrs FeatureListSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
-  public static native @ByVal Attrs FeatureListDenseShapes(@Cast("const tensorflow::gtl::ArraySlice<tensorflow::TensorShape>*") @ByRef TensorShapeVector x);
+  public static native @ByVal Attrs FeatureListDenseShapes(@ArraySlice PartialTensorShape x);
 
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector context_sparse_indices(); public native ParseSingleSequenceExample context_sparse_indices(StringVector context_sparse_indices);
   public native @ByRef @Cast("tensorflow::OutputList*") StringVector context_sparse_values(); public native ParseSingleSequenceExample context_sparse_values(StringVector context_sparse_values);
@@ -38566,6 +40037,80 @@ limitations under the License.
   public native @ByRef Output output_shape(); public native SparseConcat output_shape(Output output_shape);
 }
 
+/** Generates sparse cross from a list of sparse and dense tensors.
+ * 
+ *  The op takes two lists, one of 2D {@code SparseTensor} and one of 2D {@code Tensor}, each
+ *  representing features of one feature column. It outputs a 2D {@code SparseTensor} with
+ *  the batchwise crosses of these features.
+ * 
+ *  For example, if the inputs are
+ * 
+ *      inputs[0]: SparseTensor with shape = [2, 2]
+ *      [0, 0]: "a"
+ *      [1, 0]: "b"
+ *      [1, 1]: "c"
+ * 
+ *      inputs[1]: SparseTensor with shape = [2, 1]
+ *      [0, 0]: "d"
+ *      [1, 0]: "e"
+ * 
+ *      inputs[2]: Tensor [["f"], ["g"]]
+ * 
+ *  then the output will be
+ * 
+ *      shape = [2, 2]
+ *      [0, 0]: "a_X_d_X_f"
+ *      [1, 0]: "b_X_e_X_g"
+ *      [1, 1]: "c_X_e_X_g"
+ * 
+ *  if hashed_output=true then the output will be
+ * 
+ *      shape = [2, 2]
+ *      [0, 0]: FingerprintCat64(
+ *                  Fingerprint64("f"), FingerprintCat64(
+ *                      Fingerprint64("d"), Fingerprint64("a")))
+ *      [1, 0]: FingerprintCat64(
+ *                  Fingerprint64("g"), FingerprintCat64(
+ *                      Fingerprint64("e"), Fingerprint64("b")))
+ *      [1, 1]: FingerprintCat64(
+ *                  Fingerprint64("g"), FingerprintCat64(
+ *                      Fingerprint64("e"), Fingerprint64("c")))
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * indices: 2-D.  Indices of each input {@code SparseTensor}.
+ *  * values: 1-D.   values of each {@code SparseTensor}.
+ *  * shapes: 1-D.   Shapes of each {@code SparseTensor}.
+ *  * dense_inputs: 2-D.    Columns represented by dense {@code Tensor}.
+ *  * hashed_output: If true, returns the hash of the cross instead of the string.
+ *  This will allow us avoiding string manipulations.
+ *  * num_buckets: It is used if hashed_output is true.
+ *  output = hashed_value%num_buckets if num_buckets > 0 else hashed_value.
+ *  * hash_key: Specify the hash_key that will be used by the {@code FingerprintCat64}
+ *  function to combine the crosses fingerprints.
+ * 
+ *  Returns:
+ *  * {@code Output} output_indices: 2-D.  Indices of the concatenated {@code SparseTensor}.
+ *  * {@code Output} output_values: 1-D.  Non-empty values of the concatenated or hashed
+ *  {@code SparseTensor}.
+ *  * {@code Output} output_shape: 1-D.  Shape of the concatenated {@code SparseTensor}. */
+@Namespace("tensorflow::ops") @NoOffset public static class SparseCross extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseCross(Pointer p) { super(p); }
+
+  public SparseCross(@Const @ByRef Scope scope, @ByVal InputList indices,
+              @ByVal InputList values, @ByVal InputList shapes,
+              @ByVal InputList dense_inputs, @Cast("bool") boolean hashed_output, @Cast("tensorflow::int64") long num_buckets, @Cast("tensorflow::int64") long hash_key, @Cast("tensorflow::DataType") int out_type, @Cast("tensorflow::DataType") int internal_type) { super((Pointer)null); allocate(scope, indices, values, shapes, dense_inputs, hashed_output, num_buckets, hash_key, out_type, internal_type); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal InputList indices,
+              @ByVal InputList values, @ByVal InputList shapes,
+              @ByVal InputList dense_inputs, @Cast("bool") boolean hashed_output, @Cast("tensorflow::int64") long num_buckets, @Cast("tensorflow::int64") long hash_key, @Cast("tensorflow::DataType") int out_type, @Cast("tensorflow::DataType") int internal_type);
+
+  public native @ByRef Output output_indices(); public native SparseCross output_indices(Output output_indices);
+  public native @ByRef Output output_values(); public native SparseCross output_values(Output output_values);
+  public native @ByRef Output output_shape(); public native SparseCross output_shape(Output output_shape);
+}
+
 /** Adds up a SparseTensor and a dense Tensor, using these special rules:
  * 
  *  (1) Broadcasts the dense side to have the same shape as the sparse side, if
@@ -39712,7 +41257,7 @@ limitations under the License.
  *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/ScatterAdd.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt>
  *  </div>
  * 
  *  Arguments:
@@ -39777,6 +41322,7 @@ limitations under the License.
  * 
  *  This operation computes
  * 
+ *  <pre>{@code python
  *      # Scalar indices
  *      ref[indices, ...] /= updates[...]
  * 
@@ -39785,6 +41331,7 @@ limitations under the License.
  * 
  *      # High rank indices (for each i, ..., j)
  *      ref[indices[i, ..., j], ...] /= updates[i, ..., j, ...]
+ *  }</pre>
  * 
  *  This operation outputs {@code ref} after the update is done.
  *  This makes it easier to chain operations that need to use the reset value.
@@ -39856,6 +41403,7 @@ limitations under the License.
  * 
  *  This operation computes
  * 
+ *  <pre>{@code python
  *      # Scalar indices
  *      ref[indices, ...] *= updates[...]
  * 
@@ -39864,6 +41412,7 @@ limitations under the License.
  * 
  *      # High rank indices (for each i, ..., j)
  *      ref[indices[i, ..., j], ...] *= updates[i, ..., j, ...]
+ *  }</pre>
  * 
  *  This operation outputs {@code ref} after the update is done.
  *  This makes it easier to chain operations that need to use the reset value.
@@ -40149,12 +41698,14 @@ limitations under the License.
  *  For example, say we want to update 4 scattered elements to a rank-1 tensor to
  *  8 elements. In Python, that update would look like this:
  * 
+ *  <pre>{@code python
  *      ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
  *      indices = tf.constant([[4], [3], [1] ,[7]])
  *      updates = tf.constant([9, 10, 11, 12])
  *      update = tf.scatter_nd_update(ref, indices, updates)
  *      with tf.Session() as sess:
  *        print sess.run(update)
+ *  }</pre>
  * 
  *  The resulting update to ref would look like this:
  * 
@@ -40227,6 +41778,7 @@ limitations under the License.
 
 /** Subtracts sparse updates to a variable reference.
  * 
+ *  <pre>{@code python
  *      # Scalar indices
  *      ref[indices, ...] -= updates[...]
  * 
@@ -40235,6 +41787,7 @@ limitations under the License.
  * 
  *      # High rank indices (for each i, ..., j)
  *      ref[indices[i, ..., j], ...] -= updates[i, ..., j, ...]
+ *  }</pre>
  * 
  *  This operation outputs {@code ref} after the update is done.
  *  This makes it easier to chain operations that need to use the reset value.
@@ -40245,7 +41798,7 @@ limitations under the License.
  *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/ScatterSub.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterSub.png" alt>
  *  </div>
  * 
  *  Arguments:
@@ -40310,6 +41863,7 @@ limitations under the License.
  * 
  *  This operation computes
  * 
+ *  <pre>{@code python
  *      # Scalar indices
  *      ref[indices, ...] = updates[...]
  * 
@@ -40318,6 +41872,7 @@ limitations under the License.
  * 
  *      # High rank indices (for each i, ..., j)
  *      ref[indices[i, ..., j], ...] = updates[i, ..., j, ...]
+ *  }</pre>
  * 
  *  This operation outputs {@code ref} after the update is done.
  *  This makes it easier to chain operations that need to use the reset value.
@@ -40329,7 +41884,7 @@ limitations under the License.
  *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
- *  <img style="width:100%" src="../../images/ScatterUpdate.png" alt>
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterUpdate.png" alt>
  *  </div>
  * 
  *  Arguments:
@@ -40447,10 +42002,14 @@ limitations under the License.
 
     public native @StringPiece BytePointer var_name_(); public native Attrs var_name_(BytePointer var_name_);
   }
-  public TemporaryVariable(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, shape, dtype); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype);
-  public TemporaryVariable(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shape, dtype, attrs); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
+  public TemporaryVariable(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape,
+                    @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, shape, dtype); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape,
+                    @Cast("tensorflow::DataType") int dtype);
+  public TemporaryVariable(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape,
+                    @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shape, dtype, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape,
+                    @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -40519,12 +42078,10 @@ limitations under the License.
     public native @StringPiece BytePointer container_(); public native Attrs container_(BytePointer container_);
     public native @StringPiece BytePointer shared_name_(); public native Attrs shared_name_(BytePointer shared_name_);
   }
-  public Variable(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, shape, dtype); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype);
-  public Variable(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype,
-           @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shape, dtype, attrs); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype,
-           @Const @ByRef Attrs attrs);
+  public Variable(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, shape, dtype); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape, @Cast("tensorflow::DataType") int dtype);
+  public Variable(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shape, dtype, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal PartialTensorShape shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
@@ -40760,7 +42317,7 @@ limitations under the License.
  * 
  *  For example:
  * 
- *  <pre>{@code
+ *  <pre>{@code python
  *  # tensor `a` is [["a", "b"], ["c", "d"]]
  *  tf.reduce_join(a, 0) ==> ["ac", "bd"]
  *  tf.reduce_join(a, 1) ==> ["ab", "cd"]
@@ -41074,7 +42631,7 @@ limitations under the License.
  * 
  *  Using scalar {@code pos} and {@code len}:
  * 
- *  <pre>{@code
+ *  <pre>{@code python
  *  input = [b'Hello', b'World']
  *  position = 1
  *  length = 3
@@ -41084,7 +42641,7 @@ limitations under the License.
  * 
  *  Using {@code pos} and {@code len} with same shape as {@code input}:
  * 
- *  <pre>{@code
+ *  <pre>{@code python
  *  input = [[b'ten', b'eleven', b'twelve'],
  *           [b'thirteen', b'fourteen', b'fifteen'],
  *           [b'sixteen', b'seventeen', b'eighteen']]
@@ -41418,6 +42975,7 @@ limitations under the License.
  *  * use_locking: If {@code True}, updating of the var, m, and v tensors will be protected
  *  by a lock; otherwise the behavior is undefined, but may exhibit less
  *  contention.
+ *  * use_nesterov: If {@code True}, uses the nesterov update.
  * 
  *  Returns:
  *  * {@code Output}: Same as "var". */
@@ -41446,9 +43004,17 @@ limitations under the License.
      *  contention.
      * 
      *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
+    /** If {@code True}, uses the nesterov update.
+     * 
+     *  Defaults to false */
+    public native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
+
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
+    public native @Cast("bool") boolean use_nesterov_(); public native Attrs use_nesterov_(boolean use_nesterov_);
   }
   public ApplyAdam(@Const @ByRef Scope scope, @ByVal Input var,
             @ByVal Input m, @ByVal Input v, @ByVal Input beta1_power, @ByVal Input beta2_power, @ByVal Input lr,
@@ -41471,6 +43037,7 @@ limitations under the License.
   public native Node node();
 
   public static native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+  public static native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
 
   public native @ByRef Output out(); public native ApplyAdam out(Output out);
 }
@@ -42250,6 +43817,7 @@ limitations under the License.
  *  * use_locking: If {@code True}, updating of the var, m, and v tensors will be protected
  *  by a lock; otherwise the behavior is undefined, but may exhibit less
  *  contention.
+ *  * use_nesterov: If {@code True}, uses the nesterov update.
  * 
  *  Returns:
  *  * the created {@code Operation} */
@@ -42278,9 +43846,17 @@ limitations under the License.
      *  contention.
      * 
      *  Defaults to false */
+    
+    ///
     public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
 
+    /** If {@code True}, uses the nesterov update.
+     * 
+     *  Defaults to false */
+    public native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
+
     public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
+    public native @Cast("bool") boolean use_nesterov_(); public native Attrs use_nesterov_(boolean use_nesterov_);
   }
   public ResourceApplyAdam(@Const @ByRef Scope scope, @ByVal Input var,
                     @ByVal Input m, @ByVal Input v,
@@ -42297,6 +43873,7 @@ limitations under the License.
   public native @ByVal @Name("operator tensorflow::Operation") Operation asOperation();
 
   public static native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+  public static native @ByVal Attrs UseNesterov(@Cast("bool") boolean x);
 
   public native @ByRef Operation operation(); public native ResourceApplyAdam operation(Operation operation);
 }

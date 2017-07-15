@@ -341,6 +341,9 @@ public static class AVFilter extends Pointer {
     /** size of private data to allocate for the filter */
     public native int priv_size(); public native AVFilter priv_size(int priv_size);
 
+    /** Additional flags for avfilter internal use only. */
+    public native int flags_internal(); public native AVFilter flags_internal(int flags_internal);
+
     /**
      * Used by the filter registration system. Must not be touched by any other
      * code.
@@ -383,6 +386,28 @@ public static class AVFilter extends Pointer {
         public native int call(AVFilterContext ctx, Pointer opaque);
     }
     public native Init_opaque_AVFilterContext_Pointer init_opaque(); public native AVFilter init_opaque(Init_opaque_AVFilterContext_Pointer init_opaque);
+
+    /**
+     * Filter activation function.
+     *
+     * Called when any processing is needed from the filter, instead of any
+     * filter_frame and request_frame on pads.
+     *
+     * The function must examine inlinks and outlinks and perform a single
+     * step of processing. If there is nothing to do, the function must do
+     * nothing and not return an error. If more steps are or may be
+     * possible, it must use ff_filter_set_ready() to schedule another
+     * activation.
+     */
+    public static class Activate_AVFilterContext extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Activate_AVFilterContext(Pointer p) { super(p); }
+        protected Activate_AVFilterContext() { allocate(); }
+        private native void allocate();
+        public native int call(AVFilterContext ctx);
+    }
+    public native Activate_AVFilterContext activate(); public native AVFilter activate(Activate_AVFilterContext activate);
 }
 
 /**
@@ -492,6 +517,13 @@ public static class AVFilterContext extends Pointer {
      * Overrides global number of threads set per filter graph.
      */
     public native int nb_threads(); public native AVFilterContext nb_threads(int nb_threads);
+
+    /**
+     * Ready status of the filter.
+     * A non-0 value means that the filter needs activating;
+     * a higher value suggests a more urgent activation.
+     */
+    public native @Cast("unsigned") int ready(); public native AVFilterContext ready(int ready);
 }
 
 /**
@@ -500,6 +532,11 @@ public static class AVFilterContext extends Pointer {
  * the pads involved. In addition, this link also contains the parameters
  * which have been negotiated and agreed upon between the filter, such as
  * image dimensions, format, etc.
+ *
+ * Applications must not normally access the link structure directly.
+ * Use the buffersrc and buffersink API instead.
+ * In the future, access to the header may be reserved for filters
+ * implementation.
  */
 public static class AVFilterLink extends Pointer {
     static { Loader.load(); }
@@ -660,18 +697,6 @@ public static class AVFilterLink extends Pointer {
     public native int max_samples(); public native AVFilterLink max_samples(int max_samples);
 
     /**
-     * Link status.
-     * If not zero, all attempts of filter_frame or request_frame
-     * will fail with the corresponding code, and if necessary the reference
-     * will be destroyed.
-     * If request_frame returns an error, the status is set on the
-     * corresponding link.
-     * It can be set also be set by either the source or the destination
-     * filter.
-     */
-    public native int status(); public native AVFilterLink status(int status);
-
-    /**
      * Number of channels.
      */
     public native int channels(); public native AVFilterLink channels(int channels);
@@ -684,19 +709,13 @@ public static class AVFilterLink extends Pointer {
     /**
      * Number of past frames sent through the link.
      */
-    public native @Cast("int64_t") long frame_count(); public native AVFilterLink frame_count(long frame_count);
+    public native @Cast("int64_t") long frame_count_in(); public native AVFilterLink frame_count_in(long frame_count_in);
+    public native @Cast("int64_t") long frame_count_out(); public native AVFilterLink frame_count_out(long frame_count_out);
 
     /**
-     * A pointer to a FFVideoFramePool struct.
+     * A pointer to a FFFramePool struct.
      */
-    public native Pointer video_frame_pool(); public native AVFilterLink video_frame_pool(Pointer video_frame_pool);
-
-    /**
-     * True if a frame is currently wanted on the input of this filter.
-     * Set when ff_request_frame() is called by the output,
-     * cleared when the request is handled or forwarded.
-     */
-    public native int frame_wanted_in(); public native AVFilterLink frame_wanted_in(int frame_wanted_in);
+    public native Pointer frame_pool(); public native AVFilterLink frame_pool(Pointer frame_pool);
 
     /**
      * True if a frame is currently wanted on the output of this filter.
@@ -710,6 +729,21 @@ public static class AVFilterLink extends Pointer {
      * AVHWFramesContext describing the frames.
      */
     public native AVBufferRef hw_frames_ctx(); public native AVFilterLink hw_frames_ctx(AVBufferRef hw_frames_ctx);
+
+// #ifndef FF_INTERNAL_FIELDS
+
+    /**
+     * Internal structure members.
+     * The fields below this limit are internal for libavfilter's use
+     * and must in no way be accessed by applications.
+     */
+    public native @Cast("char") byte reserved(int i); public native AVFilterLink reserved(int i, byte reserved);
+    @MemberGetter public native @Cast("char*") BytePointer reserved();
+
+// #else /* FF_INTERNAL_FIELDS */
+
+// #endif /* FF_INTERNAL_FIELDS */
+
 }
 
 /**
@@ -982,8 +1016,10 @@ public static class AVFilterGraph extends Pointer {
 
     /** sws options to use for the auto-inserted scale filters */
     public native @Cast("char*") BytePointer scale_sws_opts(); public native AVFilterGraph scale_sws_opts(BytePointer scale_sws_opts);
+// #if FF_API_LAVR_OPTS
     /** libavresample options to use for the auto-inserted resample filters */
-    public native @Cast("char*") BytePointer resample_lavr_opts(); public native AVFilterGraph resample_lavr_opts(BytePointer resample_lavr_opts);
+    public native @Cast("char*") @Deprecated BytePointer resample_lavr_opts(); public native AVFilterGraph resample_lavr_opts(BytePointer resample_lavr_opts);
+// #endif
 
     /**
      * Type of multithreading allowed for filters in this graph. A combination
@@ -1507,9 +1543,27 @@ public static class AVABufferSinkParams extends Pointer {
 @NoException public static native void av_buffersink_set_frame_size(AVFilterContext ctx, @Cast("unsigned") int frame_size);
 
 /**
- * Get the frame rate of the input.
+ * \defgroup lavfi_buffersink_accessors Buffer sink accessors
+ * Get the properties of the stream
+ * \{
  */
-@NoException public static native @ByVal AVRational av_buffersink_get_frame_rate(AVFilterContext ctx);
+
+@NoException public static native @Cast("AVMediaType") int av_buffersink_get_type(@Const AVFilterContext ctx);
+@NoException public static native @ByVal AVRational av_buffersink_get_time_base(@Const AVFilterContext ctx);
+@NoException public static native int av_buffersink_get_format(@Const AVFilterContext ctx);
+
+@NoException public static native @ByVal AVRational av_buffersink_get_frame_rate(@Const AVFilterContext ctx);
+@NoException public static native int av_buffersink_get_w(@Const AVFilterContext ctx);
+@NoException public static native int av_buffersink_get_h(@Const AVFilterContext ctx);
+@NoException public static native @ByVal AVRational av_buffersink_get_sample_aspect_ratio(@Const AVFilterContext ctx);
+
+@NoException public static native int av_buffersink_get_channels(@Const AVFilterContext ctx);
+@NoException public static native @Cast("uint64_t") long av_buffersink_get_channel_layout(@Const AVFilterContext ctx);
+@NoException public static native int av_buffersink_get_sample_rate(@Const AVFilterContext ctx);
+
+@NoException public static native AVBufferRef av_buffersink_get_hw_frames_ctx(@Const AVFilterContext ctx);
+
+/** \} */
 
 /**
  * Get a frame with filtered data from sink and put it in frame.

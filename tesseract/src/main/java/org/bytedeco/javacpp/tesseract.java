@@ -42,7 +42,9 @@ public class tesseract extends org.bytedeco.javacpp.presets.tesseract {
 // #ifndef NOMINMAX
 // #define NOMINMAX
 // #endif /* NOMINMAX */
+// #ifndef WIN32_LEAN_AND_MEAN
 // #define WIN32_LEAN_AND_MEAN
+// #endif
 // #ifdef __GNUC__
 // #define ultoa _ultoa
 // #endif  /* __GNUC__ */
@@ -193,7 +195,7 @@ public static final int
 
 // The UNICHAR class holds a single classification result. This may be
 // a single Unicode character (stored as between 1 and 4 utf8 bytes) or
-// multple Unicode characters representing the NFKC expansion of a ligature
+// multiple Unicode characters representing the NFKC expansion of a ligature
 // such as fi, ffl etc. These are also stored as utf8.
 @NoOffset public static class UNICHAR extends Pointer {
     static { Loader.load(); }
@@ -1463,7 +1465,7 @@ public static final int
   RIL_SYMBOL = 4;     // Symbol/character within a word.
 
 /**
- * JUSTIFICATION_UNKNONW
+ * JUSTIFICATION_UNKNOWN
  *   The alignment is not clearly one of the other options.  This could happen
  *   for example if there are only one or two lines of text or the text looks
  *   like source code or poetry.
@@ -2653,6 +2655,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   public CharGenericVector() { super((Pointer)null); allocate(); }
   private native void allocate();
+
   public CharGenericVector(int size, @Cast("char") byte init_val) { super((Pointer)null); allocate(size, init_val); }
   private native void allocate(int size, @Cast("char") byte init_val);
 
@@ -2863,6 +2866,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   public StringGenericVector() { super((Pointer)null); allocate(); }
   private native void allocate();
+
   public StringGenericVector(int size, @ByVal STRING init_val) { super((Pointer)null); allocate(size, init_val); }
   private native void allocate(int size, @ByVal STRING init_val);
 
@@ -3063,6 +3067,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   public IntGenericVector() { super((Pointer)null); allocate(); }
   private native void allocate();
+
   public IntGenericVector(int size, int init_val) { super((Pointer)null); allocate(size, init_val); }
   private native void allocate(int size, int init_val);
 
@@ -3477,8 +3482,8 @@ public static class FileWriter extends FunctionPointer {
 // #ifndef TESSERACT_API_BASEAPI_H__
 // #define TESSERACT_API_BASEAPI_H__
 
-public static final String TESSERACT_VERSION_STR = "3.05.00";
-public static final int TESSERACT_VERSION = 0x030500;
+public static final String TESSERACT_VERSION_STR = "3.05.01";
+public static final int TESSERACT_VERSION = 0x030501;
 // #define MAKE_VERSION(major, minor, patch) (((major) << 16) | ((minor) << 8) |
 //                                             (patch))
 
@@ -4567,6 +4572,10 @@ public static native TessResultRenderer TessHOcrRendererCreate2(@Cast("const cha
 public static native TessResultRenderer TessHOcrRendererCreate2(String outputbase, @Cast("BOOL") boolean font_info);
 public static native TessResultRenderer TessPDFRendererCreate(@Cast("const char*") BytePointer outputbase, @Cast("const char*") BytePointer datadir);
 public static native TessResultRenderer TessPDFRendererCreate(String outputbase, String datadir);
+public static native TessResultRenderer TessPDFRendererCreateTextonly(@Cast("const char*") BytePointer outputbase, @Cast("const char*") BytePointer datadir,
+                                                             @Cast("BOOL") boolean textonly);
+public static native TessResultRenderer TessPDFRendererCreateTextonly(String outputbase, String datadir,
+                                                             @Cast("BOOL") boolean textonly);
 public static native TessResultRenderer TessUnlvRendererCreate(@Cast("const char*") BytePointer outputbase);
 public static native TessResultRenderer TessUnlvRendererCreate(String outputbase);
 public static native TessResultRenderer TessBoxTextRendererCreate(@Cast("const char*") BytePointer outputbase);
