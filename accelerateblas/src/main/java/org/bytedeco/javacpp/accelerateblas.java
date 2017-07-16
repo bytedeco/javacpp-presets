@@ -6,7 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-public class accelerate extends org.bytedeco.javacpp.presets.blas {
+public class accelerateblas extends org.bytedeco.javacpp.presets.accelerateblas {
     static { Loader.load(); }
 
 // Parsed from cblas.h
