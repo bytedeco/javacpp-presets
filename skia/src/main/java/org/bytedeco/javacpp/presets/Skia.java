@@ -65,7 +65,6 @@ import java.lang.annotation.Target;
                 "sk_vertices.h",
                 "sk_xml.h"
             },
-            resource = {"include"},
             compiler = "cpp11",
             link = {"skia"}
         )
