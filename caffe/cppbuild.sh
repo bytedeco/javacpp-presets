@@ -17,6 +17,7 @@ case $PLATFORM in
         export BINARY=32
         export BLAS=open
         export CUDAFLAGS=
+        export USE_CUDNN=0
         ;;
     linux-x86_64)
         export CPU_ONLY=0
@@ -27,6 +28,7 @@ case $PLATFORM in
         export BINARY=64
         export BLAS=open
         export CUDAFLAGS="-Xcompiler -std=c++98"
+        export USE_CUDNN=1
         ;;
     macosx-*)
         export CPU_ONLY=0
@@ -37,6 +39,7 @@ case $PLATFORM in
         export BINARY=64
         export BLAS=atlas
         export CUDAFLAGS=
+        export USE_CUDNN=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -156,7 +159,7 @@ export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH/lib -L$HDF5_PATH/lib"
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. lib
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. USE_CUDNN=$USE_CUDNN lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto
 cp -a include/caffe/* ../include/caffe/

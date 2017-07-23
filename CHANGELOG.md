@@ -1,4 +1,5 @@
 
+ * Enable cuDNN support for Caffe by default ([issue #187](https://github.com/bytedeco/javacpp-presets/issues/187))
  * Use the new `BUILD_PATH` environment variable passed by the `javacpp` plugin to the `cppbuild.sh` script files
  * Let presets pick up `include` or `link` paths from cached resources ([pull #101](https://github.com/bytedeco/javacpp-presets/pull/101))
  * Update presets for Visual Studio 2015 ([issue #298](https://github.com/bytedeco/javacpp-presets/issues/298))

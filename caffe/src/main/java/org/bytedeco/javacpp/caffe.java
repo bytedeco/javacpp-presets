@@ -22253,6 +22253,41 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/relu_layer.hpp"
 
 // #ifdef USE_CUDNN
+/**
+ * \brief CuDNN acceleration of ReLULayer.
+ */
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNReLULayer<float>") @NoOffset public static class FloatCuDNNReLULayer extends FloatReLULayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNReLULayer(Pointer p) { super(p); }
+
+  public FloatCuDNNReLULayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNReLULayer<double>") @NoOffset public static class DoubleCuDNNReLULayer extends DoubleReLULayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNReLULayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNReLULayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -22338,6 +22373,41 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/sigmoid_layer.hpp"
 
 // #ifdef USE_CUDNN
+/**
+ * \brief CuDNN acceleration of SigmoidLayer.
+ */
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNSigmoidLayer<float>") @NoOffset public static class FloatCuDNNSigmoidLayer extends FloatSigmoidLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNSigmoidLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNSigmoidLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNSigmoidLayer<double>") @NoOffset public static class DoubleCuDNNSigmoidLayer extends DoubleSigmoidLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNSigmoidLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNSigmoidLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -22423,6 +22493,41 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/tanh_layer.hpp"
 
 // #ifdef USE_CUDNN
+/**
+ * \brief CuDNN acceleration of TanHLayer.
+ */
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNTanHLayer<float>") @NoOffset public static class FloatCuDNNTanHLayer extends FloatTanHLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNTanHLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNTanHLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNTanHLayer<double>") @NoOffset public static class DoubleCuDNNTanHLayer extends DoubleTanHLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNTanHLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNTanHLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -23616,6 +23721,42 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/softmax_layer.hpp"
 
 // #ifdef USE_CUDNN
+/**
+ * \brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNSoftmaxLayer<float>") @NoOffset public static class FloatCuDNNSoftmaxLayer extends FloatSoftmaxLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNSoftmaxLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNSoftmaxLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+       @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNSoftmaxLayer<double>") @NoOffset public static class DoubleCuDNNSoftmaxLayer extends DoubleSoftmaxLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNSoftmaxLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNSoftmaxLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+       @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -25331,6 +25472,52 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/conv_layer.hpp"
 
 // #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNConvolutionLayer<float>") @NoOffset public static class FloatCuDNNConvolutionLayer extends FloatConvolutionLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNConvolutionLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNConvolutionLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNConvolutionLayer<double>") @NoOffset public static class DoubleCuDNNConvolutionLayer extends DoubleConvolutionLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNConvolutionLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNConvolutionLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -25525,6 +25712,38 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/lrn_layer.hpp"
 
 // #ifdef USE_CUDNN
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNLRNLayer<float>") @NoOffset public static class FloatCuDNNLRNLayer extends FloatLRNLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNLRNLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNLRNLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNLRNLayer<double>") @NoOffset public static class DoubleCuDNNLRNLayer extends DoubleLRNLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNLRNLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNLRNLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -25547,6 +25766,38 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/power_layer.hpp"
 
 // #ifdef USE_CUDNN
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNLCNLayer<float>") @NoOffset public static class FloatCuDNNLCNLayer extends FloatLRNLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNLCNLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNLCNLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNLCNLayer<double>") @NoOffset public static class DoubleCuDNNLCNLayer extends DoubleLRNLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNLCNLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNLCNLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -25644,6 +25895,48 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include "caffe/layers/pooling_layer.hpp"
 
 // #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNPoolingLayer<float>") @NoOffset public static class FloatCuDNNPoolingLayer extends FloatPoolingLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatCuDNNPoolingLayer(Pointer p) { super(p); }
+
+  public FloatCuDNNPoolingLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  // Currently, cuDNN does not support the extra top blob.
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+}
+@Platform({"linux-x86_64", "macosx-x86_64"}) @Name("caffe::CuDNNPoolingLayer<double>") @NoOffset public static class DoubleCuDNNPoolingLayer extends DoublePoolingLayer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleCuDNNPoolingLayer(Pointer p) { super(p); }
+
+  public DoubleCuDNNPoolingLayer(@Const @ByRef LayerParameter param) { super((Pointer)null); allocate(param); }
+  private native @Platform({"linux-x86_64", "macosx-x86_64"}) void allocate(@Const @ByRef LayerParameter param);
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  // Currently, cuDNN does not support the extra top blob.
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+}
 // #endif
 
   // namespace caffe
@@ -26922,16 +27215,6 @@ public static native void cblas_daxpby(int N, double alpha, @Const double[] X,
   // namespace caffe
 
 // #endif   // CAFFE_UTIL_UPGRADE_PROTO_H_
-
-
-// Parsed from caffe/util/cudnn.hpp
-
-// #ifndef CAFFE_UTIL_CUDNN_H_
-// #define CAFFE_UTIL_CUDNN_H_
-// #ifdef USE_CUDNN
-
-// #endif  // USE_CUDNN
-// #endif  // CAFFE_UTIL_CUDNN_H_
 
 
 }

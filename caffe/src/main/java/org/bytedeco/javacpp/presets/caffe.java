@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -56,17 +56,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "caffe/layers/lrn_layer.hpp", "caffe/layers/cudnn_lrn_layer.hpp", "caffe/layers/cudnn_lcn_layer.hpp", "caffe/layers/pooling_layer.hpp", "caffe/layers/cudnn_pooling_layer.hpp",
         "caffe/layers/spp_layer.hpp", "caffe/layers/recurrent_layer.hpp", "caffe/layers/lstm_layer.hpp", "caffe/layers/rnn_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp",
         "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
-        "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe@.1.0.0", resource = {"include", "lib"}, includepath = {"/usr/local/cuda/include/",
+        "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link = "caffe@.1.0.0", resource = {"include", "lib"}, includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
-    @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}) })
+    @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}) })
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPROTOBUF_EXPORT", "LIBPROTOC_EXPORT", "GOOGLE_PROTOBUF_VERIFY_VERSION", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_DEPRECATED",
                              "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR").cppTypes().annotations())
-               .put(new Info("NDEBUG", "CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG").define())
-               .put(new Info("USE_CUDNN", "defined(_WIN32) && defined(GetMessage)", "LANG_CXX11").define(false))
+               .put(new Info("NDEBUG", "CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG", "USE_CUDNN").define())
+               .put(new Info("defined(_WIN32) && defined(GetMessage)", "LANG_CXX11").define(false))
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
-               .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t").cast().valueTypes("int"))
+               .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t", "cudnnStatus_t", "cudnnDataType_t").cast().valueTypes("int"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<const google::protobuf::FieldDescriptor*>").pointerTypes("FieldDescriptorVector").define())
@@ -122,13 +122,14 @@ public class caffe implements InfoMapper {
                 "BatchReindexLayer", "ConcatLayer", "EltwiseLayer", "EmbedLayer", "FilterLayer", "FlattenLayer", "InnerProductLayer", "MVNLayer", "ReshapeLayer", "ReductionLayer",
                 "SilenceLayer", "SoftmaxLayer", "SplitLayer", "SliceLayer", "TileLayer", "Net", "Solver", "WorkerSolver", "SolverRegistry", "SolverRegisterer", "SGDSolver", "NesterovSolver",
                 "AdaGradSolver", "RMSPropSolver", "AdaDeltaSolver", "AdamSolver",  "InputLayer", "ParameterLayer", "BaseConvolutionLayer", "ConvolutionLayer", "CropLayer", "DeconvolutionLayer",
-                "Im2colLayer", "LRNLayer", "PoolingLayer", "SPPLayer", "RecurrentLayer", "LSTMLayer", "RNNLayer"
-                /* "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
+                "Im2colLayer", "LRNLayer", "PoolingLayer", "SPPLayer", "RecurrentLayer", "LSTMLayer", "RNNLayer", "CuDNNLCNLayer", "CuDNNLRNLayer",
+                "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" };
         for (String t : classTemplates) {
             boolean purify = t.equals("BaseDataLayer") || t.equals("LossLayer") || t.equals("NeuronLayer");
             boolean virtualize = t.endsWith("Layer") || t.endsWith("Solver");
-            infoMap.put(new Info("caffe::" + t + "<float>").pointerTypes("Float" + t).purify(purify).virtualize(virtualize))
-                   .put(new Info("caffe::" + t + "<double>").pointerTypes("Double" + t).purify(purify).virtualize(virtualize));
+            String[] annotations = t.startsWith("CuDNN") ? new String[] {"@Platform({\"linux-x86_64\", \"macosx-x86_64\"})"} : null;
+            infoMap.put(new Info("caffe::" + t + "<float>").annotations(annotations).pointerTypes("Float" + t).purify(purify).virtualize(virtualize))
+                   .put(new Info("caffe::" + t + "<double>").annotations(annotations).pointerTypes("Double" + t).purify(purify).virtualize(virtualize));
         }
         infoMap.put(new Info("caffe::BasePrefetchingDataLayer<float>::InternalThreadEntry()",
                              "caffe::BasePrefetchingDataLayer<double>::InternalThreadEntry()").skip())
