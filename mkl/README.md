@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mkl</groupId>
     <artifactId>mkl</artifactId>
-    <version>1.3.3-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>DGEMMExample</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2017.2-1.3.3-SNAPSHOT</version>
+            <version>2017.2-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

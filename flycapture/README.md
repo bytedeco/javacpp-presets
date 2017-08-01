@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>flycapture-platform</artifactId>
-            <version>2.11.3.121-1.3.3-SNAPSHOT</version>
+            <version>2.11.3.121-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
