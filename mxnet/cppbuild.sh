@@ -40,7 +40,7 @@ download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-cor
 download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
 download https://github.com/dmlc/ps-lite/archive/$PS_VERSION.tar.gz ps-lite-$PS_VERSION.tar.gz
 download https://github.com/dmlc/nnvm/archive/$NNVM_VERSION.tar.gz nnvm-$NNVM_VERSION.tar.gz
-download https://github.com/dmlc/mxnet/archive/v$MXNET_VERSION.tar.gz mxnet-$MXNET_VERSION.tar.gz
+download https://github.com/dmlc/mxnet/archive/v$MXNET_VERSION.tar.gz incubator-mxnet-$MXNET_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -67,8 +67,8 @@ tar --totals -xzf ../dmlc-core-$DMLC_VERSION.tar.gz
 tar --totals -xzf ../mshadow-$MSHADOW_VERSION.tar.gz
 tar --totals -xzf ../ps-lite-$PS_VERSION.tar.gz
 tar --totals -xzf ../nnvm-$NNVM_VERSION.tar.gz
-tar --totals -xzf ../mxnet-$MXNET_VERSION.tar.gz
-cd mxnet-$MXNET_VERSION
+tar --totals -xzf ../incubator-mxnet-$MXNET_VERSION.tar.gz
+cd incubator-mxnet-$MXNET_VERSION
 rmdir dmlc-core mshadow ps-lite nnvm || true
 ln -snf ../dmlc-core-$DMLC_VERSION dmlc-core
 ln -snf ../mshadow-$MSHADOW_VERSION mshadow
