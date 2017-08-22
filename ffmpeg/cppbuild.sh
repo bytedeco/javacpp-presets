@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-w32threads --disable-iconv --disable-opencl --disable-sdl --disable-bzlib --disable-lzma"
-ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
+ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-librtmp"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-bzlib --disable-lzma --disable-everything"
@@ -18,7 +18,7 @@ ZLIB=zlib-1.2.11
 LAME=lame-3.99.5
 SPEEX=speex-1.2.0
 OPENCORE_AMR=opencore-amr-0.1.5
-OPENSSL=openssl-1.1.0f
+OPENSSL=openssl-1.0.2l
 OPENH264_VERSION=1.7.0
 X265=x265_2.4
 VPX_VERSION=v1.6.1
@@ -39,6 +39,7 @@ download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPE
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
+git clone git://git.ffmpeg.org/rtmpdump
 echo "Decompressing archives..."
 tar --totals -xzf ../$ZLIB.tar.gz
 tar --totals -xzf ../$LAME.tar.gz
@@ -66,7 +67,21 @@ case $PLATFORM in
         export CXXFLAGS="$CFLAGS"
         export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        cd $ZLIB
+
+        cp ${ANDROID_ROOT}usr/lib/crtbegin_so.o rtmpdump/
+        cp ${ANDROID_ROOT}usr/lib/crtend_so.o rtmpdump/
+        cp ${ANDROID_ROOT}usr/lib/crtbegin_so.o rtmpdump/librtmp/
+        cp ${ANDROID_ROOT}usr/lib/crtend_so.o rtmpdump/librtmp/
+
+        cp ${ANDROID_ROOT}usr/lib/crtbegin_dynamic.o rtmpdump/
+        cp ${ANDROID_ROOT}usr/lib/crtend_android.o rtmpdump/
+        cp ${ANDROID_ROOT}usr/lib/crtbegin_dynamic.o rtmpdump/librtmp/
+        cp ${ANDROID_ROOT}usr/lib/crtend_android.o rtmpdump/librtmp/
+
+        cd ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-librtmp.patch
+
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j $MAKEJ
         make install
@@ -86,10 +101,17 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android-armeabi $CFLAGS no-shared
+        ./Configure --prefix=$INSTALL_PATH android-armv7 $CFLAGS no-shared
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
-        make install_sw
-        cd ../openh264-$OPENH264_VERSION
+        make install
+        cd ../rtmpdump/librtmp
+        OPENSSL_DIR="$INSTALL_PATH/$OPENSSL/"
+        export XLDFLAGS="-L${OPENSSL_DIR} -L${ANDROID_ROOT}usr/lib "
+        export CROSS_COMPILE="${ANDROID_BIN}-"
+        export XCFLAGS="${CFLAGS} -marm -I${OPENSSL_DIR}include -isysroot ${ANDROID_ROOT}"
+        export INC="-I${ANDROID_ROOT}"
+        make prefix=\"${INSTALL_PATH}\" OPT= install
+        cd ../../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
@@ -106,7 +128,8 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        LIBRTMP_DIR="$INSTALL_PATH/rtmpdump/librtmp/"
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS -I${LIBRTMP_DIR}android/arm/include -L${LIBRTMP_DIR}android/arm/lib -lrtmp" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS -L${LIBRTMP_DIR}android/arm/lib -lrtmp" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
