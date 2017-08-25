@@ -108,7 +108,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=arm-linux
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -169,7 +169,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -215,7 +215,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -261,7 +261,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --host=x86_64-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -346,7 +346,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -397,7 +397,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --target=ppc64le-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=ppc64le-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install 
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -443,7 +443,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -487,7 +487,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --target=x86_64-win64-gcc
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=x86_64-win64-gcc
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -531,7 +531,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --target=x86_64-win64-gcc CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=x86_64-win64-gcc CFLAGS="-m64"
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
