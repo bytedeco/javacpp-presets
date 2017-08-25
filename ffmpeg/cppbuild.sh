@@ -108,7 +108,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --target=arm-linux
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -169,7 +169,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --target=x86-android-gcc
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -215,7 +215,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --target=i686-linux
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -261,7 +261,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --target=x86_64-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -346,7 +346,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --target=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
