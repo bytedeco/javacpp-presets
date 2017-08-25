@@ -24,7 +24,7 @@ X265=x265_2.4
 VPX_VERSION=v1.6.1
 ALSA_VERSION=1.1.4.1
 FFMPEG_VERSION=3.3.2
-FREETYPE_VERSION=2.4.0
+FREETYPE_VERSION=2.8
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
