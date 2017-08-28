@@ -1,7 +1,24 @@
+diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
+--- ffmpeg-3.3.2/configure	2017-06-07 11:04:02.000000000 +0900
++++ ffmpeg-3.3.2-macosx/configure	2017-06-23 20:59:05.705559621 +0900
+@@ -1353,10 +1353,8 @@
+ require_libfreetype(){
+     log require_libfreetype "$@"
+     pkg="freetype2"
+-    check_cmd $pkg_config --exists --print-errors $pkg \
+-      || die "ERROR: $pkg not found"
+-    pkg_cflags=$($pkg_config --cflags $pkg_config_flags $pkg)
+-    pkg_libs=$($pkg_config --libs $pkg_config_flags $pkg)
++    pkg_cflags="-I../include/freetype2"
++    pkg_libs="-lfreetype"
+     {
+         echo "#include <ft2build.h>"
+         echo "#include FT_FREETYPE_H"
+
 diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-macosx/configure
 --- ffmpeg-3.3.2/configure	2017-06-07 11:04:02.000000000 +0900
 +++ ffmpeg-3.3.2-macosx/configure	2017-06-23 20:59:05.705559621 +0900
-@@ -4815,7 +4815,7 @@
+@@ -4813,7 +4813,7 @@
      darwin)
          enabled ppc && add_asflags -force_cpusubtype_ALL
          install_name_dir_default='$(SHLIBDIR)'
@@ -10,7 +27,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-macosx/configure
          enabled x86_32 && append SHFLAGS -Wl,-read_only_relocs,suppress
          strip="${strip} -x"
          add_ldflags -Wl,-dynamic,-search_paths_first
-@@ -5804,7 +5804,7 @@
+@@ -5802,7 +5802,7 @@
                                 { use_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -19,7 +36,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-macosx/configure
  enabled libopenjpeg       && { { check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
                                 check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 ||
                                 { check_lib openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
-@@ -5823,7 +5823,7 @@
+@@ -5821,7 +5821,7 @@
  enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
@@ -28,7 +45,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-macosx/configure
  enabled libtesseract      && require_pkg_config tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
  enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
-@@ -5871,7 +5871,7 @@
+@@ -5869,7 +5869,7 @@
                                 die "ERROR: libx264 must be installed and version must be >= 0.118."; } &&
                               { check_cpp_condition x264.h "X264_MPEG2" &&
                                 enable libx262; }
