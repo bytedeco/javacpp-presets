@@ -79,6 +79,7 @@ case $PLATFORM in
         cp ${ANDROID_ROOT}usr/lib/crtend_android.o rtmpdump/librtmp/
 
         cd ffmpeg-$FFMPEG_VERSION
+        export INSTALL_PATH_LIB="$INSTALL_PATH/lib"
         patch -Np1 < ../../../ffmpeg-librtmp.patch
 
         cd ../$ZLIB
