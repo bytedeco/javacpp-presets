@@ -87,6 +87,7 @@ case $PLATFORM in
         make install
         cd ../include
         make install
+        cd ../
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
