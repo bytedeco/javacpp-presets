@@ -153,6 +153,7 @@ case $PLATFORM in
         make install
         cd ../include
         make install
+        cd ../
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
