@@ -14,11 +14,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
      {
          echo "#include <ft2build.h>"
          echo "#include FT_FREETYPE_H"
-
-diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
---- ffmpeg-3.3.2/configure	2017-06-07 11:04:02.000000000 +0900
-+++ ffmpeg-3.3.2-android/configure	2017-06-23 20:32:00.139387669 +0900
-@@ -5802,7 +5802,7 @@
+@@ -5804,7 +5802,7 @@
                                 { use_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -27,7 +23,16 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
  enabled libopenjpeg       && { { check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
                                 check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 ||
                                 { check_lib openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
-@@ -5821,7 +5821,7 @@
+@@ -5812,7 +5810,7 @@
+                                { check_lib openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
+                                die "ERROR: libopenjpeg not found"; }
+ enabled libopenmpt        && require_pkg_config "libopenmpt >= 0.2.6557" libopenmpt/libopenmpt.h openmpt_module_create
+-enabled libopus           && require_pkg_config opus opus_multistream.h opus_multistream_decoder_create
++enabled libopus           && add_cppflags -I ../include/opus/ && require opus opus_multistream.h opus_multistream_decoder_create -lopus
+ enabled libpulse          && require_pkg_config libpulse pulse/pulseaudio.h pa_context_new
+ enabled librtmp           && require_pkg_config librtmp librtmp/rtmp.h RTMP_Socket
+ enabled librubberband     && require_pkg_config "rubberband >= 1.8.1" rubberband/rubberband-c.h rubberband_new
+@@ -5823,7 +5821,7 @@
  enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
@@ -36,7 +41,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
  enabled libtesseract      && require_pkg_config tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
  enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
-@@ -5869,7 +5869,7 @@
+@@ -5871,7 +5869,7 @@
                                 die "ERROR: libx264 must be installed and version must be >= 0.118."; } &&
                               { check_cpp_condition x264.h "X264_MPEG2" &&
                                 enable libx262; }
@@ -45,7 +50,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
                               { check_cpp_condition x265.h "X265_BUILD >= 68" ||
                                 die "ERROR: libx265 version must be >= 68."; }
  enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode -lxavs
-@@ -5914,10 +5914,10 @@
+@@ -5916,10 +5914,10 @@
                                  check_header OMX_Core.h ; } ||
                                 die "ERROR: OpenMAX IL headers not found"; }
  enabled openssl           && { use_pkg_config openssl openssl/ssl.h OPENSSL_init_ssl ||
@@ -59,7 +64,7 @@ diff -ruN ffmpeg-3.3.2/configure ffmpeg-3.3.2-android/configure
 +                               check_lib openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto -lws2_32 -lgdi32 ||
                                 die "ERROR: openssl not found"; }
  enabled qtkit_indev      && { check_header_objcc QTKit/QTKit.h || disable qtkit_indev; }
- 
+
 diff -ruN ffmpeg-3.3.2/library.mak ffmpeg-3.3.2-android/library.mak
 --- ffmpeg-3.3.2/library.mak	2017-06-07 11:03:56.000000000 +0900
 +++ ffmpeg-3.3.2-android/library.mak	2017-06-23 20:10:54.718543524 +0900

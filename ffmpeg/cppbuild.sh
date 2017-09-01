@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-w32threads --disable-iconv --disable-opencl --disable-sdl --disable-bzlib --disable-lzma"
-ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype"
+ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-bzlib --disable-lzma --disable-everything"
@@ -17,6 +17,7 @@ ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enabl
 ZLIB=zlib-1.2.11
 LAME=lame-3.99.5
 SPEEX=speex-1.2.0
+OPUS=opus-1.1.5
 OPENCORE_AMR=opencore-amr-0.1.5
 OPENSSL=openssl-1.1.0f
 OPENH264_VERSION=1.7.0
@@ -28,6 +29,7 @@ FREETYPE_VERSION=2.8
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
+download https://archive.mozilla.org/pub/opus/$OPUS.tar.gz $OPUS.tar.gz
 download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
@@ -45,6 +47,7 @@ echo "Decompressing archives..."
 tar --totals -xzf ../$ZLIB.tar.gz
 tar --totals -xzf ../$LAME.tar.gz
 tar --totals -xzf ../$SPEEX.tar.gz
+tar --totals -xzf ../$OPUS.tar.gz
 tar --totals -xzf ../$OPENCORE_AMR.tar.gz
 tar --totals -xzf ../$OPENSSL.tar.gz
 tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
@@ -84,7 +87,11 @@ case $PLATFORM in
         make install
         cd ../include
         make install
-        cd ../../$OPENCORE_AMR
+        cd ../../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
@@ -145,7 +152,11 @@ case $PLATFORM in
         make install
         cd ../include
         make install
-        cd ../../$OPENCORE_AMR
+        cd ../../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
@@ -192,6 +203,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ
         make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
+        make -j $MAKEJ
+        make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
         make -j $MAKEJ
@@ -235,6 +250,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
@@ -296,6 +315,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
@@ -374,6 +397,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ
+        make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64" CXXFLAGS="-m64"
         make -j $MAKEJ
@@ -417,6 +444,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j $MAKEJ
+        make install
+        cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ
         make install
@@ -464,6 +495,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
         make -j $MAKEJ
         make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+        make -j $MAKEJ
+        make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
         make -j $MAKEJ
@@ -505,6 +540,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ
         make install
