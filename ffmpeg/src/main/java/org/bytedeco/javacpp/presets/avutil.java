@@ -22,6 +22,8 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.MemberGetter;
+import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -29,7 +31,6 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
- *
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.avutil", value={
@@ -58,4 +59,28 @@ public class avutil implements InfoMapper {
                .put(new Info("AV_CH_LAYOUT_HEXADECAGONAL").translate().cppTypes("long"))
                .put(new Info("int (*)(void*, void*, int)").pointerTypes("Int_func_Pointer_Pointer_int"));
     }
+
+    public static native @MemberGetter @Name("AVERROR(EACCES)") int AVERROR_EACCES();
+    public static native @MemberGetter @Name("AVERROR(EAGAIN)") int AVERROR_EAGAIN();
+    public static native @MemberGetter @Name("AVERROR(EBADF)") int AVERROR_EBADF();
+    public static native @MemberGetter @Name("AVERROR(EDOM)") int AVERROR_EDOM();
+    public static native @MemberGetter @Name("AVERROR(EEXIST)") int AVERROR_EEXIST();
+    public static native @MemberGetter @Name("AVERROR(EFAULT)") int AVERROR_EFAULT();
+    public static native @MemberGetter @Name("AVERROR(EFBIG)") int AVERROR_EFBIG();
+    public static native @MemberGetter @Name("AVERROR(EILSEQ)") int AVERROR_EILSEQ();
+    public static native @MemberGetter @Name("AVERROR(EINTR)") int AVERROR_EINTR();
+    public static native @MemberGetter @Name("AVERROR(EINVAL)") int AVERROR_EINVAL();
+    public static native @MemberGetter @Name("AVERROR(EIO)") int AVERROR_EIO();
+    public static native @MemberGetter @Name("AVERROR(ENAMETOOLONG)") int AVERROR_ENAMETOOLONG();
+    public static native @MemberGetter @Name("AVERROR(ENODEV)") int AVERROR_ENODEV();
+    public static native @MemberGetter @Name("AVERROR(ENOENT)") int AVERROR_ENOENT();
+    public static native @MemberGetter @Name("AVERROR(ENOMEM)") int AVERROR_ENOMEM();
+    public static native @MemberGetter @Name("AVERROR(ENOSPC)") int AVERROR_ENOSPC();
+    public static native @MemberGetter @Name("AVERROR(ENOSYS)") int AVERROR_ENOSYS();
+    public static native @MemberGetter @Name("AVERROR(ENXIO)") int AVERROR_ENXIO();
+    public static native @MemberGetter @Name("AVERROR(EPERM)") int AVERROR_EPERM();
+    public static native @MemberGetter @Name("AVERROR(EPIPE)") int AVERROR_EPIPE();
+    public static native @MemberGetter @Name("AVERROR(ERANGE)") int AVERROR_ERANGE();
+    public static native @MemberGetter @Name("AVERROR(ESPIPE)") int AVERROR_ESPIPE();
+    public static native @MemberGetter @Name("AVERROR(EXDEV)") int AVERROR_EXDEV();
 }
