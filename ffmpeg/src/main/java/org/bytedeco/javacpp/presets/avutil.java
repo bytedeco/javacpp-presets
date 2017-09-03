@@ -31,6 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
+ *
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.avutil", value={
