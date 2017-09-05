@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.2.19
+OPENBLAS_VERSION=0.2.20
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -28,7 +28,7 @@ export NUM_THREADS=64
 export NO_AFFINITY=1
 case $PLATFORM in
     android-arm)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
+        patch -Np1 < ../../../OpenBLAS-android.patch
         export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -43,7 +43,7 @@ case $PLATFORM in
         sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
         ;;
     android-x86)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
+        patch -Np1 < ../../../OpenBLAS-android.patch
         export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -72,7 +72,7 @@ case $PLATFORM in
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-linux-ppc64le.patch
+        patch -Np1 < ../../../OpenBLAS-linux-ppc64le.patch
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
@@ -85,7 +85,7 @@ case $PLATFORM in
         export TARGET=ARMV6
         ;;
     macosx-*)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-macosx.patch
+        patch -Np1 < ../../../OpenBLAS-macosx.patch
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
