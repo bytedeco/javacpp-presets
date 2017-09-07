@@ -150,7 +150,7 @@ ln -sf libboost_thread.a lib/libboost_thread-mt.a
 # OSX has Accelerate, but...
 export C_INCLUDE_PATH="$OPENBLAS_PATH/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$OPENBLAS_PATH/lib/"
+export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/"
 
 cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch
@@ -158,7 +158,7 @@ cp Makefile.config.example Makefile.config
 export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS"
-export LINKFLAGS="-L../lib -L$OPENCV_PATH/lib -L$HDF5_PATH/lib"
+export LINKFLAGS="-L../lib -L$OPENCV_PATH -L$OPENCV_PATH/lib -L$HDF5_PATH -L$HDF5_PATH/lib"
 make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. USE_CUDNN=$USE_CUDNN lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto

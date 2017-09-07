@@ -40,6 +40,7 @@ case $PLATFORM in
         fi
         export BINARY=32
         export TARGET=ARMV5
+        export ARM_SOFTFP_ABI=1
         sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
         ;;
     android-x86)

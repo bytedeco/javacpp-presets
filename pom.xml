@@ -182,7 +182,6 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <skipMain>${javacpp.parser.skip}</skipMain>
               <includes>
                 <include>org/bytedeco/javacpp/presets/*.java</include>
               </includes>
@@ -228,6 +227,7 @@
           </includeResources>
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
           </linkResources>
         </configuration>
@@ -249,6 +249,7 @@
                 <argument>${javacpp.platform}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
+              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
             </configuration>
           </execution>
           <execution>
@@ -266,6 +267,7 @@
                 <argument>${javacpp.moduleId}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
+              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
             </configuration>
           </execution>
           <execution>
