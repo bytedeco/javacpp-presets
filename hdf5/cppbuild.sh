@@ -48,9 +48,25 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-ppc64le)
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
-        make -j $MAKEJ
-        make install-strip
+	MACHINE_TYPE=$( uname -m )
+	if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
+          make -j $MAKEJ
+          make install-strip
+	else
+	  echo "Not native ppc so assume cross compiling"
+	  cd ..
+	  cp ../../../ci/hdf5/ppc.cmake .
+	  #need this to run twice, first run fails
+	  for x in 1 2; do
+	    cmake -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=. -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" ./hdf5-$HDF5_VERSION
+	  done
+	  mkdir -p bin
+	  cp ../../../ci/hdf5/H5detect ./bin
+	  cp ../../../ci/hdf5/H5make_libsettings ./bin
+	  cp ../../../ci/hdf5/H5*.c .
+	  make -j4
+	fi
         ;;
     macosx-*)
         patch -Np1 < ../../../hdf5-$HDF5_VERSION-macosx.patch
