@@ -17,7 +17,7 @@ matrix:
    include:
       - jdk: oraclejdk8
         os: linux
-        env: PROJ=hdf5 OS=linux-ppc64le
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
 
