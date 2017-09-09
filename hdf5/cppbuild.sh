@@ -57,11 +57,11 @@ case $PLATFORM in
 	  echo "Not native ppc so assume cross compiling"
 	  cd ..
 	  cp ../../../ci/hdf5/ppc.cmake .
-	  #need this to run twice, first run fails
+	  #need this to run twice, first run fails so we fake the exit code too
 	  for x in 1 2; do
-	    cmake -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=. -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" ./hdf5-$HDF5_VERSION
+	    bash -c 'cmake -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=. -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" ./hdf5-1.10.1; exit 0'
 	  done
-	  mkdir -p bin
+	  bash -c "make; exit 0"
 	  cp ../../../ci/hdf5/H5detect ./bin
 	  cp ../../../ci/hdf5/H5make_libsettings ./bin
 	  cp ../../../ci/hdf5/H5*.c .
