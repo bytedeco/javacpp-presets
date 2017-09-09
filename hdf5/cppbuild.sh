@@ -66,6 +66,7 @@ case $PLATFORM in
 	  cp ../../../ci/hdf5/H5make_libsettings ./bin
 	  cp ../../../ci/hdf5/H5*.c .
 	  make -j4
+	  make install
 	fi
         ;;
     macosx-*)
