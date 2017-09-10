@@ -80,6 +80,7 @@ case $PLATFORM in
 	else
 	  export CC="powerpc64le-linux-gnu-gcc"
 	  export FC="powerpc64le-linux-gnu-gfortran-4.8"
+	  export CROSS_SUFFIX="powerpc64le-linux-gnu-"
 	fi
         export BINARY=64
         export TARGET=POWER5
