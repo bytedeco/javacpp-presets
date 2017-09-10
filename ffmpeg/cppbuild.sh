@@ -28,7 +28,7 @@ download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
 download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
+# download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
 download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
 download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
@@ -45,7 +45,7 @@ tar --totals -xzf ../$ZLIB.tar.gz
 tar --totals -xzf ../$LAME.tar.gz
 tar --totals -xzf ../$SPEEX.tar.gz
 tar --totals -xzf ../$OPENCORE_AMR.tar.gz
-tar --totals -xzf ../$OPENSSL.tar.gz
+# tar --totals -xzf ../$OPENSSL.tar.gz
 tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
 tar --totals -xjf ../last_stable_x264.tar.bz2
 tar --totals -xzf ../$X265.tar.gz
@@ -77,6 +77,11 @@ case $PLATFORM in
         cp ${ANDROID_ROOT}usr/lib/crtend_android.o rtmpdump/
         cp ${ANDROID_ROOT}usr/lib/crtbegin_dynamic.o rtmpdump/librtmp/
         cp ${ANDROID_ROOT}usr/lib/crtend_android.o rtmpdump/librtmp/
+
+        git clone https://github.com/openssl/openssl.git $OPENSSL
+        cd $OPENSSL
+        git checkout OpenSSL_1_0_2-stable
+        cd ..
 
         cd ffmpeg-$FFMPEG_VERSION
         export INSTALL_PATH_LIB="$INSTALL_PATH/lib"
