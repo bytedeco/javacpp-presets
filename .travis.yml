@@ -20,6 +20,11 @@ matrix:
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=ffmpeg OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
 
       - jdk: oraclejdk8
         os: linux 
