@@ -13,6 +13,7 @@ touch $HOME/vars.list
 
 if [ "$OS" == "linux-ppc64le" ]; then
       echo "Setting up tools for linux-ppc64le  build"
+      sudo apt-get dist-upgrade 
       sudo apt-get install gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch
       sudo dpkg --add-architecture ppc64el
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty main restricted universe multiverse"
@@ -20,8 +21,13 @@ if [ "$OS" == "linux-ppc64le" ]; then
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-backports main restricted universe multiverse"
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-security main restricted universe multiverse"
       sudo apt-get update
+      sudo apt-get clean 
+      sudo apt-get autoclean 
+      sudo apt-get dist-upgrade 
+      sudo apt-get -f install 
       #sudo apt-get install libcairo2-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libglfw-dev:ppc64el libfreetype6-dev:ppc64el libasound2-dev:ppc64el freeglut3-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el libpango1.0-dev:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el
       sudo apt-get install libcairo2-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libfreetype6-dev:ppc64el libasound2-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el
+      sudo apt-get -f install 
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
       export BUILD_COMPILER="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
