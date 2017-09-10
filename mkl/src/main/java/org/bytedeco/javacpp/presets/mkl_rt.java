@@ -38,14 +38,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",*/
         "mkl_dnn_types.h", "mkl_dnn.h", /*"mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
-              compiler = "fastfpu", includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/mkl/lib/", "/opt/intel/mkl/lib/intel64/"}, link = "mkl_rt",
+              compiler = "fastfpu", includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
               preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread"}),
-    @Platform(value = "linux-x86",    linkpath = "/opt/intel/mkl/lib/ia32/"),
-    @Platform(value = "linux-x86_64", linkpath = "/opt/intel/mkl/lib/intel64/"),
+    @Platform(value = "linux-x86",    linkpath = {"/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
+    @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
     @Platform(value = "windows", preload = {"libiomp5md", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_intel_lp64", "mkl_intel_thread"},
                                      includepath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include/"),
-    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/ia32/"),
-    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/") })
+    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/ia32/",
+                                     preloadpath = {"C:/Program Files (x86)/IntelSWTools/parallel_studio_xe_2017/compilers_and_libraries_2017/windows/redist/ia32/compiler/",
+                                                    "C:/Program Files (x86)/IntelSWTools/parallel_studio_xe_2017/compilers_and_libraries_2017/windows/redist/ia32/mkl/"}),
+    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/",
+                                     preloadpath = {"C:/Program Files (x86)/IntelSWTools/parallel_studio_xe_2017/compilers_and_libraries_2017/windows/redist/intel64/compiler/",
+                                                    "C:/Program Files (x86)/IntelSWTools/parallel_studio_xe_2017/compilers_and_libraries_2017/windows/redist/intel64/mkl/"}) })
 public class mkl_rt implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
