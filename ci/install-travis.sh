@@ -49,7 +49,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11544/l_mkl_2017.3.196.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
          sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2017.3.196/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2017.2.174/install.sh -s $HOME/build/l_mkl_2017.3.196/silent.cfg"
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2017.3.196/install.sh -s $HOME/build/l_mkl_2017.3.196/silent.cfg"
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
