@@ -13,8 +13,8 @@ touch $HOME/vars.list
 
 if [ "$OS" == "linux-ppc64le" ]; then
       echo "Setting up tools for linux-ppc64le  build"
-      sudo apt-get dist-upgrade 
-      sudo apt-get install gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch
+      #sudo apt-get dist-upgrade 
+      sudo apt-get install gcc gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch
       sudo dpkg --add-architecture ppc64el
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty main restricted universe multiverse"
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-updates main restricted universe multiverse"
