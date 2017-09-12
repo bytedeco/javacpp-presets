@@ -30,7 +30,7 @@ if [ "$OS" == "linux-ppc64le" ]; then
       sudo apt-get -f install 
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
-      sudo apt-get install gcc
+      ls -ltr /usr/bin/*gcc*
       export BUILD_COMPILER="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
       
       #if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
