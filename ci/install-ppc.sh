@@ -14,7 +14,7 @@ touch $HOME/vars.list
 if [ "$OS" == "linux-ppc64le" ]; then
       echo "Setting up tools for linux-ppc64le  build"
       #sudo apt-get dist-upgrade 
-      sudo apt-get install gcc gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch
+      sudo apt-get install gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch
       sudo dpkg --add-architecture ppc64el
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty main restricted universe multiverse"
       sudo add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-updates main restricted universe multiverse"
@@ -30,6 +30,7 @@ if [ "$OS" == "linux-ppc64le" ]; then
       sudo apt-get -f install 
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
+      sudo apt-get install gcc
       export BUILD_COMPILER="-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++"
       
       #if [[ "$PROJ" =~ cuda ]] || [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ caffe ]]; then
