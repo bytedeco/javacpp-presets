@@ -465,7 +465,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=ppc64le-linux CFLAGS="-m64"
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=ppc64le-linux CFLAGS="-m64"
+        else
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic  --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64" 
+        fi
         make -j $MAKEJ
         make install 
         cd ../ffmpeg-$FFMPEG_VERSION
