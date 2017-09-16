@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.2.0/tensorflow/BUILD tensorflow-1.2.0-android/tensorflow/BUILD
---- tensorflow-1.2.0/tensorflow/BUILD	2017-06-15 04:02:07.000000000 +0900
-+++ tensorflow-1.2.0-android/tensorflow/BUILD	2017-06-25 21:56:46.565244004 +0900
-@@ -500,14 +500,29 @@
+diff -ruN tensorflow-1.3.0/tensorflow/BUILD tensorflow-1.3.0-android/tensorflow/BUILD
+--- tensorflow-1.3.0/tensorflow/BUILD	2017-08-17 10:20:31.000000000 +0900
++++ tensorflow-1.3.0-android/tensorflow/BUILD	2017-09-15 21:17:10.284397763 +0900
+@@ -443,14 +443,29 @@
      ],
  )
  
@@ -36,10 +36,10 @@ diff -ruN tensorflow-1.2.0/tensorflow/BUILD tensorflow-1.2.0-android/tensorflow/
 +        "//tensorflow/core:android_tensorflow_lib",
      ],
  )
-diff -ruN tensorflow-1.2.0/tensorflow/c/BUILD tensorflow-1.2.0-android/tensorflow/c/BUILD
---- tensorflow-1.2.0/tensorflow/c/BUILD	2017-06-15 04:02:07.000000000 +0900
-+++ tensorflow-1.2.0-android/tensorflow/c/BUILD	2017-06-25 21:56:46.565244004 +0900
-@@ -75,6 +75,19 @@
+diff -ruN tensorflow-1.3.0/tensorflow/c/BUILD tensorflow-1.3.0-android/tensorflow/c/BUILD
+--- tensorflow-1.3.0/tensorflow/c/BUILD	2017-08-17 10:20:31.000000000 +0900
++++ tensorflow-1.3.0-android/tensorflow/c/BUILD	2017-09-15 21:17:10.284397763 +0900
+@@ -76,6 +76,19 @@
      visibility = ["//visibility:public"],
  )
  
@@ -59,10 +59,10 @@ diff -ruN tensorflow-1.2.0/tensorflow/c/BUILD tensorflow-1.2.0-android/tensorflo
  tf_cuda_library(
      name = "tf_status_helper",
      srcs = ["tf_status_helper.cc"],
-diff -ruN tensorflow-1.2.0/tensorflow/core/BUILD tensorflow-1.2.0-android/tensorflow/core/BUILD
---- tensorflow-1.2.0/tensorflow/core/BUILD	2017-06-15 04:02:07.000000000 +0900
-+++ tensorflow-1.2.0-android/tensorflow/core/BUILD	2017-06-25 21:56:46.566244005 +0900
-@@ -983,7 +983,10 @@
+diff -ruN tensorflow-1.3.0/tensorflow/core/BUILD tensorflow-1.3.0-android/tensorflow/core/BUILD
+--- tensorflow-1.3.0/tensorflow/core/BUILD	2017-08-17 10:20:31.000000000 +0900
++++ tensorflow-1.3.0-android/tensorflow/core/BUILD	2017-09-15 21:17:10.285397763 +0900
+@@ -993,7 +993,10 @@
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
@@ -74,10 +74,10 @@ diff -ruN tensorflow-1.2.0/tensorflow/core/BUILD tensorflow-1.2.0-android/tensor
      copts = tf_copts(),
      tags = [
          "manual",
-diff -ruN tensorflow-1.2.0/tensorflow/core/kernels/BUILD tensorflow-1.2.0-android/tensorflow/core/kernels/BUILD
---- tensorflow-1.2.0/tensorflow/core/kernels/BUILD	2017-06-15 04:02:07.000000000 +0900
-+++ tensorflow-1.2.0-android/tensorflow/core/kernels/BUILD	2017-06-25 21:56:46.566244005 +0900
-@@ -4089,6 +4089,7 @@
+diff -ruN tensorflow-1.3.0/tensorflow/core/kernels/BUILD tensorflow-1.3.0-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.3.0/tensorflow/core/kernels/BUILD	2017-08-17 10:20:31.000000000 +0900
++++ tensorflow-1.3.0-android/tensorflow/core/kernels/BUILD	2017-09-15 21:17:10.285397763 +0900
+@@ -4196,6 +4196,7 @@
          "warn_about_ints.h",
          "where_op.h",
          "xent_op.h",
@@ -85,10 +85,10 @@ diff -ruN tensorflow-1.2.0/tensorflow/core/kernels/BUILD tensorflow-1.2.0-androi
      ],
  )
  
-diff -ruN tensorflow-1.2.0/tensorflow/tensorflow.bzl tensorflow-1.2.0-android/tensorflow/tensorflow.bzl
---- tensorflow-1.2.0/tensorflow/tensorflow.bzl	2017-06-15 04:02:07.000000000 +0900
-+++ tensorflow-1.2.0-android/tensorflow/tensorflow.bzl	2017-06-25 21:58:44.668160797 +0900
-@@ -132,7 +132,6 @@
+diff -ruN tensorflow-1.3.0/tensorflow/tensorflow.bzl tensorflow-1.3.0-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.3.0/tensorflow/tensorflow.bzl	2017-08-17 10:20:31.000000000 +0900
++++ tensorflow-1.3.0-android/tensorflow/tensorflow.bzl	2017-09-15 21:17:10.286397763 +0900
+@@ -155,7 +155,6 @@
        ["-mfpu=neon"]) + if_x86(["-msse3"]) + select({
            clean_dep("//tensorflow:android"): [
                "-std=c++11",
@@ -96,9 +96,9 @@ diff -ruN tensorflow-1.2.0/tensorflow/tensorflow.bzl tensorflow-1.2.0-android/te
                "-O2",
            ],
            clean_dep("//tensorflow:darwin"): [],
-diff -ruN tensorflow-1.2.0/WORKSPACE tensorflow-1.2.0-android/WORKSPACE
---- tensorflow-1.2.0/WORKSPACE	2017-06-15 04:02:07.000000000 +0900
-+++ tensorflow-1.2.0-android/WORKSPACE	2017-06-25 21:57:38.895319329 +0900
+diff -ruN tensorflow-1.3.0/WORKSPACE tensorflow-1.3.0-android/WORKSPACE
+--- tensorflow-1.3.0/WORKSPACE	2017-08-17 10:20:31.000000000 +0900
++++ tensorflow-1.3.0-android/WORKSPACE	2017-09-15 21:17:48.034400585 +0900
 @@ -28,12 +28,12 @@
  #)
  #
@@ -106,13 +106,13 @@ diff -ruN tensorflow-1.2.0/WORKSPACE tensorflow-1.2.0-android/WORKSPACE
 -#android_ndk_repository(
 -#    name="androidndk",
 -#    path="<PATH_TO_NDK>",
--#    # This needs to be 14 or higher to compile TensorFlow. 
+-#    # This needs to be 14 or higher to compile TensorFlow.
 -#    # Note that the NDK version is not the API level.
 -#    api_level=14)
 +android_ndk_repository(
 +    name="androidndk",
 +    path="<PATH_TO_NDK>",
-+    # This needs to be 14 or higher to compile TensorFlow. 
++    # This needs to be 14 or higher to compile TensorFlow.
 +    # Note that the NDK version is not the API level.
 +    api_level=14)
  

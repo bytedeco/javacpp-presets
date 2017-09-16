@@ -17,6 +17,7 @@ export TF_NEED_CUDA=0
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_OPENCL=0
+export TF_NEED_MPI=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=8.0
@@ -26,7 +27,7 @@ export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
-TENSORFLOW_VERSION=1.2.1
+TENSORFLOW_VERSION=1.3.0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -38,6 +39,9 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
+
+# https://github.com/tensorflow/tensorflow/issues/12979
+sed -i="" '\@https://github.com/google/protobuf/archive/0b059a3d8a8f8aa40dde7bea55edca4ec5dfea66.tar.gz@d' tensorflow/workspace.bzl
 
 case $PLATFORM in
     # Clang is incapable of compiling TensorFlow for Android, while in $ANDROID_NDK/source.properties,

@@ -44,7 +44,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     fi 
   fi 
-  if [ "$PROJ" == "mkl" ]; then
+  if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/11544/l_mkl_2017.3.196.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
@@ -53,7 +53,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.5.1/bazel-0.5.1-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.5.2/bazel-0.5.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
@@ -120,9 +120,9 @@ fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update > /dev/null
-   brew install gcc5 swig bazel libtool libusb nasm yasm xz sdl
+   brew install gcc5 swig libtool libusb nasm yasm xz sdl
    ln -s /usr/local/opt/gcc\@5 /usr/local/opt/gcc5
- fi
+fi
 
 if [[ "$OS" =~ android ]]; then
    echo "Install android requirements.."
@@ -155,7 +155,7 @@ if [[ "$OS" =~ android ]]; then
    fi
    if [ "$PROJ" == "tensorflow" ]; then
       echo "adding bazel for tensorflow"
-      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.5.1/bazel-0.5.1-installer-linux-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
+      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.5.2/bazel-0.5.2-installer-linux-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
       if [ "$CURL_STATUS" != "0" ]; then
         echo "Download failed here, so can't proceed with the build.. Failing.."
         exit 1
@@ -223,7 +223,17 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         sudo cp ./cuda/lib/libcudnn.6.dylib /usr/local/cuda/lib/libcudnn.6.dylib
         sudo cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
         sudo cp ./cuda/lib/libcudnn_static.a /usr/local/cuda/lib/libcudnn_static.a
-      fi  
+      fi
+
+      if [ "$PROJ" == "tensorflow" ]; then
+        echo "adding bazel for tensorflow"
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.5.2/bazel-0.5.2-installer-darwin-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        if [ "$CURL_STATUS" != "0" ]; then
+          echo "Download failed here, so can't proceed with the build.. Failing.."
+          exit 1
+        fi
+        sudo bash $HOME/downloads/bazel.sh
+     fi
 fi  
 
 

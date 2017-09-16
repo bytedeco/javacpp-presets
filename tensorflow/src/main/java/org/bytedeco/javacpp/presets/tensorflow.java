@@ -94,6 +94,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/graph.pb.h",
                         "tensorflow/core/framework/shape_inference.h",
                         "tensorflow/core/framework/partial_tensor_shape.h",
+                        "tensorflow/core/framework/device_attributes.pb.h",
                         "tensorflow/core/public/session.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/core/framework/op_def.pb.h",
@@ -184,6 +185,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/graph.pb.h",
                         "tensorflow/core/framework/shape_inference.h",
                         "tensorflow/core/framework/partial_tensor_shape.h",
+                        "tensorflow/core/framework/device_attributes.pb.h",
                         "tensorflow/core/public/session.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/core/framework/op_def.pb.h",
@@ -210,11 +212,11 @@ import java.lang.annotation.Target;
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
-               .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_DEPRECATED_ATTR",
+               .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "PROTOBUF_CONSTEXPR",
                              "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT", "TF_EXPORT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
-               .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
+               .put(new Info("GOOGLE_PROTOBUF_DEPRECATED_ATTR", "PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define())
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
                .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
@@ -228,6 +230,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("std::initializer_list").skip())
                .put(new Info("std::string", "tensorflow::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("std::vector<tensorflow::StringPiece>").pointerTypes("StringPieceVector").define())
                .put(new Info("std::vector<std::string>", "std::vector<tensorflow::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::string> >").pointerTypes("StringStringPairVector").define())
                .put(new Info("std::condition_variable", "std::mutex", "std::unique_lock<std::mutex>", "tensorflow::condition_variable", "tensorflow::mutex_lock").cast().pointerTypes("Pointer"))
@@ -238,9 +241,31 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("google::protobuf::Arena", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Message",
                              "google::protobuf::Metadata", "google::protobuf::io::CodedInputStream", "google::protobuf::io::CodedOutputStream").cast().pointerTypes("Pointer"))
-               .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "::google::protobuf::internal::ExplicitlyConstructed").skip())
+               .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
+                             "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField").skip())
 
-               .put(new Info("tensorflow::AutoParallelOptionsDefaultTypeInternal", "tensorflow::ClusterDefDefaultTypeInternal", "tensorflow::JobDefDefaultTypeInternal",
+               .put(new Info("tensorflow::error::protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2ftypes_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto::TableStruct",
+                             "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto::TableStruct",
+                             "tensorflow::JobDef_TasksEntryDefaultTypeInternal", "tensorflow::ResourceHandleProtoDefaultTypeInternal", "tensorflow::NameAttrList_AttrEntryDefaultTypeInternal",
+                             "tensorflow::NodeDef_AttrEntryDefaultTypeInternal", "tensorflow::FunctionDef_AttrEntryDefaultTypeInternal", "tensorflow::FunctionDef_RetEntryDefaultTypeInternal",
+                             "tensorflow::DeviceAttributesDefaultTypeInternal", "tensorflow::DeviceLocalityDefaultTypeInternal", "tensorflow::ConfigProto_DeviceCountEntryDefaultTypeInternal",
+                             "tensorflow::AutoParallelOptionsDefaultTypeInternal", "tensorflow::ClusterDefDefaultTypeInternal", "tensorflow::JobDefDefaultTypeInternal",
                              "tensorflow::DebugOptionsDefaultTypeInternal", "tensorflow::DebugTensorWatchDefaultTypeInternal", "tensorflow::AllocatorMemoryUsedDefaultTypeInternal",
                              "tensorflow::ConfigProtoDefaultTypeInternal", "tensorflow::CostGraphDefDefaultTypeInternal", "tensorflow::CostGraphDef_NodeDefaultTypeInternal",
                              "tensorflow::CostGraphDef_Node_InputInfoDefaultTypeInternal", "tensorflow::CostGraphDef_Node_OutputInfoDefaultTypeInternal", "tensorflow::DeviceStepStatsDefaultTypeInternal",
@@ -270,6 +295,12 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::Session").base("AbstractSession"))
                .put(new Info("tensorflow::Session::~Session()").javaText("/** Calls {@link tensorflow#NewSession(SessionOptions)} and registers a deallocator. */\n"
                                                                        + "public Session(SessionOptions options) { super(options); }"))
+               .put(new Info("tensorflow::TensorShapeBase<tensorflow::TensorShape>", "tensorflow::TensorShapeBase<tensorflow::PartialTensorShape>").pointerTypes("TensorShapeBase"))
+               .put(new Info("tensorflow::TensorShapeIter<tensorflow::TensorShape>").pointerTypes("TensorShapeIter").define())
+               .put(new Info("tensorflow::shape_inference::InferenceContext").purify())
+               .put(new Info("std::vector<std::unique_ptr<std::vector<tensorflow::shape_inference::ShapeAndType> > >",
+                             "std::vector<std::unique_ptr<std::vector<std::pair<tensorflow::TensorShapeProto,tensorflow::DataType> > > >",
+                             "std::vector<std::unique_ptr<std::vector<std::pair<tensorflow::PartialTensorShape,tensorflow::DataType> > > >").skip())
                .put(new Info("std::vector<tensorflow::Tensor>").pointerTypes("TensorVector").define())
                .put(new Info("std::vector<tensorflow::TensorProto>").pointerTypes("TensorProtoVector").define())
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
@@ -277,6 +308,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::Node*,int> >").pointerTypes("NodeIntPairVector").define())
 
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator", "AttrValueMap::const_iterator").skip())
                .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>",
                              "tensorflow::protobuf::Map<tensorflow::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::FunctionDefHelper::AttrValueWrapper").pointerTypes("FunctionDefHelper.AttrValueWrapper"))
@@ -292,6 +324,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::ops::Const").cppTypes("class tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
+               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::StringPiece>").cast().pointerTypes("StringPieceVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>", "tensorflow::gtl::ArraySlice<tensorflow::string>").cast().pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >").cast().pointerTypes("StringStringPairVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
@@ -371,7 +404,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::function<int(const *tensorflow::Node)>").pointerTypes("NodeColorFunction"));
 
         infoMap.put(new Info("tensorflow::gtl::ArraySlice").annotations("@ArraySlice"))
-               .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
+               .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"StringPiece*\"}) BytePointer"))
                .put(new Info("tensorflow::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
                              "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
 
@@ -487,6 +520,6 @@ public class tensorflow implements InfoMapper {
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
-    @Adapter("StringPieceAdapter")
+    @Cast("tensorflow::StringPiece&") @Adapter("StringPieceAdapter")
     public @interface StringPiece { }
 }
