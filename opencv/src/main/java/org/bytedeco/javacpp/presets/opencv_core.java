@@ -186,6 +186,8 @@ public class opencv_core implements InfoMapper {
                      + "private Pointer data; // a reference to prevent deallocation\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
                      + "public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }\n"
+                     + "public Mat(Scalar scalar) { this(1, 1, CV_64FC4, scalar); this.data = scalar; }\n"
+                     + "public Mat(Scalar4i scalar) { this(1, 1, CV_32SC4, scalar); this.data = scalar; }\n"
                      + "public Mat(byte ... b) { this(b, false); }\n"
                      + "public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }\n"
                      + "public Mat(short ... s) { this(s, true); }\n"

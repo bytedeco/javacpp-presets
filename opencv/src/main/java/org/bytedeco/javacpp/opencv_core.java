@@ -15514,6 +15514,8 @@ including std::sort().
     private Pointer data; // a reference to prevent deallocation
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
     public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }
+    public Mat(Scalar scalar) { this(1, 1, CV_64FC4, scalar); this.data = scalar; }
+    public Mat(Scalar4i scalar) { this(1, 1, CV_32SC4, scalar); this.data = scalar; }
     public Mat(byte ... b) { this(b, false); }
     public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }
     public Mat(short ... s) { this(s, true); }
