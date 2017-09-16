@@ -25,7 +25,7 @@ if [ "$OS" == "linux-ppc64le" ]; then
       sudo apt-get autoclean 
 #      sudo apt-get dist-upgrade 
       sudo apt-get -f install 
-      sudo apt-get install libcairo2-dev:ppc64el libpango1.0-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libfreetype6-dev:ppc64el libasound2-dev:ppc64el libperl-dev:ppc64el libqt4-dev:ppc64el  libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g-dev:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el
+      sudo apt-get install libcairo2-dev:ppc64el- libpango1.0-dev:ppc64el- libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el- libfreetype6-dev:ppc64el libasound2-dev:ppc64el libperl-dev:ppc64el libqt4-dev:ppc64el  libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g-dev:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el
       sudo apt-get -f install 
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/glib-2.0/include/glibconfig.h /usr/include/glib-2.0/glibconfig.h
       sudo ln -s  /usr/lib/powerpc64le-linux-gnu/gtk-2.0/include/gdkconfig.h /usr/include/gtk-2.0/gdk/gdkconfig.h
