@@ -16,7 +16,7 @@ DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install software-properties-common python-dev python-numpy gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch" 
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture ppc64e"  
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture ppc64el"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"'  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"'  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse"'  
