@@ -26,7 +26,6 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo
   
 
 echo "Running install for $PROJ"
-DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
 echo "container id is $DOCKER_CONTAINER_ID"
 if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
    echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
