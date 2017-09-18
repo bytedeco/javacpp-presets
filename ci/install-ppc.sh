@@ -10,6 +10,8 @@ pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
+export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
+
 echo "Starting docker for ppc cross compile"
 docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup ubuntu:xenial /sbin/init 
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
