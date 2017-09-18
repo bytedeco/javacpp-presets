@@ -15,7 +15,7 @@ docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=dock
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install software-properties-common python python-dev python-numpy gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch swig git file wget unzip tar bzip2 patch automake make libtool perl nasm yasm curl" 
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install software-properties-common python python-dev python-numpy gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch swig git file wget unzip tar bzip2 patch automake make libtool perl nasm yasm curl cmake" 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "add-apt-repository ppa:webupd8team/java -y"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections"  
