@@ -386,12 +386,12 @@ case $PLATFORM in
 
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
-        cd $ZLIB
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         else
          CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         fi
+        cd $ZLIB
         make -j $MAKEJ
         make install
         cd ../$LAME

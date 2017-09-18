@@ -25,6 +25,22 @@ matrix:
         env: PROJ=ffmpeg OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=flycapture OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libdc1394 OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+
 
       - jdk: oraclejdk8
         os: linux 
