@@ -79,7 +79,7 @@ case $PLATFORM in
           export FC="$OLDFC -m64"
 	else
 	  export CC="powerpc64le-linux-gnu-gcc"
-	  export FC="powerpc64le-linux-gnu-gfortran-4.8"
+	  export FC="powerpc64le-linux-gnu-gfortran"
 	  export CROSS_SUFFIX="powerpc64le-linux-gnu-"
 	fi
         export BINARY=64
