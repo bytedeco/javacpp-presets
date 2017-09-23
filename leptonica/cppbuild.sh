@@ -261,7 +261,14 @@ case $PLATFORM in
     	make install-strip
     	;;
     linux-ppc64le)
-        export CC="$OLDCC -m64 -fPIC"
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          export CC="$OLDCC -m64 -fPIC"
+        else
+          export CC="powerpc64le-linux-gnu-gcc -m64"
+          export CXX="powerpc64le-linux-gnu-g++ -m64"
+        fi
+
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ

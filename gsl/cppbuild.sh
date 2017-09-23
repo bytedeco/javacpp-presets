@@ -67,7 +67,12 @@ case $PLATFORM in
         ;;
     linux-ppc64le)
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        else
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux 
+        fi
         make -j $MAKEJ
         make install-strip
         ;;
