@@ -109,43 +109,43 @@ public static final int
      FFTW_REDFT00= 3, FFTW_REDFT01= 4, FFTW_REDFT10= 5, FFTW_REDFT11= 6,
      FFTW_RODFT00= 7, FFTW_RODFT01= 8, FFTW_RODFT10= 9, FFTW_RODFT11= 10;
 
-public static class fftw_iodim_do_not_use_me extends Pointer {
+@Name("fftw_iodim_do_not_use_me") public static class fftw_iodim extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public fftw_iodim_do_not_use_me() { super((Pointer)null); allocate(); }
+    public fftw_iodim() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public fftw_iodim_do_not_use_me(long size) { super((Pointer)null); allocateArray(size); }
+    public fftw_iodim(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public fftw_iodim_do_not_use_me(Pointer p) { super(p); }
+    public fftw_iodim(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public fftw_iodim_do_not_use_me position(long position) {
-        return (fftw_iodim_do_not_use_me)super.position(position);
+    @Override public fftw_iodim position(long position) {
+        return (fftw_iodim)super.position(position);
     }
 
-     public native int n(); public native fftw_iodim_do_not_use_me n(int n);                     /* dimension size */
-     public native int is(); public native fftw_iodim_do_not_use_me is(int is);			/* input stride */
-     public native int os(); public native fftw_iodim_do_not_use_me os(int os);			/* output stride */
+     public native int n(); public native fftw_iodim n(int n);                     /* dimension size */
+     public native int is(); public native fftw_iodim is(int is);			/* input stride */
+     public native int os(); public native fftw_iodim os(int os);			/* output stride */
 }
 
 // #include <stddef.h> /* for ptrdiff_t */
-public static class fftw_iodim64_do_not_use_me extends Pointer {
+@Name("fftw_iodim64_do_not_use_me") public static class fftw_iodim64 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public fftw_iodim64_do_not_use_me() { super((Pointer)null); allocate(); }
+    public fftw_iodim64() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public fftw_iodim64_do_not_use_me(long size) { super((Pointer)null); allocateArray(size); }
+    public fftw_iodim64(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public fftw_iodim64_do_not_use_me(Pointer p) { super(p); }
+    public fftw_iodim64(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public fftw_iodim64_do_not_use_me position(long position) {
-        return (fftw_iodim64_do_not_use_me)super.position(position);
+    @Override public fftw_iodim64 position(long position) {
+        return (fftw_iodim64)super.position(position);
     }
 
-     public native @Cast("ptrdiff_t") long n(); public native fftw_iodim64_do_not_use_me n(long n);                     /* dimension size */
-     public native @Cast("ptrdiff_t") long is(); public native fftw_iodim64_do_not_use_me is(long is);			/* input stride */
-     public native @Cast("ptrdiff_t") long os(); public native fftw_iodim64_do_not_use_me os(long os);			/* output stride */
+     public native @Cast("ptrdiff_t") long n(); public native fftw_iodim64 n(long n);                     /* dimension size */
+     public native @Cast("ptrdiff_t") long is(); public native fftw_iodim64 is(long is);			/* input stride */
+     public native @Cast("ptrdiff_t") long os(); public native fftw_iodim64 os(long os);			/* output stride */
 }
 
 public static class fftw_write_char_func_do_not_use_me extends FunctionPointer {
@@ -509,19 +509,6 @@ public static class fftw_read_char_func_do_not_use_me extends FunctionPointer {
     public fftw_plan() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_plan(Pointer p) { super(p); }
-}
-
-@Opaque public static class fftw_iodim extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public fftw_iodim() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public fftw_iodim(Pointer p) { super(p); }
-}
-@Opaque public static class fftw_iodim64 extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public fftw_iodim64() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public fftw_iodim64(Pointer p) { super(p); }
 }
 
 public static native void fftw_execute(fftw_plan p);

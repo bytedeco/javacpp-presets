@@ -1,4 +1,5 @@
 
+ * Fix definitions of `fftw_iodim` and `fftw_iodim64` for FFTW ([issue #466](https://github.com/bytedeco/javacpp-presets/issues/466))
  * Add a `Mat(Scalar)` constructor to OpenCV for convenience ([issue bytedeco/javacv#738](https://github.com/bytedeco/javacv/issues/738))
  * Include the `libavutil/time.h` for FFmpeg ([issue bytedeco/javacv#735](https://github.com/bytedeco/javacv/issues/735))
  * Map `AVERROR()` for error codes from `errno.h` used by FFmpeg ([pull #459](https://github.com/bytedeco/javacpp-presets/pull/459))
