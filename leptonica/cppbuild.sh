@@ -264,9 +264,11 @@ case $PLATFORM in
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           export CC="$OLDCC -m64 -fPIC"
+          export BFLAGS="--build=ppc64le-linux"
         else
           export CC="powerpc64le-linux-gnu-gcc -m64"
           export CXX="powerpc64le-linux-gnu-g++ -m64"
+          export BFLAGS="--host=powerpc64le-linux-gnu"
         fi
 
         cd $ZLIB
@@ -274,28 +276,28 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$GIFLIB
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS --disable-lzma
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --build=ppc64le-linux --disable-programs
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $BFLAGS --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;

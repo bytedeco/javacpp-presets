@@ -35,7 +35,9 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo
   
 if [[ "$PROJ" =~ cuda ]]; then
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2v2_8.0.61-1_ppc64el-deb -O cuda.deb"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg -i cuda.deb; apt-get update; apt-get -y install cuda"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg -i cuda.deb"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install cuda"
 fi
 
 
