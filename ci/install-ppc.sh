@@ -37,6 +37,7 @@ if [[ "$PROJ" =~ cuda ]]; then
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb -O cuda.deb"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg -i cuda.deb"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get install -y tzdata"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install cuda"
 fi
 
@@ -77,6 +78,8 @@ if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
  echo "Build status $BUILD_STATUS"
  if [ $BUILD_STATUS -ne 0 ]; then  
    echo "Build Failed"
+   echo "Dump of config.log output files found follows:"
+   find . -name config.log | xargs cat
    exit $BUILD_STATUS
  fi
 
