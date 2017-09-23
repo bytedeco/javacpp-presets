@@ -479,7 +479,7 @@ case $PLATFORM in
           PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         else
           echo "configure ffmpeg cross compile"
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE  "${ENABLE//--enable-libfreetype}" --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"  
+          CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE "${ENABLE//--enable-libfreetype}" --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"  
         fi
         make -j $MAKEJ
         make install
