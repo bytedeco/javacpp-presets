@@ -466,9 +466,9 @@ case $PLATFORM in
         make install
         cd ../freetype-$FREETYPE_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=ppc64le-linux CFLAGS="-m64"
+          ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --disable-shared --target=ppc64le-linux CFLAGS="-m64"
         else
-          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic  --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64" 
+          CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --disable-shared --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64" 
         fi
         make -j $MAKEJ
         make install 
@@ -477,7 +477,8 @@ case $PLATFORM in
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         else
-          PKG_CONFIG_PATH=../lib/pkgconfig/ CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"  
+          echo "configure ffmpeg cross compile"
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"  
         fi
         make -j $MAKEJ
         make install

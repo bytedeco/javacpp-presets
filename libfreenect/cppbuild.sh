@@ -10,6 +10,7 @@ fi
 LIBFREENECT_VERSION=0.5.3
 download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.zip libfreenect-$LIBFREENECT_VERSION.zip
 
+
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
@@ -35,6 +36,23 @@ if [[ $PLATFORM == linux-armhf ]]; then
     make install
     cd .. 
 fi
+
+MACHINE_TYPE=$( uname -m )
+if [[ $PLATFORM ==  linux-ppc64le ]]; then
+    download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.19/libusb-1.0.19.tar.bz2/download libusb-1.0.19.tar.bz2
+    echo "Decompressing archives..."
+    tar --totals -xjf libusb-1.0.19.tar.bz2
+    cd libusb-1.0.19
+    if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc-linux-gnu --disable-udev
+    else
+        CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc-linux-gnu --disable-udev
+    fi
+    make
+    make install
+    cd ..
+fi
+
 
 cd libfreenect-$LIBFREENECT_VERSION
 
