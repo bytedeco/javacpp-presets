@@ -134,7 +134,12 @@ Once everything installed and configured, simply execute
 ```bash
 $ mvn install --projects .,opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
 ```
-inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Please refer to the comments inside the `pom.xml` file for further details.
+inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Please refer to the comments inside the `pom.xml` file for further details. From the "platform" subdirectory, we can also install the "platform" artifacts with a similar command:
+
+```bash
+$ cd platform
+$ mvn install --projects ../opencv/platform,../ffmpeg/platform,etc. -Djavacpp.platform.host
+```
 
 
 ### The `cppbuild.sh` scripts
