@@ -123,7 +123,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * Leptonica 1.74.4  http://www.leptonica.org/download.html
  * Tesseract 3.05.01  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
+ * CUDA 9.0  https://developer.nvidia.com/cuda-downloads
  * MXnet 0.10.0  https://github.com/dmlc/mxnet
  * TensorFlow 1.3.0  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
