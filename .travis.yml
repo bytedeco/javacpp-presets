@@ -351,7 +351,7 @@ matrix:
 
       - jdk: oraclejdk8
         os: linux
-        env: PROJ=opencv,flandmark,openblas,hdf5,caffe OS=linux-x86
+        env: PROJ=opencv,flandmark,openblas,hdf5 OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
@@ -426,6 +426,11 @@ matrix:
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
         os: linux
+        env: PROJ=caffe OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
         env: PROJ=cuda OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
@@ -457,7 +462,7 @@ matrix:
 
       - jdk: oraclejdk8
         os: linux
-        env: PROJ=opencv,flandmark,openblas,hdf5,caffe OS=linux-x86_64
+        env: PROJ=opencv,flandmark,openblas,hdf5 OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8
@@ -528,6 +533,11 @@ matrix:
       - jdk: oraclejdk8
         os: linux
         env: PROJ=leptonica,tesseract OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=caffe OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - jdk: oraclejdk8

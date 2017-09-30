@@ -111,7 +111,7 @@ case $PLATFORM in
         make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -176,7 +176,7 @@ case $PLATFORM in
         make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
-        ASFLAGS="-D__ANDROID__" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-tools --target=x86-android-gcc
+        ASFLAGS="-D__ANDROID__" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=x86-android-gcc
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -226,7 +226,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-linux-gcc --as=yasm
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-linux-gcc --as=yasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -276,7 +276,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-linux-gcc --as=yasm
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-linux-gcc --as=yasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -358,9 +358,9 @@ case $PLATFORM in
         cd ../libvpx-$VPX_VERSION
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          CROSS=arm-linux-gnueabihf- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=armv7-linux-gcc
+          CROSS=arm-linux-gnueabihf- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=armv7-linux-gcc
         else
-          ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
+          ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
         fi
         make -j $MAKEJ
         make install
@@ -420,7 +420,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=generic-gnu
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=generic-gnu
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -470,7 +470,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -518,7 +518,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-win32-gcc
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -566,7 +566,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-win64-gcc
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-win64-gcc
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
