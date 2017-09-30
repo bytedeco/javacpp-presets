@@ -24501,18 +24501,6 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 
 // #define __CUDA_FP16_TYPES_EXIST__
 /* Forward-declaration of structures defined in "cuda_fp16.hpp" */
-@Opaque public static class __half extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public __half() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half(Pointer p) { super(p); }
-}
-@Opaque public static class __half2 extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public __half2() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half2(Pointer p) { super(p); }
-}
 
 /* Vector type creation functions, match vector_functions.h */
 
@@ -26186,6 +26174,247 @@ public static final int warpSize =    32;
 // #include "cuda_fp16.hpp"
 
 // #endif /* end of include guard: __CUDA_FP16_H__ */
+
+
+// Parsed from cuda_fp16.hpp
+
+/*
+* Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
+*
+* NOTICE TO LICENSEE:
+*
+* This source code and/or documentation ("Licensed Deliverables") are
+* subject to NVIDIA intellectual property rights under U.S. and
+* international Copyright laws.
+*
+* These Licensed Deliverables contained herein is PROPRIETARY and
+* CONFIDENTIAL to NVIDIA and is being provided under the terms and
+* conditions of a form of NVIDIA software license agreement by and
+* between NVIDIA and Licensee ("License Agreement") or electronically
+* accepted by Licensee.  Notwithstanding any terms or conditions to
+* the contrary in the License Agreement, reproduction or disclosure
+* of the Licensed Deliverables to any third party without the express
+* written consent of NVIDIA is prohibited.
+*
+* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+* LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
+* SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
+* PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
+* NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
+* DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
+* NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+* LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
+* SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
+* DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+* WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+* ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+* OF THESE LICENSED DELIVERABLES.
+*
+* U.S. Government End Users.  These Licensed Deliverables are a
+* "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
+* 1995), consisting of "commercial computer software" and "commercial
+* computer software documentation" as such terms are used in 48
+* C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
+* only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
+* 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
+* U.S. Government End Users acquire the Licensed Deliverables with
+* only those rights set forth herein.
+*
+* Any use of the Licensed Deliverables in individual and commercial
+* software must include, in the user documentation and internal
+* comments to the code, the above Disclaimer and U.S. Government End
+* Users Notice.
+*/
+
+// #if !defined(__CUDA_FP16_HPP__)
+// #define __CUDA_FP16_HPP__
+
+/* C++11 header for std::move */
+// #if __cplusplus >= 201103L
+// #include <utility>
+// #endif /* __cplusplus >= 201103L */
+
+/* Set up function decorations */
+// #if defined(__CUDACC_RTC__)
+// #define __CUDA_FP16_DECL__ __host__ __device__
+// #define __VECTOR_FUNCTIONS_DECL__ __host__ __device__
+// #define __CUDA_HOSTDEVICE__ __host__ __device__
+// #elif defined(__CUDACC__) /* !__CUDACC_RTC__ but yes __CUDACC__ */
+// #else /* !__CUDACC_RTC and !__CUDACC__ (i.e. host non-nvcc compiler */
+// #define __CUDA_HOSTDEVICE__
+// #endif /* __CUDACC_RTC__ and __CUDACC__ */
+
+/* Set up structure-alignment attribute */
+// #if defined(__CUDACC__)
+// #else
+/* Define alignment macro based on compiler type (cannot assume C11 "_Alignas" is available) */
+// #if __cplusplus >= 201103L
+// #define __CUDA_ALIGN__(n) alignas(n)    /* C++11 kindly gives us a keyword for this */
+// #else /* !(__cplusplus >= 201103L)*/
+// #if defined(__GNUC__) /* || defined(__IBMC__) || defined(__clang__) || defined(__PGI) */
+// #define __CUDA_ALIGN__(n) __attribute__ ((aligned(n)))
+// #elif defined(_MSC_VER) /* || defined(__ICC) */
+// #define __CUDA_ALIGN__(n) __declspec(align(n))
+// #else
+// #define __CUDA_ALIGN__(n)
+// #endif /* defined(__GNUC__) */
+// #endif /* __cplusplus >= 201103L */
+// #endif /* defined(__CUDACC__) */
+
+
+/* Macros to allow half & half2 to be used by inline assembly */
+// #define __HALF_TO_US(var) *(reinterpret_cast<unsigned short *>(&(var)))
+// #define __HALF_TO_CUS(var) *(reinterpret_cast<const unsigned short *>(&(var)))
+// #define __HALF2_TO_UI(var) *(reinterpret_cast<unsigned int *>(&(var)))
+// #define __HALF2_TO_CUI(var) *(reinterpret_cast<const unsigned int *>(&(var)))
+
+
+/**
+* Types which allow static initialization of "half" and "half2" until
+* these become an actual builtin. Note this initialization is as a
+* bitfield representation of "half", and not a conversion from short->half.
+* Such a representation will be deprecated in a future version of CUDA. 
+* (Note these are visible to non-nvcc compilers, including C-only compilation)
+*/
+public static class __half_raw extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public __half_raw() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public __half_raw(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half_raw(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public __half_raw position(long position) {
+        return (__half_raw)super.position(position);
+    }
+
+    public native @Cast("unsigned short") short x(); public native __half_raw x(short x);
+}
+
+public static class __half2_raw extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public __half2_raw() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public __half2_raw(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half2_raw(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public __half2_raw position(long position) {
+        return (__half2_raw)super.position(position);
+    }
+
+    public native @Cast("unsigned short") short x(); public native __half2_raw x(short x);
+    public native @Cast("unsigned short") short y(); public native __half2_raw y(short y);
+}
+
+/* All other definitions in this file are only visible to C++ compilers */
+// #if defined(__cplusplus)
+
+/* Hide GCC member initialization list warnings because of host/device in-function init requirement */
+// #if defined(__GNUC__)
+// #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #pragma GCC diagnostic ignored "-Weffc++"
+// #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
+// #endif /* defined(__GNUC__) */
+
+@NoOffset public static class __half extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public __half(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public __half position(long position) {
+        return (__half)super.position(position);
+    }
+
+// #if __cplusplus >= 201103L
+    public __half() { super((Pointer)null); allocate(); }
+    private native void allocate();
+// #else
+// #endif /* __cplusplus >= 201103L */
+
+    /* Convert to/from __half_raw */
+    public __half(@Const @ByRef __half_raw hr) { super((Pointer)null); allocate(hr); }
+    private native void allocate(@Const @ByRef __half_raw hr);
+    public native @ByRef @Name("operator =") __half put(@Const @ByRef __half_raw hr);
+    public native @ByVal @Name("operator __half_raw") __half_raw as__half_raw();
+
+/* Member functions are only available to nvcc compilation */
+// #if defined(__CUDACC__)
+// #endif /* defined(__CUDACC__) */
+}
+
+/* Global-space operator functions are only available to nvcc compilation */
+// #if defined(__CUDACC__)
+// #endif /* defined(__CUDACC__) */
+
+/* __half2 is visible to non-nvcc host compilers */
+@NoOffset public static class __half2 extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half2(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public __half2(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public __half2 position(long position) {
+        return (__half2)super.position(position);
+    }
+
+    public native @ByRef __half x(); public native __half2 x(__half x);
+    public native @ByRef __half y(); public native __half2 y(__half y);
+// #if __cplusplus >= 201103L
+    public __half2() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public __half2(@ByVal __half2 src) { super((Pointer)null); allocate(src); }
+    private native void allocate(@ByVal __half2 src);
+    public native @ByRef @Name("operator =") __half2 put(@ByVal __half2 src);
+// #else
+// #endif /* __cplusplus >= 201103L */
+    public __half2(@Const @ByRef __half a, @Const @ByRef __half b) { super((Pointer)null); allocate(a, b); }
+    private native void allocate(@Const @ByRef __half a, @Const @ByRef __half b);
+
+    /* Convert to/from __half2_raw */
+    public __half2(@Const @ByRef __half2_raw h2r ) { super((Pointer)null); allocate(h2r); }
+    private native void allocate(@Const @ByRef __half2_raw h2r );
+    public native @ByRef @Name("operator =") __half2 put(@Const @ByRef __half2_raw h2r);
+    public native @ByVal @Name("operator __half2_raw") __half2_raw as__half2_raw();
+}
+
+/* Restore -Weffc++ warnings from here on */
+// #if defined(__GNUC__)
+// #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+// #pragma GCC diagnostic pop
+// #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
+// #endif /* defined(__GNUC__) */
+
+// #undef __CUDA_HOSTDEVICE__
+// #undef __CUDA_ALIGN__
+
+/* All intrinsic functions are only available to nvcc compilers */
+// #if defined(__CUDACC__)
+// #endif /* defined(__CUDACC__) */
+// #endif /* defined(__cplusplus) */
+
+// #undef __HALF_TO_US
+// #undef __HALF_TO_CUS
+// #undef __HALF2_TO_UI
+// #undef __HALF2_TO_CUI
+
+
+/* Define first-class types "half" and "half2", unless user specifies otherwise via "#define CUDA_NO_HALF" */
+/* C cannot ever have these types defined here, because __half and __half2 are C++ classes */
+// #if defined(__cplusplus) && !defined(CUDA_NO_HALF)
+// #endif /* defined(__cplusplus) && !defined(CUDA_NO_HALF) */
+
+// #endif /* end of include guard: __CUDA_FP16_HPP__ */
 
 
 // Parsed from <library_types.h>

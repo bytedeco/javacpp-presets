@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(names = {"linux-x86_64", "linux-arm64", "linux-ppc64le", "macosx-x86_64", "windows-x86_64"}, value = {
     @Platform(include = {"<cuda.h>", "<crt/host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
-                       /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "<library_types.h>"},
+                       /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
               includepath = "/usr/local/cuda-9.0/include/", link = {"cudart@.9.0", "cuda@.9.0"}, linkpath = "/usr/local/cuda-9.0/lib/"),
     @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-9.0/lib64/"),
     @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-9.0/include/",
@@ -47,11 +47,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class cuda implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__volatile__", "__no_return__", "__noinline__", "__forceinline__", "__thread__", "__restrict__",
-                             "__inline__", "__specialization_static", "__host__", "__device__", "__global__", "__shared__",
-                             "__constant__", "__managed__", "NV_CLANG_ATOMIC_NOEXCEPT", "cudaDevicePropDontCare", "__LDG_PTR",
+                             "__inline__", "__specialization_static", "__host__", "__device__", "__global__", "__shared__", "__CUDA_HOSTDEVICE__",
+                             "__constant__", "__managed__", "NV_CLANG_ATOMIC_NOEXCEPT", "cudaDevicePropDontCare", "__LDG_PTR", "__CUDA_ALIGN__",
                              "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__").cppTypes().annotations().cppText(""))
                .put(new Info("defined(__CUDABE__) || !defined(__CUDACC__)").define())
-               .put(new Info("defined(CUDA_FORCE_API_VERSION)",
+               .put(new Info("defined(CUDA_FORCE_API_VERSION)", "defined(__CUDACC__)",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 3020",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4000",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4010",
