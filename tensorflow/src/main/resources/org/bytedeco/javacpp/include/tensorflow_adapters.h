@@ -28,7 +28,7 @@ using namespace tensorflow::gtl;
 
 template<typename T> class ArraySliceAdapter {
 public:
-    ArraySliceAdapter(const T* ptr, typename ArraySlice<T>::size_type size, void* owner) : ptr((T*)ptr), size(size), owner(owner),
+    ArraySliceAdapter(T const * ptr, typename ArraySlice<T>::size_type size, void* owner) : ptr((T*)ptr), size(size), owner(owner),
         arr2(ptr ? ArraySlice<T>((T*)ptr, size) : ArraySlice<T>()), arr(arr2) { }
     ArraySliceAdapter(const ArraySlice<T>& arr) : ptr(0), size(0), owner(0), arr2(arr), arr(arr2) { }
     ArraySliceAdapter(      ArraySlice<T>& arr) : ptr(0), size(0), owner(0), arr(arr) { }

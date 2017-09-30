@@ -27,7 +27,7 @@ case $PLATFORM in
     linux-x86)
         export CC="$OLDCC -m32 -fPIC"
         cd glfw-$GLFW_VERSION
-	CC="gcc -m32" CXX="g++ -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
@@ -43,7 +43,11 @@ case $PLATFORM in
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64 -fPIC"
-        cd $LIBJPEG
+        cd glfw-$GLFW_VERSION
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install

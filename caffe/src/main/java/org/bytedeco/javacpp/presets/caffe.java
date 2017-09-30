@@ -188,8 +188,10 @@ public class caffe implements InfoMapper {
                      + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);\n"
                      + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);\n"))
 
+               .put(new Info("caffe::Net<float>::Callback").pointerTypes("FloatNet.Callback"))
                .put(new Info("caffe::Solver<float>::Callback").pointerTypes("FloatSolver.Callback"))
                .put(new Info("std::vector<caffe::Solver<float>::Callback*>").pointerTypes("FloatCallbackVector").define())
+               .put(new Info("caffe::Net<double>::Callback").pointerTypes("DoubleNet.Callback"))
                .put(new Info("caffe::Solver<double>::Callback").pointerTypes("DoubleSolver.Callback"))
                .put(new Info("std::vector<caffe::Solver<double>::Callback*>").pointerTypes("DoubleCallbackVector").define())
                .put(new Info("boost::function<caffe::SolverAction::Enum()>").pointerTypes("ActionCallback"));

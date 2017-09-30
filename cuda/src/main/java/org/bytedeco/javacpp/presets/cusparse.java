@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cusparse.h>", link = "cusparse@.8.0")},
+    @Platform(include = "<cusparse.h>", link = "cusparse@.9.0")},
         target = "org.bytedeco.javacpp.cusparse")
 public class cusparse implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -51,6 +51,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseHybMat_t").valueTypes("cusparseHybMat").pointerTypes("@ByPtrPtr cusparseHybMat"))
                .put(new Info("csrgemm2Info_t").valueTypes("csrgemm2Info").pointerTypes("@ByPtrPtr csrgemm2Info"))
                .put(new Info("csru2csrInfo_t").valueTypes("csru2csrInfo").pointerTypes("@ByPtrPtr csru2csrInfo"))
-               .put(new Info("cusparseColorInfo_t").valueTypes("cusparseColorInfo").pointerTypes("@ByPtrPtr cusparseColorInfo"));
+               .put(new Info("cusparseColorInfo_t").valueTypes("cusparseColorInfo").pointerTypes("@ByPtrPtr cusparseColorInfo"))
+               .put(new Info("pruneInfo_t").valueTypes("pruneInfo").pointerTypes("@ByPtrPtr pruneInfo"));
     }
 }

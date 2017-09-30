@@ -74,13 +74,13 @@ case $PLATFORM in
     windows-x86)
         "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH
         nmake chilitags_static
-        cp include/*.hpp ../include/chilitags/
+        cp *.hpp include/*.hpp ../include/chilitags/
         cp src/*.lib ../lib/
         ;;
     windows-x86_64)
         "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH
         nmake chilitags_static
-        cp include/*.hpp ../include/chilitags/
+        cp *.hpp include/*.hpp ../include/chilitags/
         cp src/*.lib ../lib/
         ;;
     *)

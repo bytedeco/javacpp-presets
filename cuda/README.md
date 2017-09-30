@@ -5,8 +5,8 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 8.0  https://developer.nvidia.com/cuda-zone
- * cuDNN 6.0  https://developer.nvidia.com/cudnn
+ * CUDA 9.0  https://developer.nvidia.com/cuda-zone
+ * cuDNN 7.0  https://developer.nvidia.com/cudnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>8.0-6.0-1.3</version>
+            <version>9.0-7.0-1.3</version>
         </dependency>
     </dependencies>
 </project>

@@ -130,6 +130,8 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
 // #include <string>
 // #include <memory>
 
+// #include "chilitags_export.hpp"
+
 /**
     The location of the detected chilitags are stored in a 4x2 matrix
     corresponding to the outside corners of its black border. The rows

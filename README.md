@@ -115,17 +115,17 @@ Each child module in turn relies on its corresponding native libraries being alr
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.1  https://support.hdfgroup.org/HDF5/
- * MKL 2017.2  https://software.intel.com/intel-mkl
- * OpenBLAS 0.2.19  http://www.openblas.net/
+ * MKL 2017.3  https://software.intel.com/intel-mkl
+ * OpenBLAS 0.2.20  http://www.openblas.net/
  * FFTW 3.3.6  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 4.0.0  http://llvm.org/releases/download.html
  * Leptonica 1.74.4  http://www.leptonica.org/download.html
  * Tesseract 3.05.01  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * CUDA 8.0  https://developer.nvidia.com/cuda-downloads
+ * CUDA 9.0  https://developer.nvidia.com/cuda-downloads
  * MXnet 0.10.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.2.1  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.3.0  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
@@ -134,7 +134,12 @@ Once everything installed and configured, simply execute
 ```bash
 $ mvn install --projects .,opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
 ```
-inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Please refer to the comments inside the `pom.xml` file for further details.
+inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Please refer to the comments inside the `pom.xml` file for further details. From the "platform" subdirectory, we can also install the "platform" artifacts with a similar command:
+
+```bash
+$ cd platform
+$ mvn install --projects ../opencv/platform,../ffmpeg/platform,etc. -Djavacpp.platform.host
+```
 
 
 ### The `cppbuild.sh` scripts
