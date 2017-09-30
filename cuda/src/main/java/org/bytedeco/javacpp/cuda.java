@@ -18150,9 +18150,9 @@ public static native @Cast("cudaError_t") int cudaEventElapsedTime(float[] ms, C
 /**
  * \brief Launches a device function
  *
- * The function invokes kernel \p func on \p gridDim (\p gridDim.x × \p gridDim.y
- * × \p gridDim.z) grid of blocks. Each block contains \p blockDim (\p blockDim.x ×
- * \p blockDim.y × \p blockDim.z) threads.
+ * The function invokes kernel \p func on \p gridDim (\p gridDim.x ?? \p gridDim.y
+ * ?? \p gridDim.z) grid of blocks. Each block contains \p blockDim (\p blockDim.x ??
+ * \p blockDim.y ?? \p blockDim.z) threads.
  *
  * If the kernel has N parameters the \p args should point to array of N pointers.
  * Each pointer, from <tt>args[0]</tt> to <tt>args[N - 1]</tt>, point to the region

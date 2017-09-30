@@ -284,7 +284,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
+        ./configure --prefix=$INSTALL_PATH  CPPFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
@@ -297,7 +297,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $BFLAGS --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $BFLAGS --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
