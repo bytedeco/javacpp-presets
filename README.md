@@ -46,9 +46,12 @@ We can also have everything downloaded and installed automatically with:
 
 * leiningen project.clj (cuda 8.0, cudnn 6.0, javacpp 1.3)
 ```clojure
+(def module-name "cuda")
+(def module-version "8.0-6.0")
+
 (defproject myproject "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
-  		 [org.bytedeco.javacpp-presets/cuda-platform "8.0-6.0-1.3"]]
+	             [~(symbol (str "org.bytedeco.javacpp-presets/" module-name "-platform")) ~(str module-version "-1.3")]]
 )
 ```
 
