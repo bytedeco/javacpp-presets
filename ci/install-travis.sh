@@ -18,7 +18,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     CENTOS_VERSION=7
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-centos$CENTOS_VERSION /bin/bash > /dev/null
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.0-cudnn7-devel-centos$CENTOS_VERSION /bin/bash > /dev/null
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install centos-release-scl-rh epel-release" > /dev/null
@@ -195,16 +195,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         while true; do echo .; sleep 60; done &
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
-        #if [[ $(find $HOME/downloads/cuda.dmg -type f -size +1000000c 2>/dev/null) ]]; then
-        if [[ $(hdiutil verify $HOME/downloads/cuda.dmg) ]]; then
-          echo "Found cuda in cache and verified image ok" 
-        else
-          echo "Downloading cuda as problem in cache" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShUzFIUHhkQnBQWWM $HOME/downloads/cuda.dmg
-        fi
+        #don't put in download dir as will be cached and we can use direct url instead
+        curl -L https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_mac-dmg -o $HOME/cuda.dmg
 
         echo "Mount dmg"
-        hdiutil mount $HOME/downloads/cuda.dmg
+        hdiutil mount $HOME/cuda.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
@@ -216,17 +211,16 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         kill $CHILDPID
         sudo cp /usr/local/cuda/lib/* /usr/local/lib
 
-        if [[ $(find $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz -type f -size +1000000c 2>/dev/null) ]]; then
+        if [[ $(find $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found cudnn in cache and size seems ok" 
         else
           echo "Downloading cudnn as not found in cache" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShc2JlWXNjNTlIVnc $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B8dyy7cU8B67UEtYVmh1akU1d1U $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz
         fi
-        tar xvf $HOME/downloads/cudnn-8.0-osx-x64-v6.0.tgz
-        sudo cp ./cuda/include/cudnn.h /usr/local/cuda/include/cudnn.h
-        sudo cp ./cuda/lib/libcudnn.6.dylib /usr/local/cuda/lib/libcudnn.6.dylib
-        sudo cp ./cuda/lib/libcudnn.dylib /usr/local/cuda/lib/libcudnn.dylib
-        sudo cp ./cuda/lib/libcudnn_static.a /usr/local/cuda/lib/libcudnn_static.a
+        tar xvf $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz
+        sudo cp ./cuda/include/*.h /usr/local/cuda/include/
+        sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
+        sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
       fi
 
       if [ "$PROJ" == "tensorflow" ]; then

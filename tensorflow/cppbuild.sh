@@ -20,14 +20,14 @@ export TF_NEED_OPENCL=0
 export TF_NEED_MPI=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
-export TF_CUDA_VERSION=8.0
-export TF_CUDNN_VERSION=6
+export TF_CUDA_VERSION=9.0
+export TF_CUDNN_VERSION=7
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
-TENSORFLOW_VERSION=1.3.0
+TENSORFLOW_VERSION=1.3.1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 

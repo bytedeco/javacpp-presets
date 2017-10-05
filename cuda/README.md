@@ -301,7 +301,7 @@ public class MNISTCUDNN {
                                                         0,0, // padding
                                                         1,1, // stride
                                                         1,1, // upscale
-                                                        CUDNN_CROSS_CORRELATION) );
+                                                        CUDNN_CROSS_CORRELATION, dataType) );
             // find dimension of convolution output
             checkCUDNN( cudnnGetConvolution2dForwardOutputDim(convDesc,
                                                     srcTensorDesc,
