@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.3.4-SNAPSHOT</version>
+    <version>1.3</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>hdf5-platform</artifactId>
-            <version>1.10.1-1.3.4-SNAPSHOT</version>
+            <version>1.10.1-1.3</version>
         </dependency>
     </dependencies>
 </project>
@@ -111,7 +111,7 @@ public class H5tutrCmprss {
             // plist->setSzip(szip_options_mask, szip_pixels_per_block);
 
             // Create the dataset.
-            DataSet dataset = new DataSet(file.asCommonFG().createDataSet(DATASET_NAME,
+            DataSet dataset = new DataSet(file.createDataSet(DATASET_NAME,
                                     new DataType(PredType.STD_I32BE()), dataspace, plist));
 
             for (int i = 0; i <  DIM0; i++)
@@ -142,7 +142,7 @@ public class H5tutrCmprss {
             // Open the file and the dataset in the file.
             file = new H5File();
             file.openFile(FILE_NAME, H5F_ACC_RDONLY);
-            dataset = new DataSet(file.asCommonFG().openDataSet(DATASET_NAME));
+            dataset = new DataSet(file.openDataSet(DATASET_NAME));
 
             // Get the create property list of the dataset.
             plist = new DSetCreatPropList(dataset.getCreatePlist());
