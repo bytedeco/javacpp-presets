@@ -53,7 +53,7 @@ PROTO=3.3.0
 LEVELDB=1.20
 SNAPPY=1.1.4
 LMDB=0.9.21
-BOOST=1_63_0
+BOOST=1_65_1
 CAFFE_VERSION=1.0
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
@@ -159,7 +159,7 @@ export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH -L$OPENCV_PATH/lib -L$HDF5_PATH -L$HDF5_PATH/lib"
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. USE_CUDNN=$USE_CUDNN lib
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto
 cp -a include/caffe/* ../include/caffe/

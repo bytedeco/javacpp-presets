@@ -61,6 +61,7 @@
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/*omp*</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*openblas*</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*openblas*</exclude>
+                <exclude>${javacpp.platform.library.path}/lib/*openblas*</exclude>
               </excludes>
             </configuration>
           </execution>

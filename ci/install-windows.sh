@@ -60,19 +60,19 @@ fi
 
 if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
        echo Installing cuda 
-       if [[ $(find /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip -type f -size +1000000c 2>/dev/null) ]]; then
+       if [[ $(find /c/Downloads/cudnn-9.0-windows10-x64-v7.zip -type f -size +1000000c 2>/dev/null) ]]; then
          echo "Found cudnn in cache and size seems OK"
        else
          echo "Downloading cudnn as not found in cache"
-         /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShc2J1UGZyenhWREU /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip 
+         /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B8dyy7cU8B67cDRUVFFtZzFwREE /c/Downloads/cudnn-9.0-windows10-x64-v7.zip
        fi
-       curl -L -o cuda_8.0.61_windows.exe "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_windows-exe"
-       ./cuda_8.0.61_windows.exe -s 
+       curl -L -o cuda_9.0.176_windows-exe "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_windows-exe"
+       ./cuda_9.0.176_windows-exe -s 
        echo May need to wait while cuda installs..
-       unzip /c/Downloads/cudnn-8.0-windows10-x64-v6.0.zip
-       mv ./cuda/bin/cudnn64_6.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/bin
-       mv ./cuda/include/cudnn.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/include
-       mv ./cuda/lib/x64/cudnn.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v8.0/lib/x64
+       unzip /c/Downloads/cudnn-9.0-windows10-x64-v7.zip
+       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.0/bin
+       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.0/include
+       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.0/lib/x64
        echo Finished cuda install
 fi 
 
