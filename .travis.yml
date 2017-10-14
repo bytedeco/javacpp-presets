@@ -13,7 +13,7 @@ language: java
 services:
       - docker
 
-matrix:
+jobs:
    include:
       - jdk: oraclejdk8
         stage: cache
