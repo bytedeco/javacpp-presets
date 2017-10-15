@@ -14,6 +14,7 @@ export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
 
 echo "Starting docker for ppc cross compile"
 docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04 /sbin/init 
+sleep 60
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
