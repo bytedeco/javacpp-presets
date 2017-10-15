@@ -13,7 +13,7 @@ touch $HOME/vars.list
 export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
 
 echo "Starting docker for ppc cross compile"
-docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup ubuntu:xenial /sbin/init 
+docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04 /sbin/init 
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
@@ -32,8 +32,17 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [ar
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo2-dev:ppc64el libpango1.0-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libfreetype6-dev:ppc64el libasound2-dev:ppc64el libperl-dev:ppc64el libqt4-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g-dev:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el libusb-1.0-0-dev:ppc64el libusb-dev:ppc64el libxcb1-dev:ppc64el libxcb1:ppc64el"  
 
-cp /usr/include/cudnn.h /usr/local/cuda/include/  
 
+if [[ "$PROJ" =~ cuda ]]; then
+   echo "Setting up for cuda build"
+   cp /usr/include/cudnn.h /usr/local/cuda/include/  
+   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdTN4a1JQY194ZzQ $HOME/downloads/cudappc64.tar
+   tar xvf cudappc64.tar -C /usr/local/cuda/targets
+   rm /usr/local/cuda/lib64
+   rm /usr/local/cuda/include
+   ln -s /usr/local/cuda/targets/ppc64le-linux/lib /usr/local/cuda/lib64
+   ln -s /usr/local/cuda/targets/ppc64le-linux/include /usr/local/cuda/include
+fi
 
 echo "Running install for $PROJ"
 echo "container id is $DOCKER_CONTAINER_ID"

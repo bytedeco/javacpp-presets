@@ -1,5 +1,6 @@
 #!/bin/bash
 # This file is meant to be included by the parent cppbuild.sh script
+set -vx
 if [[ -z "$PLATFORM" ]]; then
     pushd ..
     bash cppbuild.sh "$@" tesseract
