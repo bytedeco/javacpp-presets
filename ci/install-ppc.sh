@@ -13,8 +13,7 @@ touch $HOME/vars.list
 export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
 
 echo "Starting docker for ppc cross compile"
-docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04 /sbin/init 
-sleep 60
+docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup ubuntu:xenial /sbin/init 
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
@@ -36,13 +35,10 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo
 
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
-   cp /usr/include/cudnn.h /usr/local/cuda/include/  
-   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdTN4a1JQY194ZzQ $HOME/downloads/cudappc64.tar
-   tar xvf cudappc64.tar -C /usr/local/cuda/targets
-   rm /usr/local/cuda/lib64
-   rm /usr/local/cuda/include
-   ln -s /usr/local/cuda/targets/ppc64le-linux/lib /usr/local/cuda/lib64
-   ln -s /usr/local/cuda/targets/ppc64le-linux/include /usr/local/cuda/include
+   #cp /usr/include/cudnn.h /usr/local/cuda/include/  
+   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFlrT3FtNXFSRW8 $HOME/downloads/cudappc64.tar
+   tar xvf cudappc64.tar -C /usr/local/
+   ln -s /usr/local/cuda-9.0 /usr/local/cuda
 fi
 
 echo "Running install for $PROJ"
