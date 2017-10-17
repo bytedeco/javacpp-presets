@@ -22,7 +22,8 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "add-apt-repository ppa:webu
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install oracle-java8-installer maven "  
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install oracle-java8-installer"  
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install maven "  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "oracle-java8-set-default"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture ppc64el"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"'  
@@ -32,14 +33,20 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [ar
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo2-dev:ppc64el libpango1.0-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libfreetype6-dev:ppc64el libasound2-dev:ppc64el libperl-dev:ppc64el libqt4-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g-dev:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el libusb-1.0-0-dev:ppc64el libusb-dev:ppc64el libxcb1-dev:ppc64el libxcb1:ppc64el"  
 
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"  
 
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr /usr/local"  
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    #cp /usr/include/cudnn.h /usr/local/cuda/include/  
    python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFlrT3FtNXFSRW8 $HOME/downloads/cudappc64.tar
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/cudappc64.tar -C /usr/local/"  
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"  
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ls -ltr /usr/local"  
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"  
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.0 /usr/local/cuda"  
 fi
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"  
 
 echo "Running install for $PROJ"
 echo "container id is $DOCKER_CONTAINER_ID"
