@@ -37,8 +37,8 @@ if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    #cp /usr/include/cudnn.h /usr/local/cuda/include/  
    python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFlrT3FtNXFSRW8 $HOME/downloads/cudappc64.tar
-   tar xvf cudappc64.tar -C /usr/local/
-   ln -s /usr/local/cuda-9.0 /usr/local/cuda
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/cudappc64.tar -C /usr/local/"  
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.0 /usr/local/cuda"  
 fi
 
 echo "Running install for $PROJ"
