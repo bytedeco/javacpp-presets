@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Samuel Audet
+ * Copyright (C) 2013-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,12 +33,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_imgproc.class, opencv_videoio.class}, value = {
-    @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.3.2"),
-    @Platform(value = "windows", link = "opencv_highgui320")},
+    @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.3.3"),
+    @Platform(value = "windows", link = "opencv_highgui330")},
         target = "org.bytedeco.javacpp.opencv_highgui")
 public class opencv_highgui implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cvFontQt").annotations("@Platform(\"linux\")").javaNames("cvFontQt"))
+        infoMap.put(new Info("defined _WIN32").define(false))
+               .put(new Info("cvFontQt").annotations("@Platform(\"linux\")").javaNames("cvFontQt"))
                .put(new Info("cvAddText").annotations("@Platform(\"linux\")").javaNames("cvAddText"))
                .put(new Info("cvDisplayOverlay").annotations("@Platform(\"linux\")").javaNames("cvDisplayOverlay"))
                .put(new Info("cvDisplayStatusBar").annotations("@Platform(\"linux\")").javaNames("cvDisplayStatusBar"))

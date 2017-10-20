@@ -326,7 +326,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 /** \brief Warper that maps an image onto the unit sphere located at the origin.
  <p>
  Projects image onto unit sphere with origin at (0, 0, 0) and radius scale, measured in pixels.
- A 360° panorama would therefore have a resulting width of 2 * scale * PI pixels.
+ A 360 panorama would therefore have a resulting width of 2 * scale * PI pixels.
  Poles are located at (0, -1, 0) and (0, 1, 0) points.
 */
 @Name("cv::detail::SphericalWarper") public static class DetailSphericalWarper extends RotationWarper {

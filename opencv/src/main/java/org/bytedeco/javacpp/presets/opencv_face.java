@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.bytedeco.javacpp.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
@@ -32,10 +33,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_objdetect.class, value = {
-    @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>"}, link = "opencv_face@.3.2"),
-    @Platform(value = "windows", link = "opencv_face320")},
+    @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>"}, link = "opencv_face@.3.3"),
+    @Platform(value = "windows", link = "opencv_face330")},
         target = "org.bytedeco.javacpp.opencv_face")
 public class opencv_face implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("cv::face::BasicFaceRecognizer", "cv::face::EigenFaceRecognizer",
+                             "cv::face::FisherFaceRecognizer", "cv::face::LBPHFaceRecognizer").purify());
     }
 }

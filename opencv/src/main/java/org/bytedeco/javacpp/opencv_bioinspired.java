@@ -629,11 +629,6 @@ the log scale that is applied
 @Namespace("cv::bioinspired") public static native @Ptr Retina createRetina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, int colorSamplingMethod/*=cv::bioinspired::RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, float reductionFactor/*=1.0f*/, float samplingStrenght/*=10.0f*/);
 @Namespace("cv::bioinspired") public static native @Ptr Retina createRetina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode);
 
-// #ifdef HAVE_OPENCV_OCL
-
-
-// #endif
-
 /** \}
  <p>
  *  \} */

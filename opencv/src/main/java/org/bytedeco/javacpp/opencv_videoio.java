@@ -765,9 +765,16 @@ public static final int
        /** OpenCV Image Sequence (e.g. img_%02d.jpg) */
        CAP_IMAGES       = 2000,
        /** Aravis SDK */
-       CAP_ARAVIS       = 2100;
+       CAP_ARAVIS       = 2100,
+       /** Built-in OpenCV MotionJPEG codec */
+       CAP_OPENCV_MJPEG = 2200,
+       /** Intel MediaSDK */
+       CAP_INTEL_MFX    = 2300;
 
 /** \brief %VideoCapture generic properties identifier.
+ <p>
+ Reading / writing properties involves many layers. Some unexpected result might happens along this chain.
+ Effective behaviour depends from device hardware, driver and API Backend.
  \sa videoio_flags_others, VideoCapture::get(), VideoCapture::set()
 */
 /** enum cv::VideoCaptureProperties */
@@ -792,7 +799,7 @@ public static final int
        CAP_PROP_FORMAT         = 8,
        /** Backend-specific value indicating the current capture mode. */
        CAP_PROP_MODE           = 9,
-       /** Brightness of the image (only for cameras). */
+       /** Brightness of the image (only for those cameras that support). */
        CAP_PROP_BRIGHTNESS    = 10,
        /** Contrast of the image (only for cameras). */
        CAP_PROP_CONTRAST      = 11,
@@ -800,9 +807,9 @@ public static final int
        CAP_PROP_SATURATION    = 12,
        /** Hue of the image (only for cameras). */
        CAP_PROP_HUE           = 13,
-       /** Gain of the image (only for cameras). */
+       /** Gain of the image (only for those cameras that support). */
        CAP_PROP_GAIN          = 14,
-       /** Exposure (only for cameras). */
+       /** Exposure (only for those cameras that support). */
        CAP_PROP_EXPOSURE      = 15,
        /** Boolean flags indicating whether images should be converted to RGB. */
        CAP_PROP_CONVERT_RGB   = 16,
@@ -828,7 +835,8 @@ public static final int
        CAP_PROP_TILT          = 34,
        CAP_PROP_ROLL          = 35,
        CAP_PROP_IRIS          = 36,
-       CAP_PROP_SETTINGS      = 37, /** Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. Property value is ignored) */
+       /** Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. The property value is ignored) */
+       CAP_PROP_SETTINGS      = 37,
        CAP_PROP_BUFFERSIZE    = 38,
        CAP_PROP_AUTOFOCUS     = 39;
 
@@ -1568,9 +1576,9 @@ Here is how the class can be used:
     <p>
     \overload
     <p>
-    This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
     Parameters are similar as the constructor VideoCapture(int index),except it takes an additional argument apiPreference.
-    @return open(cameraNum + apiPreference).
+    Definitely, is same as open(int index) where {@code index=cameraNum + apiPreference}
+    @return {@code true} if the camera has been successfully opened.
     */
     public native @Cast("bool") boolean open(int cameraNum, int apiPreference);
 
@@ -1709,12 +1717,12 @@ Here is how the class can be used:
     public IVideoWriter(Pointer p) { super(p); }
 }
 
+/** \example videowriter_basic.cpp
+An example using VideoCapture and VideoWriter class
+ */
 /** \brief Video writer class.
 <p>
 The class provides C++ API for writing video files or image sequences.
-<p>
-Here is how the class can be used:
-\include samples/cpp/videowriter_basic.cpp
  */
 @Namespace("cv") @NoOffset public static class VideoWriter extends Pointer {
     static { Loader.load(); }
@@ -1775,6 +1783,27 @@ Here is how the class can be used:
     private native void allocate(@Str String filename, int fourcc, double fps,
                     @ByVal Size frameSize);
 
+    /** \overload
+    The {@code apiPreference} parameter allows to specify API backends to use. Can be used to enforce a specific reader implementation
+    if multiple are available: e.g. cv::CAP_FFMPEG or cv::CAP_GSTREAMER.
+     */
+    public VideoWriter(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, isColor); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public VideoWriter(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize); }
+    private native void allocate(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize);
+    public VideoWriter(@Str String filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize, isColor); }
+    private native void allocate(@Str String filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public VideoWriter(@Str String filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize) { super((Pointer)null); allocate(filename, apiPreference, fourcc, fps, frameSize); }
+    private native void allocate(@Str String filename, int apiPreference, int fourcc, double fps,
+                    @ByVal Size frameSize);
+
     /** \brief Default destructor
     <p>
     The method first calls VideoWriter::release to close the already opened file.
@@ -1795,6 +1824,17 @@ Here is how the class can be used:
     public native @Cast("bool") boolean open(@Str String filename, int fourcc, double fps,
                           @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
     public native @Cast("bool") boolean open(@Str String filename, int fourcc, double fps,
+                          @ByVal Size frameSize);
+
+    /** \overload
+     */
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                          @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference, int fourcc, double fps,
+                          @ByVal Size frameSize);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, int fourcc, double fps,
+                          @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference, int fourcc, double fps,
                           @ByVal Size frameSize);
 
     /** \brief Returns true if video writer has been successfully initialized.

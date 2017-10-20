@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,8 +35,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = opencv_video.class, value = {
     @Platform(include = {
         "<opencv2/shape.hpp>", "<opencv2/shape/emdL1.hpp>", "<opencv2/shape/shape_transformer.hpp>",
-        "<opencv2/shape/hist_cost.hpp>", "<opencv2/shape/shape_distance.hpp>"}, link = "opencv_shape@.3.2"),
-    @Platform(value = "windows", link = "opencv_shape320")},
+        "<opencv2/shape/hist_cost.hpp>", "<opencv2/shape/shape_distance.hpp>"}, link = "opencv_shape@.3.3"),
+    @Platform(value = "windows", link = "opencv_shape330")},
         target = "org.bytedeco.javacpp.opencv_shape")
 public class opencv_shape implements InfoMapper {
     public void map(InfoMap infoMap) {

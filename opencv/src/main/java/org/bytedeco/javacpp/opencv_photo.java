@@ -174,7 +174,7 @@ public static final int
 
 /** \brief Restores the selected region in an image using the region neighborhood.
 <p>
-@param src Input 8-bit 1-channel or 3-channel image.
+@param src Input 8-bit, 16-bit unsigned or 32-bit float 1-channel or 8-bit 3-channel image.
 @param inpaintMask Inpainting mask, 8-bit 1-channel image. Non-zero pixels indicate the area that
 needs to be inpainted.
 @param dst Output image with the same size and type as src .
@@ -878,7 +878,7 @@ For more information see \cite DM97 .
 @param samples number of pixel locations to use
 @param lambda smoothness term weight. Greater values produce smoother results, but can alter the
 response.
-@param random if true sample pixel locations are chosen at random, otherwise the form a
+@param random if true sample pixel locations are chosen at random, otherwise they form a
 rectangular grid.
  */
 @Namespace("cv") public static native @Ptr CalibrateDebevec createCalibrateDebevec(int samples/*=70*/, float lambda/*=10.0f*/, @Cast("bool") boolean random/*=false*/);
@@ -1063,6 +1063,9 @@ This function is to be applied on color images.
 /** \addtogroup photo_clone
  *  \{
 <p>
+/** \example cloning_demo.cpp
+An example using seamlessClone function
+*/
 /** \brief Image editing tasks concern either global changes (color/intensity corrections, filters,
 deformations) or local changes concerned to a selection. Here we are interested in achieving local
 changes, ones that are restricted to a region manually selected (ROI), in a seamless and effortless
@@ -1081,7 +1084,7 @@ complex outlines into a new background
 consuming and often leaves an undesirable halo. Seamless cloning, even averaged with the
 original image, is not effective. Mixed seamless cloning based on a loose selection proves
 effective.
--   **FEATURE_EXCHANGE** Feature exchange allows the user to easily replace certain features of
+-   **MONOCHROME_TRANSFER** Monochrome transfer allows the user to easily replace certain features of
 one object by alternative features.
  */
 @Namespace("cv") public static native void seamlessClone( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat mask, @ByVal Point p,
@@ -1189,6 +1192,9 @@ filters are used in many different applications \cite EM11 .
         float sigma_r/*=0.15f*/);
 @Namespace("cv") public static native void detailEnhance(@ByVal UMat src, @ByVal UMat dst);
 
+/** \example npr_demo.cpp
+An example using non-photorealistic line drawing functions
+*/
 /** \brief Pencil-like non-photorealistic line drawing
 <p>
 @param src Input 8-bit 3-channel image.
