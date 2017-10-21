@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ALE_VERSION=5c7dfa5908a2bf8b1de354d0d9d44c9c3965abbb
+ALE_VERSION=6eddb8d4a700022623ac284c8829702f26021277
 download https://github.com/mgbellemare/Arcade-Learning-Environment/archive/$ALE_VERSION.tar.gz ale-$ALE_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -32,7 +32,7 @@ case $PLATFORM in
         cp libale.so ../lib
         ;;
     macosx-*)
-        $CMAKE -DCMAKE_INSTALL_PREFIX=.. -DUSE_SDL=ON -DUSE_RLGLUE=OFF -DBUILD_EXAMPLES=ON
+        $CMAKE -DCMAKE_INSTALL_PREFIX=.. -DUSE_SDL=ON -DUSE_RLGLUE=OFF -DBUILD_EXAMPLES=ON -DCMAKE_MACOSX_RPATH=ON
         make -j $MAKEJ
         cp -r src/* ../include
         cp libale.so ../lib
