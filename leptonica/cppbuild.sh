@@ -266,8 +266,8 @@ case $PLATFORM in
           export CC="$OLDCC -m64 -fPIC"
           export BFLAGS="--build=ppc64le-linux"
         else
-          export CC="powerpc64le-linux-gnu-gcc -m64"
-          export CXX="powerpc64le-linux-gnu-g++ -m64"
+          export CC="powerpc64le-linux-gnu-gcc"
+          export CXX="powerpc64le-linux-gnu-g++"
           export BFLAGS="--host=powerpc64le-linux-gnu"
         fi
 
