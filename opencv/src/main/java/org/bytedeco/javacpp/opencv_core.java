@@ -1234,12 +1234,8 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 \****************************************************************************************/
 // #ifndef CV_CXX11
 // #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
-public static final int CV_CXX11 = 1;
 // #  endif
 // #else
-// #  if CV_CXX11 == 0
-// #    undef CV_CXX11
-// #  endif
 // #endif
 
 
@@ -3259,7 +3255,6 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 // #include <ostream>
 
 // #ifdef CV_CXX11
-// #include <functional>
 // #endif
 
 // #ifdef CV_COLLECT_IMPL_DATA
@@ -3609,19 +3604,6 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body);
 
 // #ifdef CV_CXX11
-@Namespace("cv") @NoOffset public static class ParallelLoopBodyLambdaWrapper extends ParallelLoopBody {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ParallelLoopBodyLambdaWrapper(Pointer p) { super(p); }
-
-    public ParallelLoopBodyLambdaWrapper(@ByVal Functor functor) { super((Pointer)null); allocate(functor); }
-    private native void allocate(@ByVal Functor functor);
-
-    public native @Name("operator ()") void apply(@Const @ByRef Range range);
-}
-
-@Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor, double nstripes/*=-1.*/);
-@Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor);
 // #endif
 
 /////////////////////////////// forEach method of cv::Mat ////////////////////////////
@@ -15731,8 +15713,6 @@ including std::sort().
     */
 
 // #ifdef CV_CXX11
-    /** \overload
-    */
 // #endif
 
 // #ifdef CV_CXX_STD_ARRAY
