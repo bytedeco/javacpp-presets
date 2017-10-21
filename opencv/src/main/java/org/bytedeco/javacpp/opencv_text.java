@@ -214,7 +214,7 @@ Class-specific Extremal Regions for Scene Text Detection
 --------------------------------------------------------
 <p>
 The scene text detection algorithm described below has been initially proposed by Lukás Neumann &
-Jiri Matas [Neumann12]. The main idea behind Class-specific Extremal Regions is similar to the MSER
+Jiri Matas \cite Neumann11. The main idea behind Class-specific Extremal Regions is similar to the MSER
 in that suitable Extremal Regions (ERs) are selected from the whole component tree of the image.
 However, this technique differs from MSER in that selection of suitable ERs is done by a sequential
 classifier trained for character detection, i.e. dropping the stability requirement of MSERs and
@@ -226,12 +226,12 @@ hierarchy by their inclusion relation:
 <p>
 ![image](pics/component_tree.png)
 <p>
-The component tree may conatain a huge number of regions even for a very simple image as shown in
+The component tree may contain a huge number of regions even for a very simple image as shown in
 the previous image. This number can easily reach the order of 1 x 10\^6 regions for an average 1
 Megapixel image. In order to efficiently select suitable regions among all the ERs the algorithm
 make use of a sequential classifier with two differentiated stages.
 <p>
-In the first stage incrementally computable descriptors (area, perimeter, bounding box, and euler
+In the first stage incrementally computable descriptors (area, perimeter, bounding box, and Euler's
 number) are computed (in O(1)) for each region r and used as features for a classifier which
 estimates the class-conditional probability p(r|character). Only the ERs which correspond to local
 maximum of the probability p(r|character) are selected (if their probability is above a global limit
@@ -247,9 +247,9 @@ order to increase the character localization recall.
 <p>
 After the ER filtering is done on each input channel, character candidates must be grouped in
 high-level text blocks (i.e. words, text lines, paragraphs, ...). The opencv_text module implements
-two different grouping algorithms: the Exhaustive Search algorithm proposed in [Neumann11] for
+two different grouping algorithms: the Exhaustive Search algorithm proposed in \cite Neumann12 for
 grouping horizontally aligned text, and the method proposed by Lluis Gomez and Dimosthenis Karatzas
-in [Gomez13][Gomez14] for grouping arbitrary oriented text (see erGrouping).
+in \cite Gomez13 \cite Gomez14 for grouping arbitrary oriented text (see erGrouping).
 <p>
 To see the text detector at work, have a look at the textdetection demo:
 <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/textdetection.cpp>
@@ -348,7 +348,7 @@ component tree of the image. :
     /** incrementally computable features */
     public native int area(); public native ERStat area(int area);
     public native int perimeter(); public native ERStat perimeter(int perimeter);
-    /** euler number */
+    /** Euler's number */
     public native int euler(); public native ERStat euler(int euler);
     public native @ByRef Rect rect(); public native ERStat rect(Rect rect);
     /** order 1 raw moments to derive the centroid */
@@ -382,13 +382,13 @@ component tree of the image. :
     public native ERStat next(); public native ERStat next(ERStat next);
     public native ERStat prev(); public native ERStat prev(ERStat prev);
 
-    /** wenever the regions is a local maxima of the probability */
+    /** whenever the regions is a local maxima of the probability */
     public native @Cast("bool") boolean local_maxima(); public native ERStat local_maxima(boolean local_maxima);
     public native ERStat max_probability_ancestor(); public native ERStat max_probability_ancestor(ERStat max_probability_ancestor);
     public native ERStat min_probability_ancestor(); public native ERStat min_probability_ancestor(ERStat min_probability_ancestor);
 }
 
-/** \brief Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm [Neumann12]. :
+/** \brief Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm \cite Neumann12. :
 <p>
 Extracts the component tree (if needed) and filter the extremal regions (ER's) by using a given classifier.
  */
@@ -444,40 +444,17 @@ Extracts the component tree (if needed) and filter the extremal regions (ER's) b
 }
 
 
-/**
-    Create an Extremal Region Filter for the 1st stage classifier of N&M algorithm
-    Neumann L., Matas J.: Real-Time Scene Text Localization and Recognition, CVPR 2012
-    <p>
-    The component tree of the image is extracted by a threshold increased step by step
-    from 0 to 255, incrementally computable descriptors (aspect_ratio, compactness,
-    number of holes, and number of horizontal crossings) are computed for each ER
-    and used as features for a classifier which estimates the class-conditional
-    probability P(er|character). The value of P(er|character) is tracked using the inclusion
-    relation of ER across all thresholds and only the ERs which correspond to local maximum
-    of the probability P(er|character) are selected (if the local maximum of the
-    probability is above a global limit pmin and the difference between local maximum and
-    local minimum is greater than minProbabilityDiff).
-    <p>
-    @param cb – Callback with the classifier. Default classifier can be implicitly load with function
-        loadClassifierNM1(), e.g. from file in samples/cpp/trained_classifierNM1.xml
-    @param thresholdDelta – Threshold step in subsequent thresholds when extracting the component tree
-    @param minArea – The minimum area (% of image size) allowed for retreived ER’s
-    @param maxArea – The maximum area (% of image size) allowed for retreived ER’s
-    @param minProbability – The minimum probability P(er|character) allowed for retreived ER’s
-    @param nonMaxSuppression – Whenever non-maximum suppression is done over the branch probabilities
-    @param minProbabilityDiff – The minimum probability difference between local maxima and local minima ERs
-*/
 
-/** \brief Create an Extremal Region Filter for the 1st stage classifier of N&M algorithm [Neumann12].
+/** \brief Create an Extremal Region Filter for the 1st stage classifier of N&M algorithm \cite Neumann12.
 <p>
 @param  cb :   Callback with the classifier. Default classifier can be implicitly load with function
 loadClassifierNM1, e.g. from file in samples/cpp/trained_classifierNM1.xml
 @param  thresholdDelta :   Threshold step in subsequent thresholds when extracting the component tree
 @param  minArea :   The minimum area (% of image size) allowed for retreived ER's
-@param  minArea :   The maximum area (% of image size) allowed for retreived ER's
+@param  maxArea :   The maximum area (% of image size) allowed for retreived ER's
 @param  minProbability :   The minimum probability P(er|character) allowed for retreived ER's
 @param  nonMaxSuppression :   Whenever non-maximum suppression is done over the branch probabilities
-@param  minProbability :   The minimum probability difference between local maxima and local minima ERs
+@param  minProbabilityDiff :   The minimum probability difference between local maxima and local minima ERs
 <p>
 The component tree of the image is extracted by a threshold increased step by step from 0 to 255,
 incrementally computable descriptors (aspect_ratio, compactness, number of holes, and number of
@@ -495,7 +472,7 @@ minProbabilityDiff).
                                                   float minProbabilityDiff/*=(float)0.1*/);
 @Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Ptr ERFilter.Callback cb);
 
-/** \brief Create an Extremal Region Filter for the 2nd stage classifier of N&M algorithm [Neumann12].
+/** \brief Create an Extremal Region Filter for the 2nd stage classifier of N&M algorithm \cite Neumann12.
 <p>
 @param  cb :   Callback with the classifier. Default classifier can be implicitly load with function
 loadClassifierNM2, e.g. from file in samples/cpp/trained_classifierNM2.xml
@@ -510,6 +487,35 @@ features: hole area ratio, convex hull ratio, and number of outer inflexion poin
                                                   float minProbability/*=(float)0.3*/);
 @Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Ptr ERFilter.Callback cb);
 
+/** \brief Reads an Extremal Region Filter for the 1st stage classifier of N&M algorithm
+    from the provided path e.g. /path/to/cpp/trained_classifierNM1.xml
+<p>
+\overload
+ */
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Str BytePointer filename,
+                                                  int thresholdDelta/*=1*/, float minArea/*=(float)0.00025*/,
+                                                  float maxArea/*=(float)0.13*/, float minProbability/*=(float)0.4*/,
+                                                  @Cast("bool") boolean nonMaxSuppression/*=true*/,
+                                                  float minProbabilityDiff/*=(float)0.1*/);
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Str BytePointer filename);
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Str String filename,
+                                                  int thresholdDelta/*=1*/, float minArea/*=(float)0.00025*/,
+                                                  float maxArea/*=(float)0.13*/, float minProbability/*=(float)0.4*/,
+                                                  @Cast("bool") boolean nonMaxSuppression/*=true*/,
+                                                  float minProbabilityDiff/*=(float)0.1*/);
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM1(@Str String filename);
+
+/** \brief Reads an Extremal Region Filter for the 2nd stage classifier of N&M algorithm
+    from the provided path e.g. /path/to/cpp/trained_classifierNM2.xml
+<p>
+\overload
+ */
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Str BytePointer filename,
+                                                  float minProbability/*=(float)0.3*/);
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Str BytePointer filename);
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Str String filename,
+                                                  float minProbability/*=(float)0.3*/);
+@Namespace("cv::text") public static native @Ptr ERFilter createERFilterNM2(@Str String filename);
 
 /** \brief Allow to implicitly load the default classifier when creating an ERFilter object.
 <p>
@@ -535,7 +541,7 @@ returns a pointer to ERFilter::Callback.
 public static final int ERFILTER_NM_RGBLGrad = 0,
        ERFILTER_NM_IHSGrad = 1;
 
-/** \brief Compute the different channels to be processed independently in the N&M algorithm [Neumann12].
+/** \brief Compute the different channels to be processed independently in the N&M algorithm \cite Neumann12.
 <p>
 @param _src Source image. Must be RGB CV_8UC3.
 <p>
@@ -564,7 +570,7 @@ magnitude (Grad).
 /** enum cv::text::erGrouping_Modes */
 public static final int
 
-    /** Exhaustive Search algorithm proposed in [Neumann11] for grouping horizontally aligned text.
+    /** Exhaustive Search algorithm proposed in \cite Neumann11 for grouping horizontally aligned text.
     The algorithm models a verification function for all the possible ER sequences. The
     verification fuction for ER pairs consists in a set of threshold-based pairwise rules which
     compare measurements of two regions (height ratio, centroid angle, and region distance). The
@@ -575,7 +581,7 @@ public static final int
     consistent.
     */
     ERGROUPING_ORIENTATION_HORIZ = 0,
-    /** Text grouping method proposed in [Gomez13][Gomez14] for grouping arbitrary oriented text. Regions
+    /** Text grouping method proposed in \cite Gomez13 \cite Gomez14 for grouping arbitrary oriented text. Regions
     are agglomerated by Single Linkage Clustering in a weighted feature space that combines proximity
     (x,y coordinates) and similarity measures (color, size, gradient magnitude, stroke width, etc.).
     SLC provides a dendrogram where each node represents a text group hypothesis. Then the algorithm
@@ -591,7 +597,7 @@ public static final int
 <p>
 @param channels Vector of single channel images CV_8UC1 from wich the regions were extracted.
 <p>
-@param regions Vector of ER's retreived from the ERFilter algorithm from each channel.
+@param regions Vector of ER's retrieved from the ERFilter algorithm from each channel.
 <p>
 @param groups The output of the algorithm is stored in this parameter as set of lists of indexes to
 provided regions.
@@ -688,7 +694,7 @@ method is ERGROUPING_ORIENTATION_ANY.
 <p>
 @param image Source image CV_8UC1 from which the MSERs where extracted.
 <p>
-@param contours Intput vector with all the contours (vector\<Point\>).
+@param contours Input vector with all the contours (vector\<Point\>).
 <p>
 @param regions Output where the ERStat regions are stored.
 <p>
@@ -708,6 +714,38 @@ An example of MSERsToERStats in use can be found in the text detection webcam_de
 // Utility funtion for scripting
 @Namespace("cv::text") public static native void detectRegions(@ByVal Mat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
 @Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
+
+
+/** \brief Extracts text regions from image.
+<p>
+@param image Source image where text blocks needs to be extracted from.  Should be CV_8UC3 (color).
+@param er_filter1 Extremal Region Filter for the 1st stage classifier of N&M algorithm \cite Neumann12
+@param er_filter2 Extremal Region Filter for the 2nd stage classifier of N&M algorithm \cite Neumann12
+@param groups_rects Output list of rectangle blocks with text
+@param method Grouping method (see text::erGrouping_Modes). Can be one of ERGROUPING_ORIENTATION_HORIZ, ERGROUPING_ORIENTATION_ANY.
+@param filename The XML or YAML file with the classifier model (e.g. samples/trained_classifier_erGrouping.xml). Only to use when grouping method is ERGROUPING_ORIENTATION_ANY.
+@param minProbability The minimum probability for accepting a group. Only to use when grouping method is ERGROUPING_ORIENTATION_ANY.
+ <p>
+ <p>
+ */
+@Namespace("cv::text") public static native void detectRegions(@ByVal Mat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbability/*=(float)0.5*/);
+@Namespace("cv::text") public static native void detectRegions(@ByVal Mat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void detectRegions(@ByVal Mat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str String filename/*=cv::String()*/,
+                                           float minProbability/*=(float)0.5*/);
+@Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbability/*=(float)0.5*/);
+@Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str String filename/*=cv::String()*/,
+                                           float minProbability/*=(float)0.5*/);
 
 /** \} */
 
@@ -774,6 +812,29 @@ An example of MSERsToERStats in use can be found in the text detection webcam_de
 public static final int
     OCR_LEVEL_WORD = 0,
     OCR_LEVEL_TEXTLINE = 1;
+
+/** Tesseract.PageSegMode Enumeration */
+/** enum cv::text::page_seg_mode */
+public static final int
+    PSM_OSD_ONLY = 0,
+    PSM_AUTO_OSD = 1,
+    PSM_AUTO_ONLY = 2,
+    PSM_AUTO = 3,
+    PSM_SINGLE_COLUMN = 4,
+    PSM_SINGLE_BLOCK_VERT_TEXT = 5,
+    PSM_SINGLE_BLOCK = 6,
+    PSM_SINGLE_LINE = 7,
+    PSM_SINGLE_WORD = 8,
+    PSM_CIRCLE_WORD = 9,
+    PSM_SINGLE_CHAR = 10;
+
+/** Tesseract.OcrEngineMode Enumeration */
+/** enum cv::text::ocr_engine_mode */
+public static final int
+    OEM_TESSERACT_ONLY = 0,
+    OEM_CUBE_ONLY = 1,
+    OEM_TESSERACT_CUBE_COMBINED = 2,
+    OEM_DEFAULT = 3;
 
 //base class BaseOCR declares a common API that would be used in a typical text recognition scenario
 @Namespace("cv::text") public static class BaseOCR extends Pointer {
@@ -854,7 +915,7 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
     recognition of individual text elements found (e.g. words or text lines).
     @param component_confidences If provided the method will output a list of confidence values
     for the recognition of individual text elements found (e.g. words or text lines).
-    @param component_level OCR_LEVEL_WORD (by default), or OCR_LEVEL_TEXT_LINE.
+    @param component_level OCR_LEVEL_WORD (by default), or OCR_LEVEL_TEXTLINE.
      */
     public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
@@ -920,7 +981,7 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
     @param language an ISO 639-3 code or NULL will default to "eng".
     @param char_whitelist specifies the list of characters used for recognition. NULL defaults to
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".
-    @param oem tesseract-ocr offers different OCR Engine Modes (OEM), by deffault
+    @param oem tesseract-ocr offers different OCR Engine Modes (OEM), by default
     tesseract::OEM_DEFAULT is used. See the tesseract-ocr API documentation for other possible
     values.
     @param psmode tesseract-ocr offers different Page Segmentation Modes (PSM) tesseract::PSM_AUTO
@@ -928,10 +989,10 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
     possible values.
      */
     public static native @Ptr OCRTesseract create(@Cast("const char*") BytePointer datapath/*=NULL*/, @Cast("const char*") BytePointer language/*=NULL*/,
-                                        @Cast("const char*") BytePointer char_whitelist/*=NULL*/, int oem/*=3*/, int psmode/*=3*/);
+                                        @Cast("const char*") BytePointer char_whitelist/*=NULL*/, int oem/*=cv::text::OEM_DEFAULT*/, int psmode/*=cv::text::PSM_AUTO*/);
     public static native @Ptr OCRTesseract create();
     public static native @Ptr OCRTesseract create(String datapath/*=NULL*/, String language/*=NULL*/,
-                                        String char_whitelist/*=NULL*/, int oem/*=3*/, int psmode/*=3*/);
+                                        String char_whitelist/*=NULL*/, int oem/*=cv::text::OEM_DEFAULT*/, int psmode/*=cv::text::PSM_AUTO*/);
 }
 
 
@@ -940,6 +1001,12 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
 /** enum cv::text::decoder_mode */
 public static final int
     OCR_DECODER_VITERBI = 0; // Other algorithms may be added
+
+/* OCR classifier type*/
+/** enum cv::text::classifier_type */
+public static final int
+    OCR_KNN_CLASSIFIER = 0,
+    OCR_CNN_CLASSIFIER = 1;
 
 /** \brief OCRHMMDecoder class provides an interface for OCR using Hidden Markov Models.
 <p>
@@ -968,7 +1035,7 @@ public static final int
     This way it hides the feature extractor and the classifier itself, so developers can write
     their own OCR code.
     <p>
-    The default character classifier and feature extractor can be loaded using the utility funtion
+    The default character classifier and feature extractor can be loaded using the utility function
     loadOCRHMMClassifierNM and KNN model provided in
     <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRHMM_knn_model_data.xml.gz>.
      */
@@ -1147,7 +1214,64 @@ public static final int
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);         // HMM Decoding algorithm (only Viterbi for the moment)
+                                         @ByVal UMat emission_probabilities_table);         // HMM Decoding algorithm (only Viterbi for the moment)         // HMM Decoding algorithm (only Viterbi for the moment)
+
+    /** \brief Creates an instance of the OCRHMMDecoder class. Loads and initializes HMMDecoder from the specified path
+     <p>
+     \overload
+     */
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Str String filename,
+    
+                                         @Str String vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str String filename,
+    
+                                         @Str String vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Str String filename,
+    
+                                         @Str String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str String filename,
+    
+                                         @Str String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
 }
 
 /** \brief Allow to implicitly load the default character classifier when creating an OCRHMMDecoder object.
@@ -1160,6 +1284,8 @@ fixed size, while retaining the centroid and aspect ratio, in order to extract a
 based on gradient orientations along the chain-code of its perimeter. Then, the region is classified
 using a KNN model trained with synthetic data of rendered characters with different standard font
 types.
+<p>
+@deprecated loadOCRHMMClassifier instead
  */
 
 @Namespace("cv::text") public static native @Ptr OCRHMMDecoder.ClassifierCallback loadOCRHMMClassifierNM(@Str BytePointer filename);
@@ -1173,15 +1299,26 @@ The CNN default classifier is based in the scene text recognition method propose
 Andrew NG in [Coates11a]. The character classifier consists in a Single Layer Convolutional Neural Network and
 a linear classifier. It is applied to the input image in a sliding window fashion, providing a set of recognitions
 at each window location.
+<p>
+@deprecated use loadOCRHMMClassifier instead
  */
 @Namespace("cv::text") public static native @Ptr OCRHMMDecoder.ClassifierCallback loadOCRHMMClassifierCNN(@Str BytePointer filename);
 @Namespace("cv::text") public static native @Ptr OCRHMMDecoder.ClassifierCallback loadOCRHMMClassifierCNN(@Str String filename);
 
+/** \brief Allow to implicitly load the default character classifier when creating an OCRHMMDecoder object.
+ <p>
+ @param filename The XML or YAML file with the classifier model (e.g. OCRBeamSearch_CNN_model_data.xml.gz)
+ <p>
+ @param classifier Can be one of classifier_type enum values.
+ <p>
+ */
+@Namespace("cv::text") public static native @Ptr OCRHMMDecoder.ClassifierCallback loadOCRHMMClassifier(@Str BytePointer filename, int classifier);
+@Namespace("cv::text") public static native @Ptr OCRHMMDecoder.ClassifierCallback loadOCRHMMClassifier(@Str String filename, int classifier);
 /** \}
 <p>
 /** \brief Utility function to create a tailored language model transitions table from a given list of words (lexicon).
  *
- * @param vocabulary The language vocabulary (chars when ascii english text).
+ * @param vocabulary The language vocabulary (chars when ASCII English text).
  *
  * @param lexicon The list of words that are expected to be found in a particular image.
  *
@@ -1342,7 +1479,7 @@ at each window location.
     <p>
     @param classifier The character classifier with built in feature extractor.
     <p>
-    @param vocabulary The language vocabulary (chars when ascii english text). vocabulary.size()
+    @param vocabulary The language vocabulary (chars when ASCII English text). vocabulary.size()
     must be equal to the number of classes of the classifier.
     <p>
     @param transition_probabilities_table Table with transition probabilities between character
@@ -1395,7 +1532,53 @@ at each window location.
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);                              // Size of the beam in Beam Search algorithm
+                                         @ByVal UMat emission_probabilities_table);                              // Size of the beam in Beam Search algorithm                              // Size of the beam in Beam Search algorithm
+
+    /** \brief Creates an instance of the OCRBeamSearchDecoder class. Initializes HMMDecoder from the specified path.
+    <p>
+    \overload
+     <p>
+     */
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
+                                         @Str String vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
+                                         @Str String vocabulary,
+                                         @ByVal Mat transition_probabilities_table,
+                                         @ByVal Mat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
+                                         @Str String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
+                                         @Str String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
 }
 
 /** \brief Allow to implicitly load the default character classifier when creating an OCRBeamSearchDecoder object.

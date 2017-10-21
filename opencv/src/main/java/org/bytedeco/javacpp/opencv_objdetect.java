@@ -87,6 +87,7 @@ public static final String CV_TYPE_NAME_HAAR =    "opencv-haar-classifier";
 //     (((const CvHaarClassifierCascade*)(haar))->flags & CV_MAGIC_MASK)==CV_HAAR_MAGIC_VAL)
 
 public static final int CV_HAAR_FEATURE_MAX =  3;
+public static final int CV_HAAR_STAGE_MAX = 1000;
 
 public static class CvHaarFeature extends Pointer {
     static { Loader.load(); }
@@ -579,6 +580,8 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native @Ptr MaskGenerator getMaskGenerator();
 }
 
+/** \example facedetect.cpp
+*/
 /** \brief Cascade classifier class for object detection.
  */
 @Namespace("cv") @NoOffset public static class CascadeClassifier extends Pointer {
@@ -713,7 +716,21 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                               @StdVector IntPointer numDetections );
 
     /** \overload
-    if {@code outputRejectLevels} is {@code true} returns {@code rejectLevels} and {@code levelWeights}
+    This function allows you to retrieve the final stage decision certainty of classification.
+    For this, one needs to set {@code outputRejectLevels} on true and provide the {@code rejectLevels} and {@code levelWeights} parameter.
+    For each resulting detection, {@code levelWeights} will then contain the certainty of classification at the final stage.
+    This value can then be used to separate strong from weaker classifications.
+    <p>
+    A code sample on how to use it efficiently can be found below:
+    <pre>{@code
+    Mat img;
+    vector<double> weights;
+    vector<int> levels;
+    vector<Rect> detections;
+    CascadeClassifier model("/path/to/your/model.xml");
+    model.detectMultiScale(img, detections, levels, weights, 1.1, 3, 0, Size(), Size(), true);
+    cerr << "Detection " << detections[0] << " with weight " << weights[0] << endl;
+    }</pre>
     */
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
@@ -809,6 +826,8 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
    public native @StdVector DoublePointer confidences(); public native DetectionROI confidences(DoublePointer confidences);
 }
 
+/**\example peopledetect.cpp
+ */
 @Namespace("cv") @NoOffset public static class HOGDescriptor extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

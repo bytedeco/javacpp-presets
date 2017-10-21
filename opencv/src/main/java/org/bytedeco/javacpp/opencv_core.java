@@ -894,9 +894,37 @@ public static final int CV_HAL_GEMM_3_T = 4;
 /** \addtogroup core_utils
  *  \{ */
 
-// #if !defined _CRT_SECURE_NO_DEPRECATE && defined _MSC_VER && _MSC_VER > 1300
-// #  define _CRT_SECURE_NO_DEPRECATE /* to avoid multiple Visual Studio warnings */
+// #if !defined CV_DOXYGEN && !defined CV_IGNORE_DEBUG_BUILD_GUARD
+// #if (defined(_MSC_VER) && (defined(DEBUG) || defined(_DEBUG))) ||
+//     (defined(_GLIBCXX_DEBUG) || defined(_GLIBCXX_DEBUG_PEDANTIC))
+// Guard to prevent using of binary incompatible binaries / runtimes
+// https://github.com/opencv/opencv/pull/9161
+// #define CV__DEBUG_NS_BEGIN namespace debug_build_guard {
+// #define CV__DEBUG_NS_END }
+ 
 // #endif
+// #endif
+
+// #ifndef CV__DEBUG_NS_BEGIN
+// #define CV__DEBUG_NS_BEGIN
+// #define CV__DEBUG_NS_END
+// #endif
+
+
+// #ifdef __OPENCV_BUILD
+// #include "cvconfig.h"
+// #endif
+
+// #ifndef __CV_EXPAND
+// #define __CV_EXPAND(x) x
+// #endif
+
+// #ifndef __CV_CAT
+// #define __CV_CAT__(x, y) x ## y
+// #define __CV_CAT_(x, y) __CV_CAT__(x, y)
+// #define __CV_CAT(x, y) __CV_CAT_(x, y)
+// #endif
+
 
 // undef problematic defines sometimes defined by system headers (windows.h in particular)
 // #undef small
@@ -904,9 +932,6 @@ public static final int CV_HAL_GEMM_3_T = 4;
 // #undef max
 // #undef abs
 // #undef Complex
-
-// #if !defined _CRT_SECURE_NO_DEPRECATE && defined _MSC_VER && _MSC_VER > 1300 /* to avoid multiple Visual Studio warnings */
-// #endif
 
 // #include <limits.h>
 // #include "opencv2/core/hal/interface.h"
@@ -928,7 +953,7 @@ public static final int CV_HAL_GEMM_3_T = 4;
 // #  endif
 // #endif
 
-// #if defined CV_ICC && !defined CV_ENABLE_UNROLLED
+// #if defined CV_DISABLE_OPTIMIZATION || (defined CV_ICC && !defined CV_ENABLE_UNROLLED)
 // #  define CV_ENABLE_UNROLLED 0
 // #else
 // #  define CV_ENABLE_UNROLLED 1
@@ -1001,134 +1026,13 @@ public static final int
 
     CPU_NEON            = 100;
 
-// do not include SSE/AVX/NEON headers for NVCC compiler
-// #ifndef __CUDACC__
 
-// #if defined __SSE2__ || defined _M_X64 || (defined _M_IX86_FP && _M_IX86_FP >= 2)
-// #  include <emmintrin.h>
-public static final int CV_MMX = 1;
-public static final int CV_SSE = 1;
-public static final int CV_SSE2 = 1;
-// #  if defined __SSE3__ || (defined _MSC_VER && _MSC_VER >= 1500)
-// #    include <pmmintrin.h>
-public static final int CV_SSE3 = 1;
-// #  endif
-// #  if defined __SSSE3__  || (defined _MSC_VER && _MSC_VER >= 1500)
-// #    include <tmmintrin.h>
-public static final int CV_SSSE3 = 1;
-// #  endif
-// #  if defined __SSE4_1__ || (defined _MSC_VER && _MSC_VER >= 1500)
-// #    include <smmintrin.h>
-public static final int CV_SSE4_1 = 1;
-// #  endif
-// #  if defined __SSE4_2__ || (defined _MSC_VER && _MSC_VER >= 1500)
-// #    include <nmmintrin.h>
-public static final int CV_SSE4_2 = 1;
-// #  endif
-// #  if defined __POPCNT__ || (defined _MSC_VER && _MSC_VER >= 1500)
-// #    ifdef _MSC_VER
-// #      include <nmmintrin.h>
-// #    else
-// #      include <popcntintrin.h>
-// #    endif
-public static final int CV_POPCNT = 1;
-// #  endif
-// #  if defined __AVX__ || (defined _MSC_VER && _MSC_VER >= 1600 && 0)
-// MS Visual Studio 2010 (2012?) has no macro pre-defined to identify the use of /arch:AVX
-// See: http://connect.microsoft.com/VisualStudio/feedback/details/605858/arch-avx-should-define-a-predefined-macro-in-x64-and-set-a-unique-value-for-m-ix86-fp-in-win32
-// #    include <immintrin.h>
-public static final int CV_AVX = 1;
-// #    if defined(_XCR_XFEATURE_ENABLED_MASK)
-// #      define __xgetbv() _xgetbv(_XCR_XFEATURE_ENABLED_MASK)
-// #    else
-// #      define __xgetbv() 0
-// #    endif
-// #  endif
-// #  if defined __AVX2__ || (defined _MSC_VER && _MSC_VER >= 1800 && 0)
-// #    include <immintrin.h>
-public static final int CV_AVX2 = 1;
-// #    if defined __FMA__
-public static final int CV_FMA3 = 1;
-// #    endif
-// #  endif
-// #endif
+// #include "cv_cpu_dispatch.h"
 
-// #if (defined WIN32 || defined _WIN32) && defined(_M_ARM)
-// # include <Intrin.h>
-// # include <arm_neon.h>
-// # define CV_NEON 1
-// # define CPU_HAS_NEON_FEATURE (true)
-// #elif defined(__ARM_NEON__) || (defined (__ARM_NEON) && defined(__aarch64__))
-// #  include <arm_neon.h>
-// #  define CV_NEON 1
-// #endif
-
-// #if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__
-public static final int CV_VFP = 1;
-// #endif
-
-// #endif // __CUDACC__
-
-// #ifndef CV_POPCNT
-// #endif
-// #ifndef CV_MMX
-// #endif
-// #ifndef CV_SSE
-// #endif
-// #ifndef CV_SSE2
-// #endif
-// #ifndef CV_SSE3
-// #endif
-// #ifndef CV_SSSE3
-// #endif
-// #ifndef CV_SSE4_1
-// #endif
-// #ifndef CV_SSE4_2
-// #endif
-// #ifndef CV_AVX
-// #endif
-// #ifndef CV_AVX2
-// #endif
-// #ifndef CV_FMA3
-// #endif
-// #ifndef CV_AVX_512F
-public static final int CV_AVX_512F = 0;
-// #endif
-// #ifndef CV_AVX_512BW
-public static final int CV_AVX_512BW = 0;
-// #endif
-// #ifndef CV_AVX_512CD
-public static final int CV_AVX_512CD = 0;
-// #endif
-// #ifndef CV_AVX_512DQ
-public static final int CV_AVX_512DQ = 0;
-// #endif
-// #ifndef CV_AVX_512ER
-public static final int CV_AVX_512ER = 0;
-// #endif
-// #ifndef CV_AVX_512IFMA512
-public static final int CV_AVX_512IFMA512 = 0;
-// #endif
-// #ifndef CV_AVX_512PF
-public static final int CV_AVX_512PF = 0;
-// #endif
-// #ifndef CV_AVX_512VBMI
-public static final int CV_AVX_512VBMI = 0;
-// #endif
-// #ifndef CV_AVX_512VL
-public static final int CV_AVX_512VL = 0;
-// #endif
-
-// #ifndef CV_NEON
-// #  define CV_NEON 0
-// #endif
-
-// #ifndef CV_VFP
-// #endif
 
 /* fundamental constants */
 public static final double CV_PI =   3.1415926535897932384626433832795;
-public static final double CV_2PI = 6.283185307179586476925286766559;
+public static final double CV_2PI =  6.283185307179586476925286766559;
 public static final double CV_LOG2 = 0.69314718055994530941723212145818;
 
 // #if defined __ARM_FP16_FORMAT_IEEE
@@ -1207,12 +1111,20 @@ public static final int OPENCV_ABI_COMPATIBILITY = 300;
 // #  define DISABLE_OPENCV_24_COMPATIBILITY
 // #endif
 
-// #if (defined WIN32 || defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined CVAPI_EXPORTS
+// #if (defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined CVAPI_EXPORTS
 // #  define CV_EXPORTS __declspec(dllexport)
 // #elif defined __GNUC__ && __GNUC__ >= 4
 // #  define CV_EXPORTS __attribute__ ((visibility ("default")))
 // #else
 // #  define CV_EXPORTS
+// #endif
+
+// #ifndef CV_DEPRECATED
+// #  if defined(__GNUC__)
+// #  elif defined(_MSC_VER)
+// #  else
+// #    define CV_DEPRECATED
+// #  endif
 // #endif
 
 // #ifndef CV_EXTERN_C
@@ -1251,7 +1163,7 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #define CV_IS_SUBMAT(flags)     ((flags) & CV_MAT_SUBMAT_FLAG)
 
 /** Size of each channel item,
-   0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
+   0x8442211 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
 // #define CV_ELEM_SIZE1(type)
 //     ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
 
@@ -1268,12 +1180,35 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #endif
 
 /****************************************************************************************\
+*                                    static analysys                                     *
+\****************************************************************************************/
+
+// In practice, some macro are not processed correctly (noreturn is not detected).
+// We need to use simplified definition for them.
+// #ifndef CV_STATIC_ANALYSIS
+// # if defined(__KLOCWORK__) || defined(__clang_analyzer__) || defined(__COVERITY__)
+// #   define CV_STATIC_ANALYSIS
+// # endif
+// #endif
+
+/****************************************************************************************\
+*                                    Thread sanitizer                                    *
+\****************************************************************************************/
+// #ifndef CV_THREAD_SANITIZER
+// # if defined(__has_feature)
+// #   if __has_feature(thread_sanitizer)
+// #     define CV_THREAD_SANITIZER
+// #   endif
+// # endif
+// #endif
+
+/****************************************************************************************\
 *          exchange-add operation for atomic operations on reference counters            *
 \****************************************************************************************/
 
 // #ifdef CV_XADD
   // allow to use user-defined macro
-// #elif defined __GNUC__
+// #elif defined __GNUC__ || defined __clang__
 // #elif defined _MSC_VER && !defined RC_INVOKED
 // #else
    
@@ -1295,11 +1230,25 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 
 
 /****************************************************************************************\
+*                                    C++ 11                                              *
+\****************************************************************************************/
+// #ifndef CV_CXX11
+// #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
+public static final int CV_CXX11 = 1;
+// #  endif
+// #else
+// #  if CV_CXX11 == 0
+// #    undef CV_CXX11
+// #  endif
+// #endif
+
+
+/****************************************************************************************\
 *                                    C++ Move semantics                                  *
 \****************************************************************************************/
 
 // #ifndef CV_CXX_MOVE_SEMANTICS
-// #  if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || defined(_MSC_VER) && _MSC_VER >= 1600
+// #  if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_MSC_VER) && _MSC_VER >= 1600)
 public static final int CV_CXX_MOVE_SEMANTICS = 1;
 // #  elif defined(__clang)
 // #    if __has_feature(cxx_rvalue_references)
@@ -1308,6 +1257,21 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 // #else
 // #  if CV_CXX_MOVE_SEMANTICS == 0
 // #    undef CV_CXX_MOVE_SEMANTICS
+// #  endif
+// #endif
+
+/****************************************************************************************\
+*                                    C++11 std::array                                    *
+\****************************************************************************************/
+
+// #ifndef CV_CXX_STD_ARRAY
+// #  if __cplusplus >= 201103L
+public static final int CV_CXX_STD_ARRAY = 1;
+// #    include <array>
+// #  endif
+// #else
+// #  if CV_CXX_STD_ARRAY == 0
+// #    undef CV_CXX_STD_ARRAY
 // #  endif
 // #endif
 
@@ -1916,6 +1880,12 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 
 // #include "opencv2/core/cvdef.h"
 
+// #if ((defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__
+//     && defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
+// #include <emmintrin.h>
+// #endif
+
+
 /** \addtogroup core_utils
  *  \{
 <p>
@@ -1923,25 +1893,22 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 *                                      fast math                                         *
 \****************************************************************************************/
 
-// #if defined __BORLANDC__ */
-// #  include <fastmath.h>
-// #elif defined __cplusplus
+// #ifdef __cplusplus */
 // #  include <cmath>
 // #else
-// #  include <math.h>
 // #endif
 
 // #ifdef HAVE_TEGRA_OPTIMIZATION
 // #  include "tegra_round.hpp"
 // #endif
 
-// #if CV_VFP
+// #if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__ && !defined(__CUDACC__)
     // 1. general scheme
 //     #define ARM_ROUND(_value, _asm_string)
 //         int res;
 //         float temp;
 //         (void)temp;
-//         asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value));
+//         __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value));
 //         return res
     // 2. version for double
 //     #ifdef __clang__
@@ -1951,7 +1918,7 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 //     #endif
     // 3. version for float
 //     #define ARM_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
-// #endif // CV_VFP
+// #endif
 
 /** \brief Rounds floating-point number to the nearest integer
  <p>
@@ -2221,7 +2188,7 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    3;
-public static final int CV_VERSION_MINOR =    2;
+public static final int CV_VERSION_MINOR =    3;
 public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
@@ -2307,7 +2274,7 @@ public static final int CV_SUBMINOR_VERSION = CV_VERSION_REVISION;
 /** error codes */
 /** enum cv::Error::Code */
 public static final int
-    /** everithing is ok */
+    /** everything is ok */
     StsOk= 0,
     /** pseudo error for back trace */
     StsBackTrace= -1,
@@ -2321,7 +2288,7 @@ public static final int
     StsBadArg= -5,
     /** unsupported function */
     StsBadFunc= -6,
-    /** iter. didn't converge */
+    /** iteration didn't converge */
     StsNoConv= -7,
     /** tracing */
     StsAutoTrace= -8,
@@ -2333,31 +2300,31 @@ public static final int
     BadOffset= -11,
     //!<
     BadDataPtr= -12,
-    //!<
+    /** image step is wrong, this may happen for a non-continuous matrix. */
     BadStep= -13,
     //!<
     BadModelOrChSeq= -14,
-    //!<
+    /** bad number of channels, for example, some functions accept only single channel matrices. */
     BadNumChannels= -15,
     //!<
     BadNumChannel1U= -16,
-    //!<
+    /** input image depth is not supported by the function */
     BadDepth= -17,
     //!<
     BadAlphaChannel= -18,
-    //!<
+    /** number of dimensions is out of range */
     BadOrder= -19,
-    //!<
+    /** incorrect input origin */
     BadOrigin= -20,
-    //!<
+    /** incorrect input align */
     BadAlign= -21,
     //!<
     BadCallBack= -22,
     //!<
     BadTileSize= -23,
-    //!<
+    /** input COI is not supported */
     BadCOI= -24,
-    //!<
+    /** incorrect input roi */
     BadROISize= -25,
     //!<
     MaskIsTiled= -26,
@@ -2365,11 +2332,11 @@ public static final int
     StsNullPtr= -27,
     /** incorrect vector length */
     StsVecLengthErr= -28,
-    /** incorr. filter structure content */
+    /** incorrect filter structure content */
     StsFilterStructContentErr= -29,
-    /** incorr. transform kernel content */
+    /** incorrect transform kernel content */
     StsKernelStructContentErr= -30,
-    /** incorrect filter ofset value */
+    /** incorrect filter offset value */
     StsFilterOffsetErr= -31,
     /** the input/output structure size is incorrect */
     StsBadSize= -201,
@@ -2401,12 +2368,18 @@ public static final int
     StsBadMemBlock= -214,
     /** assertion failed */
     StsAssert= -215,
+    /** no CUDA support */
     GpuNotSupported= -216,
+    /** GPU API call error */
     GpuApiCallError= -217,
+    /** no OpenGL support */
     OpenGlNotSupported= -218,
+    /** OpenGL API call error */
     OpenGlApiCallError= -219,
+    /** OpenCL API call error */
     OpenCLApiCallError= -220,
     OpenCLDoubleNotSupported= -221,
+    /** OpenCL initialization error */
     OpenCLInitError= -222,
     OpenCLNoAMDBlasFft= -223;
  //Error
@@ -2538,6 +2511,10 @@ public static final int
         into a real array and inverse transformation is executed, the function treats the input as a
         packed complex-conjugate symmetrical array, and the output will also be a real array). */
     DFT_REAL_OUTPUT    = 32,
+    /** specifies that input is complex input. If this flag is set, the input must have 2 channels.
+        On the other hand, for backwards compatibility reason, if input has 2 channels, input is
+        already considered complex. */
+    DFT_COMPLEX_INPUT  = 64,
     /** performs an inverse 1D or 2D transform instead of the default forward transform. */
     DCT_INVERSE        =  DFT_INVERSE,
     /** performs a forward or inverse transform of every individual row of the input
@@ -2620,8 +2597,8 @@ It is possible to alternate error processing by using redirectError().
 @param _code - error code (Error::Code)
 @param _err - error description
 @param _func - function name. Available only when the compiler supports getting it
-@param _file - source file name where the error has occured
-@param _line - line number in the source file where the error has occured
+@param _file - source file name where the error has occurred
+@param _line - line number in the source file where the error has occurred
 @see CV_Error, CV_Error_, CV_ErrorNoReturn, CV_ErrorNoReturn_, CV_Assert, CV_DbgAssert
  */
 @Namespace("cv") public static native void error(int _code, @Str BytePointer _err, @Cast("const char*") BytePointer _func, @Cast("const char*") BytePointer _file, int _line);
@@ -2649,6 +2626,10 @@ It is possible to alternate error processing by using redirectError().
 // #else
 // #define CV_Func ""
 // #endif
+
+// #ifdef CV_STATIC_ANALYSIS
+
+// #else // CV_STATIC_ANALYSIS
 
 /** \brief Call the error handler.
 <p>
@@ -2689,6 +2670,8 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
 /** same as CV_Error_(code,args), but does not return */
 // #define CV_ErrorNoReturn_( code, args ) cv::errorNoReturn( code, cv::format args, CV_Func, __FILE__, __LINE__ )
+
+// #endif // CV_STATIC_ANALYSIS
 
 /** replaced with CV_Assert(expr) in Debug configuration */
 // #ifdef _DEBUG
@@ -2808,7 +2791,10 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
     }
 
 
-@Namespace("cv::ipp") public static native int getIppFeatures();
+// #if OPENCV_ABI_COMPATIBILITY > 300
+@Namespace("cv::ipp") public static native @Cast("unsigned long long") long getIppFeatures();
+// #else
+// #endif
 @Namespace("cv::ipp") public static native void setIppStatus(int status, @Cast("const char*") BytePointer funcname/*=NULL*/, @Cast("const char*") BytePointer filename/*=NULL*/,
                              int line/*=0*/);
 @Namespace("cv::ipp") public static native void setIppStatus(int status);
@@ -2887,17 +2873,13 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 // #endif
 
 // #include "opencv2/core/cvdef.h"
-
 // #include <cstddef>
 // #include <cstring>
 // #include <cctype>
 
-// #ifndef OPENCV_NOSTL
-// #  include <string>
-// #endif
+// #include <string>
 
 // import useful primitives from stl
-// #ifndef OPENCV_NOSTL_TRANSITIONAL
 // #  include <algorithm>
 // #  include <utility>
 // #  include <cstdlib> //for abs(int)
@@ -2906,9 +2888,6 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
     @Namespace("cv") public static native @Cast("ushort") short abs(@Cast("ushort") short a);
     @Namespace("cv") public static native @Cast("unsigned") int abs(@Cast("unsigned") int a);
 
-
-// #else
-// #endif
 
 /** \addtogroup core_utils
  *  \{
@@ -3211,13 +3190,9 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 /** \} relates cv::String */
 
  // cv
-
-// #ifndef OPENCV_NOSTL_TRANSITIONAL
     @Namespace("std") public static native void swap(@Str BytePointer a, @Str BytePointer b);
     @Namespace("std") public static native void swap(@Str String a, @Str String b);
 
-// #else
-// #endif
 
 // #include "opencv2/core/ptr.inl.hpp"
 
@@ -3281,6 +3256,11 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 // #endif
 
 // #include "opencv2/core.hpp"
+// #include <ostream>
+
+// #ifdef CV_CXX11
+// #include <functional>
+// #endif
 
 // #ifdef CV_COLLECT_IMPL_DATA
 // #else
@@ -3307,7 +3287,7 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
  <pre>{@code
  void my_func(const cv::Mat& m)
  {
-    cv::AutoBuffer<float> buf; // create automatic buffer containing 1000 floats
+    cv::AutoBuffer<float> buf(1000); // create automatic buffer containing 1000 floats
 
     buf.allocate(m.rows); // if m.rows <= 1000, the pre-allocated buffer is used,
                           // otherwise the buffer of "m.rows" floats will be allocated
@@ -3376,13 +3356,13 @@ be called outside of parallel region.
 <p>
 OpenCV will try to run it's functions with specified threads number, but some behaviour differs from
 framework:
--   {@code TBB} – User-defined parallel constructions will run with the same threads number, if
-    another does not specified. If late on user creates own scheduler, OpenCV will be use it.
--   {@code OpenMP} – No special defined behaviour.
--   {@code Concurrency} – If threads == 1, OpenCV will disable threading optimizations and run it's
+-   {@code TBB} - User-defined parallel constructions will run with the same threads number, if
+    another does not specified. If later on user creates own scheduler, OpenCV will use it.
+-   {@code OpenMP} - No special defined behaviour.
+-   {@code Concurrency} - If threads == 1, OpenCV will disable threading optimizations and run it's
     functions sequentially.
--   {@code GCD} – Supports only values \<= 0.
--   {@code C=} – No special defined behaviour.
+-   {@code GCD} - Supports only values \<= 0.
+-   {@code C=} - No special defined behaviour.
 @param nthreads Number of threads used by OpenCV.
 \sa getNumThreads, getThreadNum
  */
@@ -3393,13 +3373,13 @@ framework:
 Always returns 1 if OpenCV is built without threading support.
 <p>
 The exact meaning of return value depends on the threading framework used by OpenCV library:
-- {@code TBB} – The number of threads, that OpenCV will try to use for parallel regions. If there is
+- {@code TBB} - The number of threads, that OpenCV will try to use for parallel regions. If there is
   any tbb::thread_scheduler_init in user code conflicting with OpenCV, then function returns
   default number of threads used by TBB library.
-- {@code OpenMP} – An upper bound on the number of threads that could be used to form a new team.
-- {@code Concurrency} – The number of threads, that OpenCV will try to use for parallel regions.
-- {@code GCD} – Unsupported; returns the GCD thread pool limit (512) for compatibility.
-- {@code C=} – The number of threads, that OpenCV will try to use for parallel regions, if before
+- {@code OpenMP} - An upper bound on the number of threads that could be used to form a new team.
+- {@code Concurrency} - The number of threads, that OpenCV will try to use for parallel regions.
+- {@code GCD} - Unsupported; returns the GCD thread pool limit (512) for compatibility.
+- {@code C=} - The number of threads, that OpenCV will try to use for parallel regions, if before
   called setNumThreads with threads \> 0, otherwise returns the number of logical CPUs,
   available for the process.
 \sa setNumThreads, getThreadNum
@@ -3410,12 +3390,12 @@ The exact meaning of return value depends on the threading framework used by Ope
 returns 0 if called outside of parallel region.
 <p>
 The exact meaning of return value depends on the threading framework used by OpenCV library:
-- {@code TBB} – Unsupported with current 4.1 TBB release. May be will be supported in future.
-- {@code OpenMP} – The thread number, within the current team, of the calling thread.
-- {@code Concurrency} – An ID for the virtual processor that the current context is executing on (0
+- {@code TBB} - Unsupported with current 4.1 TBB release. Maybe will be supported in future.
+- {@code OpenMP} - The thread number, within the current team, of the calling thread.
+- {@code Concurrency} - An ID for the virtual processor that the current context is executing on (0
   for master thread and unique number for others, but not necessary 1,2,3,...).
-- {@code GCD} – System calling thread's ID. Never returns 0 inside parallel region.
-- {@code C=} – The index of the current parallel task.
+- {@code GCD} - System calling thread's ID. Never returns 0 inside parallel region.
+- {@code C=} - The index of the current parallel task.
 \sa setNumThreads, getNumThreads
  */
 @Namespace("cv") public static native int getThreadNum();
@@ -3578,6 +3558,16 @@ The function returns the minimum number that is greater or equal to sz and is di
  */
 @Namespace("cv") public static native @Cast("size_t") long alignSize(@Cast("size_t") long sz, int n);
 
+/** \brief Integer division with result round up.
+<p>
+Use this function instead of {@code ceil((float)a / b)} expressions.
+<p>
+\sa alignSize
+*/
+@Namespace("cv") public static native int divUp(int a, @Cast("unsigned int") int b);
+/** \overload */
+@Namespace("cv") public static native @Cast("size_t") long divUp(@Cast("size_t") long a, @Cast("unsigned int") int b);
+
 /** \brief Enables or disables the optimized code.
 <p>
 The function can be used to dynamically turn on and off optimized code (code that uses SSE2, AVX,
@@ -3617,6 +3607,22 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 */
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body, double nstripes/*=-1.*/);
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body);
+
+// #ifdef CV_CXX11
+@Namespace("cv") @NoOffset public static class ParallelLoopBodyLambdaWrapper extends ParallelLoopBody {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ParallelLoopBodyLambdaWrapper(Pointer p) { super(p); }
+
+    public ParallelLoopBodyLambdaWrapper(@ByVal Functor functor) { super((Pointer)null); allocate(functor); }
+    private native void allocate(@ByVal Functor functor);
+
+    public native @Name("operator ()") void apply(@Const @ByRef Range range);
+}
+
+@Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor, double nstripes/*=-1.*/);
+@Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor);
+// #endif
 
 /////////////////////////////// forEach method of cv::Mat ////////////////////////////
 
@@ -3673,6 +3679,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     public native void deleteDataInstance(Pointer pData);
 
     public native int key_(); public native TLSDataContainer key_(int key_);
+    public native void cleanup(); /** Release created TLS data container objects. It is similar to release() call, but it keeps TLS container valid. */
 }
 
 // Main TLS data class
@@ -3689,10 +3696,13 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 
     public NodeDataTlsData() { super((Pointer)null); allocate(); }
     private native void allocate(); // Release key and delete associated data
-    public native NodeDataTls get(); // Get data assosiated with key
+    public native NodeDataTls get(); // Get data associated with key
+    public native @ByRef NodeDataTls getRef(); // Get data associated with key
 
-     // Get data from all threads
+    // Get data from all threads
     public native void gather(@ByRef NodeDataTlsVector data);
+
+    public native void cleanup();
 }
 
 /** \brief Designed for command line parsing
@@ -3728,7 +3738,7 @@ The sample below demonstrates how to use CommandLineParser:
 <p>
 ### Keys syntax
 <p>
-The keys parameter is a string containing several blocks, each one is enclosed in curley braces and
+The keys parameter is a string containing several blocks, each one is enclosed in curly braces and
 describes one argument. Each argument contains three parts separated by the {@code |} symbol:
 <p>
 -# argument names is a space-separated list of option synonyms (to mark argument as positional, prefix it with the {@code @} symbol)
@@ -3801,10 +3811,8 @@ For the described keys:
 
 
 
-// #ifndef OPENCV_NOSTL
 
 
-// #endif // OPENCV_NOSTL
 
 /** \endcond */
 
@@ -3933,6 +3941,10 @@ public static final int
 @Namespace("cv::instr") public static native @Cast("cv::instr::FLAGS") int getFlags();
 
 
+@Namespace("cv::utils") public static native int getThreadID();
+
+ // namespace
+
  //namespace cv
 
 // #ifndef DISABLE_OPENCV_24_COMPATIBILITY
@@ -3992,7 +4004,8 @@ public static final int
 
 // #ifdef HAVE_IPL
 // #  ifndef __IPL_H__
-// #    if defined WIN32 || defined _WIN32
+// #    if defined _WIN32
+// #      include <ipl.h>
 // #    else
 // #      include <ipl/ipl.h>
 // #    endif
@@ -4010,7 +4023,9 @@ public static final int
 // #include <float.h>
 // #endif // SKIP_INCLUDES
 
-// #if defined WIN32 || defined _WIN32
+// #if defined _WIN32
+// #  define CV_CDECL __cdecl
+// #  define CV_STDCALL __stdcall
 // #else
 // #  define CV_CDECL
 // #  define CV_STDCALL
@@ -4081,27 +4096,35 @@ public static final int
  /** offset is invalid               */
  CV_BadOffset= -11,
  CV_BadDataPtr= -12,  /**/
- CV_BadStep= -13,  /**/
+ /** image step is wrong, this may happen for a non-continuous matrix */
+ CV_BadStep= -13,
  CV_BadModelOrChSeq= -14,  /**/
- CV_BadNumChannels= -15,  /**/
+ /** bad number of channels, for example, some functions accept only single channel matrices */
+ CV_BadNumChannels= -15,
  CV_BadNumChannel1U= -16,  /**/
- CV_BadDepth= -17,  /**/
+ /** input image depth is not supported by the function */
+ CV_BadDepth= -17,
  CV_BadAlphaChannel= -18,  /**/
- CV_BadOrder= -19,  /**/
- CV_BadOrigin= -20,  /**/
- CV_BadAlign= -21,  /**/
+ /** number of dimensions is out of range */
+ CV_BadOrder= -19,
+ /** incorrect input origin               */
+ CV_BadOrigin= -20,
+ /** incorrect input align                */
+ CV_BadAlign= -21,
  CV_BadCallBack= -22,  /**/
  CV_BadTileSize= -23,  /**/
- CV_BadCOI= -24,  /**/
- CV_BadROISize= -25,  /**/
+ /** input COI is not supported           */
+ CV_BadCOI= -24,
+ /** incorrect input roi                  */
+ CV_BadROISize= -25,
  CV_MaskIsTiled= -26,  /**/
  /** null pointer */
  CV_StsNullPtr= -27,
  /** incorrect vector length */
  CV_StsVecLengthErr= -28,
- /** incorr. filter structure content */
+ /** incorrect filter structure content */
  CV_StsFilterStructContentErr= -29,
- /** incorr. transform kernel content */
+ /** incorrect transform kernel content */
  CV_StsKernelStructContentErr= -30,
  /** incorrect filter offset value */
  CV_StsFilterOffsetErr= -31,
@@ -4133,14 +4156,20 @@ public static final int
  CV_StsNotImplemented= -213,
  /** an allocated block has been corrupted */
  CV_StsBadMemBlock= -214,
- /** assertion failed */
+ /** assertion failed   */
  CV_StsAssert= -215,
+ /** no CUDA support    */
  CV_GpuNotSupported= -216,
+ /** GPU API call error */
  CV_GpuApiCallError= -217,
+ /** no OpenGL support  */
  CV_OpenGlNotSupported= -218,
+ /** OpenGL API call error */
  CV_OpenGlApiCallError= -219,
+ /** OpenCL API call error */
  CV_OpenCLApiCallError= -220,
  CV_OpenCLDoubleNotSupported= -221,
+ /** OpenCL initialization error */
  CV_OpenCLInitError= -222,
  CV_OpenCLNoAMDBlasFft= -223;
 
@@ -9339,7 +9368,7 @@ public static native int cvGetErrMode( );
 /** Sets error processing mode, returns previously used mode */
 public static native int cvSetErrMode( int mode );
 
-/** Sets error status and performs some additonal actions (displaying message box,
+/** Sets error status and performs some additional actions (displaying message box,
  writing message to stderr, terminating application etc.)
  depending on the current error mode */
 public static native void cvError( int status, @Cast("const char*") BytePointer func_name,
@@ -9350,7 +9379,7 @@ public static native void cvError( int status, String func_name,
 /** Retrieves textual description of the error given its code */
 public static native @Cast("const char*") BytePointer cvErrorStr( int status );
 
-/** Retrieves detailed information about the last error occured */
+/** Retrieves detailed information about the last error occurred */
 public static native int cvGetErrInfo( @Cast("const char**") PointerPointer errcode_desc, @Cast("const char**") PointerPointer description,
                         @Cast("const char**") PointerPointer filename, IntPointer line );
 public static native int cvGetErrInfo( @Cast("const char**") @ByPtrPtr BytePointer errcode_desc, @Cast("const char**") @ByPtrPtr BytePointer description,
@@ -10094,6 +10123,8 @@ OpenCV defines the following Size_\<\> aliases:
     public native @ByRef @Name("operator =") Size put(@Const @ByRef Size sz);
     /** the area (width*height) */
     public native int area();
+    /** true if empty */
+    public native @Cast("bool") boolean empty();
 
     /** conversion of another data type. */
 
@@ -10125,6 +10156,8 @@ OpenCV defines the following Size_\<\> aliases:
     public native @ByRef @Name("operator =") Size2f put(@Const @ByRef Size2f sz);
     /** the area (width*height) */
     public native float area();
+    /** true if empty */
+    public native @Cast("bool") boolean empty();
 
     /** conversion of another data type. */
 
@@ -10156,6 +10189,8 @@ OpenCV defines the following Size_\<\> aliases:
     public native @ByRef @Name("operator =") Size2d put(@Const @ByRef Size2d sz);
     /** the area (width*height) */
     public native double area();
+    /** true if empty */
+    public native @Cast("bool") boolean empty();
 
     /** conversion of another data type. */
 
@@ -10244,6 +10279,8 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public native @ByVal Size size();
     /** area (width*height) of the rectangle */
     public native int area();
+    /** true if empty */
+    public native @Cast("bool") boolean empty();
 
     /** conversion to another data type */
 
@@ -10289,6 +10326,8 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public native @ByVal Size2f size();
     /** area (width*height) of the rectangle */
     public native float area();
+    /** true if empty */
+    public native @Cast("bool") boolean empty();
 
     /** conversion to another data type */
 
@@ -10334,6 +10373,8 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public native @ByVal Size2d size();
     /** area (width*height) of the rectangle */
     public native double area();
+    /** true if empty */
+    public native @Cast("bool") boolean empty();
 
     /** conversion to another data type */
 
@@ -10474,7 +10515,7 @@ custom processing, you will probably have to check and handle it explicitly:
 
 /** \brief Template class for a 4-element vector derived from Vec.
 <p>
-Being derived from Vec\<_Tp, 4\> , Scalar_ and Scalar can be used just as typical 4-element
+Being derived from Vec\<_Tp, 4\> , Scalar\_ and Scalar can be used just as typical 4-element
 vectors. In addition, they can be converted to/from CvScalar . The type Scalar is widely used in
 OpenCV to pass pixel values.
 */
@@ -10951,7 +10992,11 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
+
+
 ////////////////////////////////// Rect /////////////////////////////////
+
+
 
 
 
@@ -11347,6 +11392,9 @@ of p and len.
 */
 @Namespace("cv") public static native int borderInterpolate(int p, int len, int borderType);
 
+/** \example copyMakeBorder_demo.cpp
+An example using copyMakeBorder function
+ */
 /** \brief Forms a border around an image.
 <p>
 The function copies the source image into the middle of the destination image. The areas to the
@@ -11579,6 +11627,9 @@ The function can also be emulated with a matrix expression, for example:
 @Namespace("cv") public static native void scaleAdd(@ByVal Mat src1, double alpha, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void scaleAdd(@ByVal UMat src1, double alpha, @ByVal UMat src2, @ByVal UMat dst);
 
+/** \example AddingImagesTrackbar.cpp
+ <p>
+ */
 /** \brief Calculates the weighted sum of two arrays.
 <p>
 The function addWeighted calculates the weighted sum of two arrays as follows:
@@ -11752,7 +11803,7 @@ then pass the matrix to calcCovarMatrix .
 @param src input array that should have from 1 to 4 channels so that the results can be stored in
 Scalar_ 's.
 @param mean output parameter: calculated mean value.
-@param stddev output parameter: calculateded standard deviation.
+@param stddev output parameter: calculated standard deviation.
 @param mask optional operation mask.
 \sa  countNonZero, mean, norm, minMaxLoc, calcCovarMatrix
 */
@@ -12936,7 +12987,7 @@ type=CV_MAT_DEPTH(dtype) that should be either CV_32F or CV_64F .
 <p>
 The function cv::transpose transposes the matrix src :
 \f[\texttt{dst} (i,j) =  \texttt{src} (j,i)\f]
-\note No complex conjugation is done in case of a complex matrix. It it
+\note No complex conjugation is done in case of a complex matrix. It
 should be done separately if needed.
 @param src input array.
 @param dst output array of the same type as src.
@@ -14234,7 +14285,7 @@ introduced by G. Marsaglia and W. W. Tsang.
     double a1 = rng.uniform((double)0, (double)1);
 
     // produces float from [0, 1)
-    double b = rng.uniform(0.f, 1.f);
+    float b = rng.uniform(0.f, 1.f);
 
     // produces double from [0, 1)
     double c = rng.uniform(0., 1.);
@@ -14250,8 +14301,8 @@ introduced by G. Marsaglia and W. W. Tsang.
     want a floating-point random number, but the range boundaries are
     integer numbers, either put dots in the end, if they are constants, or
     use explicit type cast operators, as in the a1 initialization above.
-    @param a lower inclusive boundary of the returned random numbers.
-    @param b upper non-inclusive boundary of the returned random numbers.
+    @param a lower inclusive boundary of the returned random number.
+    @param b upper non-inclusive boundary of the returned random number.
       */
     public native int uniform(int a, int b);
     /** \overload */
@@ -14309,6 +14360,8 @@ introduced by G. Marsaglia and W. W. Tsang.
     public native double gaussian(double sigma);
 
     public native @Cast("uint64") int state(); public native RNG state(int state);
+
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef RNG other);
 }
 
 /** \brief Mersenne Twister random number generator
@@ -14754,6 +14807,8 @@ Here is example of SIFT use in your application via Algorithm interface:
 
 
 
+
+
 /** returns the next unifomly-distributed random number of the specified type */
 @Namespace("cv") public static native @Name("randu<int>") int intRand();
 @Namespace("cv") public static native @Name("randu<float>") float floatRand();
@@ -14813,6 +14868,11 @@ may or may not be in the same class.
 // #ifndef OPENCV_CORE_BUFFER_POOL_HPP
 // #define OPENCV_CORE_BUFFER_POOL_HPP
 
+// #ifdef _MSC_VER
+// #pragma warning(push)
+// #pragma warning(disable: 4265)
+// #endif
+
 /** \addtogroup core
  *  \{ */
 
@@ -14830,6 +14890,10 @@ may or may not be in the same class.
 /** \} */
 
 
+
+// #ifdef _MSC_VER
+// #pragma warning(pop)
+// #endif
 
 // #endif // OPENCV_CORE_BUFFER_POOL_HPP
 
@@ -14906,8 +14970,8 @@ It is defined as:
     typedef const _InputArray& InputArray;
 }</pre>
 where _InputArray is a class that can be constructed from {@code Mat}, {@code Mat_<T>}, {@code Matx<T, m, n>},
-{@code std::vector<T>}, {@code std::vector<std::vector<T> >} or {@code std::vector<Mat>}. It can also be constructed
-from a matrix expression.
+{@code std::vector<T>}, {@code std::vector<std::vector<T> >}, {@code std::vector<Mat>}, {@code std::vector<Mat_<T> >},
+{@code UMat}, {@code std::vector<UMat>} or {@code double}. It can also be constructed from a matrix expression.
 <p>
 Since this is mostly implementation-level class, and its interface may change in future versions, we
 do not describe it in details. There are a few key things, though, that should be kept in mind:
@@ -15089,7 +15153,8 @@ public static final int
     /** enum cv::UMatData:: */
     public static final int COPY_ON_MAP= 1, HOST_COPY_OBSOLETE= 2,
         DEVICE_COPY_OBSOLETE= 4, TEMP_UMAT= 8, TEMP_COPIED_UMAT= 24,
-        USER_ALLOCATED= 32, DEVICE_MEM_MAPPED= 64;
+        USER_ALLOCATED= 32, DEVICE_MEM_MAPPED= 64,
+        ASYNC_CLEANUP= 128;
     public UMatData(@Const MatAllocator allocator) { super((Pointer)null); allocate(allocator); }
     private native void allocate(@Const MatAllocator allocator);
 
@@ -15289,7 +15354,7 @@ sub-matrices.
 <p>
 - Use MATLAB-style array initializers, zeros(), ones(), eye(), for example:
 <pre>{@code
-    // create a double-precision identity martix and add it to M.
+    // create a double-precision identity matrix and add it to M.
     M += Mat::eye(M.rows, M.cols, CV_64F);
 }</pre>
 <p>
@@ -15322,7 +15387,7 @@ If you need to process a whole row of a 2D array, the most efficient way is to g
 the row first, and then just use the plain C operator [] :
 <pre>{@code
     // compute sum of positive matrix elements
-    // (assuming that M isa double-precision matrix)
+    // (assuming that M is a double-precision matrix)
     double sum=0;
     for(int i = 0; i < M.rows; i++)
     {
@@ -15365,6 +15430,8 @@ Finally, there are STL-style iterators that are smart enough to skip gaps betwee
 }</pre>
 The matrix iterators are random-access iterators, so they can be passed to any STL algorithm,
 including std::sort().
+<p>
+\note Matrix Expressions and arithmetic see MatExpr
 */
 @Namespace("cv") @NoOffset public static class Mat extends AbstractMat {
     static { Loader.load(); }
@@ -15663,6 +15730,16 @@ including std::sort().
     destructed.
     */
 
+// #ifdef CV_CXX11
+    /** \overload
+    */
+// #endif
+
+// #ifdef CV_CXX_STD_ARRAY
+    /** \overload
+    */
+// #endif
+
     /** \overload
     */
 
@@ -15783,10 +15860,33 @@ including std::sort().
     single-column matrix. Similarly to Mat::row and Mat::col, this is an O(1) operation.
     @param d index of the diagonal, with the following values:
     - {@code d=0} is the main diagonal.
-    - {@code d>0} is a diagonal from the lower half. For example, d=1 means the diagonal is set
+    - {@code d<0} is a diagonal from the lower half. For example, d=-1 means the diagonal is set
       immediately below the main one.
-    - {@code d<0} is a diagonal from the upper half. For example, d=-1 means the diagonal is set
+    - {@code d>0} is a diagonal from the upper half. For example, d=1 means the diagonal is set
       immediately above the main one.
+    For example:
+    <pre>{@code
+        Mat m = (Mat_<int>(3,3) <<
+                    1,2,3,
+                    4,5,6,
+                    7,8,9);
+        Mat d0 = m.diag(0);
+        Mat d1 = m.diag(1);
+        Mat d_1 = m.diag(-1);
+    }</pre>
+    The resulting matrices are
+    <pre>{@code
+     d0 =
+       [1;
+        5;
+        9]
+     d1 =
+       [2;
+        6]
+     d_1 =
+       [4;
+        8]
+    }</pre>
      */
     public native @ByVal Mat diag(int d/*=0*/);
     public native @ByVal Mat diag();
@@ -15906,6 +16006,11 @@ including std::sort().
     public native @ByVal Mat reshape(int cn, int newndims, @Const IntPointer newsz);
     public native @ByVal Mat reshape(int cn, int newndims, @Const IntBuffer newsz);
     public native @ByVal Mat reshape(int cn, int newndims, @Const int[] newsz);
+
+    /** \overload */
+    public native @ByVal Mat reshape(int cn, @StdVector IntPointer newshape);
+    public native @ByVal Mat reshape(int cn, @StdVector IntBuffer newshape);
+    public native @ByVal Mat reshape(int cn, @StdVector int[] newshape);
 
     /** \brief Transposes a matrix.
     <p>
@@ -16129,7 +16234,7 @@ including std::sort().
      */
     public native void release();
 
-    /** deallocates the matrix data */
+    /** internal use function, consider to use 'release' method instead; deallocates the matrix data */
     public native @Name("deallocate") void _deallocate();
     /** internal use function; properly re-allocates _size, _step arrays */
     public native void copySize(@Const @ByRef Mat m);
@@ -16142,6 +16247,14 @@ including std::sort().
     @param sz Number of rows.
      */
     public native void reserve(@Cast("size_t") long sz);
+
+    /** \brief Reserves space for the certain number of bytes.
+    <p>
+    The method reserves space for sz bytes. If the matrix already has enough space to store sz bytes,
+    nothing happens. If matrix has to be reallocated its previous content could be lost.
+    @param sz Number of bytes.
+    */
+    public native void reserveBuffer(@Cast("size_t") long sz);
 
     /** \brief Changes the number of matrix rows.
     <p>
@@ -16262,6 +16375,9 @@ including std::sort().
     // operator CvMatND() const;
     // //! converts header to IplImage; no data is copied
     // operator IplImage() const;
+
+// #ifdef CV_CXX_STD_ARRAY
+// #endif
 
     /** \brief Reports whether the matrix is continuous or not.
     <p>
@@ -16405,6 +16521,13 @@ including std::sort().
     image).
      */
     public native @Cast("size_t") long total();
+
+    /** \brief Returns the total number of array elements.
+     <p>
+     The method returns the number of elements within a certain sub-array slice with startDim <= dim < endDim
+     */
+    public native @Cast("size_t") long total(int startDim, int endDim/*=INT_MAX*/);
+    public native @Cast("size_t") long total(int startDim);
 
     /** returns N if the matrix is 1-channel (N x ptdim) or ptdim-channel (1 x N) or (N x 1); negative number otherwise */
     public native int checkVector(int elemChannels, int depth/*=-1*/, @Cast("bool") boolean requireContinuous/*=true*/);
@@ -16585,7 +16708,7 @@ including std::sort().
 
         // first. raw pointer access.
         for (int r = 0; r < image.rows; ++r) {
-            Pixel* ptr = image.ptr<Pixel>(0, r);
+            Pixel* ptr = image.ptr<Pixel>(r, 0);
             const Pixel* ptr_end = ptr + image.cols;
             for (; ptr != ptr_end; ++ptr) {
                 ptr->x = 255;
@@ -16679,7 +16802,7 @@ including std::sort().
 
 /** \brief Template matrix class derived from Mat
 <p>
-<pre>{@code
+<pre>{@code {.cpp}
     template<typename _Tp> class Mat_ : public Mat
     {
     public:
@@ -16691,7 +16814,7 @@ including std::sort().
 The class {@code Mat_<_Tp>} is a *thin* template wrapper on top of the Mat class. It does not have any
 extra data fields. Nor this class nor Mat has any virtual methods. Thus, references or pointers to
 these two classes can be freely but carefully converted one to another. For example:
-<pre>{@code
+<pre>{@code {.cpp}
     // create a 100x100 8-bit matrix
     Mat M(100,100,CV_8U);
     // this will be compiled fine. no any data conversion will be done.
@@ -16703,7 +16826,7 @@ While Mat is sufficient in most cases, Mat_ can be more convenient if you use a 
 access operations and if you know matrix type at the compilation time. Note that
 {@code Mat::at(int y,int x)} and {@code Mat_::operator()(int y,int x)} do absolutely the same
 and run at the same speed, but the latter is certainly shorter:
-<pre>{@code
+<pre>{@code {.cpp}
     Mat_<double> M(20,20);
     for(int i = 0; i < M.rows; i++)
         for(int j = 0; j < M.cols; j++)
@@ -16713,7 +16836,7 @@ and run at the same speed, but the latter is certainly shorter:
     cout << E.at<double>(0,0)/E.at<double>(M.rows-1,0);
 }</pre>
 To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
-<pre>{@code
+<pre>{@code {.cpp}
     // allocate a 320x240 color image and fill it with green (in RGB space)
     Mat_<Vec3b> img(240, 320, Vec3b(0,255,0));
     // now draw a diagonal white line
@@ -16723,6 +16846,17 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     for(int i = 0; i < img.rows; i++)
         for(int j = 0; j < img.cols; j++)
             img(i,j)[2] ^= (uchar)(i ^ j);
+}</pre>
+Mat_ is fully compatible with C++11 range-based for loop. For example such loop
+can be used to safely apply look-up table:
+<pre>{@code {.cpp}
+void applyTable(Mat_<uchar>& I, const uchar* const table)
+{
+    for(auto& pixel : I)
+    {
+        pixel = table[pixel];
+    }
+}
 }</pre>
  */
 
@@ -16801,6 +16935,7 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     public UMat(@Const @ByRef UMat m, @Const @ByRef Rect roi) { super((Pointer)null); allocate(m, roi); }
     private native void allocate(@Const @ByRef UMat m, @Const @ByRef Rect roi);
     /** builds matrix from std::vector with or without copying the data */
+
     /** builds matrix from cv::Vec; the data is copied by default */
     /** builds matrix from cv::Matx; the data is copied by default */
     /** builds matrix from a 2D point */
@@ -16823,10 +16958,10 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     /** ... for the specified column span */
     public native @ByVal UMat colRange(int startcol, int endcol);
     public native @ByVal UMat colRange(@Const @ByRef Range r);
-    /** ... for the specified diagonal */
-    // (d=0 - the main diagonal,
-    //  >0 - a diagonal from the lower half,
-    //  <0 - a diagonal from the upper half)
+    /** ... for the specified diagonal
+     *  (d=0 - the main diagonal,
+     *   >0 - a diagonal from the upper half,
+     *   <0 - a diagonal from the lower half) */
     public native @ByVal UMat diag(int d/*=0*/);
     public native @ByVal UMat diag();
     /** constructs a square diagonal matrix which main diagonal is vector "d" */
@@ -16964,6 +17099,10 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
 // #ifdef CV_CXX_MOVE_SEMANTICS
 // #endif
 
+    /** Returns the OpenCL buffer handle on which UMat operates on.
+        The UMat instance should be kept alive during the use of the handle to prevent the buffer to be
+        returned to the OpenCV buffer pool.
+     */
     public native Pointer handle(int accessFlags);
     public native void ndoffset(@Cast("size_t*") SizeTPointer ofs);
 
@@ -17201,11 +17340,11 @@ Elements can be accessed using the following methods:
     /**
         @param [out] m - output matrix; if it does not have a proper size or type before the operation,
             it is reallocated
-        @param [in] rtype – desired output matrix type or, rather, the depth since the number of channels
+        @param [in] rtype - desired output matrix type or, rather, the depth since the number of channels
             are the same as the input has; if rtype is negative, the output matrix will have the
             same type as the input.
-        @param [in] alpha – optional scale factor
-        @param [in] beta – optional delta added to the scaled values
+        @param [in] alpha - optional scale factor
+        @param [in] beta - optional delta added to the scaled values
     */
     public native void convertTo( @ByRef Mat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByRef Mat m, int rtype );
@@ -17418,9 +17557,6 @@ notation of some operations:
         return (MatConstIterator)super.position(position);
     }
 
-
-// #ifndef OPENCV_NOSTL
-// #endif
 
     /** default constructor */
     public MatConstIterator() { super((Pointer)null); allocate(); }
@@ -18524,6 +18660,11 @@ reading data to/from a file.
     public static native @Str BytePointer getDefaultObjectName(@Str BytePointer filename);
     public static native @Str String getDefaultObjectName(@Str String filename);
 
+    /** \brief Returns the current format.
+     * @return The current format, see FileStorage::Mode
+     */
+    public native int getFormat();
+
     /** the underlying C FileStorage structure */
     public native @Ptr CvFileStorage fs(); public native FileStorage fs(CvFileStorage fs);
     /** the currently written element */
@@ -18540,7 +18681,7 @@ reading data to/from a file.
 <p>
 The node is used to store each and every element of the file storage opened for reading. When
 XML/YAML file is read, it is first parsed and stored in the memory as a hierarchical collection of
-nodes. Each node can be a “leaf” that is contain a single number or a string, or be a collection of
+nodes. Each node can be a "leaf" that is contain a single number or a string, or be a collection of
 other nodes. There can be named collections (mappings) where each element has a name and it is
 accessed by a name, and ordered collections (sequences) where elements do not have names but rather
 accessed by index. Type of the file node can be determined using FileNode::type method.
@@ -18661,8 +18802,6 @@ storage is opened for writing, no data is stored in memory after it is written.
     public native @Name("operator double") double asDouble();
     /** returns the node content as text string */
     public native @Name("operator cv::String") @Str BytePointer asBytePointer();
-// #ifndef OPENCV_NOSTL
-// #endif
 
     /** returns pointer to the underlying file node */
     public native @Name("operator *") CvFileNode multiply();
@@ -18914,10 +19053,24 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String value );
 
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef KeyPoint kpt );
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef DMatch m );
+
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Range r );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Const @ByRef KeyPointVector vec );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Const @ByRef DMatchVector vec );
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Range r );
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef Range r );
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef KeyPoint r );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef KeyPoint r );
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatch r );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef DMatch r );
 
 /** \} FileStorage
  <p>
@@ -18934,6 +19087,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortPointer value, @Cast("ushort") short default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortBuffer value, @Cast("ushort") short default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef short[] value, @Cast("ushort") short default_value);
+
+@Namespace("cv") public static native void read( @Const @ByRef FileNode node, @ByRef KeyPointVector vec, @Const @ByRef KeyPointVector default_value );
+
+@Namespace("cv") public static native void read( @Const @ByRef FileNode node, @ByRef DMatchVector vec, @Const @ByRef DMatchVector default_value );
 
 /** \} FileNode
  <p>
@@ -18977,10 +19134,15 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 */
 //It needs special handling because it contains two types of fields, int & float.
 @Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPointVector vec);
+
+@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPoint kpt);
+
 /** \brief Reads DMatch from a file storage.
 */
 //It needs special handling because it contains two types of fields, int & float.
 @Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef DMatchVector vec);
+
+@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef DMatch m);
 
 /** \} FileNode
  <p>
@@ -19130,7 +19292,7 @@ without any constraints.
     /** \brief Getter for the optimized function.
     <p>
     The optimized function is represented by Function interface, which requires derivatives to
-    implement the sole method calc(double*) to evaluate the function.
+    implement the calc(double*) and getDim() methods to evaluate the function.
     <p>
     @return Smart-pointer to an object that implements Function interface - it represents the
     function that is being optimized. It can be empty, if no function was given so far.

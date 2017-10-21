@@ -1011,6 +1011,9 @@ matching.
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1);
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1, @Cast("bool*") boolean[] ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1);
+    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1, @Cast("bool*") boolean[] ok/*=0*/);
 }
 
 // #if defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDAOPTFLOW)

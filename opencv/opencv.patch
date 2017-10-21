@@ -1,0 +1,91 @@
+diff -ruN opencv-3.3.0/CMakeLists.txt opencv-3.3.0-patch/CMakeLists.txt
+--- opencv-3.3.0/CMakeLists.txt	2017-08-04 08:58:23.000000000 +0900
++++ opencv-3.3.0-patch/CMakeLists.txt	2017-10-20 19:10:47.423836100 +0900
+@@ -7,12 +7,12 @@
+ # ----------------------------------------------------------------------------
+ 
+ # Disable in-source builds to prevent source tree corruption.
+-if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
+-  message(FATAL_ERROR "
+-FATAL: In-source builds are not allowed.
+-       You should create separate directory for build files.
+-")
+-endif()
++#if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
++#  message(FATAL_ERROR "
++#FATAL: In-source builds are not allowed.
++#       You should create separate directory for build files.
++#")
++#endif()
+ 
+ 
+ include(cmake/OpenCVMinDepVersions.cmake)
+diff -ruN opencv-3.3.0/modules/core/include/opencv2/core/utility.hpp opencv-3.3.0-patch/modules/core/include/opencv2/core/utility.hpp
+--- opencv-3.3.0/modules/core/include/opencv2/core/utility.hpp	2017-08-04 08:58:23.000000000 +0900
++++ opencv-3.3.0-patch/modules/core/include/opencv2/core/utility.hpp	2017-10-20 19:10:47.439593200 +0900
+@@ -1185,7 +1185,7 @@
+     double getTotalMs()   const { return ((double)m_ticksTotal / cv::getTickFrequency()) * 1000; }
+     double getMeanMs()    const { return (((double)m_ticksTotal/m_counter) / cv::getTickFrequency()) * 1000; }
+ };
+-bool operator==(const NodeData& lhs, const NodeData& rhs);
++CV_EXPORTS bool operator==(const NodeData& lhs, const NodeData& rhs);
+ 
+ typedef Node<NodeData> InstrNode;
+ 
+diff -ruN opencv-3.3.0/modules/core/src/system.cpp opencv-3.3.0-patch/modules/core/src/system.cpp
+--- opencv-3.3.0/modules/core/src/system.cpp	2017-08-04 08:58:23.000000000 +0900
++++ opencv-3.3.0-patch/modules/core/src/system.cpp	2017-10-20 19:10:47.439593200 +0900
+@@ -1789,7 +1789,7 @@
+ NodeData::~NodeData()
+ {
+ }
+-bool operator==(const NodeData& left, const NodeData& right)
++CV_EXPORTS bool operator==(const NodeData& left, const NodeData& right)
+ {
+     if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName)
+     {
+diff -ruN opencv-3.3.0/modules/dnn/include/opencv2/dnn/all_layers.hpp opencv-3.3.0-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp
+--- opencv-3.3.0/modules/dnn/include/opencv2/dnn/all_layers.hpp	2017-08-04 08:58:23.000000000 +0900
++++ opencv-3.3.0-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp	2017-10-20 19:12:03.682044000 +0900
+@@ -457,7 +457,7 @@
+         static Ptr<DetectionOutputLayer> create(const LayerParams& params);
+     };
+ 
+-    class NormalizeBBoxLayer : public Layer
++    class CV_EXPORTS NormalizeBBoxLayer : public Layer
+     {
+     public:
+         static Ptr<NormalizeBBoxLayer> create(const LayerParams& params);
+diff -ruN opencv-3.3.0/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-3.3.0-patch/modules/dnn/include/opencv2/dnn/dnn.hpp
+--- opencv-3.3.0/modules/dnn/include/opencv2/dnn/dnn.hpp	2017-08-04 08:58:23.000000000 +0900
++++ opencv-3.3.0-patch/modules/dnn/include/opencv2/dnn/dnn.hpp	2017-10-20 19:11:38.585518900 +0900
+@@ -100,7 +100,7 @@
+    /**
+     * @brief Derivatives of this class encapsulates functions of certain backends.
+     */
+-    class BackendNode
++    class CV_EXPORTS BackendNode
+     {
+     public:
+         BackendNode(int backendId);
+@@ -238,7 +238,7 @@
+         * Layer don't use own Halide::Func members because we can have applied
+         * layers fusing. In this way the fused function should be scheduled.
+         */
+-        virtual void applyHalideScheduler(Ptr<BackendNode>& node,
++        virtual void applyHalideScheduler(const Ptr<BackendNode>& node,
+                                           const std::vector<Mat*> &inputs,
+                                           const std::vector<Mat> &outputs,
+                                           int targetId) const;
+diff -ruN opencv-3.3.0/modules/dnn/src/dnn.cpp opencv-3.3.0-patch/modules/dnn/src/dnn.cpp
+--- opencv-3.3.0/modules/dnn/src/dnn.cpp	2017-08-04 08:58:23.000000000 +0900
++++ opencv-3.3.0-patch/modules/dnn/src/dnn.cpp	2017-10-20 19:10:47.455116200 +0900
+@@ -2009,7 +2009,7 @@
+     return Ptr<BackendNode>();
+ }
+ 
+-void Layer::applyHalideScheduler(Ptr<BackendNode>& node, const std::vector<Mat*> &inputs,
++void Layer::applyHalideScheduler(const Ptr<BackendNode>& node, const std::vector<Mat*> &inputs,
+                                  const std::vector<Mat> &outputs, int targetId) const
+ {
+ #ifdef  HAVE_HALIDE

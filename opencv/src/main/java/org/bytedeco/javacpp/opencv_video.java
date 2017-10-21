@@ -419,7 +419,9 @@ See the OpenCV sample camshiftdemo.c that tracks colored objects.
                                    @ByVal TermCriteria criteria );
 @Namespace("cv") public static native @ByVal RotatedRect CamShift( @ByVal UMat probImage, @ByRef Rect window,
                                    @ByVal TermCriteria criteria );
-
+/** \example camshiftdemo.cpp
+An example using the mean-shift tracking algorithm
+*/
 /** \brief Finds an object on a back projection image.
 <p>
 @param probImage Back projection of the object histogram. See calcBackProject for details.
@@ -437,9 +439,7 @@ calcBackProject to this function. But better results can be obtained if you pre-
 projection and remove the noise. For example, you can do this by retrieving connected components
 with findContours , throwing away contours with small area ( contourArea ), and rendering the
 remaining contours with drawContours.
-<p>
-\note
--   A mean-shift tracking sample can be found at opencv_source_code/samples/cpp/camshiftdemo.cpp
+ <p>
  */
 @Namespace("cv") public static native int meanShift( @ByVal Mat probImage, @ByRef Rect window, @ByVal TermCriteria criteria );
 @Namespace("cv") public static native int meanShift( @ByVal UMat probImage, @ByRef Rect window, @ByVal TermCriteria criteria );
@@ -488,6 +488,9 @@ to force data copying.
 @Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal UMat img, @ByVal UMatVector pyramid,
                                           @ByVal Size winSize, int maxLevel );
 
+/** \example lkdemo.cpp
+An example using the Lucas-Kanade optical flow algorithm
+ */
 /** \brief Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with
 pyramids.
 <p>
@@ -639,6 +642,10 @@ public static final int
     MOTION_AFFINE      = 2,
     MOTION_HOMOGRAPHY  = 3;
 
+/** \example image_alignment.cpp
+An example using the image alignment ECC algorithm
+ */
+
 /** \brief Finds the geometric transform (warp) between two images in terms of the ECC criterion \cite EP08 .
 <p>
 @param templateImage single-channel template image; CV_8U or CV_32F array.
@@ -678,7 +685,7 @@ row is ignored.
 Unlike findHomography and estimateRigidTransform, the function findTransformECC implements an
 area-based alignment that builds on intensity similarities. In essence, the function updates the
 initial transformation that roughly aligns the images. If this information is missing, the identity
-warp (unity matrix) should be given as input. Note that if images undergo strong
+warp (unity matrix) is used as an initialization. Note that if images undergo strong
 displacements/rotations, an initial transformation that roughly aligns the images is necessary
 (e.g., a simple euclidean/similarity transform that allows for the images showing the same image
 content approximately). Use inverse warping in the second image to take an image close to the first
@@ -702,16 +709,16 @@ estimateAffine2D, estimateAffinePartial2D, findHomography
 @Namespace("cv") public static native double findTransformECC( @ByVal UMat templateImage, @ByVal UMat inputImage,
                                       @ByVal UMat warpMatrix);
 
+/** \example kalman.cpp
+An example using the standard Kalman filter
+*/
 /** \brief Kalman filter class.
 <p>
 The class implements a standard Kalman filter <http://en.wikipedia.org/wiki/Kalman_filter>,
 \cite Welch95 . However, you can modify transitionMatrix, controlMatrix, and measurementMatrix to get
-an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
-<p>
-\note
-<p>
--   An example using the standard Kalman filter can be found at
-    opencv_source_code/samples/cpp/kalman.cpp
+an extended Kalman filter functionality.
+\note In C API when CvKalman\* kalmanFilter structure is not needed anymore, it should be released
+with cvReleaseKalman(&kalmanFilter)
  */
 @Namespace("cv") @NoOffset public static class KalmanFilter extends Pointer {
     static { Loader.load(); }
@@ -724,11 +731,6 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
         return (KalmanFilter)super.position(position);
     }
 
-    /** \brief The constructors.
-    <p>
-    \note In C API when CvKalman\* kalmanFilter structure is not needed anymore, it should be released
-    with cvReleaseKalman(&kalmanFilter)
-     */
     public KalmanFilter() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** \overload
@@ -975,7 +977,7 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
 */
 @Namespace("cv") public static native @Ptr DualTVL1OpticalFlow createOptFlow_DualTVL1();
 
-/** \brief Class computing a dense optical flow using the Gunnar Farneback’s algorithm.
+/** \brief Class computing a dense optical flow using the Gunnar Farneback's algorithm.
  */
 @Namespace("cv") public static class FarnebackOpticalFlow extends DenseOpticalFlow {
     static { Loader.load(); }
@@ -1259,13 +1261,27 @@ and \cite Zivkovic2006 .
     <p>
     A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in
     the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel
-    is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiarra,
+    is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiara,
     *Detecting Moving Shadows...*, IEEE PAMI,2003.
      */
     public native double getShadowThreshold();
     /** \brief Sets the shadow threshold
     */
     public native void setShadowThreshold(double threshold);
+
+    /** \brief Computes a foreground mask.
+    <p>
+    @param image Next video frame. Floating point frame will be used without scaling and should be in range \f$[0,255]\f$.
+    @param fgmask The output foreground mask as an 8-bit binary image.
+    @param learningRate The value between 0 and 1 that indicates how fast the background model is
+    learnt. Negative parameter value makes the algorithm to use some automatically chosen learning
+    rate. 0 means that the background model is not updated at all, 1 means that the background model
+    is completely reinitialized from the last frame.
+     */
+    public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
+    public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
 }
 
 /** \brief Creates MOG2 Background Subtractor
@@ -1351,7 +1367,7 @@ Very efficient if number of foreground pixels is low.
     <p>
     A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in
     the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel
-    is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiarra,
+    is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiara,
     *Detecting Moving Shadows...*, IEEE PAMI,2003.
      */
     public native double getShadowThreshold();

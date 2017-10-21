@@ -1017,6 +1017,142 @@ samples subfolder.
 
 }
 
+/**
+* \brief Elliptic region around an interest point.
+*/
+@Namespace("cv::xfeatures2d") @NoOffset public static class Elliptic_KeyPoint extends KeyPoint {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Elliptic_KeyPoint(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Elliptic_KeyPoint(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Elliptic_KeyPoint position(long position) {
+        return (Elliptic_KeyPoint)super.position(position);
+    }
+
+    /** the lengths of the major and minor ellipse axes */
+    public native @ByRef Size2f axes(); public native Elliptic_KeyPoint axes(Size2f axes);
+    /** the integration scale at which the parameters were estimated */
+    public native float si(); public native Elliptic_KeyPoint si(float si);
+    /** the transformation between image space and local patch space */
+    public native @ByRef @Cast("cv::Matx23f*") FloatPointer transf(); public native Elliptic_KeyPoint transf(FloatPointer transf);
+    public Elliptic_KeyPoint() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Elliptic_KeyPoint(@ByVal Point2f pt, float angle, @ByVal Size axes, float size, float si) { super((Pointer)null); allocate(pt, angle, axes, size, si); }
+    private native void allocate(@ByVal Point2f pt, float angle, @ByVal Size axes, float size, float si);
+}
+
+/**
+ * \brief Class implementing the Harris-Laplace feature detector as described in \cite Mikolajczyk2004.
+ */
+@Namespace("cv::xfeatures2d") public static class HarrisLaplaceFeatureDetector extends Feature2D {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public HarrisLaplaceFeatureDetector() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public HarrisLaplaceFeatureDetector(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public HarrisLaplaceFeatureDetector(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public HarrisLaplaceFeatureDetector position(long position) {
+        return (HarrisLaplaceFeatureDetector)super.position(position);
+    }
+
+    /**
+     * \brief Creates a new implementation instance.
+     *
+     * @param numOctaves the number of octaves in the scale-space pyramid
+     * @param corn_thresh the threshold for the Harris cornerness measure
+     * @param DOG_thresh the threshold for the Difference-of-Gaussians scale selection
+     * @param maxCorners the maximum number of corners to consider
+     * @param num_layers the number of intermediate scales per octave
+     */
+    public static native @Ptr HarrisLaplaceFeatureDetector create(
+                int numOctaves/*=6*/,
+                float corn_thresh/*=0.01f*/,
+                float DOG_thresh/*=0.01f*/,
+                int maxCorners/*=5000*/,
+                int num_layers/*=4*/);
+    public static native @Ptr HarrisLaplaceFeatureDetector create();
+}
+
+/**
+ * \brief Class implementing affine adaptation for key points.
+ *
+ * A \ref FeatureDetector and a \ref DescriptorExtractor are wrapped to augment the
+ * detected points with their affine invariant elliptic region and to compute
+ * the feature descriptors on the regions after warping them into circles.
+ *
+ * The interface is equivalent to \ref Feature2D, adding operations for
+ * \ref Elliptic_KeyPoint "Elliptic_KeyPoints" instead of \ref KeyPoint "KeyPoints".
+ */
+@Namespace("cv::xfeatures2d") public static class AffineFeature2D extends Feature2D {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AffineFeature2D(Pointer p) { super(p); }
+
+    /**
+     * \brief Creates an instance wrapping the given keypoint detector and
+     * descriptor extractor.
+     */
+    public static native @Ptr AffineFeature2D create(
+            @Cast("cv::FeatureDetector*") @Ptr Feature2D keypoint_detector,
+            @Cast("cv::DescriptorExtractor*") @Ptr Feature2D descriptor_extractor);
+
+    /**
+     * \brief Creates an instance where keypoint detector and descriptor
+     * extractor are identical.
+     */
+    public static native @Ptr AffineFeature2D create(
+            @Cast("cv::FeatureDetector*") @Ptr Feature2D keypoint_detector); // overload, don't hide
+    /**
+     * \brief Detects keypoints in the image using the wrapped detector and
+     * performs affine adaptation to augment them with their elliptic regions.
+     */
+    public native void detect(
+            @ByVal Mat image,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask );
+    public native void detect(
+            @ByVal Mat image,
+            @StdVector Elliptic_KeyPoint keypoints );
+    public native void detect(
+            @ByVal UMat image,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
+    public native void detect(
+            @ByVal UMat image,
+            @StdVector Elliptic_KeyPoint keypoints ); // overload, don't hide
+    /**
+     * \brief Detects keypoints and computes descriptors for their surrounding
+     * regions, after warping them into circles.
+     */
+    public native void detectAndCompute(
+            @ByVal Mat image,
+            @ByVal Mat mask,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal Mat descriptors,
+            @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native void detectAndCompute(
+            @ByVal Mat image,
+            @ByVal Mat mask,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal Mat descriptors );
+    public native void detectAndCompute(
+            @ByVal UMat image,
+            @ByVal UMat mask,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal UMat descriptors,
+            @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native void detectAndCompute(
+            @ByVal UMat image,
+            @ByVal UMat mask,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal UMat descriptors );
+}
+
 /** \} */
 
 
