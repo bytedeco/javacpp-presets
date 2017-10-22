@@ -7,27 +7,27 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE="--disable-w32threads --disable-iconv --disable-opencl --disable-sdl --disable-bzlib --disable-lzma"
+DISABLE="--disable-w32threads --disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf"
 ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
-# DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-bzlib --disable-lzma --disable-everything"
+# DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
 # ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
 ZLIB=zlib-1.2.11
-LAME=lame-3.99.5
+LAME=lame-3.100
 SPEEX=speex-1.2.0
-OPUS=opus-1.2
+OPUS=opus-1.2.1
 OPENCORE_AMR=opencore-amr-0.1.5
 OPENSSL=openssl-1.1.0f
 OPENH264_VERSION=1.7.0
-X265=x265_2.4
-VPX_VERSION=v1.6.1
+X265=x265_2.5
+VPX_VERSION=1.6.1
 ALSA_VERSION=1.1.4.1
-FFMPEG_VERSION=3.3.2
+FFMPEG_VERSION=3.4
 FREETYPE_VERSION=2.8
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
-download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
+download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
 download https://archive.mozilla.org/pub/opus/$OPUS.tar.gz $OPUS.tar.gz
 download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
@@ -35,7 +35,7 @@ download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
 download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
 download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
-download https://chromium.googlesource.com/webm/libvpx/+archive/$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
+download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
 download ftp://ftp.alsa-project.org/pub/lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
 download http://download.savannah.gnu.org/releases/freetype/freetype-$FREETYPE_VERSION.tar.bz2 freetype-$FREETYPE_VERSION.tar.bz2
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -53,11 +53,12 @@ tar --totals -xzf ../$OPENSSL.tar.gz
 tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
 tar --totals -xjf ../last_stable_x264.tar.bz2
 tar --totals -xzf ../$X265.tar.gz
-mkdir -p libvpx-$VPX_VERSION
-tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
+tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz
 tar --totals -xjf ../freetype-$FREETYPE_VERSION.tar.bz2
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 X264=`echo x264-snapshot-*`
+
+patch -p0 < ../../lame.patch
 
 case $PLATFORM in
     android-arm)
@@ -106,7 +107,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$X265
-        patch -Np1 < ../../../$X265-android.patch || true
+        patch -Np1 < ../../../x265-android.patch || true
         $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j $MAKEJ x265-static
         make install
@@ -115,11 +116,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
+        patch -Np1 < ../../../ffmpeg-android.patch
         ./configure --prefix=.. $DISABLE $ENABLE --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
@@ -171,7 +172,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$X265
-        patch -Np1 < ../../../$X265-android.patch || true
+        patch -Np1 < ../../../x265-android.patch || true
         $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j $MAKEJ x265-static
         make install
@@ -180,11 +181,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
+        patch -Np1 < ../../../ffmpeg-android.patch
         ./configure --prefix=.. $DISABLE $ENABLE --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
@@ -230,11 +231,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
+        patch -Np1 < ../../../ffmpeg-linux.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -280,11 +281,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --host=x86_64-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
+        patch -Np1 < ../../../ffmpeg-linux.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -369,11 +370,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
+        patch -Np1 < ../../../ffmpeg-linux.patch
         if [ $CROSSCOMPILE -eq 1 ]
         then
           PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
@@ -424,11 +425,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=ppc64le-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --target=ppc64le-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install 
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-linux.patch
+        patch -Np1 < ../../../ffmpeg-linux.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -474,11 +475,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
+        patch -Np1 < ../../../ffmpeg-macosx.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
@@ -522,11 +523,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=x86_64-win64-gcc
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --target=x86_64-win64-gcc
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
+        patch -Np1 < ../../../ffmpeg-windows.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
@@ -570,11 +571,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-harfbuzz=no --with-png=no --enable-static --with-pic --target=x86_64-win64-gcc CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --target=x86_64-win64-gcc CFLAGS="-m64"
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
+        patch -Np1 < ../../../ffmpeg-windows.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install

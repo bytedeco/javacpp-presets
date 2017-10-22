@@ -235,6 +235,29 @@ public static class AVFilter extends Pointer {
      */
 
     /**
+     * Filter pre-initialization function
+     *
+     * This callback will be called immediately after the filter context is
+     * allocated, to allow allocating and initing sub-objects.
+     *
+     * If this callback is not NULL, the uninit callback will be called on
+     * allocation failure.
+     *
+     * @return 0 on success,
+     *         AVERROR code on failure (but the code will be
+     *           dropped and treated as ENOMEM by the calling code)
+     */
+    public static class Preinit_AVFilterContext extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Preinit_AVFilterContext(Pointer p) { super(p); }
+        protected Preinit_AVFilterContext() { allocate(); }
+        private native void allocate();
+        public native int call(AVFilterContext ctx);
+    }
+    public native Preinit_AVFilterContext preinit(); public native AVFilter preinit(Preinit_AVFilterContext preinit);
+
+    /**
      * Filter initialization function.
      *
      * This callback will be called only once during the filter lifetime, after
@@ -1814,6 +1837,14 @@ public static class AVBufferSrcParameters extends Pointer {
 @NoException public static native int av_buffersrc_add_frame_flags(AVFilterContext buffer_src,
                                  AVFrame frame, int flags);
 
+/**
+ * Close the buffer source after EOF.
+ *
+ * This is similar to passing NULL to av_buffersrc_add_frame_flags()
+ * except it takes the timestamp of the EOF, i.e. the timestamp of the end
+ * of the last frame.
+ */
+@NoException public static native int av_buffersrc_close(AVFilterContext ctx, @Cast("int64_t") long pts, @Cast("unsigned") int flags);
 
 /**
  * \}
