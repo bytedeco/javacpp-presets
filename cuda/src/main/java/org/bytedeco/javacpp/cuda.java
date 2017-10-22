@@ -19133,9 +19133,9 @@ public static native @Cast("cudaError_t") int cudaLaunchKernel(@Const Pointer fu
 /**
  * \brief Launches a device function where thread blocks can cooperate and synchronize as they execute
  *
- * The function invokes kernel \p func on \p gridDim (\p gridDim.x × \p gridDim.y
- * × \p gridDim.z) grid of blocks. Each block contains \p blockDim (\p blockDim.x ×
- * \p blockDim.y × \p blockDim.z) threads.
+ * The function invokes kernel \p func on \p gridDim (\p gridDim.x ?? \p gridDim.y
+ * ?? \p gridDim.z) grid of blocks. Each block contains \p blockDim (\p blockDim.x ??
+ * \p blockDim.y ?? \p blockDim.z) threads.
  *
  * The device on which this kernel is invoked must have a non-zero value for
  * the device attribute ::cudaDevAttrCooperativeLaunch.
