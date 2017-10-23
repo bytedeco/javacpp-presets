@@ -212,7 +212,13 @@ public static final int
      * Trailer data, which doesn't contain actual content, but only for
      * finalizing the output file.
      */
-    AVIO_DATA_MARKER_TRAILER = 4;
+    AVIO_DATA_MARKER_TRAILER = 4,
+    /**
+     * A point in the output bytestream where the underlying AVIOContext might
+     * flush the buffer depending on latency or buffering requirements. Typically
+     * means the end of a packet.
+     */
+    AVIO_DATA_MARKER_FLUSH_POINT = 5;
 
 /**
  * Bytestream IO Context.
@@ -255,8 +261,9 @@ public static class AVIOContext extends Pointer {
     @MemberGetter public native @Const AVClass av_class();
 
     /*
-     * The following shows the relationship between buffer, buf_ptr, buf_end, buf_size,
-     * and pos, when reading and when writing (since AVIOContext is used for both):
+     * The following shows the relationship between buffer, buf_ptr,
+     * buf_ptr_max, buf_end, buf_size, and pos, when reading and when writing
+     * (since AVIOContext is used for both):
      *
      **********************************************************************************
      *                                   READING
@@ -283,21 +290,24 @@ public static class AVIOContext extends Pointer {
      *                                   WRITING
      **********************************************************************************
      *
-     *                                          |          buffer_size          |
-     *                                          |-------------------------------|
-     *                                          |                               |
+     *                             |          buffer_size                 |
+     *                             |--------------------------------------|
+     *                             |                                      |
      *
-     *                                       buffer              buf_ptr     buf_end
-     *                                          +-------------------+-----------+
-     *                                          |/ / / / / / / / / /|           |
-     *  write buffer:                           | / to be flushed / |           |
-     *                                          |/ / / / / / / / / /|           |
-     *                                          +-------------------+-----------+
+     *                                                buf_ptr_max
+     *                          buffer                 (buf_ptr)       buf_end
+     *                             +-----------------------+--------------+
+     *                             |/ / / / / / / / / / / /|              |
+     *  write buffer:              | / / to be flushed / / |              |
+     *                             |/ / / / / / / / / / / /|              |
+     *                             +-----------------------+--------------+
+     *                               buf_ptr can be in this
+     *                               due to a backward seek
      *
-     *                                         pos
-     *               +--------------------------+-----------------------------------+
-     *  output file: |                          |                                   |
-     *               +--------------------------+-----------------------------------+
+     *                            pos
+     *               +-------------+----------------------------------------------+
+     *  output file: |             |                                              |
+     *               +-------------+----------------------------------------------+
      *
      */
     /** Start of the buffer. */
@@ -343,7 +353,7 @@ public static class AVIOContext extends Pointer {
     public native Seek_Pointer_long_int seek(); public native AVIOContext seek(Seek_Pointer_long_int seek);
     /** position in the file of the current buffer */
     public native @Cast("int64_t") long pos(); public native AVIOContext pos(long pos);
-    /** true if the next seek should flush */
+    /** unused */
     public native int must_flush(); public native AVIOContext must_flush(int must_flush);
     /** true if eof reached */
     public native int eof_reached(); public native AVIOContext eof_reached(int eof_reached);
@@ -488,6 +498,19 @@ public static class AVIOContext extends Pointer {
         public native int call(Pointer opaque);
     }
     public native Short_seek_get_Pointer short_seek_get(); public native AVIOContext short_seek_get(Short_seek_get_Pointer short_seek_get);
+
+    public native @Cast("int64_t") long written(); public native AVIOContext written(long written);
+
+    /**
+     * Maximum reached position before a backward seek in the write buffer,
+     * used keeping track of already written data for a later flush.
+     */
+    public native @Cast("unsigned char*") BytePointer buf_ptr_max(); public native AVIOContext buf_ptr_max(BytePointer buf_ptr_max);
+
+    /**
+     * Try to buffer at least this amount of data before flushing it
+     */
+    public native int min_packet_size(); public native AVIOContext min_packet_size(int min_packet_size);
 }
 
 /**
@@ -586,7 +609,7 @@ public static class AVIOContext extends Pointer {
 
 /**
  * Allocate and initialize an AVIOContext for buffered I/O. It must be later
- * freed with av_free().
+ * freed with avio_context_free().
  *
  * @param buffer Memory block for input/output operations via AVIOContext.
  *        The buffer must be allocated with av_malloc() and friends.
@@ -685,6 +708,15 @@ public static class Write_packet_Pointer_byte___int extends FunctionPointer {
                   Read_packet_Pointer_byte___int read_packet,
                   Write_packet_Pointer_byte___int write_packet,
                   Seek_Pointer_long_int seek);
+
+/**
+ * Free the supplied IO context and everything associated with it.
+ *
+ * @param s Double pointer to the IO context. This function will write NULL
+ * into s.
+ */
+@NoException public static native void avio_context_free(@Cast("AVIOContext**") PointerPointer s);
+@NoException public static native void avio_context_free(@ByPtrPtr AVIOContext s);
 
 @NoException public static native void avio_w8(AVIOContext s, int b);
 @NoException public static native void avio_write(AVIOContext s, @Cast("const unsigned char*") BytePointer buf, int size);
@@ -812,6 +844,17 @@ public static final int AVSEEK_FORCE = 0x20000;
 @NoException public static native int avio_read(AVIOContext s, @Cast("unsigned char*") BytePointer buf, int size);
 @NoException public static native int avio_read(AVIOContext s, @Cast("unsigned char*") ByteBuffer buf, int size);
 @NoException public static native int avio_read(AVIOContext s, @Cast("unsigned char*") byte[] buf, int size);
+
+/**
+ * Read size bytes from AVIOContext into buf. Unlike avio_read(), this is allowed
+ * to read fewer bytes than requested. The missing bytes can be read in the next
+ * call. This always tries to read at least 1 byte.
+ * Useful to reduce latency in certain cases.
+ * @return number of bytes read or AVERROR
+ */
+@NoException public static native int avio_read_partial(AVIOContext s, @Cast("unsigned char*") BytePointer buf, int size);
+@NoException public static native int avio_read_partial(AVIOContext s, @Cast("unsigned char*") ByteBuffer buf, int size);
+@NoException public static native int avio_read_partial(AVIOContext s, @Cast("unsigned char*") byte[] buf, int size);
 
 /**
  * \name Functions for reading from AVIOContext
@@ -4680,6 +4723,7 @@ public static final int AV_FRAME_FILENAME_FLAGS_MULTIPLE = 1;
 
 @NoException public static native int avformat_queue_attached_pictures(AVFormatContext s);
 
+// #if FF_API_OLD_BSF
 /**
  * Apply a list of bitstream filters to a packet.
  *
@@ -4691,7 +4735,6 @@ public static final int AV_FRAME_FILENAME_FLAGS_MULTIPLE = 1;
  * @return  >=0 on success;
  *          AVERROR code on failure
  */
-// #if FF_API_OLD_BSF
 @NoException public static native @Deprecated int av_apply_bitstream_filters(AVCodecContext codec, AVPacket pkt,
                                AVBitStreamFilterContext bsfc);
 // #endif

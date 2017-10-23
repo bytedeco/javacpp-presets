@@ -18,8 +18,26 @@ public class mxnet extends org.bytedeco.javacpp.presets.mxnet {
 
 // Parsed from mxnet/c_api.h
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 /**
- *  Copyright (c) 2015 by Contributors
  * \file c_api.h
  * \brief C API of mxnet
  */
@@ -78,6 +96,13 @@ public class mxnet extends org.bytedeco.javacpp.presets.mxnet {
     public AtomicSymbolCreator() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AtomicSymbolCreator(Pointer p) { super(p); }
+}
+/** \brief handle to cached operator */
+@Namespace @Name("void") @Opaque public static class CachedOpHandle extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CachedOpHandle() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CachedOpHandle(Pointer p) { super(p); }
 }
 /** \brief handle to a symbol that can be bind as operator */
 @Namespace @Name("void") @Opaque public static class SymbolHandle extends Pointer {
@@ -347,6 +372,7 @@ public static final int
   kCustomOpPropCreateOperator = 6,
   kCustomOpPropInferType = 7;
 
+
 public static class CustomOpFBFunc extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -407,8 +433,8 @@ public static class CustomOpCreateFunc extends FunctionPointer {
     protected CustomOpCreateFunc() { allocate(); }
     private native void allocate();
     public native int call(@Cast("const char*") BytePointer arg0, int arg1,
-                                  @Cast("unsigned**") @ByPtrPtr IntPointer arg2, IntPointer arg3,
-                                  IntPointer arg4, MXCallbackList arg5,
+                                  @Cast("unsigned**") @ByPtrPtr IntPointer arg2, @Const IntPointer arg3,
+                                  @Const IntPointer arg4, MXCallbackList arg5,
                                   Pointer arg6);
 }
 public static class CustomOpPropCreator extends FunctionPointer {
@@ -418,8 +444,33 @@ public static class CustomOpPropCreator extends FunctionPointer {
     protected CustomOpPropCreator() { allocate(); }
     private native void allocate();
     public native int call(@Cast("const char*") BytePointer arg0, int arg1,
-                                     @Cast("const char**") @ByPtrPtr BytePointer arg2, @Cast("const char**") @ByPtrPtr BytePointer arg3,
-                                     MXCallbackList arg4);
+                                   @Cast("const char**") @ByPtrPtr BytePointer arg2, @Cast("const char**") @ByPtrPtr BytePointer arg3,
+                                   MXCallbackList arg4);
+}
+
+
+/** enum CustomFunctionCallbacks */
+public static final int
+  kCustomFunctionBackward = 0,
+  kCustomFunctionDelete = 1;
+
+public static class CustomFunctionBwdFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomFunctionBwdFunc(Pointer p) { super(p); }
+    protected CustomFunctionBwdFunc() { allocate(); }
+    private native void allocate();
+    public native int call(int arg0, int arg1, @Cast("void**") @ByPtrPtr Pointer arg2,
+                                     @Const IntPointer arg3, int arg4,
+                                     Pointer arg5);
+}
+public static class CustomFunctionDelFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    CustomFunctionDelFunc(Pointer p) { super(p); }
+    protected CustomFunctionDelFunc() { allocate(); }
+    private native void allocate();
+    public native int call(Pointer arg0);
 }
 
 /**
@@ -832,7 +883,7 @@ public static native int MXNDArrayGetShape(NDArrayHandle handle,
                                 @Cast("const mx_uint**") @ByPtrPtr int[] out_pdata);
 /**
  * \brief get the content of the data in NDArray
- * @param handle the handle to the narray
+ * @param handle the handle to the ndarray
  * @param out_pdata pointer holder to get pointer of data
  * @return 0 when success, -1 when failure happens
  */
@@ -868,6 +919,36 @@ public static native int MXNDArrayGetContext(NDArrayHandle handle,
 public static native int MXNDArrayGetContext(NDArrayHandle handle,
                                   int[] out_dev_type,
                                   int[] out_dev_id);
+/**
+ * \brief return gradient buffer attached to this NDArray
+ * @param handle NDArray handle
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXNDArrayGetGrad(NDArrayHandle handle, PointerPointer out);
+public static native int MXNDArrayGetGrad(NDArrayHandle handle, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out);
+/**
+ * \brief detach and ndarray from computation graph by clearing entry_
+ * @param handle NDArray handle
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXNDArrayDetach(NDArrayHandle handle, PointerPointer out);
+public static native int MXNDArrayDetach(NDArrayHandle handle, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out);
+/**
+ * \brief set the flag for gradient array state.
+ * @param handle NDArray handle
+ * @param state the new state.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXNDArraySetGradState(NDArrayHandle handle, int state);
+/**
+ * \brief set the flag for gradient array state.
+ * @param handle NDArray handle
+ * @param state the new state.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXNDArrayGetGradState(NDArrayHandle handle, IntPointer out);
+public static native int MXNDArrayGetGradState(NDArrayHandle handle, IntBuffer out);
+public static native int MXNDArrayGetGradState(NDArrayHandle handle, int[] out);
 //--------------------------------
 // Part 2: functions on NDArray
 //--------------------------------
@@ -1150,6 +1231,15 @@ public static native int MXImperativeInvoke(AtomicSymbolCreator creator,
                                  @Cast("const char**") @ByPtrPtr byte[] param_vals);
 /**
  * \brief set whether to record operator for autograd
+ * @param is_recording 1 when recording, 0 when not recording.
+ * @param prev returns the previous status before this set.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradSetIsRecording(int is_recording, IntPointer prev);
+public static native int MXAutogradSetIsRecording(int is_recording, IntBuffer prev);
+public static native int MXAutogradSetIsRecording(int is_recording, int[] prev);
+/**
+ * \brief set whether to record operator for autograd
  * @param is_train 1 when training, 0 when testing
  * @param prev returns the previous status before this set.
  * @return 0 when success, -1 when failure happens
@@ -1157,6 +1247,20 @@ public static native int MXImperativeInvoke(AtomicSymbolCreator creator,
 public static native int MXAutogradSetIsTraining(int is_training, IntPointer prev);
 public static native int MXAutogradSetIsTraining(int is_training, IntBuffer prev);
 public static native int MXAutogradSetIsTraining(int is_training, int[] prev);
+/**
+ * \brief get whether autograd recording is on
+ * @param curr returns the current status.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradIsRecording(@Cast("bool*") BoolPointer curr);
+public static native int MXAutogradIsRecording(@Cast("bool*") boolean[] curr);
+/**
+ * \brief get whether training mode is on
+ * @param curr returns the current status.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradIsTraining(@Cast("bool*") BoolPointer curr);
+public static native int MXAutogradIsTraining(@Cast("bool*") boolean[] curr);
 /**
  * \brief mark NDArrays as variables to compute gradient for autograd
  * @param num_var number of variable NDArrays
@@ -1197,6 +1301,90 @@ public static native int MXAutogradComputeGradient(@Cast("mx_uint") int num_outp
                                         PointerPointer output_handles);
 public static native int MXAutogradComputeGradient(@Cast("mx_uint") int num_output,
                                         @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle output_handles);
+/**
+ * \brief compute the gradient of outputs w.r.t variabels
+ * @param num_output number of output NDArray
+ * @param output_handles output NDArrays
+ * @param ograd_handles head gradient for NDArrays
+ * @param retain_graph whether to keep the graph after backward
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXAutogradBackward(@Cast("mx_uint") int num_output,
+                                 PointerPointer output_handles,
+                                 PointerPointer ograd_handles,
+                                 int retain_graph);
+public static native int MXAutogradBackward(@Cast("mx_uint") int num_output,
+                                 @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle output_handles,
+                                 @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle ograd_handles,
+                                 int retain_graph);
+/**
+* \brief compute the gradient of outputs w.r.t variabels
+* @param num_output number of output NDArray
+* @param output_handles output NDArrays
+* @param ograd_handles head gradient for NDArrays
+* @param retain_graph whether to keep the graph after backward
+* @param is_train whether to do backward for training or inference
+* @return 0 when success, -1 when failure happens
+*/
+public static native int MXAutogradBackwardEx(@Cast("mx_uint") int num_output,
+                                   PointerPointer output_handles,
+                                   PointerPointer ograd_handles,
+                                   int retain_graph,
+                                   int is_train);
+public static native int MXAutogradBackwardEx(@Cast("mx_uint") int num_output,
+                                   @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle output_handles,
+                                   @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle ograd_handles,
+                                   int retain_graph,
+                                   int is_train);
+/*
+ * \brief get the graph constructed by autograd.
+ * \param handle ndarray handle
+ * \param out output symbol handle
+ */
+public static native int MXAutogradGetSymbol(NDArrayHandle handle, PointerPointer out);
+public static native int MXAutogradGetSymbol(NDArrayHandle handle, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+/**
+ * \brief create cached operator
+ */
+public static native int MXCreateCachedOp(SymbolHandle handle,
+                               @ByPtrPtr CachedOpHandle out);
+/**
+ * \brief free cached operator
+ */
+public static native int MXFreeCachedOp(CachedOpHandle handle);
+/**
+ * \brief invoke cached operator
+ */
+public static native int MXInvokeCachedOp(CachedOpHandle handle,
+                               int num_inputs,
+                               PointerPointer inputs,
+                               IntPointer num_outputs,
+                               @ByPtrPtr PointerPointer outputs);
+public static native int MXInvokeCachedOp(CachedOpHandle handle,
+                               int num_inputs,
+                               @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle inputs,
+                               IntBuffer num_outputs,
+                               @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer outputs);
+public static native int MXInvokeCachedOp(CachedOpHandle handle,
+                               int num_inputs,
+                               PointerPointer inputs,
+                               int[] num_outputs,
+                               @ByPtrPtr PointerPointer outputs);
+public static native int MXInvokeCachedOp(CachedOpHandle handle,
+                               int num_inputs,
+                               @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle inputs,
+                               IntPointer num_outputs,
+                               @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer outputs);
+public static native int MXInvokeCachedOp(CachedOpHandle handle,
+                               int num_inputs,
+                               PointerPointer inputs,
+                               IntBuffer num_outputs,
+                               @ByPtrPtr PointerPointer outputs);
+public static native int MXInvokeCachedOp(CachedOpHandle handle,
+                               int num_inputs,
+                               @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle inputs,
+                               int[] num_outputs,
+                               @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer outputs);
 //--------------------------------------------
 // Part 3: symbolic configuration generation
 //--------------------------------------------
@@ -1985,7 +2173,24 @@ public static native int MXExecutorBackward(ExecutorHandle handle,
 public static native int MXExecutorBackward(ExecutorHandle handle,
                                  @Cast("mx_uint") int len,
                                  @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle head_grads);
-
+/**
+ * \brief Excecutor run backward
+ *
+ * @param handle execute handle
+ * @param len lenth
+ * @param head_grads NDArray handle for heads' gradient
+ * @param is_train int value to indicate whether the backward pass is for evaluation
+ *
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXExecutorBackwardEx(ExecutorHandle handle,
+                                   @Cast("mx_uint") int len,
+                                   PointerPointer head_grads,
+                                   int is_train);
+public static native int MXExecutorBackwardEx(ExecutorHandle handle,
+                                   @Cast("mx_uint") int len,
+                                   @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle head_grads,
+                                   int is_train);
 /**
  * \brief Get executor's head NDArray
  *
@@ -2325,6 +2530,224 @@ public static native int MXExecutorBindEX(SymbolHandle symbol_handle,
                                @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle aux_states,
                                ExecutorHandle shared_exec,
                                @Cast("ExecutorHandle*") @ByPtrPtr ExecutorHandle out);
+
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") PointerPointer g2c_keys,
+                         @Const IntPointer g2c_dev_types,
+                         @Const IntPointer g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") PointerPointer provided_grad_req_names,
+                         @Cast("const char**") PointerPointer provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") PointerPointer provided_arg_shape_names,
+                         @Cast("const mx_uint*") IntPointer provided_arg_shape_data,
+                         @Cast("const mx_uint*") IntPointer provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") PointerPointer provided_arg_dtype_names,
+                         @Const IntPointer provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") PointerPointer shared_arg_name_list,
+                         IntPointer shared_buffer_len,
+                         @Cast("const char**") PointerPointer shared_buffer_name_list,
+                         PointerPointer shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") IntPointer num_in_args,
+                         @ByPtrPtr PointerPointer in_args,
+                         @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") IntPointer num_aux_states,
+                         @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         PointerPointer out);
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") @ByPtrPtr BytePointer g2c_keys,
+                         @Const IntPointer g2c_dev_types,
+                         @Const IntPointer g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_grad_req_names,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_arg_shape_names,
+                         @Cast("const mx_uint*") IntPointer provided_arg_shape_data,
+                         @Cast("const mx_uint*") IntPointer provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_arg_dtype_names,
+                         @Const IntPointer provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") @ByPtrPtr BytePointer shared_arg_name_list,
+                         IntPointer shared_buffer_len,
+                         @Cast("const char**") @ByPtrPtr BytePointer shared_buffer_name_list,
+                         PointerPointer shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") IntPointer num_in_args,
+                         @ByPtrPtr PointerPointer in_args,
+                         @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") IntPointer num_aux_states,
+                         @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         PointerPointer out);
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer g2c_keys,
+                         @Const IntBuffer g2c_dev_types,
+                         @Const IntBuffer g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_grad_req_names,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_arg_shape_names,
+                         @Cast("const mx_uint*") IntBuffer provided_arg_shape_data,
+                         @Cast("const mx_uint*") IntBuffer provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_arg_dtype_names,
+                         @Const IntBuffer provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer shared_arg_name_list,
+                         IntBuffer shared_buffer_len,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer shared_buffer_name_list,
+                         @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") IntBuffer num_in_args,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer in_args,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") IntBuffer num_aux_states,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         @Cast("ExecutorHandle*") @ByPtrPtr ExecutorHandle out);
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") @ByPtrPtr byte[] g2c_keys,
+                         @Const int[] g2c_dev_types,
+                         @Const int[] g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_grad_req_names,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_arg_shape_names,
+                         @Cast("const mx_uint*") int[] provided_arg_shape_data,
+                         @Cast("const mx_uint*") int[] provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_arg_dtype_names,
+                         @Const int[] provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") @ByPtrPtr byte[] shared_arg_name_list,
+                         int[] shared_buffer_len,
+                         @Cast("const char**") @ByPtrPtr byte[] shared_buffer_name_list,
+                         PointerPointer shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") int[] num_in_args,
+                         @ByPtrPtr PointerPointer in_args,
+                         @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") int[] num_aux_states,
+                         @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         PointerPointer out);
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") @ByPtrPtr BytePointer g2c_keys,
+                         @Const IntPointer g2c_dev_types,
+                         @Const IntPointer g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_grad_req_names,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_arg_shape_names,
+                         @Cast("const mx_uint*") IntPointer provided_arg_shape_data,
+                         @Cast("const mx_uint*") IntPointer provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") @ByPtrPtr BytePointer provided_arg_dtype_names,
+                         @Const IntPointer provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") @ByPtrPtr BytePointer shared_arg_name_list,
+                         IntPointer shared_buffer_len,
+                         @Cast("const char**") @ByPtrPtr BytePointer shared_buffer_name_list,
+                         @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") IntPointer num_in_args,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer in_args,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") IntPointer num_aux_states,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         @Cast("ExecutorHandle*") @ByPtrPtr ExecutorHandle out);
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer g2c_keys,
+                         @Const IntBuffer g2c_dev_types,
+                         @Const IntBuffer g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_grad_req_names,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_arg_shape_names,
+                         @Cast("const mx_uint*") IntBuffer provided_arg_shape_data,
+                         @Cast("const mx_uint*") IntBuffer provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer provided_arg_dtype_names,
+                         @Const IntBuffer provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer shared_arg_name_list,
+                         IntBuffer shared_buffer_len,
+                         @Cast("const char**") @ByPtrPtr ByteBuffer shared_buffer_name_list,
+                         PointerPointer shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") IntBuffer num_in_args,
+                         @ByPtrPtr PointerPointer in_args,
+                         @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") IntBuffer num_aux_states,
+                         @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         PointerPointer out);
+public static native int MXExecutorSimpleBind(SymbolHandle symbol_handle,
+                         int dev_type,
+                         int dev_id,
+                         @Cast("const mx_uint") int num_g2c_keys,
+                         @Cast("const char**") @ByPtrPtr byte[] g2c_keys,
+                         @Const int[] g2c_dev_types,
+                         @Const int[] g2c_dev_ids,
+                         @Cast("const mx_uint") int provided_grad_req_list_len,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_grad_req_names,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_grad_req_types,
+                         @Cast("const mx_uint") int num_provided_arg_shapes,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_arg_shape_names,
+                         @Cast("const mx_uint*") int[] provided_arg_shape_data,
+                         @Cast("const mx_uint*") int[] provided_arg_shape_idx,
+                         @Cast("const mx_uint") int num_provided_arg_dtypes,
+                         @Cast("const char**") @ByPtrPtr byte[] provided_arg_dtype_names,
+                         @Const int[] provided_arg_dtypes,
+                         @Cast("const mx_uint") int num_shared_arg_names,
+                         @Cast("const char**") @ByPtrPtr byte[] shared_arg_name_list,
+                         int[] shared_buffer_len,
+                         @Cast("const char**") @ByPtrPtr byte[] shared_buffer_name_list,
+                         @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle shared_buffer_handle_list,
+                         @Cast("const char***") @ByPtrPtr PointerPointer updated_shared_buffer_name_list,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer updated_shared_buffer_handle_list,
+                         @Cast("mx_uint*") int[] num_in_args,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer in_args,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer arg_grads,
+                         @Cast("mx_uint*") int[] num_aux_states,
+                         @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer aux_states,
+                         ExecutorHandle shared_exec_handle,
+                         @Cast("ExecutorHandle*") @ByPtrPtr ExecutorHandle out);
 /**
  * \brief set a call back to notify the completion of operation
  */
@@ -2580,6 +3003,43 @@ public static native int MXKVStoreInit(KVStoreHandle handle,
                             @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals);
 
 /**
+ * \brief Init a list of (key,value) pairs in kvstore, where each key is a string
+ * @param handle handle to the kvstore
+ * @param num the number of key-value pairs
+ * @param keys the list of keys
+ * @param vals the list of values
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") PointerPointer keys,
+                              PointerPointer vals);
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              PointerPointer vals);
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals);
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              PointerPointer vals);
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals);
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              PointerPointer vals);
+public static native int MXKVStoreInitEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals);
+
+/**
  * \brief Push a list of (key,value) pairs to kvstore
  * @param handle handle to the kvstore
  * @param num the number of key-value pairs
@@ -2619,6 +3079,50 @@ public static native int MXKVStorePush(KVStoreHandle handle,
                             @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
                             int priority);
 /**
+ * \brief Push a list of (key,value) pairs to kvstore, where each key is a string
+ * @param handle handle to the kvstore
+ * @param num the number of key-value pairs
+ * @param keys the list of keys
+ * @param vals the list of values
+ * @param priority the priority of the action
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") PointerPointer keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
+                              int priority);
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
+                              int priority);
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePushEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
+                              int priority);
+/**
  * \brief pull a list of (key, value) pairs from the kvstore
  * @param handle handle to the kvstore
  * @param num the number of key-value pairs
@@ -2657,6 +3161,50 @@ public static native int MXKVStorePull(KVStoreHandle handle,
                             @Const int[] keys,
                             @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
                             int priority);
+/**
+ * \brief pull a list of (key, value) pairs from the kvstore, where each key is a string
+ * @param handle handle to the kvstore
+ * @param num the number of key-value pairs
+ * @param keys the list of keys
+ * @param vals the list of values
+ * @param priority the priority of the action
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") PointerPointer keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
+                              int priority);
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
+                              int priority);
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                              PointerPointer vals,
+                              int priority);
+public static native int MXKVStorePullEx(KVStoreHandle handle,
+                              @Cast("mx_uint") int num,
+                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                              @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle vals,
+                              int priority);
 /**
  * \brief user-defined updater for the kvstore
  * It's this updater's responsibility to delete \a recv and \a local
@@ -2989,9 +3537,27 @@ public static native int MXRtcPush(RtcHandle handle, @Cast("mx_uint") int num_in
  * \brief Delete a MXRtc object
 */
 public static native int MXRtcFree(RtcHandle handle);
-
+/*
+ * \brief register custom operators from frontend.
+ * \param op_type name of custom op
+ * \param creator
+ */
 public static native int MXCustomOpRegister(@Cast("const char*") BytePointer op_type, CustomOpPropCreator creator);
 public static native int MXCustomOpRegister(String op_type, CustomOpPropCreator creator);
+/*
+ * \brief record custom function for backward later.
+ * \param num_inputs number of input NDArrays.
+ * \param inputs handle to input NDArrays.
+ * \param num_outputs number of output NDArrays.
+ * \param outputs handle to output NDArrays.
+ * \param callbacks callbacks for backward function.
+ */
+public static native int MXCustomFunctionRecord(int num_inputs, PointerPointer inputs,
+                                     int num_outputs, PointerPointer outputs,
+                                     MXCallbackList callbacks);
+public static native int MXCustomFunctionRecord(int num_inputs, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle inputs,
+                                     int num_outputs, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle outputs,
+                                     MXCallbackList callbacks);
 
 // #ifdef __cplusplus
 // #endif  // __cplusplus
@@ -3001,8 +3567,26 @@ public static native int MXCustomOpRegister(String op_type, CustomOpPropCreator 
 
 // Parsed from mxnet/c_predict_api.h
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 /**
- *  Copyright (c) 2015 by Contributors
  * \file c_predict_api.h
  * \brief C predict API of mxnet, contains a minimum API to run prediction.
  *  This file is self-contained, and do not dependent on any other files.

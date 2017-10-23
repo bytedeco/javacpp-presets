@@ -3020,7 +3020,7 @@ public static final int
      */
     AV_PIX_FMT_MMAL =  AV_PIX_FMT_GBRP + 45,
 
-    /** HW decoding through Direct3D11, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
+    /** HW decoding through Direct3D11 via old API, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
     AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_GBRP + 46,
 
     /**
@@ -3147,8 +3147,41 @@ public static final int
     /** like NV12, with 16bpp per component, big-endian */
     AV_PIX_FMT_P016BE = 0x123+4 + 52,
 
+    /**
+     * Hardware surfaces for Direct3D11.
+     *
+     * This is preferred over the legacy AV_PIX_FMT_D3D11VA_VLD. The new D3D11
+     * hwaccel API and filtering support AV_PIX_FMT_D3D11 only.
+     *
+     * data[0] contains a ID3D11Texture2D pointer, and data[1] contains the
+     * texture array index of the frame as intptr_t if the ID3D11Texture2D is
+     * an array texture (or always 0 if it's a normal texture).
+     */
+    AV_PIX_FMT_D3D11 = 0x123+4 + 53,
+
+    /**        Y        , 9bpp, big-endian */
+    AV_PIX_FMT_GRAY9BE = 0x123+4 + 54,
+    /**        Y        , 9bpp, little-endian */
+    AV_PIX_FMT_GRAY9LE = 0x123+4 + 55,
+
+    /** IEEE-754 single precision planar GBR 4:4:4,     96bpp, big-endian */
+    AV_PIX_FMT_GBRPF32BE = 0x123+4 + 56,
+    /** IEEE-754 single precision planar GBR 4:4:4,     96bpp, little-endian */
+    AV_PIX_FMT_GBRPF32LE = 0x123+4 + 57,
+    /** IEEE-754 single precision planar GBRA 4:4:4:4, 128bpp, big-endian */
+    AV_PIX_FMT_GBRAPF32BE = 0x123+4 + 58,
+    /** IEEE-754 single precision planar GBRA 4:4:4:4, 128bpp, little-endian */
+    AV_PIX_FMT_GBRAPF32LE = 0x123+4 + 59,
+
+    /**
+     * DRM-managed buffers exposed through PRIME buffer sharing.
+     *
+     * data[0] points to an AVDRMFrameDescriptor.
+     */
+    AV_PIX_FMT_DRM_PRIME = 0x123+4 + 60,
+
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 53;
+    AV_PIX_FMT_NB = 0x123+4 + 61;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -3169,6 +3202,8 @@ public static final int AV_PIX_FMT_0RGB32 = AV_PIX_FMT_0RGB32();
 public static native @MemberGetter int AV_PIX_FMT_0BGR32();
 public static final int AV_PIX_FMT_0BGR32 = AV_PIX_FMT_0BGR32();
 
+public static native @MemberGetter int AV_PIX_FMT_GRAY9();
+public static final int AV_PIX_FMT_GRAY9 = AV_PIX_FMT_GRAY9();
 public static native @MemberGetter int AV_PIX_FMT_GRAY10();
 public static final int AV_PIX_FMT_GRAY10 = AV_PIX_FMT_GRAY10();
 public static native @MemberGetter int AV_PIX_FMT_GRAY12();
@@ -3259,6 +3294,10 @@ public static final int AV_PIX_FMT_BAYER_GBRG16 = AV_PIX_FMT_BAYER_GBRG16();
 public static native @MemberGetter int AV_PIX_FMT_BAYER_GRBG16();
 public static final int AV_PIX_FMT_BAYER_GRBG16 = AV_PIX_FMT_BAYER_GRBG16();
 
+public static native @MemberGetter int AV_PIX_FMT_GBRPF32();
+public static final int AV_PIX_FMT_GBRPF32 = AV_PIX_FMT_GBRPF32();
+public static native @MemberGetter int AV_PIX_FMT_GBRAPF32();
+public static final int AV_PIX_FMT_GBRAPF32 = AV_PIX_FMT_GBRAPF32();
 
 public static native @MemberGetter int AV_PIX_FMT_YUVA420P9();
 public static final int AV_PIX_FMT_YUVA420P9 = AV_PIX_FMT_YUVA420P9();
@@ -3292,6 +3331,7 @@ public static final int AV_PIX_FMT_P016 = AV_PIX_FMT_P016();
 
 /**
   * Chromaticity coordinates of the source primaries.
+  * These values match the ones defined by ISO/IEC 23001-8_2013 § 7.1.
   */
 /** enum AVColorPrimaries */
 public static final int
@@ -3327,6 +3367,7 @@ public static final int
 
 /**
  * Color Transfer Characteristic.
+ * These values match the ones defined by ISO/IEC 23001-8_2013 § 7.2.
  */
 /** enum AVColorTransferCharacteristic */
 public static final int
@@ -3371,6 +3412,7 @@ public static final int
 
 /**
  * YUV colorspace type.
+ * These values match the ones defined by ISO/IEC 23001-8_2013 § 7.3.
  */
 /** enum AVColorSpace */
 public static final int
@@ -3397,10 +3439,14 @@ public static final int
     AVCOL_SPC_BT2020_CL   = 10,
     /** SMPTE 2085, Y'D'zD'x */
     AVCOL_SPC_SMPTE2085   = 11,
+    /** Chromaticity-derived non-constant luminance system */
+    AVCOL_SPC_CHROMA_DERIVED_NCL = 12,
+    /** Chromaticity-derived constant luminance system */
+    AVCOL_SPC_CHROMA_DERIVED_CL = 13,
+    /** ITU-R BT.2100-0, ICtCp */
+    AVCOL_SPC_ICTCP       = 14,
     /** Not part of ABI */
-    AVCOL_SPC_NB = 12;
-// #define AVCOL_SPC_YCGCO AVCOL_SPC_YCOCG
-
+    AVCOL_SPC_NB = 15;
 
 /**
  * MPEG vs JPEG YUV range.
@@ -3477,6 +3523,7 @@ public static final int
 // #ifndef AVUTIL_FRAME_H
 // #define AVUTIL_FRAME_H
 
+// #include <stddef.h>
 // #include <stdint.h>
 
 // #include "avutil.h"
@@ -3579,7 +3626,20 @@ public static final int
      * The data represents the AVSphericalMapping structure defined in
      * libavutil/spherical.h.
      */
-    AV_FRAME_DATA_SPHERICAL = 13;
+    AV_FRAME_DATA_SPHERICAL = 13,
+
+    /**
+     * Content light level (based on CTA-861.3). This payload contains data in
+     * the form of the AVContentLightMetadata struct.
+     */
+    AV_FRAME_DATA_CONTENT_LIGHT_LEVEL = 14,
+
+    /**
+     * The data contains an ICC profile as an opaque octet buffer following the
+     * format described by ISO 15076-1 with an optional name defined in the
+     * metadata key entry "name".
+     */
+    AV_FRAME_DATA_ICC_PROFILE = 15;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3715,10 +3775,19 @@ public static final int AV_NUM_DATA_POINTERS = 8;
     @MemberGetter public native @Cast("uint8_t**") PointerPointer extended_data();
 
     /**
-     * width and height of the video frame
+     * \name Video dimensions
+     * Video frames only. The coded dimensions (in pixels) of the video frame,
+     * i.e. the size of the rectangle that contains some well-defined values.
+     *
+     * \note The part of the frame intended for display/presentation is further
+     * restricted by the \ref cropping "Cropping rectangle".
+     * \{
      */
     public native int width(); public native AVFrame width(int width);
     public native int height(); public native AVFrame height(int height);
+    /**
+     * \}
+     */
 
     /**
      * number of audio samples (per channel) described by this frame
@@ -4005,6 +4074,22 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
      * purpose.
      */
     public native AVBufferRef opaque_ref(); public native AVFrame opaque_ref(AVBufferRef opaque_ref);
+
+    /**
+     * \anchor cropping
+     * \name Cropping
+     * Video frames only. The number of pixels to discard from the the
+     * top/bottom/left/right border of the frame to obtain the sub-rectangle of
+     * the frame intended for presentation.
+     * \{
+     */
+    public native @Cast("size_t") long crop_top(); public native AVFrame crop_top(long crop_top);
+    public native @Cast("size_t") long crop_bottom(); public native AVFrame crop_bottom(long crop_bottom);
+    public native @Cast("size_t") long crop_left(); public native AVFrame crop_left(long crop_left);
+    public native @Cast("size_t") long crop_right(); public native AVFrame crop_right(long crop_right);
+    /**
+     * \}
+     */
 }
 
 /**
@@ -4126,7 +4211,9 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
  *           cases.
  *
  * @param frame frame in which to store the new buffers.
- * @param align required buffer size alignment
+ * @param align Required buffer size alignment. If equal to 0, alignment will be
+ *              chosen automatically for the current CPU. It is highly
+ *              recommended to pass 0 here unless you know what you are doing.
  *
  * @return 0 on success, a negative AVERROR on error.
  */
@@ -4217,6 +4304,40 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
  * from the frame.
  */
 @NoException public static native void av_frame_remove_side_data(AVFrame frame, @Cast("AVFrameSideDataType") int type);
+
+
+/**
+ * Flags for frame cropping.
+ */
+/** enum  */
+public static final int
+    /**
+     * Apply the maximum possible cropping, even if it requires setting the
+     * AVFrame.data[] entries to unaligned pointers. Passing unaligned data
+     * to FFmpeg API is generally not allowed, and causes undefined behavior
+     * (such as crashes). You can pass unaligned data only to FFmpeg APIs that
+     * are explicitly documented to accept it. Use this flag only if you
+     * absolutely know what you are doing.
+     */
+    AV_FRAME_CROP_UNALIGNED     =  1 << 0;
+
+/**
+ * Crop the given video AVFrame according to its crop_left/crop_top/crop_right/
+ * crop_bottom fields. If cropping is successful, the function will adjust the
+ * data pointers and the width/height fields, and set the crop fields to 0.
+ *
+ * In all cases, the cropping boundaries will be rounded to the inherent
+ * alignment of the pixel format. In some cases, such as for opaque hwaccel
+ * formats, the left/top cropping is ignored. The crop fields are set to 0 even
+ * if the cropping was rounded or ignored.
+ *
+ * @param frame the frame which should be cropped
+ * @param flags Some combination of AV_FRAME_CROP_* flags, or 0.
+ *
+ * @return >= 0 on success, a negative AVERROR on error. If the cropping fields
+ * were invalid, AVERROR(ERANGE) is returned, and nothing is changed.
+ */
+@NoException public static native int av_frame_apply_cropping(AVFrame frame, int flags);
 
 /**
  * @return a string identifying the side data type
@@ -4845,6 +4966,8 @@ public static final int
 // #ifndef AVUTIL_CPU_H
 // #define AVUTIL_CPU_H
 
+// #include <stddef.h>
+
 // #include "attributes.h"
 
 public static final int AV_CPU_FLAG_FORCE =    0x80000000; /* force usage of selected flags (OR) */
@@ -4970,6 +5093,17 @@ public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
  * @return the number of logical CPU cores present.
  */
 @NoException public static native int av_cpu_count();
+
+/**
+ * Get the maximum data alignment that may be required by FFmpeg.
+ *
+ * Note that this is affected by the build configuration and the CPU flags mask,
+ * so e.g. if the CPU supports AVX, but libavutil has been built with
+ * --disable-avx or the AV_CPU_FLAG_AVX flag has been disabled through
+ *  av_set_cpu_flags_mask(), then this function will behave as if AVX is not
+ *  present.
+ */
+@NoException public static native @Cast("size_t") long av_cpu_max_align();
 
 // #endif /* AVUTIL_CPU_H */
 
@@ -6518,6 +6652,12 @@ public static final int AV_PIX_FMT_FLAG_ALPHA =        (1 << 7);
 public static final int AV_PIX_FMT_FLAG_BAYER =        (1 << 8);
 
 /**
+ * The pixel format contains IEEE-754 floating point values. Precision (double,
+ * single, or half) should be determined by the pixel size (64, 32, or 16 bits).
+ */
+public static final int AV_PIX_FMT_FLAG_FLOAT =        (1 << 9);
+
+/**
  * Return the number of bits per pixel used by the pixel format
  * described by pixdesc. Note that this is not the same as the number
  * of bits per sample.
@@ -6589,9 +6729,21 @@ public static final int AV_PIX_FMT_FLAG_BAYER =        (1 << 8);
 @NoException public static native @Cast("const char*") BytePointer av_color_range_name(@Cast("AVColorRange") int range);
 
 /**
+ * @return the AVColorRange value for name or an AVError if not found.
+ */
+@NoException public static native int av_color_range_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_color_range_from_name(String name);
+
+/**
  * @return the name for provided color primaries or NULL if unknown.
  */
 @NoException public static native @Cast("const char*") BytePointer av_color_primaries_name(@Cast("AVColorPrimaries") int primaries);
+
+/**
+ * @return the AVColorPrimaries value for name or an AVError if not found.
+ */
+@NoException public static native int av_color_primaries_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_color_primaries_from_name(String name);
 
 /**
  * @return the name for provided color transfer or NULL if unknown.
@@ -6599,14 +6751,32 @@ public static final int AV_PIX_FMT_FLAG_BAYER =        (1 << 8);
 @NoException public static native @Cast("const char*") BytePointer av_color_transfer_name(@Cast("AVColorTransferCharacteristic") int transfer);
 
 /**
+ * @return the AVColorTransferCharacteristic value for name or an AVError if not found.
+ */
+@NoException public static native int av_color_transfer_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_color_transfer_from_name(String name);
+
+/**
  * @return the name for provided color space or NULL if unknown.
  */
 @NoException public static native @Cast("const char*") BytePointer av_color_space_name(@Cast("AVColorSpace") int space);
 
 /**
+ * @return the AVColorSpace value for name or an AVError if not found.
+ */
+@NoException public static native int av_color_space_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_color_space_from_name(String name);
+
+/**
  * @return the name for provided chroma location or NULL if unknown.
  */
 @NoException public static native @Cast("const char*") BytePointer av_chroma_location_name(@Cast("AVChromaLocation") int location);
+
+/**
+ * @return the AVChromaLocation value for name or an AVError if not found.
+ */
+@NoException public static native int av_chroma_location_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_chroma_location_from_name(String name);
 
 /**
  * Return the pixel format corresponding to name.
@@ -6977,7 +7147,7 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * one call, use av_image_alloc().
  *
  * @param dst_data      data pointers to be filled in
- * @param dst_linesizes linesizes for the image in dst_data to be filled in
+ * @param dst_linesize  linesizes for the image in dst_data to be filled in
  * @param src           buffer which will contain or contains the actual image data, can be NULL
  * @param pix_fmt       the pixel format of the image
  * @param width         the width of the image in pixels
@@ -7003,7 +7173,11 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * Return the size in bytes of the amount of data required to store an
  * image with the given parameters.
  *
- * @param [in] align the assumed linesize alignment
+ * @param pix_fmt  the pixel format of the image
+ * @param width    the width of the image in pixels
+ * @param height   the height of the image in pixels
+ * @param align    the assumed linesize alignment
+ * @return the buffer size in bytes, a negative error code in case of failure
  */
 @NoException public static native int av_image_get_buffer_size(@Cast("AVPixelFormat") int pix_fmt, int width, int height, int align);
 
@@ -7016,7 +7190,7 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * @param dst           a buffer into which picture data will be copied
  * @param dst_size      the size in bytes of dst
  * @param src_data      pointers containing the source image data
- * @param src_linesizes linesizes for the image in src_data
+ * @param src_linesize  linesizes for the image in src_data
  * @param pix_fmt       the pixel format of the source image
  * @param width         the width of the source image in pixels
  * @param height        the height of the source image in pixels
@@ -7077,6 +7251,42 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * @return 0 if valid, a negative AVERROR code otherwise
  */
 @NoException public static native int av_image_check_sar(@Cast("unsigned int") int w, @Cast("unsigned int") int h, @ByVal AVRational sar);
+
+/**
+ * Overwrite the image data with black. This is suitable for filling a
+ * sub-rectangle of an image, meaning the padding between the right most pixel
+ * and the left most pixel on the next line will not be overwritten. For some
+ * formats, the image size might be rounded up due to inherent alignment.
+ *
+ * If the pixel format has alpha, the alpha is cleared to opaque.
+ *
+ * This can return an error if the pixel format is not supported. Normally, all
+ * non-hwaccel pixel formats should be supported.
+ *
+ * Passing NULL for dst_data is allowed. Then the function returns whether the
+ * operation would have succeeded. (It can return an error if the pix_fmt is
+ * not supported.)
+ *
+ * @param dst_data      data pointers to destination image
+ * @param dst_linesize  linesizes for the destination image
+ * @param pix_fmt       the pixel format of the image
+ * @param range         the color range of the image (important for colorspaces such as YUV)
+ * @param width         the width of the image in pixels
+ * @param height        the height of the image in pixels
+ * @return 0 if the image data was cleared, a negative AVERROR code otherwise
+ */
+@NoException public static native int av_image_fill_black(@Cast("uint8_t**") PointerPointer dst_data, @Cast("const ptrdiff_t*") SizeTPointer dst_linesize,
+                        @Cast("AVPixelFormat") int pix_fmt, @Cast("AVColorRange") int range,
+                        int width, int height);
+@NoException public static native int av_image_fill_black(@Cast("uint8_t**") @ByPtrPtr BytePointer dst_data, @Cast("const ptrdiff_t*") SizeTPointer dst_linesize,
+                        @Cast("AVPixelFormat") int pix_fmt, @Cast("AVColorRange") int range,
+                        int width, int height);
+@NoException public static native int av_image_fill_black(@Cast("uint8_t**") @ByPtrPtr ByteBuffer dst_data, @Cast("const ptrdiff_t*") SizeTPointer dst_linesize,
+                        @Cast("AVPixelFormat") int pix_fmt, @Cast("AVColorRange") int range,
+                        int width, int height);
+@NoException public static native int av_image_fill_black(@Cast("uint8_t**") @ByPtrPtr byte[] dst_data, @Cast("const ptrdiff_t*") SizeTPointer dst_linesize,
+                        @Cast("AVPixelFormat") int pix_fmt, @Cast("AVColorRange") int range,
+                        int width, int height);
 
 /**
  * \}
@@ -7245,12 +7455,32 @@ public static class AVDownmixInfo extends Pointer {
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+/**
+ * \file
+ * Stereoscopic video
+ */
+
 // #ifndef AVUTIL_STEREO3D_H
 // #define AVUTIL_STEREO3D_H
 
 // #include <stdint.h>
 
 // #include "frame.h"
+
+/**
+ * \addtogroup lavu_video
+ * \{
+ *
+ * \defgroup lavu_video_stereo3d Stereo3D types and functions
+ * \{
+ */
+
+/**
+ * \addtogroup lavu_video_stereo3d
+ * A stereoscopic video file consists in multiple views embedded in a single
+ * frame, usually describing two views of a scene. This file describes all
+ * possible codec-independent view arrangements.
+ * */
 
 /**
  * List of possible 3D Types
@@ -7265,41 +7495,49 @@ public static final int
     /**
      * Views are next to each other.
      *
+     * <pre>{@code {.unparsed}
      *    LLLLRRRR
      *    LLLLRRRR
      *    LLLLRRRR
      *    ...
+     * }</pre>
      */
     AV_STEREO3D_SIDEBYSIDE = 1,
 
     /**
      * Views are on top of each other.
      *
+     * <pre>{@code {.unparsed}
      *    LLLLLLLL
      *    LLLLLLLL
      *    RRRRRRRR
      *    RRRRRRRR
+     * }</pre>
      */
     AV_STEREO3D_TOPBOTTOM = 2,
 
     /**
      * Views are alternated temporally.
      *
+     * <pre>{@code {.unparsed}
      *     frame0   frame1   frame2   ...
      *    LLLLLLLL RRRRRRRR LLLLLLLL
      *    LLLLLLLL RRRRRRRR LLLLLLLL
      *    LLLLLLLL RRRRRRRR LLLLLLLL
      *    ...      ...      ...
+     * }</pre>
      */
     AV_STEREO3D_FRAMESEQUENCE = 3,
 
     /**
      * Views are packed in a checkerboard-like structure per pixel.
      *
+     * <pre>{@code {.unparsed}
      *    LRLRLRLR
      *    RLRLRLRL
      *    LRLRLRLR
      *    ...
+     * }</pre>
      */
     AV_STEREO3D_CHECKERBOARD = 4,
 
@@ -7307,30 +7545,36 @@ public static final int
      * Views are next to each other, but when upscaling
      * apply a checkerboard pattern.
      *
+     * <pre>{@code {.unparsed}
      *     LLLLRRRR          L L L L    R R R R
      *     LLLLRRRR    =>     L L L L  R R R R
      *     LLLLRRRR          L L L L    R R R R
      *     LLLLRRRR           L L L L  R R R R
+     * }</pre>
      */
     AV_STEREO3D_SIDEBYSIDE_QUINCUNX = 5,
 
     /**
      * Views are packed per line, as if interlaced.
      *
+     * <pre>{@code {.unparsed}
      *    LLLLLLLL
      *    RRRRRRRR
      *    LLLLLLLL
      *    ...
+     * }</pre>
      */
     AV_STEREO3D_LINES = 6,
 
     /**
      * Views are packed per column.
      *
+     * <pre>{@code {.unparsed}
      *    LRLRLRLR
      *    LRLRLRLR
      *    LRLRLRLR
      *    ...
+     * }</pre>
      */
     AV_STEREO3D_COLUMNS = 7;
 
@@ -7401,12 +7645,17 @@ public static class AVStereo3D extends Pointer {
 /**
  * Get the AVStereo3DType form a human-readable name.
  *
- * @param type The input string.
+ * @param name The input string.
  *
  * @return The AVStereo3DType value, or -1 if not found.
  */
 @NoException public static native int av_stereo3d_from_name(@Cast("const char*") BytePointer name);
 @NoException public static native int av_stereo3d_from_name(String name);
+
+/**
+ * \}
+ * \}
+ */
 
 // #endif /* AVUTIL_STEREO3D_H */
 
@@ -7416,7 +7665,7 @@ public static class AVStereo3D extends Pointer {
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "3.3.2";
+public static final String FFMPEG_VERSION = "3.4";
 // #endif /* AVUTIL_FFVERSION_H */
 
 

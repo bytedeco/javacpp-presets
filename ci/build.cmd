@@ -17,11 +17,9 @@ IF "%MSYS2_ARCH%"=="x86" (
 )
 
 SET PATH=C:\%MSYS2_DIR%\usr\bin\core_perl;C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
-bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
-bash -lc "pacman -Sy --noconfirm pacman"
 bash -lc "pacman -Syu --noconfirm"
-bash -lc "pacman -S --needed --noconfirm git"
-bash -lc "pacman -S --needed --noconfirm base-devel tar nasm yasm pkg-config unzip autoconf automake libtool make patch"
+bash -lc "pacman -Su --noconfirm"
+bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip autoconf automake libtool make patch"
 bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git"
 
 bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"

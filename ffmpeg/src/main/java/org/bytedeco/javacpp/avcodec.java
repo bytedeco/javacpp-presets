@@ -462,6 +462,12 @@ public static final int
     AV_CODEC_ID_CLEARVIDEO =  0x8000 + 27,
     AV_CODEC_ID_XPM =  0x8000 + 28,
     AV_CODEC_ID_AV1 =  0x8000 + 29,
+    AV_CODEC_ID_BITPACKED =  0x8000 + 30,
+    AV_CODEC_ID_MSCC =  0x8000 + 31,
+    AV_CODEC_ID_SRGC =  0x8000 + 32,
+    AV_CODEC_ID_SVG =  0x8000 + 33,
+    AV_CODEC_ID_GDV =  0x8000 + 34,
+    AV_CODEC_ID_FITS =  0x8000 + 35,
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -565,6 +571,7 @@ public static final int
     AV_CODEC_ID_SOL_DPCM =  0x14000 + 3,
 
     AV_CODEC_ID_SDX2_DPCM =  0x14800,
+    AV_CODEC_ID_GREMLIN_DPCM =  0x14800 + 1,
 
     /* audio codecs */
     AV_CODEC_ID_MP2 =  0x15000,
@@ -656,6 +663,7 @@ public static final int
     AV_CODEC_ID_DST =  0x15800 + 13,
     AV_CODEC_ID_ATRAC3AL =  0x15800 + 14,
     AV_CODEC_ID_ATRAC3PAL =  0x15800 + 15,
+    AV_CODEC_ID_DOLBY_E =  0x15800 + 16,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -769,7 +777,7 @@ public static class AVCodecDescriptor extends Pointer {
 
 /**
  * Codec uses only intra compression.
- * Video codecs only.
+ * Video and audio codecs only.
  */
 public static final int AV_CODEC_PROP_INTRA_ONLY =    (1 << 0);
 /**
@@ -1676,7 +1684,7 @@ public static final int
 
     /**
      * Mastering display metadata (based on SMPTE-2086:2014). This metadata
-     * should be associated with a video stream and containts data in the form
+     * should be associated with a video stream and contains data in the form
      * of the AVMasteringDisplayMetadata struct.
      */
     AV_PKT_DATA_MASTERING_DISPLAY_METADATA = 79,
@@ -1688,6 +1696,20 @@ public static final int
     AV_PKT_DATA_SPHERICAL = 80,
 
     /**
+     * Content light level (based on CTA-861.3). This metadata should be
+     * associated with a video stream and contains data in the form of the
+     * AVContentLightMetadata struct.
+     */
+    AV_PKT_DATA_CONTENT_LIGHT_LEVEL = 81,
+
+    /**
+     * ATSC A53 Part 4 Closed Captions. This metadata should be associated with
+     * a video stream. A53 CC bitstream is stored as uint8_t in AVPacketSideData.data.
+     * The number of bytes of CC data is AVPacketSideData.size.
+     */
+    AV_PKT_DATA_A53_CC = 82,
+
+    /**
      * The number of side data elements (in fact a bit more than it).
      * This is not part of the public API/ABI in the sense that it may
      * change when new side data types are added.
@@ -1695,7 +1717,7 @@ public static final int
      * If its value becomes huge, some code using it
      * needs to be updated as it assumes it to be smaller than other limits.
      */
-    AV_PKT_DATA_NB = 81;
+    AV_PKT_DATA_NB = 83;
 
 public static final int AV_PKT_DATA_QUALITY_FACTOR = AV_PKT_DATA_QUALITY_STATS; //DEPRECATED
 
@@ -1824,6 +1846,13 @@ public static final int AV_PKT_FLAG_CORRUPT = 0x0002;
  * after decoding.
  **/
 public static final int AV_PKT_FLAG_DISCARD =   0x0004;
+/**
+ * The packet comes from a trusted source.
+ *
+ * Otherwise-unsafe constructs such as arbitrary pointers to data
+ * outside the packet may be followed.
+ */
+public static final int AV_PKT_FLAG_TRUSTED =   0x0008;
 
 /** enum AVSideDataParamChangeFlags */
 public static final int
@@ -2830,7 +2859,7 @@ public static final int FF_MB_DECISION_RD =     2;
      * - encoding: unused
      * - decoding: set by the caller before avcodec_open2().
      */
-    public native int refcounted_frames(); public native AVCodecContext refcounted_frames(int refcounted_frames);
+    public native @Deprecated int refcounted_frames(); public native AVCodecContext refcounted_frames(int refcounted_frames);
 
     /* - encoding parameters */
     /** amount of qscale change between easy & hard scenes (0.0-1.0) */
@@ -3282,6 +3311,7 @@ public static final int FF_IDCT_SIMPLENEON =    22;
 // #if FF_API_ARCH_ALPHA
 public static final int FF_IDCT_SIMPLEALPHA =   23;
 // #endif
+public static final int FF_IDCT_NONE =          24; /* Used by XvMC to extract IDCT coefficients with FF_IDCT_PERM_NONE */
 public static final int FF_IDCT_SIMPLEAUTO =    128;
 
     /**
@@ -3727,7 +3757,7 @@ public static final int FF_SUB_CHARENC_MODE_PRE_DECODER =  1;
      */
     public native @Cast("char*") BytePointer codec_whitelist(); public native AVCodecContext codec_whitelist(BytePointer codec_whitelist);
 
-    /*
+    /**
      * Properties of the stream that gets decoded
      * - encoding: unused
      * - decoding: set by libavcodec
@@ -3829,6 +3859,33 @@ public static final int FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS = 1;
      *             AVCodecContext.get_format callback)
      */
     public native int hwaccel_flags(); public native AVCodecContext hwaccel_flags(int hwaccel_flags);
+
+    /**
+     * Video decoding only. Certain video codecs support cropping, meaning that
+     * only a sub-rectangle of the decoded frame is intended for display.  This
+     * option controls how cropping is handled by libavcodec.
+     *
+     * When set to 1 (the default), libavcodec will apply cropping internally.
+     * I.e. it will modify the output frame width/height fields and offset the
+     * data pointers (only by as much as possible while preserving alignment, or
+     * by the full amount if the AV_CODEC_FLAG_UNALIGNED flag is set) so that
+     * the frames output by the decoder refer only to the cropped area. The
+     * crop_* fields of the output frames will be zero.
+     *
+     * When set to 0, the width/height fields of the output frames will be set
+     * to the coded dimensions and the crop_* fields will describe the cropping
+     * rectangle. Applying the cropping is left to the caller.
+     *
+     * \warning When hardware acceleration with opaque output frames is used,
+     * libavcodec is unable to apply cropping from the top/left border.
+     *
+     * \note when this option is set to zero, the width/height fields of the
+     * AVCodecContext and output AVFrames have different meanings. The codec
+     * context fields store display dimensions (with the coded dimensions in
+     * coded_width/height), while the frame fields store the coded dimensions
+     * (with the display dimensions being determined by the crop_* fields).
+     */
+    public native int apply_cropping(); public native AVCodecContext apply_cropping(int apply_cropping);
 }
 
 @NoException public static native @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
@@ -4053,15 +4110,12 @@ public static class AVCodec extends Pointer {
     }
     public native @Name("close") Close_AVCodecContext _close(); public native AVCodec _close(Close_AVCodecContext _close);
     /**
-     * Decode/encode API with decoupled packet/frame dataflow. The API is the
+     * Encode API with decoupled packet/frame dataflow. The API is the
      * same as the avcodec_ prefixed APIs (avcodec_send_frame() etc.), except
      * that:
      * - never called if the codec is closed or the wrong type,
-     * - AVPacket parameter change side data is applied right before calling
-     *   AVCodec->send_packet,
-     * - if AV_CODEC_CAP_DELAY is not set, drain packets or frames are never sent,
-     * - only one drain packet is ever passed down (until the next flush()),
-     * - a drain AVPacket is always NULL (no need to check for avpkt->size).
+     * - if AV_CODEC_CAP_DELAY is not set, drain frames are never sent,
+     * - only one drain frame is ever passed down,
      */
     public static class Send_frame_AVCodecContext_AVFrame extends FunctionPointer {
         static { Loader.load(); }
@@ -4072,24 +4126,6 @@ public static class AVCodec extends Pointer {
         public native int call(AVCodecContext avctx, @Const AVFrame frame);
     }
     public native Send_frame_AVCodecContext_AVFrame send_frame(); public native AVCodec send_frame(Send_frame_AVCodecContext_AVFrame send_frame);
-    public static class Send_packet_AVCodecContext_AVPacket extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Send_packet_AVCodecContext_AVPacket(Pointer p) { super(p); }
-        protected Send_packet_AVCodecContext_AVPacket() { allocate(); }
-        private native void allocate();
-        public native int call(AVCodecContext avctx, @Const AVPacket avpkt);
-    }
-    public native Send_packet_AVCodecContext_AVPacket send_packet(); public native AVCodec send_packet(Send_packet_AVCodecContext_AVPacket send_packet);
-    public static class Receive_frame_AVCodecContext_AVFrame extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Receive_frame_AVCodecContext_AVFrame(Pointer p) { super(p); }
-        protected Receive_frame_AVCodecContext_AVFrame() { allocate(); }
-        private native void allocate();
-        public native int call(AVCodecContext avctx, AVFrame frame);
-    }
-    public native Receive_frame_AVCodecContext_AVFrame receive_frame(); public native AVCodec receive_frame(Receive_frame_AVCodecContext_AVFrame receive_frame);
     public static class Receive_packet_AVCodecContext_AVPacket extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4099,6 +4135,21 @@ public static class AVCodec extends Pointer {
         public native int call(AVCodecContext avctx, AVPacket avpkt);
     }
     public native Receive_packet_AVCodecContext_AVPacket receive_packet(); public native AVCodec receive_packet(Receive_packet_AVCodecContext_AVPacket receive_packet);
+
+    /**
+     * Decode API with decoupled packet/frame dataflow. This function is called
+     * to get one output frame. It should call ff_decode_get_packet() to obtain
+     * input data.
+     */
+    public static class Receive_frame_AVCodecContext_AVFrame extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Receive_frame_AVCodecContext_AVFrame(Pointer p) { super(p); }
+        protected Receive_frame_AVCodecContext_AVFrame() { allocate(); }
+        private native void allocate();
+        public native int call(AVCodecContext avctx, AVFrame frame);
+    }
+    public native Receive_frame_AVCodecContext_AVFrame receive_frame(); public native AVCodec receive_frame(Receive_frame_AVCodecContext_AVFrame receive_frame);
     /**
      * Flush buffers.
      * Will be called when seeking
@@ -4117,6 +4168,12 @@ public static class AVCodec extends Pointer {
      * See FF_CODEC_CAP_* in internal.h
      */
     public native int caps_internal(); public native AVCodec caps_internal(int caps_internal);
+
+    /**
+     * Decoding only, a comma-separated list of bitstream filters to apply to
+     * packets before decoding.
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer bsfs();
 }
 
 @NoException public static native int av_codec_get_max_lowres(@Const AVCodec codec);
@@ -4176,7 +4233,7 @@ public static class AVHWAccel extends Pointer {
 
     /**
      * Hardware accelerated codec capabilities.
-     * see HWACCEL_CODEC_CAP_*
+     * see AV_HWACCEL_CODEC_CAP_*
      */
     public native int capabilities(); public native AVHWAccel capabilities(int capabilities);
 
@@ -4279,7 +4336,7 @@ public static class AVHWAccel extends Pointer {
     /**
      * Called for every Macroblock in a slice.
      *
-     * XvMC uses it to replace the ff_mpv_decode_mb().
+     * XvMC uses it to replace the ff_mpv_reconstruct_mb().
      * Instead of decoding to raw picture, MB parameters are
      * stored in an array provided by the video driver.
      *
@@ -4341,6 +4398,12 @@ public static class AVHWAccel extends Pointer {
 }
 
 /**
+ * HWAccel is experimental and is thus avoided in favor of non experimental
+ * codecs
+ */
+public static final int AV_HWACCEL_CODEC_CAP_EXPERIMENTAL = 0x0200;
+
+/**
  * Hardware acceleration should be used for decoding even if the codec level
  * used is unknown or higher than the maximum supported level reported by the
  * hardware driver.
@@ -4355,6 +4418,20 @@ public static final int AV_HWACCEL_FLAG_IGNORE_LEVEL = (1 << 0);
  * sampling than 4:2:0 and/or other than 8 bits per component.
  */
 public static final int AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH = (1 << 1);
+
+/**
+ * Hardware acceleration should still be attempted for decoding when the
+ * codec profile does not match the reported capabilities of the hardware.
+ *
+ * For example, this can be used to try to decode baseline profile H.264
+ * streams in hardware - it will often succeed, because many streams marked
+ * as baseline profile actually conform to constrained baseline profile.
+ *
+ * \warning If the stream is actually not supported then the behaviour is
+ *          undefined, and may include returning entirely incorrect output
+ *          while indicating success.
+ */
+public static final int AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH = (1 << 2);
 
 /**
  * \}
@@ -4937,7 +5014,7 @@ public static class AVCodecParameters extends Pointer {
  * Free the packet, if the packet is reference counted, it will be
  * unreferenced first.
  *
- * @param packet packet to be freed. The pointer will be set to NULL.
+ * @param pkt packet to be freed. The pointer will be set to NULL.
  * \note passing NULL is a no-op.
  */
 @NoException public static native void av_packet_free(@Cast("AVPacket**") PointerPointer pkt);
@@ -5008,15 +5085,19 @@ public static class AVCodecParameters extends Pointer {
  * Copy packet, including contents
  *
  * @return 0 on success, negative AVERROR on fail
+ *
+ * @deprecated Use av_packet_ref
  */
-@NoException public static native int av_copy_packet(AVPacket dst, @Const AVPacket src);
+@NoException public static native @Deprecated int av_copy_packet(AVPacket dst, @Const AVPacket src);
 
 /**
  * Copy packet side data
  *
  * @return 0 on success, negative AVERROR on fail
+ *
+ * @deprecated Use av_packet_copy_props
  */
-@NoException public static native int av_copy_packet_side_data(AVPacket dst, @Const AVPacket src);
+@NoException public static native @Deprecated int av_copy_packet_side_data(AVPacket dst, @Const AVPacket src);
 
 /**
  * Free a packet.
@@ -5409,13 +5490,13 @@ public static class AVCodecParameters extends Pointer {
  * and reusing a get_buffer written for video codecs would probably perform badly
  * due to a potentially very different allocation pattern.
  *
- * Some decoders (those marked with CODEC_CAP_DELAY) have a delay between input
+ * Some decoders (those marked with AV_CODEC_CAP_DELAY) have a delay between input
  * and output. This means that for some packets they will not immediately
  * produce decoded output and need to be flushed at the end of decoding to get
  * all the decoded data. Flushing is done by calling this function with packets
  * with avpkt->data set to NULL and avpkt->size set to 0 until it stops
  * returning subtitles. It is safe to flush even those decoders that are not
- * marked with CODEC_CAP_DELAY, then no subtitles will be returned.
+ * marked with AV_CODEC_CAP_DELAY, then no subtitles will be returned.
  *
  * \note The AVCodecContext MUST have been opened with \ref avcodec_open2()
  * before packets may be fed to the decoder.
@@ -6221,24 +6302,15 @@ public static class AVCodecParser extends Pointer {
  * \{
  */
 
+// #if FF_API_GETCHROMA
 /**
- * Utility function to access log2_chroma_w log2_chroma_h from
- * the pixel format AVPixFmtDescriptor.
- *
- * This function asserts that pix_fmt is valid. See av_pix_fmt_get_chroma_sub_sample
- * for one that returns a failure code and continues in case of invalid
- * pix_fmts.
- *
- * @param [in]  pix_fmt the pixel format
- * @param [out] h_shift store log2_chroma_w
- * @param [out] v_shift store log2_chroma_h
- *
- * @see av_pix_fmt_get_chroma_sub_sample
+ * @deprecated Use av_pix_fmt_get_chroma_sub_sample
  */
 
-@NoException public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntPointer h_shift, IntPointer v_shift);
-@NoException public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntBuffer h_shift, IntBuffer v_shift);
-@NoException public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, int[] h_shift, int[] v_shift);
+@NoException public static native @Deprecated void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntPointer h_shift, IntPointer v_shift);
+@NoException public static native @Deprecated void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntBuffer h_shift, IntBuffer v_shift);
+@NoException public static native @Deprecated void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, int[] h_shift, int[] v_shift);
+// #endif
 
 /**
  * Return a value representing the fourCC code associated to the
@@ -6792,8 +6864,7 @@ public static class AVBitStreamFilter extends Pointer {
  * av_bsf_receive_packet() repeatedly until it returns AVERROR(EAGAIN) or
  * AVERROR_EOF.
  *
- * @param pkt the packet to filter. pkt must contain some payload (i.e data or
- * side data must be present in pkt). The bitstream filter will take ownership of
+ * @param pkt the packet to filter. The bitstream filter will take ownership of
  * the packet and reset the contents of pkt. pkt is not touched if an error occurs.
  * This parameter may be NULL, which signals the end of the stream (i.e. no more
  * packets will be sent). That will cause the filter to output any packets it

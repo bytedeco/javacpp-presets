@@ -141,11 +141,6 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
 
 // #include "libswresample/version.h"
 
-// #if LIBSWRESAMPLE_VERSION_MAJOR < 1
-/** Maximum number of channels */
-public static final int SWR_CH_MAX = 32;
-// #endif
-
 /**
  * \name Option constants
  * These constants are used for the \ref avoptions interface for lswr.

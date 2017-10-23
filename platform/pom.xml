@@ -58,7 +58,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>3.3.2-${project.version}</version>
+      <version>3.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -158,7 +158,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>0.10.0-${project.version}</version>
+      <version>0.11.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -168,7 +168,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ale-platform</artifactId>
-      <version>20170702-5c7dfa5-${project.version}</version>
+      <version>20170911-6eddb8d-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

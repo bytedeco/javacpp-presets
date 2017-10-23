@@ -31,11 +31,13 @@ case $PLATFORM in
         ;;
 esac
 
-DMLC_VERSION=a6c5701219e635fea808d264aefc5b03c3aec314
-MSHADOW_VERSION=c037b06ddd810d39322cd056650f8b1f4763dd9d
+DLPACK_VERSION=a6e09b58dc00ee0065f5b7879800e646fbb01d1e
+DMLC_VERSION=71bfbd3a946075cea66ca9e19bad86dd33c19b46
+MSHADOW_VERSION=497eb9180b24592b7332e7e08f2c053ec5346524
 PS_VERSION=acdb698fa3bb80929ef83bb37c705f025e119b82
-NNVM_VERSION=b279286304ac954098d94a2695bca599e832effb
-MXNET_VERSION=0.10.0
+NNVM_VERSION=bcfbf903429d086f16b19b4d202788de06e45536
+MXNET_VERSION=0.11.0
+download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
 download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
 download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
 download https://github.com/dmlc/ps-lite/archive/$PS_VERSION.tar.gz ps-lite-$PS_VERSION.tar.gz
@@ -63,13 +65,15 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
 fi
 
 echo "Decompressing archives..."
+tar --totals -xzf ../dlpack-$DLPACK_VERSION.tar.gz
 tar --totals -xzf ../dmlc-core-$DMLC_VERSION.tar.gz
 tar --totals -xzf ../mshadow-$MSHADOW_VERSION.tar.gz
 tar --totals -xzf ../ps-lite-$PS_VERSION.tar.gz
 tar --totals -xzf ../nnvm-$NNVM_VERSION.tar.gz
 tar --totals -xzf ../incubator-mxnet-$MXNET_VERSION.tar.gz
 cd incubator-mxnet-$MXNET_VERSION
-rmdir dmlc-core mshadow ps-lite nnvm || true
+rmdir dlpack dmlc-core mshadow ps-lite nnvm || true
+ln -snf ../dlpack-$DLPACK_VERSION dlpack
 ln -snf ../dmlc-core-$DMLC_VERSION dmlc-core
 ln -snf ../mshadow-$MSHADOW_VERSION mshadow
 ln -snf ../ps-lite-$PS_VERSION ps-lite
