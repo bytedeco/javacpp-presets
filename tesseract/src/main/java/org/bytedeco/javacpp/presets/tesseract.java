@@ -38,6 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"},
         link="tesseract@.3", resource = {"include", "lib"}),
     @Platform(value="android", link="tesseract"),
+    @Platform(value="linux-ppc64le", compiler="cpp11"),
     @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
 public class tesseract implements InfoMapper {
     public void map(InfoMap infoMap) {

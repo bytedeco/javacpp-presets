@@ -84,6 +84,11 @@ case $PLATFORM in
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/"
         else
+          cd ..
+          rm -rf tesseract-3.05.01
+          git clone -q --branch=3.05 https://github.com/tesseract-ocr/tesseract.git tesseract-3.05.01
+          cd tesseract-$TESSERACT_VERSION
+          bash autogen.sh
           PKG_CONFIG_PATH=/root/.javacpp/cache/leptonica-linux-ppc64le.jar/org/bytedeco/javacpp/linux-ppc64le/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ LIBLEPT_HEADERSDIR="$LEPTONICA_PATH/include/" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/"
         fi
         make -j $MAKEJ
