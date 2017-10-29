@@ -14,22 +14,35 @@ public class openblas extends org.bytedeco.javacpp.presets.openblas {
 // #ifndef OPENBLAS_CONFIG_H
 // #define OPENBLAS_CONFIG_H
 public static final int OPENBLAS_OS_LINUX = 1;
-public static final int OPENBLAS_ARCH_POWER = 1;
+public static final int OPENBLAS_ARCH_X86_64 = 1;
 public static final int OPENBLAS_C_GCC = 1;
 public static final int OPENBLAS___64BIT__ = 1;
 // #define OPENBLAS_PTHREAD_CREATE_FUNC pthread_create
 // #define OPENBLAS_BUNDERSCORE _
 public static final int OPENBLAS_NEEDBUNDERSCORE = 1;
-// #define OPENBLAS_POWER5 
+// #define OPENBLAS_HASWELL 
 public static final int OPENBLAS_L1_DATA_SIZE = 32768;
-public static final int OPENBLAS_L1_DATA_LINESIZE = 128;
-public static final int OPENBLAS_L2_SIZE = 1509949;
-public static final int OPENBLAS_L2_LINESIZE = 128;
-public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 128;
+public static final int OPENBLAS_L1_DATA_LINESIZE = 64;
+public static final int OPENBLAS_L2_SIZE = 262144;
+public static final int OPENBLAS_L2_LINESIZE = 64;
+public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
 public static final int OPENBLAS_DTB_SIZE = 4096;
-public static final int OPENBLAS_L2_ASSOCIATIVE = 6;
-// #define OPENBLAS_CORE_POWER5 
-public static final String OPENBLAS_CHAR_CORENAME = "POWER5";
+// #define OPENBLAS_HAVE_CMOV 
+// #define OPENBLAS_HAVE_MMX 
+// #define OPENBLAS_HAVE_SSE 
+// #define OPENBLAS_HAVE_SSE2 
+// #define OPENBLAS_HAVE_SSE3 
+// #define OPENBLAS_HAVE_SSSE3 
+// #define OPENBLAS_HAVE_SSE4_1 
+// #define OPENBLAS_HAVE_SSE4_2 
+// #define OPENBLAS_HAVE_AVX 
+// #define OPENBLAS_FMA3 
+// #define OPENBLAS_CORE_HASWELL 
+public static final String OPENBLAS_CHAR_CORENAME = "HASWELL";
+public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 24576;
+public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
+public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 12288;
+public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
 public static final String OPENBLAS_VERSION = " OpenBLAS 0.2.20 ";
 /*This is only for "make install" target.*/

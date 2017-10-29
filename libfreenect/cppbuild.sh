@@ -10,7 +10,6 @@ fi
 LIBFREENECT_VERSION=0.5.3
 download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.zip libfreenect-$LIBFREENECT_VERSION.zip
 
-
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
@@ -52,7 +51,6 @@ if [[ $PLATFORM ==  linux-ppc64le ]]; then
     make install
     cd ..
 fi
-
 
 cd libfreenect-$LIBFREENECT_VERSION
 
