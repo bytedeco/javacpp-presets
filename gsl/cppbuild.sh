@@ -71,7 +71,7 @@ case $PLATFORM in
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
         else
-          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux 
+          ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=ppc64le-linux CC="powerpc64le-linux-gnu-gcc -m64"
         fi
         make -j $MAKEJ
         make install-strip
