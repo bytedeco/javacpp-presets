@@ -75,8 +75,15 @@ case $PLATFORM in
     linux-ppc64le)
         # patch to use less buggy generic kernels
         patch -Np1 < ../../../OpenBLAS-linux-ppc64le.patch
-        export CC="$OLDCC -m64"
-        export FC="$OLDFC -m64"
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          export CC="$OLDCC -m64"
+          export FC="$OLDFC -m64"
+        else
+          export CC="powerpc64le-linux-gnu-gcc"
+          export FC="powerpc64le-linux-gnu-gfortran"
+          export CROSS_SUFFIX="powerpc64le-linux-gnu-"
+        fi
         export BINARY=64
         export TARGET=POWER5
         ;;

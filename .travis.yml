@@ -16,6 +16,91 @@ services:
 matrix:
    include:
       - jdk: oraclejdk8
+        os: linux
+        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=ffmpeg OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=flycapture OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libdc1394 OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=libfreenect2 OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=librealsense OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=videoinput OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=artoolkitplus OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=mkl OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=fftw OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=gsl OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=llvm OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=leptonica,tesseract OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=cuda OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=tensorflow OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
+        os: linux
+        env: PROJ=liquidfun OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - jdk: oraclejdk8
         os: linux 
         env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-x86
         install: true
