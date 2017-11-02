@@ -77,7 +77,7 @@ case $PLATFORM in
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -122,7 +122,7 @@ case $PLATFORM in
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -157,7 +157,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -192,7 +192,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -230,7 +230,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=arm-linux-gnueabihf --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=arm-linux-gnueabihf --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -266,7 +266,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=aarch64-linux-gnu --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=aarch64-linux-gnu --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -311,7 +311,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $BFLAGS --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $BFLAGS --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -347,7 +347,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-macosx.patch
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -380,7 +380,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=i686-w64-mingw32 --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=i686-w64-mingw32 --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -413,7 +413,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=x86_64-w64-mingw32 --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=x86_64-w64-mingw32 --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
