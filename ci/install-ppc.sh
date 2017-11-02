@@ -16,23 +16,16 @@ echo "Starting docker for ppc cross compile"
 docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup ubuntu:xenial /sbin/init 
 DOCKER_CONTAINER_ID=$(docker ps | grep xenial | awk '{print $1}')
 echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install apt-utils"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install software-properties-common pkg-config python python-dev python-numpy gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch zlib1g zlib1g-dev swig git file wget unzip tar bzip2 patch automake make libtool perl nasm yasm curl cmake libfreetype6-dev" 
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "add-apt-repository ppa:webupd8team/java -y"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
-#docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections"  
-#docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install openjdk-8-jdk"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install maven"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "oracle-java8-set-default"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture ppc64el"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"'  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"'  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse"'  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse"' 
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"  
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo2-dev:ppc64el libpango1.0-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libfreetype6-dev:ppc64el libasound2-dev:ppc64el libperl-dev:ppc64el libqt4-dev:ppc64el libgtk2.0-dev:ppc64el libusb-dev:ppc64el zlib1g-dev:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el  libgirepository-1.0-1:ppc64el libusb-1.0-0-dev:ppc64el libusb-dev:ppc64el libxcb1-dev:ppc64el libxcb1:ppc64el"  
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install apt-utils software-properties-common pkg-config openjdk-8-jdk maven python python-dev python-numpy gfortran-powerpc64le-linux-gnu gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch swig git file wget unzip tar bzip2 patch automake make libtool perl nasm yasm curl cmake"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "dpkg --add-architecture ppc64el"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"'
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"'
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse"'
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'add-apt-repository "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse"'
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libasound2-dev:ppc64el libusb-dev:ppc64el libusb-1.0-0-dev:ppc64el zlib1g-dev:ppc64el libxcb1-dev:ppc64el"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install libcairo2-dev:ppc64el libpango1.0-dev:ppc64el libglib2.0-dev:ppc64el libatk1.0-dev:ppc64el libperl-dev:ppc64el libqt4-dev:ppc64el libgtk2.0-dev:ppc64el gir1.2-atk-1.0:ppc64el gir1.2-gtk-2.0:ppc64el gir1.2-pango-1.0:ppc64el libgdk-pixbuf2.0-dev:ppc64el gir1.2-gdkpixbuf-2.0:ppc64el gir1.2-freedesktop:ppc64el gir1.2-glib-2.0:ppc64el libgirepository-1.0-1:ppc64el"
 
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
