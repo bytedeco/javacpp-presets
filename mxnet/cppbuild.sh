@@ -32,11 +32,11 @@ case $PLATFORM in
 esac
 
 DLPACK_VERSION=a6e09b58dc00ee0065f5b7879800e646fbb01d1e
-DMLC_VERSION=71bfbd3a946075cea66ca9e19bad86dd33c19b46
-MSHADOW_VERSION=497eb9180b24592b7332e7e08f2c053ec5346524
-PS_VERSION=acdb698fa3bb80929ef83bb37c705f025e119b82
-NNVM_VERSION=bcfbf903429d086f16b19b4d202788de06e45536
-MXNET_VERSION=0.11.0
+DMLC_VERSION=595d02c0e87be8a0846700462b6f45f1b1031e39
+MSHADOW_VERSION=cb5c9872b542220be5b99f3aca0e1ff56e31b028
+PS_VERSION=bdd4c67e9e34dc0b8350ce306b0caa737eb31c83
+NNVM_VERSION=c86afa8f17a44bcd4e6eec41cd49ba87e4f7a635
+MXNET_VERSION=0.12.0
 download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
 download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
 download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz

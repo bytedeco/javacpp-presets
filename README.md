@@ -119,12 +119,12 @@ Each child module in turn relies on its corresponding native libraries being alr
  * OpenBLAS 0.2.20  http://www.openblas.net/
  * FFTW 3.3.6  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
- * LLVM 4.0.0  http://llvm.org/releases/download.html
+ * LLVM 5.0.0  http://llvm.org/releases/download.html
  * Leptonica 1.74.4  http://www.leptonica.org/download.html
  * Tesseract 3.05.01  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.0  https://developer.nvidia.com/cuda-downloads
- * MXnet 0.11.0  https://github.com/dmlc/mxnet
+ * MXnet 0.12.0  https://github.com/dmlc/mxnet
  * TensorFlow 1.3.1  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/

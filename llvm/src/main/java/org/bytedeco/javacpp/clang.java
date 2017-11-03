@@ -234,7 +234,7 @@ public static native void clang_disposeStringSet(CXStringSet set);
 |*                                                                            *|
 |*===----------------------------------------------------------------------===*|
 |*                                                                            *|
-|* This header provides a public inferface to use CompilationDatabase without *|
+|* This header provides a public interface to use CompilationDatabase without *|
 |* the full Clang C++ API.                                                    *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
@@ -610,7 +610,7 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
 |*                                                                            *|
 |*===----------------------------------------------------------------------===*|
 |*                                                                            *|
-|* This header provides a public inferface to a Clang library for extracting  *|
+|* This header provides a public interface to a Clang library for extracting  *|
 |* high-level symbol information from source files without exposing the full  *|
 |* Clang C++ API.                                                             *|
 |*                                                                            *|
@@ -635,7 +635,7 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
  * compatible, thus CINDEX_VERSION_MAJOR is expected to remain stable.
  */
 public static final int CINDEX_VERSION_MAJOR = 0;
-public static final int CINDEX_VERSION_MINOR = 37;
+public static final int CINDEX_VERSION_MINOR = 43;
 
 // #define CINDEX_VERSION_ENCODE(major, minor) (
 //       ((major) * 10000)
@@ -684,6 +684,17 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
     public CXIndex() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIndex(Pointer p) { super(p); }
+}
+
+/**
+ * \brief An opaque type representing target information for a given translation
+ * unit.
+ */
+@Name("CXTargetInfoImpl") @Opaque public static class CXTargetInfo extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXTargetInfo() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CXTargetInfo(Pointer p) { super(p); }
 }
 
 /**
@@ -807,7 +818,60 @@ public static class CXVersion extends Pointer {
    */
   public native int Subminor(); public native CXVersion Subminor(int Subminor);
 }
-  
+
+/**
+ * \brief Describes the exception specification of a cursor.
+ *
+ * A negative value indicates that the cursor is not a function declaration.
+ */
+/** enum CXCursor_ExceptionSpecificationKind */
+public static final int
+
+  /**
+   * \brief The cursor has no exception specification.
+   */
+  CXCursor_ExceptionSpecificationKind_None = 0,
+
+  /**
+   * \brief The cursor has exception specification throw()
+   */
+  CXCursor_ExceptionSpecificationKind_DynamicNone = 1,
+
+  /**
+   * \brief The cursor has exception specification throw(T1, T2)
+   */
+  CXCursor_ExceptionSpecificationKind_Dynamic = 2,
+
+  /**
+   * \brief The cursor has exception specification throw(...).
+   */
+  CXCursor_ExceptionSpecificationKind_MSAny = 3,
+
+  /**
+   * \brief The cursor has exception specification basic noexcept.
+   */
+  CXCursor_ExceptionSpecificationKind_BasicNoexcept = 4,
+
+  /**
+   * \brief The cursor has exception specification computed noexcept.
+   */
+  CXCursor_ExceptionSpecificationKind_ComputedNoexcept = 5,
+
+  /**
+   * \brief The exception specification has not yet been evaluated.
+   */
+  CXCursor_ExceptionSpecificationKind_Unevaluated = 6,
+
+  /**
+   * \brief The exception specification has not yet been instantiated.
+   */
+  CXCursor_ExceptionSpecificationKind_Uninstantiated = 7,
+
+  /**
+   * \brief The exception specification has not been parsed yet.
+   */
+  CXCursor_ExceptionSpecificationKind_Unparsed = 8;
+
 /**
  * \brief Provides a shared context for creating translation units.
  *
@@ -1177,8 +1241,8 @@ public static native void clang_getExpansionLocation(@ByVal CXSourceLocation loc
                                                @Cast("unsigned*") int[] offset);
 
 /**
- * \brief Retrieve the file, line, column, and offset represented by
- * the given source location, as specified in a # line directive.
+ * \brief Retrieve the file, line and column represented by the given source
+ * location, as specified in a # line directive.
  *
  * Example: given the following source code in a file somefile.c
  *
@@ -2049,7 +2113,12 @@ public static final int
    * purposes of an IDE, this is undesirable behavior and as much information
    * as possible should be reported. Use this flag to enable this behavior.
    */
-  CXTranslationUnit_KeepGoing =  0x200;
+  CXTranslationUnit_KeepGoing =  0x200,
+
+  /**
+   * \brief Sets the preprocessor in a mode for parsing a single file only.
+   */
+  CXTranslationUnit_SingleFileParse =  0x400;
 
 /**
  * \brief Returns the set of flags that is suitable for parsing a translation
@@ -2354,6 +2423,15 @@ public static native int clang_saveTranslationUnit(CXTranslationUnit TU,
                                              @Cast("unsigned") int options);
 
 /**
+ * \brief Suspend a translation unit in order to free memory associated with it.
+ *
+ * A suspended translation unit uses significantly less memory but on the other
+ * side does not support any other calls than \c clang_reparseTranslationUnit
+ * to resume it or \c clang_disposeTranslationUnit to dispose it completely.
+ */
+public static native @Cast("unsigned") int clang_suspendTranslationUnit(CXTranslationUnit arg0);
+
+/**
  * \brief Destroy the specified CXTranslationUnit object.
  */
 public static native void clang_disposeTranslationUnit(CXTranslationUnit arg0);
@@ -2517,6 +2595,32 @@ public static class CXTUResourceUsage extends Pointer {
 public static native @ByVal CXTUResourceUsage clang_getCXTUResourceUsage(CXTranslationUnit TU);
 
 public static native void clang_disposeCXTUResourceUsage(@ByVal CXTUResourceUsage usage);
+
+/**
+ * \brief Get target information for this translation unit.
+ *
+ * The CXTargetInfo object cannot outlive the CXTranslationUnit object.
+ */
+public static native CXTargetInfo clang_getTranslationUnitTargetInfo(CXTranslationUnit CTUnit);
+
+/**
+ * \brief Destroy the CXTargetInfo object.
+ */
+public static native void clang_TargetInfo_dispose(CXTargetInfo Info);
+
+/**
+ * \brief Get the normalized target triple as a string.
+ *
+ * Returns the empty string in case of any error.
+ */
+public static native @ByVal CXString clang_TargetInfo_getTriple(CXTargetInfo Info);
+
+/**
+ * \brief Get the pointer width of the target in bits.
+ *
+ * Returns -1 in case of error.
+ */
+public static native int clang_TargetInfo_getPointerWidth(CXTargetInfo Info);
 
 /**
  * \}
@@ -4030,8 +4134,9 @@ public static final int
   CXType_ObjCClass = 28,
   CXType_ObjCSel = 29,
   CXType_Float128 = 30,
+  CXType_Half = 31,
   CXType_FirstBuiltin =  CXType_Void,
-  CXType_LastBuiltin  =  CXType_ObjCSel,
+  CXType_LastBuiltin  =  CXType_Half,
 
   CXType_Complex = 100,
   CXType_Pointer = 101,
@@ -4058,7 +4163,52 @@ public static final int
    *
    * E.g., struct S, or via a qualified name, e.g., N::M::type, or both.
    */
-  CXType_Elaborated = 119;
+  CXType_Elaborated = 119,
+
+  /* OpenCL PipeType. */
+  CXType_Pipe = 120,
+
+  /* OpenCL builtin types. */
+  CXType_OCLImage1dRO = 121,
+  CXType_OCLImage1dArrayRO = 122,
+  CXType_OCLImage1dBufferRO = 123,
+  CXType_OCLImage2dRO = 124,
+  CXType_OCLImage2dArrayRO = 125,
+  CXType_OCLImage2dDepthRO = 126,
+  CXType_OCLImage2dArrayDepthRO = 127,
+  CXType_OCLImage2dMSAARO = 128,
+  CXType_OCLImage2dArrayMSAARO = 129,
+  CXType_OCLImage2dMSAADepthRO = 130,
+  CXType_OCLImage2dArrayMSAADepthRO = 131,
+  CXType_OCLImage3dRO = 132,
+  CXType_OCLImage1dWO = 133,
+  CXType_OCLImage1dArrayWO = 134,
+  CXType_OCLImage1dBufferWO = 135,
+  CXType_OCLImage2dWO = 136,
+  CXType_OCLImage2dArrayWO = 137,
+  CXType_OCLImage2dDepthWO = 138,
+  CXType_OCLImage2dArrayDepthWO = 139,
+  CXType_OCLImage2dMSAAWO = 140,
+  CXType_OCLImage2dArrayMSAAWO = 141,
+  CXType_OCLImage2dMSAADepthWO = 142,
+  CXType_OCLImage2dArrayMSAADepthWO = 143,
+  CXType_OCLImage3dWO = 144,
+  CXType_OCLImage1dRW = 145,
+  CXType_OCLImage1dArrayRW = 146,
+  CXType_OCLImage1dBufferRW = 147,
+  CXType_OCLImage2dRW = 148,
+  CXType_OCLImage2dArrayRW = 149,
+  CXType_OCLImage2dDepthRW = 150,
+  CXType_OCLImage2dArrayDepthRW = 151,
+  CXType_OCLImage2dMSAARW = 152,
+  CXType_OCLImage2dArrayMSAARW = 153,
+  CXType_OCLImage2dMSAADepthRW = 154,
+  CXType_OCLImage2dArrayMSAADepthRW = 155,
+  CXType_OCLImage3dRW = 156,
+  CXType_OCLSampler = 157,
+  CXType_OCLEvent = 158,
+  CXType_OCLQueue = 159,
+  CXType_OCLReserveID = 160;
 
 /**
  * \brief Describes the calling convention of a function type
@@ -4075,7 +4225,9 @@ public static final int
   CXCallingConv_AAPCS_VFP = 7,
   CXCallingConv_X86RegCall = 8,
   CXCallingConv_IntelOclBicc = 9,
-  CXCallingConv_X86_64Win64 = 10,
+  CXCallingConv_Win64 = 10,
+  /* Alias for compatibility with older versions of API. */
+  CXCallingConv_X86_64Win64 =  CXCallingConv_Win64,
   CXCallingConv_X86_64SysV = 11,
   CXCallingConv_X86VectorCall = 12,
   CXCallingConv_Swift = 13,
@@ -4358,6 +4510,16 @@ public static native @Cast("unsigned") int clang_isVolatileQualifiedType(@ByVal 
 public static native @Cast("unsigned") int clang_isRestrictQualifiedType(@ByVal CXType T);
 
 /**
+ * \brief Returns the address space of the given type.
+ */
+public static native @Cast("unsigned") int clang_getAddressSpace(@ByVal CXType T);
+
+/**
+ * \brief Returns the typedef name of the given type.
+ */
+public static native @ByVal CXString clang_getTypedefName(@ByVal CXType CT);
+
+/**
  * \brief For pointer types, returns the type of the pointee.
  */
 public static native @ByVal CXType clang_getPointeeType(@ByVal CXType T);
@@ -4397,6 +4559,13 @@ public static native @Cast("CXCallingConv") int clang_getFunctionTypeCallingConv
 public static native @ByVal CXType clang_getResultType(@ByVal CXType T);
 
 /**
+ * \brief Retrieve the exception specification type associated with a function type.
+ *
+ * If a non-function type is passed in, an error code of -1 is returned.
+ */
+public static native int clang_getExceptionSpecificationType(@ByVal CXType T);
+
+/**
  * \brief Retrieve the number of non-variadic parameters associated with a
  * function type.
  *
@@ -4423,6 +4592,13 @@ public static native @Cast("unsigned") int clang_isFunctionTypeVariadic(@ByVal C
  * This only returns a valid type if the cursor refers to a function or method.
  */
 public static native @ByVal CXType clang_getCursorResultType(@ByVal CXCursor C);
+
+/**
+ * \brief Retrieve the exception specification type associated with a given cursor.
+ *
+ * This only returns a valid result if the cursor refers to a function or method.
+ */
+public static native int clang_getCursorExceptionSpecificationType(@ByVal CXCursor C);
 
 /**
  * \brief Return 1 if the CXType is a POD (plain old data) type, and 0
@@ -4466,6 +4642,16 @@ public static native long clang_getArraySize(@ByVal CXType T);
  * If a non-elaborated type is passed in, an invalid type is returned.
  */
 public static native @ByVal CXType clang_Type_getNamedType(@ByVal CXType T);
+
+/**
+ * \brief Determine if a typedef is 'transparent' tag.
+ *
+ * A typedef is considered 'transparent' if it shares a name and spelling
+ * location with its underlying tag type, as is the case with the NS_ENUM macro.
+ *
+ * @return non-zero if transparent and zero otherwise.
+ */
+public static native @Cast("unsigned") int clang_Type_isTransparentTagTypedef(@ByVal CXType T);
 
 /**
  * \brief List the possible error codes for \c clang_Type_getSizeOf,
@@ -4994,8 +5180,8 @@ public static native int clang_Cursor_getObjCSelectorIndex(@ByVal CXCursor arg0)
 public static native int clang_Cursor_isDynamicCall(@ByVal CXCursor C);
 
 /**
- * \brief Given a cursor pointing to an Objective-C message, returns the CXType
- * of the receiver.
+ * \brief Given a cursor pointing to an Objective-C message or property
+ * reference, or C++ method call, returns the CXType of the receiver.
  */
 public static native @ByVal CXType clang_Cursor_getReceiverType(@ByVal CXCursor C);
 
@@ -5053,8 +5239,8 @@ public static native @Cast("unsigned") int clang_Cursor_getObjCDeclQualifiers(@B
 
 /**
  * \brief Given a cursor that represents an Objective-C method or property
- * declaration, return non-zero if the declaration was affected by "\optional".
- * Returns zero if the cursor is not such a declaration or it is "\required".
+ * declaration, return non-zero if the declaration was affected by "\\optional".
+ * Returns zero if the cursor is not such a declaration or it is "\\required".
  */
 public static native @Cast("unsigned") int clang_Cursor_isObjCOptional(@ByVal CXCursor C);
 
@@ -5062,6 +5248,29 @@ public static native @Cast("unsigned") int clang_Cursor_isObjCOptional(@ByVal CX
  * \brief Returns non-zero if the given cursor is a variadic function or method.
  */
 public static native @Cast("unsigned") int clang_Cursor_isVariadic(@ByVal CXCursor C);
+
+/**
+ * \brief Returns non-zero if the given cursor points to a symbol marked with
+ * external_source_symbol attribute.
+ *
+ * @param language If non-NULL, and the attribute is present, will be set to
+ * the 'language' string from the attribute.
+ *
+ * @param definedIn If non-NULL, and the attribute is present, will be set to
+ * the 'definedIn' string from the attribute.
+ *
+ * @param isGenerated If non-NULL, and the attribute is present, will be set to
+ * non-zero if the 'generated_declaration' is set in the attribute.
+ */
+public static native @Cast("unsigned") int clang_Cursor_isExternalSymbol(@ByVal CXCursor C,
+                                       CXString language, CXString definedIn,
+                                       @Cast("unsigned*") IntPointer isGenerated);
+public static native @Cast("unsigned") int clang_Cursor_isExternalSymbol(@ByVal CXCursor C,
+                                       CXString language, CXString definedIn,
+                                       @Cast("unsigned*") IntBuffer isGenerated);
+public static native @Cast("unsigned") int clang_Cursor_isExternalSymbol(@ByVal CXCursor C,
+                                       CXString language, CXString definedIn,
+                                       @Cast("unsigned*") int[] isGenerated);
 
 /**
  * \brief Given a cursor that represents a declaration, return the associated
@@ -5249,6 +5458,11 @@ public static native @Cast("unsigned") int clang_CXXMethod_isStatic(@ByVal CXCur
  * one of the base classes.
  */
 public static native @Cast("unsigned") int clang_CXXMethod_isVirtual(@ByVal CXCursor C);
+
+/**
+ * \brief Determine if an enum declaration refers to a scoped enum.
+ */
+public static native @Cast("unsigned") int clang_EnumDecl_isScoped(@ByVal CXCursor C);
 
 /**
  * \brief Determine if a C++ member function or member function template is
@@ -5802,7 +6016,7 @@ public static final int
    */
   CXCompletionChunk_HorizontalSpace = 19,
   /**
-   * Vertical space ('\n'), after which it is generally a good idea to
+   * Vertical space ('\\n'), after which it is generally a good idea to
    * perform indentation.
    */
   CXCompletionChunk_VerticalSpace = 20;
@@ -6791,7 +7005,8 @@ public static final int
   CXIdxEntityLang_None = 0,
   CXIdxEntityLang_C    = 1,
   CXIdxEntityLang_ObjC = 2,
-  CXIdxEntityLang_CXX  = 3;
+  CXIdxEntityLang_CXX  = 3,
+  CXIdxEntityLang_Swift  = 4;
 
 /**
  * \brief Extra C++ template information for an entity. This can apply to:

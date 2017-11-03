@@ -123,6 +123,18 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
 }
 
 /**
+ * Represents an LLVM Metadata.
+ *
+ * This models llvm::Metadata.
+ */
+@Name("LLVMOpaqueMetadata") @Opaque public static class LLVMMetadataRef extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LLVMMetadataRef() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LLVMMetadataRef(Pointer p) { super(p); }
+}
+
+/**
  * Represents an LLVM basic block builder.
  *
  * This models llvm::IRBuilder.
@@ -132,6 +144,18 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
     public LLVMBuilderRef() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMBuilderRef(Pointer p) { super(p); }
+}
+
+/**
+ * Represents an LLVM debug info builder.
+ *
+ * This models llvm::DIBuilder.
+ */
+@Opaque public static class LLVMOpaqueDIBuilder extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LLVMOpaqueDIBuilder() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LLVMOpaqueDIBuilder(Pointer p) { super(p); }
 }
 
 /**
@@ -223,8 +247,8 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
 // #ifndef LLVM_C_SUPPORT_H
 // #define LLVM_C_SUPPORT_H
 
-// #include "llvm/Support/DataTypes.h"
 // #include "llvm-c/Types.h"
+// #include "llvm/Support/DataTypes.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -1480,6 +1504,21 @@ public static native @Cast("LLVMBool") int LLVMIsOpaqueStruct(LLVMTypeRef Struct
 public static native LLVMTypeRef LLVMGetElementType(LLVMTypeRef Ty);
 
 /**
+ * Returns type's subtypes
+ *
+ * @see llvm::Type::subtypes()
+ */
+public static native void LLVMGetSubtypes(LLVMTypeRef Tp, @ByPtrPtr LLVMTypeRef Arr);
+public static native void LLVMGetSubtypes(LLVMTypeRef Tp, @Cast("LLVMTypeRef*") PointerPointer Arr);
+
+/**
+ *  Return the number of types in the derived type.
+ *
+ * @see llvm::Type::getNumContainedTypes()
+ */
+public static native @Cast("unsigned") int LLVMGetNumContainedTypes(LLVMTypeRef Tp);
+
+/**
  * Create a fixed size array type that refers to a specific type.
  *
  * The created type will exist in the context that its element type
@@ -2720,6 +2759,16 @@ public static native LLVMValueRef LLVMMDNodeInContext(LLVMContextRef C, @Cast("L
  */
 public static native LLVMValueRef LLVMMDNode(@ByPtrPtr LLVMValueRef Vals, @Cast("unsigned") int Count);
 public static native LLVMValueRef LLVMMDNode(@Cast("LLVMValueRef*") PointerPointer Vals, @Cast("unsigned") int Count);
+
+/**
+ * Obtain a Metadata as a Value.
+ */
+public static native LLVMValueRef LLVMMetadataAsValue(LLVMContextRef C, LLVMMetadataRef MD);
+
+/**
+ * Obtain a Value as a Metadata.
+ */
+public static native LLVMMetadataRef LLVMValueAsMetadata(LLVMValueRef Val);
 
 /**
  * Obtain the underlying string from a MDString value.
@@ -5429,7 +5478,7 @@ public static native void lto_codegen_set_should_embed_uselists(lto_code_gen_t c
                                       @Cast("lto_bool_t") boolean ShouldEmbedUselists);
 
 /**
- * \}
+ * \} // endgoup LLVMCLTO
  * \defgroup LLVMCTLTO ThinLTO
  * \ingroup LLVMC
  *
@@ -5563,77 +5612,6 @@ public static native @Cast("lto_bool_t") boolean thinlto_codegen_set_pic_model(t
                                                 @Cast("lto_codegen_model") int arg1);
 
 /**
- * \}
- * \defgroup LLVMCTLTO_CACHING ThinLTO Cache Control
- * \ingroup LLVMCTLTO
- *
- * These entry points control the ThinLTO cache. The cache is intended to
- * support incremental build, and thus needs to be persistent accross build.
- * The client enabled the cache by supplying a path to an existing directory.
- * The code generator will use this to store objects files that may be reused
- * during a subsequent build.
- * To avoid filling the disk space, a few knobs are provided:
- *  - The pruning interval limit the frequency at which the garbage collector
- *    will try to scan the cache directory to prune it from expired entries.
- *    Setting to -1 disable the pruning (default).
- *  - The pruning expiration time indicates to the garbage collector how old an
- *    entry needs to be to be removed.
- *  - Finally, the garbage collector can be instructed to prune the cache till
- *    the occupied space goes below a threshold.
- * \{
- */
-
-/**
- * Sets the path to a directory to use as a cache storage for incremental build.
- * Setting this activates caching.
- *
- * @since LTO_API_VERSION=18
- */
-public static native void thinlto_codegen_set_cache_dir(thinlto_code_gen_t cg,
-                                          @Cast("const char*") BytePointer cache_dir);
-public static native void thinlto_codegen_set_cache_dir(thinlto_code_gen_t cg,
-                                          String cache_dir);
-
-/**
- * Sets the cache pruning interval (in seconds). A negative value disable the
- * pruning. An unspecified default value will be applied, and a value of 0 will
- * be ignored.
- *
- * @since LTO_API_VERSION=18
- */
-public static native void thinlto_codegen_set_cache_pruning_interval(thinlto_code_gen_t cg,
-                                                       int interval);
-
-/**
- * Sets the maximum cache size that can be persistent across build, in terms of
- * percentage of the available space on the the disk. Set to 100 to indicate
- * no limit, 50 to indicate that the cache size will not be left over half the
- * available space. A value over 100 will be reduced to 100, a value of 0 will
- * be ignored. An unspecified default value will be applied.
- *
- * The formula looks like:
- *  AvailableSpace = FreeSpace + ExistingCacheSize
- *  NewCacheSize = AvailableSpace * P/100
- *
- * @since LTO_API_VERSION=18
- */
-public static native void thinlto_codegen_set_final_cache_size_relative_to_available_space(
-    thinlto_code_gen_t cg, @Cast("unsigned") int percentage);
-
-/**
- * Sets the expiration (in seconds) for an entry in the cache. An unspecified
- * default value will be applied. A value of 0 will be ignored.
- *
- * @since LTO_API_VERSION=18
- */
-public static native void thinlto_codegen_set_cache_entry_expiration(thinlto_code_gen_t cg,
-                                                       @Cast("unsigned") int expiration);
-
-/**
- * \}
- */
-
-/**
  * Sets the path to a directory to use as a storage for temporary bitcode files.
  * The intention is to make the bitcode files available for debugging at various
  * stage of the pipeline.
@@ -5730,12 +5708,79 @@ public static native void thinlto_codegen_add_cross_referenced_symbol(thinlto_co
                                                         String name,
                                                         int length);
 
-// #ifdef __cplusplus
-// #endif
+/**
+ * \} // endgoup LLVMCTLTO
+ * \defgroup LLVMCTLTO_CACHING ThinLTO Cache Control
+ * \ingroup LLVMCTLTO
+ *
+ * These entry points control the ThinLTO cache. The cache is intended to
+ * support incremental build, and thus needs to be persistent accross build.
+ * The client enabled the cache by supplying a path to an existing directory.
+ * The code generator will use this to store objects files that may be reused
+ * during a subsequent build.
+ * To avoid filling the disk space, a few knobs are provided:
+ *  - The pruning interval limit the frequency at which the garbage collector
+ *    will try to scan the cache directory to prune it from expired entries.
+ *    Setting to -1 disable the pruning (default).
+ *  - The pruning expiration time indicates to the garbage collector how old an
+ *    entry needs to be to be removed.
+ *  - Finally, the garbage collector can be instructed to prune the cache till
+ *    the occupied space goes below a threshold.
+ * \{
+ */
 
 /**
- * \}
+ * Sets the path to a directory to use as a cache storage for incremental build.
+ * Setting this activates caching.
+ *
+ * @since LTO_API_VERSION=18
  */
+public static native void thinlto_codegen_set_cache_dir(thinlto_code_gen_t cg,
+                                          @Cast("const char*") BytePointer cache_dir);
+public static native void thinlto_codegen_set_cache_dir(thinlto_code_gen_t cg,
+                                          String cache_dir);
+
+/**
+ * Sets the cache pruning interval (in seconds). A negative value disable the
+ * pruning. An unspecified default value will be applied, and a value of 0 will
+ * be ignored.
+ *
+ * @since LTO_API_VERSION=18
+ */
+public static native void thinlto_codegen_set_cache_pruning_interval(thinlto_code_gen_t cg,
+                                                       int interval);
+
+/**
+ * Sets the maximum cache size that can be persistent across build, in terms of
+ * percentage of the available space on the the disk. Set to 100 to indicate
+ * no limit, 50 to indicate that the cache size will not be left over half the
+ * available space. A value over 100 will be reduced to 100, a value of 0 will
+ * be ignored. An unspecified default value will be applied.
+ *
+ * The formula looks like:
+ *  AvailableSpace = FreeSpace + ExistingCacheSize
+ *  NewCacheSize = AvailableSpace * P/100
+ *
+ * @since LTO_API_VERSION=18
+ */
+public static native void thinlto_codegen_set_final_cache_size_relative_to_available_space(
+    thinlto_code_gen_t cg, @Cast("unsigned") int percentage);
+
+/**
+ * Sets the expiration (in seconds) for an entry in the cache. An unspecified
+ * default value will be applied. A value of 0 will be ignored.
+ *
+ * @since LTO_API_VERSION=18
+ */
+public static native void thinlto_codegen_set_cache_entry_expiration(thinlto_code_gen_t cg,
+                                                       @Cast("unsigned") int expiration);
+
+/**
+ * \} // endgroup LLVMCTLTO_CACHING
+ */
+
+// #ifdef __cplusplus
+// #endif
 
 // #endif /* LLVM_C_LTO_H */
 
@@ -6141,8 +6186,8 @@ public static native @Cast("unsigned long long") long LLVMOffsetOfElement(LLVMTa
 // #ifndef LLVM_C_TARGETMACHINE_H
 // #define LLVM_C_TARGETMACHINE_H
 
-// #include "llvm-c/Types.h"
 // #include "llvm-c/Target.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -6334,9 +6379,9 @@ public static native void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPass
 // #ifndef LLVM_C_EXECUTIONENGINE_H
 // #define LLVM_C_EXECUTIONENGINE_H
 
-// #include "llvm-c/Types.h"
 // #include "llvm-c/Target.h"
 // #include "llvm-c/TargetMachine.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -6892,6 +6937,9 @@ public static native void LLVMAddAlignmentFromAssumptionsPass(LLVMPassManagerRef
 /** See llvm::createCFGSimplificationPass function. */
 public static native void LLVMAddCFGSimplificationPass(LLVMPassManagerRef PM);
 
+/** See llvm::createLateCFGSimplificationPass function. */
+public static native void LLVMAddLateCFGSimplificationPass(LLVMPassManagerRef PM);
+
 /** See llvm::createDeadStoreEliminationPass function. */
 public static native void LLVMAddDeadStoreEliminationPass(LLVMPassManagerRef PM);
 
@@ -7047,7 +7095,7 @@ public static native void LLVMAddBasicAliasAnalysisPass(LLVMPassManagerRef PM);
  * \{
  */
 
-/** See llvm::createBBVectorizePass function. */
+/** DEPRECATED - Use LLVMAddSLPVectorizePass */
 public static native void LLVMAddBBVectorizePass(LLVMPassManagerRef PM);
 
 /** See llvm::createLoopVectorizePass function. */
