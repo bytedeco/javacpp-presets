@@ -26,7 +26,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -y install > /dev/null"
   fi
-  
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
+
   if [ "$PROJ" == "flycapture" ]; then
     if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
@@ -176,7 +177,6 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
         kill $CHILDPID
-        sudo cp /usr/local/cuda/lib/* /usr/local/lib
 
         if [[ $(find $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found cudnn in cache and size seems ok" 
@@ -188,6 +188,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
+        sudo cp /usr/local/cuda/lib/* /usr/local/lib/
       fi
 
       if [ "$PROJ" == "tensorflow" ]; then
