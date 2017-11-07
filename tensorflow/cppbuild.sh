@@ -74,6 +74,9 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-nocuda.patch
         ;;
     macosx-*)
+        # https://github.com/tensorflow/tensorflow/issues/14174
+        sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
+
         export TF_NEED_CUDA=1
         export BUILDFLAGS="--config=cuda --config=opt --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
         export CUDA_HOME=/usr/local/cuda
