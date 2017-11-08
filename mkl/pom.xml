@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>mkl</artifactId>
-  <version>2017.3-${project.parent.version}</version>
+  <version>2018.0-${project.parent.version}</version>
   <name>JavaCPP Presets for MKL</name>
 
   <properties>

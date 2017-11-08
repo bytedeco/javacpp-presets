@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL 2017.3  https://software.intel.com/intel-mkl
+ * MKL 2018.0  https://software.intel.com/intel-mkl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mkl</groupId>
     <artifactId>mkl</artifactId>
-    <version>1.3</version>
+    <version>1.3.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>DGEMMExample</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2017.3-1.3</version>
+            <version>2018.0-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

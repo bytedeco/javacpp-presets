@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-FFTW_VERSION=3.3.6-pl2
+FFTW_VERSION=3.3.7
 download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -28,7 +28,7 @@ case $PLATFORM in
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
+        patch -Np1 < ../../../fftw-android.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install-strip
@@ -46,7 +46,7 @@ case $PLATFORM in
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
+        patch -Np1 < ../../../fftw-android.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install-strip
@@ -97,7 +97,7 @@ case $PLATFORM in
         fi
         ;;
     macosx-*)
-        patch -Np1 < ../../../fftw-$FFTW_VERSION-macosx.patch
+        patch -Np1 < ../../../fftw-macosx.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j $MAKEJ
         make install-strip

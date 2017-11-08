@@ -21,7 +21,7 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files (x86)/IntelSWTools/parallel_studio_xe_2017/compilers_and_libraries_2017/windows/redist/" ]]; then
+        if [[ ! -d "/C/Program Files (x86)/IntelSWTools/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
