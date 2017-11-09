@@ -324,7 +324,7 @@ matrix:
         script: ./ci/install-ppc.sh
 
       - os: osx
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=macosx-x86_64
+        env: PROJ=opencv,flandmark,openblas,hdf5 OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -360,6 +360,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
+        env: PROJ=chilitags OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
         env: PROJ=mkl OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -380,10 +385,22 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
+        osx_image: xcode8.3
+        env: PROJ=caffe OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
         env: PROJ=cuda OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
+        osx_image: xcode8.3
+        env: PROJ=mxnet OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
         env: PROJ=tensorflow OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
