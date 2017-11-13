@@ -93,9 +93,8 @@ fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update > /dev/null
-   brew install gcc5 swig libtool libusb nasm yasm xz sdl
-   brew link --overwrite gcc5
-   ln -s /usr/local/opt/gcc\@5 /usr/local/opt/gcc5
+   brew install gcc swig libtool libusb nasm yasm xz sdl
+   brew link --overwrite gcc
 fi
 
 if [[ "$OS" =~ android ]]; then
