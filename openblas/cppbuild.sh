@@ -99,7 +99,7 @@ case $PLATFORM in
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/opt/gcc?/lib/gcc/?/libquadmath.a"
+        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
         export TARGET=HASWELL
         export NO_AVX2=1
         ;;
