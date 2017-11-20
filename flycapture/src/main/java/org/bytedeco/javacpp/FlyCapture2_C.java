@@ -162,7 +162,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	/*@{*/
 
 	/** The error types returned by functions. */
-	/** enum fc2Error */
+	/** enum _fc2Error */
 	public static final int
 		/** Undefined */
 		FC2_ERROR_UNDEFINED = -1,
@@ -255,7 +255,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_ERROR_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** The type of bus callback to register a callback function for. */
-	/** enum fc2BusCallbackType */
+	/** enum _fc2BusCallbackType */
 	public static final int
 		/** Register for all bus events. */
 		FC2_BUS_RESET = 0,
@@ -275,7 +275,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	 * necessary to explicitly start the image grabbing process before
 	 * specifying an image grabbing mode.
 	 */
-	/** enum fc2GrabMode */
+	/** enum _fc2GrabMode */
 	public static final int
 		/**
 		 * Grabs the newest image in the user buffer each time the
@@ -309,7 +309,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_GRAB_MODE_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Timeout options for grabbing images. */
-	/** enum fc2GrabTimeout */
+	/** enum _fc2GrabTimeout */
 	public static final int
 		/** Non-blocking wait. */
 		FC2_TIMEOUT_NONE = 0,
@@ -320,7 +320,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_GRAB_TIMEOUT_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Bandwidth allocation options for 1394 devices. */
-	/** enum fc2BandwidthAllocation */
+	/** enum _fc2BandwidthAllocation */
 	public static final int
 		/** Do not allocate bandwidth. */
 		FC2_BANDWIDTH_ALLOCATION_OFF = 0,
@@ -336,7 +336,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_BANDWIDTH_ALLOCATION_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Interfaces that a camera may use to communicate with a host. */
-	/** enum fc2InterfaceType */
+	/** enum _fc2InterfaceType */
 	public static final int
 		/** IEEE-1394 (Includes 1394a and 1394b). */
 		FC2_INTERFACE_IEEE1394 = 0,
@@ -354,7 +354,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	 * Camera properties. Not all properties may be supported, depending
 	 * on the camera model.
 	 */
-	/** enum fc2PropertyType */
+	/** enum _fc2PropertyType */
 	public static final int
 		FC2_BRIGHTNESS = 0,
 		FC2_AUTO_EXPOSURE = 1,
@@ -378,7 +378,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_PROPERTY_TYPE_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Frame rates in frames per second. */
-	/** enum fc2FrameRate */
+	/** enum _fc2FrameRate */
 	public static final int
 		/** 1.875 fps. */
 		FC2_FRAMERATE_1_875 = 0,
@@ -403,7 +403,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_FRAMERATE_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** DCAM video modes. */
-	/** enum fc2VideoMode */
+	/** enum _fc2VideoMode */
 	public static final int
 		/** 160x120 YUV444. */
 		FC2_VIDEOMODE_160x120YUV444 = 0,
@@ -458,7 +458,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_VIDEOMODE_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Camera modes for DCAM formats as well as Format7. */
-	/** enum fc2Mode */
+	/** enum _fc2Mode */
 	public static final int
 		FC2_MODE_0 = 0,
 		FC2_MODE_1 = 1,
@@ -497,7 +497,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_MODE_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Pixel formats available for Format7 modes. */
-	/** enum fc2PixelFormat */
+	/** enum _fc2PixelFormat */
 	public static final int
 		/** 8 bits of mono information. */
 		FC2_PIXEL_FORMAT_MONO8			=  0x80000000,
@@ -545,7 +545,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_UNSPECIFIED_PIXEL_FORMAT	= 0;
 
 	/** Bus speeds. */
-	/** enum fc2BusSpeed */
+	/** enum _fc2BusSpeed */
 	public static final int
 		/** 100Mbits/sec. */
 		FC2_BUSSPEED_S100 = 0,
@@ -579,7 +579,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_BUSSPEED_SPEED_UNKNOWN = -1,
 		FC2_BUSSPEED_FORCE_32BITS =  FULL_32BIT_VALUE;
 
-	/** enum fc2PCIeBusSpeed */
+	/** enum _fc2PCIeBusSpeed */
 	public static final int
 		FC2_PCIE_BUSSPEED_2_5 = 0, /** 2.5 Gb/s */
 		FC2_PCIE_BUSSPEED_5_0 = 1, /** 5.0 Gb/s */
@@ -587,7 +587,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_PCIE_BUSSPEED_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Types of low level drivers that FlyCapture uses. */
-	/** enum fc2DriverType */
+	/** enum _fc2DriverType */
 	public static final int
 		/** PGRCam.sys. */
 		FC2_DRIVER_1394_CAM = 0,
@@ -622,7 +622,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	 * article at http://www.ptgrey.com/support/kb/index.asp?a=4&q=33 for
 	 * complete details for each algorithm.
 	 */
-	/** enum fc2ColorProcessingAlgorithm */
+	/** enum _fc2ColorProcessingAlgorithm */
 	public static final int
 		/** Default method. */
 		FC2_DEFAULT = 0,
@@ -648,7 +648,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_COLOR_PROCESSING_ALGORITHM_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Bayer tile formats. */
-	/** enum fc2BayerTileFormat */
+	/** enum _fc2BayerTileFormat */
 	public static final int
 		/** No bayer tile format. */
 		FC2_BT_NONE = 0,
@@ -663,7 +663,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_BT_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** File formats to be used for saving images to disk. */
-	/** enum fc2ImageFileFormat */
+	/** enum _fc2ImageFileFormat */
 	public static final int
 		/** Determine file format from file extension. */
 		FC2_FROM_FILE_EXT = -1,
@@ -696,7 +696,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	/*@{*/
 
 	/** Possible properties that can be queried from the camera. */
-	/** enum fc2GigEPropertyType */
+	/** enum _fc2GigEPropertyType */
 	public static final int
 		FC2_HEARTBEAT = 0,
 		FC2_HEARTBEAT_TIMEOUT = 1,
@@ -708,7 +708,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	/**
 	 * Channels that allow statistics to be calculated.
 	 */
-	/** enum fc2StatisticsChannel */
+	/** enum _fc2StatisticsChannel */
 	public static final int
 		FC2_STATISTICS_GREY = 0,
 		FC2_STATISTICS_RED = 1,
@@ -720,7 +720,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_STATISTICS_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Possible operating systems. */
-	/** enum fc2OSType */
+	/** enum _fc2OSType */
 	public static final int
 		/** All Windows 32-bit variants. */
 		FC2_WINDOWS_X86 = 0,
@@ -737,7 +737,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		FC2_OSTYPE_FORCE_32BITS =  FULL_32BIT_VALUE;
 
 	/** Possible byte orders. */
-	/** enum fc2ByteOrder */
+	/** enum _fc2ByteOrder */
 	public static final int
 		FC2_BYTE_ORDER_LITTLE_ENDIAN = 0,
 		FC2_BYTE_ORDER_BIG_ENDIAN = 1,
@@ -746,7 +746,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	/**
 	 * Possible states of a port on a node.
 	 */
-	/** enum fc2PortType */
+	/** enum _fc2PortType */
 	public static final int
 		NOT_CONNECTED = 1,
 		CONNECTED_TO_PARENT = 2,
@@ -755,7 +755,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	/**
 	 * Type of node.
 	 */
-	/** enum fc2NodeType */
+	/** enum _fc2NodeType */
 	public static final int
 		COMPUTER = 0,
 		BUS = 1,
@@ -2032,7 +2032,7 @@ public static final int MAX_STRING_LENGTH =   512;
 
 	}
 
-	/** enum fc2TIFFCompressionMethod */
+	/** enum _fc2TIFFCompressionMethod */
 	public static final int
 		/** Save without any compression. */
 		FC2_TIFF_NONE = 1,
@@ -5895,7 +5895,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	// Enumerations
 	//=============================================================================
 
-	/** enum syncError */
+	/** enum _syncError */
 	public static final int
 		SYNC_ERROR_OK = 0,
 		SYNC_ERROR_FAILED = 1,
@@ -5904,7 +5904,7 @@ public static final int MAX_STRING_LENGTH =   512;
 		SYNC_ERROR_CONTEXT_NOT_INITIALIZED = 4,
 		SYNC_ERROR_UNKNOWN_ERROR = 5;
 
-	/** enum syncMessage */
+	/** enum _syncMessage */
 	public static final int
 		SYNC_MESSAGE_OK = 0,
 		SYNC_MESSAGE_FAILED = 1,

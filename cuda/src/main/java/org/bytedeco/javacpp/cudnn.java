@@ -156,7 +156,7 @@ public static native @Cast("cudnnStatus_t") int cudnnQueryRuntimeError(
 
 // #ifndef __LIBRARY_TYPES_H__
 
-/** enum libraryPropertyType */
+/** enum libraryPropertyType_t */
 public static final int
     MAJOR_VERSION = 0,
     MINOR_VERSION = 1,

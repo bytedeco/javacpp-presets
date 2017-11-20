@@ -4675,7 +4675,7 @@ public static class CvSparseMat extends AbstractCvSparseMat {
 
     public native CvSet heap(); public native CvSparseMat heap(CvSet heap);
     public native Pointer hashtable(int i); public native CvSparseMat hashtable(int i, Pointer hashtable);
-    @MemberGetter public native @Cast("void**") PointerPointer hashtable();
+    public native @Cast("void**") PointerPointer hashtable(); public native CvSparseMat hashtable(PointerPointer hashtable);
     public native int hashsize(); public native CvSparseMat hashsize(int hashsize);
     public native int valoffset(); public native CvSparseMat valoffset(int valoffset);
     public native int idxoffset(); public native CvSparseMat idxoffset(int idxoffset);
@@ -4779,7 +4779,7 @@ public static class CvHistogram extends org.bytedeco.javacpp.helper.opencv_imgpr
     @MemberGetter public native @Cast("float(*)[2]") FloatPointer thresh();
     /** For non-uniform histograms.                  */
     public native FloatPointer thresh2(int i); public native CvHistogram thresh2(int i, FloatPointer thresh2);
-    @MemberGetter public native @Cast("float**") PointerPointer thresh2();
+    public native @Cast("float**") PointerPointer thresh2(); public native CvHistogram thresh2(PointerPointer thresh2);
     /** Embedded matrix header for array histograms. */
     public native @ByRef CvMatND mat(); public native CvHistogram mat(CvMatND mat);
 }
@@ -6327,7 +6327,7 @@ public static class CvPluginFuncInfo extends Pointer {
     }
 
     public native Pointer func_addr(int i); public native CvPluginFuncInfo func_addr(int i, Pointer func_addr);
-    @MemberGetter public native @Cast("void**") PointerPointer func_addr();
+    public native @Cast("void**") PointerPointer func_addr(); public native CvPluginFuncInfo func_addr(PointerPointer func_addr);
     public native Pointer default_func_addr(); public native CvPluginFuncInfo default_func_addr(Pointer default_func_addr);
     @MemberGetter public native @Cast("const char*") BytePointer func_names();
     public native int search_modules(); public native CvPluginFuncInfo search_modules(int search_modules);
@@ -17861,7 +17861,7 @@ The example below illustrates how you can compute a normalized and threshold 3D 
     public native Mat planes(); public native NAryMatIterator planes(Mat planes);
     /** data pointers */
     public native @Cast("uchar*") BytePointer ptrs(int i); public native NAryMatIterator ptrs(int i, BytePointer ptrs);
-    @MemberGetter public native @Cast("uchar**") PointerPointer ptrs();
+    public native @Cast("uchar**") PointerPointer ptrs(); public native NAryMatIterator ptrs(PointerPointer ptrs);
     /** the number of arrays */
     public native int narrays(); public native NAryMatIterator narrays(int narrays);
     /** the number of hyper-planes that the iterator steps through */

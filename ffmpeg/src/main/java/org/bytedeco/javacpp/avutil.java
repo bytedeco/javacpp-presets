@@ -3772,7 +3772,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * extended_data must be used in order to access all channels.
      */
     public native @Cast("uint8_t*") BytePointer extended_data(int i); public native AVFrame extended_data(int i, BytePointer extended_data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer extended_data();
+    public native @Cast("uint8_t**") PointerPointer extended_data(); public native AVFrame extended_data(PointerPointer extended_data);
 
     /**
      * \name Video dimensions
@@ -3933,14 +3933,14 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * the frame. It is freed in av_frame_unref().
      */
     public native AVBufferRef extended_buf(int i); public native AVFrame extended_buf(int i, AVBufferRef extended_buf);
-    @MemberGetter public native @Cast("AVBufferRef**") PointerPointer extended_buf();
+    public native @Cast("AVBufferRef**") PointerPointer extended_buf(); public native AVFrame extended_buf(PointerPointer extended_buf);
     /**
      * Number of elements in extended_buf.
      */
     public native int nb_extended_buf(); public native AVFrame nb_extended_buf(int nb_extended_buf);
 
     public native AVFrameSideData side_data(int i); public native AVFrame side_data(int i, AVFrameSideData side_data);
-    @MemberGetter public native @Cast("AVFrameSideData**") PointerPointer side_data();
+    public native @Cast("AVFrameSideData**") PointerPointer side_data(); public native AVFrame side_data(PointerPointer side_data);
     public native int nb_side_data(); public native AVFrame nb_side_data(int nb_side_data);
 
 /**
@@ -5784,7 +5784,7 @@ public static class AVOptionRanges extends Pointer {
      * }</pre>
      */
     public native AVOptionRange range(int i); public native AVOptionRanges range(int i, AVOptionRange range);
-    @MemberGetter public native @Cast("AVOptionRange**") PointerPointer range();
+    public native @Cast("AVOptionRange**") PointerPointer range(); public native AVOptionRanges range(PointerPointer range);
     /**
      * Number of ranges per component.
      */
