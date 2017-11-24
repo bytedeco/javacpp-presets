@@ -7,12 +7,12 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE="--disable-w32threads --disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf"
-ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
+DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf"
+ENABLE="--enable-w32threads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
-# DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
-# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
+# DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
+# ENABLE="--enable-w32threads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
 ZLIB=zlib-1.2.11
 LAME=lame-3.100
@@ -561,7 +561,7 @@ case $PLATFORM in
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No libraries install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-win32thread --host=i686-w64-mingw32
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
         cd ../x265-$X265
@@ -609,7 +609,7 @@ case $PLATFORM in
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No libraries install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-win32thread --host=x86_64-w64-mingw32
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
         make -j $MAKEJ
         make install
         cd ../x265-$X265
