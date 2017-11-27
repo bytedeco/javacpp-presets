@@ -55,6 +55,7 @@ if [ "$projectName" == "mkl" ]; then
        ./mkl.exe --s --x --f .
        ./setup.exe install --output=mkllog.txt -eula=accept
        sleep 60
+       cat mkllog.txt
        echo Finished mkl 
 fi
 
