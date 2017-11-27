@@ -646,7 +646,6 @@ public static final int WORDS_BIGENDIAN = 1;
 // # endif
 // #else
 // # ifndef WORDS_BIGENDIAN
-/* #  undef WORDS_BIGENDIAN */
 // # endif
 // #endif
 
@@ -1559,58 +1558,100 @@ public static native @Cast("hid_t") int H5T_FORTRAN_S1_g(); public static native
  * These types are for Intel CPU's.  They are little endian with IEEE
  * floating point.
  */
-public static final int H5T_INTEL_I8 =		H5T_STD_I8LE;
-public static final int H5T_INTEL_I16 =		H5T_STD_I16LE;
-public static final int H5T_INTEL_I32 =		H5T_STD_I32LE;
-public static final int H5T_INTEL_I64 =		H5T_STD_I64LE;
-public static final int H5T_INTEL_U8 =		H5T_STD_U8LE;
-public static final int H5T_INTEL_U16 =		H5T_STD_U16LE;
-public static final int H5T_INTEL_U32 =		H5T_STD_U32LE;
-public static final int H5T_INTEL_U64 =		H5T_STD_U64LE;
-public static final int H5T_INTEL_B8 =		H5T_STD_B8LE;
-public static final int H5T_INTEL_B16 =		H5T_STD_B16LE;
-public static final int H5T_INTEL_B32 =		H5T_STD_B32LE;
-public static final int H5T_INTEL_B64 =		H5T_STD_B64LE;
-public static final int H5T_INTEL_F32 =		H5T_IEEE_F32LE;
-public static final int H5T_INTEL_F64 =		H5T_IEEE_F64LE;
+public static native @MemberGetter int H5T_INTEL_I8();
+public static final int H5T_INTEL_I8 = H5T_INTEL_I8();
+public static native @MemberGetter int H5T_INTEL_I16();
+public static final int H5T_INTEL_I16 = H5T_INTEL_I16();
+public static native @MemberGetter int H5T_INTEL_I32();
+public static final int H5T_INTEL_I32 = H5T_INTEL_I32();
+public static native @MemberGetter int H5T_INTEL_I64();
+public static final int H5T_INTEL_I64 = H5T_INTEL_I64();
+public static native @MemberGetter int H5T_INTEL_U8();
+public static final int H5T_INTEL_U8 = H5T_INTEL_U8();
+public static native @MemberGetter int H5T_INTEL_U16();
+public static final int H5T_INTEL_U16 = H5T_INTEL_U16();
+public static native @MemberGetter int H5T_INTEL_U32();
+public static final int H5T_INTEL_U32 = H5T_INTEL_U32();
+public static native @MemberGetter int H5T_INTEL_U64();
+public static final int H5T_INTEL_U64 = H5T_INTEL_U64();
+public static native @MemberGetter int H5T_INTEL_B8();
+public static final int H5T_INTEL_B8 = H5T_INTEL_B8();
+public static native @MemberGetter int H5T_INTEL_B16();
+public static final int H5T_INTEL_B16 = H5T_INTEL_B16();
+public static native @MemberGetter int H5T_INTEL_B32();
+public static final int H5T_INTEL_B32 = H5T_INTEL_B32();
+public static native @MemberGetter int H5T_INTEL_B64();
+public static final int H5T_INTEL_B64 = H5T_INTEL_B64();
+public static native @MemberGetter int H5T_INTEL_F32();
+public static final int H5T_INTEL_F32 = H5T_INTEL_F32();
+public static native @MemberGetter int H5T_INTEL_F64();
+public static final int H5T_INTEL_F64 = H5T_INTEL_F64();
 
 /*
  * These types are for DEC Alpha CPU's.  They are little endian with IEEE
  * floating point.
  */
-public static final int H5T_ALPHA_I8 =		H5T_STD_I8LE;
-public static final int H5T_ALPHA_I16 =		H5T_STD_I16LE;
-public static final int H5T_ALPHA_I32 =		H5T_STD_I32LE;
-public static final int H5T_ALPHA_I64 =		H5T_STD_I64LE;
-public static final int H5T_ALPHA_U8 =		H5T_STD_U8LE;
-public static final int H5T_ALPHA_U16 =		H5T_STD_U16LE;
-public static final int H5T_ALPHA_U32 =		H5T_STD_U32LE;
-public static final int H5T_ALPHA_U64 =		H5T_STD_U64LE;
-public static final int H5T_ALPHA_B8 =		H5T_STD_B8LE;
-public static final int H5T_ALPHA_B16 =		H5T_STD_B16LE;
-public static final int H5T_ALPHA_B32 =		H5T_STD_B32LE;
-public static final int H5T_ALPHA_B64 =		H5T_STD_B64LE;
-public static final int H5T_ALPHA_F32 =		H5T_IEEE_F32LE;
-public static final int H5T_ALPHA_F64 =		H5T_IEEE_F64LE;
+public static native @MemberGetter int H5T_ALPHA_I8();
+public static final int H5T_ALPHA_I8 = H5T_ALPHA_I8();
+public static native @MemberGetter int H5T_ALPHA_I16();
+public static final int H5T_ALPHA_I16 = H5T_ALPHA_I16();
+public static native @MemberGetter int H5T_ALPHA_I32();
+public static final int H5T_ALPHA_I32 = H5T_ALPHA_I32();
+public static native @MemberGetter int H5T_ALPHA_I64();
+public static final int H5T_ALPHA_I64 = H5T_ALPHA_I64();
+public static native @MemberGetter int H5T_ALPHA_U8();
+public static final int H5T_ALPHA_U8 = H5T_ALPHA_U8();
+public static native @MemberGetter int H5T_ALPHA_U16();
+public static final int H5T_ALPHA_U16 = H5T_ALPHA_U16();
+public static native @MemberGetter int H5T_ALPHA_U32();
+public static final int H5T_ALPHA_U32 = H5T_ALPHA_U32();
+public static native @MemberGetter int H5T_ALPHA_U64();
+public static final int H5T_ALPHA_U64 = H5T_ALPHA_U64();
+public static native @MemberGetter int H5T_ALPHA_B8();
+public static final int H5T_ALPHA_B8 = H5T_ALPHA_B8();
+public static native @MemberGetter int H5T_ALPHA_B16();
+public static final int H5T_ALPHA_B16 = H5T_ALPHA_B16();
+public static native @MemberGetter int H5T_ALPHA_B32();
+public static final int H5T_ALPHA_B32 = H5T_ALPHA_B32();
+public static native @MemberGetter int H5T_ALPHA_B64();
+public static final int H5T_ALPHA_B64 = H5T_ALPHA_B64();
+public static native @MemberGetter int H5T_ALPHA_F32();
+public static final int H5T_ALPHA_F32 = H5T_ALPHA_F32();
+public static native @MemberGetter int H5T_ALPHA_F64();
+public static final int H5T_ALPHA_F64 = H5T_ALPHA_F64();
 
 /*
  * These types are for MIPS cpu's commonly used in SGI systems. They are big
  * endian with IEEE floating point.
  */
-public static final int H5T_MIPS_I8 =		H5T_STD_I8BE;
-public static final int H5T_MIPS_I16 =		H5T_STD_I16BE;
-public static final int H5T_MIPS_I32 =		H5T_STD_I32BE;
-public static final int H5T_MIPS_I64 =		H5T_STD_I64BE;
-public static final int H5T_MIPS_U8 =		H5T_STD_U8BE;
-public static final int H5T_MIPS_U16 =		H5T_STD_U16BE;
-public static final int H5T_MIPS_U32 =		H5T_STD_U32BE;
-public static final int H5T_MIPS_U64 =		H5T_STD_U64BE;
-public static final int H5T_MIPS_B8 =		H5T_STD_B8BE;
-public static final int H5T_MIPS_B16 =		H5T_STD_B16BE;
-public static final int H5T_MIPS_B32 =		H5T_STD_B32BE;
-public static final int H5T_MIPS_B64 =		H5T_STD_B64BE;
-public static final int H5T_MIPS_F32 =		H5T_IEEE_F32BE;
-public static final int H5T_MIPS_F64 =		H5T_IEEE_F64BE;
+public static native @MemberGetter int H5T_MIPS_I8();
+public static final int H5T_MIPS_I8 = H5T_MIPS_I8();
+public static native @MemberGetter int H5T_MIPS_I16();
+public static final int H5T_MIPS_I16 = H5T_MIPS_I16();
+public static native @MemberGetter int H5T_MIPS_I32();
+public static final int H5T_MIPS_I32 = H5T_MIPS_I32();
+public static native @MemberGetter int H5T_MIPS_I64();
+public static final int H5T_MIPS_I64 = H5T_MIPS_I64();
+public static native @MemberGetter int H5T_MIPS_U8();
+public static final int H5T_MIPS_U8 = H5T_MIPS_U8();
+public static native @MemberGetter int H5T_MIPS_U16();
+public static final int H5T_MIPS_U16 = H5T_MIPS_U16();
+public static native @MemberGetter int H5T_MIPS_U32();
+public static final int H5T_MIPS_U32 = H5T_MIPS_U32();
+public static native @MemberGetter int H5T_MIPS_U64();
+public static final int H5T_MIPS_U64 = H5T_MIPS_U64();
+public static native @MemberGetter int H5T_MIPS_B8();
+public static final int H5T_MIPS_B8 = H5T_MIPS_B8();
+public static native @MemberGetter int H5T_MIPS_B16();
+public static final int H5T_MIPS_B16 = H5T_MIPS_B16();
+public static native @MemberGetter int H5T_MIPS_B32();
+public static final int H5T_MIPS_B32 = H5T_MIPS_B32();
+public static native @MemberGetter int H5T_MIPS_B64();
+public static final int H5T_MIPS_B64 = H5T_MIPS_B64();
+public static native @MemberGetter int H5T_MIPS_F32();
+public static final int H5T_MIPS_F32 = H5T_MIPS_F32();
+public static native @MemberGetter int H5T_MIPS_F64();
+public static final int H5T_MIPS_F64 = H5T_MIPS_F64();
 
 /*
  * The VAX floating point types (i.e. in VAX byte order)
@@ -9574,9 +9615,6 @@ public static class FL_PacketTable extends PacketTable {
    - BMR- -EIP- 2007/08/01
 */
 // #ifndef H5_CXX_HAVE_OFFSETOF
-// #ifdef HOFFSET
-// #endif
-// #define HOFFSET(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 // #endif
 
 // #endif // __H5Cpp_H

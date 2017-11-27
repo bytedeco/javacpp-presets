@@ -1867,32 +1867,6 @@ public static final int USE_INLINE_ACCESSORS =    1;
 
 // #else
 
-    /*=============================================================*/
-    /*         Slower: use function calls for all accessors        */
-    /*=============================================================*/
-
-// #define  GET_DATA_BIT(pdata, n)               l_getDataBit(pdata, n)
-// #define  SET_DATA_BIT(pdata, n)               l_setDataBit(pdata, n)
-// #define  CLEAR_DATA_BIT(pdata, n)             l_clearDataBit(pdata, n)
-// #define  SET_DATA_BIT_VAL(pdata, n, val)      l_setDataBitVal(pdata, n, val)
-
-// #define  GET_DATA_DIBIT(pdata, n)             l_getDataDibit(pdata, n)
-// #define  SET_DATA_DIBIT(pdata, n, val)        l_setDataDibit(pdata, n, val)
-// #define  CLEAR_DATA_DIBIT(pdata, n)           l_clearDataDibit(pdata, n)
-
-// #define  GET_DATA_QBIT(pdata, n)              l_getDataQbit(pdata, n)
-// #define  SET_DATA_QBIT(pdata, n, val)         l_setDataQbit(pdata, n, val)
-// #define  CLEAR_DATA_QBIT(pdata, n)            l_clearDataQbit(pdata, n)
-
-// #define  GET_DATA_BYTE(pdata, n)              l_getDataByte(pdata, n)
-// #define  SET_DATA_BYTE(pdata, n, val)         l_setDataByte(pdata, n, val)
-
-// #define  GET_DATA_TWO_BYTES(pdata, n)         l_getDataTwoBytes(pdata, n)
-// #define  SET_DATA_TWO_BYTES(pdata, n, val)    l_setDataTwoBytes(pdata, n, val)
-
-// #define  GET_DATA_FOUR_BYTES(pdata, n)         l_getDataFourBytes(pdata, n)
-// #define  SET_DATA_FOUR_BYTES(pdata, n, val)    l_setDataFourBytes(pdata, n, val)
-
 // #endif  /* USE_INLINE_ACCESSORS */
 
 
@@ -3785,7 +3759,7 @@ public static final int PIX_SRC =      (0xc);
 /** use destination pixels */
 public static final int PIX_DST =      (0xa);
 /** invert operation %op   */
-// #define   PIX_NOT(op)  ((op) ^ 0x0f)
+public static native int PIX_NOT(int op);
 /** clear pixels           */
 public static final int PIX_CLR =      (0x0);
 /** set pixels             */
@@ -3797,8 +3771,7 @@ public static final int PIX_PAINT =    (PIX_SRC | PIX_DST);
 public static final int PIX_MASK =     (PIX_SRC & PIX_DST);
 /** subtract =           */
 /**    src & !dst        */
-public static native @MemberGetter int PIX_SUBTRACT();
-public static final int PIX_SUBTRACT = PIX_SUBTRACT();
+public static final int PIX_SUBTRACT = (PIX_DST & PIX_NOT(PIX_SRC));
 /** xor = src ^ dst        */
 public static final int PIX_XOR =      (PIX_SRC ^ PIX_DST);
 

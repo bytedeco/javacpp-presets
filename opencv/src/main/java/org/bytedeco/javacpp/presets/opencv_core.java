@@ -90,6 +90,7 @@ public class opencv_core implements InfoMapper {
                              "CV_32FC1", "CV_32FC2", "CV_32FC3", "CV_32FC4",
                              "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").cppTypes("int").translate())
                .put(new Info("CV_MAT_CN", "CV_MAT_TYPE", "CV_IS_CONT_MAT", "CV_IS_MAT_CONT").cppTypes("int", "int"))
+               .put(new Info("CV_VERSION").pointerTypes("String").translate(false))
                .put(new Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate())
                .put(new Info("CvArr").skip().pointerTypes("CvArr"))
                .put(new Info("_IplROI").pointerTypes("IplROI"))

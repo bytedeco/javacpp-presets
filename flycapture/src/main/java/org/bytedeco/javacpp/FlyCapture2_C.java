@@ -1326,7 +1326,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	 * Information about a specific camera property. This structure is also
 	 * also used as the TriggerDelayInfo structure.
 	 */
-	@Name("fc2TriggerDelayInfo") public static class fc2PropertyInfo extends Pointer {
+	public static class fc2PropertyInfo extends Pointer {
 	    static { Loader.load(); }
 	    /** Default native constructor. */
 	    public fc2PropertyInfo() { super((Pointer)null); allocate(); }
@@ -1386,7 +1386,7 @@ public static final int MAX_STRING_LENGTH =   512;
 	 * - \a autoManualMode - \c false
 	 * - \a absValue - \c 12.0
 	 */
-	@Name("fc2TriggerDelay") public static class fc2Property extends Pointer {
+	public static class fc2Property extends Pointer {
 	    static { Loader.load(); }
 	    /** Default native constructor. */
 	    public fc2Property() { super((Pointer)null); allocate(); }
