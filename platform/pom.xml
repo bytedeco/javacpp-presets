@@ -180,6 +180,11 @@
       <artifactId>skia-platform</artifactId>
       <version>20170511-53d6729-${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>systems-platform</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
