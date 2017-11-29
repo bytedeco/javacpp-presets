@@ -10575,7 +10575,7 @@ public static final int DUPLICATE_SAME_ACCESS =       0x00000002;
 // period.
 //
 // {D23F2FB8-9536-4038-9C94-1CE02E5C2152}
-@MemberGetter public static native @Const @ByRef GUID GUID_IDLE_RESILIENCY_PLATFORM_STATE();
+
 
 //
 // Specifies (in milliseconds) how long we wait after the last disk access
@@ -10806,14 +10806,14 @@ public static final int DUPLICATE_SAME_ACCESS =       0x00000002;
 // Full-screen video playback GUID
 // {3D5938F0-FF20-41EF-AE9F-EEA006F422E1}
 //
-@MemberGetter public static native @Const @ByRef GUID GUID_VIDEO_FULLSCREEN_PLAYBACK();
+
 
 //
 // Audio playback GUID
 // {23B61359-2977-4c74-8207-37BCA1400D9D}
 //
 
-@MemberGetter public static native @Const @ByRef GUID GUID_AUDIO_PLAYBACK();
+
 
 //
 // Defines a guid for enabling/disabling standby (S1-S3) states. This does not
@@ -10921,9 +10921,9 @@ public static final int POWERBUTTON_ACTION_VALUE_SHUTDOWN =   6;
 @MemberGetter public static native @Const @ByRef GUID GUID_BATTERY_DISCHARGE_LEVEL_3();
 @MemberGetter public static native @Const @ByRef GUID GUID_BATTERY_DISCHARGE_FLAGS_3();
 
-@MemberGetter public static native @Const @ByRef GUID GUID_CS_BATTERY_SAVER_THRESHOLD();
-@MemberGetter public static native @Const @ByRef GUID GUID_CS_BATTERY_SAVER_ACTION();
-@MemberGetter public static native @Const @ByRef GUID GUID_CS_BATTERY_SAVER_TIMEOUT();
+
+
+
 
 // Processor power settings
 // ------------------------

@@ -224,7 +224,9 @@ public class windows implements BuildEnabled, InfoMapper {
                .put(new Info("ProcThreadAttributeValue").cppTypes("int", "int", "int", "int", "int"))
 
                .put(new Info("_PACKEDEVENTINFO", "_EVENTSFORLOGFILE", "ACTIVATION_CONTEXT_COMPATIBILITY_INFORMATION").purify())
-               .put(new Info("_mm_prefetch", "LookupAccountSidLocalA", "LookupAccountSidLocalW",
-                             "LookupAccountNameLocalA", "LookupAccountNameLocalW", "WinMain", "wWinMain").skip());
+               .put(new Info("_mm_prefetch", "GUID_AUDIO_PLAYBACK", "GUID_CS_BATTERY_SAVER_ACTION", "GUID_CS_BATTERY_SAVER_THRESHOLD",
+                             "GUID_CS_BATTERY_SAVER_TIMEOUT", "GUID_IDLE_RESILIENCY_PLATFORM_STATE", "GUID_VIDEO_FULLSCREEN_PLAYBACK",
+                             "LookupAccountSidLocalA", "LookupAccountSidLocalW", "LookupAccountNameLocalA", "LookupAccountNameLocalW",
+                             "WinMain", "wWinMain").skip());
     }
 }
