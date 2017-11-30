@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = opencv_objdetect.class, value = {
     @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>"}, link = "opencv_face@.3.3"),
-    @Platform(value = "windows", link = "opencv_face330")},
+    @Platform(value = "windows", link = "opencv_face331")},
         target = "org.bytedeco.javacpp.opencv_face")
 public class opencv_face implements InfoMapper {
     public void map(InfoMap infoMap) {

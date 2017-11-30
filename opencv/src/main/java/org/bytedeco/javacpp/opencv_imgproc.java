@@ -3723,6 +3723,7 @@ public static final int
 <p>
 /** \example lsd_lines.cpp
 An example using the LineSegmentDetector
+\image html building_lsd.png "Sample output image" width=434 height=300
 */
 
 /** \brief Line segment detector class
@@ -3899,6 +3900,11 @@ operation is shifted.
 @Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor);
 @Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize);
 
+/** \example Smoothing.cpp
+Sample code for simple filters
+![Sample screenshot](Smoothing_Tutorial_Result_Median_Filter.jpg)
+Check \ref tutorial_gausian_median_blur_bilateral_filter "the corresponding tutorial" for more details
+ */
 /** \brief Blurs an image using the median filter.
 <p>
 The function smoothes an image using the median filter with the \f$\texttt{ksize} \times
@@ -4154,6 +4160,11 @@ is at the kernel center.
 @Namespace("cv") public static native void sepFilter2D( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                                @ByVal UMat kernelX, @ByVal UMat kernelY );
 
+/** \example Sobel_Demo.cpp
+Sample code using Sobel and/or Scharr OpenCV functions to make a simple Edge Detector
+![Sample screenshot](Sobel_Derivatives_Tutorial_Result.jpg)
+Check \ref tutorial_sobel_derivatives "the corresponding tutorial" for more details
+ */
 /** \brief Calculates the first, second, third, or mixed image derivatives using an extended Sobel operator.
 <p>
 In all cases except one, the \f$\texttt{ksize} \times \texttt{ksize}\f$ separable kernel is used to
@@ -4313,7 +4324,9 @@ applied. See getDerivKernels for details.
  *  \{
 <p>
 /** \example edge.cpp
-  An example on using the canny edge detector
+  This program demonstrates usage of the Canny edge detector
+  <p>
+  Check \ref tutorial_canny_detector "the corresponding tutorial" for more details
 */
 
 /** \brief Finds edges in an image using the Canny algorithm \cite Canny86 .
@@ -4578,6 +4591,7 @@ or cornerMinEigenVal.
 <p>
 \sa  cornerMinEigenVal, cornerHarris, calcOpticalFlowPyrLK, estimateRigidTransform,
  */
+
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
                                      int maxCorners, double qualityLevel, double minDistance,
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask, int blockSize/*=3*/,
@@ -4591,8 +4605,27 @@ or cornerMinEigenVal.
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal UMat image, @ByVal UMat corners,
                                      int maxCorners, double qualityLevel, double minDistance );
 
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal Mat mask, int blockSize,
+                                     int gradientSize, @Cast("bool") boolean useHarrisDetector/*=false*/,
+                                     double k/*=0.04*/ );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal Mat mask, int blockSize,
+                                     int gradientSize );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal UMat image, @ByVal UMat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal UMat mask, int blockSize,
+                                     int gradientSize, @Cast("bool") boolean useHarrisDetector/*=false*/,
+                                     double k/*=0.04*/ );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal UMat image, @ByVal UMat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal UMat mask, int blockSize,
+                                     int gradientSize );
 /** \example houghlines.cpp
 An example using the Hough line detector
+![Sample input image](Hough_Lines_Tutorial_Original_Image.jpg) ![Output image](Hough_Lines_Tutorial_Result.jpg)
 */
 
 /** \brief Finds lines in a binary image using the standard Hough transform.
@@ -4813,7 +4846,9 @@ returned first.
  *  \{
 <p>
 /** \example morphology2.cpp
-  An example using the morphological operations
+Advanced morphology Transformations sample code
+![Sample screenshot](Morphology_2_Tutorial_Result.jpg)
+Check \ref tutorial_opening_closing_hats "the corresponding tutorial" for more details
 */
 
 /** \brief Erodes an image by using a specific structuring element.
@@ -4849,6 +4884,11 @@ anchor is at the element center.
                          @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
 @Namespace("cv") public static native void erode( @ByVal UMat src, @ByVal UMat dst, @ByVal UMat kernel );
 
+/** \example Morphology_1.cpp
+Erosion and Dilation sample code
+![Sample Screenshot-Erosion](Morphology_1_Tutorial_Erosion_Result.jpg)![Sample Screenshot-Dilation](Morphology_1_Tutorial_Dilation_Result.jpg)
+Check \ref tutorial_erosion_dilatation "the corresponding tutorial" for more details
+ */
 /** \brief Dilates an image by using a specific structuring element.
 <p>
 The function dilates the source image using the specified structuring element that determines the
@@ -5009,6 +5049,9 @@ the "outliers" in the source image are not modified by the function.
 @Namespace("cv") public static native void warpAffine( @ByVal UMat src, @ByVal UMat dst,
                               @ByVal UMat M, @ByVal Size dsize);
 
+/** \example warpPerspective_demo.cpp
+An example program shows using cv::findHomography and cv::warpPerspective for image warping
+ */
 /** \brief Applies a perspective transformation to an image.
 <p>
 The function warpPerspective transforms the source image using the specified matrix:
@@ -5553,7 +5596,7 @@ An example is shown below:
     createHanningWindow(hann, Size(100, 100), CV_32F);
 }</pre>
 @param dst Destination array to place Hann coefficients in
-@param winSize The window size specifications
+@param winSize The window size specifications (both width and height must be > 1)
 @param type Created array type
  */
 @Namespace("cv") public static native void createHanningWindow(@ByVal Mat dst, @ByVal Size winSize, int type);
@@ -5925,6 +5968,16 @@ cv::stereoRectify can be passed here. If the matrix is empty, the identity new c
                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P);
 @Namespace("cv") public static native void undistortPoints( @ByVal UMat src, @ByVal UMat dst,
                                    @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs);
+/** \overload
+    \note Default version of cv::undistortPoints does 5 iterations to compute undistorted points.
+ <p>
+ */
+@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal Mat src, @ByVal Mat dst,
+                                   @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                   @ByVal Mat R, @ByVal Mat P, @ByVal TermCriteria criteria);
+@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal UMat src, @ByVal UMat dst,
+                                   @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                   @ByVal UMat R, @ByVal UMat P, @ByVal TermCriteria criteria);
 
 /** \} imgproc_transform
  <p>
@@ -6579,6 +6632,7 @@ whole original image (i.e. when maxLevel==0).
 <p>
 /** \example grabcut.cpp
 An example using the GrabCut algorithm
+![Sample Screenshot](grabcut_output1.jpg)
  */
 
 /** \brief Runs the GrabCut algorithm.
@@ -7208,9 +7262,8 @@ false, which means that the absolute value is returned.
 /** \brief Finds a rotated rectangle of the minimum area enclosing the input 2D point set.
 <p>
 The function calculates and returns the minimum-area bounding rectangle (possibly rotated) for a
-specified point set. See the OpenCV sample minarea.cpp . Developer should keep in mind that the
-returned rotatedRect can contain negative indices when data is close to the containing Mat element
-boundary.
+specified point set. Developer should keep in mind that the returned RotatedRect can contain negative
+indices when data is close to the containing Mat element boundary.
 <p>
 @param points Input vector of 2D points, stored in std::vector\<\> or Mat
  */
@@ -7233,8 +7286,7 @@ for more information.
 
 /** \brief Finds a circle of the minimum area enclosing a 2D point set.
 <p>
-The function finds the minimal enclosing circle of a 2D point set using an iterative algorithm. See
-the OpenCV sample minarea.cpp .
+The function finds the minimal enclosing circle of a 2D point set using an iterative algorithm.
 <p>
 @param points Input vector of 2D points, stored in std::vector\<\> or Mat
 @param center Output center of the circle.
@@ -7311,6 +7363,8 @@ returns convex hull points. Otherwise, it returns indices of the convex hull poi
 output array is std::vector, the flag is ignored, and the output depends on the type of the
 vector: std::vector\<int\> implies returnPoints=false, std::vector\<Point\> implies
 returnPoints=true.
+<p>
+\note {@code points} and {@code hull} should be different arrays, inplace processing isn't supported.
  */
 @Namespace("cv") public static native void convexHull( @ByVal Mat points, @ByVal Mat hull,
                               @Cast("bool") boolean clockwise/*=false*/, @Cast("bool") boolean returnPoints/*=true*/ );
@@ -7375,6 +7429,90 @@ border of the containing Mat element.
  */
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipse( @ByVal Mat points );
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipse( @ByVal UMat points );
+
+/** \brief Fits an ellipse around a set of 2D points.
+ <p>
+ The function calculates the ellipse that fits a set of 2D points.
+ It returns the rotated rectangle in which the ellipse is inscribed.
+ The Approximate Mean Square (AMS) proposed by \cite Taubin1991 is used.
+ <p>
+ For an ellipse, this basis set is \f$ \chi= \left(x^2, x y, y^2, x, y, 1\right) \f$,
+ which is a set of six free coefficients \f$ A^T=\left\{A_{\text{xx}},A_{\text{xy}},A_{\text{yy}},A_x,A_y,A_0\right\} \f$.
+ However, to specify an ellipse, all that is needed is five numbers; the major and minor axes lengths \f$ (a,b) \f$,
+ the position \f$ (x_0,y_0) \f$, and the orientation \f$ \theta \f$. This is because the basis set includes lines,
+ quadratics, parabolic and hyperbolic functions as well as elliptical functions as possible fits.
+ If the fit is found to be a parabolic or hyperbolic function then the standard fitEllipse method is used.
+ The AMS method restricts the fit to parabolic, hyperbolic and elliptical curves
+ by imposing the condition that \f$ A^T ( D_x^T D_x  +   D_y^T D_y) A = 1 \f$ where
+ the matrices \f$ Dx \f$ and \f$ Dy \f$ are the partial derivatives of the design matrix \f$ D \f$ with
+ respect to x and y. The matrices are formed row by row applying the following to
+ each of the points in the set:
+ \f{align*}{
+ D(i,:)&=\left\{x_i^2, x_i y_i, y_i^2, x_i, y_i, 1\right\} &
+ D_x(i,:)&=\left\{2 x_i,y_i,0,1,0,0\right\} &
+ D_y(i,:)&=\left\{0,x_i,2 y_i,0,1,0\right\}
+ \f}
+ The AMS method minimizes the cost function
+ \f{equation*}{
+ \epsilon ^2=\frac{ A^T D^T D A }{ A^T (D_x^T D_x +  D_y^T D_y) A^T }
+ \f}
+ <p>
+ The minimum cost is found by solving the generalized eigenvalue problem.
+ <p>
+ \f{equation*}{
+ D^T D A = \lambda  \left( D_x^T D_x +  D_y^T D_y\right) A
+ \f}
+ <p>
+ @param points Input 2D point set, stored in std::vector\<\> or Mat
+ */
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipseAMS( @ByVal Mat points );
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipseAMS( @ByVal UMat points );
+
+
+/** \brief Fits an ellipse around a set of 2D points.
+ <p>
+ The function calculates the ellipse that fits a set of 2D points.
+ It returns the rotated rectangle in which the ellipse is inscribed.
+ The Direct least square (Direct) method by \cite Fitzgibbon1999 is used.
+ <p>
+ For an ellipse, this basis set is \f$ \chi= \left(x^2, x y, y^2, x, y, 1\right) \f$,
+ which is a set of six free coefficients \f$ A^T=\left\{A_{\text{xx}},A_{\text{xy}},A_{\text{yy}},A_x,A_y,A_0\right\} \f$.
+ However, to specify an ellipse, all that is needed is five numbers; the major and minor axes lengths \f$ (a,b) \f$,
+ the position \f$ (x_0,y_0) \f$, and the orientation \f$ \theta \f$. This is because the basis set includes lines,
+ quadratics, parabolic and hyperbolic functions as well as elliptical functions as possible fits.
+ The Direct method confines the fit to ellipses by ensuring that \f$ 4 A_{xx} A_{yy}- A_{xy}^2 > 0 \f$.
+ The condition imposed is that \f$ 4 A_{xx} A_{yy}- A_{xy}^2=1 \f$ which satisfies the inequality
+ and as the coefficients can be arbitrarily scaled is not overly restrictive.
+ <p>
+ \f{equation*}{
+ \epsilon ^2= A^T D^T D A \quad \text{with} \quad A^T C A =1 \quad \text{and} \quad C=\left(\begin{matrix}
+ 0 & 0  & 2  & 0  & 0  &  0  \\
+ 0 & -1  & 0  & 0  & 0  &  0 \\
+ 2 & 0  & 0  & 0  & 0  &  0 \\
+ 0 & 0  & 0  & 0  & 0  &  0 \\
+ 0 & 0  & 0  & 0  & 0  &  0 \\
+ 0 & 0  & 0  & 0  & 0  &  0
+ \end{matrix} \right)
+ \f}
+ <p>
+ The minimum cost is found by solving the generalized eigenvalue problem.
+ <p>
+ \f{equation*}{
+ D^T D A = \lambda  \left( C\right) A
+ \f}
+ <p>
+ The system produces only one positive eigenvalue \f$ \lambda\f$ which is chosen as the solution
+ with its eigenvector \f$\mathbf{u}\f$. These are used to find the coefficients
+ <p>
+ \f{equation*}{
+ A = \sqrt{\frac{1}{\mathbf{u}^T C \mathbf{u}}}  \mathbf{u}
+ \f}
+ The scaling factor guarantees that  \f$A^T C A =1\f$.
+ <p>
+ @param points Input 2D point set, stored in std::vector\<\> or Mat
+ */
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipseDirect( @ByVal Mat points );
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipseDirect( @ByVal UMat points );
 
 /** \brief Fits a line to a 2D or 3D point set.
 <p>
@@ -7888,7 +8026,8 @@ The function polylines draws one or more polygonal curves.
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
 
 /** \example contours2.cpp
-  An example using the drawContour functionality
+  An example program illustrates the use of cv::findContours and cv::drawContours
+  \image html WindowsQtContoursOutput.png "Screenshot of the program"
 */
 
 /** \example segment_objects.cpp

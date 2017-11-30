@@ -1075,7 +1075,7 @@ homography or affine transformation based on selected matcher.
     private native void allocate();
     public MatchesInfo(@Const @ByRef MatchesInfo other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef MatchesInfo other);
-    public native @Const @ByRef @Name("operator =") MatchesInfo put(@Const @ByRef MatchesInfo other);
+    public native @ByRef @Name("operator =") MatchesInfo put(@Const @ByRef MatchesInfo other);
 
     /** Images indices (optional) */
     public native int src_img_idx(); public native MatchesInfo src_img_idx(int src_img_idx);
@@ -1449,7 +1449,7 @@ transformation (affine trasformation estimate will be placed in matches_info).
     private native void allocate();
     public CameraParams(@Const @ByRef CameraParams other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef CameraParams other);
-    public native @Const @ByRef @Name("operator =") CameraParams put(@Const @ByRef CameraParams other);
+    public native @ByRef @Name("operator =") CameraParams put(@Const @ByRef CameraParams other);
     public native @ByVal Mat K();
 
     public native double focal(); public native CameraParams focal(double focal); // Focal length

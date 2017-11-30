@@ -1594,8 +1594,146 @@ at each window location.
 @Namespace("cv::text") public static native @Ptr OCRBeamSearchDecoder.ClassifierCallback loadOCRBeamSearchClassifierCNN(@Str BytePointer filename);
 @Namespace("cv::text") public static native @Ptr OCRBeamSearchDecoder.ClassifierCallback loadOCRBeamSearchClassifierCNN(@Str String filename);
 
+
+/** \brief OCRHolisticWordRecognizer class provides the functionallity of segmented wordspotting.
+ * Given a predefined vocabulary , a DictNet is employed to select the most probable
+ * word given an input image.
+ *
+ * DictNet is described in detail in:
+ * Max Jaderberg et al.: Reading Text in the Wild with Convolutional Neural Networks, IJCV 2015
+ * http://arxiv.org/abs/1412.1842
+ */
+@Namespace("cv::text") public static class OCRHolisticWordRecognizer extends BaseOCR {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OCRHolisticWordRecognizer(Pointer p) { super(p); }
+
+    public native void run(@ByRef Mat image,
+                         @StdString BytePointer output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatPointer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @StdString BytePointer output_text);
+    public native void run(@ByRef Mat image,
+                         @StdString String output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatBuffer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @StdString String output_text);
+    public native void run(@ByRef Mat image,
+                         @StdString BytePointer output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector float[] component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @StdString String output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatPointer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @StdString BytePointer output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatBuffer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @StdString String output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector float[] component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+
+    /** \brief Recognize text using a segmentation based word-spotting/classifier cnn.
+    <p>
+    Takes image on input and returns recognized text in the output_text parameter. Optionally
+    provides also the Rects for individual text elements found (e.g. words), and the list of those
+    text elements with their confidence values.
+    <p>
+    @param image Input image CV_8UC1 or CV_8UC3
+    <p>
+    @param mask is totally ignored and is only available for compatibillity reasons
+    <p>
+    @param output_text Output text of the the word spoting, always one that exists in the dictionary.
+    <p>
+    @param component_rects Not applicable for word spotting can be be NULL if not, a single elemnt will
+        be put in the vector.
+    <p>
+    @param component_texts Not applicable for word spotting can be be NULL if not, a single elemnt will
+        be put in the vector.
+    <p>
+    @param component_confidences Not applicable for word spotting can be be NULL if not, a single elemnt will
+        be put in the vector.
+    <p>
+    @param component_level must be OCR_LEVEL_WORD.
+     */
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString BytePointer output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatPointer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString BytePointer output_text);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString String output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatBuffer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString String output_text);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString BytePointer output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector float[] component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString String output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatPointer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString BytePointer output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector FloatBuffer component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+    public native void run(@ByRef Mat image,
+                         @ByRef Mat mask,
+                         @StdString String output_text,
+                         RectVector component_rects/*=NULL*/,
+                         StdStringVector component_texts/*=NULL*/,
+                         @StdVector float[] component_confidences/*=NULL*/,
+                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
+
+    /** \brief Creates an instance of the OCRHolisticWordRecognizer class.
+     */
+    public static native @Ptr OCRHolisticWordRecognizer create(@StdString BytePointer archFilename,
+                                                     @StdString BytePointer weightsFilename,
+                                                     @StdString BytePointer wordsFilename);
+    public static native @Ptr OCRHolisticWordRecognizer create(@StdString String archFilename,
+                                                     @StdString String weightsFilename,
+                                                     @StdString String wordsFilename);
+}
+
 /** \} */
 
+ // cv::text::
 
 
 // #endif // _OPENCV_TEXT_OCR_HPP_

@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = {opencv_video.class, opencv_videoio.class}, value = {
     @Platform(include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"},
               link = "opencv_superres@.3.3", preload = "opencv_cuda@.3.3"),
-    @Platform(value = "windows", link = "opencv_superres330", preload = "opencv_cuda330")},
+    @Platform(value = "windows", link = "opencv_superres331", preload = "opencv_cuda331")},
         target = "org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {

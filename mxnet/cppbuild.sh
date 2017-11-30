@@ -36,13 +36,13 @@ DMLC_VERSION=595d02c0e87be8a0846700462b6f45f1b1031e39
 MSHADOW_VERSION=cb5c9872b542220be5b99f3aca0e1ff56e31b028
 PS_VERSION=bdd4c67e9e34dc0b8350ce306b0caa737eb31c83
 NNVM_VERSION=c86afa8f17a44bcd4e6eec41cd49ba87e4f7a635
-MXNET_VERSION=0.12.0
+MXNET_VERSION=0.12.1
 download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
 download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
 download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
 download https://github.com/dmlc/ps-lite/archive/$PS_VERSION.tar.gz ps-lite-$PS_VERSION.tar.gz
 download https://github.com/dmlc/nnvm/archive/$NNVM_VERSION.tar.gz nnvm-$NNVM_VERSION.tar.gz
-download https://github.com/dmlc/mxnet/archive/v$MXNET_VERSION.tar.gz incubator-mxnet-$MXNET_VERSION.tar.gz
+download https://github.com/apache/incubator-mxnet/archive/$MXNET_VERSION.tar.gz incubator-mxnet-$MXNET_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM

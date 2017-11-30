@@ -930,6 +930,13 @@ videos, it will display the video frame-by-frame)
 @Namespace("cv") public static native void resizeWindow(@Str BytePointer winname, int width, int height);
 @Namespace("cv") public static native void resizeWindow(@Str String winname, int width, int height);
 
+/** \overload
+@param winname Window name.
+@param size The new window size.
+*/
+@Namespace("cv") public static native void resizeWindow(@Str BytePointer winname, @Const @ByRef Size size);
+@Namespace("cv") public static native void resizeWindow(@Str String winname, @Const @ByRef Size size);
+
 /** \brief Moves window to the specified position
 <p>
 @param winname Name of the window.
@@ -1187,7 +1194,7 @@ panel.
 <p>
 @param trackbarname Name of the trackbar.
 @param winname Name of the window that is the parent of trackbar.
-@param minval New maximum position.
+@param minval New minimum position.
  */
 @Namespace("cv") public static native void setTrackbarMin(@Str BytePointer trackbarname, @Str BytePointer winname, int minval);
 @Namespace("cv") public static native void setTrackbarMin(@Str String trackbarname, @Str String winname, int minval);

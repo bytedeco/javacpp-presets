@@ -64,8 +64,12 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 // #ifndef OPENCV_FEATURES_2D_HPP
 // #define OPENCV_FEATURES_2D_HPP
 
+// #include "opencv2/opencv_modules.hpp"
 // #include "opencv2/core.hpp"
+
+// #ifdef HAVE_OPENCV_FLANN
 // #include "opencv2/flann/miniflann.hpp"
+// #endif
 
 /**
   \defgroup features2d 2D Features Framework
@@ -145,6 +149,10 @@ This section describes approaches based on local 2D features and used to categor
      * Remove duplicated keypoints.
      */
     public static native void removeDuplicated( @ByRef KeyPointVector keypoints );
+    /*
+     * Remove duplicated keypoints and sort the remaining keypoints
+     */
+    public static native void removeDuplicatedSorted( @ByRef KeyPointVector keypoints );
 
     /*
      * Retain the specified number of the best keypoints (according to the response)
@@ -276,6 +284,7 @@ This section describes approaches based on local 2D features and used to categor
 
     /** Return true if detector object is empty */
     public native @Cast("bool") boolean empty();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** Feature detectors in OpenCV have wrappers with a common interface that enables you to easily switch
@@ -337,6 +346,36 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
     public static native @Ptr BRISK create(@StdVector float[] radiusList, @StdVector int[] numberList,
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector int[] indexChange/*=std::vector<int>()*/);
     public static native @Ptr BRISK create(@StdVector float[] radiusList, @StdVector int[] numberList);
+
+    /** \brief The BRISK constructor for a custom pattern, detection threshold and octaves
+    <p>
+    @param thresh AGAST detection threshold score.
+    @param octaves detection octaves. Use 0 to do single scale.
+    @param radiusList defines the radii (in pixels) where the samples around a keypoint are taken (for
+    keypoint scale 1).
+    @param numberList defines the number of sampling points on the sampling circle. Must be the same
+    size as radiusList..
+    @param dMax threshold for the short pairings used for descriptor formation (in pixels for keypoint
+    scale 1).
+    @param dMin threshold for the long pairings used for orientation determination (in pixels for
+    keypoint scale 1).
+    @param indexChange index remapping of the bits. */
+    public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatPointer radiusList,
+            @StdVector IntPointer numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
+            @StdVector IntPointer indexChange/*=std::vector<int>()*/);
+    public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatPointer radiusList,
+            @StdVector IntPointer numberList);
+    public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatBuffer radiusList,
+            @StdVector IntBuffer numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
+            @StdVector IntBuffer indexChange/*=std::vector<int>()*/);
+    public static native @Ptr BRISK create(int thresh, int octaves, @StdVector FloatBuffer radiusList,
+            @StdVector IntBuffer numberList);
+    public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
+            @StdVector int[] numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
+            @StdVector int[] indexChange/*=std::vector<int>()*/);
+    public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
+            @StdVector int[] numberList);
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \brief Class implementing the ORB (*oriented BRIEF*) keypoint detector and descriptor extractor
@@ -414,6 +453,7 @@ k-tuples) are rotated according to the measured orientation).
 
     public native void setFastThreshold(int fastThreshold);
     public native int getFastThreshold();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \brief Maximally stable extremal region extractor
@@ -479,6 +519,7 @@ code which is distributed under GPL.
 
     public native void setPass2Only(@Cast("bool") boolean f);
     public native @Cast("bool") boolean getPass2Only();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \overload */
@@ -544,6 +585,7 @@ detection, use cv2.FAST.detect() method.
 
     public native void setType(int type);
     public native int getType();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \overload */
@@ -608,6 +650,7 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
 
     public native void setType(int type);
     public native int getType();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \brief Wrapping class for feature detection using the goodFeaturesToTrack function. :
@@ -620,6 +663,10 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
     public static native @Ptr GFTTDetector create( int maxCorners/*=1000*/, double qualityLevel/*=0.01*/, double minDistance/*=1*/,
                                                  int blockSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
     public static native @Ptr GFTTDetector create( );
+    public static native @Ptr GFTTDetector create( int maxCorners, double qualityLevel, double minDistance,
+                                                 int blockSize, int gradiantSize, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
+    public static native @Ptr GFTTDetector create( int maxCorners, double qualityLevel, double minDistance,
+                                                 int blockSize, int gradiantSize );
     public native void setMaxFeatures(int maxFeatures);
     public native int getMaxFeatures();
 
@@ -637,6 +684,7 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
 
     public native void setK(double k);
     public native double getK();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \brief Class for extracting blobs from an image. :
@@ -728,6 +776,7 @@ Default values of parameters are tuned to extract dark circular blobs.
 
   public static native @Ptr SimpleBlobDetector create(@Const @ByRef(nullValue = "cv::SimpleBlobDetector::Params()") Params parameters);
   public static native @Ptr SimpleBlobDetector create();
+  public native @Str BytePointer getDefaultName();
 }
 
 /** \} features2d_main
@@ -786,15 +835,25 @@ F. Alcantarilla, Adrien Bartoli and Andrew J. Davison. In European Conference on
 
     public native void setDiffusivity(int diff);
     public native int getDiffusivity();
+    public native @Str BytePointer getDefaultName();
 }
 
-/** \brief Class implementing the AKAZE keypoint detector and descriptor extractor, described in \cite ANB13 . :
+/** \brief Class implementing the AKAZE keypoint detector and descriptor extractor, described in \cite ANB13.
 <p>
-\note AKAZE descriptors can only be used with KAZE or AKAZE keypoints. Try to avoid using *extract*
-and *detect* instead of *operator()* due to performance reasons. .. [ANB13] Fast Explicit Diffusion
-for Accelerated Features in Nonlinear Scale Spaces. Pablo F. Alcantarilla, Jesús Nuevo and Adrien
-Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 2013.
- */
+\details AKAZE descriptors can only be used with KAZE or AKAZE keypoints. This class is thread-safe.
+<p>
+\note When you need descriptors use Feature2D::detectAndCompute, which
+provides better performance. When using Feature2D::detect followed by
+Feature2D::compute scale space pyramid is computed twice.
+<p>
+\note AKAZE implements T-API. When image is passed as UMat some parts of the algorithm
+will use OpenCL.
+<p>
+\note [ANB13] Fast Explicit Diffusion for Accelerated Features in Nonlinear
+Scale Spaces. Pablo F. Alcantarilla, Jesús Nuevo and Adrien Bartoli. In
+British Machine Vision Conference (BMVC), Bristol, UK, September 2013.
+<p>
+*/
 @Namespace("cv") public static class AKAZE extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -848,6 +907,7 @@ Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 201
 
     public native void setDiffusivity(int diff);
     public native int getDiffusivity();
+    public native @Str BytePointer getDefaultName();
 }
 
 /** \} features2d_main
@@ -1155,7 +1215,7 @@ sets.
 
     public native @Cast("bool") boolean isMaskSupported();
 
-    /* @brief Brute-force matcher create method.
+    /** \brief Brute-force matcher create method.
     @param normType One of NORM_L1, NORM_L2, NORM_HAMMING, NORM_HAMMING2. L1 and L2 norms are
     preferable choices for SIFT and SURF descriptors, NORM_HAMMING should be used with ORB, BRISK and
     BRIEF, NORM_HAMMING2 should be used with ORB when WTA_K==3 or 4 (see ORB::ORB constructor
@@ -1174,6 +1234,7 @@ sets.
     public native @Ptr DescriptorMatcher clone( );
 }
 
+// #if defined(HAVE_OPENCV_FLANN) || defined(CV_DOXYGEN)
 
 /** \brief Flann-based descriptor matcher.
 <p>
@@ -1217,6 +1278,8 @@ matches of descriptor sets because flann::Index does not support this. :
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr DescriptorMatcher clone( );
 }
+
+// #endif
 
 /** \} features2d_match
 <p>

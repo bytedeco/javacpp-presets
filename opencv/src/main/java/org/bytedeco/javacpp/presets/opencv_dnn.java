@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
                          "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
               link = "opencv_dnn@.3.3"),
-    @Platform(value = "windows", link = "opencv_dnn330")},
+    @Platform(value = "windows", link = "opencv_dnn331")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -45,6 +45,7 @@ public class opencv_dnn implements InfoMapper {
                .put(new Info("cv::dnn::MatShape").annotations("@StdVector").pointerTypes("IntPointer"))
                .put(new Info("std::vector<cv::dnn::MatShape>").pointerTypes("MatShapeVector").define())
                .put(new Info("std::vector<std::vector<cv::dnn::MatShape> >").pointerTypes("MatShapeVectorVector").define())
+               .put(new Info("std::vector<std::vector<cv::Range> >").pointerTypes("RangeVectorVector").define())
                .put(new Info("cv::dnn::LRNLayer::type").javaNames("lrnType"))
                .put(new Info("cv::dnn::PoolingLayer::type").javaNames("poolingType"))
                .put(new Info("cv::dnn::BlankLayer", "cv::dnn::LSTMLayer", "cv::dnn::RNNLayer", "cv::dnn::BaseConvolutionLayer",
@@ -55,7 +56,8 @@ public class opencv_dnn implements InfoMapper {
                              "cv::dnn::ChannelsPReLULayer", "cv::dnn::ELULayer", "cv::dnn::TanHLayer", "cv::dnn::SigmoidLayer",
                              "cv::dnn::BNLLLayer", "cv::dnn::AbsLayer", "cv::dnn::PowerLayer", "cv::dnn::CropLayer", "cv::dnn::EltwiseLayer",
                              "cv::dnn::BatchNormLayer", "cv::dnn::MaxUnpoolLayer", "cv::dnn::ScaleLayer", "cv::dnn::ShiftLayer",
-                             "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer").purify())
+                             "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer",
+                             "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer").purify())
                .put(new Info("cv::dnn::Net::forward(cv::dnn::Net::LayerId, cv::dnn::Net::LayerId)",
                              "cv::dnn::Net::forward(cv::dnn::Net::LayerId*, cv::dnn::Net::LayerId*)",
                              "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId)",
