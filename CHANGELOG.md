@@ -1,4 +1,5 @@
 
+ * Enable VisualOn AMR-WB encoder library support for FFmpeg ([pull #487](https://github.com/bytedeco/javacpp-presets/pull/487))
  * Use native threads for FFmpeg on Windows to prevent deadlocks with pthreads ([pull #481](https://github.com/bytedeco/javacpp-presets/pull/481))
  * Add cross-compilation support for `linux-ppc64le` ([pull #471](https://github.com/bytedeco/javacpp-presets/pull/471))
  * Fix definitions of `fftw_iodim` and `fftw_iodim64` for FFTW ([issue #466](https://github.com/bytedeco/javacpp-presets/issues/466))
