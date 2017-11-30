@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf"
-ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
+ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
 # DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
@@ -19,6 +19,7 @@ LAME=lame-3.100
 SPEEX=speex-1.2.0
 OPUS=opus-1.2.1
 OPENCORE_AMR=opencore-amr-0.1.5
+VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.0f # openssl-1.1.0g doesn't work on Windows
 OPENH264_VERSION=1.7.0
 X265=2.4 # x265-2.5 doesn't work on Windows
@@ -31,6 +32,7 @@ download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $
 download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
 download https://archive.mozilla.org/pub/opus/$OPUS.tar.gz $OPUS.tar.gz
 download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
+download http://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
 download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
@@ -49,6 +51,7 @@ tar --totals -xzf ../$LAME.tar.gz
 tar --totals -xzf ../$SPEEX.tar.gz
 tar --totals -xzf ../$OPUS.tar.gz
 tar --totals -xzf ../$OPENCORE_AMR.tar.gz
+tar --totals -xzf ../$VO_AMRWBENC.tar.gz
 tar --totals -xzf ../$OPENSSL.tar.gz
 tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
 tar --totals -xjf ../last_stable_x264.tar.bz2
@@ -93,6 +96,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
+        make -j $MAKEJ
+        make install
+        cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
@@ -161,6 +168,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ
+        make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-x86 $CFLAGS no-shared
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
@@ -212,6 +223,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
         make -j $MAKEJ
         make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j $MAKEJ
+        make install
         cd ../$OPENSSL
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
@@ -259,6 +274,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
         make -j $MAKEJ
         make install
@@ -324,6 +343,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
@@ -427,6 +450,14 @@ case $PLATFORM in
         fi
         make -j $MAKEJ
         make install
+        cd ../$VO_AMRWBENC
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64" CXXFLAGS="-m64"
+        else
+          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
+        fi
+        make -j $MAKEJ
+        make install
         cd ../$OPENSSL
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH
@@ -506,6 +537,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ
         make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j $MAKEJ
+        make install
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
@@ -554,6 +589,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
         make -j $MAKEJ
         make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j $MAKEJ
+        make install
         cd ../$OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
@@ -599,6 +638,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
         make -j $MAKEJ
         make install
