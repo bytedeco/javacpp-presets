@@ -350,6 +350,7 @@ public static final int CV_CALIB_THIN_PRISM_MODEL = 32768;
 public static final int CV_CALIB_FIX_S1_S2_S3_S4 =  65536;
 public static final int CV_CALIB_TILTED_MODEL =  262144;
 public static final int CV_CALIB_FIX_TAUX_TAUY =  524288;
+public static final int CV_CALIB_FIX_TANGENT_DIST = 2097152;
 
 public static final int CV_CALIB_NINTRINSIC = 18;
 
@@ -1519,6 +1520,26 @@ found, or as colored corners connected with lines if the board was found.
     public native @Cast("cv::CirclesGridFinderParameters::GridType") int gridType(); public native CirclesGridFinderParameters gridType(int gridType);
 }
 
+@Namespace("cv") @NoOffset public static class CirclesGridFinderParameters2 extends CirclesGridFinderParameters {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CirclesGridFinderParameters2(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CirclesGridFinderParameters2(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CirclesGridFinderParameters2 position(long position) {
+        return (CirclesGridFinderParameters2)super.position(position);
+    }
+
+    public CirclesGridFinderParameters2() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** Distance between two adjacent points. Used by CALIB_CB_CLUSTERING. */
+    public native float squareSize(); public native CirclesGridFinderParameters2 squareSize(float squareSize);
+    /** Max deviation from predicion. Used by CALIB_CB_CLUSTERING. */
+    public native float maxRectifiedDistance(); public native CirclesGridFinderParameters2 maxRectifiedDistance(float maxRectifiedDistance);
+}
+
 /** \brief Finds centers in the grid of circles.
 <p>
 @param image grid view of input circles; it must be an 8-bit grayscale or color image.
@@ -1559,6 +1580,16 @@ the board to make the detection more robust in various environments.
                                    @ByVal UMat centers, int flags,
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
                                    @ByVal CirclesGridFinderParameters parameters);
+
+/** \overload */
+@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal Mat image, @ByVal Size patternSize,
+                                   @ByVal Mat centers, int flags,
+                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
+                                   @ByVal CirclesGridFinderParameters2 parameters);
+@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal UMat image, @ByVal Size patternSize,
+                                   @ByVal UMat centers, int flags,
+                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
+                                   @ByVal CirclesGridFinderParameters2 parameters);
 
 /** \overload */
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal Mat image, @ByVal Size patternSize,

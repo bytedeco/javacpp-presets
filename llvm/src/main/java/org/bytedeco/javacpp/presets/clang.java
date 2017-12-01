@@ -33,6 +33,7 @@ public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CINDEX_LINKAGE", "CINDEX_VERSION_STRING").cppTypes().annotations())
                .put(new Info("CINDEX_DEPRECATED").cppTypes().annotations("@Deprecated"))
+               .put(new Info("CINDEX_VERSION").cppTypes("int").translate(false))
                .put(new Info("__has_feature(blocks)").define(false))
 
                .put(new Info("CXVirtualFileOverlayImpl").pointerTypes("CXVirtualFileOverlay"))

@@ -140,6 +140,13 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW32
       BIT: 32
+    - PLATFORM: x86
+      PROJ: "systems"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
 
     - PLATFORM: x64
       PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
@@ -274,6 +281,13 @@ environment:
       MSYS2_DIR: msys64
       MSYSTEM: MINGW64
       BIT: 64
+    - PLATFORM: x64
+      PROJ: "systems"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
 
 init:
 # uncomment this if you need to enable RDP for this build run
@@ -284,7 +298,6 @@ install:
 
 build_script:
     - 'echo build step for %PROJ%'
-    - SET PATH=C:\%MSYS2_DIR%\usr\bin\core_perl;C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
     - '%APPVEYOR_BUILD_FOLDER%\ci\build.cmd "%PROJ%"'
 
 test_script:

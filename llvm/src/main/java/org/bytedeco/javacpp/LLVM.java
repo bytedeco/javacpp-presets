@@ -4882,7 +4882,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
 
   /** This provides a C-visible enumerator to manage status codes.
    *  This should map exactly onto the C++ enumerator LTOStatus. */
-  /** enum llvm_lto_status_t */
+  /** enum llvm_lto_status */
   public static final int
     LLVM_LTO_UNKNOWN = 0,
     LLVM_LTO_OPT_SUCCESS = 1,

@@ -53,7 +53,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>3.3.0-${project.version}</version>
+      <version>3.3.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -158,7 +158,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>0.12.0-${project.version}</version>
+      <version>0.12.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -173,12 +173,17 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>liquidfun-platform</artifactId>
-      <version>20150401-0708ce1-${project.version}</version>
+      <version>20170717-43d53e0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>skia-platform</artifactId>
       <version>20170511-53d6729-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>systems-platform</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

@@ -994,6 +994,8 @@ public static final int CV_CPU_AVX_512VL =        21;
 
 public static final int CV_CPU_NEON =   100;
 
+public static final int CV_CPU_VSX = 200;
+
 // when adding to this list remember to update the following enum
 public static final int CV_HARDWARE_MAX_FEATURE = 255;
 
@@ -1024,7 +1026,9 @@ public static final int
     CPU_AVX_512VBMI     = 20,
     CPU_AVX_512VL       = 21,
 
-    CPU_NEON            = 100;
+    CPU_NEON            = 100,
+
+    CPU_VSX             = 200;
 
 
 // #include "cv_cpu_dispatch.h"
@@ -2185,7 +2189,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    3;
 public static final int CV_VERSION_MINOR =    3;
-public static final int CV_VERSION_REVISION = 0;
+public static final int CV_VERSION_REVISION = 1;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -2408,46 +2412,58 @@ public static final int
     DECOMP_NORMAL   = 16;
 
 /** norm types
-- For one array:
-\f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
-{ \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
-{ \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
 <p>
-- Absolute norm for two arrays
-\f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
-<p>
-- Relative norm for two arrays
-\f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_INF}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L1}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L2}\) }\f]
-<p>
-As example for one array consider the function \f$r(x)= \begin{pmatrix} x \\ 1-x \end{pmatrix}, x \in [-1;1]\f$.
-The \f$ L_{1}, L_{2} \f$ and \f$ L_{\infty} \f$ norm for the sample value \f$r(-1) = \begin{pmatrix} -1 \\ 2 \end{pmatrix}\f$
-is calculated as follows
-\f{align*}
-    \| r(-1) \|_{L_1} &= |-1| + |2| = 3 \\
-    \| r(-1) \|_{L_2} &= \sqrt{(-1)^{2} + (2)^{2}} = \sqrt{5} \\
-    \| r(-1) \|_{L_\infty} &= \max(|-1|,|2|) = 2
-\f}
-and for \f$r(0.5) = \begin{pmatrix} 0.5 \\ 0.5 \end{pmatrix}\f$ the calculation is
-\f{align*}
-    \| r(0.5) \|_{L_1} &= |0.5| + |0.5| = 1 \\
-    \| r(0.5) \|_{L_2} &= \sqrt{(0.5)^{2} + (0.5)^{2}} = \sqrt{0.5} \\
-    \| r(0.5) \|_{L_\infty} &= \max(|0.5|,|0.5|) = 0.5.
-\f}
-The following graphic shows all values for the three norm functions \f$\| r(x) \|_{L_1}, \| r(x) \|_{L_2}\f$ and \f$\| r(x) \|_{L_\infty}\f$.
-It is notable that the \f$ L_{1} \f$ norm forms the upper and the \f$ L_{\infty} \f$ norm forms the lower border for the example function \f$ r(x) \f$.
-![Graphs for the different norm functions from the above example](pics/NormTypes_OneArray_1-2-INF.png)
- */
+src1 and src2 denote input arrays.
+*/
+
 /** enum cv::NormTypes */
-public static final int NORM_INF       = 1,
+public static final int
+                /**
+                \f[
+                norm =  \forkthree
+                {\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
+                {\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
+                {\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM_RELATIVE | NORM_INF}\) }
+                \f]
+                */
+                NORM_INF       = 1,
+                /**
+                \f[
+                norm =  \forkthree
+                {\| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\)}
+                { \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
+                { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE | NORM_L1}\) }
+                \f]*/
                  NORM_L1        = 2,
+                 /**
+                 \f[
+                 norm =  \forkthree
+                 { \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }
+                 { \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }
+                 { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE | NORM_L2}\) }
+                 \f]
+                 */
                  NORM_L2        = 4,
+                 /**
+                 \f[
+                 norm =  \forkthree
+                 { \| \texttt{src1} \| _{L_2} ^{2} = \sum_I \texttt{src1}(I)^2} {if  \(\texttt{normType} = \texttt{NORM_L2SQR}\)}
+                 { \| \texttt{src1} - \texttt{src2} \| _{L_2} ^{2} =  \sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2 }{if  \(\texttt{normType} = \texttt{NORM_L2SQR}\) }
+                 { \left(\frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}}\right)^2 }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE | NORM_L2}\) }
+                 \f]
+                 */
                  NORM_L2SQR     = 5,
+                 /**
+                 In the case of one input array, calculates the Hamming distance of the array from zero,
+                 In the case of two input arrays, calculates the Hamming distance between the arrays.
+                 */
                  NORM_HAMMING   = 6,
+                 /**
+                 Similar to NORM_HAMMING, but in the calculation, each two bits of the input sequence will
+                 be added and treated as a single bit to be used in the same calculation as NORM_HAMMING.
+                 */
                  NORM_HAMMING2  = 7,
+                 /** bit-mask which can be used to separate norm type from norm flags */
                  NORM_TYPE_MASK = 7,
                  /** flag */
                  NORM_RELATIVE  = 8,
@@ -2659,7 +2675,22 @@ The macros CV_Assert (and CV_DbgAssert(expr)) evaluate the specified expression.
 raise an error (see cv::error). The macro CV_Assert checks the condition in both Debug and Release
 configurations while CV_DbgAssert is only retained in the Debug configuration.
 */
-// #define CV_Assert( expr ) if(!!(expr)) ; else cv::error( cv::Error::StsAssert, #expr, CV_Func, __FILE__, __LINE__ )
+
+// #define CV_VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)    N
+// #define CV_VA_NUM_ARGS(...)      CV_VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+// #define CV_Assert_1( expr ) if(!!(expr)) ; else cv::error( cv::Error::StsAssert, #expr, CV_Func, __FILE__, __LINE__ )
+// #define CV_Assert_2( expr1, expr2 ) CV_Assert_1(expr1); CV_Assert_1(expr2)
+// #define CV_Assert_3( expr1, expr2, expr3 ) CV_Assert_2(expr1, expr2); CV_Assert_1(expr3)
+// #define CV_Assert_4( expr1, expr2, expr3, expr4 ) CV_Assert_3(expr1, expr2, expr3); CV_Assert_1(expr4)
+// #define CV_Assert_5( expr1, expr2, expr3, expr4, expr5 ) CV_Assert_4(expr1, expr2, expr3, expr4); CV_Assert_1(expr5)
+// #define CV_Assert_6( expr1, expr2, expr3, expr4, expr5, expr6 ) CV_Assert_5(expr1, expr2, expr3, expr4, expr5); CV_Assert_1(expr6)
+// #define CV_Assert_7( expr1, expr2, expr3, expr4, expr5, expr6, expr7 ) CV_Assert_6(expr1, expr2, expr3, expr4, expr5, expr6 ); CV_Assert_1(expr7)
+// #define CV_Assert_8( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8 ) CV_Assert_7(expr1, expr2, expr3, expr4, expr5, expr6, expr7 ); CV_Assert_1(expr8)
+// #define CV_Assert_9( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9 ) CV_Assert_8(expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8 ); CV_Assert_1(expr9)
+// #define CV_Assert_10( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9, expr10 ) CV_Assert_9(expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9 ); CV_Assert_1(expr10)
+
+// #define CV_Assert(...)               CVAUX_CONCAT(CV_Assert_, CV_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__)
 
 /** same as CV_Error(code,msg), but does not return */
 // #define CV_ErrorNoReturn( code, msg ) cv::errorNoReturn( code, msg, CV_Func, __FILE__, __LINE__ )
@@ -2800,6 +2831,12 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 @Namespace("cv::ipp") public static native @Str BytePointer getIppErrorLocation();
 @Namespace("cv::ipp") public static native @Cast("bool") boolean useIPP();
 @Namespace("cv::ipp") public static native void setUseIPP(@Cast("bool") boolean flag);
+@Namespace("cv::ipp") public static native @Str BytePointer getIppVersion();
+
+// IPP Not-Exact mode. This function may force use of IPP then both IPP and OpenCV provide proper results
+// but have internal accuracy differences which have to much direct or indirect impact on accuracy tests.
+@Namespace("cv::ipp") public static native @Cast("bool") boolean useIPP_NE();
+@Namespace("cv::ipp") public static native void setUseIPP_NE(@Cast("bool") boolean flag);
 
  // ipp
 
@@ -2813,6 +2850,7 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
  // cv
 
 // #include "opencv2/core/neon_utils.hpp"
+// #include "opencv2/core/vsx_utils.hpp"
 
 // #endif //OPENCV_CORE_BASE_HPP
 
@@ -3349,12 +3387,12 @@ If threads == 0, OpenCV will disable threading optimizations and run all it's fu
 sequentially. Passing threads \< 0 will reset threads number to system default. This function must
 be called outside of parallel region.
 <p>
-OpenCV will try to run it's functions with specified threads number, but some behaviour differs from
+OpenCV will try to run its functions with specified threads number, but some behaviour differs from
 framework:
 -   {@code TBB} - User-defined parallel constructions will run with the same threads number, if
-    another does not specified. If later on user creates own scheduler, OpenCV will use it.
+    another is not specified. If later on user creates his own scheduler, OpenCV will use it.
 -   {@code OpenMP} - No special defined behaviour.
--   {@code Concurrency} - If threads == 1, OpenCV will disable threading optimizations and run it's
+-   {@code Concurrency} - If threads == 1, OpenCV will disable threading optimizations and run its
     functions sequentially.
 -   {@code GCD} - Supports only values \<= 0.
 -   {@code C=} - No special defined behaviour.
@@ -3384,7 +3422,7 @@ The exact meaning of return value depends on the threading framework used by Ope
 /** \brief Returns the index of the currently executed thread within the current parallel region. Always
 returns 0 if called outside of parallel region.
 <p>
-The exact meaning of return value depends on the threading framework used by OpenCV library:
+The exact meaning of the return value depends on the threading framework used by OpenCV library:
 - {@code TBB} - Unsupported with current 4.1 TBB release. Maybe will be supported in future.
 - {@code OpenMP} - The thread number, within the current team, of the calling thread.
 - {@code Concurrency} - An ID for the virtual processor that the current context is executing on (0
@@ -3435,6 +3473,19 @@ tm.start();
 // do something ...
 tm.stop();
 std::cout << tm.getTimeSec();
+}</pre>
+<p>
+It is also possible to compute the average time over multiple runs:
+<pre>{@code
+TickMeter tm;
+for (int i = 0; i < 100; i++)
+{
+    tm.start();
+    // do something ...
+    tm.stop();
+}
+double average_time = tm.getTimeSec() / tm.getCounter();
+std::cout << "Average time in second per iteration is: " << average_time << std::endl;
 }</pre>
 \sa getTickCount, getTickFrequency
 */
@@ -3546,7 +3597,7 @@ The function returns the aligned pointer of the same type as the input pointer:
 
 /** \brief Aligns a buffer size to the specified number of bytes.
 <p>
-The function returns the minimum number that is greater or equal to sz and is divisible by n :
+The function returns the minimum number that is greater than or equal to sz and is divisible by n :
 \f[\texttt{(sz + n-1) & -n}\f]
 @param sz Buffer size to align.
 @param n Alignment size that must be a power of two.
@@ -4675,7 +4726,7 @@ public static class CvSparseMat extends AbstractCvSparseMat {
 
     public native CvSet heap(); public native CvSparseMat heap(CvSet heap);
     public native Pointer hashtable(int i); public native CvSparseMat hashtable(int i, Pointer hashtable);
-    @MemberGetter public native @Cast("void**") PointerPointer hashtable();
+    public native @Cast("void**") PointerPointer hashtable(); public native CvSparseMat hashtable(PointerPointer hashtable);
     public native int hashsize(); public native CvSparseMat hashsize(int hashsize);
     public native int valoffset(); public native CvSparseMat valoffset(int valoffset);
     public native int idxoffset(); public native CvSparseMat idxoffset(int idxoffset);
@@ -4779,7 +4830,7 @@ public static class CvHistogram extends org.bytedeco.javacpp.helper.opencv_imgpr
     @MemberGetter public native @Cast("float(*)[2]") FloatPointer thresh();
     /** For non-uniform histograms.                  */
     public native FloatPointer thresh2(int i); public native CvHistogram thresh2(int i, FloatPointer thresh2);
-    @MemberGetter public native @Cast("float**") PointerPointer thresh2();
+    public native @Cast("float**") PointerPointer thresh2(); public native CvHistogram thresh2(PointerPointer thresh2);
     /** Embedded matrix header for array histograms. */
     public native @ByRef CvMatND mat(); public native CvHistogram mat(CvMatND mat);
 }
@@ -6327,7 +6378,7 @@ public static class CvPluginFuncInfo extends Pointer {
     }
 
     public native Pointer func_addr(int i); public native CvPluginFuncInfo func_addr(int i, Pointer func_addr);
-    @MemberGetter public native @Cast("void**") PointerPointer func_addr();
+    public native @Cast("void**") PointerPointer func_addr(); public native CvPluginFuncInfo func_addr(PointerPointer func_addr);
     public native Pointer default_func_addr(); public native CvPluginFuncInfo default_func_addr(Pointer default_func_addr);
     @MemberGetter public native @Cast("const char*") BytePointer func_names();
     public native int search_modules(); public native CvPluginFuncInfo search_modules(int search_modules);
@@ -9766,7 +9817,61 @@ public static final String cvFuncName = "";
   more convenient access to the real and imaginary parts using through the simple field access, as opposite
   to std::complex::real() and std::complex::imag().
 */
+@Name("cv::Complex<float>") @NoOffset public static class Complexf extends FloatPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Complexf(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Complexf(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Complexf position(long position) {
+        return (Complexf)super.position(position);
+    }
 
+
+    /** constructors */
+    public Complexf() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Complexf( float _re, float _im/*=0*/ ) { super((Pointer)null); allocate(_re, _im); }
+    private native void allocate( float _re, float _im/*=0*/ );
+    public Complexf( float _re ) { super((Pointer)null); allocate(_re); }
+    private native void allocate( float _re );
+
+    /** conversion to another data type */
+    /** conjugation */
+    public native @ByVal Complexf conj();
+
+    public native float re(); public native Complexf re(float re);
+    public native float im(); public native Complexf im(float im); //< the real and the imaginary parts
+}
+@Name("cv::Complex<double>") @NoOffset public static class Complexd extends DoublePointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Complexd(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Complexd(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Complexd position(long position) {
+        return (Complexd)super.position(position);
+    }
+
+
+    /** constructors */
+    public Complexd() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Complexd( double _re, double _im/*=0*/ ) { super((Pointer)null); allocate(_re, _im); }
+    private native void allocate( double _re, double _im/*=0*/ );
+    public Complexd( double _re ) { super((Pointer)null); allocate(_re); }
+    private native void allocate( double _re );
+
+    /** conversion to another data type */
+    /** conjugation */
+    public native @ByVal Complexd conj();
+
+    public native double re(); public native Complexd re(double re);
+    public native double im(); public native Complexd im(double im); //< the real and the imaginary parts
+}
+ // namespace
 
 
 //////////////////////////////// Point_ ////////////////////////////////
@@ -9923,7 +10028,7 @@ Example:
     public native double x(); public native Point2d x(double x);
     public native double y(); public native Point2d y(double y); //< the point coordinates
 }
-
+ // namespace
 
 
 //////////////////////////////// Point3_ ////////////////////////////////
@@ -10062,8 +10167,7 @@ The following Point3_\<\> aliases are available:
     public native double y(); public native Point3d y(double y);
     public native double z(); public native Point3d z(double z); //< the point coordinates
 }
-
-
+ // namespace
 
 //////////////////////////////// Size_ ////////////////////////////////
 
@@ -10179,8 +10283,7 @@ OpenCV defines the following Size_\<\> aliases:
     public native double width(); public native Size2d width(double width);
     public native double height(); public native Size2d height(double height); // the width and the height
 }
-
-
+ // namespace
 
 //////////////////////////////// Rect_ ////////////////////////////////
 
@@ -10368,8 +10471,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public native double width(); public native Rectd width(double width);
     public native double height(); public native Rectd height(double height); //< the top-left corner, as well as width and height of the rectangle
 }
-
-
+ // namespace
 
 ///////////////////////////// RotatedRect /////////////////////////////
 
@@ -10428,7 +10530,7 @@ The sample below demonstrates how to use RotatedRect:
     private native void allocate(@Const @ByRef Point2f point1, @Const @ByRef Point2f point2, @Const @ByRef Point2f point3);
 
     /** returns 4 vertices of the rectangle
-    @param pts The points array for storing rectangle vertices.
+    @param pts The points array for storing rectangle vertices. The order is bottomLeft, topLeft, topRight, bottomRight.
     */
     public native void points(Point2f pts);
     /** returns the minimal up-right integer rectangle containing the rotated rectangle */
@@ -10440,7 +10542,7 @@ The sample below demonstrates how to use RotatedRect:
     public native @ByRef Size2f size(); public native RotatedRect size(Size2f size);    //< width and height of the rectangle
     public native float angle(); public native RotatedRect angle(float angle);    //< the rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.
 }
-
+ // namespace
 
 
 //////////////////////////////// Range /////////////////////////////////
@@ -10490,7 +10592,7 @@ custom processing, you will probably have to check and handle it explicitly:
     public native int start(); public native Range start(int start);
     public native int end(); public native Range end(int end);
 }
-
+ // namespace
 
 
 //////////////////////////////// Scalar_ ///////////////////////////////
@@ -10573,7 +10675,7 @@ OpenCV to pass pixel values.
     // returns true iff v1 == v2 == v3 == 0
     public native @Cast("bool") boolean isReal();
 }
-
+ // namespace
 
 
 /////////////////////////////// KeyPoint ////////////////////////////////
@@ -10691,6 +10793,8 @@ can then be matched using cv::KDTree or another method.
     public native int class_id(); public native KeyPoint class_id(int class_id);
 }
 
+// #ifdef OPENCV_TRAITS_ENABLE_DEPRECATED
+// #endif
 
 
 //////////////////////////////// DMatch /////////////////////////////////
@@ -10728,6 +10832,8 @@ descriptors.
     public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef DMatch m);
 }
 
+// #ifdef OPENCV_TRAITS_ENABLE_DEPRECATED
+// #endif
 
 
 ///////////////////////////// TermCriteria //////////////////////////////
@@ -10877,6 +10983,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     public native double nu03(); public native Moments nu03(double nu03);
     /** \} */
 }
+ // namespace
 
 /** \} imgproc_shape
  <p>
@@ -11186,6 +11293,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     \{
         \defgroup core_utils_sse SSE utilities
         \defgroup core_utils_neon NEON utilities
+        \defgroup core_utils_softfloat Softfloat support
     \}
     \defgroup core_opengl OpenGL interoperability
     \defgroup core_ipp Intel IPP Asynchronous C/C++ Converters
@@ -11796,35 +11904,37 @@ Scalar_ 's.
                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void meanStdDev(@ByVal UMat src, @ByVal UMat mean, @ByVal UMat stddev);
 
-/** \brief Calculates an absolute array norm, an absolute difference norm, or a
-relative difference norm.
+/** \brief Calculates the  absolute norm of an array.
 <p>
-The function cv::norm calculates an absolute norm of src1 (when there is no
-src2 ):
+This version of cv::norm calculates the absolute norm of src1. The type of norm to calculate is specified using cv::NormTypes.
 <p>
-\f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
-{ \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
-{ \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
-<p>
-or an absolute or relative difference norm if src2 is there:
-<p>
-\f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
-<p>
-or
-<p>
-\f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_INF}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L1}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L2}\) }\f]
-<p>
-The function cv::norm returns the calculated norm.
+As example for one array consider the function \f$r(x)= \begin{pmatrix} x \\ 1-x \end{pmatrix}, x \in [-1;1]\f$.
+The \f$ L_{1}, L_{2} \f$ and \f$ L_{\infty} \f$ norm for the sample value \f$r(-1) = \begin{pmatrix} -1 \\ 2 \end{pmatrix}\f$
+is calculated as follows
+\f{align*}
+    \| r(-1) \|_{L_1} &= |-1| + |2| = 3 \\
+    \| r(-1) \|_{L_2} &= \sqrt{(-1)^{2} + (2)^{2}} = \sqrt{5} \\
+    \| r(-1) \|_{L_\infty} &= \max(|-1|,|2|) = 2
+\f}
+and for \f$r(0.5) = \begin{pmatrix} 0.5 \\ 0.5 \end{pmatrix}\f$ the calculation is
+\f{align*}
+    \| r(0.5) \|_{L_1} &= |0.5| + |0.5| = 1 \\
+    \| r(0.5) \|_{L_2} &= \sqrt{(0.5)^{2} + (0.5)^{2}} = \sqrt{0.5} \\
+    \| r(0.5) \|_{L_\infty} &= \max(|0.5|,|0.5|) = 0.5.
+\f}
+The following graphic shows all values for the three norm functions \f$\| r(x) \|_{L_1}, \| r(x) \|_{L_2}\f$ and \f$\| r(x) \|_{L_\infty}\f$.
+It is notable that the \f$ L_{1} \f$ norm forms the upper and the \f$ L_{\infty} \f$ norm forms the lower border for the example function \f$ r(x) \f$.
+![Graphs for the different norm functions from the above example](pics/NormTypes_OneArray_1-2-INF.png)
 <p>
 When the mask parameter is specified and it is not empty, the norm is
+<p>
+If normType is not specified, NORM_L2 is used.
 calculated only over the region specified by the mask.
 <p>
-A multi-channel input arrays are treated as a single-channel, that is,
+Multi-channel input arrays are treated as single-channel arrays, that is,
 the results for all channels are combined.
+<p>
+Hamming norms can only be calculated with CV_8U depth arrays.
 <p>
 @param src1 first input array.
 @param normType type of the norm (see cv::NormTypes).
@@ -11835,7 +11945,12 @@ the results for all channels are combined.
 @Namespace("cv") public static native double norm(@ByVal UMat src1, int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native double norm(@ByVal UMat src1);
 
-/** \overload
+/** \brief Calculates an absolute difference norm or a relative difference norm.
+<p>
+This version of cv::norm calculates the absolute difference norm
+or the relative difference norm of arrays src1 and src2.
+The type of norm to calculate is specified using cv::NormTypes.
+<p>
 @param src1 first input array.
 @param src2 second input array of the same size and the same type as src1.
 @param normType type of the norm (cv::NormTypes).
@@ -11853,10 +11968,21 @@ the results for all channels are combined.
 */
 @Namespace("cv") public static native double norm( @Const @ByRef SparseMat src, int normType );
 
-/** \brief computes PSNR image/video quality metric
+/** \brief Computes the Peak Signal-to-Noise Ratio (PSNR) image quality metric.
 <p>
-see http://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio for details
-\todo document
+This function calculates the Peak Signal-to-Noise Ratio (PSNR) image quality metric in decibels (dB), between two input arrays src1 and src2. Arrays must have depth CV_8U.
+<p>
+The PSNR is calculated as follows:
+<p>
+\f[
+\texttt{PSNR} = 10 \cdot \log_{10}{\left( \frac{R^2}{MSE} \right) }
+\f]
+<p>
+where R is the maximum integer value of depth CV_8U (255) and MSE is the mean squared error between the two arrays.
+<p>
+@param src1 first input array.
+@param src2 second input array of the same size as src1.
+  <p>
   */
 @Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2);
 @Namespace("cv") public static native double PSNR(@ByVal UMat src1, @ByVal UMat src2);
@@ -12057,6 +12183,13 @@ obtained. For example, the function can be used to compute horizontal and vertic
 raster image. In case of REDUCE_MAX and REDUCE_MIN , the output image should have the same type as the source one.
 In case of REDUCE_SUM and REDUCE_AVG , the output may have a larger element bit-depth to preserve accuracy.
 And multi-channel arrays are also supported in these two reduction modes.
+<p>
+The following code demonstrates its usage for a single channel matrix.
+\snippet snippets/core_reduce.cpp example
+<p>
+And the following code demonstrates its usage for a two-channel matrix.
+\snippet snippets/core_reduce.cpp example2
+<p>
 @param src input 2D matrix.
 @param dst output vector. Its size and type is defined by dim and dtype parameters.
 @param dim dimension index along which the matrix is reduced. 0 means that the matrix is reduced to
@@ -12079,6 +12212,10 @@ elements of i-th input array are treated as mv[i].channels()-element vectors.
 <p>
 The function cv::split does the reverse operation. If you need to shuffle channels in some other
 advanced way, use cv::mixChannels.
+<p>
+The following example shows how to merge 3 single channel matrices into a single 3-channel matrix.
+\snippet snippets/core_merge.cpp example
+<p>
 @param mv input array of matrices to be merged; all the matrices in mv must have the same
 size and the same depth.
 @param count number of input matrices when mv is a plain C array; it must be greater than zero.
@@ -12106,6 +12243,10 @@ The function cv::split splits a multi-channel array into separate single-channel
 \f[\texttt{mv} [c](I) =  \texttt{src} (I)_c\f]
 If you need to extract a single channel or do some other sophisticated channel permutation, use
 mixChannels .
+<p>
+The following example demonstrates how to split a 3-channel matrix into 3 single channel matrices.
+\snippet snippets/core_split.cpp example
+<p>
 @param src input multi-channel array.
 @param mvbegin output array; the number of arrays must match src.channels(); the arrays themselves are
 reallocated, if needed.
@@ -13229,8 +13370,9 @@ matrix src:
 <pre>{@code
     src*eigenvectors.row(i).t() = eigenvalues.at<srcType>(i)*eigenvectors.row(i).t()
 }</pre>
-\note in the new and the old interfaces different ordering of eigenvalues and eigenvectors
-parameters is used.
+<p>
+\note Use cv::eigenNonSymmetric for calculation of real eigenvalues and eigenvectors of non-symmetric matrix.
+<p>
 @param src input matrix that must have CV_32FC1 or CV_64FC1 type, square size and be symmetrical
 (src ^T^ == src).
 @param eigenvalues output vector of eigenvalues of the same type as src; the eigenvalues are stored
@@ -13238,7 +13380,7 @@ in the descending order.
 @param eigenvectors output matrix of eigenvectors; it has the same size and type as src; the
 eigenvectors are stored as subsequent matrix rows, in the same order as the corresponding
 eigenvalues.
-\sa completeSymm , PCA
+\sa eigenNonSymmetric, completeSymm , PCA
 */
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal Mat src, @ByVal Mat eigenvalues,
                         @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat eigenvectors);
@@ -13246,6 +13388,25 @@ eigenvalues.
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal UMat src, @ByVal UMat eigenvalues,
                         @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat eigenvectors);
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal UMat src, @ByVal UMat eigenvalues);
+
+/** \brief Calculates eigenvalues and eigenvectors of a non-symmetric matrix (real eigenvalues only).
+<p>
+\note Assumes real eigenvalues.
+<p>
+The function calculates eigenvalues and eigenvectors (optional) of the square matrix src:
+<pre>{@code
+    src*eigenvectors.row(i).t() = eigenvalues.at<srcType>(i)*eigenvectors.row(i).t()
+}</pre>
+<p>
+@param src input matrix (CV_32FC1 or CV_64FC1 type).
+@param eigenvalues output vector of eigenvalues (type is the same type as src).
+@param eigenvectors output matrix of eigenvectors (type is the same type as src). The eigenvectors are stored as subsequent matrix rows, in the same order as the corresponding eigenvalues.
+\sa eigen
+*/
+@Namespace("cv") public static native void eigenNonSymmetric(@ByVal Mat src, @ByVal Mat eigenvalues,
+                                    @ByVal Mat eigenvectors);
+@Namespace("cv") public static native void eigenNonSymmetric(@ByVal UMat src, @ByVal UMat eigenvalues,
+                                    @ByVal UMat eigenvectors);
 
 /** \brief Calculates the covariance matrix of a set of vectors.
 <p>
@@ -14936,6 +15097,9 @@ may or may not be in the same class.
 
 // #include "opencv2/core/bufferpool.hpp"
 
+// #ifdef CV_CXX11
+// #endif
+
 /** \addtogroup core_basic
  *  \{ */
 
@@ -15224,7 +15388,7 @@ public static final int
 An example demonstrating the serial out capabilities of cv::Mat
 */
 
- /** \brief n-dimensional dense array class
+ /** \brief n-dimensional dense array class \anchor CVMat_Details
 <p>
 The class Mat represents an n-dimensional dense numerical single-channel or multi-channel array. It
 can be used to store real or complex-valued vectors and matrices, grayscale or color images, voxel
@@ -15906,8 +16070,8 @@ including std::sort().
     /** \overload
     @param m Destination matrix. If it does not have a proper size or type before the operation, it is
     reallocated.
-    @param mask Operation mask. Its non-zero elements indicate which matrix elements need to be copied.
-    The mask has to be of type CV_8U and can have 1 or multiple channels.
+    @param mask Operation mask of the same size as \*this. Its non-zero elements indicate which matrix
+    elements need to be copied. The mask has to be of type CV_8U and can have 1 or multiple channels.
     */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
     public native void copyTo( @ByVal UMat m, @ByVal UMat mask );
@@ -15948,7 +16112,8 @@ including std::sort().
     <p>
     This is an advanced variant of the Mat::operator=(const Scalar& s) operator.
     @param value Assigned scalar converted to the actual array type.
-    @param mask Operation mask of the same size as \*this.
+    @param mask Operation mask of the same size as \*this. Its non-zero elements indicate which matrix
+    elements need to be copied. The mask has to be of type CV_8U and can have 1 or multiple channels
      */
     public native @ByRef Mat setTo(@ByVal Mat value, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
     public native @ByRef Mat setTo(@ByVal Mat value);
@@ -16267,6 +16432,10 @@ including std::sort().
     */
 
     /** \overload
+    @param elem Added element(s).
+    */
+
+    /** \overload
     @param m Added line(s).
     */
     public native void push_back(@Const @ByRef Mat m);
@@ -16391,7 +16560,7 @@ including std::sort().
                         inv_scale = 1.f/alpha_scale;
 
             CV_Assert( src1.type() == src2.type() &&
-                       src1.type() == CV_MAKETYPE(DataType<T>::depth, 4) &&
+                       src1.type() == CV_MAKETYPE(traits::Depth<T>::value, 4) &&
                        src1.size() == src2.size());
             Size size = src1.size();
             dst.create(size, src1.type());
@@ -16649,7 +16818,7 @@ including std::sort().
                         inv_scale = 1.f/alpha_scale;
 
             CV_Assert( src1.type() == src2.type() &&
-                       src1.type() == DataType<VT>::type &&
+                       src1.type() == traits::Type<VT>::value &&
                        src1.size() == src2.size());
             Size size = src1.size();
             dst.create(size, src1.type());
@@ -16956,7 +17125,7 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     /** copies those matrix elements to "m" that are marked with non-zero mask elements. */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
     public native void copyTo( @ByVal UMat m, @ByVal UMat mask );
-    /** converts matrix to another datatype with optional scalng. See cvConvertScale. */
+    /** converts matrix to another datatype with optional scaling. See cvConvertScale. */
     public native void convertTo( @ByVal Mat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByVal Mat m, int rtype );
     public native void convertTo( @ByVal UMat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
@@ -17861,7 +18030,7 @@ The example below illustrates how you can compute a normalized and threshold 3D 
     public native Mat planes(); public native NAryMatIterator planes(Mat planes);
     /** data pointers */
     public native @Cast("uchar*") BytePointer ptrs(int i); public native NAryMatIterator ptrs(int i, BytePointer ptrs);
-    @MemberGetter public native @Cast("uchar**") PointerPointer ptrs();
+    public native @Cast("uchar**") PointerPointer ptrs(); public native NAryMatIterator ptrs(PointerPointer ptrs);
     /** the number of arrays */
     public native int narrays(); public native NAryMatIterator narrays(int narrays);
     /** the number of hyper-planes that the iterator steps through */
@@ -18185,6 +18354,11 @@ where C is depth=CV_8U .
 // #ifndef OPENCV_CORE_PERSISTENCE_HPP
 // #define OPENCV_CORE_PERSISTENCE_HPP
 
+// #ifndef CV_DOXYGEN
+/** Define to support persistence legacy formats */
+// #define CV__LEGACY_PERSISTENCE
+// #endif
+
 // #ifndef __cplusplus
 // #endif
 
@@ -18242,7 +18416,7 @@ XML/YAML/JSON file storages.     {#xml_storage}
 Writing to a file storage.
 --------------------------
 You can store and then restore various OpenCV data structures to/from XML (<http://www.w3c.org/XML>),
-YAML (<http://www.yaml.org>) or JSON (<http://www.json.org/>) formats. Also, it is possible store
+YAML (<http://www.yaml.org>) or JSON (<http://www.json.org/>) formats. Also, it is possible to store
 and load arbitrarily complex data structures, which include OpenCV data structures, as well as
 primitive data types (integer and floating-point numbers and text strings) as their elements.
 <p>
@@ -18289,7 +18463,7 @@ Here is an example:
         return 0;
     }
 }</pre>
-The sample above stores to XML and integer, text string (calibration date), 2 matrices, and a custom
+The sample above stores to YML an integer, a text string (calibration date), 2 matrices, and a custom
 structure "feature", which includes feature coordinates and LBP (local binary pattern) value. Here
 is output of the sample:
 <pre>{@code {.yaml}
@@ -18957,10 +19131,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Mat value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef SparseMat value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef SparseMat value );
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef KeyPointVector value);
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef KeyPointVector value);
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatchVector value);
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef DMatchVector value);
+// #ifdef CV__LEGACY_PERSISTENCE
+// #endif
 
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, int value );
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, float value );
@@ -18988,8 +19160,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef(nullValue = "cv::SparseMat()") SparseMat default_mat );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat );
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef KeyPointVector keypoints);
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DMatchVector matches);
+// #ifdef CV__LEGACY_PERSISTENCE
+// #endif
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef KeyPoint value, @Const @ByRef KeyPoint default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DMatch value, @Const @ByRef DMatch default_value);
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
 
@@ -19033,24 +19207,19 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String value );
 
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef KeyPoint kpt );
-
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef DMatch m );
-
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Range r );
-
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Const @ByRef KeyPointVector vec );
-
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Const @ByRef DMatchVector vec );
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Range r );
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef Range r );
 
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef KeyPoint r );
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef KeyPoint r );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef KeyPoint kpt);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef KeyPoint kpt);
 
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatch r );
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef DMatch r );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatch m);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef DMatch m);
+
+// #ifdef CV__LEGACY_PERSISTENCE
+// #endif
 
 /** \} FileStorage
  <p>
@@ -19113,15 +19282,14 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 /** \brief Reads KeyPoint from a file storage.
 */
 //It needs special handling because it contains two types of fields, int & float.
-@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPointVector vec);
-
 @Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPoint kpt);
+
+// #ifdef CV__LEGACY_PERSISTENCE
+// #endif
 
 /** \brief Reads DMatch from a file storage.
 */
 //It needs special handling because it contains two types of fields, int & float.
-@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef DMatchVector vec);
-
 @Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef DMatch m);
 
 /** \} FileNode

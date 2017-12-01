@@ -64,6 +64,37 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     }
 }
 
+@Name("std::vector<std::vector<cv::Range> >") public static class RangeVectorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RangeVectorVector(Pointer p) { super(p); }
+    public RangeVectorVector(Range[] ... array) { this(array.length); put(array); }
+    public RangeVectorVector()       { allocate();  }
+    public RangeVectorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef RangeVectorVector put(@ByRef RangeVectorVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+    public native @Index long size(@Cast("size_t") long i);
+    public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
+
+    @Index public native @ByRef Range get(@Cast("size_t") long i, @Cast("size_t") long j);
+    public native RangeVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Range value);
+
+    public RangeVectorVector put(Range[] ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            if (size(i) != array[i].length) { resize(i, array[i].length); }
+            for (int j = 0; j < array[i].length; j++) {
+                put(i, j, array[i][j]);
+            }
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<cv::Mat*>") public static class MatPointerVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -360,7 +391,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** Creates instance of LSTM layer */
         public static native @Ptr LSTMLayer create(@Const @ByRef LayerParams params);
 
-        /** Set trained weights for LSTM layer.
+        /** @deprecated Use LayerParams::blobs instead.
+        \brief Set trained weights for LSTM layer.
+        <p>
         LSTM behavior on each step is defined by current input, previous output, previous cell state and learned weights.
         <p>
         Let \f$x_t\f$ be current input, \f$h_t\f$ be current output, \f$c_t\f$ be current state.
@@ -399,7 +432,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native void setOutShape(@Const @StdVector @ByRef(nullValue = "cv::dnn::MatShape()") IntPointer outTailShape);
         public native void setOutShape();
 
-        /** \brief Specifies either interpet first dimension of input blob as timestamp dimenion either as sample.
+        /** @deprecated Use flag {@code produce_cell_output} in LayerParams.
+          * \brief Specifies either interpet first dimension of input blob as timestamp dimenion either as sample.
           *
           * If flag is set to true then shape of input blob will be interpeted as [{@code T}, {@code N}, {@code [data dims]}] where {@code T} specifies number of timpestamps, {@code N} is number of independent streams.
           * In this case each forward() call will iterate through {@code T} timestamps and update layer's state {@code T} times.
@@ -410,7 +444,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native void setUseTimstampsDim(@Cast("bool") boolean use/*=true*/);
         public native void setUseTimstampsDim();
 
-        /** \brief If this flag is set to true then layer will produce \f$ c_t \f$ as second output.
+        /** @deprecated Use flag {@code use_timestamp_dim} in LayerParams.
+         * \brief If this flag is set to true then layer will produce \f$ c_t \f$ as second output.
          * \details Shape of the second output is the same as first output.
          */
         public native void setProduceCellOutput(@Cast("bool") boolean produce/*=false*/);
@@ -489,6 +524,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @ByRef Size dilation(); public native BaseConvolutionLayer dilation(Size dilation);
         public native @ByRef Size adjustPad(); public native BaseConvolutionLayer adjustPad(Size adjustPad);
         public native @Str BytePointer padMode(); public native BaseConvolutionLayer padMode(BytePointer padMode);
+        public native int numOutput(); public native BaseConvolutionLayer numOutput(int numOutput);
     }
 
     @Namespace("cv::dnn") public static class ConvolutionLayer extends BaseConvolutionLayer {
@@ -545,6 +581,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("bool") boolean globalPooling(); public native PoolingLayer globalPooling(boolean globalPooling);
         public native @Cast("bool") boolean computeMaxIdx(); public native PoolingLayer computeMaxIdx(boolean computeMaxIdx);
         public native @Str BytePointer padMode(); public native PoolingLayer padMode(BytePointer padMode);
+        public native @Cast("bool") boolean ceilMode(); public native PoolingLayer ceilMode(boolean ceilMode);
 
         public static native @Ptr PoolingLayer create(@Const @ByRef LayerParams params);
     }
@@ -607,6 +644,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public ConcatLayer(Pointer p) { super(p); }
     
         public native int axis(); public native ConcatLayer axis(int axis);
+        /**
+         * \brief Add zero padding in case of concatenation of blobs with different
+         * spatial sizes.
+         *
+         * Details: https://github.com/torch/nn/blob/master/doc/containers.md#depthconcat
+         */
+        public native @Cast("bool") boolean padding(); public native ConcatLayer padding(boolean padding);
 
         public static native @Ptr ConcatLayer create(@Const @ByRef LayerParams params);
     }
@@ -622,13 +666,43 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr SplitLayer create(@Const @ByRef LayerParams params);
     }
 
+    /**
+     * Slice layer has several modes:
+     * 1. Caffe mode
+     * @param [in] axis Axis of split operation
+     * @param [in] slice_point Array of split points
+     *
+     * Number of output blobs equals to number of split points plus one. The
+     * first blob is a slice on input from 0 to \p slice_point[0] - 1 by \p axis,
+     * the second output blob is a slice of input from \p slice_point[0] to
+     * \p slice_point[1] - 1 by \p axis and the last output blob is a slice of
+     * input from \p slice_point[-1] up to the end of \p axis size.
+     *
+     * 2. TensorFlow mode
+     * @param begin Vector of start indices
+     * @param size Vector of sizes
+     *
+     * More convinient numpy-like slice. One and only output blob
+     * is a slice {@code input[begin[0]:begin[0]+size[0], begin[1]:begin[1]+size[1], ...]}
+     *
+     * 3. Torch mode
+     * @param axis Axis of split operation
+     *
+     * Split input blob on the equal parts by \p axis.
+     */
     @Namespace("cv::dnn") @NoOffset public static class SliceLayer extends Layer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SliceLayer(Pointer p) { super(p); }
     
+        /**
+         * \brief Vector of slice ranges.
+         *
+         * The first dimension equals number of output blobs.
+         * Inner vector has slice ranges for the first number of input dimensions.
+         */
+        public native @ByRef RangeVectorVector sliceRanges(); public native SliceLayer sliceRanges(RangeVectorVector sliceRanges);
         public native int axis(); public native SliceLayer axis(int axis);
-        public native @StdVector IntPointer sliceIndices(); public native SliceLayer sliceIndices(IntPointer sliceIndices);
 
         public static native @Ptr SliceLayer create(@Const @ByRef LayerParams params);
     }
@@ -641,6 +715,25 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr PermuteLayer create(@Const @ByRef LayerParams params);
     }
 
+    /**
+     * \brief Adds extra values for specific axes.
+     * @param paddings Vector of paddings in format
+     *                 <pre>{@code
+     *                 [ pad_before, pad_after,  // [0]th dimension
+     *                   pad_before, pad_after,  // [1]st dimension
+     *                   ...
+     *                   pad_before, pad_after ] // [n]th dimension
+     *                 }</pre>
+     *                 that represents number of padded values at every dimension
+     *                 starting from the first one. The rest of dimensions won't
+     *                 be padded.
+     * @param value Value to be padded. Defaults to zero.
+     * @param input_dims Torch's parameter. If \p input_dims is not equal to the
+     *                   actual input dimensionality then the {@code [0]th} dimension
+     *                   is considered as a batch dimension and \p paddings are shifted
+     *                   to a one dimension. Defaults to {@code -1} that means padding
+     *                   corresponding to \p paddings.
+     */
     @Namespace("cv::dnn") public static class PaddingLayer extends Layer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -673,12 +766,20 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr ReLULayer create(@Const @ByRef LayerParams params);
     }
 
+    @Namespace("cv::dnn") public static class ReLU6Layer extends ActivationLayer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ReLU6Layer(Pointer p) { super(p); }
+    
+        public static native @Ptr ReLU6Layer create(@Const @ByRef LayerParams params);
+    }
+
     @Namespace("cv::dnn") public static class ChannelsPReLULayer extends ActivationLayer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ChannelsPReLULayer(Pointer p) { super(p); }
     
-        public static native @Ptr ChannelsPReLULayer create(@Const @ByRef LayerParams params);
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
 
     @Namespace("cv::dnn") public static class ELULayer extends ActivationLayer {
@@ -811,6 +912,22 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr PriorBoxLayer create(@Const @ByRef LayerParams params);
     }
 
+    @Namespace("cv::dnn") public static class ReorgLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ReorgLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr ReorgLayer create(@Const @ByRef LayerParams params);
+    }
+
+    @Namespace("cv::dnn") public static class RegionLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public RegionLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr RegionLayer create(@Const @ByRef LayerParams params);
+    }
+
     @Namespace("cv::dnn") public static class DetectionOutputLayer extends Layer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -819,12 +936,54 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr DetectionOutputLayer create(@Const @ByRef LayerParams params);
     }
 
-    @Namespace("cv::dnn") public static class NormalizeBBoxLayer extends Layer {
+    /**
+     * \brief \f$ L_p \f$ - normalization layer.
+     * @param p Normalization factor. The most common {@code p = 1} for \f$ L_1 \f$ -
+     *          normalization or {@code p = 2} for \f$ L_2 \f$ - normalization or a custom one.
+     * @param eps Parameter \f$ \epsilon \f$ to prevent a division by zero.
+     * @param across_spatial If true, normalize an input across all non-batch dimensions.
+     *                       Otherwise normalize an every channel separately.
+     *
+     * Across spatial:
+     * \f[
+     * norm = \sqrt[p]{\epsilon + \sum_{x, y, c} |src(x, y, c)|^p } \\
+     * dst(x, y, c) = \frac{ src(x, y, c) }{norm}
+     * \f]
+     *
+     * Channel wise normalization:
+     * \f[
+     * norm(c) = \sqrt[p]{\epsilon + \sum_{x, y} |src(x, y, c)|^p } \\
+     * dst(x, y, c) = \frac{ src(x, y, c) }{norm(c)}
+     * \f]
+     *
+     * Where {@code x, y} - spatial cooridnates, {@code c} - channel.
+     *
+     * An every sample in the batch is normalized separately. Optionally,
+     * output is scaled by the trained parameters.
+     */
+    @Namespace("cv::dnn") @NoOffset public static class NormalizeBBoxLayer extends Layer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public NormalizeBBoxLayer(Pointer p) { super(p); }
     
+        public native float pnorm(); public native NormalizeBBoxLayer pnorm(float pnorm);
+        public native float epsilon(); public native NormalizeBBoxLayer epsilon(float epsilon);
+        public native @Cast("bool") boolean acrossSpatial(); public native NormalizeBBoxLayer acrossSpatial(boolean acrossSpatial);
+
         public static native @Ptr NormalizeBBoxLayer create(@Const @ByRef LayerParams params);
+    }
+
+    /**
+     * \brief Resize input 4-dimensional blob by nearest neghbor strategy.
+     *
+     * Layer is used to support TensorFlow's resize_nearest_neighbor op.
+     */
+    @Namespace("cv::dnn") public static class ResizeNearestNeighborLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ResizeNearestNeighborLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr ResizeNearestNeighborLayer create(@Const @ByRef LayerParams params);
     }
 
 /** \}
@@ -884,7 +1043,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #include <opencv2/core.hpp>
 
 // #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_EXPERIMENTAL_NS
-// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v1 {
+// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v2 {
 // #define CV__DNN_EXPERIMENTAL_NS_END }
  
 // #else
@@ -988,6 +1147,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * \brief Transfer data to CPU host memory.
          */
         public native void copyToHost();
+
+        /**
+         * \brief Indicate that an actual data is on CPU.
+         */
+        public native void setHostDirty();
 
         /** Backend identifier. */
         public native int backendId(); public native BackendWrapper backendId(int backendId);
@@ -1138,6 +1302,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Str BytePointer name(); public native Layer name(BytePointer name);
         /** Type name which was used for creating layer by layer factory. */
         public native @Str BytePointer type(); public native Layer type(BytePointer type);
+        /** prefer target for layer forwarding */
+        public native int preferableTarget(); public native Layer preferableTarget(int preferableTarget);
         /** Initializes only #name, #type and #blobs fields. */
         public native void setParamsFrom(@Const @ByRef LayerParams params);
     }
@@ -1198,7 +1364,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** \brief Returns pointer to layer with specified id or name which the network use. */
         public native @Ptr Layer getLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layerId);
 
-        /** \brief Returns pointers to input layers of specific layer. */
+        /** \brief Returns pointers to input layers of specific layer. */ // FIXIT: CV_WRAP
 
         /** \brief Delete layer for the network (not implemented yet) */
         public native void deleteLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layer);
@@ -1344,30 +1510,30 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void getLayersShapes(@Const @ByRef MatShapeVector netInputShapes,
                                              @StdVector IntPointer layersIds,
-                                             MatShapeVectorVector inLayersShapes,
-                                             MatShapeVectorVector outLayersShapes);
+                                             @ByRef MatShapeVectorVector inLayersShapes,
+                                             @ByRef MatShapeVectorVector outLayersShapes);
         public native void getLayersShapes(@Const @ByRef MatShapeVector netInputShapes,
                                              @StdVector IntBuffer layersIds,
-                                             MatShapeVectorVector inLayersShapes,
-                                             MatShapeVectorVector outLayersShapes);
+                                             @ByRef MatShapeVectorVector inLayersShapes,
+                                             @ByRef MatShapeVectorVector outLayersShapes);
         public native void getLayersShapes(@Const @ByRef MatShapeVector netInputShapes,
                                              @StdVector int[] layersIds,
-                                             MatShapeVectorVector inLayersShapes,
-                                             MatShapeVectorVector outLayersShapes);
+                                             @ByRef MatShapeVectorVector inLayersShapes,
+                                             @ByRef MatShapeVectorVector outLayersShapes);
 
         /** \overload */
         public native void getLayersShapes(@Const @StdVector @ByRef IntPointer netInputShape,
                                              @StdVector IntPointer layersIds,
-                                             MatShapeVectorVector inLayersShapes,
-                                             MatShapeVectorVector outLayersShapes);
+                                             @ByRef MatShapeVectorVector inLayersShapes,
+                                             @ByRef MatShapeVectorVector outLayersShapes);
         public native void getLayersShapes(@Const @StdVector @ByRef IntPointer netInputShape,
                                              @StdVector IntBuffer layersIds,
-                                             MatShapeVectorVector inLayersShapes,
-                                             MatShapeVectorVector outLayersShapes);
+                                             @ByRef MatShapeVectorVector inLayersShapes,
+                                             @ByRef MatShapeVectorVector outLayersShapes);
         public native void getLayersShapes(@Const @StdVector @ByRef IntPointer netInputShape,
                                              @StdVector int[] layersIds,
-                                             MatShapeVectorVector inLayersShapes,
-                                             MatShapeVectorVector outLayersShapes);
+                                             @ByRef MatShapeVectorVector inLayersShapes,
+                                             @ByRef MatShapeVectorVector outLayersShapes);
 
         /** \brief Returns input and output shapes for layer with specified
          * id in loaded model; preliminary inferencing isn't necessary.
@@ -1380,14 +1546,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void getLayerShapes(@Const @StdVector @ByRef IntPointer netInputShape,
                                             int layerId,
-                                            MatShapeVector inLayerShapes,
-                                            MatShapeVector outLayerShapes);
+                                            @ByRef MatShapeVector inLayerShapes,
+                                            @ByRef MatShapeVector outLayerShapes); // FIXIT: CV_WRAP
 
         /** \overload */
         public native void getLayerShapes(@Const @ByRef MatShapeVector netInputShapes,
                                             int layerId,
-                                            MatShapeVector inLayerShapes,
-                                            MatShapeVector outLayerShapes);
+                                            @ByRef MatShapeVector inLayerShapes,
+                                            @ByRef MatShapeVector outLayerShapes); // FIXIT: CV_WRAP
 
         /** \brief Computes FLOP for whole loaded model with specified input shapes.
          * @param netInputShapes vector of shapes for all net inputs.
@@ -1422,7 +1588,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * @param blobs output parameter to store resulting bytes for intermediate blobs.
          */
         public native void getMemoryConsumption(@Const @ByRef MatShapeVector netInputShapes,
-                                                  @Cast("size_t*") @ByRef SizeTPointer weights, @Cast("size_t*") @ByRef SizeTPointer blobs);
+                                                  @Cast("size_t*") @ByRef SizeTPointer weights, @Cast("size_t*") @ByRef SizeTPointer blobs); // FIXIT: CV_WRAP
         /** \overload */
         public native void getMemoryConsumption(@Const @StdVector @ByRef IntPointer netInputShape,
                                                   @Cast("size_t*") @ByRef SizeTPointer weights, @Cast("size_t*") @ByRef SizeTPointer blobs);
@@ -1443,32 +1609,50 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * @param blobs output parameter to store resulting bytes for intermediate blobs.
          */
         public native void getMemoryConsumption(@Const @ByRef MatShapeVector netInputShapes,
-                                                  @StdVector IntPointer layerIds, @Cast("size_t*") @StdVector SizeTPointer weights,
+                                                  @StdVector IntPointer layerIds,
+                                                  @Cast("size_t*") @StdVector SizeTPointer weights,
                                                   @Cast("size_t*") @StdVector SizeTPointer blobs);
         public native void getMemoryConsumption(@Const @ByRef MatShapeVector netInputShapes,
-                                                  @StdVector IntBuffer layerIds, @Cast("size_t*") @StdVector SizeTPointer weights,
+                                                  @StdVector IntBuffer layerIds,
+                                                  @Cast("size_t*") @StdVector SizeTPointer weights,
                                                   @Cast("size_t*") @StdVector SizeTPointer blobs);
         public native void getMemoryConsumption(@Const @ByRef MatShapeVector netInputShapes,
-                                                  @StdVector int[] layerIds, @Cast("size_t*") @StdVector SizeTPointer weights,
-                                                  @Cast("size_t*") @StdVector SizeTPointer blobs);
+                                                  @StdVector int[] layerIds,
+                                                  @Cast("size_t*") @StdVector SizeTPointer weights,
+                                                  @Cast("size_t*") @StdVector SizeTPointer blobs); // FIXIT: CV_WRAP
         /** \overload */
         public native void getMemoryConsumption(@Const @StdVector @ByRef IntPointer netInputShape,
-                                                  @StdVector IntPointer layerIds, @Cast("size_t*") @StdVector SizeTPointer weights,
+                                                  @StdVector IntPointer layerIds,
+                                                  @Cast("size_t*") @StdVector SizeTPointer weights,
                                                   @Cast("size_t*") @StdVector SizeTPointer blobs);
         public native void getMemoryConsumption(@Const @StdVector @ByRef IntPointer netInputShape,
-                                                  @StdVector IntBuffer layerIds, @Cast("size_t*") @StdVector SizeTPointer weights,
+                                                  @StdVector IntBuffer layerIds,
+                                                  @Cast("size_t*") @StdVector SizeTPointer weights,
                                                   @Cast("size_t*") @StdVector SizeTPointer blobs);
         public native void getMemoryConsumption(@Const @StdVector @ByRef IntPointer netInputShape,
-                                                  @StdVector int[] layerIds, @Cast("size_t*") @StdVector SizeTPointer weights,
-                                                  @Cast("size_t*") @StdVector SizeTPointer blobs);
+                                                  @StdVector int[] layerIds,
+                                                  @Cast("size_t*") @StdVector SizeTPointer weights,
+                                                  @Cast("size_t*") @StdVector SizeTPointer blobs); // FIXIT: CV_WRAP
 
         /** \brief Enables or disables layer fusion in the network.
          * @param fusion true to enable the fusion, false to disable. The fusion is enabled by default.
          */
         public native void enableFusion(@Cast("bool") boolean fusion);
+
+        /** \brief Returns overall time for inference and timings (in ticks) for layers.
+         * Indexes in returned vector correspond to layers ids. Some layers can be fused with others,
+         * in this case zero ticks count will be return for that skipped layers.
+         * @param timings vector for tick timings for all layers.
+         * @return overall ticks for model inference.
+         */
+        public native @Cast("int64") long getPerfProfile(@StdVector DoublePointer timings);
+        public native @Cast("int64") long getPerfProfile(@StdVector DoubleBuffer timings);
+        public native @Cast("int64") long getPerfProfile(@StdVector double[] timings);
     }
 
-    /** \brief Small interface class for loading trained serialized models of different dnn-frameworks. */
+    /**
+     * @deprecated Deprecated as external interface. Will be for internal needs only.
+     * \brief Small interface class for loading trained serialized models of different dnn-frameworks. */
     @Namespace("cv::dnn") public static class Importer extends Algorithm {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1479,7 +1663,20 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native void populateNet(@ByVal Net net);
     }
 
-    /** \brief Creates the importer of <a href="http://caffe.berkeleyvision.org">Caffe</a> framework network.
+    /** \brief Reads a network model stored in <a href="https://pjreddie.com/darknet/">Darknet</a> model files.
+    *  @param cfgFile      path to the .cfg file with text description of the network architecture.
+    *  @param darknetModel path to the .weights file with learned network.
+    *  @return Network object that ready to do forward, throw an exception in failure cases.
+    * \details This is shortcut consisting from DarknetImporter and Net::populateNet calls.
+    */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str BytePointer cfgFile, @Str BytePointer darknetModel/*=cv::String()*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str BytePointer cfgFile);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str String cfgFile, @Str String darknetModel/*=cv::String()*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str String cfgFile);
+
+    /**
+     *  @deprecated Use \ref readNetFromCaffe instead.
+     *  \brief Creates the importer of <a href="http://caffe.berkeleyvision.org">Caffe</a> framework network.
      *  @param prototxt   path to the .prototxt file with text description of the network architecture.
      *  @param caffeModel path to the .caffemodel file with learned network.
      *  @return Pointer to the created importer, NULL in failure cases.
@@ -1500,7 +1697,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     /** \brief Reads a network model stored in Tensorflow model file.
       * \details This is shortcut consisting from createTensorflowImporter and Net::populateNet calls.
       */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str BytePointer model, @Str BytePointer config/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str BytePointer model);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str String model, @Str String config/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str String model);
 
     /** \brief Reads a network model stored in Torch model file.
@@ -1511,14 +1710,18 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model);
 
-    /** \brief Creates the importer of <a href="http://www.tensorflow.org">TensorFlow</a> framework network.
+    /**
+     *  @deprecated Use \ref readNetFromTensorflow instead.
+     *  \brief Creates the importer of <a href="http://www.tensorflow.org">TensorFlow</a> framework network.
      *  @param model   path to the .pb file with binary protobuf description of the network architecture.
      *  @return Pointer to the created importer, NULL in failure cases.
      */
     @Namespace("cv::dnn") public static native @Ptr Importer createTensorflowImporter(@Str BytePointer model);
     @Namespace("cv::dnn") public static native @Ptr Importer createTensorflowImporter(@Str String model);
 
-    /** \brief Creates the importer of <a href="http://torch.ch">Torch7</a> framework network.
+    /**
+     *  @deprecated Use \ref readNetFromTorch instead.
+     *  \brief Creates the importer of <a href="http://torch.ch">Torch7</a> framework network.
      *  @param filename path to the file, dumped from Torch by using torch.save() function.
      *  @param isBinary specifies whether the network was serialized in ascii mode or binary.
      *  @return Pointer to the created importer, NULL in failure cases.
@@ -1565,12 +1768,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *  @param scalefactor multiplier for \p image values.
      *  @param swapRB flag which indicates that swap first and last channels
      *  in 3-channel image is necessary.
-     *  \details input image is resized so one side after resize is equal to corresponing
+     *  @param crop flag which indicates whether image will be cropped after resize or not
+     *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponing
      *  dimension in \p size and another one is equal or larger. Then, crop from the center is performed.
+     *  If \p crop is false, direct resize without cropping and preserving aspect ratio is performed.
      *  @return 4-dimansional Mat with NCHW dimensions order.
      */
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@Const @ByRef Mat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/);
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@Const @ByRef Mat image);
     /** \brief Creates 4-dimensional blob from series of images. Optionally resizes and
      *  crops \p images from center, subtract \p mean values, scales values by \p scalefactor,
@@ -1582,13 +1787,29 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *  @param scalefactor multiplier for \p images values.
      *  @param swapRB flag which indicates that swap first and last channels
      *  in 3-channel image is necessary.
-     *  \details input image is resized so one side after resize is equal to corresponing
+     *  @param crop flag which indicates whether image will be cropped after resize or not
+     *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponing
      *  dimension in \p size and another one is equal or larger. Then, crop from the center is performed.
+     *  If \p crop is false, direct resize without cropping and preserving aspect ratio is performed.
      *  @return 4-dimansional Mat with NCHW dimensions order.
      */
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@Const @ByRef MatVector images, double scalefactor/*=1.0*/,
-                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/);
+                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@Const @ByRef MatVector images);
+
+    /** \brief Convert all weights of Caffe network to half precision floating point.
+     * @param src Path to origin model from Caffe framework contains single
+     *            precision floating point weights (usually has {@code .caffemodel} extension).
+     * @param dst Path to destination model with updated weights.
+     *
+     * \note Shrinked model has no origin float32 weights so it can't be used
+     *       in origin Caffe framework anymore. However the structure of data
+     *       is taken from NVidia's Caffe fork: https://github.com/NVIDIA/caffe.
+     *       So the resulting model may be used there.
+     */
+    @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str BytePointer src, @Str BytePointer dst);
+    @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str String src, @Str String dst);
+
 
 /** \} */
 

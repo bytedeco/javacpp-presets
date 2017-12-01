@@ -696,7 +696,7 @@ public static final int NUMA_VERSION_NUMBER =     1;
     public native @Cast("l_int32") int n(); public native NUMAA n(int n);
     /** array of Numa                        */
     public native NUMA numa(int i); public native NUMAA numa(int i, NUMA numa);
-    @MemberGetter public native @Cast("Numa**") PointerPointer numa();
+    public native @Cast("Numa**") PointerPointer numa(); public native NUMAA numa(PointerPointer numa);
 }
 
 /** Dna version for serialization */
@@ -752,7 +752,7 @@ public static final int DNA_VERSION_NUMBER =     1;
     public native @Cast("l_int32") int n(); public native L_DNAA n(int n);
     /** array of L_Dna                       */
     public native L_DNA dna(int i); public native L_DNAA dna(int i, L_DNA dna);
-    @MemberGetter public native @Cast("L_Dna**") PointerPointer dna();
+    public native @Cast("L_Dna**") PointerPointer dna(); public native L_DNAA dna(PointerPointer dna);
 }
 
     /** A hash table of Dnas */
@@ -775,7 +775,7 @@ public static final int DNA_VERSION_NUMBER =     1;
     public native @Cast("l_int32") int initsize(); public native L_DNAHASH initsize(int initsize);
     /** array of L_Dna                       */
     public native L_DNA dna(int i); public native L_DNAHASH dna(int i, L_DNA dna);
-    @MemberGetter public native @Cast("L_Dna**") PointerPointer dna();
+    public native @Cast("L_Dna**") PointerPointer dna(); public native L_DNAHASH dna(PointerPointer dna);
 }
 
 /** Sarray version for serialization */
@@ -804,7 +804,7 @@ public static final int SARRAY_VERSION_NUMBER =     1;
     public native @Cast("l_int32") int refcount(); public native SARRAY refcount(int refcount);
     /** string array                        */
     public native @Cast("char*") BytePointer array(int i); public native SARRAY array(int i, BytePointer array);
-    @MemberGetter public native @Cast("char**") PointerPointer array();
+    public native @Cast("char**") PointerPointer array(); public native SARRAY array(PointerPointer array);
 }
 
     /** Byte array (analogous to C++ "string") */
@@ -1043,7 +1043,7 @@ public static final int
     public native @Cast("l_int32") int n(); public native L_HEAP n(int n);
     /** ptr array                                 */
     public native Pointer array(int i); public native L_HEAP array(int i, Pointer array);
-    @MemberGetter public native @Cast("void**") PointerPointer array();
+    public native @Cast("void**") PointerPointer array(); public native L_HEAP array(PointerPointer array);
     /** L_SORT_INCREASING or L_SORT_DECREASING    */
     public native @Cast("l_int32") int direction(); public native L_HEAP direction(int direction);
 }
@@ -1231,7 +1231,7 @@ public static final int
     public native @Cast("l_int32") int nactual(); public native L_PTRA nactual(int nactual);
     /** ptr array                           */
     public native Pointer array(int i); public native L_PTRA array(int i, Pointer array);
-    @MemberGetter public native @Cast("void**") PointerPointer array();
+    public native @Cast("void**") PointerPointer array(); public native L_PTRA array(PointerPointer array);
 }
 
 
@@ -1254,7 +1254,7 @@ public static final int
     public native @Cast("l_int32") int nalloc(); public native L_PTRAA nalloc(int nalloc);
     /** array of ptra                       */
     public native L_PTRA ptra(int i); public native L_PTRAA ptra(int i, L_PTRA ptra);
-    @MemberGetter public native @Cast("L_Ptra**") PointerPointer ptra();
+    public native @Cast("L_Ptra**") PointerPointer ptra(); public native L_PTRAA ptra(PointerPointer ptra);
 }
 
 
@@ -1381,7 +1381,7 @@ public static final int
     public native @Cast("l_int32") int nelem(); public native L_QUEUE nelem(int nelem);
     /** ptr array                              */
     public native Pointer array(int i); public native L_QUEUE array(int i, Pointer array);
-    @MemberGetter public native @Cast("void**") PointerPointer array();
+    public native @Cast("void**") PointerPointer array(); public native L_QUEUE array(PointerPointer array);
     /** auxiliary stack                        */
     public native L_STACK stack(); public native L_QUEUE stack(L_STACK stack);
 
@@ -1621,7 +1621,7 @@ public static final int
     public native @Cast("l_int32") int n(); public native L_STACK n(int n);
     /** ptr array                      */
     public native Pointer array(int i); public native L_STACK array(int i, Pointer array);
-    @MemberGetter public native @Cast("void**") PointerPointer array();
+    public native @Cast("void**") PointerPointer array(); public native L_STACK array(PointerPointer array);
     /** auxiliary stack                */
     public native L_STACK auxstack(); public native L_STACK auxstack(L_STACK auxstack);
 }
@@ -1866,32 +1866,6 @@ public static final int USE_INLINE_ACCESSORS =    1;
 
 
 // #else
-
-    /*=============================================================*/
-    /*         Slower: use function calls for all accessors        */
-    /*=============================================================*/
-
-// #define  GET_DATA_BIT(pdata, n)               l_getDataBit(pdata, n)
-// #define  SET_DATA_BIT(pdata, n)               l_setDataBit(pdata, n)
-// #define  CLEAR_DATA_BIT(pdata, n)             l_clearDataBit(pdata, n)
-// #define  SET_DATA_BIT_VAL(pdata, n, val)      l_setDataBitVal(pdata, n, val)
-
-// #define  GET_DATA_DIBIT(pdata, n)             l_getDataDibit(pdata, n)
-// #define  SET_DATA_DIBIT(pdata, n, val)        l_setDataDibit(pdata, n, val)
-// #define  CLEAR_DATA_DIBIT(pdata, n)           l_clearDataDibit(pdata, n)
-
-// #define  GET_DATA_QBIT(pdata, n)              l_getDataQbit(pdata, n)
-// #define  SET_DATA_QBIT(pdata, n, val)         l_setDataQbit(pdata, n, val)
-// #define  CLEAR_DATA_QBIT(pdata, n)            l_clearDataQbit(pdata, n)
-
-// #define  GET_DATA_BYTE(pdata, n)              l_getDataByte(pdata, n)
-// #define  SET_DATA_BYTE(pdata, n, val)         l_setDataByte(pdata, n, val)
-
-// #define  GET_DATA_TWO_BYTES(pdata, n)         l_getDataTwoBytes(pdata, n)
-// #define  SET_DATA_TWO_BYTES(pdata, n, val)    l_setDataTwoBytes(pdata, n, val)
-
-// #define  GET_DATA_FOUR_BYTES(pdata, n)         l_getDataFourBytes(pdata, n)
-// #define  SET_DATA_FOUR_BYTES(pdata, n, val)    l_setDataFourBytes(pdata, n, val)
 
 // #endif  /* USE_INLINE_ACCESSORS */
 
@@ -2146,7 +2120,7 @@ public static final int
     public native @Cast("l_int32") int nalloc(); public native CCBORDA nalloc(int nalloc);
     /** ccb ptr array                    */
     public native CCBORD ccb(int i); public native CCBORDA ccb(int i, CCBORD ccb);
-    @MemberGetter public native @Cast("CCBord**") PointerPointer ccb();
+    public native @Cast("CCBord**") PointerPointer ccb(); public native CCBORDA ccb(PointerPointer ccb);
 }
 
 
@@ -2288,10 +2262,10 @@ public static final int DEWARP_VERSION_NUMBER =      4;
     public native @Cast("l_int32") int maxpage(); public native L_DEWARPA maxpage(int maxpage);
     /** array of ptrs to page dewarp      */
     public native L_DEWARP dewarp(int i); public native L_DEWARPA dewarp(int i, L_DEWARP dewarp);
-    @MemberGetter public native @Cast("L_Dewarp**") PointerPointer dewarp();
+    public native @Cast("L_Dewarp**") PointerPointer dewarp(); public native L_DEWARPA dewarp(PointerPointer dewarp);
     /** array of ptrs to cached dewarps   */
     public native L_DEWARP dewarpcache(int i); public native L_DEWARPA dewarpcache(int i, L_DEWARP dewarpcache);
-    @MemberGetter public native @Cast("L_Dewarp**") PointerPointer dewarpcache();
+    public native @Cast("L_Dewarp**") PointerPointer dewarpcache(); public native L_DEWARPA dewarpcache(PointerPointer dewarpcache);
     /** list of page numbers for pages    */
     /** with page models                  */
     public native NUMA namodels(); public native L_DEWARPA namodels(NUMA namodels);
@@ -3162,7 +3136,7 @@ public static final int SEL_VERSION_NUMBER =    1;
     public native @Cast("l_int32") int cx(); public native SEL cx(int cx);
     /** {0,1,2}; data[i][j] in [row][col] order  */
     public native @Cast("l_int32*") IntPointer data(int i); public native SEL data(int i, IntPointer data);
-    @MemberGetter public native @Cast("l_int32**") PointerPointer data();
+    public native @Cast("l_int32**") PointerPointer data(); public native SEL data(PointerPointer data);
     /** used to find sel by name                 */
     public native @Cast("char*") BytePointer name(); public native SEL name(BytePointer name);
 }
@@ -3188,7 +3162,7 @@ public static final int SEL_VERSION_NUMBER =    1;
     public native @Cast("l_int32") int nalloc(); public native SELA nalloc(int nalloc);
     /** sel ptr array                           */
     public native SEL sel(int i); public native SELA sel(int i, SEL sel);
-    @MemberGetter public native @Cast("Sel**") PointerPointer sel();
+    public native @Cast("Sel**") PointerPointer sel(); public native SELA sel(PointerPointer sel);
 }
 
 
@@ -3222,7 +3196,7 @@ public static final int KERNEL_VERSION_NUMBER =    2;
     public native @Cast("l_int32") int cx(); public native L_KERNEL cx(int cx);
     /** data[i][j] in [row][col] order           */
     public native @Cast("l_float32*") FloatPointer data(int i); public native L_KERNEL data(int i, FloatPointer data);
-    @MemberGetter public native @Cast("l_float32**") PointerPointer data();
+    public native @Cast("l_float32**") PointerPointer data(); public native L_KERNEL data(PointerPointer data);
 }
 
 
@@ -3785,7 +3759,7 @@ public static final int PIX_SRC =      (0xc);
 /** use destination pixels */
 public static final int PIX_DST =      (0xa);
 /** invert operation %op   */
-// #define   PIX_NOT(op)  ((op) ^ 0x0f)
+public static native int PIX_NOT(int op);
 /** clear pixels           */
 public static final int PIX_CLR =      (0x0);
 /** set pixels             */
@@ -3797,8 +3771,7 @@ public static final int PIX_PAINT =    (PIX_SRC | PIX_DST);
 public static final int PIX_MASK =     (PIX_SRC & PIX_DST);
 /** subtract =           */
 /**    src & !dst        */
-public static native @MemberGetter int PIX_SUBTRACT();
-public static final int PIX_SUBTRACT = PIX_SUBTRACT();
+public static final int PIX_SUBTRACT = (PIX_DST & PIX_NOT(PIX_SRC));
 /** xor = src ^ dst        */
 public static final int PIX_XOR =      (PIX_SRC ^ PIX_DST);
 
@@ -3942,7 +3915,7 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     public native @Cast("l_uint32") int refcount(); public native PIXA refcount(int refcount);
     /** the array of ptrs to pix          */
     public native PIX pix(int i); public native PIXA pix(int i, PIX pix);
-    @MemberGetter public native @Cast("Pix**") PointerPointer pix();
+    public native @Cast("Pix**") PointerPointer pix(); public native PIXA pix(PointerPointer pix);
     /** array of boxes                    */
     public native BOXA boxa(); public native PIXA boxa(BOXA boxa);
 }
@@ -3968,7 +3941,7 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     public native @Cast("l_int32") int nalloc(); public native PIXAA nalloc(int nalloc);
     /** array of ptrs to pixa             */
     public native PIXA pixa(int i); public native PIXAA pixa(int i, PIXA pixa);
-    @MemberGetter public native @Cast("Pixa**") PointerPointer pixa();
+    public native @Cast("Pixa**") PointerPointer pixa(); public native PIXAA pixa(PointerPointer pixa);
     /** array of boxes                    */
     public native BOXA boxa(); public native PIXAA boxa(BOXA boxa);
 }
@@ -4029,7 +4002,7 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     public native @Cast("l_uint32") int refcount(); public native BOXA refcount(int refcount);
     /** box ptr array                     */
     public native BOX box(int i); public native BOXA box(int i, BOX box);
-    @MemberGetter public native @Cast("Box**") PointerPointer box();
+    public native @Cast("Box**") PointerPointer box(); public native BOXA box(PointerPointer box);
 }
 
 /** Array of Boxa */
@@ -4053,7 +4026,7 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     public native @Cast("l_int32") int nalloc(); public native BOXAA nalloc(int nalloc);
     /** boxa ptr array                    */
     public native BOXA boxa(int i); public native BOXAA boxa(int i, BOXA boxa);
-    @MemberGetter public native @Cast("Boxa**") PointerPointer boxa();
+    public native @Cast("Boxa**") PointerPointer boxa(); public native BOXAA boxa(PointerPointer boxa);
 }
 
 
@@ -4115,7 +4088,7 @@ public static final int PTA_VERSION_NUMBER =      1;
     public native @Cast("l_int32") int nalloc(); public native PTAA nalloc(int nalloc);
     /** pta ptr array                     */
     public native PTA pta(int i); public native PTAA pta(int i, PTA pta);
-    @MemberGetter public native @Cast("Pta**") PointerPointer pta();
+    public native @Cast("Pta**") PointerPointer pta(); public native PTAA pta(PointerPointer pta);
 }
 
 
@@ -4250,7 +4223,7 @@ public static final int FPIX_VERSION_NUMBER =      2;
     public native @Cast("l_uint32") int refcount(); public native FPIXA refcount(int refcount);
     /** the array of ptrs to fpix         */
     public native FPIX fpix(int i); public native FPIXA fpix(int i, FPIX fpix);
-    @MemberGetter public native @Cast("FPix**") PointerPointer fpix();
+    public native @Cast("FPix**") PointerPointer fpix(); public native FPIXA fpix(PointerPointer fpix);
 }
 
 
@@ -4368,7 +4341,7 @@ public static final int PIXACOMP_VERSION_NUMBER = 2;
     public native @Cast("l_int32") int offset(); public native PIXAC offset(int offset);
     /** the array of ptrs to PixComp      */
     public native PIXC pixc(int i); public native PIXAC pixc(int i, PIXC pixc);
-    @MemberGetter public native @Cast("PixComp**") PointerPointer pixc();
+    public native @Cast("PixComp**") PointerPointer pixc(); public native PIXAC pixc(PointerPointer pixc);
     /** array of boxes                    */
     public native BOXA boxa(); public native PIXAC boxa(BOXA boxa);
 }
@@ -5529,10 +5502,10 @@ public static final int RECOG_VERSION_NUMBER =      2;
     public native PIX pixs(); public native L_RDID pixs(PIX pixs);
     /** count array for each averaged template */
     public native @Cast("l_int32*") IntPointer counta(int i); public native L_RDID counta(int i, IntPointer counta);
-    @MemberGetter public native @Cast("l_int32**") PointerPointer counta();
+    public native @Cast("l_int32**") PointerPointer counta(); public native L_RDID counta(PointerPointer counta);
     /** best y-shift array per average template */
     public native @Cast("l_int32*") IntPointer delya(int i); public native L_RDID delya(int i, IntPointer delya);
-    @MemberGetter public native @Cast("l_int32**") PointerPointer delya();
+    public native @Cast("l_int32**") PointerPointer delya(); public native L_RDID delya(PointerPointer delya);
     /** number of averaged templates           */
     public native @Cast("l_int32") int narray(); public native L_RDID narray(int narray);
     /** size of count array (width of pixs)    */
@@ -6025,16 +5998,16 @@ public static final int
     public native PIX pixt(); public native L_WSHED pixt(PIX pixt);
     /** line ptrs for pixs                       */
     public native Pointer lines8(int i); public native L_WSHED lines8(int i, Pointer lines8);
-    @MemberGetter public native @Cast("void**") PointerPointer lines8();
+    public native @Cast("void**") PointerPointer lines8(); public native L_WSHED lines8(PointerPointer lines8);
     /** line ptrs for pixm                       */
     public native Pointer linem1(int i); public native L_WSHED linem1(int i, Pointer linem1);
-    @MemberGetter public native @Cast("void**") PointerPointer linem1();
+    public native @Cast("void**") PointerPointer linem1(); public native L_WSHED linem1(PointerPointer linem1);
     /** line ptrs for pixlab                     */
     public native Pointer linelab32(int i); public native L_WSHED linelab32(int i, Pointer linelab32);
-    @MemberGetter public native @Cast("void**") PointerPointer linelab32();
+    public native @Cast("void**") PointerPointer linelab32(); public native L_WSHED linelab32(PointerPointer linelab32);
     /** line ptrs for pixt                       */
     public native Pointer linet1(int i); public native L_WSHED linet1(int i, Pointer linet1);
-    @MemberGetter public native @Cast("void**") PointerPointer linet1();
+    public native @Cast("void**") PointerPointer linet1(); public native L_WSHED linet1(PointerPointer linet1);
     /** result: 1 bpp pixa of watersheds         */
     public native PIXA pixad(); public native L_WSHED pixad(PIXA pixad);
     /** pta of initial seed pixels               */
@@ -6055,7 +6028,7 @@ public static final int
     public native @Cast("l_int32*") IntPointer lut(); public native L_WSHED lut(IntPointer lut);
     /** back-links into lut, for updates         */
     public native NUMA links(int i); public native L_WSHED links(int i, NUMA links);
-    @MemberGetter public native @Cast("Numa**") PointerPointer links();
+    public native @Cast("Numa**") PointerPointer links(); public native L_WSHED links(PointerPointer links);
     /** size of links array                      */
     public native @Cast("l_int32") int arraysize(); public native L_WSHED arraysize(int arraysize);
     /** set to 1 for debug output                */

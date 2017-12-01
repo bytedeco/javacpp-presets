@@ -55,10 +55,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core330", "opencv_imgproc330"}, preload = {"msvcp140", "vcruntime140",
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core331", "opencv_imgproc331"}, preload = {"concrt140", "msvcp140", "vcruntime140",
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0"}),
+        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"}),
     @Platform(value = "windows-x86", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
                                                     "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
@@ -76,8 +76,9 @@ public class opencv_core implements InfoMapper {
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN",
                              "CV__DEBUG_NS_END", "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END").cppTypes().annotations())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
-               .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_AS", "CV_EXPORTS_W_MAP",
-                             "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP", "CV_WRAP_AS").cppTypes().annotations().cppText(""))
+               .put(new Info("CV_EXPORTS_AS", "CV_WRAP_AS").cppTypes().annotations("@Name").cppText(""))
+               .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
+                             "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").cppTypes().annotations().cppText(""))
                .put(new Info("CvRNG").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").cppTypes("int", "int"))
                .put(new Info("CV_MAKETYPE", "CV_MAKE_TYPE").cppTypes("int", "int", "int"))
@@ -89,6 +90,7 @@ public class opencv_core implements InfoMapper {
                              "CV_32FC1", "CV_32FC2", "CV_32FC3", "CV_32FC4",
                              "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").cppTypes("int").translate())
                .put(new Info("CV_MAT_CN", "CV_MAT_TYPE", "CV_IS_CONT_MAT", "CV_IS_MAT_CONT").cppTypes("int", "int"))
+               .put(new Info("CV_VERSION").pointerTypes("String").translate(false))
                .put(new Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate())
                .put(new Info("CvArr").skip().pointerTypes("CvArr"))
                .put(new Info("_IplROI").pointerTypes("IplROI"))
@@ -223,6 +225,10 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray").skip()./*cast().*/pointerTypes("Mat", "Mat", "UMat", "UMat"))
                .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip()./*cast().*/pointerTypes("MatVector", "UMatVector"))
 
+               .put(new Info("cv::traits::Depth", "cv::traits::Type").skip())
+               .put(new Info("cv::Complex<float>").pointerTypes("Complexf").base("FloatPointer"))
+               .put(new Info("cv::Complex<double>").pointerTypes("Complexd").base("DoublePointer"))
+               .put(new Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
                .put(new Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
                .put(new Info("cv::Point_<float>").pointerTypes("Point2f").base("FloatPointer"))
                .put(new Info("cv::Point_<double>").pointerTypes("Point2d").base("DoublePointer"))

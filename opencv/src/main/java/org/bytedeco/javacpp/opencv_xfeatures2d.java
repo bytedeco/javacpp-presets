@@ -768,7 +768,7 @@ samples subfolder.
     * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
     *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
     */
-    public native float getWeightConstrast();
+    public native float getWeightContrast();
     /**
     * \brief Weights (multiplicative constants) that linearly stretch individual axes of the feature space
     *       (x,y = position; L,a,b = color in CIE Lab space; c = contrast. e = entropy)
@@ -1152,6 +1152,32 @@ samples subfolder.
             @StdVector Elliptic_KeyPoint keypoints,
             @ByVal UMat descriptors );
 }
+
+
+/** \brief Estimates cornerness for prespecified KeyPoints using the FAST algorithm
+<p>
+@param image grayscale image where keypoints (corners) are detected.
+@param keypoints keypoints which should be tested to fit the FAST criteria. Keypoints not beeing
+detected as corners are removed.
+@param threshold threshold on difference between intensity of the central pixel and pixels of a
+circle around this pixel.
+@param nonmaxSuppression if true, non-maximum suppression is applied to detected corners
+(keypoints).
+@param type one of the three neighborhoods as defined in the paper:
+FastFeatureDetector::TYPE_9_16, FastFeatureDetector::TYPE_7_12,
+FastFeatureDetector::TYPE_5_8
+<p>
+Detects corners using the FAST algorithm by \cite Rosten06 .
+ */
+@Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal Mat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
+@Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal Mat image, @ByRef KeyPointVector keypoints,
+                      int threshold);
+@Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal UMat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
+@Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal UMat image, @ByRef KeyPointVector keypoints,
+                      int threshold);
+
 
 /** \} */
 

@@ -60,7 +60,6 @@ public static final String OPENBLAS_VERSION = " OpenBLAS 0.2.20 ";
 // #ifdef OPENBLAS_NEEDBUNDERSCORE
 // #define BLASFUNC(FUNC) FUNC##_
 // #else
-// #define BLASFUNC(FUNC) FUNC
 // #endif
 
 // #ifdef OPENBLAS_QUAD_PRECISION

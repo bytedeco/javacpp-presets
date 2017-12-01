@@ -364,9 +364,9 @@ public static class MXCallbackList extends Pointer {
       public native int call();
   }
   public native Int_Callbacks callbacks(int i); public native MXCallbackList callbacks(int i, Int_Callbacks callbacks);
-  @MemberGetter public native @Cast("void**") PointerPointer callbacks();
+  public native @Cast("int (**)(void)") PointerPointer callbacks(); public native MXCallbackList callbacks(PointerPointer callbacks);
   public native Pointer contexts(int i); public native MXCallbackList contexts(int i, Pointer contexts);
-  @MemberGetter public native @Cast("void**") PointerPointer contexts();
+  public native @Cast("void**") PointerPointer contexts(); public native MXCallbackList contexts(PointerPointer contexts);
 }
 
 /** enum CustomOpCallbacks */

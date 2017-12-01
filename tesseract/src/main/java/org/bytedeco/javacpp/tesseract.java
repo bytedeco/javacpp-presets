@@ -430,11 +430,9 @@ public static final double MIN_FLOAT32 = ((float)1.17549435e-38);
 
 // Defines
 // #ifndef TRUE
-public static final int TRUE =            1;
 // #endif
 
 // #ifndef FALSE
-public static final int FALSE =           0;
 // #endif
 
 // Return true if x is within tolerance of y

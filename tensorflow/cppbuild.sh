@@ -77,8 +77,12 @@ case $PLATFORM in
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
 
-        export TF_NEED_CUDA=1
-        export BUILDFLAGS="--config=cuda --config=opt --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
+        export BUILDFLAGS="--linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
+        if [[ -z ${TRAVIS:-} ]]; then
+            # Enable CUDA for TensorFlow on Mac OS X only outside Travis CI to prevent timeouts
+            export TF_NEED_CUDA=1
+            export BUILDFLAGS="--config=cuda --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH $BUILDFLAGS"
+        fi
         export CUDA_HOME=/usr/local/cuda
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH

@@ -63,6 +63,7 @@
     <module>ale</module>
     <module>liquidfun</module>
     <module>skia</module>
+    <module>systems</module>
   </modules>
 
   <prerequisites>

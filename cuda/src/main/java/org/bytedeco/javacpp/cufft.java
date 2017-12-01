@@ -89,7 +89,7 @@ public class cufft extends org.bytedeco.javacpp.presets.cufft {
 // #endif
 
 // CUFFT API function return values 
-/** enum cufftResult */
+/** enum cufftResult_t */
 public static final int
   CUFFT_SUCCESS        =  0x0,
   CUFFT_INVALID_PLAN   =  0x1,
@@ -127,7 +127,7 @@ public static final int CUFFT_FORWARD = -1; // Forward FFT
 public static final int CUFFT_INVERSE =  1; // Inverse FFT
 
 // CUFFT supports the following transform types 
-/** enum cufftType */
+/** enum cufftType_t */
 public static final int
   CUFFT_R2C =  0x2a,     // Real to Complex (interleaved)
   CUFFT_C2R =  0x2c,     // Complex (interleaved) to Real
@@ -137,7 +137,7 @@ public static final int
   CUFFT_Z2Z =  0x69;      // Double-Complex to Double-Complex
 
 // CUFFT supports the following data layouts
-/** enum cufftCompatibility */
+/** enum cufftCompatibility_t */
 public static final int
     CUFFT_COMPATIBILITY_FFTW_PADDING    =  0x01;    // The default value
 

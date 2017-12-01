@@ -289,7 +289,7 @@ public static class CUipcMemHandle extends Pointer {
 /**
  * CUDA Ipc Mem Flags
  */
-/** enum CUipcMem_flags */
+/** enum CUipcMem_flags_enum */
 public static final int
     /** Automatically enable peer access between remote devices as needed */
     CU_IPC_MEM_LAZY_ENABLE_PEER_ACCESS =  0x1;
@@ -299,7 +299,7 @@ public static final int
 /**
  * CUDA Mem Attach Flags
  */
-/** enum CUmemAttach_flags */
+/** enum CUmemAttach_flags_enum */
 public static final int
     /** Memory can be accessed by any stream on any device */
     CU_MEM_ATTACH_GLOBAL =  0x1,
@@ -311,7 +311,7 @@ public static final int
 /**
  * Context creation flags
  */
-/** enum CUctx_flags */
+/** enum CUctx_flags_enum */
 public static final int
     /** Automatic scheduling */
     CU_CTX_SCHED_AUTO          =  0x00,
@@ -335,7 +335,7 @@ public static final int
 /**
  * Stream creation flags
  */
-/** enum CUstream_flags */
+/** enum CUstream_flags_enum */
 public static final int
     /** Default stream flag */
     CU_STREAM_DEFAULT      =  0x0,
@@ -367,7 +367,7 @@ public static final CUstream_st CU_STREAM_PER_THREAD = CU_STREAM_PER_THREAD();
 /**
  * Event creation flags
  */
-/** enum CUevent_flags */
+/** enum CUevent_flags_enum */
 public static final int
     /** Default event flag */
     CU_EVENT_DEFAULT        =  0x0,
@@ -382,7 +382,7 @@ public static final int
 /**
  * Flags for ::cuStreamWaitValue32 and ::cuStreamWaitValue64
  */
-/** enum CUstreamWaitValue_flags */
+/** enum CUstreamWaitValue_flags_enum */
 public static final int
     /** Wait until (int32_t)(*addr - value) >= 0 (or int64_t for 64 bit
                                              values). Note this is a cyclic comparison which ignores wraparound.
@@ -409,7 +409,7 @@ public static final int
 /**
  * Flags for ::cuStreamWriteValue32
  */
-/** enum CUstreamWriteValue_flags */
+/** enum CUstreamWriteValue_flags_enum */
 public static final int
     /** Default behavior */
     CU_STREAM_WRITE_VALUE_DEFAULT           =  0x0,
@@ -424,7 +424,7 @@ public static final int
 /**
  * Operations for ::cuStreamBatchMemOp
  */
-/** enum CUstreamBatchMemOpType */
+/** enum CUstreamBatchMemOpType_enum */
 public static final int
     /** Represents a ::cuStreamWaitValue32 operation */
     CU_STREAM_MEM_OP_WAIT_VALUE_32  = 1,
@@ -480,7 +480,7 @@ public static class CUstreamBatchMemOpParams extends Pointer {
 /**
  * Occupancy calculator flag
  */
-/** enum CUoccupancy_flags */
+/** enum CUoccupancy_flags_enum */
 public static final int
     /** Default behavior */
     CU_OCCUPANCY_DEFAULT                  =  0x0,
@@ -490,7 +490,7 @@ public static final int
 /**
  * Array formats
  */
-/** enum CUarray_format */
+/** enum CUarray_format_enum */
 public static final int
     /** Unsigned 8-bit integers */
     CU_AD_FORMAT_UNSIGNED_INT8  =  0x01,
@@ -512,7 +512,7 @@ public static final int
 /**
  * Texture reference addressing modes
  */
-/** enum CUaddress_mode */
+/** enum CUaddress_mode_enum */
 public static final int
     /** Wrapping address mode */
     CU_TR_ADDRESS_MODE_WRAP   = 0,
@@ -526,7 +526,7 @@ public static final int
 /**
  * Texture reference filtering modes
  */
-/** enum CUfilter_mode */
+/** enum CUfilter_mode_enum */
 public static final int
     /** Point filter mode */
     CU_TR_FILTER_MODE_POINT  = 0,
@@ -536,7 +536,7 @@ public static final int
 /**
  * Device properties
  */
-/** enum CUdevice_attribute */
+/** enum CUdevice_attribute_enum */
 public static final int
     /** Maximum number of threads per block */
     CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK = 1,
@@ -788,7 +788,7 @@ public static class CUdevprop extends Pointer {
 /**
  * Pointer information
  */
-/** enum CUpointer_attribute */
+/** enum CUpointer_attribute_enum */
 public static final int
     /** The ::CUcontext on which a pointer was allocated or registered */
     CU_POINTER_ATTRIBUTE_CONTEXT = 1,
@@ -810,7 +810,7 @@ public static final int
 /**
  * Function properties
  */
-/** enum CUfunction_attribute */
+/** enum CUfunction_attribute_enum */
 public static final int
     /**
      * The maximum number of threads per block, beyond which a launch of the
@@ -885,7 +885,7 @@ public static final int
 /**
  * Function cache configurations
  */
-/** enum CUfunc_cache */
+/** enum CUfunc_cache_enum */
 public static final int
     /** no preference for shared memory or L1 (default) */
     CU_FUNC_CACHE_PREFER_NONE    =  0x00,
@@ -899,7 +899,7 @@ public static final int
 /**
  * Shared memory configurations
  */
-/** enum CUsharedconfig */
+/** enum CUsharedconfig_enum */
 public static final int
     /** set default shared memory bank size */
     CU_SHARED_MEM_CONFIG_DEFAULT_BANK_SIZE    =  0x00,
@@ -911,7 +911,7 @@ public static final int
 /**
  * Shared memory carveout configurations
  */
-/** enum CUshared_carveout */
+/** enum CUshared_carveout_enum */
 public static final int
     CU_SHAREDMEM_CARVEOUT_DEFAULT       = -1,  /** < no preference for shared memory or L1 (default) */
     CU_SHAREDMEM_CARVEOUT_MAX_SHARED    = 100, /** < prefer maximum available shared memory, minimum L1 cache */
@@ -920,7 +920,7 @@ public static final int
 /**
  * Memory types
  */
-/** enum CUmemorytype */
+/** enum CUmemorytype_enum */
 public static final int
     /** Host memory */
     CU_MEMORYTYPE_HOST    =  0x01,
@@ -934,7 +934,7 @@ public static final int
 /**
  * Compute Modes
  */
-/** enum CUcomputemode */
+/** enum CUcomputemode_enum */
 public static final int
     /** Default compute mode (Multiple contexts allowed per device) */
     CU_COMPUTEMODE_DEFAULT           = 0,
@@ -946,7 +946,7 @@ public static final int
 /**
  * Memory advise values
  */
-/** enum CUmem_advise */
+/** enum CUmem_advise_enum */
 public static final int
     /** Data will mostly be read and only occassionally be written to */
     CU_MEM_ADVISE_SET_READ_MOSTLY          = 1,
@@ -961,7 +961,7 @@ public static final int
     /** Let the Unified Memory subsystem decide on the page faulting policy for the specified device */
     CU_MEM_ADVISE_UNSET_ACCESSED_BY        = 6;
 
-/** enum CUmem_range_attribute */
+/** enum CUmem_range_attribute_enum */
 public static final int
     /** Whether the range will mostly be read and only occassionally be written to */
     CU_MEM_RANGE_ATTRIBUTE_READ_MOSTLY            = 1,
@@ -975,7 +975,7 @@ public static final int
 /**
  * Online compiler and linker options
  */
-/** enum CUjit_option */
+/** enum CUjit_option_enum */
 public static final int
     /**
      * Max number of registers that a thread may use.\n
@@ -1117,7 +1117,7 @@ public static final int
 /**
  * Online compilation targets
  */
-/** enum CUjit_target */
+/** enum CUjit_target_enum */
 public static final int
     /** Compute device class 2.0 */
     CU_TARGET_COMPUTE_20 = 20,
@@ -1149,7 +1149,7 @@ public static final int
 /**
  * Cubin matching fallback strategies
  */
-/** enum CUjit_fallback */
+/** enum CUjit_fallback_enum */
 public static final int
     /** Prefer to compile ptx if exact binary match not found */
     CU_PREFER_PTX = 0,
@@ -1160,7 +1160,7 @@ public static final int
 /**
  * Caching modes for dlcm 
  */
-/** enum CUjit_cacheMode */
+/** enum CUjit_cacheMode_enum */
 public static final int
     /** Compile with no -dlcm flag specified */
     CU_JIT_CACHE_OPTION_NONE = 0,
@@ -1172,7 +1172,7 @@ public static final int
 /**
  * Device code formats
  */
-/** enum CUjitInputType */
+/** enum CUjitInputType_enum */
 public static final int
     /**
      * Compiled device-class-specific device code\n
@@ -1218,7 +1218,7 @@ public static final int
 /**
  * Flags to register a graphics resource
  */
-/** enum CUgraphicsRegisterFlags */
+/** enum CUgraphicsRegisterFlags_enum */
 public static final int
     CU_GRAPHICS_REGISTER_FLAGS_NONE           =  0x00,
     CU_GRAPHICS_REGISTER_FLAGS_READ_ONLY      =  0x01,
@@ -1229,7 +1229,7 @@ public static final int
 /**
  * Flags for mapping and unmapping interop resources
  */
-/** enum CUgraphicsMapResourceFlags */
+/** enum CUgraphicsMapResourceFlags_enum */
 public static final int
     CU_GRAPHICS_MAP_RESOURCE_FLAGS_NONE          =  0x00,
     CU_GRAPHICS_MAP_RESOURCE_FLAGS_READ_ONLY     =  0x01,
@@ -1238,7 +1238,7 @@ public static final int
 /**
  * Array indices for cube faces
  */
-/** enum CUarray_cubemap_face */
+/** enum CUarray_cubemap_face_enum */
 public static final int
     /** Positive X face of cubemap */
     CU_CUBEMAP_FACE_POSITIVE_X  =  0x00,
@@ -1256,7 +1256,7 @@ public static final int
 /**
  * Limits
  */
-/** enum CUlimit */
+/** enum CUlimit_enum */
 public static final int
     /** GPU thread stack size */
     CU_LIMIT_STACK_SIZE                       =  0x00,
@@ -1273,7 +1273,7 @@ public static final int
 /**
  * Resource types
  */
-/** enum CUresourcetype */
+/** enum CUresourcetype_enum */
 public static final int
     /** Array resoure */
     CU_RESOURCE_TYPE_ARRAY           =  0x00,
@@ -1287,7 +1287,7 @@ public static final int
 /**
  * Error codes
  */
-/** enum CUresult */
+/** enum cudaError_enum */
 public static final int
     /**
      * The API call returned with no errors. In the case of query calls, this
@@ -1701,7 +1701,7 @@ public static final int
 /**
  * P2P Attributes
  */
-/** enum CUdevice_P2PAttribute */
+/** enum CUdevice_P2PAttribute_enum */
 public static final int
     /** A relative value indicating the performance of the link between two devices */
     CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK        =  0x01,
@@ -2152,7 +2152,7 @@ public static class CUDA_TEXTURE_DESC extends Pointer {
 /**
  * Resource view format
  */
-/** enum CUresourceViewFormat */
+/** enum CUresourceViewFormat_enum */
 public static final int
     /** No resource view format (use underlying resource format) */
     CU_RES_VIEW_FORMAT_NONE          =  0x00,
@@ -2324,7 +2324,7 @@ public static class CUDA_LAUNCH_PARAMS extends Pointer {
     public native CUstream_st hStream(); public native CUDA_LAUNCH_PARAMS hStream(CUstream_st hStream);
     /** Array of pointers to kernel parameters */
     public native Pointer kernelParams(int i); public native CUDA_LAUNCH_PARAMS kernelParams(int i, Pointer kernelParams);
-    @MemberGetter public native @Cast("void**") PointerPointer kernelParams();
+    public native @Cast("void**") PointerPointer kernelParams(); public native CUDA_LAUNCH_PARAMS kernelParams(PointerPointer kernelParams);
 }
 
 // #endif /* __CUDA_API_VERSION >= 9000 */
@@ -15031,7 +15031,7 @@ public static class cudaLaunchParams extends Pointer {
     public native @ByRef dim3 blockDim(); public native cudaLaunchParams blockDim(dim3 blockDim);
     /** Arguments */
     public native Pointer args(int i); public native cudaLaunchParams args(int i, Pointer args);
-    @MemberGetter public native @Cast("void**") PointerPointer args();
+    public native @Cast("void**") PointerPointer args(); public native cudaLaunchParams args(PointerPointer args);
     /** Shared memory */
     public native @Cast("size_t") long sharedMem(); public native cudaLaunchParams sharedMem(long sharedMem);
     /** Stream identifier */
@@ -26472,7 +26472,7 @@ public static class __half2_raw extends Pointer {
 // #define __LIBRARY_TYPES_H__
 
 
-/** enum cudaDataType */
+/** enum cudaDataType_t */
 public static final int
 	CUDA_R_16F= 2,  /* real as a half */
 	CUDA_C_16F= 6,  /* complex as a pair of half numbers */
@@ -26490,7 +26490,7 @@ public static final int
 	CUDA_C_32U= 13;  /* complex as a pair of unsigned int numbers */ 
 
 
-/** enum libraryPropertyType */
+/** enum libraryPropertyType_t */
 public static final int
 	MAJOR_VERSION = 0,
 	MINOR_VERSION = 1,

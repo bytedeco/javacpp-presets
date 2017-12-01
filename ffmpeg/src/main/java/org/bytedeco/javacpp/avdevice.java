@@ -588,7 +588,7 @@ public static class AVDeviceInfoList extends Pointer {
 
     /** list of autodetected devices */
     public native AVDeviceInfo devices(int i); public native AVDeviceInfoList devices(int i, AVDeviceInfo devices);
-    @MemberGetter public native @Cast("AVDeviceInfo**") PointerPointer devices();
+    public native @Cast("AVDeviceInfo**") PointerPointer devices(); public native AVDeviceInfoList devices(PointerPointer devices);
     /** number of autodetected devices */
     public native int nb_devices(); public native AVDeviceInfoList nb_devices(int nb_devices);
     /** index of default device or -1 if no default */

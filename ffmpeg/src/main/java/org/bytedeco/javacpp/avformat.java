@@ -2987,7 +2987,7 @@ public static class AVFormatContext extends Pointer {
      * Freed by libavformat in avformat_free_context().
      */
     public native AVStream streams(int i); public native AVFormatContext streams(int i, AVStream streams);
-    @MemberGetter public native @Cast("AVStream**") PointerPointer streams();
+    public native @Cast("AVStream**") PointerPointer streams(); public native AVFormatContext streams(PointerPointer streams);
 
     /**
      * input or output filename
@@ -3096,7 +3096,7 @@ public static final int AVFMT_FLAG_AUTO_BSF =   0x200000;
 
     public native @Cast("unsigned int") int nb_programs(); public native AVFormatContext nb_programs(int nb_programs);
     public native AVProgram programs(int i); public native AVFormatContext programs(int i, AVProgram programs);
-    @MemberGetter public native @Cast("AVProgram**") PointerPointer programs();
+    public native @Cast("AVProgram**") PointerPointer programs(); public native AVFormatContext programs(PointerPointer programs);
 
     /**
      * Forced video codec_id.
@@ -3147,7 +3147,7 @@ public static final int AVFMT_FLAG_AUTO_BSF =   0x200000;
      */
     public native @Cast("unsigned int") int nb_chapters(); public native AVFormatContext nb_chapters(int nb_chapters);
     public native AVChapter chapters(int i); public native AVFormatContext chapters(int i, AVChapter chapters);
-    @MemberGetter public native @Cast("AVChapter**") PointerPointer chapters();
+    public native @Cast("AVChapter**") PointerPointer chapters(); public native AVFormatContext chapters(PointerPointer chapters);
 
     /**
      * Metadata that applies to the whole file.

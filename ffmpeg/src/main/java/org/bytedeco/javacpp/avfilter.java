@@ -473,7 +473,7 @@ public static class AVFilterContext extends Pointer {
     public native AVFilterPad input_pads(); public native AVFilterContext input_pads(AVFilterPad input_pads);
     /** array of pointers to input links */
     public native AVFilterLink inputs(int i); public native AVFilterContext inputs(int i, AVFilterLink inputs);
-    @MemberGetter public native @Cast("AVFilterLink**") PointerPointer inputs();
+    public native @Cast("AVFilterLink**") PointerPointer inputs(); public native AVFilterContext inputs(PointerPointer inputs);
     /** number of input pads */
     public native @Cast("unsigned") int nb_inputs(); public native AVFilterContext nb_inputs(int nb_inputs);
 
@@ -481,7 +481,7 @@ public static class AVFilterContext extends Pointer {
     public native AVFilterPad output_pads(); public native AVFilterContext output_pads(AVFilterPad output_pads);
     /** array of pointers to output links */
     public native AVFilterLink outputs(int i); public native AVFilterContext outputs(int i, AVFilterLink outputs);
-    @MemberGetter public native @Cast("AVFilterLink**") PointerPointer outputs();
+    public native @Cast("AVFilterLink**") PointerPointer outputs(); public native AVFilterContext outputs(PointerPointer outputs);
     /** number of output pads */
     public native @Cast("unsigned") int nb_outputs(); public native AVFilterContext nb_outputs(int nb_outputs);
 
@@ -1034,7 +1034,7 @@ public static class AVFilterGraph extends Pointer {
 
     @MemberGetter public native @Const AVClass av_class();
     public native AVFilterContext filters(int i); public native AVFilterGraph filters(int i, AVFilterContext filters);
-    @MemberGetter public native @Cast("AVFilterContext**") PointerPointer filters();
+    public native @Cast("AVFilterContext**") PointerPointer filters(); public native AVFilterGraph filters(PointerPointer filters);
     public native @Cast("unsigned") int nb_filters(); public native AVFilterGraph nb_filters(int nb_filters);
 
     /** sws options to use for the auto-inserted scale filters */
@@ -1102,7 +1102,7 @@ public static class AVFilterGraph extends Pointer {
      */
 
     public native AVFilterLink sink_links(int i); public native AVFilterGraph sink_links(int i, AVFilterLink sink_links);
-    @MemberGetter public native @Cast("AVFilterLink**") PointerPointer sink_links();
+    public native @Cast("AVFilterLink**") PointerPointer sink_links(); public native AVFilterGraph sink_links(PointerPointer sink_links);
     public native int sink_links_count(); public native AVFilterGraph sink_links_count(int sink_links_count);
 
     public native @Cast("unsigned") int disable_auto_convert(); public native AVFilterGraph disable_auto_convert(int disable_auto_convert);

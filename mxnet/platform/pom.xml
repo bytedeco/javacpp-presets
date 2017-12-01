@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>mxnet-platform</artifactId>
-  <version>0.12.0-${project.parent.version}</version>
+  <version>0.12.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MXNet</name>
 
   <properties>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>3.3.0-${project.parent.version}</version>
+      <version>3.3.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

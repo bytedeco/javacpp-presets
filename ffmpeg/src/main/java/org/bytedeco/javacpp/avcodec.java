@@ -4574,7 +4574,7 @@ public static class AVSubtitle extends Pointer {
     public native @Cast("uint32_t") int end_display_time(); public native AVSubtitle end_display_time(int end_display_time); /* relative to packet pts, in ms */
     public native @Cast("unsigned") int num_rects(); public native AVSubtitle num_rects(int num_rects);
     public native AVSubtitleRect rects(int i); public native AVSubtitle rects(int i, AVSubtitleRect rects);
-    @MemberGetter public native @Cast("AVSubtitleRect**") PointerPointer rects();
+    public native @Cast("AVSubtitleRect**") PointerPointer rects(); public native AVSubtitle rects(PointerPointer rects);
     /** Same as packet pts, in AV_TIME_BASE */
     public native @Cast("int64_t") long pts(); public native AVSubtitle pts(long pts);
 }

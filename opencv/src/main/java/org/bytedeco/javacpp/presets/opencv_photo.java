@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = opencv_imgproc.class, value = {
     @Platform(include = {"<opencv2/photo/photo_c.h>", "<opencv2/photo.hpp>", "<opencv2/photo/cuda.hpp>"},
               link = "opencv_photo@.3.3", preload = "opencv_cuda@.3.3"),
-    @Platform(value = "windows", link = "opencv_photo330", preload = "opencv_cuda330")},
+    @Platform(value = "windows", link = "opencv_photo331", preload = "opencv_cuda331")},
         target = "org.bytedeco.javacpp.opencv_photo")
 public class opencv_photo implements InfoMapper {
     public void map(InfoMap infoMap) {
