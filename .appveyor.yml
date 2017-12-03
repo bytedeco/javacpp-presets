@@ -8,7 +8,7 @@ cache:
 environment:
   matrix:
     - PLATFORM: x86
-      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
+      PROJ: "opencv,flandmark"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
@@ -71,7 +71,28 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
+      PROJ: "chilitags"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "hdf5"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
       PROJ: "mkl"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "openblas"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
@@ -106,7 +127,21 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
+      PROJ: "caffe"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
       PROJ: "cuda"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
+      PROJ: "mxnet"
       COMPILER: msys2
       MSYS2_ARCH: x86
       MSYS2_DIR: msys64
@@ -149,7 +184,7 @@ environment:
       BIT: 32
 
     - PLATFORM: x64
-      PROJ: "opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe"
+      PROJ: "opencv,flandmark"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
@@ -212,7 +247,28 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
     - PLATFORM: x64
+      PROJ: "chilitags"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "hdf5"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
       PROJ: "mkl"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "openblas"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64
@@ -247,7 +303,21 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
     - PLATFORM: x64
+      PROJ: "caffe"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
       PROJ: "cuda"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+    - PLATFORM: x64
+      PROJ: "mxnet"
       COMPILER: msys2
       MSYS2_ARCH: x86_64
       MSYS2_DIR: msys64

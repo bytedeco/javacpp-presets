@@ -29,7 +29,7 @@ echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
-   call mvn deploy -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% --settings .\ci\settings.xml -pl .,%PROJ%
+   call mvn clean deploy -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Djavacpp.copyResources --settings .\ci\settings.xml -pl .,%PROJ%
    IF ERRORLEVEL 1 (
      echo Quitting with error  
      exit /b 1
@@ -37,7 +37,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
-    call mvn -U -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings ..\ci\settings.xml deploy
+    call mvn clean -U -f platform -Djavacpp.platform=windows-%MSYS2_ARCH% --settings ..\ci\settings.xml deploy
     IF ERRORLEVEL 1 (
       echo Quitting with error  
       exit /b 1
@@ -47,7 +47,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    )
 ) ELSE (
    echo Install %PROJ%
-   call mvn install -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -pl .,%PROJ%
+   call mvn clean install -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=windows-%MSYS2_ARCH% -Djavacpp.copyResources -pl .,%PROJ%
    IF ERRORLEVEL 1 (
       echo Quitting with error  
       exit /b 1 

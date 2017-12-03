@@ -77,16 +77,20 @@ case $PLATFORM in
         ;;
 # Installers available at: https://www.hdfgroup.org/downloads/hdf5/
     windows-x86)
-        if [[ ! -d "/C/Program Files (x86)/HDF_Group/HDF5/1.10.1/" ]]; then
+        if [[ ! -d "/C/Program Files (x86)/HDF_Group/HDF5/$HDF5_VERSION/" ]]; then
             echo "Please install HDF5 under the default installation directory"
             exit 1
         fi
+        ln -sf "/C/Program Files (x86)/HDF_Group/HDF5/$HDF5_VERSION/include" ../include
+        ln -sf "/C/Program Files (x86)/HDF_Group/HDF5/$HDF5_VERSION/lib" ../lib
         ;;
     windows-x86_64)
-        if [[ ! -d "/C/Program Files/HDF_Group/HDF5/1.10.1/" ]]; then
+        if [[ ! -d "/C/Program Files/HDF_Group/HDF5/$HDF5_VERSION/" ]]; then
             echo "Please install HDF5 under the default installation directory"
             exit 1
         fi
+        ln -sf "/C/Program Files/HDF_Group/HDF5/$HDF5_VERSION/include" ../include
+        ln -sf "/C/Program Files/HDF_Group/HDF5/$HDF5_VERSION/lib" ../lib
         ;;
 
     *)

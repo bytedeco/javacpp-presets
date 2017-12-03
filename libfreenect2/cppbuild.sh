@@ -7,10 +7,10 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBJPEG=libjpeg-turbo-1.5.1
+LIBJPEG=libjpeg-turbo-1.5.2
 GLFW_VERSION=3.2.1
 LIBFREENECT2_VERSION=0.2.0
-download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download https://github.com/OpenKinect/libfreenect2/archive/v$LIBFREENECT2_VERSION.zip libfreenect2-$LIBFREENECT2_VERSION.zip
 download https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.zip glfw-$GLFW_VERSION.zip
 

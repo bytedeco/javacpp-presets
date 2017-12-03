@@ -16,7 +16,7 @@ services:
 matrix:
    include:
       - os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-arm
+        env: PROJ=opencv,flandmark OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -52,7 +52,19 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=chilitags OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=hdf5 OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=mkl OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -72,7 +84,15 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=caffe OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=cuda OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=mxnet OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -97,7 +117,7 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=android-x86
+        env: PROJ=opencv,flandmark OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -133,7 +153,19 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=chilitags OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=hdf5 OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=mkl OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -153,7 +185,15 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=caffe OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=cuda OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=mxnet OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -178,7 +218,7 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-armhf
+        env: PROJ=opencv,flandmark OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -214,7 +254,19 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=chilitags OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=hdf5 OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=mkl OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -234,7 +286,15 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=caffe OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=cuda OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=mxnet OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -259,7 +319,7 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
-        env: PROJ=opencv,chilitags,flandmark,openblas,mxnet,hdf5,caffe OS=linux-ppc64le
+        env: PROJ=opencv,flandmark OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -295,7 +355,19 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
+        env: PROJ=chilitags OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=hdf5 OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
         env: PROJ=mkl OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=openblas OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -315,7 +387,15 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
+        env: PROJ=caffe OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
         env: PROJ=cuda OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=mxnet OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -341,7 +421,7 @@ matrix:
 
       - os: osx
         osx_image: xcode7.3
-        env: PROJ=opencv,flandmark,openblas,hdf5 OS=macosx-x86_64
+        env: PROJ=opencv,flandmark OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -390,8 +470,18 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
+        osx_image: xcode7.3
+        env: PROJ=hdf5 OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
         osx_image: xcode8.3
         env: PROJ=mkl OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=openblas OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -456,7 +546,7 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
-        env: PROJ=opencv,flandmark,openblas,hdf5 OS=linux-x86
+        env: PROJ=opencv,flandmark OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -496,7 +586,15 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=hdf5 OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=mkl OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -549,7 +647,7 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
-        env: PROJ=opencv,flandmark,openblas,hdf5 OS=linux-x86_64
+        env: PROJ=opencv,flandmark OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -589,7 +687,15 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=hdf5 OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=mkl OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux

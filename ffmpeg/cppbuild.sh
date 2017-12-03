@@ -22,9 +22,9 @@ OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.0f # openssl-1.1.0g doesn't work on Windows
 OPENH264_VERSION=1.7.0
-X265=2.4 # x265-2.5 doesn't work on Windows
+X265=2.6
 VPX_VERSION=1.6.1
-ALSA_VERSION=1.1.4.1
+ALSA_VERSION=1.1.5
 FFMPEG_VERSION=3.4
 FREETYPE_VERSION=2.8.1
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
@@ -510,7 +510,7 @@ case $PLATFORM in
           PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         else
           echo "configure ffmpeg cross compile"
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"
+          PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"
         fi
         make -j $MAKEJ
         make install
