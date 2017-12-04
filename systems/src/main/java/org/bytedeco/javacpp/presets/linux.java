@@ -39,17 +39,17 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(value = {@Platform(value = "linux-x86",
+@Properties(value = {@Platform(value = "linux",
     exclude = {"bits/locale.h", "bits/socket.h", "bits/siginfo.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h",
                "bits/sched.h", "bits/confname.h", "bits/resource.h"},
     include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "bits/locale.h", "langinfo.h", "locale.h",
                "bits/uio.h", "sys/uio.h", "bits/sockaddr.h", "bits/socket.h", "sys/socket.h", /*"sys/types.h", "bits/timex.h",*/
                "asm-generic/errno-base.h", "asm-generic/errno.h", "bits/errno.h", "errno.h", "string.h", "stdlib.h",
                "bits/time.h", "sys/time.h", "time.h", "utime.h", "bits/stat.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",
-               "bits/siginfo.h", "bits/sigset.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
+               "bits/siginfo.h", "bits/sigset.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h", "asm/ptrace.h",
                "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h", "bits/confname.h", "unistd.h",
-               "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h"},
-    includepath = "/usr/include", link = "dl")}, target = "org.bytedeco.javacpp.linux")
+               "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
+    link = "dl")}, target = "org.bytedeco.javacpp.linux")
 public class linux implements BuildEnabled, InfoMapper {
 
     private Logger logger;
@@ -62,7 +62,7 @@ public class linux implements BuildEnabled, InfoMapper {
         this.logger = logger;
         this.properties = properties;
         this.encoding = encoding;
-        this.is64bits = properties.getProperty("platform").endsWith("64");
+        this.is64bits = properties.getProperty("platform").contains("64");
     }
 
     public void map(InfoMap infoMap) {
@@ -71,10 +71,12 @@ public class linux implements BuildEnabled, InfoMapper {
                .put(new Info("siginfo.h").linePatterns("# define si_.*").skip())
                .put(new Info("sigaction.h").linePatterns("# define sa_.*").skip())
                .put(new Info("signal.h").linePatterns("#ifndef\t_SIGNAL_H", "#endif").skip())
+               .put(new Info("ptrace.h").linePatterns("#define .*regs\\[.*").skip())
                .put(new Info("sysinfo.h").linePatterns(".*char _f.*").skip())
 
                .put(new Info("__BEGIN_DECLS").cppText("#define __BEGIN_DECLS"))
                .put(new Info("__END_DECLS").cppText("#define __END_DECLS"))
+               .put(new Info("__NTH").cppText("#define __NTH(a) a"))
                .put(new Info("__BEGIN_NAMESPACE_C99").cppText("#define __BEGIN_NAMESPACE_C99"))
                .put(new Info("__END_NAMESPACE_C99").cppText("#define __END_NAMESPACE_C99"))
                .put(new Info("__USING_NAMESPACE_C99").cppText("#define __USING_NAMESPACE_C99(name)"))
@@ -82,8 +84,8 @@ public class linux implements BuildEnabled, InfoMapper {
                .put(new Info("__END_NAMESPACE_STD").cppText("#define __END_NAMESPACE_STD"))
                .put(new Info("__USING_NAMESPACE_STD").cppText("#define __USING_NAMESPACE_STD(name)"))
 
-               .put(new Info("__WORDSIZE == 32").define(!is64bits))
-               .put(new Info("__x86_64__", "__WORDSIZE == 64").define(is64bits))
+               .put(new Info("__WORDSIZE == 32", "__i386__").define(!is64bits))
+               .put(new Info("__WORDSIZE == 64", "__aarch64__", "__powerpc64__", "__x86_64__").define(is64bits))
 
                .put(new Info("defined __cplusplus || !__GNUC_PREREQ (2, 7) || !defined __USE_GNU",
                              "__WORDSIZE == 64 || !defined __USE_FILE_OFFSET64",
@@ -123,12 +125,13 @@ public class linux implements BuildEnabled, InfoMapper {
                              "__syscall_slong_t", "__syscall_ulong_t", "__CPU_MASK_TYPE", "__kernel_long_t", "__kernel_ulong_t")
                        .cast().valueTypes("long").pointerTypes("SizeTPointer"))
 
-               .put(new Info("off64_t", "rlim64_t", "__off64_t", "__rlim64_t", "__blkcnt64_t", "greg_t", "__ino64_t", "__uint64_t")
+               .put(new Info("off64_t", "rlim64_t", "__off64_t", "__rlim64_t", "__blkcnt64_t", "greg_t", "__ino64_t", "__u64", "__uint64_t")
                        .cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 
                .put(new Info("__locale_data", "__spawn_action", "timex").cast().pointerTypes("Pointer"))
                .put(new Info("__timezone_ptr_t").cast().pointerTypes("timezone"))
-               .put(new Info("gregset_t").cppTypes("const greg_t*"))
+               .put(new Info("gregset_t").cppTypes("const long long*"))
+               .put(new Info("fpregset_t").cppTypes("const void*"))
 
                .put(new Info("__locale_struct").pointerTypes("locale_t"))
                .put(new Info("__locale_t").valueTypes("locale_t"))
@@ -142,7 +145,6 @@ public class linux implements BuildEnabled, InfoMapper {
                .put(new Info("sigval_t").pointerTypes("sigval"))
                .put(new Info("struct sigstack").pointerTypes("sigstack"))
                .put(new Info("sigaltstack").pointerTypes("stack_t"))
-               .put(new Info("fpregset_t").valueTypes("_libc_fpstate"))
                .put(new Info("ucontext").valueTypes("ucontext_t"))
 
                .put(new Info("siginfo_t").javaText("\n"

@@ -7,25 +7,41 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-mkdir -p $PLATFORM/include
-cd $PLATFORM/include
+mkdir -p $PLATFORM
+cd $PLATFORM
+
+INCLUDE_PATH="/usr/include/"
+if [[ ! -d "$INCLUDE_PATH" ]]; then
+    echo "Please install system development files under the default installation directory"
+    exit 1
+fi
 
 case $PLATFORM in
-    linux-x86*)
-        if [[ ! -d "/usr/include/" ]]; then
-            echo "Please install system development files under the default installation directory"
-            exit 1
+    linux-armhf)
+        CROSS_INCLUDE_PATH=$(echo | arm-linux-gnueabihf-g++ -E -v - 2>&1 | grep -o ' .*/usr/include' | tail -1 | xargs)
+        if [[ -d "$CROSS_INCLUDE_PATH" ]]; then
+            INCLUDE_PATH="$CROSS_INCLUDE_PATH"
         fi
-        CPUID_PATH=$(echo '#include <cpuid.h>' | g++ -M -E - | grep -o ' .*cpuid.h')
-        ln -sf $CPUID_PATH
+        touch cpuid.h
+        ln -sf "$INCLUDE_PATH"
+        ln -sf "$INCLUDE_PATH/arm-linux-gnueabihf"
+        ;;
+    linux-ppc64le)
+        touch cpuid.h
+        ln -sf "$INCLUDE_PATH"
+        ln -sf "$INCLUDE_PATH/powerpc64le-linux-gnu"
+        ;;
+    linux-x86*)
+        CPUID_PATH=$(echo '#include <cpuid.h>' | g++ -M -E - | grep -o ' .*cpuid.h' | xargs)
+        ln -sf "$CPUID_PATH"
+        ln -sf "$INCLUDE_PATH"
+        ln -sf "$INCLUDE_PATH/i386-linux-gnu"
+        ln -sf "$INCLUDE_PATH/x86_64-linux-gnu"
         ;;
     macosx-*)
-        if [[ ! -d "/usr/include/" ]]; then
-            echo "Please install system development files under the default installation directory"
-            exit 1
-        fi
-        CPUID_PATH=$(echo '#include <cpuid.h>' | clang++ -M -E - | grep -o ' .*cpuid.h')
-        ln -sf $CPUID_PATH
+        CPUID_PATH=$(echo '#include <cpuid.h>' | clang++ -M -E - | grep -o ' .*cpuid.h' | xargs)
+        ln -sf "$CPUID_PATH"
+        ln -sf "$INCLUDE_PATH"
         ;;
     windows-*)
         if [[ ! -d "/C/Program Files (x86)/Windows Kits/" ]]; then

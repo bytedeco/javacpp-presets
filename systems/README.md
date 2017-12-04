@@ -9,7 +9,7 @@ This directory contains the JavaCPP Presets module for system APIs:
  * Mac OS X (XNU libc)  https://opensource.apple.com/
  * Windows (Win32)  https://developer.microsoft.com/en-us/windows/
 
-For now, only small portions of the APIs are actually supported. The range will be expanded based on demand, so please make sure to communicate your needs.
+For now, basic functionality is supported. The range will be expanded based on demand, so please make sure to communicate your needs.
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

@@ -7846,6 +7846,74 @@ public static native int __libc_current_sigrtmax();
 // #endif /* not signal.h */
 
 
+// Parsed from asm/ptrace.h
+
+// #ifndef _ASM_X86_PTRACE_H
+// #define _ASM_X86_PTRACE_H
+
+	/* For */
+// #include <asm/ptrace-abi.h>
+// #include <asm/processor-faLgs.h>
+
+
+// #ifndef __ASSEMBLY__
+
+// #ifdef __i386__
+
+
+// #else /* __i386__ */
+
+
+public static class pt_regs extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public pt_regs() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public pt_regs(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public pt_regs(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public pt_regs position(long position) {
+        return (pt_regs)super.position(position);
+    }
+
+	public native @Cast("unsigned long") long r15(); public native pt_regs r15(long r15);
+	public native @Cast("unsigned long") long r14(); public native pt_regs r14(long r14);
+	public native @Cast("unsigned long") long r13(); public native pt_regs r13(long r13);
+	public native @Cast("unsigned long") long r12(); public native pt_regs r12(long r12);
+	public native @Cast("unsigned long") long rbp(); public native pt_regs rbp(long rbp);
+	public native @Cast("unsigned long") long rbx(); public native pt_regs rbx(long rbx);
+/* arguments: non interrupts/non tracing syscalls only save upto here*/
+	public native @Cast("unsigned long") long r11(); public native pt_regs r11(long r11);
+	public native @Cast("unsigned long") long r10(); public native pt_regs r10(long r10);
+	public native @Cast("unsigned long") long r9(); public native pt_regs r9(long r9);
+	public native @Cast("unsigned long") long r8(); public native pt_regs r8(long r8);
+	public native @Cast("unsigned long") long rax(); public native pt_regs rax(long rax);
+	public native @Cast("unsigned long") long rcx(); public native pt_regs rcx(long rcx);
+	public native @Cast("unsigned long") long rdx(); public native pt_regs rdx(long rdx);
+	public native @Cast("unsigned long") long rsi(); public native pt_regs rsi(long rsi);
+	public native @Cast("unsigned long") long rdi(); public native pt_regs rdi(long rdi);
+	public native @Cast("unsigned long") long orig_rax(); public native pt_regs orig_rax(long orig_rax);
+/* end of arguments */
+/* cpu exception frame or undefined */
+	public native @Cast("unsigned long") long rip(); public native pt_regs rip(long rip);
+	public native @Cast("unsigned long") long cs(); public native pt_regs cs(long cs);
+	public native @Cast("unsigned long") long eflags(); public native pt_regs eflags(long eflags);
+	public native @Cast("unsigned long") long rsp(); public native pt_regs rsp(long rsp);
+	public native @Cast("unsigned long") long ss(); public native pt_regs ss(long ss);
+/* top of stack page */
+}
+
+// #endif /* !__i386__ */
+
+
+
+// #endif /* !__ASSEMBLY__ */
+
+// #endif /* _ASM_X86_PTRACE_H */
+
+
 // Parsed from sys/ucontext.h
 
 /* Copyright (C) 2001, 2002 Free Software Foundation, Inc.
@@ -8025,9 +8093,9 @@ public static class mcontext_t extends Pointer {
         return (mcontext_t)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const greg_t*") LongPointer gregs();
+    @MemberGetter public native @Const LongPointer gregs();
     /* Note that fpregs is a pointer.  */
-    public native _libc_fpstate fpregs(); public native mcontext_t fpregs(_libc_fpstate fpregs);
+    @MemberGetter public native @Const Pointer fpregs();
     public native @Cast("unsigned long") long __reserved1(int i); public native mcontext_t __reserved1(int i, long __reserved1);
     @MemberGetter public native @Cast("unsigned long*") CLongPointer __reserved1();
 }
@@ -11368,6 +11436,48 @@ public static native int sysctl(@Cast("int*") int[] __name, int __nlen, Pointer 
 		   @Cast("size_t*") SizeTPointer __oldlenp, Pointer __newval, @Cast("size_t") long __newlen);
 
 // #endif	/* _SYS_SYSCTL_H */
+
+
+// Parsed from bits/waitflags.h
+
+/* Definitions of flag bits for `waitpid' et al.
+   Copyright (C) 1992,1996,1997,2000,2004,2005 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
+
+// #if !defined _SYS_WAIT_H && !defined _STDLIB_H
+// # error "Never include <bits/waitflags.h> directly; use <sys/wait.h> instead."
+// #endif
+
+
+/* Bits in the third argument to `waitpid'.  */
+public static final int WNOHANG =		1;	/* Don't block waiting.  */
+public static final int WUNTRACED =	2;	/* Report status of stopped children.  */
+
+/* Bits in the fourth argument to `waitid'.  */
+public static final int WSTOPPED =	2;	/* Report stopped child (same as WUNTRACED). */
+public static final int WEXITED =		4;	/* Report dead child.  */
+public static final int WCONTINUED =	8;	/* Report continued child.  */
+public static final int WNOWAIT =		0x01000000; /* Don't reap, just poll status.  */
+
+public static final int __WNOTHREAD =     0x20000000; /* Don't wait on children of other threads
+				      in this group */
+public static final int __WALL =		0x40000000; /* Wait for any child.  */
+public static final int __WCLONE =	0x80000000; /* Wait for cloned process.  */
 
 
 // Parsed from sys/wait.h

@@ -61,7 +61,7 @@ public class windows implements BuildEnabled, InfoMapper {
         this.logger = logger;
         this.properties = properties;
         this.encoding = encoding;
-        this.is64bits = properties.getProperty("platform").endsWith("64");
+        this.is64bits = properties.getProperty("platform").contains("64");
     }
 
     public void map(InfoMap infoMap) {

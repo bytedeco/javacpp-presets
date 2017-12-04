@@ -47,6 +47,15 @@
               <value>${javacpp.platform.oldcompiler}</value>
             </property>
           </propertyKeysAndValues>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/arm-linux-gnueabihf/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/powerpc64le-linux-gnu/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/i386-linux-gnu/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/x86_64-linux-gnu/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+          </includePaths>
         </configuration>
         <executions>
           <execution>
