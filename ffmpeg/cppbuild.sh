@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf"
-ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libmfx"
+ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfreetype --enable-libopus"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
 # DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
@@ -129,11 +129,6 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
-        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
         ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
@@ -203,11 +198,6 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
-        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
         ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
@@ -259,14 +249,17 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ
         make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
-        make install
+        if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
+            cd ../mfx_dispatch-$MFX_VERSION
+            autoreconf -fiv
+            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
+            make -j $MAKEJ
+            make install
+            ENABLE="$ENABLE --enable-libmfx"
+        fi
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
@@ -321,11 +314,14 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
-        make install
+        if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
+            cd ../mfx_dispatch-$MFX_VERSION
+            autoreconf -fiv
+            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
+            make -j $MAKEJ
+            make install
+            ENABLE="$ENABLE --enable-libmfx"
+        fi
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
@@ -418,11 +414,6 @@ case $PLATFORM in
         cd ../freetype-$FREETYPE_VERSION
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
-        make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
@@ -532,11 +523,6 @@ case $PLATFORM in
         fi
         make -j $MAKEJ
         make install 
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
-        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -596,11 +582,6 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
-        cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
-        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
@@ -650,17 +631,17 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --target=x86_64-win64-gcc
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-w64-mingw32 CFLAGS="-m32"
         make -j $MAKEJ
         make install
         cd ../mfx_dispatch-$MFX_VERSION
         autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
+        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-w64-mingw32 # CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
@@ -707,17 +688,17 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --target=x86_64-win64-gcc CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ
         make install
         cd ../mfx_dispatch-$MFX_VERSION
         autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix="`pwd`/.." --disable-shared --enable-static --enable-fast-install
-        make
+        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-w64-mingw32 # CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
