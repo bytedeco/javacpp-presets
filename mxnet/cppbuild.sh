@@ -32,11 +32,11 @@ case $PLATFORM in
 esac
 
 DLPACK_VERSION=a6e09b58dc00ee0065f5b7879800e646fbb01d1e
-DMLC_VERSION=595d02c0e87be8a0846700462b6f45f1b1031e39
-MSHADOW_VERSION=cb5c9872b542220be5b99f3aca0e1ff56e31b028
-PS_VERSION=bdd4c67e9e34dc0b8350ce306b0caa737eb31c83
-NNVM_VERSION=c86afa8f17a44bcd4e6eec41cd49ba87e4f7a635
-MXNET_VERSION=0.12.1
+DMLC_VERSION=87b7ffa59eb78f753073ac56f5f60e46d930b93c
+MSHADOW_VERSION=2d7780c3f2eefe4453fa419862d1b2089bedb8d5
+PS_VERSION=2ce8b9a256207947acfa2cb9b09ab74b8de74547
+NNVM_VERSION=e4a138ab947d682c83625840bbcd66f70feb4b14
+MXNET_VERSION=1.0.0
 download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
 download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
 download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
@@ -85,7 +85,7 @@ export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_P
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" ADD_CFLAGS="-DMXNET_USE_LAPACK -fopenmp" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
 cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
 

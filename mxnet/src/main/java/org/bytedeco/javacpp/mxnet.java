@@ -38,6 +38,7 @@ public class mxnet extends org.bytedeco.javacpp.presets.mxnet {
  */
 
 /**
+ *  Copyright (c) 2015 by Contributors
  * \file c_api.h
  * \brief C API of mxnet
  */
@@ -541,6 +542,15 @@ public static native int MXDumpProfile();
 public static native int MXSetNumOMPThreads(int thread_num);
 
 /**
+ * \brief set bulk execution limit
+ * @param bulk_size new bulk_size
+ * @param prev_bulk_size previous bulk_size
+ */
+public static native int MXEngineSetBulkSize(int bulk_size, IntPointer prev_bulk_size);
+public static native int MXEngineSetBulkSize(int bulk_size, IntBuffer prev_bulk_size);
+public static native int MXEngineSetBulkSize(int bulk_size, int[] prev_bulk_size);
+
+/**
  * \brief get the MXNet library version as an integer
  * @param pointer to the integer holding the version number
  * @return 0 when success, -1 when failure happens
@@ -901,6 +911,12 @@ public static native int MXNDArraySyncCopyFromNDArray(NDArrayHandle handle_dst,
                                            NDArrayHandle handle_src,
                                            int i);
 
+/**
+ * \brief check whether the NDArray format is valid
+ * @param full_check if {@code True}, rigorous check, O(N) operations
+ *    Otherwise basic check, O(1) operations
+ */
+public static native int MXNDArraySyncCheckFormat(NDArrayHandle handle, @Cast("const bool") boolean full_check);
 /**
  * \brief Wait until all the pending writes with respect NDArray are finished.
  *  Always call this before read data out synchronizely.
@@ -3358,6 +3374,31 @@ public static native int MXKVStoreCreate(@Cast("const char*") BytePointer type,
                               PointerPointer out);
 public static native int MXKVStoreCreate(String type,
                               @Cast("KVStoreHandle*") @ByPtrPtr KVStoreHandle out);
+
+/**
+ * \brief Set parameters to use low-bit compressed gradients
+ * @param handle handle to the kvstore
+ * @param keys keys for compression parameters
+ * @param vals values for compression parameters
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXKVStoreSetGradientCompression(KVStoreHandle handle,
+                                              @Cast("mx_uint") int num_params,
+                                              @Cast("const char**") PointerPointer keys,
+                                              @Cast("const char**") PointerPointer vals);
+public static native int MXKVStoreSetGradientCompression(KVStoreHandle handle,
+                                              @Cast("mx_uint") int num_params,
+                                              @Cast("const char**") @ByPtrPtr BytePointer keys,
+                                              @Cast("const char**") @ByPtrPtr BytePointer vals);
+public static native int MXKVStoreSetGradientCompression(KVStoreHandle handle,
+                                              @Cast("mx_uint") int num_params,
+                                              @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                                              @Cast("const char**") @ByPtrPtr ByteBuffer vals);
+public static native int MXKVStoreSetGradientCompression(KVStoreHandle handle,
+                                              @Cast("mx_uint") int num_params,
+                                              @Cast("const char**") @ByPtrPtr byte[] keys,
+                                              @Cast("const char**") @ByPtrPtr byte[] vals);
+
 /**
  * \brief Delete a KVStore handle.
  * @param handle handle to the kvstore
@@ -4187,6 +4228,40 @@ public static native int MXRtcCudaKernelCall(CudaKernelHandle handle, int dev_id
                                   @Cast("mx_uint") int grid_dim_z, @Cast("mx_uint") int block_dim_x,
                                   @Cast("mx_uint") int block_dim_y, @Cast("mx_uint") int block_dim_z,
                                   @Cast("mx_uint") int shared_mem);
+/**
+ * \brief Get shared memory handle from NDArray
+ * @param handle NDArray handle.
+ * @param shared_pid output PID
+ * @param shared_id output shared memory id.
+ */
+public static native int MXNDArrayGetSharedMemHandle(NDArrayHandle handle, IntPointer shared_pid,
+                                          IntPointer shared_id);
+public static native int MXNDArrayGetSharedMemHandle(NDArrayHandle handle, IntBuffer shared_pid,
+                                          IntBuffer shared_id);
+public static native int MXNDArrayGetSharedMemHandle(NDArrayHandle handle, int[] shared_pid,
+                                          int[] shared_id);
+/**
+ * \brief Reconstruct NDArray from shared memory handle
+ * @param shared_pid shared PID
+ * @param shared_id shared memory id
+ * @param shape pointer to NDArray dimensions
+ * @param ndim number of NDArray dimensions
+ * @param dtype data type of NDArray
+ * @param out constructed NDArray
+ */
+public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") IntPointer shape,
+                                           @Cast("mx_uint") int ndim, int dtype, PointerPointer out);
+public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") IntBuffer shape,
+                                           @Cast("mx_uint") int ndim, int dtype, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out);
+public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") int[] shape,
+                                           @Cast("mx_uint") int ndim, int dtype, PointerPointer out);
+public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") IntPointer shape,
+                                           @Cast("mx_uint") int ndim, int dtype, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out);
+public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") IntBuffer shape,
+                                           @Cast("mx_uint") int ndim, int dtype, PointerPointer out);
+public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") int[] shape,
+                                           @Cast("mx_uint") int ndim, int dtype, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out);
+
 
 // #ifdef __cplusplus
 // #endif  // __cplusplus
@@ -4216,6 +4291,7 @@ public static native int MXRtcCudaKernelCall(CudaKernelHandle handle, int dev_id
  */
 
 /**
+ *  Copyright (c) 2015 by Contributors
  * \file c_predict_api.h
  * \brief C predict API of mxnet, contains a minimum API to run prediction.
  *  This file is self-contained, and do not dependent on any other files.
