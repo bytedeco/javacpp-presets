@@ -419,9 +419,10 @@ case $PLATFORM in
         patch -Np1 < ../../../ffmpeg-linux.patch
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I/opt/additionalInclude/ -I../include/" --extra-ldflags="-L../lib/ -L/opt/additionalLib" --extra-libs="-lstdc++ -ldl -lasound" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs --enable-mmal --enable-hwaccel=h264_mmal
+          USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -ldl -lasound -lvcos" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
         else
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --enable-mmal --enable-hwaccel=h264_mmal
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound -lvcos" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         fi
         make -j $MAKEJ
         make install

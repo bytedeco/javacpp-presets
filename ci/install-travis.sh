@@ -76,8 +76,12 @@ if [ "$OS" == "linux-armhf" ]; then
 	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
 	sudo apt-get -y install clang git file wget unzip tar bzip2 gzip patch autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libglfw3-dev libgtk2.0-dev libusb-dev zlib1g
 	git -C $HOME clone https://github.com/raspberrypi/tools
+	git -C $HOME clone https://github.com/raspberrypi/userland
 	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 	export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
+	pushd $HOME/userland
+	bash buildme
+	popd
 	if [ "$PROJ" == "flycapture" ]; then
           if [[ $(find $HOME/downloads/flycapture.2.11.3.121_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
