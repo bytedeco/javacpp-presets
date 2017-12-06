@@ -1,4 +1,6 @@
 
+ * Enable V4L2 for OpenCV on ARM platforms as well ([issue bytedeco/javacv#850](https://github.com/bytedeco/javacv/issues/850))
+ * Enable Intel QSV acceleration via libmfx for FFmpeg ([pull #485](https://github.com/bytedeco/javacpp-presets/pull/485))
  * Add support for Mac OS X and Windows to presets for libfreenect2 ([issue bytedeco/javacv#837](https://github.com/bytedeco/javacv/issues/837))
  * Enable VisualOn AMR-WB encoder library support for FFmpeg ([pull #487](https://github.com/bytedeco/javacpp-presets/pull/487))
  * Use native threads for FFmpeg on Windows to prevent deadlocks with pthreads ([pull #481](https://github.com/bytedeco/javacpp-presets/pull/481))
