@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>tesseract</artifactId>
-  <version>3.04.01-${project.parent.version}</version>
+  <version>3.05.01-${project.parent.version}</version>
   <name>JavaCPP Presets for Tesseract</name>
 
   <properties>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>leptonica</artifactId>
-      <version>1.73-${project.parent.version}</version>
+      <version>1.74.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -33,10 +33,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
       <plugin>
@@ -45,6 +41,19 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>leptonica</artifactId>
+            <version>1.74.4-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>leptonica</artifactId>
+            <version>1.74.4-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+        </dependencies>
         <configuration>
           <propertyKeysAndValues>
             <property>
@@ -57,7 +66,7 @@
             </property>
           </propertyKeysAndValues>
           <classPaths>
-            <classPath>${basedir}/../leptonica/target/classes/</classPath>
+            <classPath>${basedir}/../leptonica/target/classes/include/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>

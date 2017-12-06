@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,15 +33,18 @@ public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CINDEX_LINKAGE", "CINDEX_VERSION_STRING").cppTypes().annotations())
                .put(new Info("CINDEX_DEPRECATED").cppTypes().annotations("@Deprecated"))
+               .put(new Info("CINDEX_VERSION").cppTypes("int").translate(false))
                .put(new Info("__has_feature(blocks)").define(false))
 
                .put(new Info("CXVirtualFileOverlayImpl").pointerTypes("CXVirtualFileOverlay"))
                .put(new Info("CXModuleMapDescriptorImpl").pointerTypes("CXModuleMapDescriptor"))
+               .put(new Info("CXTargetInfoImpl").pointerTypes("CXTargetInfo"))
                .put(new Info("CXTranslationUnitImpl").pointerTypes("CXTranslationUnit"))
                .put(new Info("CXCursorSetImpl").pointerTypes("CXCursorSet"))
 
                .put(new Info("CXVirtualFileOverlay").valueTypes("CXVirtualFileOverlay").pointerTypes("@ByPtrPtr CXVirtualFileOverlay", "@Cast(\"CXVirtualFileOverlay*\") PointerPointer"))
                .put(new Info("CXModuleMapDescriptor").valueTypes("CXModuleMapDescriptor").pointerTypes("@ByPtrPtr CXModuleMapDescriptor", "@Cast(\"CXModuleMapDescriptor*\") PointerPointer"))
+               .put(new Info("CXTargetInfo").valueTypes("CXTargetInfo").pointerTypes("@ByPtrPtr CXTargetInfo", "@Cast(\"CXTargetInfo*\") PointerPointer"))
                .put(new Info("CXTranslationUnit").valueTypes("CXTranslationUnit").pointerTypes("@ByPtrPtr CXTranslationUnit", "@Cast(\"CXTranslationUnit*\") PointerPointer"))
                .put(new Info("CXCursorSet").valueTypes("CXCursorSet").pointerTypes("@ByPtrPtr CXCursorSet", "@Cast(\"CXCursorSet*\") PointerPointer"));
     }

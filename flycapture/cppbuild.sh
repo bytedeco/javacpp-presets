@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-FLYCAPTURE_VERSION=2.9.3.43
+FLYCAPTURE_VERSION=2.11.3.121
 
 case $PLATFORM in
     linux-arm*)
@@ -15,10 +15,12 @@ case $PLATFORM in
             echo "Please place flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz in the downloads directory"
             exit 1
         fi
-        tar -xzvf ../../downloads/flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz
+        echo "Decompressing archives..."
+        tar -xzf ../../downloads/flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz
         rm -Rf $PLATFORM
         mv flycapture.${FLYCAPTURE_VERSION}_armhf $PLATFORM
         mv $PLATFORM/lib/C/* $PLATFORM/lib
+        mv $PLATFORM/include/C/* $PLATFORM/include
         ;;
     linux-x86*)
         if [[ ! -d "/usr/include/flycapture/" ]]; then

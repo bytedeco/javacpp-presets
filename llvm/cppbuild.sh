@@ -28,18 +28,19 @@ case $PLATFORM in
         ;;
 esac
 
-LLVM_VERSION=3.9.1
+LLVM_VERSION=5.0.0
 download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar xvf ../llvm-$LLVM_VERSION.src.tar.xz
+echo "Decompressing archives..."
+tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd llvm-$LLVM_VERSION.src
 mkdir -p build tools
 cd tools
-tar xvf ../../../cfe-$LLVM_VERSION.src.tar.xz
+tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
 cd ../build

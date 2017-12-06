@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet, Jarek Sacha
+ * Copyright (C) 2014-2017 Samuel Audet, Jarek Sacha
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,9 +41,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jarek Sacha
  */
 @Properties(target = "org.bytedeco.javacpp.FlyCapture2_C", value = {
-        @Platform(value = {"linux-x86", "linux-arm", "windows"}, include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"}),
-        @Platform(value = {"linux-x86", "linux-arm"}, link = "flycapture-c@.2", includepath = "/usr/include/flycapture/C/"),
-        @Platform(value = "windows", link = "FlyCapture2_C", preload = {"libiomp5md", "FlyCapture2"},
+        @Platform(value = {"linux-x86", "linux-arm", "windows"},
+                include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>",
+                        "MultiSyncLibraryDefs_C.h", "MultiSyncLibrary_C.h"},
+                link = {"flycapture-c@.2", "multisync-c@.2"}, includepath = "/usr/include/flycapture/C/"),
+        @Platform(value = "linux-arm", include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"}, link = "flycapture-c@.2"),
+        @Platform(value = "windows", link = {"FlyCapture2_C", "MultiSyncLibrary_C"},
+                preload = {"libiomp5md", "FlyCapture2"},
                 includepath =  "C:/Program Files/Point Grey Research/FlyCapture2/include/C/"),
         @Platform(value = "windows-x86",
                 linkpath    = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/C/",
@@ -58,12 +62,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                "C:/Program Files/Point Grey Research/FlyCapture2/bin64/C/"}) })
 public class FlyCapture2_C implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("FLYCAPTURE2_C_API", "FLYCAPTURE2_C_CALL_CONVEN").cppTypes().annotations().cppText(""))
+        infoMap.put(new Info("FLYCAPTURE2_C_API", "FLYCAPTURE2_C_CALL_CONVEN",
+                "MULTISYNCLIBRARY_C_API", "MULTISYNCLIBRARY_C_CALL_CONVEN").cppTypes().annotations().cppText(""))
                .put(new Info("fc2TriggerDelayInfo").cast().pointerTypes("fc2PropertyInfo"))
                .put(new Info("fc2TriggerDelay").cast().pointerTypes("fc2Property"))
                .put(new Info("fc2ImageEventCallback").valueTypes("fc2ImageEventCallback")
                        .pointerTypes("@Cast(\"fc2ImageEventCallback*\") @ByPtrPtr fc2ImageEventCallback"))
                .put(new Info("fc2Context").valueTypes("fc2Context")
-                       .pointerTypes("@Cast(\"fc2Context*\") @ByPtrPtr fc2Context"));
+                       .pointerTypes("@Cast(\"fc2Context*\") @ByPtrPtr fc2Context"))
+                // To avoid linking error on Windows 64: "unresolved external symbol __imp_ResetStats"
+               .put(new Info("ResetStats").skip());
     }
 }

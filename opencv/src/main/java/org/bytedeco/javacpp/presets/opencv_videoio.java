@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,11 +33,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_imgcodecs.class, value = {
-    @Platform(include = {"<opencv2/videoio/videoio_c.h>", "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.3.2"),
+    @Platform(include = {"<opencv2/videoio/videoio_c.h>", "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.3.3"),
     @Platform(value = "android", preload = {
         "native_camera_r2.2.0", "native_camera_r2.3.3", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
         "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
-    @Platform(value = "windows", link = "opencv_videoio320", preload = {"opencv_ffmpeg320", "opencv_ffmpeg320_64"})},
+    @Platform(value = "windows", link = "opencv_videoio331", preload = {"opencv_ffmpeg331", "opencv_ffmpeg331_64"})},
         target = "org.bytedeco.javacpp.opencv_videoio")
 public class opencv_videoio implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -48,3 +48,4 @@ public class opencv_videoio implements InfoMapper {
                .put(new Info("cvWriteToAVI").cppTypes("int", "CvVideoWriter*", "IplImage*"));
     }
 }
+

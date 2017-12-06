@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.3.2-SNAPSHOT</version>
+  <version>1.3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -49,6 +49,7 @@
     <module>chilitags</module>
     <module>flandmark</module>
     <module>hdf5</module>
+    <module>mkl</module>
     <module>openblas</module>
     <module>fftw</module>
     <module>gsl</module>
@@ -59,6 +60,10 @@
     <module>cuda</module>
     <module>mxnet</module>
     <module>tensorflow</module>
+    <module>ale</module>
+    <module>liquidfun</module>
+    <module>skia</module>
+    <module>systems</module>
   </modules>
 
   <prerequisites>
@@ -111,6 +116,33 @@
     </dependencies>
   </dependencyManagement>
 
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <finalName>${project.artifactId}</finalName>
     <pluginManagement>
@@ -151,7 +183,6 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <skipMain>${javacpp.parser.skip}</skipMain>
               <includes>
                 <include>org/bytedeco/javacpp/presets/*.java</include>
               </includes>
@@ -176,11 +207,70 @@
             </property>
           </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
-          <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+          </includePaths>
           <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          <resourcePaths>
+            <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
+            <resourcePath>${basedir}/target/classes/org/bytedeco/javacpp/</resourcePath>
+          </resourcePaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/javacpp/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/javacpp/include/</includeResource>
+            <includeResource>/org/bytedeco/javacpp/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
+          <execution>
+            <id>javacpp.cppbuild.install</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${javacpp.cppbuild.skip}</skip>
+              <buildCommand>
+                <program>bash</program>
+                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>install</argument>
+                <argument>${javacpp.moduleId}</argument>
+                <argument>-platform</argument>
+                <argument>${javacpp.platform}</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}/..</workingDirectory>
+              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp.cppbuild.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${javacpp.cppbuild.skip}</skip>
+              <buildCommand>
+                <program>bash</program>
+                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>clean</argument>
+                <argument>${javacpp.moduleId}</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}/..</workingDirectory>
+              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+            </configuration>
+          </execution>
           <execution>
             <id>javacpp.parser</id>
             <phase>generate-sources</phase>
@@ -203,6 +293,7 @@
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
               <copyLibs>true</copyLibs>
+<!--              <copyResources>true</copyResources>-->
             </configuration>
           </execution>
         </executions>
@@ -240,7 +331,7 @@
                 <include>org/bytedeco/javacpp/presets/*</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/*.h</exclude>
+                <exclude>org/bytedeco/javacpp/include/</exclude>
                 <exclude>org/bytedeco/javacpp/linux-*/</exclude>
                 <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
                 <exclude>org/bytedeco/javacpp/windows-*/</exclude>
@@ -262,9 +353,9 @@
                 <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
               </includes>
               <excludes>
-                <exclude>**/*.exp</exclude>
-                <exclude>**/*.lib</exclude>
-                <exclude>**/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -307,48 +398,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.5.0</version>
-        <executions>
-          <execution>
-            <id>javacpp.cppbuild.install</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>			
-            <configuration>
-              <arguments>
-                <argument>${project.basedir}/../cppbuild.sh</argument>
-                <argument>install</argument>
-                <argument>${javacpp.moduleId}</argument>
-                <argument>-platform</argument>
-                <argument>${javacpp.platform}</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>javacpp.cppbuild.clean</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>			
-            <configuration>
-              <arguments>
-                <argument>${project.basedir}/../cppbuild.sh</argument>
-                <argument>clean</argument>
-                <argument>${javacpp.moduleId}</argument>
-              </arguments>
-            </configuration>
-          </execution>		  
-        </executions>
-        <configuration>
-          <skip>${javacpp.cppbuild.skip}</skip>
-          <workingDirectory>${project.basedir}/..</workingDirectory>
-          <executable>bash</executable>			
-        </configuration>
       </plugin>
     </plugins>
     </pluginManagement>

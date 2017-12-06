@@ -35,7 +35,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target="org.bytedeco.javacpp.tesseract", inherit=lept.class, value={
     @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
         "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
-        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"}, link="tesseract@.3"),
+        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"},
+        link="tesseract@.3", resource = {"include", "lib"}),
     @Platform(value="android", link="tesseract"),
     @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
 public class tesseract implements InfoMapper {
@@ -56,21 +57,21 @@ public class tesseract implements InfoMapper {
                .put(new Info("TessResultCallback1<bool,int>").pointerTypes("DeleteCallback").define().virtualize())
 
                .put(new Info("TessCallback1<char>").pointerTypes("CharClearCallback").define().virtualize())
-               .put(new Info("TessResultCallback2<bool,char const&,char const&>").pointerTypes("CharCompareCallback").define().virtualize())
-               .put(new Info("TessResultCallback2<bool,FILE*,char const&>").pointerTypes("CharWriteCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,const char&,const char&>").pointerTypes("CharCompareCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,FILE*,const char&>").pointerTypes("CharWriteCallback").define().virtualize())
                .put(new Info("TessResultCallback3<bool,FILE*,char*,bool>").pointerTypes("CharReadCallback").define().virtualize())
                .put(new Info("GenericVector<char>").pointerTypes("CharGenericVector").define())
 
                .put(new Info("TessCallback1<STRING>").pointerTypes("StringClearCallback").define().virtualize())
-               .put(new Info("TessResultCallback2<bool,STRING const&,STRING const&>").pointerTypes("StringCompareCallback").define().virtualize())
-               .put(new Info("TessResultCallback2<bool,FILE*,STRING const&>").pointerTypes("StringWriteCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,const STRING&,const STRING&>").pointerTypes("StringCompareCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,FILE*,const STRING&>").pointerTypes("StringWriteCallback").define().virtualize())
                .put(new Info("TessResultCallback3<bool,FILE*,STRING*,bool>").pointerTypes("StringReadCallback").define().virtualize())
                .put(new Info("GenericVector<STRING>").pointerTypes("StringGenericVector").define())
                .put(new Info("GenericVector<STRING>::WithinBounds").skip())
 
                .put(new Info("TessCallback1<int>").pointerTypes("IntClearCallback").define().virtualize())
-               .put(new Info("TessResultCallback2<bool,int const&,int const&>").pointerTypes("IntCompareCallback").define().virtualize())
-               .put(new Info("TessResultCallback2<bool,FILE*,int const&>").pointerTypes("IntWriteCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,const int&,const int&>").pointerTypes("IntCompareCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,FILE*,const int&>").pointerTypes("IntWriteCallback").define().virtualize())
                .put(new Info("TessResultCallback3<bool,FILE*,int*,bool>").pointerTypes("IntReadCallback").define().virtualize())
                .put(new Info("GenericVector<int>").pointerTypes("IntGenericVector").define())
                .put(new Info("GenericVector<StrongScriptDirection>").cast().pointerTypes("IntGenericVector"))
@@ -78,6 +79,8 @@ public class tesseract implements InfoMapper {
 
                .put(new Info("GenericVector<char>::delete_data_pointers", "GenericVector<char>::SerializeClasses", "GenericVector<char>::DeSerializeClasses",
                              "GenericVector<int>::delete_data_pointers", "GenericVector<int>::SerializeClasses", "GenericVector<int>::DeSerializeClasses",
+                             "GenericVector<char>::SkipDeSerialize", "GenericVector<char>::SkipDeSerializeClasses",
+                             "GenericVector<int>::SkipDeSerialize", "GenericVector<int>::SkipDeSerializeClasses",
                              "GenericVector<STRING>::contains_index", "GenericVector<STRING>::delete_data_pointers", "GenericVector<STRING>::binary_search",
                              "GenericVector<STRING>::bool_binary_search", "GenericVector<STRING>::choose_nth_item", "GenericVector<STRING>::dot_product",
                              "GenericVector<STRING>::sort", "GenericVectorEqEq<int>::GenericVectorEqEq<int>(int)").skip())

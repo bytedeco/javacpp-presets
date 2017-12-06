@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -27,6 +27,7 @@
     <module>../chilitags/platform</module>
     <module>../flandmark/platform</module>
     <module>../hdf5/platform</module>
+    <module>../mkl/platform</module>
     <module>../openblas/platform</module>
     <module>../fftw/platform</module>
     <module>../gsl/platform</module>
@@ -37,6 +38,9 @@
     <module>../cuda/platform</module>
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
+    <module>../ale/platform</module>
+    <module>../liquidfun/platform</module>
+    <module>../skia/platform</module>
   </modules>
 
   <dependencies>
@@ -49,17 +53,17 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>3.2.0-${project.version}</version>
+      <version>3.3.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>3.2.1-${project.version}</version>
+      <version>3.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>flycapture-platform</artifactId>
-      <version>2.9.3.43-${project.version}</version>
+      <version>2.11.3.121-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -104,57 +108,82 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.10.0-patch1-${project.version}</version>
+      <version>1.10.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>mkl-platform</artifactId>
+      <version>2018.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.2.19-${project.version}</version>
+      <version>0.2.20-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>fftw-platform</artifactId>
-      <version>3.3.5-${project.version}</version>
+      <version>3.3.7-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>gsl-platform</artifactId>
-      <version>2.2.1-${project.version}</version>
+      <version>2.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>3.9.1-${project.version}</version>
+      <version>5.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>leptonica-platform</artifactId>
-      <version>1.73-${project.version}</version>
+      <version>1.74.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>3.04.01-${project.version}</version>
+      <version>3.05.01-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>caffe-platform</artifactId>
-      <version>master-${project.version}</version>
+      <version>1.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>8.0-${project.version}</version>
+      <version>9.0-7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>master-${project.version}</version>
+      <version>1.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.0.0-${project.version}</version>
+      <version>1.4.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>ale-platform</artifactId>
+      <version>20170911-6eddb8d-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>liquidfun-platform</artifactId>
+      <version>20170717-43d53e0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>skia-platform</artifactId>
+      <version>20170511-53d6729-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>systems-platform</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

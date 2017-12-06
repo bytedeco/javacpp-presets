@@ -7,26 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
-    FFTW_VERSION=3.3.5
-    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll$BITS.zip fftw-$FFTW_VERSION-dll$BITS.zip
+FFTW_VERSION=3.3.7
+download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    mkdir -p include lib
-    unzip -o ../fftw-$FFTW_VERSION-dll$BITS.zip -d fftw-$FFTW_VERSION-dll$BITS
-    cd fftw-$FFTW_VERSION-dll$BITS
-else
-    FFTW_VERSION=3.3.5
-    download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    INSTALL_PATH=`pwd`
-    tar -xzvf ../fftw-$FFTW_VERSION.tar.gz
-    cd fftw-$FFTW_VERSION
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+echo "Decompressing archives..."
+tar --totals -xzf ../fftw-$FFTW_VERSION.tar.gz
+cd fftw-$FFTW_VERSION
 
 case $PLATFORM in
     android-arm)
@@ -39,7 +28,7 @@ case $PLATFORM in
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
+        patch -Np1 < ../../../fftw-android.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install-strip
@@ -57,7 +46,7 @@ case $PLATFORM in
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
+        patch -Np1 < ../../../fftw-android.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install-strip
@@ -90,15 +79,25 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-ppc64le)
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
-        make -j $MAKEJ
-        make install-strip
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
-        make -j $MAKEJ
-        make install-strip
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
+          make -j $MAKEJ
+          make install-strip
+          ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
+          make -j $MAKEJ
+          make install-strip
+        else
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=powerpc64le-linux-gnu --build=ppc64le-linux
+          make -j $MAKEJ
+          make install-strip
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=powerpc64le-linux-gnu --build=ppc64le-linux --enable-float
+          make -j $MAKEJ
+          make install-strip
+        fi
         ;;
     macosx-*)
-        patch -Np1 < ../../../fftw-$FFTW_VERSION-macosx.patch
+        patch -Np1 < ../../../fftw-macosx.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j $MAKEJ
         make install-strip
@@ -107,12 +106,20 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        cp *.h ../include
-        cp *.dll ../lib
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32" --with-our-malloc
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32" --with-our-malloc --enable-float
+        make -j $MAKEJ
+        make install-strip
         ;;
     windows-x86_64)
-        cp *.h ../include
-        cp *.dll ../lib
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m64" --with-our-malloc
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m64" --with-our-malloc --enable-float
+        make -j $MAKEJ
+        make install-strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

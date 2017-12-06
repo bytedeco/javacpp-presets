@@ -1,0 +1,148 @@
+diff -ruN opencv-3.3.1/CMakeLists.txt opencv-3.3.1-patch/CMakeLists.txt
+--- opencv-3.3.1/CMakeLists.txt	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/CMakeLists.txt	2017-11-30 14:20:10.074673414 +0900
+@@ -7,12 +7,12 @@
+ # ----------------------------------------------------------------------------
+ 
+ # Disable in-source builds to prevent source tree corruption.
+-if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
+-  message(FATAL_ERROR "
+-FATAL: In-source builds are not allowed.
+-       You should create a separate directory for build files.
+-")
+-endif()
++#if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
++#  message(FATAL_ERROR "
++#FATAL: In-source builds are not allowed.
++#       You should create a separate directory for build files.
++#")
++#endif()
+ 
+ 
+ include(cmake/OpenCVMinDepVersions.cmake)
+diff -ruN opencv-3.3.1/modules/core/include/opencv2/core/cv_cpu_dispatch.h opencv-3.3.1-patch/modules/core/include/opencv2/core/cv_cpu_dispatch.h
+--- opencv-3.3.1/modules/core/include/opencv2/core/cv_cpu_dispatch.h	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/core/include/opencv2/core/cv_cpu_dispatch.h	2017-12-01 13:54:35.006697555 +0900
+@@ -99,13 +99,13 @@
+ #  include <arm_neon.h>
+ #endif
+ 
+-#if defined(__VSX__) && defined(__PPC64__) && defined(__LITTLE_ENDIAN__)
+-#  include <altivec.h>
+-#  undef vector
+-#  undef pixel
+-#  undef bool
+-#  define CV_VSX 1
+-#endif
++//#if defined(__VSX__) && defined(__PPC64__) && defined(__LITTLE_ENDIAN__)
++//#  include <altivec.h>
++//#  undef vector
++//#  undef pixel
++//#  undef bool
++//#  define CV_VSX 1
++//#endif
+ 
+ #endif // CV_ENABLE_INTRINSICS && !CV_DISABLE_OPTIMIZATION && !__CUDACC__
+ 
+@@ -143,12 +143,12 @@
+ #elif defined(__ARM_NEON__) || (defined (__ARM_NEON) && defined(__aarch64__))
+ #  include <arm_neon.h>
+ #  define CV_NEON 1
+-#elif defined(__VSX__) && defined(__PPC64__) && defined(__LITTLE_ENDIAN__)
+-#  include <altivec.h>
+-#  undef vector
+-#  undef pixel
+-#  undef bool
+-#  define CV_VSX 1
++//#elif defined(__VSX__) && defined(__PPC64__) && defined(__LITTLE_ENDIAN__)
++//#  include <altivec.h>
++//#  undef vector
++//#  undef pixel
++//#  undef bool
++//#  define CV_VSX 1
+ #endif
+ 
+ #endif // !__OPENCV_BUILD && !__CUDACC (Compatibility code)
+diff -ruN opencv-3.3.1/modules/core/include/opencv2/core/utility.hpp opencv-3.3.1-patch/modules/core/include/opencv2/core/utility.hpp
+--- opencv-3.3.1/modules/core/include/opencv2/core/utility.hpp	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/core/include/opencv2/core/utility.hpp	2017-11-30 14:20:10.075673413 +0900
+@@ -1199,7 +1199,7 @@
+     double getTotalMs()   const { return ((double)m_ticksTotal / cv::getTickFrequency()) * 1000; }
+     double getMeanMs()    const { return (((double)m_ticksTotal/m_counter) / cv::getTickFrequency()) * 1000; }
+ };
+-bool operator==(const NodeData& lhs, const NodeData& rhs);
++CV_EXPORTS bool operator==(const NodeData& lhs, const NodeData& rhs);
+ 
+ typedef Node<NodeData> InstrNode;
+ 
+diff -ruN opencv-3.3.1/modules/core/src/system.cpp opencv-3.3.1-patch/modules/core/src/system.cpp
+--- opencv-3.3.1/modules/core/src/system.cpp	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/core/src/system.cpp	2017-11-30 14:20:10.076673412 +0900
+@@ -1814,7 +1814,7 @@
+ NodeData::~NodeData()
+ {
+ }
+-bool operator==(const NodeData& left, const NodeData& right)
++CV_EXPORTS bool operator==(const NodeData& left, const NodeData& right)
+ {
+     if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName)
+     {
+diff -ruN opencv-3.3.1/modules/dnn/include/opencv2/dnn/all_layers.hpp opencv-3.3.1-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp
+--- opencv-3.3.1/modules/dnn/include/opencv2/dnn/all_layers.hpp	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp	2017-11-30 14:20:10.077673411 +0900
+@@ -562,7 +562,7 @@
+      * An every sample in the batch is normalized separately. Optionally,
+      * output is scaled by the trained parameters.
+      */
+-    class NormalizeBBoxLayer : public Layer
++    class CV_EXPORTS NormalizeBBoxLayer : public Layer
+     {
+     public:
+         float pnorm, epsilon;
+diff -ruN opencv-3.3.1/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-3.3.1-patch/modules/dnn/include/opencv2/dnn/dnn.hpp
+--- opencv-3.3.1/modules/dnn/include/opencv2/dnn/dnn.hpp	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/dnn/include/opencv2/dnn/dnn.hpp	2017-11-30 14:20:10.078673410 +0900
+@@ -100,7 +100,7 @@
+    /**
+     * @brief Derivatives of this class encapsulates functions of certain backends.
+     */
+-    class BackendNode
++    class CV_EXPORTS BackendNode
+     {
+     public:
+         BackendNode(int backendId);
+@@ -243,7 +243,7 @@
+         * Layer don't use own Halide::Func members because we can have applied
+         * layers fusing. In this way the fused function should be scheduled.
+         */
+-        virtual void applyHalideScheduler(Ptr<BackendNode>& node,
++        virtual void applyHalideScheduler(const Ptr<BackendNode>& node,
+                                           const std::vector<Mat*> &inputs,
+                                           const std::vector<Mat> &outputs,
+                                           int targetId) const;
+diff -ruN opencv-3.3.1/modules/dnn/src/dnn.cpp opencv-3.3.1-patch/modules/dnn/src/dnn.cpp
+--- opencv-3.3.1/modules/dnn/src/dnn.cpp	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/dnn/src/dnn.cpp	2017-11-30 14:20:10.079673409 +0900
+@@ -2001,7 +2001,7 @@
+     return Ptr<BackendNode>();
+ }
+ 
+-void Layer::applyHalideScheduler(Ptr<BackendNode>& node, const std::vector<Mat*> &inputs,
++void Layer::applyHalideScheduler(const Ptr<BackendNode>& node, const std::vector<Mat*> &inputs,
+                                  const std::vector<Mat> &outputs, int targetId) const
+ {
+ #ifdef  HAVE_HALIDE
+diff -ruN opencv-3.3.1/modules/flann/include/opencv2/flann/miniflann.hpp opencv-3.3.1-patch/modules/flann/include/opencv2/flann/miniflann.hpp
+--- opencv-3.3.1/modules/flann/include/opencv2/flann/miniflann.hpp	2017-10-24 00:41:12.000000000 +0900
++++ opencv-3.3.1-patch/modules/flann/include/opencv2/flann/miniflann.hpp	2017-11-30 14:20:37.092691236 +0900
+@@ -74,10 +74,6 @@
+                 std::vector<double>& numValues) const;
+ 
+     void* params;
+-
+-private:
+-    IndexParams(const IndexParams &); // copy disabled
+-    IndexParams& operator=(const IndexParams &); // assign disabled
+ };
+ 
+ struct CV_EXPORTS KDTreeIndexParams : public IndexParams

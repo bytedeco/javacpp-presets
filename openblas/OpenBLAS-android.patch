@@ -1,0 +1,15 @@
+diff -ruN OpenBLAS-0.2.20/common.h OpenBLAS-0.2.20-android/common.h
+--- OpenBLAS-0.2.20/common.h	2017-07-24 13:03:35.000000000 +0900
++++ OpenBLAS-0.2.20-android/common.h	2017-08-23 06:08:41.651929598 +0900
+@@ -100,9 +100,9 @@
+ #ifdef OS_ANDROID
+ #define NO_SYSV_IPC
+ //Android NDK only supports complex.h since Android 5.0
+-#if __ANDROID_API__ < 21
++//#if __ANDROID_API__ < 21
+ #define FORCE_OPENBLAS_COMPLEX_STRUCT
+-#endif
++//#endif
+ #endif
+ 
+ #ifdef OS_WINDOWS

@@ -6,19 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>videoinput</artifactId>
   <version>0.200-${project.parent.version}</version>
   <name>JavaCPP Presets for videoInput</name>
-
-  <properties>
-    <!-- Skip on non-Windows system (see profile below) -->
-    <javacpp.parser.skip>true</javacpp.parser.skip>
-    <javacpp.compiler.skip>true</javacpp.compiler.skip>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -30,10 +24,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
       <plugin>
@@ -44,8 +34,8 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <environmentVariables>
-            <!-- Hack required for Windows SDK v7.1 -->
-            <CL>&quot;/I${env.SDKDIR}/Include/&quot; &quot;/IC:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include&quot;</CL>
+            <!-- Hack required for the Windows SDK -->
+            <CL>&quot;/I${env.WINDOWSSDKDIR}/Include/&quot; &quot;/I${env.SDKDIR}/Include/&quot; &quot;/IC:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include&quot;</CL>
           </environmentVariables>
         </configuration>
         <executions>
@@ -75,18 +65,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os><family>windows</family></os>
-      </activation>
-      <properties>
-        <javacpp.parser.skip>false</javacpp.parser.skip>
-        <javacpp.compiler.skip>false</javacpp.compiler.skip>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>

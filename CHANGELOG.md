@@ -1,10 +1,28 @@
 
+ * Add support for Mac OS X and Windows to presets for libfreenect2 ([issue bytedeco/javacv#837](https://github.com/bytedeco/javacv/issues/837))
+ * Enable VisualOn AMR-WB encoder library support for FFmpeg ([pull #487](https://github.com/bytedeco/javacpp-presets/pull/487))
+ * Use native threads for FFmpeg on Windows to prevent deadlocks with pthreads ([pull #481](https://github.com/bytedeco/javacpp-presets/pull/481))
+ * Add cross-compilation support for `linux-ppc64le` ([pull #471](https://github.com/bytedeco/javacpp-presets/pull/471))
+ * Fix definitions of `fftw_iodim` and `fftw_iodim64` for FFTW ([issue #466](https://github.com/bytedeco/javacpp-presets/issues/466))
+ * Add a `Mat(Scalar)` constructor to OpenCV for convenience ([issue bytedeco/javacv#738](https://github.com/bytedeco/javacv/issues/738))
+ * Include the `libavutil/time.h` for FFmpeg ([issue bytedeco/javacv#735](https://github.com/bytedeco/javacv/issues/735))
+ * Map `AVERROR()` for error codes from `errno.h` used by FFmpeg ([pull #459](https://github.com/bytedeco/javacpp-presets/pull/459))
+ * Use `long` instead of `int` for constants starting with `AV_CH_LAYOUT_` in `avutil` ([pull #455](https://github.com/bytedeco/javacpp-presets/pull/455))
+ * Build FFmpeg with FreeType, enabling the `drawtext` filter ([pull #452](https://github.com/bytedeco/javacpp-presets/pull/452)), and support for Opus ([pull #457](https://github.com/bytedeco/javacpp-presets/pull/457))
+ * Enable cuDNN support for Caffe by default ([issue #187](https://github.com/bytedeco/javacpp-presets/issues/187))
+ * Use the new `BUILD_PATH` environment variable passed by the `javacpp` plugin to the `cppbuild.sh` script files
+ * Let presets pick up `include` or `link` paths from cached resources ([pull #101](https://github.com/bytedeco/javacpp-presets/pull/101))
+ * Update presets for Visual Studio 2015 ([issue #298](https://github.com/bytedeco/javacpp-presets/issues/298))
+ * Reuse the presets for HDF5 and OpenBLAS with Caffe and MXNet
+ * Replace the `exec-maven-plugin` with the `javacpp` plugin itself to execute the `cppbuild.sh` script files
+ * Link TensorFlow statically with `cudart` to avoid dependency on CUDA ([issue #396](https://github.com/bytedeco/javacpp-presets/issues/396))
+ * Add missing call to `Loader.load()` in helper class for `opencv_ml` ([issue bytedeco/javacv#638](https://github.com/bytedeco/javacv/issues/638))
  * Work around issues with TensorFlow on some versions of Mac OS X ([issue #335](https://github.com/bytedeco/javacpp-presets/issues/335))
- * Upgrade presets for OpenCV 3.2.0, libdc1394 2.2.5, LLVM 3.9.1 ([pull #343](https://github.com/bytedeco/javacpp-presets/pull/343)), TensorFlow 1.0.0
- * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340))
+ * Upgrade presets for OpenCV 3.3.1, FFmpeg 3.4, FlyCapture 2.11.3.121 ([pull #424](https://github.com/bytedeco/javacpp-presets/pull/424)), libdc1394 2.2.5, Chilitags, HDF5 1.10.1, OpenBLAS 0.2.20, FFTW 3.3.7, GSL 2.4, LLVM 4.0.0 ([pull #404](https://github.com/bytedeco/javacpp-presets/pull/404)), Leptonica 1.74.4, Tesseract 3.05.01, Caffe 1.0, CUDA 9.0, cuDNN 7.0, MXNet 1.0.0, TensorFlow 1.4.0, and their dependencies
+ * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340)), MKL 2018.0 ([issue #112](https://github.com/bytedeco/javacpp-presets/issues/112)), The Arcade Learning Environment, LiquidFun ([pull #356](https://github.com/bytedeco/javacpp-presets/pull/356)), Skia ([pull #418](https://github.com/bytedeco/javacpp-presets/pull/418)), and system APIs (Linux, Mac OS X, and Windows)
  * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))
- * Add presets for the `text` module of OpenCV 3.1 ([pull #333](https://github.com/bytedeco/javacpp-presets/pull/333))
+ * Add presets for the `text` module of OpenCV 3.x ([pull #333](https://github.com/bytedeco/javacpp-presets/pull/333))
 
 ### December 7, 2016 version 1.3
  * Fix FFmpeg builds on ARM when not using a cross compiler ([issue #322](https://github.com/bytedeco/javacpp-presets/issues/322))

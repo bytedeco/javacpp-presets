@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.2.19
+OPENBLAS_VERSION=0.2.20
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -28,7 +28,7 @@ export NUM_THREADS=64
 export NO_AFFINITY=1
 case $PLATFORM in
     android-arm)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
+        patch -Np1 < ../../../OpenBLAS-android.patch
         export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -40,10 +40,11 @@ case $PLATFORM in
         fi
         export BINARY=32
         export TARGET=ARMV5
+        export ARM_SOFTFP_ABI=1
         sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
         ;;
     android-x86)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
+        patch -Np1 < ../../../OpenBLAS-android.patch
         export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -61,18 +62,28 @@ case $PLATFORM in
         export FC="$OLDFC -m32"
         export BINARY=32
         export DYNAMIC_ARCH=1
+        export TARGET=CORE2
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
+        export TARGET=HASWELL
+        export NO_AVX2=1
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-linux-ppc64le.patch
-        export CC="$OLDCC -m64"
-        export FC="$OLDFC -m64"
+        patch -Np1 < ../../../OpenBLAS-linux-ppc64le.patch
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          export CC="$OLDCC -m64"
+          export FC="$OLDFC -m64"
+        else
+          export CC="powerpc64le-linux-gnu-gcc"
+          export FC="powerpc64le-linux-gnu-gfortran"
+          export CROSS_SUFFIX="powerpc64le-linux-gnu-"
+        fi
         export BINARY=64
         export TARGET=POWER5
         ;;
@@ -83,12 +94,14 @@ case $PLATFORM in
         export TARGET=ARMV6
         ;;
     macosx-*)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-macosx.patch
+        patch -Np1 < ../../../OpenBLAS-macosx.patch
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/opt/gcc?/lib/gcc/?/libquadmath.a"
+        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
+        export TARGET=HASWELL
+        export NO_AVX2=1
         ;;
     windows-x86)
         export CC="$OLDCC -m32"
@@ -96,6 +109,7 @@ case $PLATFORM in
         export BINARY=32
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export TARGET=CORE2
         ;;
     windows-x86_64)
         export CC="$OLDCC -m64"
@@ -103,6 +117,8 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export TARGET=HASWELL
+        export NO_AVX2=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -110,7 +126,7 @@ case $PLATFORM in
         ;;
 esac
 
-make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN
 make install "PREFIX=$INSTALL_PATH"
 export LDFLAGS=
 

@@ -8,13 +8,17 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 LIBFREENECT_VERSION=0.5.3
-download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.zip libfreenect-$LIBFREENECT_VERSION.zip
+LIBUSB_VERSION=1.0.21
+download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.tar.gz libfreenect-$LIBFREENECT_VERSION.tar.gz
+download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
+echo "Decompressing archives..."
 mkdir -p include lib bin
-unzip -o ../libfreenect-$LIBFREENECT_VERSION.zip
+tar --totals -xzf ../libfreenect-$LIBFREENECT_VERSION.tar.gz
+tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
 if [[ $PLATFORM == windows* ]]; then
     download http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/1.2.6.0/libusb-win32-bin-1.2.6.0.zip libusb-win32-bin-1.2.6.0.zip
@@ -23,16 +27,6 @@ if [[ $PLATFORM == windows* ]]; then
     unzip -o libusb-win32-bin-1.2.6.0.zip
     unzip -o pthreads-w32-2-9-1-release.zip -d pthreads-w32-2-9-1-release/
     patch -Np1 -d libfreenect-$LIBFREENECT_VERSION < ../../libfreenect-$LIBFREENECT_VERSION-windows.patch
-fi
-
-if [[ $PLATFORM == linux-armhf ]]; then
-    download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.19/libusb-1.0.19.tar.bz2/download libusb-1.0.19.tar.bz2
-    tar xvjf libusb-1.0.19.tar.bz2
-    cd libusb-1.0.19
-    CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
-    make
-    make install
-    cd .. 
 fi
 
 cd libfreenect-$LIBFREENECT_VERSION
@@ -49,12 +43,31 @@ case $PLATFORM in
         make install
         ;;
     linux-armhf)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
+        make -j4
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/
         make -j4
         make install
         ;;
     linux-ppc64le)
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+        cd ../libusb-$LIBUSB_VERSION
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+            CC="$OLDCC -m64" CXX="$OLDCXX -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc-linux-gnu --disable-udev
+        else
+            CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc-linux-gnu --disable-udev
+        fi
+        make -j4
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+        else
+          CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+        fi
         make -j4
         make install
         ;;

@@ -9,15 +9,15 @@ fi
 
 ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
-LIBJPEG=libjpeg-turbo-1.5.1
-LIBPNG=libpng-1.6.28
-LIBTIFF=tiff-4.0.6
-LIBWEBP=libwebp-0.5.1
-LEPTONICA_VERSION=1.73
+LIBJPEG=libjpeg-turbo-1.5.2
+LIBPNG=libpng-1.6.32
+LIBTIFF=tiff-4.0.9
+LIBWEBP=libwebp-0.6.1
+LEPTONICA_VERSION=1.74.4
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
-download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.28/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.32/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
@@ -25,17 +25,14 @@ download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz lep
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../$ZLIB.tar.gz
-tar -xzvf ../$GIFLIB.tar.gz
-tar -xzvf ../$LIBJPEG.tar.gz
-tar -xzvf ../$LIBPNG.tar.gz
-tar -xzvf ../$LIBTIFF.tar.gz
-
-#patch old config.sub for aarch64 support
-patch -p0 < ../../libtiff-aarch64.patch
-
-tar -xzvf ../$LIBWEBP.tar.gz
-tar -xzvf ../leptonica-$LEPTONICA_VERSION.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../$ZLIB.tar.gz
+tar --totals -xzf ../$GIFLIB.tar.gz
+tar --totals -xzf ../$LIBJPEG.tar.gz
+tar --totals -xzf ../$LIBPNG.tar.gz
+tar --totals -xzf ../$LIBTIFF.tar.gz
+tar --totals -xzf ../$LIBWEBP.tar.gz
+tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
 case $PLATFORM in
     android-arm)
@@ -64,7 +61,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
+        rm contrib/arm-neon/android-ndk.c
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-arm-neon
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
@@ -72,13 +70,14 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT"
+        patch -Np1 < ../../../libwebp-arm.patch
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT" --disable-neon
         cd src
         make -j $MAKEJ
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
-        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
+        patch -Np1 < ../../../leptonica-android.patch
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -108,6 +107,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
+        rm contrib/arm-neon/android-ndk.c
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install
@@ -121,12 +121,16 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
-        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
+        patch -Np1 < ../../../leptonica-android.patch
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86)
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
         export CC="$OLDCC -m32 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
@@ -153,11 +157,15 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
         export CC="$OLDCC -m64 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
@@ -184,7 +192,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
@@ -192,6 +200,7 @@ case $PLATFORM in
         export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard -I$INSTALL_PATH/include/"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
         export CC="arm-linux-gnueabihf-gcc -fPIC"
         cd $ZLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
@@ -207,7 +216,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf
+        rm contrib/arm-neon/android-ndk.c
+        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-arm-neon
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
@@ -215,82 +225,101 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        patch -Np1 < ../../../libwebp-arm.patch
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-neon
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=arm-linux-gnueabihf --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=arm-linux-gnueabihf --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
     linux-arm64)
-    	export CFLAGS="-I$INSTALL_PATH/include/"
-    	export CXXFLAGS="$CFLAGS"
-    	export CPPFLAGS="$CFLAGS"
-    	export CC="aarch64-linux-gnu-gcc -fPIC"
-    	cd $ZLIB
-    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
-    	make -j $MAKEJ
-    	make install
-    	cd ../$GIFLIB
-    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --disable-shared
-    	#./configure --prefix=$INSTALL_PATH --disable-shared --host=aarch64-linux-gnu
-    	make -j $MAKEJ
-    	make install
-    	cd ../$LIBJPEG
-    	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
-    	make -j $MAKEJ
-    	make install
-    	cd ../$LIBPNG
-    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=aarch64-linux-gnu
-    	make -j $MAKEJ
-    	make install
-    	cd ../$LIBTIFF
-    	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=aarch64-linux-gnu
-    	make -j $MAKEJ
-    	make install
-    	cd ../$LIBWEBP
-    	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
-    	make -j $MAKEJ
-    	make install
-    	cd ../leptonica-$LEPTONICA_VERSION
-    	CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=aarch64-linux-gnu --disable-programs
-    	make -j $MAKEJ
-    	make install-strip
-    	;;
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
+        export CC="aarch64-linux-gnu-gcc -fPIC"
+        cd $ZLIB
+        CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ
+        make install
+        cd ../$GIFLIB
+        CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --disable-shared
+        #./configure --prefix=$INSTALL_PATH --disable-shared --host=aarch64-linux-gnu
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+        make -j $MAKEJ
+        make install
+        cd ../$LIBPNG
+        CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=aarch64-linux-gnu
+        make -j $MAKEJ
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=aarch64-linux-gnu
+        make -j $MAKEJ
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+        make -j $MAKEJ
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  --host=aarch64-linux-gnu --disable-programs
+        make -j $MAKEJ
+        make install-strip
+        ;;
     linux-ppc64le)
-        export CC="$OLDCC -m64 -fPIC"
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          export CC="$OLDCC -m64 -fPIC"
+          export BFLAGS="--build=ppc64le-linux"
+        else
+          export CC="powerpc64le-linux-gnu-gcc"
+          export CXX="powerpc64le-linux-gnu-g++"
+          export BFLAGS="--host=powerpc64le-linux-gnu"
+        fi
+
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
         make install
         cd ../$GIFLIB
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS --disable-lzma
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --build=ppc64le-linux --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $BFLAGS --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
     macosx-*)
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
@@ -317,12 +346,16 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-macosx.patch
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
+        patch -Np1 < ../../../leptonica-macosx.patch
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86)
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
         export CC="gcc -m32"
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
@@ -347,11 +380,15 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=i686-w64-mingw32 --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
+        export CFLAGS="-I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
         export CC="gcc -m64"
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
@@ -376,7 +413,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
-        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --build=x86_64-w64-mingw32 --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;

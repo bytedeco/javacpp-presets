@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Samuel Audet
+ * Copyright (C) 2013-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_highgui.class, opencv_ml.class}, value = {
     @Platform(include = {"<opencv2/objdetect/objdetect_c.h>", "<opencv2/objdetect.hpp>",
-                         "<opencv2/objdetect/detection_based_tracker.hpp>"}, link = "opencv_objdetect@.3.2"),
-    @Platform(value = "windows", link = "opencv_objdetect320")},
+                         "<opencv2/objdetect/detection_based_tracker.hpp>"}, link = "opencv_objdetect@.3.3"),
+    @Platform(value = "windows", link = "opencv_objdetect331")},
         target = "org.bytedeco.javacpp.opencv_objdetect", helper = "org.bytedeco.javacpp.helper.opencv_objdetect")
 public class opencv_objdetect implements InfoMapper {
     public void map(InfoMap infoMap) {

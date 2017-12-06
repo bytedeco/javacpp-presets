@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  * @author Jarek Sacha
  */
-@Properties(value = @Platform(define = "FLANDMAR_MSVC_COMPAT", include = {"flandmark_detector.h", "liblbp.h"}, link = "flandmark_static"),
+@Properties(value = @Platform(define = "FLANDMAR_MSVC_COMPAT", include = {"flandmark_detector.h", "liblbp.h"}, link = "flandmark_static", resource = {"include", "lib"}),
     inherit = opencv_imgproc.class, target = "org.bytedeco.javacpp.flandmark")
 public class flandmark implements InfoMapper {
     public void map(InfoMap infoMap) {
