@@ -115,7 +115,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.1  https://support.hdfgroup.org/HDF5/
- * MKL 2018.0  https://software.intel.com/intel-mkl
+ * MKL 2018.1  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.20  http://www.openblas.net/
  * FFTW 3.3.7  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
