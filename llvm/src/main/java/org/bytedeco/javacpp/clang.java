@@ -176,7 +176,12 @@ public static class CXString extends Pointer {
         return (CXString)super.position(position);
     }
 
-  @MemberGetter public native @Const Pointer data();
+  public String getString() {
+      String s = clang_getCString(this).getString();
+      clang_disposeString(this);
+      return s;
+  }
+  public native @Const Pointer data(); public native CXString data(Pointer data);
   public native @Cast("unsigned") int private_flags(); public native CXString private_flags(int private_flags);
 }
 

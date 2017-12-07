@@ -1,4 +1,5 @@
 
+ * Add `String CXString.getString()` helper method for `clang` ([issue bytedeco/javacpp#51](https://github.com/bytedeco/javacpp/issues/51))
  * Add support for Mac OS X and Windows to presets for librealsense ([issue #447](https://github.com/bytedeco/javacpp-presets/issues/447))
  * Enable MMAL and OpenMAX acceleration for FFmpeg on `linux-armhf` ([pull #388](https://github.com/bytedeco/javacpp-presets/pull/388))
  * Enable V4L2 for OpenCV on ARM platforms as well ([issue bytedeco/javacv#850](https://github.com/bytedeco/javacv/issues/850))

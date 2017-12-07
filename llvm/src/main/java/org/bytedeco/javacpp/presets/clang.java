@@ -36,6 +36,14 @@ public class clang implements InfoMapper {
                .put(new Info("CINDEX_VERSION").cppTypes("int").translate(false))
                .put(new Info("__has_feature(blocks)").define(false))
 
+               .put(new Info("CXString::data").javaText(
+                       "public String getString() {\n"
+                     + "    String s = clang_getCString(this).getString();\n"
+                     + "    clang_disposeString(this);\n"
+                     + "    return s;\n"
+                     + "}\n"
+                     + "public native @Const Pointer data(); public native CXString data(Pointer data);\n"))
+
                .put(new Info("CXVirtualFileOverlayImpl").pointerTypes("CXVirtualFileOverlay"))
                .put(new Info("CXModuleMapDescriptorImpl").pointerTypes("CXModuleMapDescriptor"))
                .put(new Info("CXTargetInfoImpl").pointerTypes("CXTargetInfo"))
