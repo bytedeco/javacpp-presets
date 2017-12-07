@@ -83,7 +83,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>librealsense-platform</artifactId>
-      <version>1.9.6-${project.version}</version>
+      <version>1.12.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
