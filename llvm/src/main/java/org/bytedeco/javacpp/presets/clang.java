@@ -44,6 +44,26 @@ public class clang implements InfoMapper {
                      + "}\n"
                      + "public native @Const Pointer data(); public native CXString data(Pointer data);\n"))
 
+               .put(new Info("clang_getTUResourceUsageName").javaText(
+                       "public static native @Cast(\"const char*\") BytePointer clang_getTUResourceUsageName(@Cast(\"CXTUResourceUsageKind\") int kind);\n"
+                     + "public static class CXTUResourceUsageKind {\n"
+                     + "    public static String getString(int kind) { return clang_getTUResourceUsageName(kind).getString(); }\n"
+                     + "}\n"))
+
+               .put(new Info("CXEvalResult").javaText(
+                       "@Namespace @Name(\"void\") @Opaque public static class CXEvalResult extends Pointer {\n"
+                     + "    /** Empty constructor. Calls {@code super((Pointer)null)}. */\n"
+                     + "    public CXEvalResult() { super((Pointer)null); }\n"
+                     + "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n"
+                     + "    public CXEvalResult(Pointer p) { super(p); }\n"
+                     + "\n"
+                     + "    public String getString() {\n"
+                     + "        String s = clang_EvalResult_getAsStr(this).getString();\n"
+                     + "        clang_EvalResult_dispose(this);\n"
+                     + "        return s;\n"
+                     + "    }\n"
+                     + "}\n").valueTypes("CXEvalResult"))
+
                .put(new Info("CXVirtualFileOverlayImpl").pointerTypes("CXVirtualFileOverlay"))
                .put(new Info("CXModuleMapDescriptorImpl").pointerTypes("CXModuleMapDescriptor"))
                .put(new Info("CXTargetInfoImpl").pointerTypes("CXTargetInfo"))

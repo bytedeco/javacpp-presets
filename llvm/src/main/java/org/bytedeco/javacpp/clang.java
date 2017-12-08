@@ -2542,6 +2542,9 @@ public static final int
   *  the name of the memory category.  This string should never be freed.
   */
 public static native @Cast("const char*") BytePointer clang_getTUResourceUsageName(@Cast("CXTUResourceUsageKind") int kind);
+public static class CXTUResourceUsageKind {
+    public static String getString(int kind) { return clang_getTUResourceUsageName(kind).getString(); }
+}
 
 public static class CXTUResourceUsageEntry extends Pointer {
     static { Loader.load(); }
@@ -6610,6 +6613,12 @@ public static final int
     public CXEvalResult() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXEvalResult(Pointer p) { super(p); }
+
+    public String getString() {
+        String s = clang_EvalResult_getAsStr(this).getString();
+        clang_EvalResult_dispose(this);
+        return s;
+    }
 }
 
 /**
