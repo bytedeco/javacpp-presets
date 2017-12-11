@@ -1,4 +1,5 @@
 
+ * Include `saver.pb.h`, `meta_graph.pb.h`, and `loader.h` for TensorFlow ([issue #494](https://github.com/bytedeco/javacpp-presets/issues/494))
  * Add `getString()` helper methods to `CXString`, `CXTUResourceUsageKind`, and `CXEvalResult` for `clang` ([issue bytedeco/javacpp#51](https://github.com/bytedeco/javacpp/issues/51))
  * Add support for Mac OS X and Windows to presets for librealsense ([issue #447](https://github.com/bytedeco/javacpp-presets/issues/447))
  * Enable MMAL and OpenMAX acceleration for FFmpeg on `linux-armhf` ([pull #388](https://github.com/bytedeco/javacpp-presets/pull/388))

@@ -122,6 +122,9 @@ import java.lang.annotation.Target;
                         "tensorflow/cc/framework/ops.h",
                         "tensorflow/cc/framework/cc_op_gen.h",
                         "tensorflow/cc/framework/gradients.h",
+                        "tensorflow/core/protobuf/saver.pb.h",
+                        "tensorflow/core/protobuf/meta_graph.pb.h",
+                        "tensorflow/cc/saved_model/loader.h",
                         "tensorflow_adapters.h",
                         "tensorflow/cc/ops/standard_ops.h",
                         "tensorflow/cc/ops/const_op.h",
@@ -208,6 +211,8 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/graph_def_builder.h",
                         "tensorflow/core/graph/default_device.h",
                         "tensorflow/core/graph/graph_constructor.h",
+                        "tensorflow/core/protobuf/saver.pb.h",
+                        "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
                 link = "tensorflow_cc"),
         },
@@ -235,6 +240,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("std::initializer_list").skip())
                .put(new Info("std::string", "tensorflow::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("std::unordered_set<tensorflow::string>").pointerTypes("StringSet").define())
                .put(new Info("std::vector<tensorflow::StringPiece>").pointerTypes("StringPieceVector").define())
                .put(new Info("std::vector<std::string>", "std::vector<tensorflow::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::string> >").pointerTypes("StringStringPairVector").define())
@@ -244,7 +250,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new Info("google::protobuf::Arena", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Message",
+               .put(new Info("google::protobuf::Arena", "google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Message",
                              "google::protobuf::Metadata", "google::protobuf::io::CodedInputStream", "google::protobuf::io::CodedOutputStream").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
@@ -286,7 +292,14 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::TensorProtoDefaultTypeInternal", "tensorflow::AttrValueDefaultTypeInternal", "tensorflow::AttrValue_ListValueDefaultTypeInternal",
                              "tensorflow::NameAttrListDefaultTypeInternal", "tensorflow::NodeDefDefaultTypeInternal", "tensorflow::OpDefDefaultTypeInternal", "tensorflow::OpDef_ArgDefDefaultTypeInternal",
                              "tensorflow::OpDef_AttrDefDefaultTypeInternal", "tensorflow::OpDeprecationDefaultTypeInternal", "tensorflow::OpListDefaultTypeInternal",
-                             "tensorflow::FunctionDefDefaultTypeInternal", "tensorflow::FunctionDefLibraryDefaultTypeInternal", "tensorflow::GradientDefDefaultTypeInternal").skip())
+                             "tensorflow::FunctionDefDefaultTypeInternal", "tensorflow::FunctionDefLibraryDefaultTypeInternal", "tensorflow::GradientDefDefaultTypeInternal",
+                             "tensorflow::SaverDefDefaultTypeInternal", "tensorflow::AssetFileDefDefaultTypeInternal", "tensorflow::CollectionDefDefaultTypeInternal",
+                             "tensorflow::CollectionDef_AnyListDefaultTypeInternal", "tensorflow::CollectionDef_BytesListDefaultTypeInternal", "tensorflow::CollectionDef_FloatListDefaultTypeInternal",
+                             "tensorflow::CollectionDef_Int64ListDefaultTypeInternal", "tensorflow::CollectionDef_NodeListDefaultTypeInternal", "tensorflow::MetaGraphDefDefaultTypeInternal",
+                             "tensorflow::MetaGraphDef_CollectionDefEntryDefaultTypeInternal", "tensorflow::MetaGraphDef_CollectionDefEntryDefaultTypeInternal",
+                             "tensorflow::MetaGraphDef_MetaInfoDefDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntryDefaultTypeInternal",
+                             "tensorflow::MetaGraphDef_SignatureDefEntryDefaultTypeInternal", "tensorflow::SignatureDefDefaultTypeInternal", "tensorflow::SignatureDef_InputsEntryDefaultTypeInternal",
+                             "tensorflow::SignatureDef_OutputsEntryDefaultTypeInternal", "tensorflow::TensorInfoDefaultTypeInternal", "tensorflow::TensorInfo_CooSparseDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -370,6 +383,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("TF_WhileParams").purify())
                .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
                .put(new Info("TF_GraphImportGraphDefOptionsRemapControlDependency").annotations("@Platform(not=\"android\")").javaNames("TF_GraphImportGraphDefOptionsRemapControlDependency"))
+               .put(new Info("tensorflow::SavedModelBundle::session").javaText("public native @MemberGetter @UniquePtr Session session();"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
