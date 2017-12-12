@@ -116,6 +116,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index public native StringVector put(@Cast("size_t") long i, @Str String value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Str BytePointer get();
+    }
+
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -150,6 +161,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef Point get(@Cast("size_t") long i);
     public native PointVector put(@Cast("size_t") long i, Point value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Point get();
+    }
+
     public PointVector put(Point ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -175,6 +197,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef Point2f get(@Cast("size_t") long i);
     public native Point2fVector put(@Cast("size_t") long i, Point2f value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Point2f get();
+    }
 
     public Point2fVector put(Point2f ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -202,6 +235,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef Point2d get(@Cast("size_t") long i);
     public native Point2dVector put(@Cast("size_t") long i, Point2d value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Point2d get();
+    }
+
     public Point2dVector put(Point2d ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -227,6 +271,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef Size get(@Cast("size_t") long i);
     public native SizeVector put(@Cast("size_t") long i, Size value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Size get();
+    }
 
     public SizeVector put(Size ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -254,6 +309,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef Rect get(@Cast("size_t") long i);
     public native RectVector put(@Cast("size_t") long i, Rect value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Rect get();
+    }
+
     public RectVector put(Rect ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -279,6 +345,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef KeyPoint get(@Cast("size_t") long i);
     public native KeyPointVector put(@Cast("size_t") long i, KeyPoint value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef KeyPoint get();
+    }
 
     public KeyPointVector put(KeyPoint ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -306,6 +383,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef DMatch get(@Cast("size_t") long i);
     public native DMatchVector put(@Cast("size_t") long i, DMatch value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef DMatch get();
+    }
+
     public DMatchVector put(DMatch ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -331,6 +419,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef PointVector get(@Cast("size_t") long i);
     public native PointVectorVector put(@Cast("size_t") long i, PointVector value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef PointVector get();
+    }
 
     public PointVectorVector put(PointVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -358,6 +457,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef Point2fVector get(@Cast("size_t") long i);
     public native Point2fVectorVector put(@Cast("size_t") long i, Point2fVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Point2fVector get();
+    }
+
     public Point2fVectorVector put(Point2fVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -383,6 +493,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef Point2dVector get(@Cast("size_t") long i);
     public native Point2dVectorVector put(@Cast("size_t") long i, Point2dVector value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Point2dVector get();
+    }
 
     public Point2dVectorVector put(Point2dVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -410,6 +531,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef RectVector get(@Cast("size_t") long i);
     public native RectVectorVector put(@Cast("size_t") long i, RectVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef RectVector get();
+    }
+
     public RectVectorVector put(RectVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -435,6 +567,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef KeyPointVector get(@Cast("size_t") long i);
     public native KeyPointVectorVector put(@Cast("size_t") long i, KeyPointVector value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef KeyPointVector get();
+    }
 
     public KeyPointVectorVector put(KeyPointVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -462,6 +605,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef DMatchVector get(@Cast("size_t") long i);
     public native DMatchVectorVector put(@Cast("size_t") long i, DMatchVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef DMatchVector get();
+    }
+
     public DMatchVectorVector put(DMatchVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -488,6 +642,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index public native @ByRef Mat get(@Cast("size_t") long i);
     public native MatVector put(@Cast("size_t") long i, Mat value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Mat get();
+    }
+
     public MatVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -513,6 +678,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef UMat get(@Cast("size_t") long i);
     public native UMatVector put(@Cast("size_t") long i, UMat value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef UMat get();
+    }
 
     public UMatVector put(UMat ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -643,6 +819,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native NodeDataTls get(@Cast("size_t") long i);
     public native NodeDataTlsVector put(@Cast("size_t") long i, NodeDataTls value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") NodeDataTls get();
+    }
 
     public NodeDataTlsVector put(NodeDataTls ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -15727,8 +15914,14 @@ including std::sort().
     private Pointer data; // a reference to prevent deallocation
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
     public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }
-    public Mat(Scalar scalar) { this(1, 1, CV_64FC4, scalar); this.data = scalar; }
-    public Mat(Scalar4i scalar) { this(1, 1, CV_32SC4, scalar); this.data = scalar; }
+    public Mat(Point points) { this(1, Math.max(1, points.limit - points.position), CV_32SC2, points); this.data = points; }
+    public Mat(Point2f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC2, points); this.data = points; }
+    public Mat(Point2d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC2, points); this.data = points; }
+    public Mat(Point3i points) { this(1, Math.max(1, points.limit - points.position), CV_32SC3, points); this.data = points; }
+    public Mat(Point3f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC3, points); this.data = points; }
+    public Mat(Point3d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC3, points); this.data = points; }
+    public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_64FC4, scalar); this.data = scalar; }
+    public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_32SC4, scalar); this.data = scalar; }
     public Mat(byte ... b) { this(b, false); }
     public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }
     public Mat(short ... s) { this(s, true); }
@@ -15738,12 +15931,12 @@ including std::sort().
     public Mat(float ... f) { this(new FloatPointer(f)); }
     private Mat(long rows, long cols, int type, Pointer data) { this((int)Math.min(rows, Integer.MAX_VALUE), (int)Math.min(cols, Integer.MAX_VALUE), type, data, AUTO_STEP); }
     public Mat(BytePointer p) { this(p, false); }
-    public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }
+    public Mat(BytePointer p, boolean signed) { this(1, Math.max(1, p.limit - p.position), signed ? CV_8SC1 : CV_8UC1, p); }
     public Mat(ShortPointer p) { this(p, false); }
-    public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }
-    public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }
-    public Mat(FloatPointer p) { this(p.limit - p.position, 1, CV_32FC1, p); }
-    public Mat(DoublePointer p) { this(p.limit - p.position, 1, CV_64FC1, p); }
+    public Mat(ShortPointer p, boolean signed) { this(1, Math.max(1, p.limit - p.position), signed ? CV_16SC1 : CV_16UC1, p); }
+    public Mat(IntPointer p) { this(1, Math.max(1, p.limit - p.position), CV_32SC1, p); }
+    public Mat(FloatPointer p) { this(1, Math.max(1, p.limit - p.position), CV_32FC1, p); }
+    public Mat(DoublePointer p) { this(1, Math.max(1, p.limit - p.position), CV_64FC1, p); }
 
     /** \overload
     @param size 2D array size: Size(cols, rows) . In the Size() constructor, the number of rows and the

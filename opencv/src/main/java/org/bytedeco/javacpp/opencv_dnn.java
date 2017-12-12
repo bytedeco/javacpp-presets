@@ -29,6 +29,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Index public native @StdVector IntPointer get(@Cast("size_t") long i);
     public native MatShapeVector put(@Cast("size_t") long i, IntPointer value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @StdVector IntPointer get();
+    }
+
     public MatShapeVector put(IntPointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -54,6 +65,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
     @Index public native @ByRef MatShapeVector get(@Cast("size_t") long i);
     public native MatShapeVectorVector put(@Cast("size_t") long i, MatShapeVector value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef MatShapeVector get();
+    }
 
     public MatShapeVectorVector put(MatShapeVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -111,6 +133,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
     @Index public native Mat get(@Cast("size_t") long i);
     public native MatPointerVector put(@Cast("size_t") long i, Mat value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") Mat get();
+    }
 
     public MatPointerVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }

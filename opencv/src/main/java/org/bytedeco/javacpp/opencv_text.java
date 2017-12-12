@@ -33,6 +33,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index public native int get(@Cast("size_t") long i);
     public native IntDeque put(@Cast("size_t") long i, int value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") int get();
+    }
+
     public IntDeque put(int ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -58,6 +69,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
 
     @Index public native @ByRef ERStat get(@Cast("size_t") long i);
     public native ERStatVector put(@Cast("size_t") long i, ERStat value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef ERStat get();
+    }
 
     public ERStatVector put(ERStat ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -85,6 +107,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index public native @ByRef ERStatVector get(@Cast("size_t") long i);
     public native ERStatVectorVector put(@Cast("size_t") long i, ERStatVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef ERStatVector get();
+    }
+
     public ERStatVectorVector put(ERStatVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -110,6 +143,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
 
     @Index public native double get(@Cast("size_t") long i);
     public native DoubleVector put(@Cast("size_t") long i, double value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") double get();
+    }
 
     public DoubleVector put(double ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -138,6 +182,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index public native @StdString BytePointer get(@Cast("size_t") long i);
     public native StdStringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index public native StdStringVector put(@Cast("size_t") long i, @StdString String value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @StdString BytePointer get();
+    }
 
     public StdStringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }

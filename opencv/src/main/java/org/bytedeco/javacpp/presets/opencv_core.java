@@ -198,8 +198,14 @@ public class opencv_core implements InfoMapper {
                      + "private Pointer data; // a reference to prevent deallocation\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
                      + "public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }\n"
-                     + "public Mat(Scalar scalar) { this(1, 1, CV_64FC4, scalar); this.data = scalar; }\n"
-                     + "public Mat(Scalar4i scalar) { this(1, 1, CV_32SC4, scalar); this.data = scalar; }\n"
+                     + "public Mat(Point points) { this(1, Math.max(1, points.limit - points.position), CV_32SC2, points); this.data = points; }\n"
+                     + "public Mat(Point2f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC2, points); this.data = points; }\n"
+                     + "public Mat(Point2d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC2, points); this.data = points; }\n"
+                     + "public Mat(Point3i points) { this(1, Math.max(1, points.limit - points.position), CV_32SC3, points); this.data = points; }\n"
+                     + "public Mat(Point3f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC3, points); this.data = points; }\n"
+                     + "public Mat(Point3d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC3, points); this.data = points; }\n"
+                     + "public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_64FC4, scalar); this.data = scalar; }\n"
+                     + "public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_32SC4, scalar); this.data = scalar; }\n"
                      + "public Mat(byte ... b) { this(b, false); }\n"
                      + "public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }\n"
                      + "public Mat(short ... s) { this(s, true); }\n"
@@ -209,12 +215,12 @@ public class opencv_core implements InfoMapper {
                      + "public Mat(float ... f) { this(new FloatPointer(f)); }\n"
                      + "private Mat(long rows, long cols, int type, Pointer data) { this((int)Math.min(rows, Integer.MAX_VALUE), (int)Math.min(cols, Integer.MAX_VALUE), type, data, AUTO_STEP); }\n"
                      + "public Mat(BytePointer p) { this(p, false); }\n"
-                     + "public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }\n"
+                     + "public Mat(BytePointer p, boolean signed) { this(1, Math.max(1, p.limit - p.position), signed ? CV_8SC1 : CV_8UC1, p); }\n"
                      + "public Mat(ShortPointer p) { this(p, false); }\n"
-                     + "public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }\n"
-                     + "public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }\n"
-                     + "public Mat(FloatPointer p) { this(p.limit - p.position, 1, CV_32FC1, p); }\n"
-                     + "public Mat(DoublePointer p) { this(p.limit - p.position, 1, CV_64FC1, p); }\n"))
+                     + "public Mat(ShortPointer p, boolean signed) { this(1, Math.max(1, p.limit - p.position), signed ? CV_16SC1 : CV_16UC1, p); }\n"
+                     + "public Mat(IntPointer p) { this(1, Math.max(1, p.limit - p.position), CV_32SC1, p); }\n"
+                     + "public Mat(FloatPointer p) { this(1, Math.max(1, p.limit - p.position), CV_32FC1, p); }\n"
+                     + "public Mat(DoublePointer p) { this(1, Math.max(1, p.limit - p.position), CV_64FC1, p); }\n"))
                .put(new Info("cv::Mat::zeros(int, int*, int)", "cv::Mat::ones(int, int*, int)").skip())
                .put(new Info("cv::Mat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
