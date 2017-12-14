@@ -99,7 +99,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
+    public StringVector(BytePointer value) { this(1); put(0, value); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String value) { this(1); put(0, value); }
     public StringVector(String ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
@@ -114,6 +116,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index public native StringVector put(@Cast("size_t") long i, @StdString String value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @StdString BytePointer get();
+    }
+
+    public StringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -122,6 +140,11 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         return this;
     }
 
+    public StringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -135,6 +158,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FieldDescriptorVector(Pointer p) { super(p); }
+    public FieldDescriptorVector(FieldDescriptor value) { this(1); put(0, value); }
     public FieldDescriptorVector(FieldDescriptor ... array) { this(array.length); put(array); }
     public FieldDescriptorVector()       { allocate();  }
     public FieldDescriptorVector(long n) { allocate(n); }
@@ -148,6 +172,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @Const FieldDescriptor get(@Cast("size_t") long i);
     public native FieldDescriptorVector put(@Cast("size_t") long i, FieldDescriptor value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Const FieldDescriptor get();
+    }
+
+    public FieldDescriptorVector put(FieldDescriptor value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FieldDescriptorVector put(FieldDescriptor ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -161,6 +201,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DatumVector(Pointer p) { super(p); }
+    public DatumVector(Datum value) { this(1); put(0, value); }
     public DatumVector(Datum ... array) { this(array.length); put(array); }
     public DatumVector()       { allocate();  }
     public DatumVector(long n) { allocate(n); }
@@ -174,6 +215,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @ByRef Datum get(@Cast("size_t") long i);
     public native DatumVector put(@Cast("size_t") long i, Datum value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef Datum get();
+    }
+
+    public DatumVector put(Datum value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DatumVector put(Datum ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -187,6 +244,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlobSharedVector(Pointer p) { super(p); }
+    public FloatBlobSharedVector(FloatBlob value) { this(1); put(0, value); }
     public FloatBlobSharedVector(FloatBlob ... array) { this(array.length); put(array); }
     public FloatBlobSharedVector()       { allocate();  }
     public FloatBlobSharedVector(long n) { allocate(n); }
@@ -200,6 +258,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @SharedPtr FloatBlob get(@Cast("size_t") long i);
     public native FloatBlobSharedVector put(@Cast("size_t") long i, FloatBlob value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr FloatBlob get();
+    }
+
+    public FloatBlobSharedVector put(FloatBlob value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FloatBlobSharedVector put(FloatBlob ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -213,6 +287,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlobSharedVector(Pointer p) { super(p); }
+    public DoubleBlobSharedVector(DoubleBlob value) { this(1); put(0, value); }
     public DoubleBlobSharedVector(DoubleBlob ... array) { this(array.length); put(array); }
     public DoubleBlobSharedVector()       { allocate();  }
     public DoubleBlobSharedVector(long n) { allocate(n); }
@@ -226,6 +301,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @SharedPtr DoubleBlob get(@Cast("size_t") long i);
     public native DoubleBlobSharedVector put(@Cast("size_t") long i, DoubleBlob value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr DoubleBlob get();
+    }
+
+    public DoubleBlobSharedVector put(DoubleBlob value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleBlobSharedVector put(DoubleBlob ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -239,6 +330,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLayerSharedVector(Pointer p) { super(p); }
+    public FloatLayerSharedVector(FloatLayer value) { this(1); put(0, value); }
     public FloatLayerSharedVector(FloatLayer ... array) { this(array.length); put(array); }
     public FloatLayerSharedVector()       { allocate();  }
     public FloatLayerSharedVector(long n) { allocate(n); }
@@ -252,6 +344,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr FloatLayer get(@Cast("size_t") long i);
     public native FloatLayerSharedVector put(@Cast("size_t") long i, FloatLayer value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr FloatLayer get();
+    }
+
+    public FloatLayerSharedVector put(FloatLayer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FloatLayerSharedVector put(FloatLayer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -265,6 +373,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLayerSharedVector(Pointer p) { super(p); }
+    public DoubleLayerSharedVector(DoubleLayer value) { this(1); put(0, value); }
     public DoubleLayerSharedVector(DoubleLayer ... array) { this(array.length); put(array); }
     public DoubleLayerSharedVector()       { allocate();  }
     public DoubleLayerSharedVector(long n) { allocate(n); }
@@ -278,6 +387,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr DoubleLayer get(@Cast("size_t") long i);
     public native DoubleLayerSharedVector put(@Cast("size_t") long i, DoubleLayer value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr DoubleLayer get();
+    }
+
+    public DoubleLayerSharedVector put(DoubleLayer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleLayerSharedVector put(DoubleLayer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -291,6 +416,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNetSharedVector(Pointer p) { super(p); }
+    public FloatNetSharedVector(FloatNet value) { this(1); put(0, value); }
     public FloatNetSharedVector(FloatNet ... array) { this(array.length); put(array); }
     public FloatNetSharedVector()       { allocate();  }
     public FloatNetSharedVector(long n) { allocate(n); }
@@ -304,6 +430,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @SharedPtr FloatNet get(@Cast("size_t") long i);
     public native FloatNetSharedVector put(@Cast("size_t") long i, FloatNet value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr FloatNet get();
+    }
+
+    public FloatNetSharedVector put(FloatNet value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FloatNetSharedVector put(FloatNet ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -317,6 +459,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNetSharedVector(Pointer p) { super(p); }
+    public DoubleNetSharedVector(DoubleNet value) { this(1); put(0, value); }
     public DoubleNetSharedVector(DoubleNet ... array) { this(array.length); put(array); }
     public DoubleNetSharedVector()       { allocate();  }
     public DoubleNetSharedVector(long n) { allocate(n); }
@@ -330,6 +473,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @SharedPtr DoubleNet get(@Cast("size_t") long i);
     public native DoubleNetSharedVector put(@Cast("size_t") long i, DoubleNet value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr DoubleNet get();
+    }
+
+    public DoubleNetSharedVector put(DoubleNet value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleNetSharedVector put(DoubleNet ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -343,6 +502,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlobVector(Pointer p) { super(p); }
+    public FloatBlobVector(FloatBlob value) { this(1); put(0, value); }
     public FloatBlobVector(FloatBlob ... array) { this(array.length); put(array); }
     public FloatBlobVector()       { allocate();  }
     public FloatBlobVector(long n) { allocate(n); }
@@ -356,6 +516,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native FloatBlob get(@Cast("size_t") long i);
     public native FloatBlobVector put(@Cast("size_t") long i, FloatBlob value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") FloatBlob get();
+    }
+
+    public FloatBlobVector put(FloatBlob value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FloatBlobVector put(FloatBlob ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -369,6 +545,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlobVector(Pointer p) { super(p); }
+    public DoubleBlobVector(DoubleBlob value) { this(1); put(0, value); }
     public DoubleBlobVector(DoubleBlob ... array) { this(array.length); put(array); }
     public DoubleBlobVector()       { allocate();  }
     public DoubleBlobVector(long n) { allocate(n); }
@@ -382,6 +559,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native DoubleBlob get(@Cast("size_t") long i);
     public native DoubleBlobVector put(@Cast("size_t") long i, DoubleBlob value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") DoubleBlob get();
+    }
+
+    public DoubleBlobVector put(DoubleBlob value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleBlobVector put(DoubleBlob ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -395,6 +588,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlobVectorVector(Pointer p) { super(p); }
+    public FloatBlobVectorVector(FloatBlobVector value) { this(1); put(0, value); }
     public FloatBlobVectorVector(FloatBlobVector ... array) { this(array.length); put(array); }
     public FloatBlobVectorVector()       { allocate();  }
     public FloatBlobVectorVector(long n) { allocate(n); }
@@ -408,6 +602,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @ByRef FloatBlobVector get(@Cast("size_t") long i);
     public native FloatBlobVectorVector put(@Cast("size_t") long i, FloatBlobVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef FloatBlobVector get();
+    }
+
+    public FloatBlobVectorVector put(FloatBlobVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FloatBlobVectorVector put(FloatBlobVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -421,6 +631,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlobVectorVector(Pointer p) { super(p); }
+    public DoubleBlobVectorVector(DoubleBlobVector value) { this(1); put(0, value); }
     public DoubleBlobVectorVector(DoubleBlobVector ... array) { this(array.length); put(array); }
     public DoubleBlobVectorVector()       { allocate();  }
     public DoubleBlobVectorVector(long n) { allocate(n); }
@@ -434,6 +645,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @ByRef DoubleBlobVector get(@Cast("size_t") long i);
     public native DoubleBlobVectorVector put(@Cast("size_t") long i, DoubleBlobVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef DoubleBlobVector get();
+    }
+
+    public DoubleBlobVectorVector put(DoubleBlobVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleBlobVectorVector put(DoubleBlobVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -447,6 +674,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BoolVector(Pointer p) { super(p); }
+    public BoolVector(boolean value) { this(1); put(0, value); }
     public BoolVector(boolean ... array) { this(array.length); put(array); }
     public BoolVector()       { allocate();  }
     public BoolVector(long n) { allocate(n); }
@@ -460,6 +688,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @Cast("bool") boolean get(@Cast("size_t") long i);
     public native BoolVector put(@Cast("size_t") long i, boolean value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("bool") boolean get();
+    }
+
+    public BoolVector put(boolean value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public BoolVector put(boolean ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -473,6 +717,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BoolVectorVector(Pointer p) { super(p); }
+    public BoolVectorVector(BoolVector value) { this(1); put(0, value); }
     public BoolVectorVector(BoolVector ... array) { this(array.length); put(array); }
     public BoolVectorVector()       { allocate();  }
     public BoolVectorVector(long n) { allocate(n); }
@@ -486,6 +731,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native @ByRef BoolVector get(@Cast("size_t") long i);
     public native BoolVectorVector put(@Cast("size_t") long i, BoolVector value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef BoolVector get();
+    }
+
+    public BoolVectorVector put(BoolVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public BoolVectorVector put(BoolVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -499,6 +760,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatCallbackVector(Pointer p) { super(p); }
+    public FloatCallbackVector(FloatSolver.Callback value) { this(1); put(0, value); }
     public FloatCallbackVector(FloatSolver.Callback ... array) { this(array.length); put(array); }
     public FloatCallbackVector()       { allocate();  }
     public FloatCallbackVector(long n) { allocate(n); }
@@ -512,6 +774,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native FloatSolver.Callback get(@Cast("size_t") long i);
     public native FloatCallbackVector put(@Cast("size_t") long i, FloatSolver.Callback value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") FloatSolver.Callback get();
+    }
+
+    public FloatCallbackVector put(FloatSolver.Callback value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public FloatCallbackVector put(FloatSolver.Callback ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -525,6 +803,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleCallbackVector(Pointer p) { super(p); }
+    public DoubleCallbackVector(DoubleSolver.Callback value) { this(1); put(0, value); }
     public DoubleCallbackVector(DoubleSolver.Callback ... array) { this(array.length); put(array); }
     public DoubleCallbackVector()       { allocate();  }
     public DoubleCallbackVector(long n) { allocate(n); }
@@ -538,6 +817,22 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     @Index public native DoubleSolver.Callback get(@Cast("size_t") long i);
     public native DoubleCallbackVector put(@Cast("size_t") long i, DoubleSolver.Callback value);
 
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") DoubleSolver.Callback get();
+    }
+
+    public DoubleCallbackVector put(DoubleSolver.Callback value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleCallbackVector put(DoubleSolver.Callback ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
