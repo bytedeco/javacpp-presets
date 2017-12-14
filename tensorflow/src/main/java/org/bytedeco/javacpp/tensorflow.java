@@ -93,7 +93,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringPieceVector(Pointer p) { super(p); }
+    public StringPieceVector(BytePointer value) { this(1); put(0, value); }
     public StringPieceVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringPieceVector(String value) { this(1); put(0, value); }
     public StringPieceVector(String ... array) { this(array.length); put(array); }
     public StringPieceVector()       { allocate();  }
     public StringPieceVector(long n) { allocate(n); }
@@ -119,6 +121,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @StringPiece BytePointer get();
     }
 
+    public StringPieceVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringPieceVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -127,6 +134,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         return this;
     }
 
+    public StringPieceVector put(String value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringPieceVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -140,7 +152,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
+    public StringVector(BytePointer value) { this(1); put(0, value); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String value) { this(1); put(0, value); }
     public StringVector(String ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
@@ -166,6 +180,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @StdString BytePointer get();
     }
 
+    public StringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -174,6 +193,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         return this;
     }
 
+    public StringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -224,6 +248,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorVector(Pointer p) { super(p); }
+    public TensorVector(Tensor value) { this(1); put(0, value); }
     public TensorVector(Tensor ... array) { this(array.length); put(array); }
     public TensorVector()       { allocate();  }
     public TensorVector(long n) { allocate(n); }
@@ -248,6 +273,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef Tensor get();
     }
 
+    public TensorVector put(Tensor value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public TensorVector put(Tensor ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -261,6 +291,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorProtoVector(Pointer p) { super(p); }
+    public TensorProtoVector(TensorProto value) { this(1); put(0, value); }
     public TensorProtoVector(TensorProto ... array) { this(array.length); put(array); }
     public TensorProtoVector()       { allocate();  }
     public TensorProtoVector(long n) { allocate(n); }
@@ -285,6 +316,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef TensorProto get();
     }
 
+    public TensorProtoVector put(TensorProto value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public TensorProtoVector put(TensorProto ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -298,6 +334,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShapeVector(Pointer p) { super(p); }
+    public TensorShapeVector(TensorShape value) { this(1); put(0, value); }
     public TensorShapeVector(TensorShape ... array) { this(array.length); put(array); }
     public TensorShapeVector()       { allocate();  }
     public TensorShapeVector(long n) { allocate(n); }
@@ -322,6 +359,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef TensorShape get();
     }
 
+    public TensorShapeVector put(TensorShape value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public TensorShapeVector put(TensorShape ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -335,6 +377,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeOutVector(Pointer p) { super(p); }
+    public NodeOutVector(NodeBuilder.NodeOut value) { this(1); put(0, value); }
     public NodeOutVector(NodeBuilder.NodeOut ... array) { this(array.length); put(array); }
     public NodeOutVector()       { allocate();  }
     public NodeOutVector(long n) { allocate(n); }
@@ -359,6 +402,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef NodeBuilder.NodeOut get();
     }
 
+    public NodeOutVector put(NodeBuilder.NodeOut value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public NodeOutVector put(NodeBuilder.NodeOut ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -372,6 +420,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeVector(Pointer p) { super(p); }
+    public NodeVector(Node value) { this(1); put(0, value); }
     public NodeVector(Node ... array) { this(array.length); put(array); }
     public NodeVector()       { allocate();  }
     public NodeVector(long n) { allocate(n); }
@@ -396,6 +445,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") Node get();
     }
 
+    public NodeVector put(Node value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public NodeVector put(Node ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -471,6 +525,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstTensorPtrVector(Pointer p) { super(p); }
+    public ConstTensorPtrVector(Tensor value) { this(1); put(0, value); }
     public ConstTensorPtrVector(Tensor ... array) { this(array.length); put(array); }
     public ConstTensorPtrVector()       { allocate();  }
     public ConstTensorPtrVector(long n) { allocate(n); }
@@ -495,6 +550,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @Const Tensor get();
     }
 
+    public ConstTensorPtrVector put(Tensor value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public ConstTensorPtrVector put(Tensor ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -508,6 +568,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstDimensionPtrVector(Pointer p) { super(p); }
+    public ConstDimensionPtrVector(Dimension value) { this(1); put(0, value); }
     public ConstDimensionPtrVector(Dimension ... array) { this(array.length); put(array); }
     public ConstDimensionPtrVector()       { allocate();  }
     public ConstDimensionPtrVector(long n) { allocate(n); }
@@ -532,6 +593,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @Const Dimension get();
     }
 
+    public ConstDimensionPtrVector put(Dimension value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public ConstDimensionPtrVector put(Dimension ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -581,6 +647,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeVector(Pointer p) { super(p); }
+    public EdgeVector(Edge value) { this(1); put(0, value); }
     public EdgeVector(Edge ... array) { this(array.length); put(array); }
     public EdgeVector()       { allocate();  }
     public EdgeVector(long n) { allocate(n); }
@@ -605,6 +672,11 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") Edge get();
     }
 
+    public EdgeVector put(Edge value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public EdgeVector put(Edge ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -697,6 +769,370 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @StdString BytePointer get();
     }
 }
+
+// Parsed from google/protobuf/message_lite.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Authors: wink@google.com (Wink Saville),
+//          kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Defines MessageLite, the abstract interface implemented by all (lite
+// and non-lite) protocol message objects.
+
+// #ifndef GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+// #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+
+// #include <climits>
+// #include <google/protobuf/stubs/common.h>
+// #include <google/protobuf/stubs/logging.h>
+// #include <google/protobuf/stubs/once.h>
+
+
+// #if LANG_CXX11 && !defined(__NVCC__)
+public static final int PROTOBUF_CXX11 = 1;
+// #else
+// #endif
+
+// #if PROTOBUF_CXX11
+// #define PROTOBUF_FINAL final
+// #else
+// #endif
+
+// #ifndef LIBPROTOBUF_EXPORT
+// #define LIBPROTOBUF_EXPORT
+// #endif
+
+// #define PROTOBUF_RUNTIME_DEPRECATED(message)
+@Namespace("google::protobuf") @Opaque public static class Arena extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Arena() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Arena(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CodedInputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CodedInputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class CodedOutputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CodedOutputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CodedOutputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyInputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZeroCopyInputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZeroCopyInputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyOutputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZeroCopyOutputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZeroCopyOutputStream(Pointer p) { super(p); }
+}
+
+
+@Namespace("google::protobuf::internal") @Opaque public static class WireFormatLite extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WireFormatLite() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WireFormatLite(Pointer p) { super(p); }
+}
+
+// #ifndef SWIG
+// #endif  // SWIG
+  // namespace internal
+
+// Interface to light weight protocol messages.
+//
+// This interface is implemented by all protocol message objects.  Non-lite
+// messages additionally implement the Message interface, which is a
+// subclass of MessageLite.  Use MessageLite instead when you only need
+// the subset of features which it supports -- namely, nothing that uses
+// descriptors or reflection.  You can instruct the protocol compiler
+// to generate classes which implement only MessageLite, not the full
+// Message interface, by adding the following line to the .proto file:
+//
+//   option optimize_for = LITE_RUNTIME;
+//
+// This is particularly useful on resource-constrained systems where
+// the full protocol buffers runtime library is too big.
+//
+// Note that on non-constrained systems (e.g. servers) when you need
+// to link in lots of protocol definitions, a better way to reduce
+// total code footprint is to use optimize_for = CODE_SIZE.  This
+// will make the generated code smaller while still supporting all the
+// same features (at the expense of speed).  optimize_for = LITE_RUNTIME
+// is best when you only have a small number of message types linked
+// into your binary, in which case the size of the protocol buffers
+// runtime itself is the biggest problem.
+@Namespace("google::protobuf") public static class MessageLite extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MessageLite(Pointer p) { super(p); }
+
+
+  // Basic Operations ------------------------------------------------
+
+  // Get the name of this message type, e.g. "foo.bar.BazProto".
+  public native @StdString BytePointer GetTypeName();
+
+  // Construct a new instance of the same type.  Ownership is passed to the
+  // caller.
+  public native MessageLite New();
+
+  // Construct a new instance on the arena. Ownership is passed to the caller
+  // if arena is a NULL. Default implementation for backwards compatibility.
+  public native MessageLite New(Arena arena);
+
+  // Get the arena, if any, associated with this message. Virtual method
+  // required for generic operations but most arena-related operations should
+  // use the GetArenaNoVirtual() generated-code method. Default implementation
+  // to reduce code size by avoiding the need for per-type implementations
+  // when types do not implement arena support.
+  public native Arena GetArena();
+
+  // Get a pointer that may be equal to this message's arena, or may not be.
+  // If the value returned by this method is equal to some arena pointer, then
+  // this message is on that arena; however, if this message is on some arena,
+  // this method may or may not return that arena's pointer. As a tradeoff,
+  // this method may be more efficient than GetArena(). The intent is to allow
+  // underlying representations that use e.g. tagged pointers to sometimes
+  // store the arena pointer directly, and sometimes in a more indirect way,
+  // and allow a fastpath comparison against the arena pointer when it's easy
+  // to obtain.
+  public native Pointer GetMaybeArenaPointer();
+
+  // Clear all fields of the message and set them to their default values.
+  // Clear() avoids freeing memory, assuming that any memory allocated
+  // to hold parts of the message will be needed again to hold the next
+  // message.  If you actually want to free the memory used by a Message,
+  // you must delete it.
+  public native void Clear();
+
+  // Quickly check if all required fields have values set.
+  public native @Cast("bool") boolean IsInitialized();
+
+  // This is not implemented for Lite messages -- it just returns "(cannot
+  // determine missing fields for lite message)".  However, it is implemented
+  // for full messages.  See message.h.
+  public native @StdString BytePointer InitializationErrorString();
+
+  // If |other| is the exact same class as this, calls MergeFrom(). Otherwise,
+  // results are undefined (probably crash).
+  public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
+
+  // Parsing ---------------------------------------------------------
+  // Methods for parsing in protocol buffer format.  Most of these are
+  // just simple wrappers around MergeFromCodedStream().  Clear() will be
+  // called before merging the input.
+
+  // Fill the message with a protocol buffer parsed from the given input
+  // stream. Returns false on a read error or if the input is in the wrong
+  // format.  A successful return does not indicate the entire input is
+  // consumed, ensure you call ConsumedEntireMessage() to check that if
+  // applicable.
+  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
+  // Like ParseFromCodedStream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromCodedStream(CodedInputStream input);
+  // Read a protocol buffer from the given zero-copy input stream.  If
+  // successful, the entire input will be consumed.
+  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
+  // Like ParseFromZeroCopyStream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromZeroCopyStream(ZeroCopyInputStream input);
+  // Read a protocol buffer from the given zero-copy input stream, expecting
+  // the message to be exactly "size" bytes long.  If successful, exactly
+  // this many bytes will have been consumed from the input.
+  public native @Cast("bool") boolean ParseFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
+  // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
+  // missing required fields.
+  public native @Cast("bool") boolean ParsePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input,
+                                               int size);
+  // Parses a protocol buffer contained in a string. Returns true on success.
+  // This function takes a string in the (non-human-readable) binary wire
+  // format, matching the encoding output by MessageLite::SerializeToString().
+  // If you'd like to convert a human-readable string into a protocol buffer
+  // object, see google::protobuf::TextFormat::ParseFromString().
+  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParseFromString(@StdString String data);
+  // Like ParseFromString(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParsePartialFromString(@StdString String data);
+  // Parse a protocol buffer contained in an array of bytes.
+  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
+  // Like ParseFromArray(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromArray(@Const Pointer data, int size);
+
+
+  // Reads a protocol buffer from the stream and merges it into this
+  // Message.  Singular fields read from the input overwrite what is
+  // already in the Message and repeated fields are appended to those
+  // already present.
+  //
+  // It is the responsibility of the caller to call input->LastTagWas()
+  // (for groups) or input->ConsumedEntireMessage() (for non-groups) after
+  // this returns to verify that the message's end was delimited correctly.
+  //
+  // ParsefromCodedStream() is implemented as Clear() followed by
+  // MergeFromCodedStream().
+  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
+
+  // Like MergeFromCodedStream(), but succeeds even if required fields are
+  // missing in the input.
+  //
+  // MergeFromCodedStream() is just implemented as MergePartialFromCodedStream()
+  // followed by IsInitialized().
+  public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
+
+
+  // Serialization ---------------------------------------------------
+  // Methods for serializing in protocol buffer format.  Most of these
+  // are just simple wrappers around ByteSize() and SerializeWithCachedSizes().
+
+  // Write a protocol buffer of this message to the given output.  Returns
+  // false on a write error.  If the message is missing required fields,
+  // this may GOOGLE_CHECK-fail.
+  public native @Cast("bool") boolean SerializeToCodedStream(CodedOutputStream output);
+  // Like SerializeToCodedStream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToCodedStream(CodedOutputStream output);
+  // Write the message to the given zero-copy output stream.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToZeroCopyStream(ZeroCopyOutputStream output);
+  // Like SerializeToZeroCopyStream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToZeroCopyStream(ZeroCopyOutputStream output);
+  // Serialize the message and store it in the given string.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Like SerializeToString(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Serialize the message and store it in the given byte array.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToArray(Pointer data, int size);
+  // Like SerializeToArray(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToArray(Pointer data, int size);
+
+  // Make a string encoding the message. Is equivalent to calling
+  // SerializeToString() on a string and using that.  Returns the empty
+  // string if SerializeToString() would have returned an error.
+  // Note: If you intend to generate many such strings, you may
+  // reduce heap fragmentation by instead re-using the same string
+  // object with calls to SerializeToString().
+  public native @StdString BytePointer SerializeAsString();
+  // Like SerializeAsString(), but allows missing required fields.
+  public native @StdString BytePointer SerializePartialAsString();
+
+  // Like SerializeToString(), but appends to the data to the string's existing
+  // contents.  All required fields must be set.
+  public native @Cast("bool") boolean AppendToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Like AppendToString(), but allows missing required fields.
+  public native @Cast("bool") boolean AppendPartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+
+  // Computes the serialized size of the message.  This recursively calls
+  // ByteSizeLong() on all embedded messages.
+  //
+  // ByteSizeLong() is generally linear in the number of fields defined for the
+  // proto.
+  public native @Cast("size_t") long ByteSizeLong();
+
+  // Legacy ByteSize() API.
+  public native int ByteSize();
+
+  // Serializes the message without recomputing the size.  The message must not
+  // have changed since the last call to ByteSize(), and the value returned by
+  // ByteSize must be non-negative.  Otherwise the results are undefined.
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+
+  // Functions below here are not part of the public interface.  It isn't
+  // enforced, but they should be treated as private, and will be private
+  // at some future time.  Unfortunately the implementation of the "friend"
+  // keyword in GCC is broken at the moment, but we expect it will be fixed.
+
+  // Like SerializeWithCachedSizes, but writes directly to *target, returning
+  // a pointer to the byte immediately after the last byte written.  "target"
+  // must point at a byte array of at least ByteSize() bytes.  Whether to use
+  // deterministic serialization, e.g., maps in sorted order, is determined by
+  // CodedOutputStream::IsDefaultSerializationDeterministic().
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] target);
+
+  // Returns the result of the last call to ByteSize().  An embedded message's
+  // size is needed both to serialize it (because embedded messages are
+  // length-delimited) and to compute the outer message's size.  Caching
+  // the size avoids computing it multiple times.
+  //
+  // ByteSize() does not automatically use the cached size when available
+  // because this would require invalidating it every time the message was
+  // modified, which would be too hard and expensive.  (E.g. if a deeply-nested
+  // sub-message is changed, all of its parents' cached sizes would need to be
+  // invalidated, which is too much work for an otherwise inlined setter
+  // method.)
+  public native int GetCachedSize();
+
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
+                                                           @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
+                                                           @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
+                                                           @Cast("google::protobuf::uint8*") byte[] target);
+}
+
+
+
+// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
+// preserve unknowns.
+@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean GetProto3PreserveUnknownsDefault();
+
+// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
+// preserve unknowns.
+@Namespace("google::protobuf::internal") public static native void SetProto3PreserveUnknownsDefault(@Cast("bool") boolean preserve);
+  // namespace internal
+
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+
 
 // Parsed from tensorflow/core/platform/default/integral_types.h
 
@@ -1464,11 +1900,11 @@ limitations under the License.
 // Returns true on success. Note: Unlike protobuf's builtin ParseFromString,
 // this function has no size restrictions on the total size of the encoded
 // protocol buffer.
-@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") Pointer proto,
+@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") MessageLite proto,
                          @StdString BytePointer serialized);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") Pointer proto,
+@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") MessageLite proto,
                          @StdString String serialized);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") Pointer proto, @Const Pointer serialized,
+@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") MessageLite proto, @Const Pointer serialized,
                          @Cast("size_t") long size);
 
 // Returns the string value for the value of a string or bytes protobuf field.
@@ -2400,29 +2836,29 @@ limitations under the License.
 
 /** Write binary representation of "proto" to the named file. */
 @Namespace("tensorflow") public static native @ByVal Status WriteBinaryProto(Env env, @StdString BytePointer fname,
-                        @Cast("const tensorflow::protobuf::MessageLite*") @ByRef Pointer proto);
+                        @Cast("const tensorflow::protobuf::MessageLite*") @ByRef MessageLite proto);
 @Namespace("tensorflow") public static native @ByVal Status WriteBinaryProto(Env env, @StdString String fname,
-                        @Cast("const tensorflow::protobuf::MessageLite*") @ByRef Pointer proto);
+                        @Cast("const tensorflow::protobuf::MessageLite*") @ByRef MessageLite proto);
 
 /** Reads contents of named file and parse as binary encoded proto data
  *  and store into {@code *proto}. */
 @Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString BytePointer fname,
-                       @Cast("tensorflow::protobuf::MessageLite*") Pointer proto);
+                       @Cast("tensorflow::protobuf::MessageLite*") MessageLite proto);
 @Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString String fname,
-                       @Cast("tensorflow::protobuf::MessageLite*") Pointer proto);
+                       @Cast("tensorflow::protobuf::MessageLite*") MessageLite proto);
 
 /** Write the text representation of "proto" to the named file. */
 @Namespace("tensorflow") public static native @ByVal Status WriteTextProto(Env env, @StdString BytePointer fname,
-                      @Cast("const tensorflow::protobuf::Message*") @ByRef Pointer proto);
+                      @Cast("const tensorflow::protobuf::Message*") @ByRef MessageLite proto);
 @Namespace("tensorflow") public static native @ByVal Status WriteTextProto(Env env, @StdString String fname,
-                      @Cast("const tensorflow::protobuf::Message*") @ByRef Pointer proto);
+                      @Cast("const tensorflow::protobuf::Message*") @ByRef MessageLite proto);
 
 /** Read contents of named file and parse as text encoded proto data
  *  and store into {@code *proto}. */
 @Namespace("tensorflow") public static native @ByVal Status ReadTextProto(Env env, @StdString BytePointer fname,
-                     @Cast("tensorflow::protobuf::Message*") Pointer proto);
+                     @Cast("tensorflow::protobuf::Message*") MessageLite proto);
 @Namespace("tensorflow") public static native @ByVal Status ReadTextProto(Env env, @StdString String fname,
-                     @Cast("tensorflow::protobuf::Message*") Pointer proto);
+                     @Cast("tensorflow::protobuf::Message*") MessageLite proto);
 
 // START_SKIP_DOXYGEN
 
@@ -2489,7 +2925,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class DebugTensorWatch extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class DebugTensorWatch extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DebugTensorWatch(Pointer p) { super(p); }
@@ -2509,7 +2945,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") DebugTensorWatch put(@Const @ByRef DebugTensorWatch from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef DebugTensorWatch default_instance();
@@ -2526,9 +2962,9 @@ limitations under the License.
 
   public native DebugTensorWatch New();
 
-  public native DebugTensorWatch New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native DebugTensorWatch New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef DebugTensorWatch from);
   public native void MergeFrom(@Const @ByRef DebugTensorWatch from);
   public native void Clear();
@@ -2536,9 +2972,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -2629,7 +3065,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class DebugOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class DebugOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DebugOptions(Pointer p) { super(p); }
@@ -2649,7 +3085,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") DebugOptions put(@Const @ByRef DebugOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef DebugOptions default_instance();
@@ -2666,9 +3102,9 @@ limitations under the License.
 
   public native DebugOptions New();
 
-  public native DebugOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native DebugOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef DebugOptions from);
   public native void MergeFrom(@Const @ByRef DebugOptions from);
   public native void Clear();
@@ -2676,9 +3112,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -2893,7 +3329,7 @@ limitations under the License.
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class JobDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class JobDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public JobDef(Pointer p) { super(p); }
@@ -2913,7 +3349,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") JobDef put(@Const @ByRef JobDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef JobDef default_instance();
@@ -2930,9 +3366,9 @@ limitations under the License.
 
   public native JobDef New();
 
-  public native JobDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native JobDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef JobDef from);
   public native void MergeFrom(@Const @ByRef JobDef from);
   public native void Clear();
@@ -2940,9 +3376,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -2984,7 +3420,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class ClusterDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class ClusterDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ClusterDef(Pointer p) { super(p); }
@@ -3004,7 +3440,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") ClusterDef put(@Const @ByRef ClusterDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef ClusterDef default_instance();
@@ -3021,9 +3457,9 @@ limitations under the License.
 
   public native ClusterDef New();
 
-  public native ClusterDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native ClusterDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef ClusterDef from);
   public native void MergeFrom(@Const @ByRef ClusterDef from);
   public native void Clear();
@@ -3031,9 +3467,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -3218,7 +3654,7 @@ public static final int
     @StdString String name, @Cast("tensorflow::RewriterConfig_MemOptType*") int... value);
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class AutoParallelOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class AutoParallelOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AutoParallelOptions(Pointer p) { super(p); }
@@ -3238,7 +3674,7 @@ public static final int
   public native @ByRef @Name("operator =") AutoParallelOptions put(@Const @ByRef AutoParallelOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef AutoParallelOptions default_instance();
@@ -3255,9 +3691,9 @@ public static final int
 
   public native AutoParallelOptions New();
 
-  public native AutoParallelOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native AutoParallelOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef AutoParallelOptions from);
   public native void MergeFrom(@Const @ByRef AutoParallelOptions from);
   public native void Clear();
@@ -3265,9 +3701,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -3298,7 +3734,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class RewriterConfig extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class RewriterConfig extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RewriterConfig(Pointer p) { super(p); }
@@ -3318,7 +3754,7 @@ public static final int
   public native @ByRef @Name("operator =") RewriterConfig put(@Const @ByRef RewriterConfig from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef RewriterConfig default_instance();
@@ -3335,9 +3771,9 @@ public static final int
 
   public native RewriterConfig New();
 
-  public native RewriterConfig New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native RewriterConfig New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef RewriterConfig from);
   public native void MergeFrom(@Const @ByRef RewriterConfig from);
   public native void Clear();
@@ -3345,9 +3781,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -3757,7 +4193,7 @@ public static final int
     @StdString String name, @Cast("tensorflow::RunOptions_TraceLevel*") int... value);
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class GPUOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class GPUOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GPUOptions(Pointer p) { super(p); }
@@ -3777,7 +4213,7 @@ public static final int
   public native @ByRef @Name("operator =") GPUOptions put(@Const @ByRef GPUOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef GPUOptions default_instance();
@@ -3794,9 +4230,9 @@ public static final int
 
   public native GPUOptions New();
 
-  public native GPUOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native GPUOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef GPUOptions from);
   public native void MergeFrom(@Const @ByRef GPUOptions from);
   public native void Clear();
@@ -3804,9 +4240,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -3901,7 +4337,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class OptimizerOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class OptimizerOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OptimizerOptions(Pointer p) { super(p); }
@@ -3921,7 +4357,7 @@ public static final int
   public native @ByRef @Name("operator =") OptimizerOptions put(@Const @ByRef OptimizerOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef OptimizerOptions default_instance();
@@ -3938,9 +4374,9 @@ public static final int
 
   public native OptimizerOptions New();
 
-  public native OptimizerOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native OptimizerOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef OptimizerOptions from);
   public native void MergeFrom(@Const @ByRef OptimizerOptions from);
   public native void Clear();
@@ -3948,9 +4384,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -4056,7 +4492,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class GraphOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class GraphOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphOptions(Pointer p) { super(p); }
@@ -4076,7 +4512,7 @@ public static final int
   public native @ByRef @Name("operator =") GraphOptions put(@Const @ByRef GraphOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef GraphOptions default_instance();
@@ -4093,9 +4529,9 @@ public static final int
 
   public native GraphOptions New();
 
-  public native GraphOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native GraphOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef GraphOptions from);
   public native void MergeFrom(@Const @ByRef GraphOptions from);
   public native void Clear();
@@ -4103,9 +4539,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -4197,7 +4633,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class ThreadPoolOptionProto extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class ThreadPoolOptionProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThreadPoolOptionProto(Pointer p) { super(p); }
@@ -4217,7 +4653,7 @@ public static final int
   public native @ByRef @Name("operator =") ThreadPoolOptionProto put(@Const @ByRef ThreadPoolOptionProto from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef ThreadPoolOptionProto default_instance();
@@ -4234,9 +4670,9 @@ public static final int
 
   public native ThreadPoolOptionProto New();
 
-  public native ThreadPoolOptionProto New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native ThreadPoolOptionProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef ThreadPoolOptionProto from);
   public native void MergeFrom(@Const @ByRef ThreadPoolOptionProto from);
   public native void Clear();
@@ -4244,9 +4680,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -4288,7 +4724,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class RPCOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class RPCOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RPCOptions(Pointer p) { super(p); }
@@ -4308,7 +4744,7 @@ public static final int
   public native @ByRef @Name("operator =") RPCOptions put(@Const @ByRef RPCOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef RPCOptions default_instance();
@@ -4325,9 +4761,9 @@ public static final int
 
   public native RPCOptions New();
 
-  public native RPCOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native RPCOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef RPCOptions from);
   public native void MergeFrom(@Const @ByRef RPCOptions from);
   public native void Clear();
@@ -4335,9 +4771,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -4364,7 +4800,7 @@ public static final int
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class ConfigProto extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class ConfigProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConfigProto(Pointer p) { super(p); }
@@ -4384,7 +4820,7 @@ public static final int
   public native @ByRef @Name("operator =") ConfigProto put(@Const @ByRef ConfigProto from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef ConfigProto default_instance();
@@ -4401,9 +4837,9 @@ public static final int
 
   public native ConfigProto New();
 
-  public native ConfigProto New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native ConfigProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef ConfigProto from);
   public native void MergeFrom(@Const @ByRef ConfigProto from);
   public native void Clear();
@@ -4411,9 +4847,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -4568,7 +5004,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class RunOptions extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class RunOptions extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RunOptions(Pointer p) { super(p); }
@@ -4588,7 +5024,7 @@ public static final int
   public native @ByRef @Name("operator =") RunOptions put(@Const @ByRef RunOptions from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef RunOptions default_instance();
@@ -4605,9 +5041,9 @@ public static final int
 
   public native RunOptions New();
 
-  public native RunOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native RunOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef RunOptions from);
   public native void MergeFrom(@Const @ByRef RunOptions from);
   public native void Clear();
@@ -4615,9 +5051,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -4704,7 +5140,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class RunMetadata extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class RunMetadata extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RunMetadata(Pointer p) { super(p); }
@@ -4724,7 +5160,7 @@ public static final int
   public native @ByRef @Name("operator =") RunMetadata put(@Const @ByRef RunMetadata from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef RunMetadata default_instance();
@@ -4741,9 +5177,9 @@ public static final int
 
   public native RunMetadata New();
 
-  public native RunMetadata New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native RunMetadata New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef RunMetadata from);
   public native void MergeFrom(@Const @ByRef RunMetadata from);
   public native void Clear();
@@ -4751,9 +5187,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -5241,7 +5677,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class CostGraphDef_Node_InputInfo extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CostGraphDef_Node_InputInfo extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CostGraphDef_Node_InputInfo(Pointer p) { super(p); }
@@ -5261,7 +5697,7 @@ public static final int
   public native @ByRef @Name("operator =") CostGraphDef_Node_InputInfo put(@Const @ByRef CostGraphDef_Node_InputInfo from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CostGraphDef_Node_InputInfo default_instance();
@@ -5278,9 +5714,9 @@ public static final int
 
   public native CostGraphDef_Node_InputInfo New();
 
-  public native CostGraphDef_Node_InputInfo New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CostGraphDef_Node_InputInfo New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CostGraphDef_Node_InputInfo from);
   public native void MergeFrom(@Const @ByRef CostGraphDef_Node_InputInfo from);
   public native void Clear();
@@ -5288,9 +5724,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -5321,7 +5757,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CostGraphDef_Node_OutputInfo extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CostGraphDef_Node_OutputInfo extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CostGraphDef_Node_OutputInfo(Pointer p) { super(p); }
@@ -5341,7 +5777,7 @@ public static final int
   public native @ByRef @Name("operator =") CostGraphDef_Node_OutputInfo put(@Const @ByRef CostGraphDef_Node_OutputInfo from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CostGraphDef_Node_OutputInfo default_instance();
@@ -5358,9 +5794,9 @@ public static final int
 
   public native CostGraphDef_Node_OutputInfo New();
 
-  public native CostGraphDef_Node_OutputInfo New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CostGraphDef_Node_OutputInfo New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CostGraphDef_Node_OutputInfo from);
   public native void MergeFrom(@Const @ByRef CostGraphDef_Node_OutputInfo from);
   public native void Clear();
@@ -5368,9 +5804,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -5421,7 +5857,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CostGraphDef_Node extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CostGraphDef_Node extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CostGraphDef_Node(Pointer p) { super(p); }
@@ -5441,7 +5877,7 @@ public static final int
   public native @ByRef @Name("operator =") CostGraphDef_Node put(@Const @ByRef CostGraphDef_Node from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CostGraphDef_Node default_instance();
@@ -5458,9 +5894,9 @@ public static final int
 
   public native CostGraphDef_Node New();
 
-  public native CostGraphDef_Node New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CostGraphDef_Node New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CostGraphDef_Node from);
   public native void MergeFrom(@Const @ByRef CostGraphDef_Node from);
   public native void Clear();
@@ -5468,9 +5904,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -5620,7 +6056,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CostGraphDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CostGraphDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CostGraphDef(Pointer p) { super(p); }
@@ -5640,7 +6076,7 @@ public static final int
   public native @ByRef @Name("operator =") CostGraphDef put(@Const @ByRef CostGraphDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CostGraphDef default_instance();
@@ -5657,9 +6093,9 @@ public static final int
 
   public native CostGraphDef New();
 
-  public native CostGraphDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CostGraphDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CostGraphDef from);
   public native void MergeFrom(@Const @ByRef CostGraphDef from);
   public native void Clear();
@@ -5667,9 +6103,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -5929,7 +6365,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class AllocatorMemoryUsed extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class AllocatorMemoryUsed extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AllocatorMemoryUsed(Pointer p) { super(p); }
@@ -5949,7 +6385,7 @@ public static final int
   public native @ByRef @Name("operator =") AllocatorMemoryUsed put(@Const @ByRef AllocatorMemoryUsed from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef AllocatorMemoryUsed default_instance();
@@ -5966,9 +6402,9 @@ public static final int
 
   public native AllocatorMemoryUsed New();
 
-  public native AllocatorMemoryUsed New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native AllocatorMemoryUsed New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef AllocatorMemoryUsed from);
   public native void MergeFrom(@Const @ByRef AllocatorMemoryUsed from);
   public native void Clear();
@@ -5976,9 +6412,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -6041,7 +6477,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class NodeOutput extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class NodeOutput extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeOutput(Pointer p) { super(p); }
@@ -6061,7 +6497,7 @@ public static final int
   public native @ByRef @Name("operator =") NodeOutput put(@Const @ByRef NodeOutput from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef NodeOutput default_instance();
@@ -6078,9 +6514,9 @@ public static final int
 
   public native NodeOutput New();
 
-  public native NodeOutput New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native NodeOutput New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef NodeOutput from);
   public native void MergeFrom(@Const @ByRef NodeOutput from);
   public native void Clear();
@@ -6088,9 +6524,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -6127,7 +6563,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class MemoryStats extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class MemoryStats extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MemoryStats(Pointer p) { super(p); }
@@ -6147,7 +6583,7 @@ public static final int
   public native @ByRef @Name("operator =") MemoryStats put(@Const @ByRef MemoryStats from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef MemoryStats default_instance();
@@ -6164,9 +6600,9 @@ public static final int
 
   public native MemoryStats New();
 
-  public native MemoryStats New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native MemoryStats New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef MemoryStats from);
   public native void MergeFrom(@Const @ByRef MemoryStats from);
   public native void Clear();
@@ -6174,9 +6610,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -6239,7 +6675,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class NodeExecStats extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class NodeExecStats extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeExecStats(Pointer p) { super(p); }
@@ -6259,7 +6695,7 @@ public static final int
   public native @ByRef @Name("operator =") NodeExecStats put(@Const @ByRef NodeExecStats from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef NodeExecStats default_instance();
@@ -6276,9 +6712,9 @@ public static final int
 
   public native NodeExecStats New();
 
-  public native NodeExecStats New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native NodeExecStats New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef NodeExecStats from);
   public native void MergeFrom(@Const @ByRef NodeExecStats from);
   public native void Clear();
@@ -6286,9 +6722,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -6423,7 +6859,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class DeviceStepStats extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class DeviceStepStats extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeviceStepStats(Pointer p) { super(p); }
@@ -6443,7 +6879,7 @@ public static final int
   public native @ByRef @Name("operator =") DeviceStepStats put(@Const @ByRef DeviceStepStats from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef DeviceStepStats default_instance();
@@ -6460,9 +6896,9 @@ public static final int
 
   public native DeviceStepStats New();
 
-  public native DeviceStepStats New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native DeviceStepStats New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef DeviceStepStats from);
   public native void MergeFrom(@Const @ByRef DeviceStepStats from);
   public native void Clear();
@@ -6470,9 +6906,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -6516,7 +6952,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class StepStats extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class StepStats extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StepStats(Pointer p) { super(p); }
@@ -6536,7 +6972,7 @@ public static final int
   public native @ByRef @Name("operator =") StepStats put(@Const @ByRef StepStats from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef StepStats default_instance();
@@ -6553,9 +6989,9 @@ public static final int
 
   public native StepStats New();
 
-  public native StepStats New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native StepStats New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef StepStats from);
   public native void MergeFrom(@Const @ByRef StepStats from);
   public native void Clear();
@@ -6563,9 +6999,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -6900,7 +7336,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class VersionDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class VersionDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VersionDef(Pointer p) { super(p); }
@@ -6920,7 +7356,7 @@ public static final int
   public native @ByRef @Name("operator =") VersionDef put(@Const @ByRef VersionDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef VersionDef default_instance();
@@ -6937,9 +7373,9 @@ public static final int
 
   public native VersionDef New();
 
-  public native VersionDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native VersionDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef VersionDef from);
   public native void MergeFrom(@Const @ByRef VersionDef from);
   public native void Clear();
@@ -6947,9 +7383,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -7285,7 +7721,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class AllocationDescription extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class AllocationDescription extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AllocationDescription(Pointer p) { super(p); }
@@ -7305,7 +7741,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") AllocationDescription put(@Const @ByRef AllocationDescription from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef AllocationDescription default_instance();
@@ -7322,9 +7758,9 @@ limitations under the License.
 
   public native AllocationDescription New();
 
-  public native AllocationDescription New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native AllocationDescription New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef AllocationDescription from);
   public native void MergeFrom(@Const @ByRef AllocationDescription from);
   public native void Clear();
@@ -7332,9 +7768,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -7825,7 +8261,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class TensorShapeProto_Dim extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class TensorShapeProto_Dim extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShapeProto_Dim(Pointer p) { super(p); }
@@ -7845,7 +8281,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") TensorShapeProto_Dim put(@Const @ByRef TensorShapeProto_Dim from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef TensorShapeProto_Dim default_instance();
@@ -7862,9 +8298,9 @@ limitations under the License.
 
   public native TensorShapeProto_Dim New();
 
-  public native TensorShapeProto_Dim New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native TensorShapeProto_Dim New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef TensorShapeProto_Dim from);
   public native void MergeFrom(@Const @ByRef TensorShapeProto_Dim from);
   public native void Clear();
@@ -7872,9 +8308,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -7916,7 +8352,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class TensorShapeProto extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class TensorShapeProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShapeProto(Pointer p) { super(p); }
@@ -7936,7 +8372,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") TensorShapeProto put(@Const @ByRef TensorShapeProto from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef TensorShapeProto default_instance();
@@ -7953,9 +8389,9 @@ limitations under the License.
 
   public native TensorShapeProto New();
 
-  public native TensorShapeProto New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native TensorShapeProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef TensorShapeProto from);
   public native void MergeFrom(@Const @ByRef TensorShapeProto from);
   public native void Clear();
@@ -7963,9 +8399,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -8230,7 +8666,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class ResourceHandleProto extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class ResourceHandleProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResourceHandleProto(Pointer p) { super(p); }
@@ -8250,7 +8686,7 @@ public static final int
   public native @ByRef @Name("operator =") ResourceHandleProto put(@Const @ByRef ResourceHandleProto from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef ResourceHandleProto default_instance();
@@ -8267,9 +8703,9 @@ public static final int
 
   public native ResourceHandleProto New();
 
-  public native ResourceHandleProto New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native ResourceHandleProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef ResourceHandleProto from);
   public native void MergeFrom(@Const @ByRef ResourceHandleProto from);
   public native void Clear();
@@ -8277,9 +8713,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -8508,7 +8944,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class TensorProto extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class TensorProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorProto(Pointer p) { super(p); }
@@ -8528,7 +8964,7 @@ public static final int
   public native @ByRef @Name("operator =") TensorProto put(@Const @ByRef TensorProto from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef TensorProto default_instance();
@@ -8545,9 +8981,9 @@ public static final int
 
   public native TensorProto New();
 
-  public native TensorProto New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native TensorProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef TensorProto from);
   public native void MergeFrom(@Const @ByRef TensorProto from);
   public native void Clear();
@@ -8555,9 +8991,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -8727,7 +9163,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class VariantTensorDataProto extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class VariantTensorDataProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VariantTensorDataProto(Pointer p) { super(p); }
@@ -8747,7 +9183,7 @@ public static final int
   public native @ByRef @Name("operator =") VariantTensorDataProto put(@Const @ByRef VariantTensorDataProto from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef VariantTensorDataProto default_instance();
@@ -8764,9 +9200,9 @@ public static final int
 
   public native VariantTensorDataProto New();
 
-  public native VariantTensorDataProto New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native VariantTensorDataProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef VariantTensorDataProto from);
   public native void MergeFrom(@Const @ByRef VariantTensorDataProto from);
   public native void Clear();
@@ -8774,9 +9210,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -9094,7 +9530,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class TensorDescription extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class TensorDescription extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorDescription(Pointer p) { super(p); }
@@ -9114,7 +9550,7 @@ public static final int
   public native @ByRef @Name("operator =") TensorDescription put(@Const @ByRef TensorDescription from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef TensorDescription default_instance();
@@ -9131,9 +9567,9 @@ public static final int
 
   public native TensorDescription New();
 
-  public native TensorDescription New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native TensorDescription New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef TensorDescription from);
   public native void MergeFrom(@Const @ByRef TensorDescription from);
   public native void Clear();
@@ -9141,9 +9577,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -10372,7 +10808,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class AttrValue_ListValue extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class AttrValue_ListValue extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AttrValue_ListValue(Pointer p) { super(p); }
@@ -10392,7 +10828,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") AttrValue_ListValue put(@Const @ByRef AttrValue_ListValue from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef AttrValue_ListValue default_instance();
@@ -10409,9 +10845,9 @@ limitations under the License.
 
   public native AttrValue_ListValue New();
 
-  public native AttrValue_ListValue New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native AttrValue_ListValue New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef AttrValue_ListValue from);
   public native void MergeFrom(@Const @ByRef AttrValue_ListValue from);
   public native void Clear();
@@ -10419,9 +10855,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -10520,7 +10956,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class AttrValue extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class AttrValue extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AttrValue(Pointer p) { super(p); }
@@ -10540,7 +10976,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") AttrValue put(@Const @ByRef AttrValue from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef AttrValue default_instance();
@@ -10571,9 +11007,9 @@ limitations under the License.
 
   public native AttrValue New();
 
-  public native AttrValue New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native AttrValue New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef AttrValue from);
   public native void MergeFrom(@Const @ByRef AttrValue from);
   public native void Clear();
@@ -10581,9 +11017,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -10706,7 +11142,7 @@ limitations under the License.
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class NameAttrList extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class NameAttrList extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NameAttrList(Pointer p) { super(p); }
@@ -10726,7 +11162,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") NameAttrList put(@Const @ByRef NameAttrList from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef NameAttrList default_instance();
@@ -10743,9 +11179,9 @@ limitations under the License.
 
   public native NameAttrList New();
 
-  public native NameAttrList New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native NameAttrList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef NameAttrList from);
   public native void MergeFrom(@Const @ByRef NameAttrList from);
   public native void Clear();
@@ -10753,9 +11189,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -11107,7 +11543,7 @@ limitations under the License.
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class NodeDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class NodeDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeDef(Pointer p) { super(p); }
@@ -11127,7 +11563,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") NodeDef put(@Const @ByRef NodeDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef NodeDef default_instance();
@@ -11144,9 +11580,9 @@ limitations under the License.
 
   public native NodeDef New();
 
-  public native NodeDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native NodeDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef NodeDef from);
   public native void MergeFrom(@Const @ByRef NodeDef from);
   public native void Clear();
@@ -11154,9 +11590,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -11400,7 +11836,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class OpDef_ArgDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class OpDef_ArgDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDef_ArgDef(Pointer p) { super(p); }
@@ -11420,7 +11856,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") OpDef_ArgDef put(@Const @ByRef OpDef_ArgDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef OpDef_ArgDef default_instance();
@@ -11437,9 +11873,9 @@ limitations under the License.
 
   public native OpDef_ArgDef New();
 
-  public native OpDef_ArgDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native OpDef_ArgDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef OpDef_ArgDef from);
   public native void MergeFrom(@Const @ByRef OpDef_ArgDef from);
   public native void Clear();
@@ -11447,9 +11883,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -11570,7 +12006,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class OpDef_AttrDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class OpDef_AttrDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDef_AttrDef(Pointer p) { super(p); }
@@ -11590,7 +12026,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") OpDef_AttrDef put(@Const @ByRef OpDef_AttrDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef OpDef_AttrDef default_instance();
@@ -11607,9 +12043,9 @@ limitations under the License.
 
   public native OpDef_AttrDef New();
 
-  public native OpDef_AttrDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native OpDef_AttrDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef OpDef_AttrDef from);
   public native void MergeFrom(@Const @ByRef OpDef_AttrDef from);
   public native void Clear();
@@ -11617,9 +12053,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -11730,7 +12166,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class OpDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class OpDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDef(Pointer p) { super(p); }
@@ -11750,7 +12186,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") OpDef put(@Const @ByRef OpDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef OpDef default_instance();
@@ -11767,9 +12203,9 @@ limitations under the License.
 
   public native OpDef New();
 
-  public native OpDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native OpDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef OpDef from);
   public native void MergeFrom(@Const @ByRef OpDef from);
   public native void Clear();
@@ -11777,9 +12213,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -11918,7 +12354,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class OpDeprecation extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class OpDeprecation extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDeprecation(Pointer p) { super(p); }
@@ -11938,7 +12374,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") OpDeprecation put(@Const @ByRef OpDeprecation from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef OpDeprecation default_instance();
@@ -11955,9 +12391,9 @@ limitations under the License.
 
   public native OpDeprecation New();
 
-  public native OpDeprecation New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native OpDeprecation New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef OpDeprecation from);
   public native void MergeFrom(@Const @ByRef OpDeprecation from);
   public native void Clear();
@@ -11965,9 +12401,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -12009,7 +12445,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class OpList extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class OpList extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpList(Pointer p) { super(p); }
@@ -12029,7 +12465,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") OpList put(@Const @ByRef OpList from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef OpList default_instance();
@@ -12046,9 +12482,9 @@ limitations under the License.
 
   public native OpList New();
 
-  public native OpList New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native OpList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef OpList from);
   public native void MergeFrom(@Const @ByRef OpList from);
   public native void Clear();
@@ -12056,9 +12492,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -12476,7 +12912,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class FunctionDefLibrary extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class FunctionDefLibrary extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionDefLibrary(Pointer p) { super(p); }
@@ -12496,7 +12932,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") FunctionDefLibrary put(@Const @ByRef FunctionDefLibrary from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef FunctionDefLibrary default_instance();
@@ -12513,9 +12949,9 @@ limitations under the License.
 
   public native FunctionDefLibrary New();
 
-  public native FunctionDefLibrary New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native FunctionDefLibrary New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef FunctionDefLibrary from);
   public native void MergeFrom(@Const @ByRef FunctionDefLibrary from);
   public native void Clear();
@@ -12523,9 +12959,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -12566,7 +13002,7 @@ limitations under the License.
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class FunctionDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class FunctionDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionDef(Pointer p) { super(p); }
@@ -12586,7 +13022,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") FunctionDef put(@Const @ByRef FunctionDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef FunctionDef default_instance();
@@ -12603,9 +13039,9 @@ limitations under the License.
 
   public native FunctionDef New();
 
-  public native FunctionDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native FunctionDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef FunctionDef from);
   public native void MergeFrom(@Const @ByRef FunctionDef from);
   public native void Clear();
@@ -12613,9 +13049,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -12669,7 +13105,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class GradientDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class GradientDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GradientDef(Pointer p) { super(p); }
@@ -12689,7 +13125,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") GradientDef put(@Const @ByRef GradientDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef GradientDef default_instance();
@@ -12706,9 +13142,9 @@ limitations under the License.
 
   public native GradientDef New();
 
-  public native GradientDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native GradientDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef GradientDef from);
   public native void MergeFrom(@Const @ByRef GradientDef from);
   public native void Clear();
@@ -12716,9 +13152,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -12936,7 +13372,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class GraphDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class GraphDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphDef(Pointer p) { super(p); }
@@ -12956,7 +13392,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") GraphDef put(@Const @ByRef GraphDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef GraphDef default_instance();
@@ -12973,9 +13409,9 @@ limitations under the License.
 
   public native GraphDef New();
 
-  public native GraphDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native GraphDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef GraphDef from);
   public native void MergeFrom(@Const @ByRef GraphDef from);
   public native void Clear();
@@ -12983,9 +13419,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -13713,7 +14149,7 @@ limitations under the License.
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class DeviceLocality extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class DeviceLocality extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeviceLocality(Pointer p) { super(p); }
@@ -13733,7 +14169,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") DeviceLocality put(@Const @ByRef DeviceLocality from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef DeviceLocality default_instance();
@@ -13750,9 +14186,9 @@ limitations under the License.
 
   public native DeviceLocality New();
 
-  public native DeviceLocality New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native DeviceLocality New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef DeviceLocality from);
   public native void MergeFrom(@Const @ByRef DeviceLocality from);
   public native void Clear();
@@ -13760,9 +14196,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -13786,7 +14222,7 @@ limitations under the License.
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class DeviceAttributes extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class DeviceAttributes extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeviceAttributes(Pointer p) { super(p); }
@@ -13806,7 +14242,7 @@ limitations under the License.
   public native @ByRef @Name("operator =") DeviceAttributes put(@Const @ByRef DeviceAttributes from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef DeviceAttributes default_instance();
@@ -13823,9 +14259,9 @@ limitations under the License.
 
   public native DeviceAttributes New();
 
-  public native DeviceAttributes New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native DeviceAttributes New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef DeviceAttributes from);
   public native void MergeFrom(@Const @ByRef DeviceAttributes from);
   public native void Clear();
@@ -13833,9 +14269,9 @@ limitations under the License.
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -20888,7 +21324,7 @@ public static final int
     @StdString String name, @Cast("tensorflow::SaverDef_CheckpointFormatVersion*") int... value);
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class SaverDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class SaverDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SaverDef(Pointer p) { super(p); }
@@ -20908,7 +21344,7 @@ public static final int
   public native @ByRef @Name("operator =") SaverDef put(@Const @ByRef SaverDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef SaverDef default_instance();
@@ -20925,9 +21361,9 @@ public static final int
 
   public native SaverDef New();
 
-  public native SaverDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native SaverDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef SaverDef from);
   public native void MergeFrom(@Const @ByRef SaverDef from);
   public native void Clear();
@@ -20935,9 +21371,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21230,7 +21666,7 @@ public static final int
 
 // ===================================================================
 
-@Namespace("tensorflow") @NoOffset public static class MetaGraphDef_MetaInfoDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class MetaGraphDef_MetaInfoDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MetaGraphDef_MetaInfoDef(Pointer p) { super(p); }
@@ -21250,7 +21686,7 @@ public static final int
   public native @ByRef @Name("operator =") MetaGraphDef_MetaInfoDef put(@Const @ByRef MetaGraphDef_MetaInfoDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef MetaGraphDef_MetaInfoDef default_instance();
@@ -21267,9 +21703,9 @@ public static final int
 
   public native MetaGraphDef_MetaInfoDef New();
 
-  public native MetaGraphDef_MetaInfoDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native MetaGraphDef_MetaInfoDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef MetaGraphDef_MetaInfoDef from);
   public native void MergeFrom(@Const @ByRef MetaGraphDef_MetaInfoDef from);
   public native void Clear();
@@ -21277,9 +21713,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21403,7 +21839,7 @@ public static final int
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class MetaGraphDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class MetaGraphDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MetaGraphDef(Pointer p) { super(p); }
@@ -21423,7 +21859,7 @@ public static final int
   public native @ByRef @Name("operator =") MetaGraphDef put(@Const @ByRef MetaGraphDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef MetaGraphDef default_instance();
@@ -21440,9 +21876,9 @@ public static final int
 
   public native MetaGraphDef New();
 
-  public native MetaGraphDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native MetaGraphDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef MetaGraphDef from);
   public native void MergeFrom(@Const @ByRef MetaGraphDef from);
   public native void Clear();
@@ -21450,9 +21886,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21529,7 +21965,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CollectionDef_NodeList extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CollectionDef_NodeList extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectionDef_NodeList(Pointer p) { super(p); }
@@ -21549,7 +21985,7 @@ public static final int
   public native @ByRef @Name("operator =") CollectionDef_NodeList put(@Const @ByRef CollectionDef_NodeList from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CollectionDef_NodeList default_instance();
@@ -21566,9 +22002,9 @@ public static final int
 
   public native CollectionDef_NodeList New();
 
-  public native CollectionDef_NodeList New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CollectionDef_NodeList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CollectionDef_NodeList from);
   public native void MergeFrom(@Const @ByRef CollectionDef_NodeList from);
   public native void Clear();
@@ -21576,9 +22012,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21616,7 +22052,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CollectionDef_BytesList extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CollectionDef_BytesList extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectionDef_BytesList(Pointer p) { super(p); }
@@ -21636,7 +22072,7 @@ public static final int
   public native @ByRef @Name("operator =") CollectionDef_BytesList put(@Const @ByRef CollectionDef_BytesList from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CollectionDef_BytesList default_instance();
@@ -21653,9 +22089,9 @@ public static final int
 
   public native CollectionDef_BytesList New();
 
-  public native CollectionDef_BytesList New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CollectionDef_BytesList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CollectionDef_BytesList from);
   public native void MergeFrom(@Const @ByRef CollectionDef_BytesList from);
   public native void Clear();
@@ -21663,9 +22099,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21701,7 +22137,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CollectionDef_Int64List extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CollectionDef_Int64List extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectionDef_Int64List(Pointer p) { super(p); }
@@ -21721,7 +22157,7 @@ public static final int
   public native @ByRef @Name("operator =") CollectionDef_Int64List put(@Const @ByRef CollectionDef_Int64List from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CollectionDef_Int64List default_instance();
@@ -21738,9 +22174,9 @@ public static final int
 
   public native CollectionDef_Int64List New();
 
-  public native CollectionDef_Int64List New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CollectionDef_Int64List New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CollectionDef_Int64List from);
   public native void MergeFrom(@Const @ByRef CollectionDef_Int64List from);
   public native void Clear();
@@ -21748,9 +22184,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21776,7 +22212,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CollectionDef_FloatList extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CollectionDef_FloatList extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectionDef_FloatList(Pointer p) { super(p); }
@@ -21796,7 +22232,7 @@ public static final int
   public native @ByRef @Name("operator =") CollectionDef_FloatList put(@Const @ByRef CollectionDef_FloatList from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CollectionDef_FloatList default_instance();
@@ -21813,9 +22249,9 @@ public static final int
 
   public native CollectionDef_FloatList New();
 
-  public native CollectionDef_FloatList New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CollectionDef_FloatList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CollectionDef_FloatList from);
   public native void MergeFrom(@Const @ByRef CollectionDef_FloatList from);
   public native void Clear();
@@ -21823,9 +22259,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21851,7 +22287,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CollectionDef_AnyList extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CollectionDef_AnyList extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectionDef_AnyList(Pointer p) { super(p); }
@@ -21871,7 +22307,7 @@ public static final int
   public native @ByRef @Name("operator =") CollectionDef_AnyList put(@Const @ByRef CollectionDef_AnyList from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CollectionDef_AnyList default_instance();
@@ -21888,9 +22324,9 @@ public static final int
 
   public native CollectionDef_AnyList New();
 
-  public native CollectionDef_AnyList New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CollectionDef_AnyList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CollectionDef_AnyList from);
   public native void MergeFrom(@Const @ByRef CollectionDef_AnyList from);
   public native void Clear();
@@ -21898,9 +22334,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -21926,7 +22362,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class CollectionDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class CollectionDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectionDef(Pointer p) { super(p); }
@@ -21946,7 +22382,7 @@ public static final int
   public native @ByRef @Name("operator =") CollectionDef put(@Const @ByRef CollectionDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef CollectionDef default_instance();
@@ -21972,9 +22408,9 @@ public static final int
 
   public native CollectionDef New();
 
-  public native CollectionDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native CollectionDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef CollectionDef from);
   public native void MergeFrom(@Const @ByRef CollectionDef from);
   public native void Clear();
@@ -21982,9 +22418,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -22068,7 +22504,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class TensorInfo_CooSparse extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class TensorInfo_CooSparse extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorInfo_CooSparse(Pointer p) { super(p); }
@@ -22088,7 +22524,7 @@ public static final int
   public native @ByRef @Name("operator =") TensorInfo_CooSparse put(@Const @ByRef TensorInfo_CooSparse from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef TensorInfo_CooSparse default_instance();
@@ -22105,9 +22541,9 @@ public static final int
 
   public native TensorInfo_CooSparse New();
 
-  public native TensorInfo_CooSparse New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native TensorInfo_CooSparse New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef TensorInfo_CooSparse from);
   public native void MergeFrom(@Const @ByRef TensorInfo_CooSparse from);
   public native void Clear();
@@ -22115,9 +22551,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -22188,7 +22624,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class TensorInfo extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class TensorInfo extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorInfo(Pointer p) { super(p); }
@@ -22208,7 +22644,7 @@ public static final int
   public native @ByRef @Name("operator =") TensorInfo put(@Const @ByRef TensorInfo from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef TensorInfo default_instance();
@@ -22231,9 +22667,9 @@ public static final int
 
   public native TensorInfo New();
 
-  public native TensorInfo New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native TensorInfo New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef TensorInfo from);
   public native void MergeFrom(@Const @ByRef TensorInfo from);
   public native void Clear();
@@ -22241,9 +22677,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -22317,7 +22753,7 @@ public static final int
 
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class SignatureDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class SignatureDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SignatureDef(Pointer p) { super(p); }
@@ -22337,7 +22773,7 @@ public static final int
   public native @ByRef @Name("operator =") SignatureDef put(@Const @ByRef SignatureDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef SignatureDef default_instance();
@@ -22354,9 +22790,9 @@ public static final int
 
   public native SignatureDef New();
 
-  public native SignatureDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native SignatureDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef SignatureDef from);
   public native void MergeFrom(@Const @ByRef SignatureDef from);
   public native void Clear();
@@ -22364,9 +22800,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
@@ -22414,7 +22850,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("tensorflow") @NoOffset public static class AssetFileDef extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class AssetFileDef extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AssetFileDef(Pointer p) { super(p); }
@@ -22434,7 +22870,7 @@ public static final int
   public native @ByRef @Name("operator =") AssetFileDef put(@Const @ByRef AssetFileDef from);
 //   #if LANG_CXX11
 //   #endif
-  public native @Cast("google::protobuf::Arena*") Pointer GetArena();
+  public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
   public static native @Const @ByRef AssetFileDef default_instance();
@@ -22451,9 +22887,9 @@ public static final int
 
   public native AssetFileDef New();
 
-  public native AssetFileDef New(@Cast("google::protobuf::Arena*") Pointer arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native AssetFileDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void CopyFrom(@Const @ByRef AssetFileDef from);
   public native void MergeFrom(@Const @ByRef AssetFileDef from);
   public native void Clear();
@@ -22461,9 +22897,9 @@ public static final int
 
   public native @Cast("size_t") long ByteSizeLong();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
         @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(

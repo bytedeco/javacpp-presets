@@ -52,6 +52,7 @@ import java.lang.annotation.Target;
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
+                        "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/framework/numeric_types.h",
                         "tensorflow/core/platform/init_main.h",
@@ -151,6 +152,7 @@ import java.lang.annotation.Target;
                 compiler = {"cpp11"},
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std"},
                 include = {
+                        "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/framework/numeric_types.h",
                         "tensorflow/core/platform/init_main.h",
@@ -221,7 +223,7 @@ import java.lang.annotation.Target;
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
-               .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "PROTOBUF_CONSTEXPR",
+               .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE",
                              "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT", "TF_EXPORT", 
                              "TF_ATTRIBUTE_ALWAYS_INLINE").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
@@ -239,7 +241,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("std::initializer_list").skip())
-               .put(new Info("std::string", "tensorflow::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("string", "std::string", "tensorflow::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::unordered_set<tensorflow::string>").pointerTypes("StringSet").define())
                .put(new Info("std::vector<tensorflow::StringPiece>").pointerTypes("StringPieceVector").define())
                .put(new Info("std::vector<std::string>", "std::vector<tensorflow::string>").pointerTypes("StringVector").define())
@@ -250,12 +252,12 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new Info("google::protobuf::Arena", "google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Message",
-                             "google::protobuf::Metadata", "google::protobuf::io::CodedInputStream", "google::protobuf::io::CodedOutputStream").cast().pointerTypes("Pointer"))
+               .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
+               .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
-                             "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable",
+                             "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip())
 
                .put(new Info("tensorflow::error::protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto::TableStruct",
@@ -303,7 +305,7 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
-               .put(new Info("tensorflow::protobuf::Message", "tensorflow::protobuf::MessageLite").cast().pointerTypes("Pointer"))
+               .put(new Info("tensorflow::protobuf::Message", "tensorflow::protobuf::MessageLite").cast().pointerTypes("MessageLite"))
                .put(new Info("tensorflow::Allocator::is_simple<bfloat16>").skip())
 
                .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector", "google::protobuf::Map"))

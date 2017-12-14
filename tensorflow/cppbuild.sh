@@ -71,7 +71,6 @@ case $PLATFORM in
         export TF_NEED_CUDA=1
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--config=cuda --copt=-m64 --linkopt=-m64"
-        patch -Np1 < ../../../tensorflow-nocuda.patch
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
