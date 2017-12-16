@@ -95,6 +95,9 @@
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
     <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
+    <javacpp.platform.root></javacpp.platform.root>
+    <javacpp.platform.compiler></javacpp.platform.compiler>
+    <javacpp.platform.extension></javacpp.platform.extension>
     <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
     <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
     <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
@@ -205,29 +208,37 @@
               <name>platform.compiler</name>
               <value>${javacpp.platform.compiler}</value>
             </property>
+            <property>
+              <name>platform.extension</name>
+              <value>${javacpp.platform.extension}</value>
+            </property>
           </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
           <includePaths>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
-          <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
-          <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+          <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
-            <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
+            <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
             <resourcePath>${basedir}/target/classes/org/bytedeco/javacpp/</resourcePath>
           </resourcePaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</buildResource>
             <buildResource>/org/bytedeco/javacpp/${javacpp.platform}/</buildResource>
           </buildResources>
           <includeResources>
             <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
             <includeResource>/org/bytedeco/javacpp/include/</includeResource>
+            <includeResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/include/</includeResource>
             <includeResource>/org/bytedeco/javacpp/${javacpp.platform}/include/</includeResource>
           </includeResources>
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
           </linkResources>
@@ -248,6 +259,8 @@
                 <argument>${javacpp.moduleId}</argument>
                 <argument>-platform</argument>
                 <argument>${javacpp.platform}</argument>
+                <argument>-extension</argument>
+                <argument>${javacpp.platform.extension}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
               <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
@@ -335,22 +348,22 @@
                 <exclude>org/bytedeco/javacpp/linux-*/</exclude>
                 <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
                 <exclude>org/bytedeco/javacpp/windows-*/</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</exclude>
               </excludes>
             </configuration>
           </execution>
           <execution>
-            <id>${javacpp.platform}</id>
+            <id>${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>${javacpp.platform}</classifier>
+              <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
-                <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
+                <include>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <excludes>
                 <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>

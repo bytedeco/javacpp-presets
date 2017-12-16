@@ -101,7 +101,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
+    public StringVector(BytePointer value) { this(1); put(0, value); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String value) { this(1); put(0, value); }
     public StringVector(String ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
@@ -127,6 +129,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @Str BytePointer get();
     }
 
+    public StringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -135,6 +142,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         return this;
     }
 
+    public StringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -148,6 +160,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVector(Pointer p) { super(p); }
+    public PointVector(Point value) { this(1); put(0, value); }
     public PointVector(Point ... array) { this(array.length); put(array); }
     public PointVector()       { allocate();  }
     public PointVector(long n) { allocate(n); }
@@ -172,6 +185,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point get();
     }
 
+    public PointVector put(Point value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public PointVector put(Point ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -185,6 +203,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVector(Pointer p) { super(p); }
+    public Point2fVector(Point2f value) { this(1); put(0, value); }
     public Point2fVector(Point2f ... array) { this(array.length); put(array); }
     public Point2fVector()       { allocate();  }
     public Point2fVector(long n) { allocate(n); }
@@ -209,6 +228,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2f get();
     }
 
+    public Point2fVector put(Point2f value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public Point2fVector put(Point2f ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -222,6 +246,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVector(Pointer p) { super(p); }
+    public Point2dVector(Point2d value) { this(1); put(0, value); }
     public Point2dVector(Point2d ... array) { this(array.length); put(array); }
     public Point2dVector()       { allocate();  }
     public Point2dVector(long n) { allocate(n); }
@@ -246,6 +271,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2d get();
     }
 
+    public Point2dVector put(Point2d value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public Point2dVector put(Point2d ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -259,6 +289,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SizeVector(Pointer p) { super(p); }
+    public SizeVector(Size value) { this(1); put(0, value); }
     public SizeVector(Size ... array) { this(array.length); put(array); }
     public SizeVector()       { allocate();  }
     public SizeVector(long n) { allocate(n); }
@@ -283,6 +314,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Size get();
     }
 
+    public SizeVector put(Size value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public SizeVector put(Size ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -296,6 +332,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVector(Pointer p) { super(p); }
+    public RectVector(Rect value) { this(1); put(0, value); }
     public RectVector(Rect ... array) { this(array.length); put(array); }
     public RectVector()       { allocate();  }
     public RectVector(long n) { allocate(n); }
@@ -320,6 +357,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Rect get();
     }
 
+    public RectVector put(Rect value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public RectVector put(Rect ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -333,6 +375,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointVector(Pointer p) { super(p); }
+    public KeyPointVector(KeyPoint value) { this(1); put(0, value); }
     public KeyPointVector(KeyPoint ... array) { this(array.length); put(array); }
     public KeyPointVector()       { allocate();  }
     public KeyPointVector(long n) { allocate(n); }
@@ -357,6 +400,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef KeyPoint get();
     }
 
+    public KeyPointVector put(KeyPoint value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public KeyPointVector put(KeyPoint ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -370,6 +418,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatchVector(Pointer p) { super(p); }
+    public DMatchVector(DMatch value) { this(1); put(0, value); }
     public DMatchVector(DMatch ... array) { this(array.length); put(array); }
     public DMatchVector()       { allocate();  }
     public DMatchVector(long n) { allocate(n); }
@@ -394,6 +443,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef DMatch get();
     }
 
+    public DMatchVector put(DMatch value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DMatchVector put(DMatch ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -407,6 +461,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVectorVector(Pointer p) { super(p); }
+    public PointVectorVector(PointVector value) { this(1); put(0, value); }
     public PointVectorVector(PointVector ... array) { this(array.length); put(array); }
     public PointVectorVector()       { allocate();  }
     public PointVectorVector(long n) { allocate(n); }
@@ -431,6 +486,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef PointVector get();
     }
 
+    public PointVectorVector put(PointVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public PointVectorVector put(PointVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -444,6 +504,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVectorVector(Pointer p) { super(p); }
+    public Point2fVectorVector(Point2fVector value) { this(1); put(0, value); }
     public Point2fVectorVector(Point2fVector ... array) { this(array.length); put(array); }
     public Point2fVectorVector()       { allocate();  }
     public Point2fVectorVector(long n) { allocate(n); }
@@ -468,6 +529,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2fVector get();
     }
 
+    public Point2fVectorVector put(Point2fVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public Point2fVectorVector put(Point2fVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -481,6 +547,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVectorVector(Pointer p) { super(p); }
+    public Point2dVectorVector(Point2dVector value) { this(1); put(0, value); }
     public Point2dVectorVector(Point2dVector ... array) { this(array.length); put(array); }
     public Point2dVectorVector()       { allocate();  }
     public Point2dVectorVector(long n) { allocate(n); }
@@ -505,6 +572,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2dVector get();
     }
 
+    public Point2dVectorVector put(Point2dVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public Point2dVectorVector put(Point2dVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -518,6 +590,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVectorVector(Pointer p) { super(p); }
+    public RectVectorVector(RectVector value) { this(1); put(0, value); }
     public RectVectorVector(RectVector ... array) { this(array.length); put(array); }
     public RectVectorVector()       { allocate();  }
     public RectVectorVector(long n) { allocate(n); }
@@ -542,6 +615,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef RectVector get();
     }
 
+    public RectVectorVector put(RectVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public RectVectorVector put(RectVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -555,6 +633,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointVectorVector(Pointer p) { super(p); }
+    public KeyPointVectorVector(KeyPointVector value) { this(1); put(0, value); }
     public KeyPointVectorVector(KeyPointVector ... array) { this(array.length); put(array); }
     public KeyPointVectorVector()       { allocate();  }
     public KeyPointVectorVector(long n) { allocate(n); }
@@ -579,6 +658,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef KeyPointVector get();
     }
 
+    public KeyPointVectorVector put(KeyPointVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public KeyPointVectorVector put(KeyPointVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -592,6 +676,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatchVectorVector(Pointer p) { super(p); }
+    public DMatchVectorVector(DMatchVector value) { this(1); put(0, value); }
     public DMatchVectorVector(DMatchVector ... array) { this(array.length); put(array); }
     public DMatchVectorVector()       { allocate();  }
     public DMatchVectorVector(long n) { allocate(n); }
@@ -616,6 +701,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef DMatchVector get();
     }
 
+    public DMatchVectorVector put(DMatchVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DMatchVectorVector put(DMatchVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -629,6 +719,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatVector(Pointer p) { super(p); }
+    public MatVector(Mat value) { this(1); put(0, value); }
     public MatVector(Mat ... array) { this(array.length); put(array); }
     public MatVector()       { allocate();  }
     public MatVector(long n) { allocate(n); }
@@ -653,6 +744,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Mat get();
     }
 
+    public MatVector put(Mat value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public MatVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -666,6 +762,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMatVector(Pointer p) { super(p); }
+    public UMatVector(UMat value) { this(1); put(0, value); }
     public UMatVector(UMat ... array) { this(array.length); put(array); }
     public UMatVector()       { allocate();  }
     public UMatVector(long n) { allocate(n); }
@@ -690,6 +787,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef UMat get();
     }
 
+    public UMatVector put(UMat value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public UMatVector put(UMat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -807,6 +909,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeDataTlsVector(Pointer p) { super(p); }
+    public NodeDataTlsVector(NodeDataTls value) { this(1); put(0, value); }
     public NodeDataTlsVector(NodeDataTls ... array) { this(array.length); put(array); }
     public NodeDataTlsVector()       { allocate();  }
     public NodeDataTlsVector(long n) { allocate(n); }
@@ -831,6 +934,11 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") NodeDataTls get();
     }
 
+    public NodeDataTlsVector put(NodeDataTls value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public NodeDataTlsVector put(NodeDataTls ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {

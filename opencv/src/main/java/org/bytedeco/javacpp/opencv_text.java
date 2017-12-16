@@ -57,6 +57,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ERStatVector(Pointer p) { super(p); }
+    public ERStatVector(ERStat value) { this(1); put(0, value); }
     public ERStatVector(ERStat ... array) { this(array.length); put(array); }
     public ERStatVector()       { allocate();  }
     public ERStatVector(long n) { allocate(n); }
@@ -81,6 +82,11 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @ByRef ERStat get();
     }
 
+    public ERStatVector put(ERStat value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public ERStatVector put(ERStat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -94,6 +100,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ERStatVectorVector(Pointer p) { super(p); }
+    public ERStatVectorVector(ERStatVector value) { this(1); put(0, value); }
     public ERStatVectorVector(ERStatVector ... array) { this(array.length); put(array); }
     public ERStatVectorVector()       { allocate();  }
     public ERStatVectorVector(long n) { allocate(n); }
@@ -118,6 +125,11 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @ByRef ERStatVector get();
     }
 
+    public ERStatVectorVector put(ERStatVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public ERStatVectorVector put(ERStatVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -131,6 +143,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleVector(Pointer p) { super(p); }
+    public DoubleVector(double value) { this(1); put(0, value); }
     public DoubleVector(double ... array) { this(array.length); put(array); }
     public DoubleVector()       { allocate();  }
     public DoubleVector(long n) { allocate(n); }
@@ -155,6 +168,11 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") double get();
     }
 
+    public DoubleVector put(double value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public DoubleVector put(double ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -168,7 +186,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StdStringVector(Pointer p) { super(p); }
+    public StdStringVector(BytePointer value) { this(1); put(0, value); }
     public StdStringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StdStringVector(String value) { this(1); put(0, value); }
     public StdStringVector(String ... array) { this(array.length); put(array); }
     public StdStringVector()       { allocate();  }
     public StdStringVector(long n) { allocate(n); }
@@ -194,6 +214,11 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @StdString BytePointer get();
     }
 
+    public StdStringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StdStringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -202,6 +227,11 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         return this;
     }
 
+    public StdStringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public StdStringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {

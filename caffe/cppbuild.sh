@@ -7,31 +7,33 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export CPU_ONLY=1
+export USE_CUDNN=0
+if [[ "$EXTENSION" == *gpu ]]; then
+    export CPU_ONLY=0
+    export USE_CUDNN=1
+fi
+
 case $PLATFORM in
     linux-x86)
-        export CPU_ONLY=1
-        export CC="$OLDCC -m32"
-        export CXX="$OLDCXX -m32"
-        export FC="$OLDFC -m32"
-        export TOOLSET=`echo $OLDCC | sed 's/\([a-zA-Z]*\)\([0-9]\)\([0-9]\)/\1-\2.\3/'`
+        export CC="gcc -m32"
+        export CXX="g++ -m32"
+        export FC="gfortran -m32"
+        export TOOLSET="gcc"
         export BINARY=32
         export BLAS=open
         export CUDAFLAGS=
-        export USE_CUDNN=0
         ;;
     linux-x86_64)
-        export CPU_ONLY=0
-        export CC="$OLDCC -m64"
-        export CXX="$OLDCXX -m64"
-        export FC="$OLDFC -m64"
-        export TOOLSET=`echo $OLDCC | sed 's/\([a-zA-Z]*\)\([0-9]\)\([0-9]\)/\1-\2.\3/'`
+        export CC="gcc -m64"
+        export CXX="g++ -m64"
+        export FC="gfortran -m64"
+        export TOOLSET="gcc"
         export BINARY=64
         export BLAS=open
         export CUDAFLAGS="-Xcompiler -std=c++98"
-        export USE_CUDNN=1
         ;;
     macosx-*)
-        export CPU_ONLY=0
         export CC="clang"
         export CXX="clang++"
         export LDFLAGS="-undefined dynamic_lookup"
@@ -39,7 +41,6 @@ case $PLATFORM in
         export BINARY=64
         export BLAS=atlas
         export CUDAFLAGS=
-        export USE_CUDNN=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -65,8 +66,8 @@ download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
 
-mkdir -p $PLATFORM
-cd $PLATFORM
+mkdir -p "$PLATFORM$EXTENSION"
+cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 mkdir -p include lib bin
 
@@ -159,8 +160,8 @@ export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH -L$OPENCV_PATH/lib -L$HDF5_PATH -L$HDF5_PATH/lib"
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN proto
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN lib
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN proto
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto
 cp -a include/caffe/* ../include/caffe/

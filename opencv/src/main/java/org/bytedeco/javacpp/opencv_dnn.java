@@ -16,6 +16,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatShapeVector(Pointer p) { super(p); }
+    public MatShapeVector(IntPointer value) { this(1); put(0, value); }
     public MatShapeVector(IntPointer ... array) { this(array.length); put(array); }
     public MatShapeVector()       { allocate();  }
     public MatShapeVector(long n) { allocate(n); }
@@ -40,6 +41,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @StdVector IntPointer get();
     }
 
+    public MatShapeVector put(IntPointer value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public MatShapeVector put(IntPointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -53,6 +59,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatShapeVectorVector(Pointer p) { super(p); }
+    public MatShapeVectorVector(MatShapeVector value) { this(1); put(0, value); }
     public MatShapeVectorVector(MatShapeVector ... array) { this(array.length); put(array); }
     public MatShapeVectorVector()       { allocate();  }
     public MatShapeVectorVector(long n) { allocate(n); }
@@ -77,6 +84,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @ByRef MatShapeVector get();
     }
 
+    public MatShapeVectorVector put(MatShapeVector value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public MatShapeVectorVector put(MatShapeVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -121,6 +133,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatPointerVector(Pointer p) { super(p); }
+    public MatPointerVector(Mat value) { this(1); put(0, value); }
     public MatPointerVector(Mat ... array) { this(array.length); put(array); }
     public MatPointerVector()       { allocate();  }
     public MatPointerVector(long n) { allocate(n); }
@@ -145,6 +158,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") Mat get();
     }
 
+    public MatPointerVector put(Mat value) {
+        if (size() != 1) { resize(1); }
+        put(0, value);
+        return this;
+    }
     public MatPointerVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {

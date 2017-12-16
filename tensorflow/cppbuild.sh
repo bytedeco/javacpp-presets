@@ -33,14 +33,20 @@ TENSORFLOW_VERSION=1.4.0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
-mkdir -p $PLATFORM
-cd $PLATFORM
+mkdir -p "$PLATFORM$EXTENSION"
+cd "$PLATFORM$EXTENSION"
 
 echo "Decompressing archives"
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
+
+export GPU_FLAGS=
+if [[ "$EXTENSION" == *gpu ]]; then
+    export TF_NEED_CUDA=1
+    export GPU_FLAGS="--config=cuda --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx --copt=-mavx2 --copt=-mfma"
+fi
 
 case $PLATFORM in
     # Clang is incapable of compiling TensorFlow for Android, while in $ANDROID_NDK/source.properties,
@@ -68,20 +74,14 @@ case $PLATFORM in
     linux-x86_64)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
-        export TF_NEED_CUDA=1
         export GCC_HOST_COMPILER_PATH=$CC
-        export BUILDFLAGS="--config=cuda --copt=-m64 --linkopt=-m64"
+        export BUILDFLAGS="$GPU_FLAGS --copt=-m64 --linkopt=-m64"
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
 
-        export BUILDFLAGS="--linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
-        if [[ -z ${TRAVIS:-} ]]; then
-            # Enable CUDA for TensorFlow on Mac OS X only outside Travis CI to prevent timeouts
-            export TF_NEED_CUDA=1
-            export BUILDFLAGS="--config=cuda --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH $BUILDFLAGS"
-        fi
+        export BUILDFLAGS="$GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
         export CUDA_HOME=/usr/local/cuda
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
