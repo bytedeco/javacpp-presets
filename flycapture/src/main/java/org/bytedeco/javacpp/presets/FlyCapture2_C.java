@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet, Jarek Sacha
+ * Copyright (C) 2014-2017 Samuel Audet, Jarek Sacha
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -43,8 +43,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target = "org.bytedeco.javacpp.FlyCapture2_C", value = {
         @Platform(value = {"linux-x86", "linux-arm", "windows"},
                 include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>",
-                        "MultiSyncLibraryDefs_C.h", "MultiSyncLibrary_C.h"}),
-        @Platform(value = {"linux-x86", "linux-arm"}, link = "flycapture-c@.2", includepath = "/usr/include/flycapture/C/"),
+                        "MultiSyncLibraryDefs_C.h", "MultiSyncLibrary_C.h"},
+                link = {"flycapture-c@.2", "multisync-c@.2"}, includepath = "/usr/include/flycapture/C/"),
+        @Platform(value = "linux-arm", include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"}, link = "flycapture-c@.2"),
         @Platform(value = "windows", link = {"FlyCapture2_C", "MultiSyncLibrary_C"},
                 preload = {"libiomp5md", "FlyCapture2"},
                 includepath =  "C:/Program Files/Point Grey Research/FlyCapture2/include/C/"),

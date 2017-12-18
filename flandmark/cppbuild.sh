@@ -19,6 +19,17 @@ cd flandmark-$FLANDMARK_VERSION
 
 OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -d "$P/include/opencv2" ]]; then
+            OPENCV_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
 case $PLATFORM in
     android-arm)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=$INSTALL_PATH/../../android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/
@@ -51,7 +62,12 @@ case $PLATFORM in
         cp libflandmark/*.a ../lib
         ;;
     linux-ppc64le)
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        else
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        fi
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib

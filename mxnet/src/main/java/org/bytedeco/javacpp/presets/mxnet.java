@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Audet
+ * Copyright (C) 2016-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ public class mxnet implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MXNET_EXTERN_C", "MXNET_DLL").cppTypes().annotations())
                .put(new Info("NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
+               .put(new Info("const NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("@Cast(\"NDArrayHandle*\") PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
                .put(new Info("FunctionHandle").annotations("@Const").valueTypes("FunctionHandle").pointerTypes("PointerPointer", "@Cast(\"FunctionHandle*\") @ByPtrPtr FunctionHandle"))
                .put(new Info("AtomicSymbolCreator").valueTypes("AtomicSymbolCreator").pointerTypes("PointerPointer", "@Cast(\"AtomicSymbolCreator*\") @ByPtrPtr AtomicSymbolCreator"))
                .put(new Info("SymbolHandle").valueTypes("SymbolHandle").pointerTypes("PointerPointer", "@Cast(\"SymbolHandle*\") @ByPtrPtr SymbolHandle"))

@@ -32,10 +32,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jeremy Laviole
  */
 @Properties(target = "org.bytedeco.javacpp.freenect2", value = {
-    @Platform(value = "linux-x86", include = {"<libfreenect2/libfreenect2.hpp>", "<libfreenect2/frame_listener.hpp>",
-                "<libfreenect2/frame_listener_impl.h>", "<libfreenect2/logger.h>", "<libfreenect2/packet_pipeline.h>",
-                "<libfreenect2/registration.h>", "<libfreenect2/config.h>"},
-            link = "freenect2@0.2", preload = "usb-1.0@.0") })
+    @Platform(value = {"linux-x86", "macosx-x86_64", "windows-x86_64"}, include = {"<libfreenect2/libfreenect2.hpp>",
+                "<libfreenect2/frame_listener.hpp>", "<libfreenect2/frame_listener_impl.h>", "<libfreenect2/logger.h>",
+                "<libfreenect2/packet_pipeline.h>", "<libfreenect2/registration.h>", "<libfreenect2/config.h>"},
+            link = "freenect2@.0.2"),
+    @Platform(value = "macosx-x86_64", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
+    @Platform(value = "windows-x86_64", preload = {"freenect2-openni2", "glfw3", "libusb-1.0", "turbojpeg", "concrt140", "msvcp140", "vcruntime140",
+                "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
+                "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
+                "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"},
+            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}) })
 public class freenect2 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBFREENECT2_WITH_CUDA_SUPPORT", "LIBFREENECT2_WITH_OPENCL_SUPPORT").define(false))

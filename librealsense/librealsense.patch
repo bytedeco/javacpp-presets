@@ -1,0 +1,15 @@
+diff -ruN librealsense-1.12.1/include/librealsense/rs.hpp librealsense-1.12.1-patch/include/librealsense/rs.hpp
+--- librealsense-1.12.1/include/librealsense/rs.hpp	2016-12-27 16:17:15.000000000 +0900
++++ librealsense-1.12.1-patch/include/librealsense/rs.hpp	2017-12-07 14:14:24.283636151 +0900
+@@ -384,10 +384,9 @@
+         rs_device * device;
+         rs_frame_ref * frame_ref;
+ 
+-        frame(const frame &) = delete;
+-
+     public:
+         frame() : device(nullptr), frame_ref(nullptr) {}
++        frame(const frame& other) : device(other.device), frame_ref(other.frame_ref) { }
+         frame(rs_device * device, rs_frame_ref * frame_ref) : device(device), frame_ref(frame_ref) {}
+         frame(frame&& other) : device(other.device), frame_ref(other.frame_ref) { other.frame_ref = nullptr; }
+         frame& operator=(frame other)

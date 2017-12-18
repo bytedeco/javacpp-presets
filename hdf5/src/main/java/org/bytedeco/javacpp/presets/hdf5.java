@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Audet
+ * Copyright (C) 2016-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,20 +38,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5Tpublic.h", "H5Lpublic.h", "H5Opublic.h", "H5Zpublic.h",  "H5Apublic.h", "H5ACpublic.h", "H5Dpublic.h", "H5Epublic.h", "H5Fpublic.h",
         "H5FDpublic.h", "H5Gpublic.h", "H5MMpublic.h", "H5Ppublic.h", "H5PLpublic.h", "H5Rpublic.h", "H5Spublic.h", "H5FDcore.h", "H5FDdirect.h",
         "H5FDfamily.h", "H5FDlog.h", "H5FDmpi.h", "H5FDmulti.h", "H5FDsec2.h", "H5FDstdio.h", /* "H5FDwindows.h", */ "H5DOpublic.h", "H5DSpublic.h",
-        "H5LTpublic.h", "H5IMpublic.h", "H5TBpublic.h", "H5PTpublic.h", "H5LDpublic.h",
+        "H5LTpublic.h", "H5IMpublic.h", "H5TBpublic.h", "H5PTpublic.h", "H5LDpublic.h", "H5PacketTable.h",
 
-        "H5Include.h", "H5Exception.h", "H5IdComponent.h", "H5DataSpace.h", "H5PropList.h", "H5Location.h", "H5Object.h", "H5AbstractDs.h",
-        "H5Attribute.h", "H5OcreatProp.h", "H5DcreatProp.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h", "H5FaccProp.h", "H5FcreatProp.h",
-        "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h", "H5ArrayType.h",
-        "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
-            link = {"hdf5@.100", "hdf5_hl@.100", "hdf5_cpp@.100"}, resource = {"include", "lib"}),
-    @Platform(value = "windows", link = {"libhdf5", "libhdf5_hl", "libhdf5_cpp", "libszip", "libzlib"}, preload = {"msvcp120", "msvcr120"}),
-    @Platform(value = "windows-x86",    includepath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/include/",
-                                        preloadpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/bin/",
-                                           linkpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.0/lib/"),
-    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/HDF_Group/HDF5/1.10.0/include/",
-                                        preloadpath = "C:/Program Files/HDF_Group/HDF5/1.10.0/bin/",
-                                           linkpath = "C:/Program Files/HDF_Group/HDF5/1.10.0/lib/") })
+        "H5Cpp.h", "H5Include.h", "H5Exception.h", "H5IdComponent.h", "H5DataSpace.h", "H5PropList.h", "H5AbstractDs.h", "H5Attribute.h",
+        "H5OcreatProp.h", "H5DcreatProp.h", "H5Location.h", "H5Object.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h", "H5FaccProp.h",
+        "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
+        "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
+            link = {"hdf5@.101", "hdf5_cpp@.101", "hdf5_hl@.100", "hdf5_hl_cpp@.100"}, resource = {"include", "lib"}),
+    @Platform(value = "windows", link = {"libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp", "libszip", "libzlib"}, preload = {"concrt140", "msvcp140", "vcruntime140",
+        "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
+        "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
+        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"}),
+    @Platform(value = "windows-x86",    includepath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.1/include/",
+                                        preloadpath = {"C:/Program Files (x86)/HDF_Group/HDF5/1.10.1/bin/",
+                                                       "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                                                       "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"},
+                                           linkpath = "C:/Program Files (x86)/HDF_Group/HDF5/1.10.1/lib/"),
+    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/HDF_Group/HDF5/1.10.1/include/",
+                                        preloadpath = {"C:/Program Files/HDF_Group/HDF5/1.10.1/bin/",
+                                                       "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                                                       "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"},
+                                           linkpath = "C:/Program Files/HDF_Group/HDF5/1.10.1/lib/") })
 public class hdf5 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5_HLDLL", "H5_DLLCPP", "H5CHECK", "H5OPEN", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
@@ -63,8 +70,10 @@ public class hdf5 implements InfoMapper {
                              "H5O_SHMESG_DTYPE_FLAG", "H5O_SHMESG_FILL_FLAG", "H5O_SHMESG_PLINE_FLAG", "H5O_SHMESG_ATTR_FLAG", "H5T_VARIABLE",
                              "H5T_NATIVE_CHAR", "H5D_CHUNK_CACHE_NSLOTS_DEFAULT", "H5D_CHUNK_CACHE_NBYTES_DEFAULT", "H5E_DEFAULT",
                              "H5F_ACC_SWMR_WRITE", "H5F_ACC_SWMR_READ", "H5F_FAMILY_DEFAULT", "H5F_UNLIMITED", "H5P_DEFAULT", "H5S_ALL").translate(false))
-               .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT", "H5E_ERR_CLS_g").skip())
+               .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT", "H5E_ERR_CLS_g",
+                             "H5::Attribute::getName(size_t, std::string&)", "H5::FileAccPropList::getFileAccDirect", "H5::FileAccPropList::setFileAccDirect").skip())
 
+               .put(new Info("H5::H5Location").purify())
                .put(new Info("H5::attr_operator_t").valueTypes("attr_operator_t").pointerTypes("@ByPtrPtr attr_operator_t").javaText(
                        "public static class attr_operator_t extends FunctionPointer {\n"
                      + "    static { Loader.load(); }\n"
@@ -72,9 +81,9 @@ public class hdf5 implements InfoMapper {
                      + "    public    attr_operator_t(Pointer p) { super(p); }\n"
                      + "    protected attr_operator_t() { allocate(); }\n"
                      + "    private native void allocate();\n"
-                     + "    public native void call( @ByRef H5Location loc,\n"
-                     + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter\") BytePointer attr_name,\n"
-                     + "            Pointer operator_data);\n"
+                     + "    public native void call( @ByRef H5Object loc/*in*/,\n"
+                     + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter\") BytePointer attr_name/*in*/,\n"
+                     + "            Pointer operator_data/*in,out*/);\n"
                      + "}\n"))
 
                .put(new Info("H5::FileAccPropList::setSplit").skip())

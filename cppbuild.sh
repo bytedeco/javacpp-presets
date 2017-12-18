@@ -41,6 +41,7 @@ case $ARCH in
         ;;
 esac
 PLATFORM=$OS-$ARCH
+EXTENSION=
 echo "Detected platform \"$PLATFORM\""
 
 while [[ $# > 0 ]]; do
@@ -48,6 +49,10 @@ while [[ $# > 0 ]]; do
         -platform)
             shift
             PLATFORM="$1"
+            ;;
+        -extension)
+            shift
+            EXTENSION="$1"
             ;;
         install)
             OPERATION=install
@@ -61,10 +66,15 @@ while [[ $# > 0 ]]; do
     esac
     shift
 done
-echo "Building for platform \"$PLATFORM\""
+
+echo -n "Building for platform \"$PLATFORM\""
+if [[ -n "$EXTENSION" ]]; then
+    echo -n " with extension \"$EXTENSION\""
+fi
+echo
 
 if [[ -z ${OPERATION:-} ]]; then
-    echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] <install | clean> [projects]"
+    echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]"
     echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc."
     exit 1
 fi
@@ -116,7 +126,7 @@ function download {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl openblas fftw gsl llvm leptonica tesseract caffe cuda mxnet tensorflow liquidfun)
+    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl openblas fftw gsl llvm leptonica tesseract caffe cuda mxnet tensorflow ale liquidfun skia systems)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

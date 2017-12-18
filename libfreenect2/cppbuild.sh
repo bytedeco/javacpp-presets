@@ -7,45 +7,80 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBJPEG=libjpeg-turbo-1.5.1
+GLFW_VERSION=3.2.1
+LIBJPEG=libjpeg-turbo-1.5.2
 LIBFREENECT2_VERSION=0.2.0
-download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download https://github.com/OpenKinect/libfreenect2/archive/v$LIBFREENECT2_VERSION.zip libfreenect2-$LIBFREENECT2_VERSION.zip
+download https://github.com/glfw/glfw/archive/$GLFW_VERSION.tar.gz glfw-$GLFW_VERSION.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download https://github.com/OpenKinect/libfreenect2/archive/v$LIBFREENECT2_VERSION.tar.gz libfreenect2-$LIBFREENECT2_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals -xzf ../$LIBJPEG.tar.gz
 mkdir -p include lib bin
-unzip -o ../libfreenect2-$LIBFREENECT2_VERSION.zip
+tar --totals -xzf ../glfw-$GLFW_VERSION.tar.gz
+tar --totals -xzf ../$LIBJPEG.tar.gz
+tar --totals -xzf ../libfreenect2-$LIBFREENECT2_VERSION.tar.gz
+
+if [[ $PLATFORM == windows* ]]; then
+    download https://github.com/OpenKinect/libfreenect2/releases/download/v$LIBFREENECT2_VERSION/libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64.zip libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64.zip
+
+    unzip -o libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64.zip
+fi
 
 case $PLATFORM in
     linux-x86)
         export CC="$OLDCC -m32 -fPIC"
-        cd $LIBJPEG
+        cd glfw-$GLFW_VERSION
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         cd ../libfreenect2-$LIBFREENECT2_VERSION
-#	patch -Np1 < ../../../libfreenect2-$LIBFREENECT2_VERSION.patch
-        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a
-        make -j4
+        patch -Np1 < ../../../libfreenect2.patch
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DGLFW3_INCLUDE_DIRS=../include -DGLFW3_LIBRARY=../lib/libglfw3.a -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a
+        make -j $MAKEJ
         make install
-        patch -Np1 < ../../../libfreenect2-$LIBFREENECT2_VERSION.patch
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64 -fPIC"
-        cd $LIBJPEG
+        cd glfw-$GLFW_VERSION
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
         cd ../libfreenect2-$LIBFREENECT2_VERSION
-#	patch -Np1 < ../../../libfreenect2-$LIBFREENECT2_VERSION.patch
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a
-        make -j4
+        patch -Np1 < ../../../libfreenect2.patch
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DGLFW3_INCLUDE_DIRS=../include -DGLFW3_LIBRARY=../lib/libglfw3.a -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a
+        make -j $MAKEJ
         make install
-        patch -Np1 < ../../../libfreenect2-$LIBFREENECT2_VERSION.patch
+        ;;
+    macosx-x86_64)
+        cd glfw-$GLFW_VERSION
+        $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j $MAKEJ
+        make install
+        cd ../libfreenect2-$LIBFREENECT2_VERSION
+        patch -Np1 < ../../../libfreenect2.patch
+        LDFLAGS="-framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreVideo" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_OPENNI_DRIVER=OFF -DENABLE_CUDA=OFF -DENABLE_CXX11=OFF -DENABLE_OPENCL=OFF -DENABLE_VAAPI=OFF -DENABLE_TEGRAJPEG=OFF -DCMAKE_INSTALL_PREFIX=.. -DGLFW3_INCLUDE_DIRS=../include -DGLFW3_LIBRARY=../lib/libglfw3.a -DTurboJPEG_INCLUDE_DIRS=../include -DTurboJPEG_LIBRARIES=../lib/libturbojpeg.a -DCMAKE_MACOSX_RPATH=ON
+        make -j $MAKEJ
+        make install
+        ;;
+    windows-x86_64)
+        cp -a libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64/include/* include
+        cp -a libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64/lib/* lib
+        cp -a libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64/bin/* bin
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.3.3-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>liquidfun</artifactId>
-  <version>20150401-0708ce1-${project.parent.version}</version>
+  <version>20170717-43d53e0-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for LiquidFun</name>
 

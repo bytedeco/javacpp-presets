@@ -37,14 +37,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.dc1394", value={
-    @Platform(not="android", include={"<poll.h>", "<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
+@Properties(target = "org.bytedeco.javacpp.dc1394", value = {
+    @Platform(not = "android", include = {"<poll.h>", "<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
         "<dc1394/camera.h>", "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
-        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link="dc1394@.22",
-            preload="usb-1.0@.0", preloadpath="/usr/local/lib/"),
-    @Platform(value="windows", include={"<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
+        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link = "dc1394@.22"),
+    @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
+    @Platform(value = "windows", include = {"<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
         "<dc1394/camera.h>", "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
-        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, preload={"libdc1394-22", "libusb-1.0"}) })
+        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, preload = {"libdc1394-22", "libusb-1.0"}) })
 public class dc1394 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("poll.h").skip())
@@ -64,7 +64,7 @@ public class dc1394 implements InfoMapper {
             POLLHUP        = 0x010,
             POLLNVAL       = 0x020;
 
-    @Platform(not="windows") public static class pollfd extends Pointer {
+    @Platform(not = "windows") public static class pollfd extends Pointer {
         static { Loader.load(); }
         public pollfd() { allocate(); }
         public pollfd(long size) { allocateArray(size); }
@@ -81,7 +81,7 @@ public class dc1394 implements InfoMapper {
         public native short revents(); public native pollfd revents(short fd);
     }
 
-    @Platform(not="windows") public native static int poll(pollfd fds, @Cast("nfds_t") long nfds, int timeout);
+    @Platform(not = "windows") public native static int poll(pollfd fds, @Cast("nfds_t") long nfds, int timeout);
 
     public static abstract class dc1394video_frame_t_abstract extends Pointer {
         public dc1394video_frame_t_abstract() { }

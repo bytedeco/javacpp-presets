@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cudnn.h>", link = "cudnn@.6")},
+    @Platform(include = "<cudnn.h>", link = "cudnn@.7")},
         target = "org.bytedeco.javacpp.cudnn")
 public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -52,6 +52,7 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnRNNDescriptor_t").valueTypes("cudnnRNNStruct").pointerTypes("@ByPtrPtr cudnnRNNStruct"))
                .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
                .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"))
+               .put(new Info("cudnnCTCLossDescriptor_t").valueTypes("cudnnCTCLossStruct").pointerTypes("@ByPtrPtr cudnnCTCLossStruct"))
 
                .put(new Info("cudnnSetConvolution2dDescriptor_v4").javaText(
                           " public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,\n"

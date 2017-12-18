@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_video.class, opencv_videoio.class}, value = {
     @Platform(include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"},
-              link = "opencv_superres@.3.2", preload = "opencv_cuda@.3.2"),
-    @Platform(value = "windows", link = "opencv_superres320", preload = "opencv_cuda320")},
+              link = "opencv_superres@.3.3", preload = "opencv_cuda@.3.3"),
+    @Platform(value = "windows", link = "opencv_superres331", preload = "opencv_cuda331")},
         target = "org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {

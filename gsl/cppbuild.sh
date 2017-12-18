@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GSL_VERSION=2.3
+GSL_VERSION=2.4
 download ftp://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -67,7 +67,12 @@ case $PLATFORM in
         ;;
     linux-ppc64le)
         sed -i s/elf64ppc/elf64lppc/ configure
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        else
+          ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=ppc64le-linux CC="powerpc64le-linux-gnu-gcc -m64"
+        fi
         make -j $MAKEJ
         make install-strip
         ;;

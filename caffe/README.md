@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is the main tool for training of Caffe ported to Java from this C++ source file:
 
- * https://github.com/BVLC/caffe/blob/master/tools/caffe.cpp
+ * https://github.com/BVLC/caffe/blob/1.0/tools/caffe.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, instead of the original `caffe` executable tool, after creating the `pom.xml` and `src/main/java/caffe.java` source files below, simply execute on the command line:
 ```bash
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.caffe</groupId>
     <artifactId>caffe</artifactId>
-    <version>1.3</version>
+    <version>1.3.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>caffe</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>caffe-platform</artifactId>
-            <version>master-1.3</version>
+            <version>1.0-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

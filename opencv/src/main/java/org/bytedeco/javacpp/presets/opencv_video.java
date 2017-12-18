@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Samuel Audet
+ * Copyright (C) 2013-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = opencv_imgproc.class, value = {
     @Platform(include = {"<opencv2/video.hpp>", "<opencv2/video/tracking_c.h>", "<opencv2/video/tracking.hpp>",
-                         "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.3.2"),
-    @Platform(value = "windows", link = "opencv_video320")},
+                         "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.3.3"),
+    @Platform(value = "windows", link = "opencv_video331")},
         target = "org.bytedeco.javacpp.opencv_video", helper = "org.bytedeco.javacpp.helper.opencv_video")
 public class opencv_video implements InfoMapper {
     public void map(InfoMap infoMap) {

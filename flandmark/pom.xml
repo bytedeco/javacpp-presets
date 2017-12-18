@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.3.3-SNAPSHOT</version>
+    <version>1.3.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv</artifactId>
-      <version>3.2.0-${project.parent.version}</version>
+      <version>3.3.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -45,12 +45,12 @@
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.2.0-${project.parent.version}</version>
+            <version>3.3.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.2.0-${project.parent.version}</version>
+            <version>3.3.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -70,7 +70,7 @@
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
-            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
+            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/include/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>

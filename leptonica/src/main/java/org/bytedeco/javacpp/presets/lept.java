@@ -45,6 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class lept implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LEPT_DLL", "LIBJP2K_HEADER", "L_END_LIST").cppTypes().annotations())
+               .put(new Info("PIX_NOT").cppTypes("int", "int"))
                .put(new Info("L_WallTimer").pointerTypes("L_WALLTIMER"))
                .put(new Info("Numa").pointerTypes("NUMA"))
                .put(new Info("Numaa").pointerTypes("NUMAA"))

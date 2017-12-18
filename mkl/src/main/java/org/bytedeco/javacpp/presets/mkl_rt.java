@@ -38,17 +38,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",*/
         "mkl_dnn_types.h", "mkl_dnn.h", /*"mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
-              compiler = "fastfpu", includepath = "/opt/intel/mkl/include/", linkpath = "/opt/intel/mkl/lib/intel64/", link = "mkl_rt",
-              preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread"}),
-    @Platform(value = "linux-x86",    linkpath = "/opt/intel/mkl/lib/ia32/"),
-    @Platform(value = "linux-x86_64", linkpath = "/opt/intel/mkl/lib/intel64/"),
-    @Platform(value = "windows", preload = {"libiomp5md", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_intel_lp64", "mkl_intel_thread"},
+              compiler = "fastfpu", includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
+              preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread"}),
+    @Platform(value = "linux-x86",    linkpath = {"/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
+    @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
+    @Platform(value = "windows", preload = {"libiomp5md", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_core", "mkl_intel_lp64", "mkl_intel_thread"},
                                      includepath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include/"),
-    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/ia32/"),
-    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/") })
+    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/ia32/",
+                                     preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/compiler/",
+                                                    "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/mkl/"}),
+    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/",
+                                     preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/compiler/",
+                                                    "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/"}) })
 public class mkl_rt implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
+                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_INT32",
 
                              "mkl_simatcopy", "mkl_dimatcopy", "mkl_cimatcopy", "mkl_zimatcopy", "mkl_somatcopy", "mkl_domatcopy", "mkl_comatcopy", "mkl_zomatcopy",
                              "mkl_somatcopy2", "mkl_domatcopy2", "mkl_comatcopy2", "mkl_zomatcopy2", "mkl_somatadd", "mkl_domatadd", "mkl_comatadd", "mkl_zomatadd",
@@ -79,6 +84,7 @@ public class mkl_rt implements InfoMapper {
                              "__inline", "MKL_DIRECT_CALL_INIT_FLAG").cppTypes().annotations())
 
                .put(new Info("sparse_matrix_t").valueTypes("sparse_matrix").pointerTypes("@ByPtrPtr sparse_matrix"))
+               .put(new Info("sparse_vector_t").valueTypes("sparse_vector").pointerTypes("@ByPtrPtr sparse_vector"))
 
                .put(new Info("MKL_Complex8").define().cast().pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("MKL_Complex16").define().cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"))
@@ -108,6 +114,15 @@ public class mkl_rt implements InfoMapper {
                .put(new Info("DFTI_DESCRIPTOR_DM_HANDLE").valueTypes("_DFTI_DESCRIPTOR_DM").pointerTypes("@ByPtrPtr _DFTI_DESCRIPTOR_DM"))
 
                .put(new Info("cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "mklfreetls", "MKLFREETLS", "MKLFreeTls",
+                             "mkl_sparse_c_create_vector", "mkl_sparse_d_create_vector", "mkl_sparse_s_create_vector", "mkl_sparse_z_create_vector",
+                             "mkl_sparse_c_export_vector", "mkl_sparse_d_export_vector", "mkl_sparse_s_export_vector", "mkl_sparse_z_export_vector",
+                             "mkl_sparse_destroy_vector", "mkl_sparse_c_spmspvd", "mkl_sparse_d_spmspvd", "mkl_sparse_s_spmspvd", "mkl_sparse_z_spmspvd",
+                             "mkl_sparse_set_spmspvd_hint", "replace_operation", "PardisopivotEntry",
+                             "MKL_MIC_Enable", "MKL_MIC_Disable", "MKL_MIC_Get_Device_Count", "MKL_MIC_Get_Cpuinfo", "MKL_MIC_Get_Meminfo",
+                             "MKL_MIC_Set_Workdivision", "MKL_MIC_Get_Workdivision", "MKL_MIC_Set_Max_Memory", "MKL_MIC_Free_Memory",
+                             "MKL_MIC_Set_Offload_Report", "MKL_MIC_Set_Device_Num_Threads", "MKL_MIC_Set_Resource_Limit", "MKL_MIC_Get_Resource_Limit",
+                             "VMDAcospi", "VMDAsinpi", "VMDAtanpi", "VMDCosd", "VMDCospi", "VMDSind", "VMDSinpi", "VMDTand", "VMDTanpi",
+                             "MKL_MIC_Get_Flags", "MKL_MIC_Set_Flags", "MKL_MIC_Get_Status", "MKL_MIC_Clear_Status",
                              "VSLCONVCopyTask", "VSLCONVDeleteTask", "VSLCORRCopyTask", "VSLCORRDeleteTask").skip());
     }
 }

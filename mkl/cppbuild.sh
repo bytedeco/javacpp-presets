@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 case $PLATFORM in
-    linux-*)
+    linux-x86*)
         if [[ ! -d "/opt/intel/mkl/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
@@ -21,7 +21,7 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/" ]]; then
+        if [[ ! -d "/C/Program Files (x86)/IntelSWTools/" ]]; then
             echo "Please install MKL under the default installation directory"
             exit 1
         fi
