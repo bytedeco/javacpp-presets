@@ -480,12 +480,26 @@ compression parameters :
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal Mat img,
               @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal Mat img);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal Mat img,
               @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal UMat img);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal UMat img,
               @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal UMat img);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal UMat img,
+              @StdVector IntBuffer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal UMat img);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal UMat img,
+              @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal GpuMat img,
+              @StdVector IntPointer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal GpuMat img);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal GpuMat img,
+              @StdVector IntBuffer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal GpuMat img);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal GpuMat img,
+              @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal Mat img,
+              @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal Mat img,
               @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal Mat img,
@@ -494,13 +508,13 @@ compression parameters :
               @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal UMat img,
               @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal Mat img,
-              @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal Mat img,
-              @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal UMat img,
+              @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal GpuMat img,
+              @StdVector IntPointer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal GpuMat img,
               @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal GpuMat img,
               @StdVector int[] params/*=std::vector<int>()*/);
 
 /** \brief Reads an image from a buffer in memory.
@@ -516,6 +530,7 @@ See cv::imread for the list of supported formats and flags description.
 */
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags );
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal UMat buf, int flags );
+@Namespace("cv") public static native @ByVal Mat imdecode( @ByVal GpuMat buf, int flags );
 
 /** \overload
 @param buf
@@ -525,6 +540,7 @@ reallocations when the function is called repeatedly for images of the same size
 */
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags, Mat dst);
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal UMat buf, int flags, Mat dst);
+@Namespace("cv") public static native @ByVal Mat imdecode( @ByVal GpuMat buf, int flags, Mat dst);
 
 /** \brief Encodes an image into a memory buffer.
 <p>
@@ -546,15 +562,45 @@ result. See cv::imwrite for the list of supported formats and flags description.
                             @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf,
                             @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
                             @Cast("uchar*") @StdVector BytePointer buf,
                             @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
+                            @Cast("uchar*") @StdVector BytePointer buf);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
+                            @Cast("uchar*") @StdVector ByteBuffer buf,
+                            @StdVector IntBuffer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
+                            @Cast("uchar*") @StdVector ByteBuffer buf);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
+                            @Cast("uchar*") @StdVector byte[] buf,
+                            @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
+                            @Cast("uchar*") @StdVector byte[] buf);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal GpuMat img,
+                            @Cast("uchar*") @StdVector BytePointer buf,
+                            @StdVector IntPointer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal GpuMat img,
+                            @Cast("uchar*") @StdVector BytePointer buf);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal GpuMat img,
+                            @Cast("uchar*") @StdVector ByteBuffer buf,
+                            @StdVector IntBuffer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal GpuMat img,
+                            @Cast("uchar*") @StdVector ByteBuffer buf);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal GpuMat img,
+                            @Cast("uchar*") @StdVector byte[] buf,
+                            @StdVector int[] params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal GpuMat img,
+                            @Cast("uchar*") @StdVector byte[] buf);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector BytePointer buf,
+                            @StdVector IntPointer params/*=std::vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf,
@@ -576,25 +622,25 @@ result. See cv::imwrite for the list of supported formats and flags description.
                             @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal Mat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
                             @Cast("uchar*") @StdVector byte[] buf,
                             @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal Mat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
                             @Cast("uchar*") @StdVector byte[] buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal Mat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal GpuMat img,
                             @Cast("uchar*") @StdVector BytePointer buf,
                             @StdVector IntPointer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal Mat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal GpuMat img,
                             @Cast("uchar*") @StdVector BytePointer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal GpuMat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf,
                             @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal GpuMat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal GpuMat img,
                             @Cast("uchar*") @StdVector byte[] buf,
                             @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal UMat img,
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal GpuMat img,
                             @Cast("uchar*") @StdVector byte[] buf);
 
 /** \} imgcodecs */

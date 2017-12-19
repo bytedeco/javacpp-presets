@@ -1639,6 +1639,8 @@ Here is how the class can be used:
     public native @Cast("bool") boolean retrieve(@ByVal Mat image);
     public native @Cast("bool") boolean retrieve(@ByVal UMat image, int flag/*=0*/);
     public native @Cast("bool") boolean retrieve(@ByVal UMat image);
+    public native @Cast("bool") boolean retrieve(@ByVal GpuMat image, int flag/*=0*/);
+    public native @Cast("bool") boolean retrieve(@ByVal GpuMat image);
 
     /** \brief Stream operator to read the next video frame.
     \sa read()
@@ -1666,6 +1668,7 @@ Here is how the class can be used:
      */
     public native @Cast("bool") boolean read(@ByVal Mat image);
     public native @Cast("bool") boolean read(@ByVal UMat image);
+    public native @Cast("bool") boolean read(@ByVal GpuMat image);
 
     /** \brief Sets a property in the VideoCapture.
     <p>

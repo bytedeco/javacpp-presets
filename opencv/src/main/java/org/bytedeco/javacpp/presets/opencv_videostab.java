@@ -39,11 +39,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/motion_core.hpp>", "<opencv2/videostab/outlier_rejection.hpp>",
         "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>", "<opencv2/videostab/inpainting.hpp>",
         "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/wobble_suppression.hpp>", "<opencv2/videostab/stabilizer.hpp>",
-        "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.3.3", preload = "opencv_cuda@.3.3"),
-    @Platform(value = "windows", link = "opencv_videostab331", preload = "opencv_cuda331")},
+        "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.3.3",
+              preload = {"opencv_cuda@.3.3", "opencv_cudaarithm@.3.3", "opencv_cudafilters@.3.3",
+                         "opencv_cudaimgproc@.3.3", "opencv_cudafeatures2d@.3.3", "opencv_cudalegacy@.3.3",
+                         "opencv_cudaoptflow@.3.3", "opencv_cudawarping@.3.3"}),
+    @Platform(value = "windows", link = "opencv_videostab331",
+              preload = {"opencv_cuda331", "opencv_cudaarithm331", "opencv_cudafilters331",
+                         "opencv_cudaimgproc331", "opencv_cudafeatures2d331", "opencv_cudalegacy331",
+                         "opencv_cudaoptflow331", "opencv_cudawarping331"})},
         target = "org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("cv::videostab::IFrameSource").virtualize());
     }
 }
+

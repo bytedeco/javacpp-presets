@@ -95,6 +95,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
      */
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R);
 
     /** \brief Builds the projection maps according to the given camera data.
     <p>
@@ -107,6 +108,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
      */
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
 
     /** \brief Projects the image.
     <p>
@@ -122,6 +124,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
                            @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
                            @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                           @ByVal GpuMat dst);
 
     /** \brief Projects the image backward.
     <p>
@@ -137,6 +141,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
                                   @ByVal Size dst_size, @ByVal Mat dst);
     public native void warpBackward(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
                                   @ByVal Size dst_size, @ByVal UMat dst);
+    public native void warpBackward(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                                  @ByVal Size dst_size, @ByVal GpuMat dst);
 
     /**
     @param src_size Source image bounding box
@@ -146,6 +152,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
      */
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R);
 
     public native float getScale();
     public native void setScale(float arg0);
@@ -174,6 +181,9 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native void setCameraParams(@ByVal(nullValue = "cv::InputArray(cv::Mat::eye(3, 3, CV_32F))") UMat K,
                              @ByVal(nullValue = "cv::InputArray(cv::Mat::eye(3, 3, CV_32F))") UMat R,
                              @ByVal(nullValue = "cv::InputArray(cv::Mat::zeros(3, 1, CV_32F))") UMat T);
+    public native void setCameraParams(@ByVal(nullValue = "cv::InputArray(cv::Mat::eye(3, 3, CV_32F))") GpuMat K,
+                             @ByVal(nullValue = "cv::InputArray(cv::Mat::eye(3, 3, CV_32F))") GpuMat R,
+                             @ByVal(nullValue = "cv::InputArray(cv::Mat::zeros(3, 1, CV_32F))") GpuMat T);
 
     public native float scale(); public native ProjectorBase scale(float scale);
     public native float k(int i); public native ProjectorBase k(int i, float k);
@@ -238,27 +248,37 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T);
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R,
                    int interp_mode, int border_mode, @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R,
                    int interp_mode, int border_mode, @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R,
+                   int interp_mode, int border_mode, @ByVal GpuMat dst);
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
                    @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, int interp_mode, int border_mode,
                    @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T, int interp_mode, int border_mode,
+                   @ByVal GpuMat dst);
 
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T);
 }
 
 
@@ -289,14 +309,19 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R,
                    int interp_mode, int border_mode, @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R,
                    int interp_mode, int border_mode, @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R,
+                   int interp_mode, int border_mode, @ByVal GpuMat dst);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
+    public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R);
 }
 
 
@@ -344,8 +369,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode, @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode, @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode, @ByVal GpuMat dst);
 }
 
 
@@ -388,8 +415,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode, @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode, @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode, @ByVal GpuMat dst);
 }
 
 
@@ -678,7 +707,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 }
 
 
-@Name("cv::detail::PlaneWarperGpu") public static class DetailPlaneWarperGpu extends RotationWarper {
+@Name("cv::detail::PlaneWarperGpu") @NoOffset public static class DetailPlaneWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPlaneWarperGpu(Pointer p) { super(p); }
@@ -696,23 +725,45 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
                    @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
                    @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                   @ByVal GpuMat dst);
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
                    @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, int interp_mode, int border_mode,
                    @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T, int interp_mode, int border_mode,
+                   @ByVal GpuMat dst);
+
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
+
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
 }
 
 
-@Name("cv::detail::SphericalWarperGpu") public static class DetailSphericalWarperGpu extends RotationWarper {
+@Name("cv::detail::SphericalWarperGpu") @NoOffset public static class DetailSphericalWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailSphericalWarperGpu(Pointer p) { super(p); }
@@ -722,15 +773,26 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
                    @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
                    @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                   @ByVal GpuMat dst);
+
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
 }
 
 
-@Name("cv::detail::CylindricalWarperGpu") public static class DetailCylindricalWarperGpu extends RotationWarper {
+@Name("cv::detail::CylindricalWarperGpu") @NoOffset public static class DetailCylindricalWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailCylindricalWarperGpu(Pointer p) { super(p); }
@@ -740,11 +802,22 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
                    @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
                    @ByVal UMat dst);
+    public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                   @ByVal GpuMat dst);
+
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
+
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
+    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
+                   @ByRef GpuMat dst);
 }
 
 
@@ -944,6 +1017,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     /** \overload */
     public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features);
     public native @Name("operator ()") void apply(@ByVal UMat image, @ByRef ImageFeatures features);
+    public native @Name("operator ()") void apply(@ByVal GpuMat image, @ByRef ImageFeatures features);
     /** \brief Finds features in the given image.
     <p>
     @param image Source image
@@ -954,6 +1028,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     */
     public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
     public native @Name("operator ()") void apply(@ByVal UMat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
+    public native @Name("operator ()") void apply(@ByVal GpuMat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
     /** \brief Finds features in the given images in parallel.
     <p>
     @param images Source images
@@ -966,9 +1041,12 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
                          @Const @ByRef RectVectorVector rois);
     public native @Name("operator ()") void apply(@ByVal UMatVector images, @StdVector ImageFeatures features,
                          @Const @ByRef RectVectorVector rois);
+    public native @Name("operator ()") void apply(@ByVal GpuMatVector images, @StdVector ImageFeatures features,
+                         @Const @ByRef RectVectorVector rois);
     /** \overload */
     public native @Name("operator ()") void apply(@ByVal MatVector images, @StdVector ImageFeatures features);
     public native @Name("operator ()") void apply(@ByVal UMatVector images, @StdVector ImageFeatures features);
+    public native @Name("operator ()") void apply(@ByVal GpuMatVector images, @StdVector ImageFeatures features);
     /** \brief Frees unused memory allocated before if there is any. */
     public native void collectGarbage();
 }
@@ -1851,6 +1929,7 @@ public static final int
      */
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
+    public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
 }
 
 /** \brief Stub exposure compensator which does nothing.
@@ -1873,6 +1952,7 @@ public static final int
                   @Const @ByRef UMatBytePairVector arg2);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal Mat arg2, @ByVal Mat arg3);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal UMat arg2, @ByVal UMat arg3);
+    public native void apply(int arg0, @ByVal Point arg1, @ByVal GpuMat arg2, @ByVal GpuMat arg3);
 }
 
 /** \brief Exposure compensator which tries to remove exposure related artifacts by adjusting image
@@ -1896,6 +1976,7 @@ intensities, see \cite BL07 and \cite WJ10 for details.
                   @Const @ByRef UMatBytePairVector masks);
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
+    public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
     public native @StdVector DoublePointer gains();
 }
 
@@ -1921,6 +2002,7 @@ intensities, see \cite UES01 for details.
                   @Const @ByRef UMatBytePairVector masks);
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
+    public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
 }
 
 /** \} */
@@ -2235,6 +2317,7 @@ Simple blender which puts one image over another
      */
     public native void feed(@ByVal Mat img, @ByVal Mat mask, @ByVal Point tl);
     public native void feed(@ByVal UMat img, @ByVal UMat mask, @ByVal Point tl);
+    public native void feed(@ByVal GpuMat img, @ByVal GpuMat mask, @ByVal Point tl);
     /** \brief Blends and returns the final pano.
     <p>
     @param dst Final pano
@@ -2242,6 +2325,7 @@ Simple blender which puts one image over another
      */
     public native void blend(@ByVal Mat dst, @ByVal Mat dst_mask);
     public native void blend(@ByVal UMat dst, @ByVal UMat dst_mask);
+    public native void blend(@ByVal GpuMat dst, @ByVal GpuMat dst_mask);
 }
 
 /** \brief Simple blender which mixes images at its borders.
@@ -2268,8 +2352,10 @@ Simple blender which puts one image over another
     public native void prepare(@ByVal Rect dst_roi);
     public native void feed(@ByVal Mat img, @ByVal Mat mask, @ByVal Point tl);
     public native void feed(@ByVal UMat img, @ByVal UMat mask, @ByVal Point tl);
+    public native void feed(@ByVal GpuMat img, @ByVal GpuMat mask, @ByVal Point tl);
     public native void blend(@ByVal Mat dst, @ByVal Mat dst_mask);
     public native void blend(@ByVal UMat dst, @ByVal UMat dst_mask);
+    public native void blend(@ByVal GpuMat dst, @ByVal GpuMat dst_mask);
 
     /** Creates weight maps for fixed set of source images by their masks and top-left corners.
      *  Final image can be obtained by simple weighting of the source images. */
@@ -2303,8 +2389,10 @@ Simple blender which puts one image over another
     public native void prepare(@ByVal Rect dst_roi);
     public native void feed(@ByVal Mat img, @ByVal Mat mask, @ByVal Point tl);
     public native void feed(@ByVal UMat img, @ByVal UMat mask, @ByVal Point tl);
+    public native void feed(@ByVal GpuMat img, @ByVal GpuMat mask, @ByVal Point tl);
     public native void blend(@ByVal Mat dst, @ByVal Mat dst_mask);
     public native void blend(@ByVal UMat dst, @ByVal UMat dst_mask);
+    public native void blend(@ByVal GpuMat dst, @ByVal GpuMat dst_mask);
 }
 
 
@@ -2313,14 +2401,18 @@ Simple blender which puts one image over another
 
 @Namespace("cv::detail") public static native void normalizeUsingWeightMap(@ByVal Mat weight, @ByVal Mat src);
 @Namespace("cv::detail") public static native void normalizeUsingWeightMap(@ByVal UMat weight, @ByVal UMat src);
+@Namespace("cv::detail") public static native void normalizeUsingWeightMap(@ByVal GpuMat weight, @ByVal GpuMat src);
 
 @Namespace("cv::detail") public static native void createWeightMap(@ByVal Mat mask, float sharpness, @ByVal Mat weight);
 @Namespace("cv::detail") public static native void createWeightMap(@ByVal UMat mask, float sharpness, @ByVal UMat weight);
+@Namespace("cv::detail") public static native void createWeightMap(@ByVal GpuMat mask, float sharpness, @ByVal GpuMat weight);
 
 @Namespace("cv::detail") public static native void createLaplacePyr(@ByVal Mat img, int num_levels, @ByRef UMatVector pyr);
 @Namespace("cv::detail") public static native void createLaplacePyr(@ByVal UMat img, int num_levels, @ByRef UMatVector pyr);
+@Namespace("cv::detail") public static native void createLaplacePyr(@ByVal GpuMat img, int num_levels, @ByRef UMatVector pyr);
 @Namespace("cv::detail") public static native void createLaplacePyrGpu(@ByVal Mat img, int num_levels, @ByRef UMatVector pyr);
 @Namespace("cv::detail") public static native void createLaplacePyrGpu(@ByVal UMat img, int num_levels, @ByRef UMatVector pyr);
+@Namespace("cv::detail") public static native void createLaplacePyrGpu(@ByVal GpuMat img, int num_levels, @ByRef UMatVector pyr);
 
 // Restores source image
 @Namespace("cv::detail") public static native void restoreImageFromLaplacePyr(@ByRef UMatVector pyr);
@@ -2510,6 +2602,7 @@ by Heung-Yeung Shum and Richard Szeliski.
     public native void initialize(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);
     public native void process(@ByVal Mat img, @ByVal Mat mask, @ByVal Point tl);
     public native void process(@ByVal UMat img, @ByVal UMat mask, @ByVal Point tl);
+    public native void process(@ByVal GpuMat img, @ByVal GpuMat mask, @ByVal Point tl);
     public native @Const @ByRef UMat getDst();
 }
 
@@ -3046,6 +3139,7 @@ familiar with the theory is recommended.
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images);
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal UMatVector images);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images);
     /** \brief These functions try to match the given images and to estimate rotations of each camera.
     <p>
     \note Use the functions only if you're aware of the stitching pipeline, otherwise use
@@ -3057,10 +3151,12 @@ familiar with the theory is recommended.
      */
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images, @Const @ByRef RectVectorVector rois);
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois);
 
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal GpuMat pano);
     /** \brief These functions try to compose the given images (or images stored internally from the other function
     calls) into the final pano under the assumption that the image transformations were estimated
     before.
@@ -3074,14 +3170,24 @@ familiar with the theory is recommended.
      */
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal MatVector images, @ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal UMatVector images, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal GpuMatVector images, @ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal MatVector images, @ByVal UMat pano);
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal UMatVector images, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal GpuMatVector images, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal MatVector images, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal UMatVector images, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal GpuMatVector images, @ByVal GpuMat pano);
 
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal UMat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal GpuMat pano);
     /** \brief These functions try to stitch the given images.
     <p>
     @param images Input images.
@@ -3091,8 +3197,13 @@ familiar with the theory is recommended.
      */
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal UMat pano);
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois, @ByVal GpuMat pano);
 
     public native @StdVector IntPointer component();
     public native @StdVector CameraParams cameras();

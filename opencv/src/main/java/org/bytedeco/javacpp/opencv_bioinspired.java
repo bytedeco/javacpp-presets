@@ -508,6 +508,7 @@ more informations in the above cited Jeanny Heraults's book.
      */
     public native void run(@ByVal Mat inputImage);
     public native void run(@ByVal UMat inputImage);
+    public native void run(@ByVal GpuMat inputImage);
 
     /** \brief Method which processes an image in the aim to correct its luminance correct
     backlight problems, enhance details in shadows.
@@ -527,6 +528,7 @@ more informations in the above cited Jeanny Heraults's book.
      */
     public native void applyFastToneMapping(@ByVal Mat inputImage, @ByVal Mat outputToneMappedImage);
     public native void applyFastToneMapping(@ByVal UMat inputImage, @ByVal UMat outputToneMappedImage);
+    public native void applyFastToneMapping(@ByVal GpuMat inputImage, @ByVal GpuMat outputToneMappedImage);
 
     /** \brief Accessor of the details channel of the retina (models foveal vision).
     <p>
@@ -542,12 +544,14 @@ more informations in the above cited Jeanny Heraults's book.
      */
     public native void getParvo(@ByVal Mat retinaOutput_parvo);
     public native void getParvo(@ByVal UMat retinaOutput_parvo);
+    public native void getParvo(@ByVal GpuMat retinaOutput_parvo);
 
     /** \brief Accessor of the details channel of the retina (models foveal vision).
     @see getParvo
      */
     public native void getParvoRAW(@ByVal Mat retinaOutput_parvo);
     public native void getParvoRAW(@ByVal UMat retinaOutput_parvo);
+    public native void getParvoRAW(@ByVal GpuMat retinaOutput_parvo);
 
     /** \brief Accessor of the motion channel of the retina (models peripheral vision).
     <p>
@@ -561,12 +565,14 @@ more informations in the above cited Jeanny Heraults's book.
      */
     public native void getMagno(@ByVal Mat retinaOutput_magno);
     public native void getMagno(@ByVal UMat retinaOutput_magno);
+    public native void getMagno(@ByVal GpuMat retinaOutput_magno);
 
     /** \brief Accessor of the motion channel of the retina (models peripheral vision).
     @see getMagno
      */
     public native void getMagnoRAW(@ByVal Mat retinaOutput_magno);
     public native void getMagnoRAW(@ByVal UMat retinaOutput_magno);
+    public native void getMagnoRAW(@ByVal GpuMat retinaOutput_magno);
 
     /** \overload */
     public native @Const @ByVal Mat getMagnoRAW();
@@ -757,6 +763,7 @@ Vision: Images, Signals and Neural Networks: Models of Neural Processing in Visu
     */
     public native void applyFastToneMapping(@ByVal Mat inputImage, @ByVal Mat outputToneMappedImage);
     public native void applyFastToneMapping(@ByVal UMat inputImage, @ByVal UMat outputToneMappedImage);
+    public native void applyFastToneMapping(@ByVal GpuMat inputImage, @ByVal GpuMat outputToneMappedImage);
 
     /** \brief updates tone mapping behaviors by adjusing the local luminance computation area
     <p>
@@ -968,12 +975,15 @@ to the neighborhood otion energy, then the area is considered as moving and is s
     public native void run(@ByVal Mat inputToSegment);
     public native void run(@ByVal UMat inputToSegment, int channelIndex/*=0*/);
     public native void run(@ByVal UMat inputToSegment);
+    public native void run(@ByVal GpuMat inputToSegment, int channelIndex/*=0*/);
+    public native void run(@ByVal GpuMat inputToSegment);
 
     /** \brief access function
     @return the last segmentation result: a boolean picture which is resampled between 0 and 255 for a display purpose
    */
     public native void getSegmentationPicture(@ByVal Mat transientAreas);
     public native void getSegmentationPicture(@ByVal UMat transientAreas);
+    public native void getSegmentationPicture(@ByVal GpuMat transientAreas);
 
     /** \brief cleans all the buffers of the instance
     */

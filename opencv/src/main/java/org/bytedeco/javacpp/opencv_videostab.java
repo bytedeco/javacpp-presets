@@ -410,6 +410,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native void run(
                 @ByVal UMat frame0, @ByVal UMat frame1, @ByVal UMat points0, @ByVal UMat points1,
                 @ByVal UMat status, @ByVal UMat errors);
+    public native void run(
+                @ByVal GpuMat frame0, @ByVal GpuMat frame1, @ByVal GpuMat points0, @ByVal GpuMat points1,
+                @ByVal GpuMat status, @ByVal GpuMat errors);
 }
 
 @Namespace("cv::videostab") public static class IDenseOptFlowEstimator extends Pointer {
@@ -423,6 +426,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native void run(
                 @ByVal UMat frame0, @ByVal UMat frame1, @ByVal UMat flowX, @ByVal UMat flowY,
                 @ByVal UMat errors);
+    public native void run(
+                @ByVal GpuMat frame0, @ByVal GpuMat frame1, @ByVal GpuMat flowX, @ByVal GpuMat flowY,
+                @ByVal GpuMat errors);
 }
 
 @Namespace("cv::videostab") @NoOffset public static class PyrLkOptFlowEstimatorBase extends Pointer {
@@ -468,6 +474,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native void run(
                 @ByVal UMat frame0, @ByVal UMat frame1, @ByVal UMat points0, @ByVal UMat points1,
                 @ByVal UMat status, @ByVal UMat errors);
+    public native void run(
+                @ByVal GpuMat frame0, @ByVal GpuMat frame1, @ByVal GpuMat points0, @ByVal GpuMat points1,
+                @ByVal GpuMat status, @ByVal GpuMat errors);
 }
 
 // #ifdef HAVE_OPENCV_CUDAOPTFLOW
@@ -667,6 +676,8 @@ public static final int
                 @ByVal Size frameSize, @ByVal Mat points0, @ByVal Mat points1, @ByVal Mat mask);
     public native void process(
                 @ByVal Size frameSize, @ByVal UMat points0, @ByVal UMat points1, @ByVal UMat mask);
+    public native void process(
+                @ByVal Size frameSize, @ByVal GpuMat points0, @ByVal GpuMat points1, @ByVal GpuMat mask);
 }
 
 @Namespace("cv::videostab") public static class NullOutlierRejector extends IOutlierRejector {
@@ -687,6 +698,8 @@ public static final int
                 @ByVal Size frameSize, @ByVal Mat points0, @ByVal Mat points1, @ByVal Mat mask);
     public native void process(
                 @ByVal Size frameSize, @ByVal UMat points0, @ByVal UMat points1, @ByVal UMat mask);
+    public native void process(
+                @ByVal Size frameSize, @ByVal GpuMat points0, @ByVal GpuMat points1, @ByVal GpuMat mask);
 }
 
 @Namespace("cv::videostab") @NoOffset public static class TranslationBasedLocalOutlierRejector extends IOutlierRejector {
@@ -713,6 +726,8 @@ public static final int
                 @ByVal Size frameSize, @ByVal Mat points0, @ByVal Mat points1, @ByVal Mat mask);
     public native void process(
                 @ByVal Size frameSize, @ByVal UMat points0, @ByVal UMat points1, @ByVal UMat mask);
+    public native void process(
+                @ByVal Size frameSize, @ByVal GpuMat points0, @ByVal GpuMat points1, @ByVal GpuMat mask);
 }
 
 /** \} */
@@ -805,13 +820,30 @@ public static final int
         @ByVal Mat points0, @ByVal Mat points1, int model/*=cv::videostab::MM_AFFINE*/,
         FloatBuffer rmse/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
-        @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @ByVal Mat points0, @ByVal Mat points1, int model/*=cv::videostab::MM_AFFINE*/,
         float[] rmse/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        FloatPointer rmse/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @ByVal UMat points0, @ByVal UMat points1);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        FloatBuffer rmse/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        float[] rmse/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @ByVal GpuMat points0, @ByVal GpuMat points1, int model/*=cv::videostab::MM_AFFINE*/,
         FloatPointer rmse/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @ByVal GpuMat points0, @ByVal GpuMat points1);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @ByVal GpuMat points0, @ByVal GpuMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        FloatBuffer rmse/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @ByVal GpuMat points0, @ByVal GpuMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        float[] rmse/*=0*/);
 
 /** \brief Estimates best global motion between two 2D point clouds robustly (using RANSAC method).
 <p>
@@ -833,15 +865,37 @@ public static final int
         @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
         FloatBuffer rmse/*=0*/, IntBuffer ninliers/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
-        @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @ByVal Mat points0, @ByVal Mat points1, int model/*=cv::videostab::MM_AFFINE*/,
         @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
         float[] rmse/*=0*/, int[] ninliers/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
+        @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
+        FloatPointer rmse/*=0*/, IntPointer ninliers/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
         @ByVal UMat points0, @ByVal UMat points1);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
         @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
         @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
+        FloatBuffer rmse/*=0*/, IntBuffer ninliers/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
+        @ByVal UMat points0, @ByVal UMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
+        float[] rmse/*=0*/, int[] ninliers/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
+        @ByVal GpuMat points0, @ByVal GpuMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
         FloatPointer rmse/*=0*/, IntPointer ninliers/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
+        @ByVal GpuMat points0, @ByVal GpuMat points1);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
+        @ByVal GpuMat points0, @ByVal GpuMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
+        FloatBuffer rmse/*=0*/, IntBuffer ninliers/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRansac(
+        @ByVal GpuMat points0, @ByVal GpuMat points1, int model/*=cv::videostab::MM_AFFINE*/,
+        @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params,
+        float[] rmse/*=0*/, int[] ninliers/*=0*/);
 
 /** \brief Base class for all global motion estimation methods.
  */
@@ -872,9 +926,12 @@ public static final int
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") BoolPointer ok/*=0*/);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") boolean[] ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1);
     public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") boolean[] ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1);
+    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1, @Cast("bool*") boolean[] ok/*=0*/);
 }
 
 /** \brief Describes a robust RANSAC-based global 2D motion estimation method which minimizes L2 error.
@@ -904,9 +961,12 @@ public static final int
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") BoolPointer ok/*=0*/);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") boolean[] ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1);
     public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") boolean[] ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1);
+    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1, @Cast("bool*") boolean[] ok/*=0*/);
 }
 
 /** \brief Describes a global 2D motion estimation method which minimizes L1 error.
@@ -932,9 +992,12 @@ public static final int
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") BoolPointer ok/*=0*/);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") boolean[] ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1);
     public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") boolean[] ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1);
+    public native @ByVal Mat estimate(@ByVal UMat points0, @ByVal UMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1);
+    public native @ByVal Mat estimate(@ByVal GpuMat points0, @ByVal GpuMat points1, @Cast("bool*") boolean[] ok/*=0*/);
 }
 
 /** \brief Base class for global 2D motion estimation methods which take frames as input.
@@ -1012,9 +1075,12 @@ matching.
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1);
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1, @Cast("bool*") boolean[] ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
-    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1);
     public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1, @Cast("bool*") boolean[] ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1);
+    public native @ByVal Mat estimate(@ByVal UMat frame0, @ByVal UMat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat frame0, @ByVal GpuMat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
+    public native @ByVal Mat estimate(@ByVal GpuMat frame0, @ByVal GpuMat frame1);
+    public native @ByVal Mat estimate(@ByVal GpuMat frame0, @ByVal GpuMat frame1, @Cast("bool*") boolean[] ok/*=0*/);
 }
 
 // #if defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDAOPTFLOW)

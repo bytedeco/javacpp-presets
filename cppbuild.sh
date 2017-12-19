@@ -46,9 +46,15 @@ echo "Detected platform \"$PLATFORM\""
 
 while [[ $# > 0 ]]; do
     case "$1" in
+        -platform=*)
+            PLATFORM="${1#-platform=}"
+            ;;
         -platform)
             shift
             PLATFORM="$1"
+            ;;
+        -extension=*)
+            EXTENSION="${1#-extension=}"
             ;;
         -extension)
             shift

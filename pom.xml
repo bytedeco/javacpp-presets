@@ -257,10 +257,8 @@
                 <argument>${project.basedir}/../cppbuild.sh</argument>
                 <argument>install</argument>
                 <argument>${javacpp.moduleId}</argument>
-                <argument>-platform</argument>
-                <argument>${javacpp.platform}</argument>
-                <argument>-extension</argument>
-                <argument>${javacpp.platform.extension}</argument>
+                <argument>-platform=${javacpp.platform}</argument>
+                <argument>-extension=${javacpp.platform.extension}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
               <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>

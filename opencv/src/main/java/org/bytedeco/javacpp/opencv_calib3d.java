@@ -927,6 +927,8 @@ optimization procedures like calibrateCamera, stereoCalibrate, or solvePnP .
 @Namespace("cv") public static native void Rodrigues( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native void Rodrigues( @ByVal UMat src, @ByVal UMat dst, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat jacobian );
 @Namespace("cv") public static native void Rodrigues( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void Rodrigues( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian );
+@Namespace("cv") public static native void Rodrigues( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Finds a perspective transformation between two planes.
 <p>
@@ -1003,6 +1005,11 @@ perspectiveTransform
                                  @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat mask, int maxIters/*=2000*/,
                                  double confidence/*=0.995*/);
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal UMat srcPoints, @ByVal UMat dstPoints);
+@Namespace("cv") public static native @ByVal Mat findHomography( @ByVal GpuMat srcPoints, @ByVal GpuMat dstPoints,
+                                 int method/*=0*/, double ransacReprojThreshold/*=3*/,
+                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat mask, int maxIters/*=2000*/,
+                                 double confidence/*=0.995*/);
+@Namespace("cv") public static native @ByVal Mat findHomography( @ByVal GpuMat srcPoints, @ByVal GpuMat dstPoints);
 
 /** \overload */
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal Mat srcPoints, @ByVal Mat dstPoints,
@@ -1013,6 +1020,10 @@ perspectiveTransform
                                @ByVal UMat mask, int method/*=0*/, double ransacReprojThreshold/*=3*/ );
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal UMat srcPoints, @ByVal UMat dstPoints,
                                @ByVal UMat mask );
+@Namespace("cv") public static native @ByVal Mat findHomography( @ByVal GpuMat srcPoints, @ByVal GpuMat dstPoints,
+                               @ByVal GpuMat mask, int method/*=0*/, double ransacReprojThreshold/*=3*/ );
+@Namespace("cv") public static native @ByVal Mat findHomography( @ByVal GpuMat srcPoints, @ByVal GpuMat dstPoints,
+                               @ByVal GpuMat mask );
 
 /** \brief Computes an RQ decomposition of 3x3 matrices.
 <p>
@@ -1043,6 +1054,11 @@ are only one of the possible solutions.
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat Qy,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat Qz);
 @Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal UMat src, @ByVal UMat mtxR, @ByVal UMat mtxQ);
+@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal GpuMat src, @ByVal GpuMat mtxR, @ByVal GpuMat mtxQ,
+                                @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat Qx,
+                                @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat Qy,
+                                @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat Qz);
+@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal GpuMat src, @ByVal GpuMat mtxR, @ByVal GpuMat mtxQ);
 
 /** \brief Decomposes a projection matrix into a rotation matrix and a camera matrix.
 <p>
@@ -1082,6 +1098,14 @@ The function is based on RQDecomp3x3 .
                                              @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat eulerAngles );
 @Namespace("cv") public static native void decomposeProjectionMatrix( @ByVal UMat projMatrix, @ByVal UMat cameraMatrix,
                                              @ByVal UMat rotMatrix, @ByVal UMat transVect );
+@Namespace("cv") public static native void decomposeProjectionMatrix( @ByVal GpuMat projMatrix, @ByVal GpuMat cameraMatrix,
+                                             @ByVal GpuMat rotMatrix, @ByVal GpuMat transVect,
+                                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat rotMatrixX,
+                                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat rotMatrixY,
+                                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat rotMatrixZ,
+                                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat eulerAngles );
+@Namespace("cv") public static native void decomposeProjectionMatrix( @ByVal GpuMat projMatrix, @ByVal GpuMat cameraMatrix,
+                                             @ByVal GpuMat rotMatrix, @ByVal GpuMat transVect );
 
 /** \brief Computes partial derivatives of the matrix product for each multiplied matrix.
 <p>
@@ -1098,6 +1122,7 @@ matrices in stereoCalibrate but can also be used in any other similar optimizati
  */
 @Namespace("cv") public static native void matMulDeriv( @ByVal Mat A, @ByVal Mat B, @ByVal Mat dABdA, @ByVal Mat dABdB );
 @Namespace("cv") public static native void matMulDeriv( @ByVal UMat A, @ByVal UMat B, @ByVal UMat dABdA, @ByVal UMat dABdB );
+@Namespace("cv") public static native void matMulDeriv( @ByVal GpuMat A, @ByVal GpuMat B, @ByVal GpuMat dABdA, @ByVal GpuMat dABdB );
 
 /** \brief Combines two rotation-and-shift transformations.
 <p>
@@ -1149,6 +1174,16 @@ function that contains a matrix multiplication.
 @Namespace("cv") public static native void composeRT( @ByVal UMat rvec1, @ByVal UMat tvec1,
                              @ByVal UMat rvec2, @ByVal UMat tvec2,
                              @ByVal UMat rvec3, @ByVal UMat tvec3 );
+@Namespace("cv") public static native void composeRT( @ByVal GpuMat rvec1, @ByVal GpuMat tvec1,
+                             @ByVal GpuMat rvec2, @ByVal GpuMat tvec2,
+                             @ByVal GpuMat rvec3, @ByVal GpuMat tvec3,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dr3dr1, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dr3dt1,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dr3dr2, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dr3dt2,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dt3dr1, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dt3dt1,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dt3dr2, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dt3dt2 );
+@Namespace("cv") public static native void composeRT( @ByVal GpuMat rvec1, @ByVal GpuMat tvec1,
+                             @ByVal GpuMat rvec2, @ByVal GpuMat tvec2,
+                             @ByVal GpuMat rvec3, @ByVal GpuMat tvec3 );
 
 /** \brief Projects 3D points to an image plane.
 <p>
@@ -1202,6 +1237,16 @@ perspective transformation (and also compute the derivatives) in the ideal zero-
                                  @ByVal UMat rvec, @ByVal UMat tvec,
                                  @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                  @ByVal UMat imagePoints );
+@Namespace("cv") public static native void projectPoints( @ByVal GpuMat objectPoints,
+                                 @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+                                 @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                 @ByVal GpuMat imagePoints,
+                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian,
+                                 double aspectRatio/*=0*/ );
+@Namespace("cv") public static native void projectPoints( @ByVal GpuMat objectPoints,
+                                 @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+                                 @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                 @ByVal GpuMat imagePoints );
 
 /** \brief Finds an object pose from 3D-2D point correspondences.
 <p>
@@ -1281,6 +1326,13 @@ projections, as well as the camera matrix and the distortion coefficients.
 @Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal UMat objectPoints, @ByVal UMat imagePoints,
                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                             @ByVal UMat rvec, @ByVal UMat tvec );
+@Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                            @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                            @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+                            @Cast("bool") boolean useExtrinsicGuess/*=false*/, int flags/*=cv::SOLVEPNP_ITERATIVE*/ );
+@Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                            @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                            @ByVal GpuMat rvec, @ByVal GpuMat tvec );
 
 /** \brief Finds an object pose from 3D-2D point correspondences using the RANSAC scheme.
 <p>
@@ -1342,6 +1394,15 @@ makes the function resistant to outliers.
 @Namespace("cv") public static native @Cast("bool") boolean solvePnPRansac( @ByVal UMat objectPoints, @ByVal UMat imagePoints,
                                   @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                   @ByVal UMat rvec, @ByVal UMat tvec );
+@Namespace("cv") public static native @Cast("bool") boolean solvePnPRansac( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                                  @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                  @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+                                  @Cast("bool") boolean useExtrinsicGuess/*=false*/, int iterationsCount/*=100*/,
+                                  float reprojectionError/*=8.0*/, double confidence/*=0.99*/,
+                                  @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat inliers, int flags/*=cv::SOLVEPNP_ITERATIVE*/ );
+@Namespace("cv") public static native @Cast("bool") boolean solvePnPRansac( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                                  @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                  @ByVal GpuMat rvec, @ByVal GpuMat tvec );
 /** \brief Finds an object pose from 3 3D-2D point correspondences.
 <p>
 @param objectPoints Array of object points in the object coordinate space, 3x3 1-channel or
@@ -1373,6 +1434,10 @@ projections, as well as the camera matrix and the distortion coefficients.
                            @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                            @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                            int flags );
+@Namespace("cv") public static native int solveP3P( @ByVal Mat objectPoints, @ByVal Mat imagePoints,
+                           @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                           @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                           int flags );
 @Namespace("cv") public static native int solveP3P( @ByVal UMat objectPoints, @ByVal UMat imagePoints,
                            @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                            @ByVal MatVector rvecs, @ByVal MatVector tvecs,
@@ -1380,6 +1445,22 @@ projections, as well as the camera matrix and the distortion coefficients.
 @Namespace("cv") public static native int solveP3P( @ByVal UMat objectPoints, @ByVal UMat imagePoints,
                            @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                            @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                           int flags );
+@Namespace("cv") public static native int solveP3P( @ByVal UMat objectPoints, @ByVal UMat imagePoints,
+                           @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                           @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                           int flags );
+@Namespace("cv") public static native int solveP3P( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                           @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                           int flags );
+@Namespace("cv") public static native int solveP3P( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                           @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                           int flags );
+@Namespace("cv") public static native int solveP3P( @ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints,
+                           @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                            int flags );
 
 /** \brief Finds an initial camera matrix from 3D-2D point correspondences.
@@ -1408,6 +1489,12 @@ object point has z-coordinate =0.
                                      @ByVal Size imageSize, double aspectRatio/*=1.0*/ );
 @Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal UMatVector objectPoints,
                                      @ByVal UMatVector imagePoints,
+                                     @ByVal Size imageSize );
+@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints,
+                                     @ByVal Size imageSize, double aspectRatio/*=1.0*/ );
+@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints,
                                      @ByVal Size imageSize );
 
 /** \brief Finds the positions of internal corners of the chessboard.
@@ -1465,10 +1552,14 @@ square grouping and ordering algorithm fails.
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal UMat image, @ByVal Size patternSize, @ByVal UMat corners,
                                          int flags/*=cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE*/ );
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal UMat image, @ByVal Size patternSize, @ByVal UMat corners );
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize, @ByVal GpuMat corners,
+                                         int flags/*=cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE*/ );
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize, @ByVal GpuMat corners );
 
 /** finds subpixel-accurate positions of the chessboard corners */
 @Namespace("cv") public static native @Cast("bool") boolean find4QuadCornerSubpix( @ByVal Mat img, @ByVal Mat corners, @ByVal Size region_size );
 @Namespace("cv") public static native @Cast("bool") boolean find4QuadCornerSubpix( @ByVal UMat img, @ByVal UMat corners, @ByVal Size region_size );
+@Namespace("cv") public static native @Cast("bool") boolean find4QuadCornerSubpix( @ByVal GpuMat img, @ByVal GpuMat corners, @ByVal Size region_size );
 
 /** \brief Renders the detected chessboard corners.
 <p>
@@ -1486,6 +1577,8 @@ found, or as colored corners connected with lines if the board was found.
                                          @ByVal Mat corners, @Cast("bool") boolean patternWasFound );
 @Namespace("cv") public static native void drawChessboardCorners( @ByVal UMat image, @ByVal Size patternSize,
                                          @ByVal UMat corners, @Cast("bool") boolean patternWasFound );
+@Namespace("cv") public static native void drawChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize,
+                                         @ByVal GpuMat corners, @Cast("bool") boolean patternWasFound );
 
 @Namespace("cv") @NoOffset public static class CirclesGridFinderParameters extends Pointer {
     static { Loader.load(); }
@@ -1580,6 +1673,10 @@ the board to make the detection more robust in various environments.
                                    @ByVal UMat centers, int flags,
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
                                    @ByVal CirclesGridFinderParameters parameters);
+@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal GpuMat image, @ByVal Size patternSize,
+                                   @ByVal GpuMat centers, int flags,
+                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
+                                   @ByVal CirclesGridFinderParameters parameters);
 
 /** \overload */
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal Mat image, @ByVal Size patternSize,
@@ -1588,6 +1685,10 @@ the board to make the detection more robust in various environments.
                                    @ByVal CirclesGridFinderParameters2 parameters);
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal UMat image, @ByVal Size patternSize,
                                    @ByVal UMat centers, int flags,
+                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
+                                   @ByVal CirclesGridFinderParameters2 parameters);
+@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal GpuMat image, @ByVal Size patternSize,
+                                   @ByVal GpuMat centers, int flags,
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
                                    @ByVal CirclesGridFinderParameters2 parameters);
 
@@ -1602,6 +1703,11 @@ the board to make the detection more robust in various environments.
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector/*=cv::SimpleBlobDetector::create()*/);
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal UMat image, @ByVal Size patternSize,
                                    @ByVal UMat centers);
+@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal GpuMat image, @ByVal Size patternSize,
+                                   @ByVal GpuMat centers, int flags/*=cv::CALIB_CB_SYMMETRIC_GRID*/,
+                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector/*=cv::SimpleBlobDetector::create()*/);
+@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal GpuMat image, @ByVal Size patternSize,
+                                   @ByVal GpuMat centers);
 
 /** \brief Finds the camera intrinsic and extrinsic parameters from several views of a calibration pattern.
 <p>
@@ -1748,6 +1854,22 @@ The algorithm performs the following steps:
                                      @ByVal Mat stdDeviationsIntrinsics,
                                      @ByVal Mat stdDeviationsExtrinsics,
                                      @ByVal Mat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat perViewErrors );
 @Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
                                      @ByVal MatVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
@@ -1780,6 +1902,70 @@ The algorithm performs the following steps:
                                      @ByVal UMat stdDeviationsIntrinsics,
                                      @ByVal UMat stdDeviationsExtrinsics,
                                      @ByVal UMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat perViewErrors,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat perViewErrors );
 
 /** \overload double calibrateCamera( InputArrayOfArrays objectPoints,
                                      InputArrayOfArrays imagePoints, Size imageSize,
@@ -1809,6 +1995,16 @@ The algorithm performs the following steps:
                                      @ByVal UMatVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
 @Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
                                      @ByVal MatVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
@@ -1829,6 +2025,46 @@ The algorithm performs the following steps:
                                      @ByVal UMatVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
 
 /** \brief Computes useful camera characteristics from the camera matrix.
 <p>
@@ -1860,7 +2096,7 @@ matrix.
                                            @ByRef DoubleBuffer fovx, @ByRef DoubleBuffer fovy,
                                            @ByRef DoubleBuffer focalLength, @ByRef Point2d principalPoint,
                                            @ByRef DoubleBuffer aspectRatio );
-@Namespace("cv") public static native void calibrationMatrixValues( @ByVal UMat cameraMatrix, @ByVal Size imageSize,
+@Namespace("cv") public static native void calibrationMatrixValues( @ByVal Mat cameraMatrix, @ByVal Size imageSize,
                                            double apertureWidth, double apertureHeight,
                                            @ByRef double[] fovx, @ByRef double[] fovy,
                                            @ByRef double[] focalLength, @ByRef Point2d principalPoint,
@@ -1870,6 +2106,31 @@ matrix.
                                            @ByRef DoublePointer fovx, @ByRef DoublePointer fovy,
                                            @ByRef DoublePointer focalLength, @ByRef Point2d principalPoint,
                                            @ByRef DoublePointer aspectRatio );
+@Namespace("cv") public static native void calibrationMatrixValues( @ByVal UMat cameraMatrix, @ByVal Size imageSize,
+                                           double apertureWidth, double apertureHeight,
+                                           @ByRef DoubleBuffer fovx, @ByRef DoubleBuffer fovy,
+                                           @ByRef DoubleBuffer focalLength, @ByRef Point2d principalPoint,
+                                           @ByRef DoubleBuffer aspectRatio );
+@Namespace("cv") public static native void calibrationMatrixValues( @ByVal UMat cameraMatrix, @ByVal Size imageSize,
+                                           double apertureWidth, double apertureHeight,
+                                           @ByRef double[] fovx, @ByRef double[] fovy,
+                                           @ByRef double[] focalLength, @ByRef Point2d principalPoint,
+                                           @ByRef double[] aspectRatio );
+@Namespace("cv") public static native void calibrationMatrixValues( @ByVal GpuMat cameraMatrix, @ByVal Size imageSize,
+                                           double apertureWidth, double apertureHeight,
+                                           @ByRef DoublePointer fovx, @ByRef DoublePointer fovy,
+                                           @ByRef DoublePointer focalLength, @ByRef Point2d principalPoint,
+                                           @ByRef DoublePointer aspectRatio );
+@Namespace("cv") public static native void calibrationMatrixValues( @ByVal GpuMat cameraMatrix, @ByVal Size imageSize,
+                                           double apertureWidth, double apertureHeight,
+                                           @ByRef DoubleBuffer fovx, @ByRef DoubleBuffer fovy,
+                                           @ByRef DoubleBuffer focalLength, @ByRef Point2d principalPoint,
+                                           @ByRef DoubleBuffer aspectRatio );
+@Namespace("cv") public static native void calibrationMatrixValues( @ByVal GpuMat cameraMatrix, @ByVal Size imageSize,
+                                           double apertureWidth, double apertureHeight,
+                                           @ByRef double[] fovx, @ByRef double[] fovy,
+                                           @ByRef double[] focalLength, @ByRef Point2d principalPoint,
+                                           @ByRef double[] aspectRatio );
 
 /** \brief Calibrates the stereo camera.
 <p>
@@ -1987,6 +2248,18 @@ re-projection error.
                                      @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
+                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
+                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
+                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
+                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F );
 @Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
                                      @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
                                      @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
@@ -2011,6 +2284,54 @@ re-projection error.
                                      @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
+                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
+                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
+                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
+                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
+                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
+                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
+                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
+                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
+                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
+                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
+                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
+                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
+                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
+                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
+@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
+                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F );
 
 
 /** \brief Computes rectification transforms for each head of a calibrated stereo camera.
@@ -2120,6 +2441,20 @@ their interiors are all valid pixels.
                                  @ByVal UMat R1, @ByVal UMat R2,
                                  @ByVal UMat P1, @ByVal UMat P2,
                                  @ByVal UMat Q );
+@Namespace("cv") public static native void stereoRectify( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                 @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                 @ByVal Size imageSize, @ByVal GpuMat R, @ByVal GpuMat T,
+                                 @ByVal GpuMat R1, @ByVal GpuMat R2,
+                                 @ByVal GpuMat P1, @ByVal GpuMat P2,
+                                 @ByVal GpuMat Q, int flags/*=cv::CALIB_ZERO_DISPARITY*/,
+                                 double alpha/*=-1*/, @ByVal(nullValue = "cv::Size()") Size newImageSize,
+                                 Rect validPixROI1/*=0*/, Rect validPixROI2/*=0*/ );
+@Namespace("cv") public static native void stereoRectify( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                 @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                 @ByVal Size imageSize, @ByVal GpuMat R, @ByVal GpuMat T,
+                                 @ByVal GpuMat R1, @ByVal GpuMat R2,
+                                 @ByVal GpuMat P1, @ByVal GpuMat P2,
+                                 @ByVal GpuMat Q );
 
 /** \brief Computes a rectification transform for an uncalibrated stereo camera.
 <p>
@@ -2164,6 +2499,13 @@ homography matrices H1 and H2 . The function implements the algorithm \cite Hart
 @Namespace("cv") public static native @Cast("bool") boolean stereoRectifyUncalibrated( @ByVal UMat points1, @ByVal UMat points2,
                                              @ByVal UMat F, @ByVal Size imgSize,
                                              @ByVal UMat H1, @ByVal UMat H2 );
+@Namespace("cv") public static native @Cast("bool") boolean stereoRectifyUncalibrated( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                             @ByVal GpuMat F, @ByVal Size imgSize,
+                                             @ByVal GpuMat H1, @ByVal GpuMat H2,
+                                             double threshold/*=5*/ );
+@Namespace("cv") public static native @Cast("bool") boolean stereoRectifyUncalibrated( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                             @ByVal GpuMat F, @ByVal Size imgSize,
+                                             @ByVal GpuMat H1, @ByVal GpuMat H2 );
 
 /** computes the rectification transformations for 3-head camera, where all the heads are on the same line. */
 @Namespace("cv") public static native float rectify3Collinear( @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
@@ -2186,6 +2528,16 @@ homography matrices H1 and H2 . The function implements the algorithm \cite Hart
                                       @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat P3,
                                       @ByVal Mat Q, double alpha, @ByVal Size newImgSize,
                                       Rect roi1, Rect roi2, int flags );
+@Namespace("cv") public static native float rectify3Collinear( @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
+                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
+                                      @ByVal Mat cameraMatrix3, @ByVal Mat distCoeffs3,
+                                      @ByVal GpuMatVector imgpt1, @ByVal GpuMatVector imgpt3,
+                                      @ByVal Size imageSize, @ByVal Mat R12, @ByVal Mat T12,
+                                      @ByVal Mat R13, @ByVal Mat T13,
+                                      @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat R3,
+                                      @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat P3,
+                                      @ByVal Mat Q, double alpha, @ByVal Size newImgSize,
+                                      Rect roi1, Rect roi2, int flags );
 @Namespace("cv") public static native float rectify3Collinear( @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                       @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                       @ByVal UMat cameraMatrix3, @ByVal UMat distCoeffs3,
@@ -2205,6 +2557,46 @@ homography matrices H1 and H2 . The function implements the algorithm \cite Hart
                                       @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat R3,
                                       @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat P3,
                                       @ByVal UMat Q, double alpha, @ByVal Size newImgSize,
+                                      Rect roi1, Rect roi2, int flags );
+@Namespace("cv") public static native float rectify3Collinear( @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
+                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
+                                      @ByVal UMat cameraMatrix3, @ByVal UMat distCoeffs3,
+                                      @ByVal GpuMatVector imgpt1, @ByVal GpuMatVector imgpt3,
+                                      @ByVal Size imageSize, @ByVal UMat R12, @ByVal UMat T12,
+                                      @ByVal UMat R13, @ByVal UMat T13,
+                                      @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat R3,
+                                      @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat P3,
+                                      @ByVal UMat Q, double alpha, @ByVal Size newImgSize,
+                                      Rect roi1, Rect roi2, int flags );
+@Namespace("cv") public static native float rectify3Collinear( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                      @ByVal GpuMat cameraMatrix3, @ByVal GpuMat distCoeffs3,
+                                      @ByVal MatVector imgpt1, @ByVal MatVector imgpt3,
+                                      @ByVal Size imageSize, @ByVal GpuMat R12, @ByVal GpuMat T12,
+                                      @ByVal GpuMat R13, @ByVal GpuMat T13,
+                                      @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat R3,
+                                      @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat P3,
+                                      @ByVal GpuMat Q, double alpha, @ByVal Size newImgSize,
+                                      Rect roi1, Rect roi2, int flags );
+@Namespace("cv") public static native float rectify3Collinear( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                      @ByVal GpuMat cameraMatrix3, @ByVal GpuMat distCoeffs3,
+                                      @ByVal UMatVector imgpt1, @ByVal UMatVector imgpt3,
+                                      @ByVal Size imageSize, @ByVal GpuMat R12, @ByVal GpuMat T12,
+                                      @ByVal GpuMat R13, @ByVal GpuMat T13,
+                                      @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat R3,
+                                      @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat P3,
+                                      @ByVal GpuMat Q, double alpha, @ByVal Size newImgSize,
+                                      Rect roi1, Rect roi2, int flags );
+@Namespace("cv") public static native float rectify3Collinear( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
+                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
+                                      @ByVal GpuMat cameraMatrix3, @ByVal GpuMat distCoeffs3,
+                                      @ByVal GpuMatVector imgpt1, @ByVal GpuMatVector imgpt3,
+                                      @ByVal Size imageSize, @ByVal GpuMat R12, @ByVal GpuMat T12,
+                                      @ByVal GpuMat R13, @ByVal GpuMat T13,
+                                      @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat R3,
+                                      @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat P3,
+                                      @ByVal GpuMat Q, double alpha, @ByVal Size newImgSize,
                                       Rect roi1, Rect roi2, int flags );
 
 /** \brief Returns the new camera matrix based on the free scaling parameter.
@@ -2246,6 +2638,12 @@ initUndistortRectifyMap to produce the maps for remap .
                                             @Cast("bool") boolean centerPrincipalPoint/*=false*/);
 @Namespace("cv") public static native @ByVal Mat getOptimalNewCameraMatrix( @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                             @ByVal Size imageSize, double alpha);
+@Namespace("cv") public static native @ByVal Mat getOptimalNewCameraMatrix( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                            @ByVal Size imageSize, double alpha, @ByVal(nullValue = "cv::Size()") Size newImgSize,
+                                            Rect validPixROI/*=0*/,
+                                            @Cast("bool") boolean centerPrincipalPoint/*=false*/);
+@Namespace("cv") public static native @ByVal Mat getOptimalNewCameraMatrix( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                            @ByVal Size imageSize, double alpha);
 
 /** \brief Converts points from Euclidean to homogeneous space.
 <p>
@@ -2257,6 +2655,7 @@ point coordinates. That is, each point (x1, x2, ..., xn) is converted to (x1, x2
  */
 @Namespace("cv") public static native void convertPointsToHomogeneous( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native void convertPointsToHomogeneous( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void convertPointsToHomogeneous( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Converts points from homogeneous to Euclidean space.
 <p>
@@ -2269,6 +2668,7 @@ output point coordinates will be (0,0,0,...).
  */
 @Namespace("cv") public static native void convertPointsFromHomogeneous( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native void convertPointsFromHomogeneous( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void convertPointsFromHomogeneous( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Converts points to/from homogeneous coordinates.
 <p>
@@ -2282,6 +2682,7 @@ convertPointsToHomogeneous or convertPointsFromHomogeneous.
  */
 @Namespace("cv") public static native void convertPointsHomogeneous( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native void convertPointsHomogeneous( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void convertPointsHomogeneous( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Calculates a fundamental matrix from the corresponding points in two images.
 <p>
@@ -2343,6 +2744,11 @@ stereoRectifyUncalibrated to compute the rectification transformation. :
                                      double param1/*=3.*/, double param2/*=0.99*/,
                                      @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal UMat points1, @ByVal UMat points2 );
+@Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                     int method/*=cv::FM_RANSAC*/,
+                                     double param1/*=3.*/, double param2/*=0.99*/,
+                                     @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal GpuMat points1, @ByVal GpuMat points2 );
 
 /** \overload */
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal Mat points1, @ByVal Mat points2,
@@ -2355,6 +2761,11 @@ stereoRectifyUncalibrated to compute the rectification transformation. :
                                    double param1/*=3.*/, double param2/*=0.99*/ );
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal UMat points1, @ByVal UMat points2,
                                    @ByVal UMat mask );
+@Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                   @ByVal GpuMat mask, int method/*=cv::FM_RANSAC*/,
+                                   double param1/*=3.*/, double param2/*=0.99*/ );
+@Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                   @ByVal GpuMat mask );
 
 /** \brief Calculates an essential matrix from the corresponding points in two images.
 <p>
@@ -2397,6 +2808,12 @@ decomposeEssentialMat or recoverPose to recover the relative pose between camera
                                  @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native @ByVal Mat findEssentialMat( @ByVal UMat points1, @ByVal UMat points2,
                                  @ByVal UMat cameraMatrix );
+@Namespace("cv") public static native @ByVal Mat findEssentialMat( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                 @ByVal GpuMat cameraMatrix, int method/*=cv::RANSAC*/,
+                                 double prob/*=0.999*/, double threshold/*=1.0*/,
+                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native @ByVal Mat findEssentialMat( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                 @ByVal GpuMat cameraMatrix );
 
 /** \overload
 @param points1 Array of N (N \>= 5) 2D points from the first image. The point coordinates should
@@ -2437,6 +2854,11 @@ f & 0 & x_{pp}  \\
                                  int method/*=cv::RANSAC*/, double prob/*=0.999*/,
                                  double threshold/*=1.0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native @ByVal Mat findEssentialMat( @ByVal UMat points1, @ByVal UMat points2 );
+@Namespace("cv") public static native @ByVal Mat findEssentialMat( @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                 double focal/*=1.0*/, @ByVal(nullValue = "cv::Point2d(0, 0)") Point2d pp,
+                                 int method/*=cv::RANSAC*/, double prob/*=0.999*/,
+                                 double threshold/*=1.0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native @ByVal Mat findEssentialMat( @ByVal GpuMat points1, @ByVal GpuMat points2 );
 
 /** \brief Decompose an essential matrix to possible rotations and translation.
 <p>
@@ -2451,6 +2873,7 @@ decomposing E, you can only get the direction of the translation, so the functio
  */
 @Namespace("cv") public static native void decomposeEssentialMat( @ByVal Mat E, @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat t );
 @Namespace("cv") public static native void decomposeEssentialMat( @ByVal UMat E, @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat t );
+@Namespace("cv") public static native void decomposeEssentialMat( @ByVal GpuMat E, @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat t );
 
 /** \brief Recover relative camera rotation and translation from an estimated essential matrix and the
 corresponding points in two images, using cheirality check. Returns the number of inliers which pass
@@ -2507,6 +2930,11 @@ points1 and points2 are the same input for findEssentialMat. :
                             @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native int recoverPose( @ByVal UMat E, @ByVal UMat points1, @ByVal UMat points2,
                             @ByVal UMat cameraMatrix, @ByVal UMat R, @ByVal UMat t );
+@Namespace("cv") public static native int recoverPose( @ByVal GpuMat E, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                            @ByVal GpuMat cameraMatrix, @ByVal GpuMat R, @ByVal GpuMat t,
+                            @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native int recoverPose( @ByVal GpuMat E, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                            @ByVal GpuMat cameraMatrix, @ByVal GpuMat R, @ByVal GpuMat t );
 
 /** \overload
 @param E The input essential matrix.
@@ -2545,6 +2973,12 @@ f & 0 & x_{pp}  \\
                             @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native int recoverPose( @ByVal UMat E, @ByVal UMat points1, @ByVal UMat points2,
                             @ByVal UMat R, @ByVal UMat t );
+@Namespace("cv") public static native int recoverPose( @ByVal GpuMat E, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                            @ByVal GpuMat R, @ByVal GpuMat t,
+                            double focal/*=1.0*/, @ByVal(nullValue = "cv::Point2d(0, 0)") Point2d pp,
+                            @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native int recoverPose( @ByVal GpuMat E, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                            @ByVal GpuMat R, @ByVal GpuMat t );
 
 /** \overload
 @param E The input essential matrix.
@@ -2574,6 +3008,11 @@ which pass the cheirality check.
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat triangulatedPoints);
 @Namespace("cv") public static native int recoverPose( @ByVal UMat E, @ByVal UMat points1, @ByVal UMat points2,
                             @ByVal UMat cameraMatrix, @ByVal UMat R, @ByVal UMat t, double distanceThresh);
+@Namespace("cv") public static native int recoverPose( @ByVal GpuMat E, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                            @ByVal GpuMat cameraMatrix, @ByVal GpuMat R, @ByVal GpuMat t, double distanceThresh, @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") GpuMat mask,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat triangulatedPoints);
+@Namespace("cv") public static native int recoverPose( @ByVal GpuMat E, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                            @ByVal GpuMat cameraMatrix, @ByVal GpuMat R, @ByVal GpuMat t, double distanceThresh);
 
 /** \brief For points in an image of a stereo pair, computes the corresponding epilines in the other image.
 <p>
@@ -2602,6 +3041,8 @@ Line coefficients are defined up to a scale. They are normalized so that \f$a_i^
                                              @ByVal Mat F, @ByVal Mat lines );
 @Namespace("cv") public static native void computeCorrespondEpilines( @ByVal UMat points, int whichImage,
                                              @ByVal UMat F, @ByVal UMat lines );
+@Namespace("cv") public static native void computeCorrespondEpilines( @ByVal GpuMat points, int whichImage,
+                                             @ByVal GpuMat F, @ByVal GpuMat lines );
 
 /** \brief Reconstructs points by triangulation.
 <p>
@@ -2628,6 +3069,9 @@ observations with a stereo camera. Projections matrices can be obtained from ste
 @Namespace("cv") public static native void triangulatePoints( @ByVal UMat projMatr1, @ByVal UMat projMatr2,
                                      @ByVal UMat projPoints1, @ByVal UMat projPoints2,
                                      @ByVal UMat points4D );
+@Namespace("cv") public static native void triangulatePoints( @ByVal GpuMat projMatr1, @ByVal GpuMat projMatr2,
+                                     @ByVal GpuMat projPoints1, @ByVal GpuMat projPoints2,
+                                     @ByVal GpuMat points4D );
 
 /** \brief Refines coordinates of corresponding points.
 <p>
@@ -2648,6 +3092,8 @@ geometric distance between points \f$a\f$ and \f$b\f$ ) subject to the epipolar 
                                   @ByVal Mat newPoints1, @ByVal Mat newPoints2 );
 @Namespace("cv") public static native void correctMatches( @ByVal UMat F, @ByVal UMat points1, @ByVal UMat points2,
                                   @ByVal UMat newPoints1, @ByVal UMat newPoints2 );
+@Namespace("cv") public static native void correctMatches( @ByVal GpuMat F, @ByVal GpuMat points1, @ByVal GpuMat points2,
+                                  @ByVal GpuMat newPoints1, @ByVal GpuMat newPoints2 );
 
 /** \brief Filters off small noise blobs (speckles) in the disparity map
 <p>
@@ -2671,6 +3117,11 @@ account when specifying this parameter value.
                                   @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") UMat buf );
 @Namespace("cv") public static native void filterSpeckles( @ByVal UMat img, double newVal,
                                   int maxSpeckleSize, double maxDiff );
+@Namespace("cv") public static native void filterSpeckles( @ByVal GpuMat img, double newVal,
+                                  int maxSpeckleSize, double maxDiff,
+                                  @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") GpuMat buf );
+@Namespace("cv") public static native void filterSpeckles( @ByVal GpuMat img, double newVal,
+                                  int maxSpeckleSize, double maxDiff );
 
 /** computes valid disparity ROI from the valid ROIs of the rectified images (that are returned by cv::stereoRectify()) */
 @Namespace("cv") public static native @ByVal Rect getValidDisparityROI( @ByVal Rect roi1, @ByVal Rect roi2,
@@ -2687,6 +3138,11 @@ account when specifying this parameter value.
                                      int minDisparity, int numberOfDisparities,
                                      int disp12MaxDisp/*=1*/ );
 @Namespace("cv") public static native void validateDisparity( @ByVal UMat disparity, @ByVal UMat cost,
+                                     int minDisparity, int numberOfDisparities );
+@Namespace("cv") public static native void validateDisparity( @ByVal GpuMat disparity, @ByVal GpuMat cost,
+                                     int minDisparity, int numberOfDisparities,
+                                     int disp12MaxDisp/*=1*/ );
+@Namespace("cv") public static native void validateDisparity( @ByVal GpuMat disparity, @ByVal GpuMat cost,
                                      int minDisparity, int numberOfDisparities );
 
 /** \brief Reprojects a disparity image to 3D space.
@@ -2727,6 +3183,12 @@ perspectiveTransform .
                                       int ddepth/*=-1*/ );
 @Namespace("cv") public static native void reprojectImageTo3D( @ByVal UMat disparity,
                                       @ByVal UMat _3dImage, @ByVal UMat Q );
+@Namespace("cv") public static native void reprojectImageTo3D( @ByVal GpuMat disparity,
+                                      @ByVal GpuMat _3dImage, @ByVal GpuMat Q,
+                                      @Cast("bool") boolean handleMissingValues/*=false*/,
+                                      int ddepth/*=-1*/ );
+@Namespace("cv") public static native void reprojectImageTo3D( @ByVal GpuMat disparity,
+                                      @ByVal GpuMat _3dImage, @ByVal GpuMat Q );
 
 /** \brief Calculates the Sampson Distance between two points.
 <p>
@@ -2739,6 +3201,7 @@ The fundamental matrix may be calculated using the cv::findFundamentalMat functi
 */
 @Namespace("cv") public static native double sampsonDistance(@ByVal Mat pt1, @ByVal Mat pt2, @ByVal Mat F);
 @Namespace("cv") public static native double sampsonDistance(@ByVal UMat pt1, @ByVal UMat pt2, @ByVal UMat F);
+@Namespace("cv") public static native double sampsonDistance(@ByVal GpuMat pt1, @ByVal GpuMat pt2, @ByVal GpuMat F);
 
 /** \brief Computes an optimal affine transformation between two 3D point sets.
 <p>
@@ -2765,6 +3228,11 @@ RANSAC algorithm.
                                    double ransacThreshold/*=3*/, double confidence/*=0.99*/);
 @Namespace("cv") public static native int estimateAffine3D(@ByVal UMat src, @ByVal UMat dst,
                                    @ByVal UMat out, @ByVal UMat inliers);
+@Namespace("cv") public static native int estimateAffine3D(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat out, @ByVal GpuMat inliers,
+                                   double ransacThreshold/*=3*/, double confidence/*=0.99*/);
+@Namespace("cv") public static native int estimateAffine3D(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat out, @ByVal GpuMat inliers);
 
 /** \brief Computes an optimal affine transformation between two 2D point sets.
 <p>
@@ -2810,6 +3278,11 @@ correctly only when there are more than 50% of inliers.
                                   @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
                                   @Cast("size_t") long refineIters/*=10*/);
 @Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal UMat from, @ByVal UMat to);
+@Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal GpuMat from, @ByVal GpuMat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat inliers,
+                                  int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
+                                  @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
+                                  @Cast("size_t") long refineIters/*=10*/);
+@Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal GpuMat from, @ByVal GpuMat to);
 
 /** \brief Computes an optimal limited affine transformation with 4 degrees of freedom between
 two 2D point sets.
@@ -2864,6 +3337,11 @@ correctly only when there are more than 50% of inliers.
                                   @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
                                   @Cast("size_t") long refineIters/*=10*/);
 @Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal UMat from, @ByVal UMat to);
+@Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal GpuMat from, @ByVal GpuMat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat inliers,
+                                  int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
+                                  @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
+                                  @Cast("size_t") long refineIters/*=10*/);
+@Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal GpuMat from, @ByVal GpuMat to);
 
 /** \brief Decompose a homography matrix to rotation(s), translation(s) and plane normal(s).
 <p>
@@ -2889,6 +3367,11 @@ must be in front of the camera). The decomposition method is described in detail
                                         @ByVal UMatVector rotations,
                                         @ByVal UMatVector translations,
                                         @ByVal UMatVector normals);
+@Namespace("cv") public static native int decomposeHomographyMat(@ByVal Mat H,
+                                        @ByVal Mat K,
+                                        @ByVal GpuMatVector rotations,
+                                        @ByVal GpuMatVector translations,
+                                        @ByVal GpuMatVector normals);
 @Namespace("cv") public static native int decomposeHomographyMat(@ByVal UMat H,
                                         @ByVal UMat K,
                                         @ByVal MatVector rotations,
@@ -2899,6 +3382,26 @@ must be in front of the camera). The decomposition method is described in detail
                                         @ByVal UMatVector rotations,
                                         @ByVal UMatVector translations,
                                         @ByVal UMatVector normals);
+@Namespace("cv") public static native int decomposeHomographyMat(@ByVal UMat H,
+                                        @ByVal UMat K,
+                                        @ByVal GpuMatVector rotations,
+                                        @ByVal GpuMatVector translations,
+                                        @ByVal GpuMatVector normals);
+@Namespace("cv") public static native int decomposeHomographyMat(@ByVal GpuMat H,
+                                        @ByVal GpuMat K,
+                                        @ByVal MatVector rotations,
+                                        @ByVal MatVector translations,
+                                        @ByVal MatVector normals);
+@Namespace("cv") public static native int decomposeHomographyMat(@ByVal GpuMat H,
+                                        @ByVal GpuMat K,
+                                        @ByVal UMatVector rotations,
+                                        @ByVal UMatVector translations,
+                                        @ByVal UMatVector normals);
+@Namespace("cv") public static native int decomposeHomographyMat(@ByVal GpuMat H,
+                                        @ByVal GpuMat K,
+                                        @ByVal GpuMatVector rotations,
+                                        @ByVal GpuMatVector translations,
+                                        @ByVal GpuMatVector normals);
 
 /** \brief The base class for stereo correspondence algorithms.
  */
@@ -2923,6 +3426,8 @@ must be in front of the camera). The decomposition method is described in detail
                                       @ByVal Mat disparity );
     public native void compute( @ByVal UMat left, @ByVal UMat right,
                                       @ByVal UMat disparity );
+    public native void compute( @ByVal GpuMat left, @ByVal GpuMat right,
+                                      @ByVal GpuMat disparity );
 
     public native int getMinDisparity();
     public native void setMinDisparity(int minDisparity);
@@ -3136,12 +3641,18 @@ check, quadratic interpolation and speckle filtering).
             @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat jacobian);
     @Namespace("cv::fisheye") public static native void projectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @Const @ByRef Mat affine,
             @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @Const @ByRef Mat affine,
+            @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian);
+    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @Const @ByRef Mat affine,
+            @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \overload */
     @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @ByVal Mat rvec, @ByVal Mat tvec,
             @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat jacobian);
     @Namespace("cv::fisheye") public static native void projectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @ByVal UMat rvec, @ByVal UMat tvec,
             @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat jacobian);
+    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+            @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian);
 
     /** \brief Distorts 2D points using fisheye model.
     <p>
@@ -3160,6 +3671,8 @@ check, quadratic interpolation and speckle filtering).
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal UMat undistorted, @ByVal UMat distorted, @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/);
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal UMat undistorted, @ByVal UMat distorted, @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal GpuMat undistorted, @ByVal GpuMat distorted, @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/);
+    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal GpuMat undistorted, @ByVal GpuMat distorted, @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Undistorts 2D points using fisheye model
     <p>
@@ -3180,6 +3693,10 @@ check, quadratic interpolation and speckle filtering).
             @ByVal UMat K, @ByVal UMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P);
     @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
             @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P);
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+            @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Computes undistortion and rectification maps for image transform by cv::remap(). If D is empty zero
     distortion is used, if R or P is empty identity matrixes are used.
@@ -3199,6 +3716,8 @@ check, quadratic interpolation and speckle filtering).
             @Const @ByRef Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
     @Namespace("cv::fisheye") public static native void initUndistortRectifyMap(@ByVal UMat K, @ByVal UMat D, @ByVal UMat R, @ByVal UMat P,
             @Const @ByRef Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2);
+    @Namespace("cv::fisheye") public static native void initUndistortRectifyMap(@ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMat R, @ByVal GpuMat P,
+            @Const @ByRef Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
 
     /** \brief Transforms an image to compensate for fisheye lens distortion.
     <p>
@@ -3236,6 +3755,10 @@ check, quadratic interpolation and speckle filtering).
             @ByVal UMat K, @ByVal UMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat Knew, @Const @ByRef(nullValue = "cv::Size()") Size new_size);
     @Namespace("cv::fisheye") public static native void undistortImage(@ByVal UMat distorted, @ByVal UMat undistorted,
             @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat Knew, @Const @ByRef(nullValue = "cv::Size()") Size new_size);
+    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+            @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Estimates new camera matrix for undistortion or rectification.
     <p>
@@ -3258,6 +3781,10 @@ check, quadratic interpolation and speckle filtering).
             @ByVal UMat P, double balance/*=0.0*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size, double fov_scale/*=1.0*/);
     @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal UMat K, @ByVal UMat D, @Const @ByRef Size image_size, @ByVal UMat R,
             @ByVal UMat P);
+    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
+            @ByVal GpuMat P, double balance/*=0.0*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size, double fov_scale/*=1.0*/);
+    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
+            @ByVal GpuMat P);
 
     /** \brief Performs camera calibaration
     <p>
@@ -3302,6 +3829,11 @@ optimization. It stays at the center or at a different location specified when C
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal Mat K, @ByVal Mat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
+                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal Mat K, @ByVal Mat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
@@ -3312,6 +3844,26 @@ optimization. It stays at the center or at a different location specified when C
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal UMat K, @ByVal UMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
+                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal UMat K, @ByVal UMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
+                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
+                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
+                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
 
     /** \brief Stereo rectification for fisheye camera model
     <p>
@@ -3353,6 +3905,11 @@ optimization. It stays at the center or at a different location specified when C
             double balance/*=0.0*/, double fov_scale/*=1.0*/);
     @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @Const @ByRef Size imageSize, @ByVal UMat R, @ByVal UMat tvec,
             @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat Q, int flags);
+    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @Const @ByRef Size imageSize, @ByVal GpuMat R, @ByVal GpuMat tvec,
+            @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat Q, int flags, @Const @ByRef(nullValue = "cv::Size()") Size newImageSize,
+            double balance/*=0.0*/, double fov_scale/*=1.0*/);
+    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @Const @ByRef Size imageSize, @ByVal GpuMat R, @ByVal GpuMat tvec,
+            @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat Q, int flags);
 
     /** \brief Performs stereo calibration
     <p>
@@ -3400,6 +3957,13 @@ optimization. It stays at the center or at a different location specified when C
     @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
                                       @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
                                       @ByVal Mat R, @ByVal Mat T);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
+                                      @ByVal Mat R, @ByVal Mat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
+                                      @ByVal Mat R, @ByVal Mat T);
     @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
                                       @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
                                       @ByVal UMat R, @ByVal UMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
@@ -3414,6 +3978,34 @@ optimization. It stays at the center or at a different location specified when C
     @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
                                       @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
                                       @ByVal UMat R, @ByVal UMat T);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                      @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
+                                      @ByVal UMat R, @ByVal UMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                      @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
+                                      @ByVal UMat R, @ByVal UMat T);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
+                                      @ByVal GpuMat R, @ByVal GpuMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
+                                      @ByVal GpuMat R, @ByVal GpuMat T);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
+                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
+                                      @ByVal GpuMat R, @ByVal GpuMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
+                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
+                                      @ByVal GpuMat R, @ByVal GpuMat T);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
+                                      @ByVal GpuMat R, @ByVal GpuMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
+                                      @ByVal GpuMat R, @ByVal GpuMat T);
 
 /** \} calib3d_fisheye */
 

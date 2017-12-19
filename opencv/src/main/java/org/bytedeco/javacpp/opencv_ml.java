@@ -182,8 +182,13 @@ of this class into StatModel::train.
 
     public native void getSample(@ByVal Mat varIdx, int sidx, FloatPointer buf);
     public native void getSample(@ByVal Mat varIdx, int sidx, FloatBuffer buf);
-    public native void getSample(@ByVal UMat varIdx, int sidx, float[] buf);
+    public native void getSample(@ByVal Mat varIdx, int sidx, float[] buf);
     public native void getSample(@ByVal UMat varIdx, int sidx, FloatPointer buf);
+    public native void getSample(@ByVal UMat varIdx, int sidx, FloatBuffer buf);
+    public native void getSample(@ByVal UMat varIdx, int sidx, float[] buf);
+    public native void getSample(@ByVal GpuMat varIdx, int sidx, FloatPointer buf);
+    public native void getSample(@ByVal GpuMat varIdx, int sidx, FloatBuffer buf);
+    public native void getSample(@ByVal GpuMat varIdx, int sidx, float[] buf);
     public native @ByVal Mat getSamples();
     public native @ByVal Mat getMissing();
 
@@ -233,12 +238,22 @@ of this class into StatModel::train.
     public native @ByVal Mat getTestSampleIdx();
     public native void getValues(int vi, @ByVal Mat sidx, FloatPointer values);
     public native void getValues(int vi, @ByVal Mat sidx, FloatBuffer values);
-    public native void getValues(int vi, @ByVal UMat sidx, float[] values);
+    public native void getValues(int vi, @ByVal Mat sidx, float[] values);
     public native void getValues(int vi, @ByVal UMat sidx, FloatPointer values);
+    public native void getValues(int vi, @ByVal UMat sidx, FloatBuffer values);
+    public native void getValues(int vi, @ByVal UMat sidx, float[] values);
+    public native void getValues(int vi, @ByVal GpuMat sidx, FloatPointer values);
+    public native void getValues(int vi, @ByVal GpuMat sidx, FloatBuffer values);
+    public native void getValues(int vi, @ByVal GpuMat sidx, float[] values);
     public native void getNormCatValues(int vi, @ByVal Mat sidx, IntPointer values);
     public native void getNormCatValues(int vi, @ByVal Mat sidx, IntBuffer values);
-    public native void getNormCatValues(int vi, @ByVal UMat sidx, int[] values);
+    public native void getNormCatValues(int vi, @ByVal Mat sidx, int[] values);
     public native void getNormCatValues(int vi, @ByVal UMat sidx, IntPointer values);
+    public native void getNormCatValues(int vi, @ByVal UMat sidx, IntBuffer values);
+    public native void getNormCatValues(int vi, @ByVal UMat sidx, int[] values);
+    public native void getNormCatValues(int vi, @ByVal GpuMat sidx, IntPointer values);
+    public native void getNormCatValues(int vi, @ByVal GpuMat sidx, IntBuffer values);
+    public native void getNormCatValues(int vi, @ByVal GpuMat sidx, int[] values);
     public native @ByVal Mat getDefaultSubstValues();
 
     public native int getCatCount(int vi);
@@ -353,6 +368,10 @@ of this class into StatModel::train.
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat varIdx, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat sampleIdx,
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat sampleWeights, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat varType);
     public static native @Ptr TrainData create(@ByVal UMat samples, int layout, @ByVal UMat responses);
+    public static native @Ptr TrainData create(@ByVal GpuMat samples, int layout, @ByVal GpuMat responses,
+                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat varIdx, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat sampleIdx,
+                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat sampleWeights, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat varType);
+    public static native @Ptr TrainData create(@ByVal GpuMat samples, int layout, @ByVal GpuMat responses);
 }
 
 /** \brief Base class for statistical models in OpenCV ML.
@@ -399,6 +418,7 @@ of this class into StatModel::train.
     */
     public native @Cast("bool") boolean train( @ByVal Mat samples, int layout, @ByVal Mat responses );
     public native @Cast("bool") boolean train( @ByVal UMat samples, int layout, @ByVal UMat responses );
+    public native @Cast("bool") boolean train( @ByVal GpuMat samples, int layout, @ByVal GpuMat responses );
 
     /** \brief Computes error on the training or test dataset
     <p>
@@ -415,6 +435,7 @@ of this class into StatModel::train.
      */
     public native float calcError( @Ptr TrainData data, @Cast("bool") boolean test, @ByVal Mat resp );
     public native float calcError( @Ptr TrainData data, @Cast("bool") boolean test, @ByVal UMat resp );
+    public native float calcError( @Ptr TrainData data, @Cast("bool") boolean test, @ByVal GpuMat resp );
 
     /** \brief Predicts response(s) for the provided sample(s)
     <p>
@@ -426,6 +447,8 @@ of this class into StatModel::train.
     public native float predict( @ByVal Mat samples );
     public native float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
     public native float predict( @ByVal UMat samples );
+    public native float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
+    public native float predict( @ByVal GpuMat samples );
 
     /** \brief Create and train model with default parameters
     <p>
@@ -462,6 +485,10 @@ of this class into StatModel::train.
                                    @ByVal UMat outputProbs, int flags/*=0*/ );
     public native float predictProb( @ByVal UMat inputs, @ByVal UMat outputs,
                                    @ByVal UMat outputProbs );
+    public native float predictProb( @ByVal GpuMat inputs, @ByVal GpuMat outputs,
+                                   @ByVal GpuMat outputProbs, int flags/*=0*/ );
+    public native float predictProb( @ByVal GpuMat inputs, @ByVal GpuMat outputs,
+                                   @ByVal GpuMat outputProbs );
 
     /** Creates empty model
     Use StatModel::train to train the model after creation. */
@@ -558,6 +585,12 @@ of this class into StatModel::train.
                                    @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat dist );
     public native float findNearest( @ByVal UMat samples, int k,
                                    @ByVal UMat results );
+    public native float findNearest( @ByVal GpuMat samples, int k,
+                                   @ByVal GpuMat results,
+                                   @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat neighborResponses,
+                                   @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat dist );
+    public native float findNearest( @ByVal GpuMat samples, int k,
+                                   @ByVal GpuMat results );
 
     /** \brief Implementations of KNearest algorithm
        */
@@ -839,6 +872,20 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean trainAuto(@ByVal UMat samples,
                 int layout,
                 @ByVal UMat responses);
+    public native @Cast("bool") boolean trainAuto(@ByVal GpuMat samples,
+                int layout,
+                @ByVal GpuMat responses,
+                int kFold/*=10*/,
+                @Ptr ParamGrid Cgrid/*=cv::ml::SVM::getDefaultGridPtr(cv::ml::SVM::C)*/,
+                @Ptr ParamGrid gammaGrid/*=cv::ml::SVM::getDefaultGridPtr(cv::ml::SVM::GAMMA)*/,
+                @Ptr ParamGrid pGrid/*=cv::ml::SVM::getDefaultGridPtr(cv::ml::SVM::P)*/,
+                @Ptr ParamGrid nuGrid/*=cv::ml::SVM::getDefaultGridPtr(cv::ml::SVM::NU)*/,
+                @Ptr ParamGrid coeffGrid/*=cv::ml::SVM::getDefaultGridPtr(cv::ml::SVM::COEF)*/,
+                @Ptr ParamGrid degreeGrid/*=cv::ml::SVM::getDefaultGridPtr(cv::ml::SVM::DEGREE)*/,
+                @Cast("bool") boolean balanced/*=false*/);
+    public native @Cast("bool") boolean trainAuto(@ByVal GpuMat samples,
+                int layout,
+                @ByVal GpuMat responses);
 
     /** \brief Retrieves all the support vectors
     <p>
@@ -872,6 +919,7 @@ of this class into StatModel::train.
      */
     public native double getDecisionFunction(int i, @ByVal Mat alpha, @ByVal Mat svidx);
     public native double getDecisionFunction(int i, @ByVal UMat alpha, @ByVal UMat svidx);
+    public native double getDecisionFunction(int i, @ByVal GpuMat alpha, @ByVal GpuMat svidx);
 
     /** \brief Generates a grid for %SVM parameters.
     <p>
@@ -1005,6 +1053,8 @@ of this class into StatModel::train.
     public native float predict( @ByVal Mat samples );
     public native float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
     public native float predict( @ByVal UMat samples );
+    public native float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
+    public native float predict( @ByVal GpuMat samples );
 
     /** \brief Returns a likelihood logarithm value and an index of the most probable mixture component
     for the given sample.
@@ -1020,6 +1070,7 @@ of this class into StatModel::train.
      */
     public native @ByVal Point2d predict2(@ByVal Mat sample, @ByVal Mat probs);
     public native @ByVal Point2d predict2(@ByVal UMat sample, @ByVal UMat probs);
+    public native @ByVal Point2d predict2(@ByVal GpuMat sample, @ByVal GpuMat probs);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
     <p>
@@ -1059,6 +1110,11 @@ of this class into StatModel::train.
                              @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat labels,
                              @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat probs);
     public native @Cast("bool") boolean trainEM(@ByVal UMat samples);
+    public native @Cast("bool") boolean trainEM(@ByVal GpuMat samples,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat logLikelihoods,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat labels,
+                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat probs);
+    public native @Cast("bool") boolean trainEM(@ByVal GpuMat samples);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
     <p>
@@ -1101,6 +1157,13 @@ of this class into StatModel::train.
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat labels,
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat probs);
     public native @Cast("bool") boolean trainE(@ByVal UMat samples, @ByVal UMat means0);
+    public native @Cast("bool") boolean trainE(@ByVal GpuMat samples, @ByVal GpuMat means0,
+                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat covs0,
+                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat weights0,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat logLikelihoods,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat labels,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat probs);
+    public native @Cast("bool") boolean trainE(@ByVal GpuMat samples, @ByVal GpuMat means0);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
     <p>
@@ -1130,6 +1193,11 @@ of this class into StatModel::train.
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat labels,
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat probs);
     public native @Cast("bool") boolean trainM(@ByVal UMat samples, @ByVal UMat probs0);
+    public native @Cast("bool") boolean trainM(@ByVal GpuMat samples, @ByVal GpuMat probs0,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat logLikelihoods,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat labels,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat probs);
+    public native @Cast("bool") boolean trainM(@ByVal GpuMat samples, @ByVal GpuMat probs0);
 
     /** Creates empty %EM model.
     The model should be trained then using StatModel::train(traindata, flags) method. Alternatively, you
@@ -1448,6 +1516,7 @@ use this capability to implement decision tree ensembles.
     */
     public native void getVotes(@ByVal Mat samples, @ByVal Mat results, int flags);
     public native void getVotes(@ByVal UMat samples, @ByVal UMat results, int flags);
+    public native void getVotes(@ByVal GpuMat samples, @ByVal GpuMat results, int flags);
 
     /** Creates the empty model.
     Use StatModel::train to train the model, StatModel::train to create and train the model,
@@ -1625,6 +1694,7 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     \sa getLayerSizes */
     public native void setLayerSizes(@ByVal Mat _layer_sizes);
     public native void setLayerSizes(@ByVal UMat _layer_sizes);
+    public native void setLayerSizes(@ByVal GpuMat _layer_sizes);
 
     /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
     The very first element specifies the number of elements in the input layer.
@@ -1824,6 +1894,8 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     public native float predict( @ByVal Mat samples );
     public native float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
     public native float predict( @ByVal UMat samples );
+    public native float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
+    public native float predict( @ByVal GpuMat samples );
 
     /** \brief This function returns the trained paramters arranged across rows.
     <p>
@@ -2044,12 +2116,15 @@ svmsgd->predict(samples, responses);
 */
 @Namespace("cv::ml") public static native void randMVNormal( @ByVal Mat mean, @ByVal Mat cov, int nsamples, @ByVal Mat samples);
 @Namespace("cv::ml") public static native void randMVNormal( @ByVal UMat mean, @ByVal UMat cov, int nsamples, @ByVal UMat samples);
+@Namespace("cv::ml") public static native void randMVNormal( @ByVal GpuMat mean, @ByVal GpuMat cov, int nsamples, @ByVal GpuMat samples);
 
 /** \brief Creates test set */
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
                                                 @ByVal Mat samples, @ByVal Mat responses);
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
                                                 @ByVal UMat samples, @ByVal UMat responses);
+@Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
+                                                @ByVal GpuMat samples, @ByVal GpuMat responses);
 
 /** \} ml */
 

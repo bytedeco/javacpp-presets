@@ -29,21 +29,21 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = opencv_cudafilters.class,
+    inherit = opencv_core.class,
     value = {
         @Platform(
-            include = "<opencv2/cudaimgproc.hpp>",
-            link = "opencv_cudaimgproc@.3.3",
+            include = "<opencv2/cudawarping.hpp>",
+            link = "opencv_cudawarping@.3.3",
             extension = "-gpu"
         ),
-        @Platform(value = "windows", link = "opencv_cudaimgproc331")
+        @Platform(value = "windows", link = "opencv_cudawarping331")
     },
-    target = "org.bytedeco.javacpp.opencv_cudaimgproc"
+    target = "org.bytedeco.javacpp.opencv_cudawarping"
 )
-public class opencv_cudaimgproc implements InfoMapper {
+public class opencv_cudawarping implements InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::cuda::CLAHE").pointerTypes("CudaCLAHE"));
+
     }
 }

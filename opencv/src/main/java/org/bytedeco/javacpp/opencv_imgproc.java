@@ -3348,20 +3348,28 @@ public static final int
     public native void setTemplate(@ByVal Mat templ);
     public native void setTemplate(@ByVal UMat templ, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter);
     public native void setTemplate(@ByVal UMat templ);
+    public native void setTemplate(@ByVal GpuMat templ, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter);
+    public native void setTemplate(@ByVal GpuMat templ);
     public native void setTemplate(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter);
     public native void setTemplate(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy);
     public native void setTemplate(@ByVal UMat edges, @ByVal UMat dx, @ByVal UMat dy, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter);
     public native void setTemplate(@ByVal UMat edges, @ByVal UMat dx, @ByVal UMat dy);
+    public native void setTemplate(@ByVal GpuMat edges, @ByVal GpuMat dx, @ByVal GpuMat dy, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter);
+    public native void setTemplate(@ByVal GpuMat edges, @ByVal GpuMat dx, @ByVal GpuMat dy);
 
     /** find template on image */
     public native void detect(@ByVal Mat image, @ByVal Mat positions, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat votes);
     public native void detect(@ByVal Mat image, @ByVal Mat positions);
     public native void detect(@ByVal UMat image, @ByVal UMat positions, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat votes);
     public native void detect(@ByVal UMat image, @ByVal UMat positions);
+    public native void detect(@ByVal GpuMat image, @ByVal GpuMat positions, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat votes);
+    public native void detect(@ByVal GpuMat image, @ByVal GpuMat positions);
     public native void detect(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Mat positions, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat votes);
     public native void detect(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Mat positions);
     public native void detect(@ByVal UMat edges, @ByVal UMat dx, @ByVal UMat dy, @ByVal UMat positions, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat votes);
     public native void detect(@ByVal UMat edges, @ByVal UMat dx, @ByVal UMat dy, @ByVal UMat positions);
+    public native void detect(@ByVal GpuMat edges, @ByVal GpuMat dx, @ByVal GpuMat dy, @ByVal GpuMat positions, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat votes);
+    public native void detect(@ByVal GpuMat edges, @ByVal GpuMat dx, @ByVal GpuMat dy, @ByVal GpuMat positions);
 
     /** Canny low threshold. */
     public native void setCannyLowThresh(int cannyLowThresh);
@@ -3464,6 +3472,7 @@ public static final int
 
     public native void apply(@ByVal Mat src, @ByVal Mat dst);
     public native void apply(@ByVal UMat src, @ByVal UMat dst);
+    public native void apply(@ByVal GpuMat src, @ByVal GpuMat dst);
 
     public native void setClipLimit(double clipLimit);
     public native double getClipLimit();
@@ -3764,6 +3773,10 @@ following the algorithm described at \cite Rafael12 .
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat width, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat prec,
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat nfa);
     public native void detect(@ByVal UMat _image, @ByVal UMat _lines);
+    public native void detect(@ByVal GpuMat _image, @ByVal GpuMat _lines,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat width, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat prec,
+                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat nfa);
+    public native void detect(@ByVal GpuMat _image, @ByVal GpuMat _lines);
 
     /** \brief Draws the line segments on a given image.
     @param _image The image, where the lines will be drawn. Should be bigger or equal to the image,
@@ -3772,6 +3785,7 @@ following the algorithm described at \cite Rafael12 .
      */
     public native void drawSegments(@ByVal Mat _image, @ByVal Mat lines);
     public native void drawSegments(@ByVal UMat _image, @ByVal UMat lines);
+    public native void drawSegments(@ByVal GpuMat _image, @ByVal GpuMat lines);
 
     /** \brief Draws two groups of lines in blue and red, counting the non overlapping (mismatching) pixels.
     <p>
@@ -3785,6 +3799,8 @@ following the algorithm described at \cite Rafael12 .
     public native int compareSegments(@Const @ByRef Size size, @ByVal Mat lines1, @ByVal Mat lines2);
     public native int compareSegments(@Const @ByRef Size size, @ByVal UMat lines1, @ByVal UMat lines2, @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") UMat _image);
     public native int compareSegments(@Const @ByRef Size size, @ByVal UMat lines1, @ByVal UMat lines2);
+    public native int compareSegments(@Const @ByRef Size size, @ByVal GpuMat lines1, @ByVal GpuMat lines2, @ByVal(nullValue = "cv::InputOutputArray(cv::noArray())") GpuMat _image);
+    public native int compareSegments(@Const @ByRef Size size, @ByVal GpuMat lines1, @ByVal GpuMat lines2);
 }
 
 /** \brief Creates a smart pointer to a LineSegmentDetector object and initializes it.
@@ -3862,6 +3878,11 @@ all the fractional bits, you may want to set normalize=false .
                                    @Cast("bool") boolean normalize/*=false*/, int ktype/*=CV_32F*/ );
 @Namespace("cv") public static native void getDerivKernels( @ByVal UMat kx, @ByVal UMat ky,
                                    int dx, int dy, int ksize );
+@Namespace("cv") public static native void getDerivKernels( @ByVal GpuMat kx, @ByVal GpuMat ky,
+                                   int dx, int dy, int ksize,
+                                   @Cast("bool") boolean normalize/*=false*/, int ktype/*=CV_32F*/ );
+@Namespace("cv") public static native void getDerivKernels( @ByVal GpuMat kx, @ByVal GpuMat ky,
+                                   int dx, int dy, int ksize );
 
 /** \brief Returns Gabor filter coefficients.
 <p>
@@ -3921,6 +3942,7 @@ CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U.
  */
 @Namespace("cv") public static native void medianBlur( @ByVal Mat src, @ByVal Mat dst, int ksize );
 @Namespace("cv") public static native void medianBlur( @ByVal UMat src, @ByVal UMat dst, int ksize );
+@Namespace("cv") public static native void medianBlur( @ByVal GpuMat src, @ByVal GpuMat dst, int ksize );
 
 /** \brief Blurs an image using a Gaussian filter.
 <p>
@@ -3951,6 +3973,11 @@ sigmaX, and sigmaY.
                                 double sigmaX, double sigmaY/*=0*/,
                                 int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void GaussianBlur( @ByVal UMat src, @ByVal UMat dst, @ByVal Size ksize,
+                                double sigmaX );
+@Namespace("cv") public static native void GaussianBlur( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size ksize,
+                                double sigmaX, double sigmaY/*=0*/,
+                                int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void GaussianBlur( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size ksize,
                                 double sigmaX );
 
 /** \brief Applies the bilateral filter to an image.
@@ -3991,6 +4018,11 @@ proportional to sigmaSpace.
                                    int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void bilateralFilter( @ByVal UMat src, @ByVal UMat dst, int d,
                                    double sigmaColor, double sigmaSpace );
+@Namespace("cv") public static native void bilateralFilter( @ByVal GpuMat src, @ByVal GpuMat dst, int d,
+                                   double sigmaColor, double sigmaSpace,
+                                   int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void bilateralFilter( @ByVal GpuMat src, @ByVal GpuMat dst, int d,
+                                   double sigmaColor, double sigmaSpace );
 
 /** \brief Blurs an image using the box filter.
 <p>
@@ -4028,6 +4060,12 @@ center.
                              int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void boxFilter( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                              @ByVal Size ksize );
+@Namespace("cv") public static native void boxFilter( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                             @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+                             @Cast("bool") boolean normalize/*=true*/,
+                             int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void boxFilter( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                             @ByVal Size ksize );
 
 /** \brief Calculates the normalized sum of squares of the pixel values overlapping the filter.
 <p>
@@ -4059,6 +4097,12 @@ center.
                                 int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void sqrBoxFilter( @ByVal UMat _src, @ByVal UMat _dst, int ddepth,
                                 @ByVal Size ksize );
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal GpuMat _src, @ByVal GpuMat _dst, int ddepth,
+                                @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
+                                @Cast("bool") boolean normalize/*=true*/,
+                                int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal GpuMat _src, @ByVal GpuMat _dst, int ddepth,
+                                @ByVal Size ksize );
 
 /** \brief Blurs an image using the normalized box filter.
 <p>
@@ -4087,6 +4131,11 @@ center.
                         @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
                         int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void blur( @ByVal UMat src, @ByVal UMat dst,
+                        @ByVal Size ksize );
+@Namespace("cv") public static native void blur( @ByVal GpuMat src, @ByVal GpuMat dst,
+                        @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+                        int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void blur( @ByVal GpuMat src, @ByVal GpuMat dst,
                         @ByVal Size ksize );
 
 /** \brief Convolves an image with the kernel.
@@ -4129,6 +4178,11 @@ is at the kernel center.
                             double delta/*=0*/, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void filter2D( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                             @ByVal UMat kernel );
+@Namespace("cv") public static native void filter2D( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                            @ByVal GpuMat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+                            double delta/*=0*/, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void filter2D( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                            @ByVal GpuMat kernel );
 
 /** \brief Applies a separable linear filter to an image.
 <p>
@@ -4159,6 +4213,12 @@ is at the kernel center.
                                double delta/*=0*/, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void sepFilter2D( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                                @ByVal UMat kernelX, @ByVal UMat kernelY );
+@Namespace("cv") public static native void sepFilter2D( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                               @ByVal GpuMat kernelX, @ByVal GpuMat kernelY,
+                               @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+                               double delta/*=0*/, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void sepFilter2D( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                               @ByVal GpuMat kernelX, @ByVal GpuMat kernelY );
 
 /** \example Sobel_Demo.cpp
 Sample code using Sobel and/or Scharr OpenCV functions to make a simple Edge Detector
@@ -4219,6 +4279,12 @@ applied (see cv::getDerivKernels for details).
                          int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void Sobel( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                          int dx, int dy );
+@Namespace("cv") public static native void Sobel( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                         int dx, int dy, int ksize/*=3*/,
+                         double scale/*=1*/, double delta/*=0*/,
+                         int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void Sobel( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                         int dx, int dy );
 
 /** \brief Calculates the first order image derivative in both x and y using a Sobel operator
 <p>
@@ -4248,6 +4314,11 @@ Sobel( src, dy, CV_16SC1, 0, 1, 3 );
                                    int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void spatialGradient( @ByVal UMat src, @ByVal UMat dx,
                                    @ByVal UMat dy );
+@Namespace("cv") public static native void spatialGradient( @ByVal GpuMat src, @ByVal GpuMat dx,
+                                   @ByVal GpuMat dy, int ksize/*=3*/,
+                                   int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void spatialGradient( @ByVal GpuMat src, @ByVal GpuMat dx,
+                                   @ByVal GpuMat dy );
 
 /** \brief Calculates the first x- or y- image derivative using Scharr operator.
 <p>
@@ -4280,6 +4351,11 @@ applied (see getDerivKernels for details).
                           int dx, int dy, double scale/*=1*/, double delta/*=0*/,
                           int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void Scharr( @ByVal UMat src, @ByVal UMat dst, int ddepth,
+                          int dx, int dy );
+@Namespace("cv") public static native void Scharr( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                          int dx, int dy, double scale/*=1*/, double delta/*=0*/,
+                          int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void Scharr( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
                           int dx, int dy );
 
 /** \example laplace.cpp
@@ -4317,6 +4393,10 @@ applied. See getDerivKernels for details.
                              int ksize/*=1*/, double scale/*=1*/, double delta/*=0*/,
                              int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void Laplacian( @ByVal UMat src, @ByVal UMat dst, int ddepth );
+@Namespace("cv") public static native void Laplacian( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
+                             int ksize/*=1*/, double scale/*=1*/, double delta/*=0*/,
+                             int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void Laplacian( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth );
 
 /** \} imgproc_filter
  <p>
@@ -4356,6 +4436,11 @@ L2gradient=false ).
                          int apertureSize/*=3*/, @Cast("bool") boolean L2gradient/*=false*/ );
 @Namespace("cv") public static native void Canny( @ByVal UMat image, @ByVal UMat edges,
                          double threshold1, double threshold2 );
+@Namespace("cv") public static native void Canny( @ByVal GpuMat image, @ByVal GpuMat edges,
+                         double threshold1, double threshold2,
+                         int apertureSize/*=3*/, @Cast("bool") boolean L2gradient/*=false*/ );
+@Namespace("cv") public static native void Canny( @ByVal GpuMat image, @ByVal GpuMat edges,
+                         double threshold1, double threshold2 );
 
 /** \overload
 <p>
@@ -4378,6 +4463,13 @@ Finds edges in an image using the Canny algorithm with custom image gradient.
                          @Cast("bool") boolean L2gradient/*=false*/ );
 @Namespace("cv") public static native void Canny( @ByVal UMat dx, @ByVal UMat dy,
                          @ByVal UMat edges,
+                         double threshold1, double threshold2 );
+@Namespace("cv") public static native void Canny( @ByVal GpuMat dx, @ByVal GpuMat dy,
+                         @ByVal GpuMat edges,
+                         double threshold1, double threshold2,
+                         @Cast("bool") boolean L2gradient/*=false*/ );
+@Namespace("cv") public static native void Canny( @ByVal GpuMat dx, @ByVal GpuMat dy,
+                         @ByVal GpuMat edges,
                          double threshold1, double threshold2 );
 
 /** \brief Calculates the minimal eigenvalue of gradient matrices for corner detection.
@@ -4402,6 +4494,11 @@ src .
                                      int blockSize, int ksize/*=3*/,
                                      int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void cornerMinEigenVal( @ByVal UMat src, @ByVal UMat dst,
+                                     int blockSize );
+@Namespace("cv") public static native void cornerMinEigenVal( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                     int blockSize, int ksize/*=3*/,
+                                     int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void cornerMinEigenVal( @ByVal GpuMat src, @ByVal GpuMat dst,
                                      int blockSize );
 
 /** \brief Harris corner detector.
@@ -4432,6 +4529,11 @@ size as src .
                                 int ksize, double k,
                                 int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void cornerHarris( @ByVal UMat src, @ByVal UMat dst, int blockSize,
+                                int ksize, double k );
+@Namespace("cv") public static native void cornerHarris( @ByVal GpuMat src, @ByVal GpuMat dst, int blockSize,
+                                int ksize, double k,
+                                int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void cornerHarris( @ByVal GpuMat src, @ByVal GpuMat dst, int blockSize,
                                 int ksize, double k );
 
 /** \brief Calculates eigenvalues and eigenvectors of image blocks for corner detection.
@@ -4470,6 +4572,11 @@ The output of the function can be used for robust edge or corner detection.
                                           int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal UMat src, @ByVal UMat dst,
                                           int blockSize, int ksize );
+@Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                          int blockSize, int ksize,
+                                          int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                          int blockSize, int ksize );
 
 /** \brief Calculates a feature map for corner detection.
 <p>
@@ -4500,6 +4607,9 @@ The corners can be found as local maximums of the functions, as shown below:
 @Namespace("cv") public static native void preCornerDetect( @ByVal UMat src, @ByVal UMat dst, int ksize,
                                    int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void preCornerDetect( @ByVal UMat src, @ByVal UMat dst, int ksize );
+@Namespace("cv") public static native void preCornerDetect( @ByVal GpuMat src, @ByVal GpuMat dst, int ksize,
+                                   int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void preCornerDetect( @ByVal GpuMat src, @ByVal GpuMat dst, int ksize );
 
 /** \brief Refines the corner locations.
 <p>
@@ -4545,6 +4655,9 @@ the corner position moves by less than criteria.epsilon on some iteration.
                                 @ByVal Size winSize, @ByVal Size zeroZone,
                                 @ByVal TermCriteria criteria );
 @Namespace("cv") public static native void cornerSubPix( @ByVal UMat image, @ByVal UMat corners,
+                                @ByVal Size winSize, @ByVal Size zeroZone,
+                                @ByVal TermCriteria criteria );
+@Namespace("cv") public static native void cornerSubPix( @ByVal GpuMat image, @ByVal GpuMat corners,
                                 @ByVal Size winSize, @ByVal Size zeroZone,
                                 @ByVal TermCriteria criteria );
 
@@ -4604,6 +4717,12 @@ or cornerMinEigenVal.
                                      @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal UMat image, @ByVal UMat corners,
                                      int maxCorners, double qualityLevel, double minDistance );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal GpuMat image, @ByVal GpuMat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask, int blockSize/*=3*/,
+                                     @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal GpuMat image, @ByVal GpuMat corners,
+                                     int maxCorners, double qualityLevel, double minDistance );
 
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
                                      int maxCorners, double qualityLevel, double minDistance,
@@ -4622,6 +4741,15 @@ or cornerMinEigenVal.
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal UMat image, @ByVal UMat corners,
                                      int maxCorners, double qualityLevel, double minDistance,
                                      @ByVal UMat mask, int blockSize,
+                                     int gradientSize );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal GpuMat image, @ByVal GpuMat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal GpuMat mask, int blockSize,
+                                     int gradientSize, @Cast("bool") boolean useHarrisDetector/*=false*/,
+                                     double k/*=0.04*/ );
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal GpuMat image, @ByVal GpuMat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal GpuMat mask, int blockSize,
                                      int gradientSize );
 /** \example houghlines.cpp
 An example using the Hough line detector
@@ -4664,6 +4792,12 @@ Must fall between min_theta and CV_PI.
                               double srn/*=0*/, double stn/*=0*/,
                               double min_theta/*=0*/, double max_theta/*=CV_PI*/ );
 @Namespace("cv") public static native void HoughLines( @ByVal UMat image, @ByVal UMat lines,
+                              double rho, double theta, int threshold );
+@Namespace("cv") public static native void HoughLines( @ByVal GpuMat image, @ByVal GpuMat lines,
+                              double rho, double theta, int threshold,
+                              double srn/*=0*/, double stn/*=0*/,
+                              double min_theta/*=0*/, double max_theta/*=CV_PI*/ );
+@Namespace("cv") public static native void HoughLines( @ByVal GpuMat image, @ByVal GpuMat lines,
                               double rho, double theta, int threshold );
 
 /** \brief Finds line segments in a binary image using the probabilistic Hough transform.
@@ -4755,6 +4889,11 @@ votes ( \f$>\texttt{threshold}\f$ ).
                                double minLineLength/*=0*/, double maxLineGap/*=0*/ );
 @Namespace("cv") public static native void HoughLinesP( @ByVal UMat image, @ByVal UMat lines,
                                double rho, double theta, int threshold );
+@Namespace("cv") public static native void HoughLinesP( @ByVal GpuMat image, @ByVal GpuMat lines,
+                               double rho, double theta, int threshold,
+                               double minLineLength/*=0*/, double maxLineGap/*=0*/ );
+@Namespace("cv") public static native void HoughLinesP( @ByVal GpuMat image, @ByVal GpuMat lines,
+                               double rho, double theta, int threshold );
 
 /** \example houghcircles.cpp
 An example using the Hough circle detector
@@ -4839,6 +4978,12 @@ returned first.
                                int minRadius/*=0*/, int maxRadius/*=0*/ );
 @Namespace("cv") public static native void HoughCircles( @ByVal UMat image, @ByVal UMat circles,
                                int method, double dp, double minDist );
+@Namespace("cv") public static native void HoughCircles( @ByVal GpuMat image, @ByVal GpuMat circles,
+                               int method, double dp, double minDist,
+                               double param1/*=100*/, double param2/*=100*/,
+                               int minRadius/*=0*/, int maxRadius/*=0*/ );
+@Namespace("cv") public static native void HoughCircles( @ByVal GpuMat image, @ByVal GpuMat circles,
+                               int method, double dp, double minDist );
 
 /** \} imgproc_feature
  <p>
@@ -4883,6 +5028,11 @@ anchor is at the element center.
                          int borderType/*=cv::BORDER_CONSTANT*/,
                          @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
 @Namespace("cv") public static native void erode( @ByVal UMat src, @ByVal UMat dst, @ByVal UMat kernel );
+@Namespace("cv") public static native void erode( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat kernel,
+                         @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor, int iterations/*=1*/,
+                         int borderType/*=cv::BORDER_CONSTANT*/,
+                         @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
+@Namespace("cv") public static native void erode( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat kernel );
 
 /** \example Morphology_1.cpp
 Erosion and Dilation sample code
@@ -4920,6 +5070,11 @@ anchor is at the element center.
                           int borderType/*=cv::BORDER_CONSTANT*/,
                           @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
 @Namespace("cv") public static native void dilate( @ByVal UMat src, @ByVal UMat dst, @ByVal UMat kernel );
+@Namespace("cv") public static native void dilate( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat kernel,
+                          @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor, int iterations/*=1*/,
+                          int borderType/*=cv::BORDER_CONSTANT*/,
+                          @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
+@Namespace("cv") public static native void dilate( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat kernel );
 
 /** \brief Performs advanced morphological transformations.
 <p>
@@ -4959,6 +5114,13 @@ successively: erode -> erode -> dilate -> dilate (and not erode -> dilate -> ero
                                 @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
 @Namespace("cv") public static native void morphologyEx( @ByVal UMat src, @ByVal UMat dst,
                                 int op, @ByVal UMat kernel );
+@Namespace("cv") public static native void morphologyEx( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                int op, @ByVal GpuMat kernel,
+                                @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor, int iterations/*=1*/,
+                                int borderType/*=cv::BORDER_CONSTANT*/,
+                                @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
+@Namespace("cv") public static native void morphologyEx( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                int op, @ByVal GpuMat kernel );
 
 /** \} imgproc_filter
  <p>
@@ -5009,6 +5171,11 @@ src.size(), fx, and fy; the type of dst is the same as of src.
                           int interpolation/*=cv::INTER_LINEAR*/ );
 @Namespace("cv") public static native void resize( @ByVal UMat src, @ByVal UMat dst,
                           @ByVal Size dsize );
+@Namespace("cv") public static native void resize( @ByVal GpuMat src, @ByVal GpuMat dst,
+                          @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/,
+                          int interpolation/*=cv::INTER_LINEAR*/ );
+@Namespace("cv") public static native void resize( @ByVal GpuMat src, @ByVal GpuMat dst,
+                          @ByVal Size dsize );
 
 /** \brief Applies an affine transformation to an image.
 <p>
@@ -5048,6 +5215,13 @@ the "outliers" in the source image are not modified by the function.
                               @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
 @Namespace("cv") public static native void warpAffine( @ByVal UMat src, @ByVal UMat dst,
                               @ByVal UMat M, @ByVal Size dsize);
+@Namespace("cv") public static native void warpAffine( @ByVal GpuMat src, @ByVal GpuMat dst,
+                              @ByVal GpuMat M, @ByVal Size dsize,
+                              int flags/*=cv::INTER_LINEAR*/,
+                              int borderMode/*=cv::BORDER_CONSTANT*/,
+                              @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
+@Namespace("cv") public static native void warpAffine( @ByVal GpuMat src, @ByVal GpuMat dst,
+                              @ByVal GpuMat M, @ByVal Size dsize);
 
 /** \example warpPerspective_demo.cpp
 An example program shows using cv::findHomography and cv::warpPerspective for image warping
@@ -5088,6 +5262,13 @@ optional flag WARP_INVERSE_MAP, that sets M as the inverse transformation (
                                    @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
 @Namespace("cv") public static native void warpPerspective( @ByVal UMat src, @ByVal UMat dst,
                                    @ByVal UMat M, @ByVal Size dsize);
+@Namespace("cv") public static native void warpPerspective( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat M, @ByVal Size dsize,
+                                   int flags/*=cv::INTER_LINEAR*/,
+                                   int borderMode/*=cv::BORDER_CONSTANT*/,
+                                   @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
+@Namespace("cv") public static native void warpPerspective( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat M, @ByVal Size dsize);
 
 /** \brief Applies a generic geometrical transformation to an image.
 <p>
@@ -5135,6 +5316,13 @@ Due to current implementaion limitations the size of an input and output images 
 @Namespace("cv") public static native void remap( @ByVal UMat src, @ByVal UMat dst,
                          @ByVal UMat map1, @ByVal UMat map2,
                          int interpolation);
+@Namespace("cv") public static native void remap( @ByVal GpuMat src, @ByVal GpuMat dst,
+                         @ByVal GpuMat map1, @ByVal GpuMat map2,
+                         int interpolation, int borderMode/*=cv::BORDER_CONSTANT*/,
+                         @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
+@Namespace("cv") public static native void remap( @ByVal GpuMat src, @ByVal GpuMat dst,
+                         @ByVal GpuMat map1, @ByVal GpuMat map2,
+                         int interpolation);
 
 /** \brief Converts image transformation maps from one representation to another.
 <p>
@@ -5177,6 +5365,12 @@ nearest-neighbor or for a more complex interpolation.
                                int dstmap1type, @Cast("bool") boolean nninterpolation/*=false*/ );
 @Namespace("cv") public static native void convertMaps( @ByVal UMat map1, @ByVal UMat map2,
                                @ByVal UMat dstmap1, @ByVal UMat dstmap2,
+                               int dstmap1type );
+@Namespace("cv") public static native void convertMaps( @ByVal GpuMat map1, @ByVal GpuMat map2,
+                               @ByVal GpuMat dstmap1, @ByVal GpuMat dstmap2,
+                               int dstmap1type, @Cast("bool") boolean nninterpolation/*=false*/ );
+@Namespace("cv") public static native void convertMaps( @ByVal GpuMat map1, @ByVal GpuMat map2,
+                               @ByVal GpuMat dstmap1, @ByVal GpuMat dstmap2,
                                int dstmap1type );
 
 /** \brief Calculates an affine matrix of 2D rotation.
@@ -5233,6 +5427,7 @@ The result is also a \f$2 \times 3\f$ matrix of the same type as M.
  */
 @Namespace("cv") public static native void invertAffineTransform( @ByVal Mat M, @ByVal Mat iM );
 @Namespace("cv") public static native void invertAffineTransform( @ByVal UMat M, @ByVal UMat iM );
+@Namespace("cv") public static native void invertAffineTransform( @ByVal GpuMat M, @ByVal GpuMat iM );
 
 /** \brief Calculates a perspective transform from four pairs of the corresponding points.
 <p>
@@ -5251,9 +5446,11 @@ where
  */
 @Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 @Namespace("cv") public static native @ByVal Mat getAffineTransform( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native @ByVal Mat getAffineTransform( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native @ByVal Mat getAffineTransform( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Retrieves a pixel rectangle from an image with sub-pixel accuracy.
 <p>
@@ -5284,6 +5481,10 @@ source image. The center must be inside the image.
                                  @ByVal Point2f center, @ByVal UMat patch, int patchType/*=-1*/ );
 @Namespace("cv") public static native void getRectSubPix( @ByVal UMat image, @ByVal Size patchSize,
                                  @ByVal Point2f center, @ByVal UMat patch );
+@Namespace("cv") public static native void getRectSubPix( @ByVal GpuMat image, @ByVal Size patchSize,
+                                 @ByVal Point2f center, @ByVal GpuMat patch, int patchType/*=-1*/ );
+@Namespace("cv") public static native void getRectSubPix( @ByVal GpuMat image, @ByVal Size patchSize,
+                                 @ByVal Point2f center, @ByVal GpuMat patch );
 
 /** \example polar_transforms.cpp
 An example using the cv::linearPolar and cv::logPolar operations
@@ -5326,6 +5527,8 @@ rotation-invariant template matching, for object tracking and so forth.
                             @ByVal Point2f center, double M, int flags );
 @Namespace("cv") public static native void logPolar( @ByVal UMat src, @ByVal UMat dst,
                             @ByVal Point2f center, double M, int flags );
+@Namespace("cv") public static native void logPolar( @ByVal GpuMat src, @ByVal GpuMat dst,
+                            @ByVal Point2f center, double M, int flags );
 
 /** \brief Remaps an image to polar coordinates space.
 <p>
@@ -5367,6 +5570,8 @@ and
                                @ByVal Point2f center, double maxRadius, int flags );
 @Namespace("cv") public static native void linearPolar( @ByVal UMat src, @ByVal UMat dst,
                                @ByVal Point2f center, double maxRadius, int flags );
+@Namespace("cv") public static native void linearPolar( @ByVal GpuMat src, @ByVal GpuMat dst,
+                               @ByVal Point2f center, double maxRadius, int flags );
 
 /** \} imgproc_transform
  <p>
@@ -5378,6 +5583,8 @@ and
 @Namespace("cv") public static native void integral( @ByVal Mat src, @ByVal Mat sum );
 @Namespace("cv") public static native void integral( @ByVal UMat src, @ByVal UMat sum, int sdepth/*=-1*/ );
 @Namespace("cv") public static native void integral( @ByVal UMat src, @ByVal UMat sum );
+@Namespace("cv") public static native void integral( @ByVal GpuMat src, @ByVal GpuMat sum, int sdepth/*=-1*/ );
+@Namespace("cv") public static native void integral( @ByVal GpuMat src, @ByVal GpuMat sum );
 
 /** \overload */
 @Namespace("cv") public static native @Name("integral") void integral2( @ByVal Mat src, @ByVal Mat sum,
@@ -5388,6 +5595,10 @@ and
                                         @ByVal UMat sqsum, int sdepth/*=-1*/, int sqdepth/*=-1*/ );
 @Namespace("cv") public static native @Name("integral") void integral2( @ByVal UMat src, @ByVal UMat sum,
                                         @ByVal UMat sqsum );
+@Namespace("cv") public static native @Name("integral") void integral2( @ByVal GpuMat src, @ByVal GpuMat sum,
+                                        @ByVal GpuMat sqsum, int sdepth/*=-1*/, int sqdepth/*=-1*/ );
+@Namespace("cv") public static native @Name("integral") void integral2( @ByVal GpuMat src, @ByVal GpuMat sum,
+                                        @ByVal GpuMat sqsum );
 
 /** \brief Calculates the integral of an image.
 <p>
@@ -5433,6 +5644,11 @@ CV_64F.
                                         int sdepth/*=-1*/, int sqdepth/*=-1*/ );
 @Namespace("cv") public static native @Name("integral") void integral3( @ByVal UMat src, @ByVal UMat sum,
                                         @ByVal UMat sqsum, @ByVal UMat tilted );
+@Namespace("cv") public static native @Name("integral") void integral3( @ByVal GpuMat src, @ByVal GpuMat sum,
+                                        @ByVal GpuMat sqsum, @ByVal GpuMat tilted,
+                                        int sdepth/*=-1*/, int sqdepth/*=-1*/ );
+@Namespace("cv") public static native @Name("integral") void integral3( @ByVal GpuMat src, @ByVal GpuMat sum,
+                                        @ByVal GpuMat sqsum, @ByVal GpuMat tilted );
 
 /** \} imgproc_misc
  <p>
@@ -5462,6 +5678,9 @@ viewed by a still camera and for the further foreground-background segmentation.
 @Namespace("cv") public static native void accumulate( @ByVal UMat src, @ByVal UMat dst,
                               @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native void accumulate( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void accumulate( @ByVal GpuMat src, @ByVal GpuMat dst,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native void accumulate( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Adds the square of a source image to the accumulator.
 <p>
@@ -5485,6 +5704,9 @@ floating-point.
 @Namespace("cv") public static native void accumulateSquare( @ByVal UMat src, @ByVal UMat dst,
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native void accumulateSquare( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void accumulateSquare( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native void accumulateSquare( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Adds the per-element product of two input images to the accumulator.
 <p>
@@ -5510,6 +5732,10 @@ floating-point.
                                      @ByVal UMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native void accumulateProduct( @ByVal UMat src1, @ByVal UMat src2,
                                      @ByVal UMat dst );
+@Namespace("cv") public static native void accumulateProduct( @ByVal GpuMat src1, @ByVal GpuMat src2,
+                                     @ByVal GpuMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native void accumulateProduct( @ByVal GpuMat src1, @ByVal GpuMat src2,
+                                     @ByVal GpuMat dst );
 
 /** \brief Updates a running average.
 <p>
@@ -5536,6 +5762,10 @@ floating-point.
 @Namespace("cv") public static native void accumulateWeighted( @ByVal UMat src, @ByVal UMat dst,
                                       double alpha, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native void accumulateWeighted( @ByVal UMat src, @ByVal UMat dst,
+                                      double alpha );
+@Namespace("cv") public static native void accumulateWeighted( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                      double alpha, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native void accumulateWeighted( @ByVal GpuMat src, @ByVal GpuMat dst,
                                       double alpha );
 
 /** \brief The function is used to detect translational shifts that occur between two images.
@@ -5578,11 +5808,22 @@ peak) and will be smaller when there are multiple peaks.
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2);
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2,
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat window, DoubleBuffer response/*=0*/);
-@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal UMat src1, @ByVal UMat src2,
-                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat window, double[] response/*=0*/);
-@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal UMat src1, @ByVal UMat src2);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat window, double[] response/*=0*/);
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal UMat src1, @ByVal UMat src2,
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat window, DoublePointer response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal UMat src1, @ByVal UMat src2);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal UMat src1, @ByVal UMat src2,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat window, DoubleBuffer response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal UMat src1, @ByVal UMat src2,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat window, double[] response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat window, DoublePointer response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal GpuMat src1, @ByVal GpuMat src2);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat window, DoubleBuffer response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat window, double[] response/*=0*/);
 
 /** \brief This function computes a Hanning window coefficients in two dimensions.
 <p>
@@ -5601,6 +5842,7 @@ An example is shown below:
  */
 @Namespace("cv") public static native void createHanningWindow(@ByVal Mat dst, @ByVal Size winSize, int type);
 @Namespace("cv") public static native void createHanningWindow(@ByVal UMat dst, @ByVal Size winSize, int type);
+@Namespace("cv") public static native void createHanningWindow(@ByVal GpuMat dst, @ByVal Size winSize, int type);
 
 /** \} imgproc_motion
  <p>
@@ -5636,6 +5878,8 @@ types.
                                double thresh, double maxval, int type );
 @Namespace("cv") public static native double threshold( @ByVal UMat src, @ByVal UMat dst,
                                double thresh, double maxval, int type );
+@Namespace("cv") public static native double threshold( @ByVal GpuMat src, @ByVal GpuMat dst,
+                               double thresh, double maxval, int type );
 
 
 /** \brief Applies an adaptive threshold to an array.
@@ -5666,6 +5910,9 @@ is positive but may be zero or negative as well.
                                      double maxValue, int adaptiveMethod,
                                      int thresholdType, int blockSize, double C );
 @Namespace("cv") public static native void adaptiveThreshold( @ByVal UMat src, @ByVal UMat dst,
+                                     double maxValue, int adaptiveMethod,
+                                     int thresholdType, int blockSize, double C );
+@Namespace("cv") public static native void adaptiveThreshold( @ByVal GpuMat src, @ByVal GpuMat dst,
                                      double maxValue, int adaptiveMethod,
                                      int thresholdType, int blockSize, double C );
 
@@ -5702,6 +5949,9 @@ Then, it downsamples the image by rejecting even rows and columns.
 @Namespace("cv") public static native void pyrDown( @ByVal UMat src, @ByVal UMat dst,
                            @Const @ByRef(nullValue = "cv::Size()") Size dstsize, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void pyrDown( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void pyrDown( @ByVal GpuMat src, @ByVal GpuMat dst,
+                           @Const @ByRef(nullValue = "cv::Size()") Size dstsize, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void pyrDown( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Upsamples an image and then blurs it.
 <p>
@@ -5726,6 +5976,9 @@ pyrDown multiplied by 4.
 @Namespace("cv") public static native void pyrUp( @ByVal UMat src, @ByVal UMat dst,
                          @Const @ByRef(nullValue = "cv::Size()") Size dstsize, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void pyrUp( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void pyrUp( @ByVal GpuMat src, @ByVal GpuMat dst,
+                         @Const @ByRef(nullValue = "cv::Size()") Size dstsize, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void pyrUp( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Constructs the Gaussian pyramid for an image.
 <p>
@@ -5746,6 +5999,10 @@ same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, an
                               int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal UMatVector dst,
                               int maxlevel );
+@Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal GpuMatVector dst,
+                              int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal GpuMatVector dst,
+                              int maxlevel );
 @Namespace("cv") public static native void buildPyramid( @ByVal UMat src, @ByVal MatVector dst,
                               int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void buildPyramid( @ByVal UMat src, @ByVal MatVector dst,
@@ -5753,6 +6010,22 @@ same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, an
 @Namespace("cv") public static native void buildPyramid( @ByVal UMat src, @ByVal UMatVector dst,
                               int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void buildPyramid( @ByVal UMat src, @ByVal UMatVector dst,
+                              int maxlevel );
+@Namespace("cv") public static native void buildPyramid( @ByVal UMat src, @ByVal GpuMatVector dst,
+                              int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void buildPyramid( @ByVal UMat src, @ByVal GpuMatVector dst,
+                              int maxlevel );
+@Namespace("cv") public static native void buildPyramid( @ByVal GpuMat src, @ByVal MatVector dst,
+                              int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void buildPyramid( @ByVal GpuMat src, @ByVal MatVector dst,
+                              int maxlevel );
+@Namespace("cv") public static native void buildPyramid( @ByVal GpuMat src, @ByVal UMatVector dst,
+                              int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void buildPyramid( @ByVal GpuMat src, @ByVal UMatVector dst,
+                              int maxlevel );
+@Namespace("cv") public static native void buildPyramid( @ByVal GpuMat src, @ByVal GpuMatVector dst,
+                              int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
+@Namespace("cv") public static native void buildPyramid( @ByVal GpuMat src, @ByVal GpuMatVector dst,
                               int maxlevel );
 
 /** \} imgproc_filter
@@ -5803,6 +6076,13 @@ cameraMatrix but you may additionally scale and shift the result by using a diff
 @Namespace("cv") public static native void undistort( @ByVal UMat src, @ByVal UMat dst,
                              @ByVal UMat cameraMatrix,
                              @ByVal UMat distCoeffs );
+@Namespace("cv") public static native void undistort( @ByVal GpuMat src, @ByVal GpuMat dst,
+                             @ByVal GpuMat cameraMatrix,
+                             @ByVal GpuMat distCoeffs,
+                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat newCameraMatrix );
+@Namespace("cv") public static native void undistort( @ByVal GpuMat src, @ByVal GpuMat dst,
+                             @ByVal GpuMat cameraMatrix,
+                             @ByVal GpuMat distCoeffs );
 
 /** \brief Computes the undistortion and rectification transformation map.
 <p>
@@ -5872,6 +6152,9 @@ is assumed. In cvInitUndistortMap R assumed to be an identity matrix.
 @Namespace("cv") public static native void initUndistortRectifyMap( @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                            @ByVal UMat R, @ByVal UMat newCameraMatrix,
                            @ByVal Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2 );
+@Namespace("cv") public static native void initUndistortRectifyMap( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal GpuMat R, @ByVal GpuMat newCameraMatrix,
+                           @ByVal Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2 );
 
 /** initializes maps for cv::remap() for wide-angle */
 @Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
@@ -5888,6 +6171,13 @@ is assumed. In cvInitUndistortMap R assumed to be an identity matrix.
 @Namespace("cv") public static native float initWideAngleProjMap( @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                          @ByVal Size imageSize, int destImageWidth,
                                          int m1type, @ByVal UMat map1, @ByVal UMat map2);
+@Namespace("cv") public static native float initWideAngleProjMap( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                         @ByVal Size imageSize, int destImageWidth,
+                                         int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2,
+                                         int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
+@Namespace("cv") public static native float initWideAngleProjMap( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                         @ByVal Size imageSize, int destImageWidth,
+                                         int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
 
 /** \brief Returns the default new camera matrix.
 <p>
@@ -5917,6 +6207,9 @@ parameter indicates whether this location should be at the image center or not.
 @Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal UMat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
                                             @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
 @Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal UMat cameraMatrix );
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal GpuMat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
+                                            @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal GpuMat cameraMatrix );
 
 /** \brief Computes the ideal point coordinates from the observed point coordinates.
 <p>
@@ -5968,6 +6261,11 @@ cv::stereoRectify can be passed here. If the matrix is empty, the identity new c
                                    @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P);
 @Namespace("cv") public static native void undistortPoints( @ByVal UMat src, @ByVal UMat dst,
                                    @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs);
+@Namespace("cv") public static native void undistortPoints( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                   @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P);
+@Namespace("cv") public static native void undistortPoints( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs);
 /** \overload
     \note Default version of cv::undistortPoints does 5 iterations to compute undistorted points.
  <p>
@@ -5978,6 +6276,9 @@ cv::stereoRectify can be passed here. If the matrix is empty, the identity new c
 @Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal UMat src, @ByVal UMat dst,
                                    @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                    @ByVal UMat R, @ByVal UMat P, @ByVal TermCriteria criteria);
+@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                   @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                   @ByVal GpuMat R, @ByVal GpuMat P, @ByVal TermCriteria criteria);
 
 /** \} imgproc_transform
  <p>
@@ -6098,12 +6399,12 @@ arrays, or to update the histogram in time.
                           @ByVal Mat hist, int dims, @Const IntBuffer histSize,
                           @Const @ByPtrPtr FloatBuffer ranges );
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
-                          @Const int[] channels, @ByVal UMat mask,
-                          @ByVal UMat hist, int dims, @Const int[] histSize,
+                          @Const int[] channels, @ByVal Mat mask,
+                          @ByVal Mat hist, int dims, @Const int[] histSize,
                           @Const @ByPtrPtr float[] ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
-                          @Const int[] channels, @ByVal UMat mask,
-                          @ByVal UMat hist, int dims, @Const int[] histSize,
+                          @Const int[] channels, @ByVal Mat mask,
+                          @ByVal Mat hist, int dims, @Const int[] histSize,
                           @Const @ByPtrPtr float[] ranges );
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
                           @Const IntPointer channels, @ByVal UMat mask,
@@ -6113,6 +6414,46 @@ arrays, or to update the histogram in time.
                           @Const IntPointer channels, @ByVal UMat mask,
                           @ByVal UMat hist, int dims, @Const IntPointer histSize,
                           @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal UMat mask,
+                          @ByVal UMat hist, int dims, @Const IntBuffer histSize,
+                          @Const @ByPtrPtr FloatBuffer ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal UMat mask,
+                          @ByVal UMat hist, int dims, @Const IntBuffer histSize,
+                          @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal UMat mask,
+                          @ByVal UMat hist, int dims, @Const int[] histSize,
+                          @Const @ByPtrPtr float[] ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal UMat mask,
+                          @ByVal UMat hist, int dims, @Const int[] histSize,
+                          @Const @ByPtrPtr float[] ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal GpuMat mask,
+                          @ByVal GpuMat hist, int dims, @Const IntPointer histSize,
+                          @Const @ByPtrPtr FloatPointer ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal GpuMat mask,
+                          @ByVal GpuMat hist, int dims, @Const IntPointer histSize,
+                          @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal GpuMat mask,
+                          @ByVal GpuMat hist, int dims, @Const IntBuffer histSize,
+                          @Const @ByPtrPtr FloatBuffer ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal GpuMat mask,
+                          @ByVal GpuMat hist, int dims, @Const IntBuffer histSize,
+                          @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal GpuMat mask,
+                          @ByVal GpuMat hist, int dims, @Const int[] histSize,
+                          @Const @ByPtrPtr float[] ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal GpuMat mask,
+                          @ByVal GpuMat hist, int dims, @Const int[] histSize,
+                          @Const @ByPtrPtr float[] ranges );
 
 /** \overload
 <p>
@@ -6142,12 +6483,12 @@ this variant uses cv::SparseMat for output
                           @ByRef SparseMat hist, int dims,
                           @Const IntBuffer histSize, @Const @ByPtrPtr FloatBuffer ranges );
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
-                          @Const int[] channels, @ByVal UMat mask,
+                          @Const int[] channels, @ByVal Mat mask,
                           @ByRef SparseMat hist, int dims,
                           @Const int[] histSize, @Const @ByPtrPtr float[] ranges,
                           @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
-                          @Const int[] channels, @ByVal UMat mask,
+                          @Const int[] channels, @ByVal Mat mask,
                           @ByRef SparseMat hist, int dims,
                           @Const int[] histSize, @Const @ByPtrPtr float[] ranges );
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
@@ -6159,6 +6500,51 @@ this variant uses cv::SparseMat for output
                           @Const IntPointer channels, @ByVal UMat mask,
                           @ByRef SparseMat hist, int dims,
                           @Const IntPointer histSize, @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal UMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntBuffer histSize, @Const @ByPtrPtr FloatBuffer ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal UMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntBuffer histSize, @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal UMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const int[] histSize, @Const @ByPtrPtr float[] ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal UMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const int[] histSize, @Const @ByPtrPtr float[] ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal GpuMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntPointer histSize, @Const @ByPtrPtr FloatPointer ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal GpuMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntPointer histSize, @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal GpuMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntBuffer histSize, @Const @ByPtrPtr FloatBuffer ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal GpuMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntBuffer histSize, @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal GpuMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const int[] histSize, @Const @ByPtrPtr float[] ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal GpuMat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const int[] histSize, @Const @ByPtrPtr float[] ranges );
 
 /** \overload */
 @Namespace("cv") public static native void calcHist( @ByVal MatVector images,
@@ -6183,46 +6569,13 @@ this variant uses cv::SparseMat for output
                             @ByVal Mat mask, @ByVal Mat hist,
                             @StdVector IntBuffer histSize,
                             @StdVector FloatBuffer ranges );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
-                            @StdVector int[] channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
-                            @StdVector int[] histSize,
-                            @StdVector float[] ranges,
-                            @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
-                            @StdVector int[] channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
-                            @StdVector int[] histSize,
-                            @StdVector float[] ranges );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
-                            @StdVector IntPointer channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
-                            @StdVector IntPointer histSize,
-                            @StdVector FloatPointer ranges,
-                            @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
-                            @StdVector IntPointer channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
-                            @StdVector IntPointer histSize,
-                            @StdVector FloatPointer ranges );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
-                            @StdVector IntBuffer channels,
-                            @ByVal Mat mask, @ByVal Mat hist,
-                            @StdVector IntBuffer histSize,
-                            @StdVector FloatBuffer ranges,
-                            @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
-                            @StdVector IntBuffer channels,
-                            @ByVal Mat mask, @ByVal Mat hist,
-                            @StdVector IntBuffer histSize,
-                            @StdVector FloatBuffer ranges );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal GpuMatVector images,
                             @StdVector int[] channels,
                             @ByVal Mat mask, @ByVal Mat hist,
                             @StdVector int[] histSize,
                             @StdVector float[] ranges,
                             @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal GpuMatVector images,
                             @StdVector int[] channels,
                             @ByVal Mat mask, @ByVal Mat hist,
                             @StdVector int[] histSize,
@@ -6249,48 +6602,48 @@ this variant uses cv::SparseMat for output
                             @ByVal UMat mask, @ByVal UMat hist,
                             @StdVector IntBuffer histSize,
                             @StdVector FloatBuffer ranges );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal GpuMatVector images,
                             @StdVector int[] channels,
-                            @ByVal Mat mask, @ByVal Mat hist,
+                            @ByVal UMat mask, @ByVal UMat hist,
                             @StdVector int[] histSize,
                             @StdVector float[] ranges,
                             @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal GpuMatVector images,
                             @StdVector int[] channels,
-                            @ByVal Mat mask, @ByVal Mat hist,
+                            @ByVal UMat mask, @ByVal UMat hist,
                             @StdVector int[] histSize,
                             @StdVector float[] ranges );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
                             @StdVector IntPointer channels,
-                            @ByVal Mat mask, @ByVal Mat hist,
+                            @ByVal GpuMat mask, @ByVal GpuMat hist,
                             @StdVector IntPointer histSize,
                             @StdVector FloatPointer ranges,
                             @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
                             @StdVector IntPointer channels,
-                            @ByVal Mat mask, @ByVal Mat hist,
+                            @ByVal GpuMat mask, @ByVal GpuMat hist,
                             @StdVector IntPointer histSize,
                             @StdVector FloatPointer ranges );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
                             @StdVector IntBuffer channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
+                            @ByVal GpuMat mask, @ByVal GpuMat hist,
                             @StdVector IntBuffer histSize,
                             @StdVector FloatBuffer ranges,
                             @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
                             @StdVector IntBuffer channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
+                            @ByVal GpuMat mask, @ByVal GpuMat hist,
                             @StdVector IntBuffer histSize,
                             @StdVector FloatBuffer ranges );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal GpuMatVector images,
                             @StdVector int[] channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
+                            @ByVal GpuMat mask, @ByVal GpuMat hist,
                             @StdVector int[] histSize,
                             @StdVector float[] ranges,
                             @Cast("bool") boolean accumulate/*=false*/ );
-@Namespace("cv") public static native void calcHist( @ByVal UMatVector images,
+@Namespace("cv") public static native void calcHist( @ByVal GpuMatVector images,
                             @StdVector int[] channels,
-                            @ByVal UMat mask, @ByVal UMat hist,
+                            @ByVal GpuMat mask, @ByVal GpuMat hist,
                             @StdVector int[] histSize,
                             @StdVector float[] ranges );
 
@@ -6352,12 +6705,12 @@ size and depth as images[0] .
                                  @Const IntBuffer channels, @ByVal Mat hist,
                                  @ByVal Mat backProject, @Const @ByPtrPtr FloatBuffer ranges );
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
-                                 @Const int[] channels, @ByVal UMat hist,
-                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges,
+                                 @Const int[] channels, @ByVal Mat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr float[] ranges,
                                  double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
-                                 @Const int[] channels, @ByVal UMat hist,
-                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges );
+                                 @Const int[] channels, @ByVal Mat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr float[] ranges );
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const IntPointer channels, @ByVal UMat hist,
                                  @ByVal UMat backProject, @Const @ByPtrPtr FloatPointer ranges,
@@ -6365,6 +6718,41 @@ size and depth as images[0] .
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const IntPointer channels, @ByVal UMat hist,
                                  @ByVal UMat backProject, @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @ByVal UMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr FloatBuffer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @ByVal UMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @ByVal UMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @ByVal UMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @ByVal GpuMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatPointer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @ByVal GpuMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @ByVal GpuMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatBuffer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @ByVal GpuMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @ByVal GpuMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr float[] ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @ByVal GpuMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr float[] ranges );
 
 /** \overload */
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
@@ -6387,11 +6775,11 @@ size and depth as images[0] .
                                  @ByVal Mat backProject, @Const @ByPtrPtr FloatBuffer ranges );
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const int[] channels, @Const @ByRef SparseMat hist,
-                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr float[] ranges,
                                  double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const int[] channels, @Const @ByRef SparseMat hist,
-                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges );
+                                 @ByVal Mat backProject, @Const @ByPtrPtr float[] ranges );
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const IntPointer channels, @Const @ByRef SparseMat hist,
                                  @ByVal UMat backProject, @Const @ByPtrPtr FloatPointer ranges,
@@ -6399,6 +6787,41 @@ size and depth as images[0] .
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const IntPointer channels, @Const @ByRef SparseMat hist,
                                  @ByVal UMat backProject, @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr FloatBuffer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @Const @ByRef SparseMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @Const @ByRef SparseMat hist,
+                                 @ByVal UMat backProject, @Const @ByPtrPtr float[] ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatPointer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatPointer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatBuffer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr FloatBuffer ranges );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @Const @ByRef SparseMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr float[] ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @Const @ByRef SparseMat hist,
+                                 @ByVal GpuMat backProject, @Const @ByPtrPtr float[] ranges );
 
 /** \overload */
 @Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector IntPointer channels,
@@ -6409,19 +6832,7 @@ size and depth as images[0] .
                                    @ByVal Mat hist, @ByVal Mat dst,
                                    @StdVector FloatBuffer ranges,
                                    double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector int[] channels,
-                                   @ByVal UMat hist, @ByVal UMat dst,
-                                   @StdVector float[] ranges,
-                                   double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal UMatVector images, @StdVector IntPointer channels,
-                                   @ByVal UMat hist, @ByVal UMat dst,
-                                   @StdVector FloatPointer ranges,
-                                   double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector IntBuffer channels,
-                                   @ByVal Mat hist, @ByVal Mat dst,
-                                   @StdVector FloatBuffer ranges,
-                                   double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal UMatVector images, @StdVector int[] channels,
+@Namespace("cv") public static native void calcBackProject( @ByVal GpuMatVector images, @StdVector int[] channels,
                                    @ByVal Mat hist, @ByVal Mat dst,
                                    @StdVector float[] ranges,
                                    double scale );
@@ -6433,20 +6844,20 @@ size and depth as images[0] .
                                    @ByVal UMat hist, @ByVal UMat dst,
                                    @StdVector FloatBuffer ranges,
                                    double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector int[] channels,
-                                   @ByVal Mat hist, @ByVal Mat dst,
+@Namespace("cv") public static native void calcBackProject( @ByVal GpuMatVector images, @StdVector int[] channels,
+                                   @ByVal UMat hist, @ByVal UMat dst,
                                    @StdVector float[] ranges,
                                    double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal UMatVector images, @StdVector IntPointer channels,
-                                   @ByVal Mat hist, @ByVal Mat dst,
+@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector IntPointer channels,
+                                   @ByVal GpuMat hist, @ByVal GpuMat dst,
                                    @StdVector FloatPointer ranges,
                                    double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector IntBuffer channels,
-                                   @ByVal UMat hist, @ByVal UMat dst,
+@Namespace("cv") public static native void calcBackProject( @ByVal UMatVector images, @StdVector IntBuffer channels,
+                                   @ByVal GpuMat hist, @ByVal GpuMat dst,
                                    @StdVector FloatBuffer ranges,
                                    double scale );
-@Namespace("cv") public static native void calcBackProject( @ByVal UMatVector images, @StdVector int[] channels,
-                                   @ByVal UMat hist, @ByVal UMat dst,
+@Namespace("cv") public static native void calcBackProject( @ByVal GpuMatVector images, @StdVector int[] channels,
+                                   @ByVal GpuMat hist, @ByVal GpuMat dst,
                                    @StdVector float[] ranges,
                                    double scale );
 
@@ -6467,6 +6878,7 @@ or more general sparse configurations of weighted points, consider using the cv:
  */
 @Namespace("cv") public static native double compareHist( @ByVal Mat H1, @ByVal Mat H2, int method );
 @Namespace("cv") public static native double compareHist( @ByVal UMat H1, @ByVal UMat H2, int method );
+@Namespace("cv") public static native double compareHist( @ByVal GpuMat H1, @ByVal GpuMat H2, int method );
 
 /** \overload */
 @Namespace("cv") public static native double compareHist( @Const @ByRef SparseMat H1, @Const @ByRef SparseMat H2, int method );
@@ -6488,6 +6900,7 @@ The algorithm normalizes the brightness and increases the contrast of the image.
  */
 @Namespace("cv") public static native void equalizeHist( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native void equalizeHist( @ByVal UMat src, @ByVal UMat dst );
+@Namespace("cv") public static native void equalizeHist( @ByVal GpuMat src, @ByVal GpuMat dst );
 
 /** \brief Computes the "minimal work" distance between two weighted point configurations.
 <p>
@@ -6531,14 +6944,31 @@ a flow from \f$i\f$ -th point of signature1 to \f$j\f$ -th point of signature2 .
 @Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
                       int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cost,
                       FloatBuffer lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat flow );
+@Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
+                      int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cost,
+                      float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat flow );
 @Namespace("cv") public static native float EMD( @ByVal UMat signature1, @ByVal UMat signature2,
                       int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cost,
-                      float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat flow );
+                      FloatPointer lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat flow );
 @Namespace("cv") public static native float EMD( @ByVal UMat signature1, @ByVal UMat signature2,
                       int distType );
 @Namespace("cv") public static native float EMD( @ByVal UMat signature1, @ByVal UMat signature2,
                       int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cost,
-                      FloatPointer lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat flow );
+                      FloatBuffer lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat flow );
+@Namespace("cv") public static native float EMD( @ByVal UMat signature1, @ByVal UMat signature2,
+                      int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cost,
+                      float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat flow );
+@Namespace("cv") public static native float EMD( @ByVal GpuMat signature1, @ByVal GpuMat signature2,
+                      int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cost,
+                      FloatPointer lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat flow );
+@Namespace("cv") public static native float EMD( @ByVal GpuMat signature1, @ByVal GpuMat signature2,
+                      int distType );
+@Namespace("cv") public static native float EMD( @ByVal GpuMat signature1, @ByVal GpuMat signature2,
+                      int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cost,
+                      FloatBuffer lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat flow );
+@Namespace("cv") public static native float EMD( @ByVal GpuMat signature1, @ByVal GpuMat signature2,
+                      int distType, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cost,
+                      float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat flow );
 
 /** \} imgproc_hist
 <p>
@@ -6574,6 +7004,7 @@ size as image .
  */
 @Namespace("cv") public static native void watershed( @ByVal Mat image, @ByVal Mat markers );
 @Namespace("cv") public static native void watershed( @ByVal UMat image, @ByVal UMat markers );
+@Namespace("cv") public static native void watershed( @ByVal GpuMat image, @ByVal GpuMat markers );
 
 /** \addtogroup imgproc_filter
  *  \{
@@ -6624,6 +7055,11 @@ whole original image (i.e. when maxLevel==0).
                                          @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER+cv::TermCriteria::EPS,5,1)") TermCriteria termcrit );
 @Namespace("cv") public static native void pyrMeanShiftFiltering( @ByVal UMat src, @ByVal UMat dst,
                                          double sp, double sr );
+@Namespace("cv") public static native void pyrMeanShiftFiltering( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                         double sp, double sr, int maxLevel/*=1*/,
+                                         @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER+cv::TermCriteria::EPS,5,1)") TermCriteria termcrit );
+@Namespace("cv") public static native void pyrMeanShiftFiltering( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                         double sp, double sr );
 
 /** \}
  <p>
@@ -6664,6 +7100,12 @@ mode==GC_EVAL .
                            int iterCount, int mode/*=cv::GC_EVAL*/ );
 @Namespace("cv") public static native void grabCut( @ByVal UMat img, @ByVal UMat mask, @ByVal Rect rect,
                            @ByVal UMat bgdModel, @ByVal UMat fgdModel,
+                           int iterCount );
+@Namespace("cv") public static native void grabCut( @ByVal GpuMat img, @ByVal GpuMat mask, @ByVal Rect rect,
+                           @ByVal GpuMat bgdModel, @ByVal GpuMat fgdModel,
+                           int iterCount, int mode/*=cv::GC_EVAL*/ );
+@Namespace("cv") public static native void grabCut( @ByVal GpuMat img, @ByVal GpuMat mask, @ByVal Rect rect,
+                           @ByVal GpuMat bgdModel, @ByVal GpuMat fgdModel,
                            int iterCount );
 
 /** \example distrans.cpp
@@ -6734,6 +7176,11 @@ the parameter is forced to 3 because a \f$3\times 3\f$ mask gives the same resul
                                      int labelType/*=cv::DIST_LABEL_CCOMP*/ );
 @Namespace("cv") public static native @Name("distanceTransform") void distanceTransformWithLabels( @ByVal UMat src, @ByVal UMat dst,
                                      @ByVal UMat labels, int distanceType, int maskSize );
+@Namespace("cv") public static native @Name("distanceTransform") void distanceTransformWithLabels( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat labels, int distanceType, int maskSize,
+                                     int labelType/*=cv::DIST_LABEL_CCOMP*/ );
+@Namespace("cv") public static native @Name("distanceTransform") void distanceTransformWithLabels( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat labels, int distanceType, int maskSize );
 
 /** \overload
 @param src 8-bit, single-channel (binary) source image.
@@ -6753,6 +7200,10 @@ the first variant of the function and distanceType == DIST_L1.
 @Namespace("cv") public static native void distanceTransform( @ByVal UMat src, @ByVal UMat dst,
                                      int distanceType, int maskSize, int dstType/*=CV_32F*/);
 @Namespace("cv") public static native void distanceTransform( @ByVal UMat src, @ByVal UMat dst,
+                                     int distanceType, int maskSize);
+@Namespace("cv") public static native void distanceTransform( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                     int distanceType, int maskSize, int dstType/*=CV_32F*/);
+@Namespace("cv") public static native void distanceTransform( @ByVal GpuMat src, @ByVal GpuMat dst,
                                      int distanceType, int maskSize);
 
 /** \example ffilldemo.cpp
@@ -6774,6 +7225,12 @@ variant without {@code mask} parameter
                           @ByVal(nullValue = "cv::Scalar()") Scalar loDiff, @ByVal(nullValue = "cv::Scalar()") Scalar upDiff,
                           int flags/*=4*/ );
 @Namespace("cv") public static native int floodFill( @ByVal UMat image,
+                          @ByVal Point seedPoint, @ByVal Scalar newVal );
+@Namespace("cv") public static native int floodFill( @ByVal GpuMat image,
+                          @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
+                          @ByVal(nullValue = "cv::Scalar()") Scalar loDiff, @ByVal(nullValue = "cv::Scalar()") Scalar upDiff,
+                          int flags/*=4*/ );
+@Namespace("cv") public static native int floodFill( @ByVal GpuMat image,
                           @ByVal Point seedPoint, @ByVal Scalar newVal );
 
 /** \brief Fills a connected component with the given color.
@@ -6858,6 +7315,12 @@ pixel \f$(x+1, y+1)\f$ in the mask .
                             int flags/*=4*/ );
 @Namespace("cv") public static native int floodFill( @ByVal UMat image, @ByVal UMat mask,
                             @ByVal Point seedPoint, @ByVal Scalar newVal );
+@Namespace("cv") public static native int floodFill( @ByVal GpuMat image, @ByVal GpuMat mask,
+                            @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
+                            @ByVal(nullValue = "cv::Scalar()") Scalar loDiff, @ByVal(nullValue = "cv::Scalar()") Scalar upDiff,
+                            int flags/*=4*/ );
+@Namespace("cv") public static native int floodFill( @ByVal GpuMat image, @ByVal GpuMat mask,
+                            @ByVal Point seedPoint, @ByVal Scalar newVal );
 
 /** \brief Converts an image from one color space to another.
 <p>
@@ -6904,6 +7367,8 @@ channels is derived automatically from src and code.
 @Namespace("cv") public static native void cvtColor( @ByVal Mat src, @ByVal Mat dst, int code );
 @Namespace("cv") public static native void cvtColor( @ByVal UMat src, @ByVal UMat dst, int code, int dstCn/*=0*/ );
 @Namespace("cv") public static native void cvtColor( @ByVal UMat src, @ByVal UMat dst, int code );
+@Namespace("cv") public static native void cvtColor( @ByVal GpuMat src, @ByVal GpuMat dst, int code, int dstCn/*=0*/ );
+@Namespace("cv") public static native void cvtColor( @ByVal GpuMat src, @ByVal GpuMat dst, int code );
 
 /** \} imgproc_misc */
 
@@ -6912,6 +7377,8 @@ channels is derived automatically from src and code.
 @Namespace("cv") public static native void demosaicing(@ByVal Mat _src, @ByVal Mat _dst, int code);
 @Namespace("cv") public static native void demosaicing(@ByVal UMat _src, @ByVal UMat _dst, int code, int dcn/*=0*/);
 @Namespace("cv") public static native void demosaicing(@ByVal UMat _src, @ByVal UMat _dst, int code);
+@Namespace("cv") public static native void demosaicing(@ByVal GpuMat _src, @ByVal GpuMat _dst, int code, int dcn/*=0*/);
+@Namespace("cv") public static native void demosaicing(@ByVal GpuMat _src, @ByVal GpuMat _dst, int code);
 
 /** \addtogroup imgproc_shape
  *  \{
@@ -6936,6 +7403,8 @@ type for the input array should be either np.int32 or np.float32.
 @Namespace("cv") public static native @ByVal Moments moments( @ByVal Mat array );
 @Namespace("cv") public static native @ByVal Moments moments( @ByVal UMat array, @Cast("bool") boolean binaryImage/*=false*/ );
 @Namespace("cv") public static native @ByVal Moments moments( @ByVal UMat array );
+@Namespace("cv") public static native @ByVal Moments moments( @ByVal GpuMat array, @Cast("bool") boolean binaryImage/*=false*/ );
+@Namespace("cv") public static native @ByVal Moments moments( @ByVal GpuMat array );
 
 /** \brief Calculates seven Hu invariants.
 <p>
@@ -6963,6 +7432,7 @@ transformed images are a bit different.
 /** \overload */
 @Namespace("cv") public static native void HuMoments( @Const @ByRef Moments m, @ByVal Mat hu );
 @Namespace("cv") public static native void HuMoments( @Const @ByRef Moments m, @ByVal UMat hu );
+@Namespace("cv") public static native void HuMoments( @Const @ByRef Moments m, @ByVal GpuMat hu );
 
 /** \} imgproc_shape
  <p>
@@ -7021,6 +7491,10 @@ not set by default. Currently, only the TM_SQDIFF and TM_CCORR_NORMED methods ar
                                  @ByVal UMat result, int method, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
 @Namespace("cv") public static native void matchTemplate( @ByVal UMat image, @ByVal UMat templ,
                                  @ByVal UMat result, int method );
+@Namespace("cv") public static native void matchTemplate( @ByVal GpuMat image, @ByVal GpuMat templ,
+                                 @ByVal GpuMat result, int method, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+@Namespace("cv") public static native void matchTemplate( @ByVal GpuMat image, @ByVal GpuMat templ,
+                                 @ByVal GpuMat result, int method );
 
 /** \}
  <p>
@@ -7048,6 +7522,8 @@ parallel framework is enabled and if the rows of the image are at least twice th
                                                                         int connectivity, int ltype, int ccltype);
 @Namespace("cv") public static native @Name("connectedComponents") int connectedComponentsWithAlgorithm(@ByVal UMat image, @ByVal UMat labels,
                                                                         int connectivity, int ltype, int ccltype);
+@Namespace("cv") public static native @Name("connectedComponents") int connectedComponentsWithAlgorithm(@ByVal GpuMat image, @ByVal GpuMat labels,
+                                                                        int connectivity, int ltype, int ccltype);
 
 
 /** \overload
@@ -7063,6 +7539,9 @@ parallel framework is enabled and if the rows of the image are at least twice th
 @Namespace("cv") public static native int connectedComponents(@ByVal UMat image, @ByVal UMat labels,
                                      int connectivity/*=8*/, int ltype/*=CV_32S*/);
 @Namespace("cv") public static native int connectedComponents(@ByVal UMat image, @ByVal UMat labels);
+@Namespace("cv") public static native int connectedComponents(@ByVal GpuMat image, @ByVal GpuMat labels,
+                                     int connectivity/*=8*/, int ltype/*=CV_32S*/);
+@Namespace("cv") public static native int connectedComponents(@ByVal GpuMat image, @ByVal GpuMat labels);
 
 
 /** \brief computes the connected components labeled image of boolean image and also produces a statistics output for each label
@@ -7093,6 +7572,9 @@ accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data t
 @Namespace("cv") public static native @Name("connectedComponentsWithStats") int connectedComponentsWithStatsWithAlgorithm(@ByVal UMat image, @ByVal UMat labels,
                                                                                           @ByVal UMat stats, @ByVal UMat centroids,
                                                                                           int connectivity, int ltype, int ccltype);
+@Namespace("cv") public static native @Name("connectedComponentsWithStats") int connectedComponentsWithStatsWithAlgorithm(@ByVal GpuMat image, @ByVal GpuMat labels,
+                                                                                          @ByVal GpuMat stats, @ByVal GpuMat centroids,
+                                                                                          int connectivity, int ltype, int ccltype);
 
 /** \overload
 @param image the 8-bit single-channel image to be labeled
@@ -7115,6 +7597,11 @@ accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data t
                                               int connectivity/*=8*/, int ltype/*=CV_32S*/);
 @Namespace("cv") public static native int connectedComponentsWithStats(@ByVal UMat image, @ByVal UMat labels,
                                               @ByVal UMat stats, @ByVal UMat centroids);
+@Namespace("cv") public static native int connectedComponentsWithStats(@ByVal GpuMat image, @ByVal GpuMat labels,
+                                              @ByVal GpuMat stats, @ByVal GpuMat centroids,
+                                              int connectivity/*=8*/, int ltype/*=CV_32S*/);
+@Namespace("cv") public static native int connectedComponentsWithStats(@ByVal GpuMat image, @ByVal GpuMat labels,
+                                              @ByVal GpuMat stats, @ByVal GpuMat centroids);
 
 
 /** \brief Finds contours in a binary image.
@@ -7154,6 +7641,12 @@ context.
 @Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal UMatVector contours,
                               @ByVal Mat hierarchy, int mode,
                               int method);
+@Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal GpuMatVector contours,
+                              @ByVal Mat hierarchy, int mode,
+                              int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal GpuMatVector contours,
+                              @ByVal Mat hierarchy, int mode,
+                              int method);
 @Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal MatVector contours,
                               @ByVal UMat hierarchy, int mode,
                               int method, @ByVal(nullValue = "cv::Point()") Point offset);
@@ -7165,6 +7658,30 @@ context.
                               int method, @ByVal(nullValue = "cv::Point()") Point offset);
 @Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal UMatVector contours,
                               @ByVal UMat hierarchy, int mode,
+                              int method);
+@Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal GpuMatVector contours,
+                              @ByVal UMat hierarchy, int mode,
+                              int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal GpuMatVector contours,
+                              @ByVal UMat hierarchy, int mode,
+                              int method);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal MatVector contours,
+                              @ByVal GpuMat hierarchy, int mode,
+                              int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal MatVector contours,
+                              @ByVal GpuMat hierarchy, int mode,
+                              int method);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal UMatVector contours,
+                              @ByVal GpuMat hierarchy, int mode,
+                              int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal UMatVector contours,
+                              @ByVal GpuMat hierarchy, int mode,
+                              int method);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
+                              @ByVal GpuMat hierarchy, int mode,
+                              int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
+                              @ByVal GpuMat hierarchy, int mode,
                               int method);
 
 /** \overload */
@@ -7176,6 +7693,10 @@ context.
                               int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
 @Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal UMatVector contours,
                               int mode, int method);
+@Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal GpuMatVector contours,
+                              int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal GpuMatVector contours,
+                              int mode, int method);
 @Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal MatVector contours,
                               int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
 @Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal MatVector contours,
@@ -7183,6 +7704,22 @@ context.
 @Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal UMatVector contours,
                               int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
 @Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal UMatVector contours,
+                              int mode, int method);
+@Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal GpuMatVector contours,
+                              int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal UMat image, @ByVal GpuMatVector contours,
+                              int mode, int method);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal MatVector contours,
+                              int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal MatVector contours,
+                              int mode, int method);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal UMatVector contours,
+                              int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal UMatVector contours,
+                              int mode, int method);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
+                              int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset);
+@Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
                               int mode, int method);
 
 /** \brief Approximates a polygonal curve(s) with the specified precision.
@@ -7204,6 +7741,9 @@ connected). Otherwise, it is not closed.
 @Namespace("cv") public static native void approxPolyDP( @ByVal UMat curve,
                                 @ByVal UMat approxCurve,
                                 double epsilon, @Cast("bool") boolean closed );
+@Namespace("cv") public static native void approxPolyDP( @ByVal GpuMat curve,
+                                @ByVal GpuMat approxCurve,
+                                double epsilon, @Cast("bool") boolean closed );
 
 /** \brief Calculates a contour perimeter or a curve length.
 <p>
@@ -7214,6 +7754,7 @@ The function computes a curve length or a closed contour perimeter.
  */
 @Namespace("cv") public static native double arcLength( @ByVal Mat curve, @Cast("bool") boolean closed );
 @Namespace("cv") public static native double arcLength( @ByVal UMat curve, @Cast("bool") boolean closed );
+@Namespace("cv") public static native double arcLength( @ByVal GpuMat curve, @Cast("bool") boolean closed );
 
 /** \brief Calculates the up-right bounding rectangle of a point set.
 <p>
@@ -7223,6 +7764,7 @@ The function calculates and returns the minimal up-right bounding rectangle for 
  */
 @Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal Mat points );
 @Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal UMat points );
+@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal GpuMat points );
 
 /** \brief Calculates a contour area.
 <p>
@@ -7258,6 +7800,8 @@ false, which means that the absolute value is returned.
 @Namespace("cv") public static native double contourArea( @ByVal Mat contour );
 @Namespace("cv") public static native double contourArea( @ByVal UMat contour, @Cast("bool") boolean oriented/*=false*/ );
 @Namespace("cv") public static native double contourArea( @ByVal UMat contour );
+@Namespace("cv") public static native double contourArea( @ByVal GpuMat contour, @Cast("bool") boolean oriented/*=false*/ );
+@Namespace("cv") public static native double contourArea( @ByVal GpuMat contour );
 
 /** \brief Finds a rotated rectangle of the minimum area enclosing the input 2D point set.
 <p>
@@ -7269,6 +7813,7 @@ indices when data is close to the containing Mat element boundary.
  */
 @Namespace("cv") public static native @ByVal RotatedRect minAreaRect( @ByVal Mat points );
 @Namespace("cv") public static native @ByVal RotatedRect minAreaRect( @ByVal UMat points );
+@Namespace("cv") public static native @ByVal RotatedRect minAreaRect( @ByVal GpuMat points );
 
 /** \brief Finds the four vertices of a rotated rect. Useful to draw the rotated rectangle.
 <p>
@@ -7283,6 +7828,7 @@ for more information.
  */
 @Namespace("cv") public static native void boxPoints(@ByVal RotatedRect box, @ByVal Mat points);
 @Namespace("cv") public static native void boxPoints(@ByVal RotatedRect box, @ByVal UMat points);
+@Namespace("cv") public static native void boxPoints(@ByVal RotatedRect box, @ByVal GpuMat points);
 
 /** \brief Finds a circle of the minimum area enclosing a 2D point set.
 <p>
@@ -7296,10 +7842,20 @@ The function finds the minimal enclosing circle of a 2D point set using an itera
                                       @ByRef Point2f center, @ByRef FloatPointer radius );
 @Namespace("cv") public static native void minEnclosingCircle( @ByVal Mat points,
                                       @ByRef Point2f center, @ByRef FloatBuffer radius );
-@Namespace("cv") public static native void minEnclosingCircle( @ByVal UMat points,
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal Mat points,
                                       @ByRef Point2f center, @ByRef float[] radius );
 @Namespace("cv") public static native void minEnclosingCircle( @ByVal UMat points,
                                       @ByRef Point2f center, @ByRef FloatPointer radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal UMat points,
+                                      @ByRef Point2f center, @ByRef FloatBuffer radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal UMat points,
+                                      @ByRef Point2f center, @ByRef float[] radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal GpuMat points,
+                                      @ByRef Point2f center, @ByRef FloatPointer radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal GpuMat points,
+                                      @ByRef Point2f center, @ByRef FloatBuffer radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal GpuMat points,
+                                      @ByRef Point2f center, @ByRef float[] radius );
 
 /** \example minarea.cpp
   */
@@ -7325,6 +7881,7 @@ of the OutputArray must be CV_32F.
  */
 @Namespace("cv") public static native double minEnclosingTriangle( @ByVal Mat points, @ByVal Mat triangle );
 @Namespace("cv") public static native double minEnclosingTriangle( @ByVal UMat points, @ByVal UMat triangle );
+@Namespace("cv") public static native double minEnclosingTriangle( @ByVal GpuMat points, @ByVal GpuMat triangle );
 
 /** \brief Compares two shapes.
 <p>
@@ -7338,6 +7895,8 @@ The function compares two shapes. All three implemented methods use the Hu invar
 @Namespace("cv") public static native double matchShapes( @ByVal Mat contour1, @ByVal Mat contour2,
                                  int method, double parameter );
 @Namespace("cv") public static native double matchShapes( @ByVal UMat contour1, @ByVal UMat contour2,
+                                 int method, double parameter );
+@Namespace("cv") public static native double matchShapes( @ByVal GpuMat contour1, @ByVal GpuMat contour2,
                                  int method, double parameter );
 
 /** \example convexhull.cpp
@@ -7372,6 +7931,9 @@ returnPoints=true.
 @Namespace("cv") public static native void convexHull( @ByVal UMat points, @ByVal UMat hull,
                               @Cast("bool") boolean clockwise/*=false*/, @Cast("bool") boolean returnPoints/*=true*/ );
 @Namespace("cv") public static native void convexHull( @ByVal UMat points, @ByVal UMat hull );
+@Namespace("cv") public static native void convexHull( @ByVal GpuMat points, @ByVal GpuMat hull,
+                              @Cast("bool") boolean clockwise/*=false*/, @Cast("bool") boolean returnPoints/*=true*/ );
+@Namespace("cv") public static native void convexHull( @ByVal GpuMat points, @ByVal GpuMat hull );
 
 /** \brief Finds the convexity defects of a contour.
 <p>
@@ -7392,6 +7954,7 @@ fixpt_depth/256.0.
  */
 @Namespace("cv") public static native void convexityDefects( @ByVal Mat contour, @ByVal Mat convexhull, @ByVal Mat convexityDefects );
 @Namespace("cv") public static native void convexityDefects( @ByVal UMat contour, @ByVal UMat convexhull, @ByVal UMat convexityDefects );
+@Namespace("cv") public static native void convexityDefects( @ByVal GpuMat contour, @ByVal GpuMat convexhull, @ByVal GpuMat convexityDefects );
 
 /** \brief Tests a contour convexity.
 <p>
@@ -7402,6 +7965,7 @@ without self-intersections. Otherwise, the function output is undefined.
  */
 @Namespace("cv") public static native @Cast("bool") boolean isContourConvex( @ByVal Mat contour );
 @Namespace("cv") public static native @Cast("bool") boolean isContourConvex( @ByVal UMat contour );
+@Namespace("cv") public static native @Cast("bool") boolean isContourConvex( @ByVal GpuMat contour );
 
 /** finds intersection of two convex polygons */
 @Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat _p1, @ByVal Mat _p2,
@@ -7412,6 +7976,10 @@ without self-intersections. Otherwise, the function output is undefined.
                                           @ByVal UMat _p12, @Cast("bool") boolean handleNested/*=true*/ );
 @Namespace("cv") public static native float intersectConvexConvex( @ByVal UMat _p1, @ByVal UMat _p2,
                                           @ByVal UMat _p12 );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat _p1, @ByVal GpuMat _p2,
+                                          @ByVal GpuMat _p12, @Cast("bool") boolean handleNested/*=true*/ );
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat _p1, @ByVal GpuMat _p2,
+                                          @ByVal GpuMat _p12 );
 
 /** \example fitellipse.cpp
   An example using the fitEllipse technique
@@ -7429,6 +7997,7 @@ border of the containing Mat element.
  */
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipse( @ByVal Mat points );
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipse( @ByVal UMat points );
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipse( @ByVal GpuMat points );
 
 /** \brief Fits an ellipse around a set of 2D points.
  <p>
@@ -7467,6 +8036,7 @@ border of the containing Mat element.
  */
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipseAMS( @ByVal Mat points );
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipseAMS( @ByVal UMat points );
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipseAMS( @ByVal GpuMat points );
 
 
 /** \brief Fits an ellipse around a set of 2D points.
@@ -7513,6 +8083,7 @@ border of the containing Mat element.
  */
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipseDirect( @ByVal Mat points );
 @Namespace("cv") public static native @ByVal RotatedRect fitEllipseDirect( @ByVal UMat points );
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipseDirect( @ByVal GpuMat points );
 
 /** \brief Fits a line to a 2D or 3D point set.
 <p>
@@ -7552,6 +8123,8 @@ is chosen.
                            double param, double reps, double aeps );
 @Namespace("cv") public static native void fitLine( @ByVal UMat points, @ByVal UMat line, int distType,
                            double param, double reps, double aeps );
+@Namespace("cv") public static native void fitLine( @ByVal GpuMat points, @ByVal GpuMat line, int distType,
+                           double param, double reps, double aeps );
 
 /** \brief Performs a point-in-contour test.
 <p>
@@ -7571,6 +8144,7 @@ nearest contour edge. Otherwise, the function only checks if the point is inside
  */
 @Namespace("cv") public static native double pointPolygonTest( @ByVal Mat contour, @ByVal Point2f pt, @Cast("bool") boolean measureDist );
 @Namespace("cv") public static native double pointPolygonTest( @ByVal UMat contour, @ByVal Point2f pt, @Cast("bool") boolean measureDist );
+@Namespace("cv") public static native double pointPolygonTest( @ByVal GpuMat contour, @ByVal Point2f pt, @Cast("bool") boolean measureDist );
 
 /** \brief Finds out if there is any intersection between two rotated rectangles.
 <p>
@@ -7589,6 +8163,7 @@ at most 8 vertices. Stored as std::vector\<cv::Point2f\> or cv::Mat as Mx1 of ty
  */
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal Mat intersectingRegion  );
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal UMat intersectingRegion  );
+@Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal GpuMat intersectingRegion  );
 
 /** \} imgproc_shape */
 
@@ -7612,6 +8187,7 @@ at most 8 vertices. Stored as std::vector\<cv::Point2f\> or cv::Mat as Mx1 of ty
  *  @param dst It is created if it does not have the same size and type with src1. */
 @Namespace("cv") public static native void blendLinear(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat weights1, @ByVal Mat weights2, @ByVal Mat dst);
 @Namespace("cv") public static native void blendLinear(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat weights1, @ByVal UMat weights2, @ByVal UMat dst);
+@Namespace("cv") public static native void blendLinear(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat weights1, @ByVal GpuMat weights2, @ByVal GpuMat dst);
 
 /** \addtogroup imgproc_colormap
  *  \{
@@ -7657,6 +8233,7 @@ An example using applyColorMap function
 */
 @Namespace("cv") public static native void applyColorMap(@ByVal Mat src, @ByVal Mat dst, int colormap);
 @Namespace("cv") public static native void applyColorMap(@ByVal UMat src, @ByVal UMat dst, int colormap);
+@Namespace("cv") public static native void applyColorMap(@ByVal GpuMat src, @ByVal GpuMat dst, int colormap);
 
 /** \brief Applies a user colormap on a given image.
 <p>
@@ -7666,6 +8243,7 @@ An example using applyColorMap function
 */
 @Namespace("cv") public static native void applyColorMap(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat userColor);
 @Namespace("cv") public static native void applyColorMap(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat userColor);
+@Namespace("cv") public static native void applyColorMap(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat userColor);
 
 /** \} imgproc_colormap
  <p>
@@ -7693,6 +8271,9 @@ lines are drawn using Gaussian filtering.
 @Namespace("cv") public static native void line(@ByVal UMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
                      int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/);
 @Namespace("cv") public static native void line(@ByVal UMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color);
+@Namespace("cv") public static native void line(@ByVal GpuMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
+                     int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/);
+@Namespace("cv") public static native void line(@ByVal GpuMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color);
 
 /** \brief Draws a arrow segment pointing from the first point to the second one.
 <p>
@@ -7713,6 +8294,9 @@ The function arrowedLine draws an arrow between pt1 and pt2 points in the image.
 @Namespace("cv") public static native void arrowedLine(@ByVal UMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
                      int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/, double tipLength/*=0.1*/);
 @Namespace("cv") public static native void arrowedLine(@ByVal UMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color);
+@Namespace("cv") public static native void arrowedLine(@ByVal GpuMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
+                     int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/, double tipLength/*=0.1*/);
+@Namespace("cv") public static native void arrowedLine(@ByVal GpuMat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color);
 
 /** \brief Draws a simple, thick, or filled up-right rectangle.
 <p>
@@ -7737,6 +8321,11 @@ mean that the function has to draw a filled rectangle.
                           @Const @ByRef Scalar color, int thickness/*=1*/,
                           int lineType/*=cv::LINE_8*/, int shift/*=0*/);
 @Namespace("cv") public static native void rectangle(@ByVal UMat img, @ByVal Point pt1, @ByVal Point pt2,
+                          @Const @ByRef Scalar color);
+@Namespace("cv") public static native void rectangle(@ByVal GpuMat img, @ByVal Point pt1, @ByVal Point pt2,
+                          @Const @ByRef Scalar color, int thickness/*=1*/,
+                          int lineType/*=cv::LINE_8*/, int shift/*=0*/);
+@Namespace("cv") public static native void rectangle(@ByVal GpuMat img, @ByVal Point pt1, @ByVal Point pt2,
                           @Const @ByRef Scalar color);
 
 /** \overload
@@ -7774,6 +8363,11 @@ filled circle is to be drawn.
                        @Const @ByRef Scalar color, int thickness/*=1*/,
                        int lineType/*=cv::LINE_8*/, int shift/*=0*/);
 @Namespace("cv") public static native void circle(@ByVal UMat img, @ByVal Point center, int radius,
+                       @Const @ByRef Scalar color);
+@Namespace("cv") public static native void circle(@ByVal GpuMat img, @ByVal Point center, int radius,
+                       @Const @ByRef Scalar color, int thickness/*=1*/,
+                       int lineType/*=cv::LINE_8*/, int shift/*=0*/);
+@Namespace("cv") public static native void circle(@ByVal GpuMat img, @ByVal Point center, int radius,
                        @Const @ByRef Scalar color);
 
 /** \brief Draws a simple or thick elliptic arc or fills an ellipse sector.
@@ -7815,6 +8409,13 @@ a filled ellipse sector is to be drawn.
 @Namespace("cv") public static native void ellipse(@ByVal UMat img, @ByVal Point center, @ByVal Size axes,
                         double angle, double startAngle, double endAngle,
                         @Const @ByRef Scalar color);
+@Namespace("cv") public static native void ellipse(@ByVal GpuMat img, @ByVal Point center, @ByVal Size axes,
+                        double angle, double startAngle, double endAngle,
+                        @Const @ByRef Scalar color, int thickness/*=1*/,
+                        int lineType/*=cv::LINE_8*/, int shift/*=0*/);
+@Namespace("cv") public static native void ellipse(@ByVal GpuMat img, @ByVal Point center, @ByVal Size axes,
+                        double angle, double startAngle, double endAngle,
+                        @Const @ByRef Scalar color);
 
 /** \overload
 @param img Image.
@@ -7831,6 +8432,9 @@ a filled ellipse sector is to be drawn.
 @Namespace("cv") public static native void ellipse(@ByVal UMat img, @Const @ByRef RotatedRect box, @Const @ByRef Scalar color,
                         int thickness/*=1*/, int lineType/*=cv::LINE_8*/);
 @Namespace("cv") public static native void ellipse(@ByVal UMat img, @Const @ByRef RotatedRect box, @Const @ByRef Scalar color);
+@Namespace("cv") public static native void ellipse(@ByVal GpuMat img, @Const @ByRef RotatedRect box, @Const @ByRef Scalar color,
+                        int thickness/*=1*/, int lineType/*=cv::LINE_8*/);
+@Namespace("cv") public static native void ellipse(@ByVal GpuMat img, @Const @ByRef RotatedRect box, @Const @ByRef Scalar color);
 
 /* ----------------------------------------------------------------------------------------- */
 /* ADDING A SET OF PREDEFINED MARKERS WHICH COULD BE USED TO HIGHLIGHT POSITIONS IN AN IMAGE */
@@ -7906,6 +8510,11 @@ twice at the most (though, its top-most and/or the bottom edge could be horizont
                                  int shift/*=0*/);
 @Namespace("cv") public static native void fillConvexPoly(@ByVal UMat img, @ByVal UMat points,
                                  @Const @ByRef Scalar color);
+@Namespace("cv") public static native void fillConvexPoly(@ByVal GpuMat img, @ByVal GpuMat points,
+                                 @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/,
+                                 int shift/*=0*/);
+@Namespace("cv") public static native void fillConvexPoly(@ByVal GpuMat img, @ByVal GpuMat points,
+                                 @Const @ByRef Scalar color);
 
 /** \overload */
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Cast("const cv::Point**") PointerPointer pts,
@@ -7960,6 +8569,11 @@ parts), and so forth.
                            @ByVal(nullValue = "cv::Point()") Point offset );
 @Namespace("cv") public static native void fillPoly(@ByVal Mat img, @ByVal UMatVector pts,
                            @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @ByVal GpuMatVector pts,
+                           @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                           @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @ByVal GpuMatVector pts,
+                           @Const @ByRef Scalar color );
 @Namespace("cv") public static native void fillPoly(@ByVal UMat img, @ByVal MatVector pts,
                            @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
                            @ByVal(nullValue = "cv::Point()") Point offset );
@@ -7969,6 +8583,26 @@ parts), and so forth.
                            @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
                            @ByVal(nullValue = "cv::Point()") Point offset );
 @Namespace("cv") public static native void fillPoly(@ByVal UMat img, @ByVal UMatVector pts,
+                           @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @ByVal GpuMatVector pts,
+                           @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                           @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @ByVal GpuMatVector pts,
+                           @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @ByVal MatVector pts,
+                           @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                           @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @ByVal MatVector pts,
+                           @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @ByVal UMatVector pts,
+                           @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                           @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @ByVal UMatVector pts,
+                           @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @ByVal GpuMatVector pts,
+                           @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                           @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @ByVal GpuMatVector pts,
                            @Const @ByRef Scalar color );
 
 /** \overload */
@@ -8014,6 +8648,11 @@ The function polylines draws one or more polygonal curves.
                             int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
 @Namespace("cv") public static native void polylines(@ByVal Mat img, @ByVal UMatVector pts,
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @ByVal GpuMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                            int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @ByVal GpuMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
 @Namespace("cv") public static native void polylines(@ByVal UMat img, @ByVal MatVector pts,
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
                             int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
@@ -8023,6 +8662,26 @@ The function polylines draws one or more polygonal curves.
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
                             int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
 @Namespace("cv") public static native void polylines(@ByVal UMat img, @ByVal UMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @ByVal GpuMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                            int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @ByVal GpuMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal MatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                            int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal MatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal UMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                            int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal UMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal GpuMatVector pts,
+                            @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                            int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal GpuMatVector pts,
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
 
 /** \example contours2.cpp
@@ -8111,6 +8770,13 @@ parameter is only taken into account when there is hierarchy available.
                               int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
 @Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal UMatVector contours,
                               int contourIdx, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal GpuMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color,
+                              int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat hierarchy,
+                              int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal GpuMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color );
 @Namespace("cv") public static native void drawContours( @ByVal UMat image, @ByVal MatVector contours,
                               int contourIdx, @Const @ByRef Scalar color,
                               int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
@@ -8124,6 +8790,34 @@ parameter is only taken into account when there is hierarchy available.
                               @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat hierarchy,
                               int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
 @Namespace("cv") public static native void drawContours( @ByVal UMat image, @ByVal UMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void drawContours( @ByVal UMat image, @ByVal GpuMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color,
+                              int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat hierarchy,
+                              int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void drawContours( @ByVal UMat image, @ByVal GpuMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void drawContours( @ByVal GpuMat image, @ByVal MatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color,
+                              int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat hierarchy,
+                              int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void drawContours( @ByVal GpuMat image, @ByVal MatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void drawContours( @ByVal GpuMat image, @ByVal UMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color,
+                              int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat hierarchy,
+                              int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void drawContours( @ByVal GpuMat image, @ByVal UMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void drawContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color,
+                              int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat hierarchy,
+                              int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void drawContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
                               int contourIdx, @Const @ByRef Scalar color );
 
 /** \brief Clips the line against the image rectangle.
@@ -8211,17 +8905,29 @@ it is at the top-left corner.
                          @Cast("bool") boolean bottomLeftOrigin/*=false*/ );
 @Namespace("cv") public static native void putText( @ByVal Mat img, @Str String text, @ByVal Point org,
                          int fontFace, double fontScale, @ByVal Scalar color );
+@Namespace("cv") public static native void putText( @ByVal UMat img, @Str String text, @ByVal Point org,
+                         int fontFace, double fontScale, @ByVal Scalar color,
+                         int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                         @Cast("bool") boolean bottomLeftOrigin/*=false*/ );
+@Namespace("cv") public static native void putText( @ByVal UMat img, @Str String text, @ByVal Point org,
+                         int fontFace, double fontScale, @ByVal Scalar color );
 @Namespace("cv") public static native void putText( @ByVal UMat img, @Str BytePointer text, @ByVal Point org,
                          int fontFace, double fontScale, @ByVal Scalar color,
                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
                          @Cast("bool") boolean bottomLeftOrigin/*=false*/ );
 @Namespace("cv") public static native void putText( @ByVal UMat img, @Str BytePointer text, @ByVal Point org,
                          int fontFace, double fontScale, @ByVal Scalar color );
-@Namespace("cv") public static native void putText( @ByVal UMat img, @Str String text, @ByVal Point org,
+@Namespace("cv") public static native void putText( @ByVal GpuMat img, @Str BytePointer text, @ByVal Point org,
                          int fontFace, double fontScale, @ByVal Scalar color,
                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
                          @Cast("bool") boolean bottomLeftOrigin/*=false*/ );
-@Namespace("cv") public static native void putText( @ByVal UMat img, @Str String text, @ByVal Point org,
+@Namespace("cv") public static native void putText( @ByVal GpuMat img, @Str BytePointer text, @ByVal Point org,
+                         int fontFace, double fontScale, @ByVal Scalar color );
+@Namespace("cv") public static native void putText( @ByVal GpuMat img, @Str String text, @ByVal Point org,
+                         int fontFace, double fontScale, @ByVal Scalar color,
+                         int thickness/*=1*/, int lineType/*=cv::LINE_8*/,
+                         @Cast("bool") boolean bottomLeftOrigin/*=false*/ );
+@Namespace("cv") public static native void putText( @ByVal GpuMat img, @Str String text, @ByVal Point org,
                          int fontFace, double fontScale, @ByVal Scalar color );
 
 /** \brief Calculates the width and height of a text string.
