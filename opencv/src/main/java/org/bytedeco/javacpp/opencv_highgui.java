@@ -913,8 +913,10 @@ videos, it will display the video frame-by-frame)
  */
 @Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal Mat mat);
 @Namespace("cv") public static native void imshow(@Str String winname, @ByVal Mat mat);
-@Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal UMat mat);
 @Namespace("cv") public static native void imshow(@Str String winname, @ByVal UMat mat);
+@Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal UMat mat);
+@Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal GpuMat mat);
+@Namespace("cv") public static native void imshow(@Str String winname, @ByVal GpuMat mat);
 
 /** \brief Resizes window to the specified size
 <p>
@@ -1029,10 +1031,14 @@ After finish of work an empty callback will be set for the used window.
 @Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal Mat img);
 @Namespace("cv") public static native @ByVal Rect selectROI(@Str String windowName, @ByVal Mat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
 @Namespace("cv") public static native @ByVal Rect selectROI(@Str String windowName, @ByVal Mat img);
-@Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal UMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
-@Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal UMat img);
 @Namespace("cv") public static native @ByVal Rect selectROI(@Str String windowName, @ByVal UMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
 @Namespace("cv") public static native @ByVal Rect selectROI(@Str String windowName, @ByVal UMat img);
+@Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal UMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
+@Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal UMat img);
+@Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal GpuMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
+@Namespace("cv") public static native @ByVal Rect selectROI(@Str BytePointer windowName, @ByVal GpuMat img);
+@Namespace("cv") public static native @ByVal Rect selectROI(@Str String windowName, @ByVal GpuMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
+@Namespace("cv") public static native @ByVal Rect selectROI(@Str String windowName, @ByVal GpuMat img);
 
 /** \overload
  */
@@ -1040,6 +1046,8 @@ After finish of work an empty callback will be set for the used window.
 @Namespace("cv") public static native @ByVal Rect selectROI(@ByVal Mat img);
 @Namespace("cv") public static native @ByVal Rect selectROI(@ByVal UMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
 @Namespace("cv") public static native @ByVal Rect selectROI(@ByVal UMat img);
+@Namespace("cv") public static native @ByVal Rect selectROI(@ByVal GpuMat img, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
+@Namespace("cv") public static native @ByVal Rect selectROI(@ByVal GpuMat img);
 
 /** \brief Selects ROIs on the given image.
 Function creates a window and allows user to select a ROIs using mouse.
@@ -1064,13 +1072,21 @@ After finish of work an empty callback will be set for the used window.
                              @ByRef RectVector boundingBoxes, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
 @Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal Mat img,
                              @ByRef RectVector boundingBoxes);
+@Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal UMat img,
+                             @ByRef RectVector boundingBoxes, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
+@Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal UMat img,
+                             @ByRef RectVector boundingBoxes);
 @Namespace("cv") public static native void selectROIs(@Str BytePointer windowName, @ByVal UMat img,
                              @ByRef RectVector boundingBoxes, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
 @Namespace("cv") public static native void selectROIs(@Str BytePointer windowName, @ByVal UMat img,
                              @ByRef RectVector boundingBoxes);
-@Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal UMat img,
+@Namespace("cv") public static native void selectROIs(@Str BytePointer windowName, @ByVal GpuMat img,
                              @ByRef RectVector boundingBoxes, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
-@Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal UMat img,
+@Namespace("cv") public static native void selectROIs(@Str BytePointer windowName, @ByVal GpuMat img,
+                             @ByRef RectVector boundingBoxes);
+@Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal GpuMat img,
+                             @ByRef RectVector boundingBoxes, @Cast("bool") boolean showCrosshair/*=true*/, @Cast("bool") boolean fromCenter/*=false*/);
+@Namespace("cv") public static native void selectROIs(@Str String windowName, @ByVal GpuMat img,
                              @ByRef RectVector boundingBoxes);
 
 /** \brief Creates a trackbar and attaches it to the specified window.

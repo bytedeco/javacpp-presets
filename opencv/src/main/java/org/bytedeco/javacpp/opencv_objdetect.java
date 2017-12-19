@@ -504,6 +504,11 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                                double scaleFactor,
                                int minNeighbors, int flags,
                                @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                               @ByRef RectVector objects,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
 
     public native void detectMultiScale( @ByVal Mat image,
                                @ByRef RectVector objects,
@@ -517,7 +522,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                                double scaleFactor,
                                int minNeighbors, int flags,
                                @ByVal Size minSize, @ByVal Size maxSize );
-    public native void detectMultiScale( @ByVal UMat image,
+    public native void detectMultiScale( @ByVal Mat image,
                                @ByRef RectVector objects,
                                @StdVector int[] numDetections,
                                double scaleFactor,
@@ -526,6 +531,36 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native void detectMultiScale( @ByVal UMat image,
                                @ByRef RectVector objects,
                                @StdVector IntPointer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal UMat image,
+                               @ByRef RectVector objects,
+                               @StdVector IntBuffer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal UMat image,
+                               @ByRef RectVector objects,
+                               @StdVector int[] numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                               @ByRef RectVector objects,
+                               @StdVector IntPointer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                               @ByRef RectVector objects,
+                               @StdVector IntBuffer numDetections,
+                               double scaleFactor,
+                               int minNeighbors, int flags,
+                               @ByVal Size minSize, @ByVal Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                               @ByRef RectVector objects,
+                               @StdVector int[] numDetections,
                                double scaleFactor,
                                int minNeighbors, int flags,
                                @ByVal Size minSize, @ByVal Size maxSize );
@@ -546,7 +581,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                                        int minNeighbors, int flags,
                                        @ByVal Size minSize, @ByVal Size maxSize,
                                        @Cast("bool") boolean outputRejectLevels );
-    public native void detectMultiScale( @ByVal UMat image,
+    public native void detectMultiScale( @ByVal Mat image,
                                        @ByRef RectVector objects,
                                        @StdVector int[] rejectLevels,
                                        @StdVector double[] levelWeights,
@@ -558,6 +593,46 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                                        @ByRef RectVector objects,
                                        @StdVector IntPointer rejectLevels,
                                        @StdVector DoublePointer levelWeights,
+                                       double scaleFactor,
+                                       int minNeighbors, int flags,
+                                       @ByVal Size minSize, @ByVal Size maxSize,
+                                       @Cast("bool") boolean outputRejectLevels );
+    public native void detectMultiScale( @ByVal UMat image,
+                                       @ByRef RectVector objects,
+                                       @StdVector IntBuffer rejectLevels,
+                                       @StdVector DoubleBuffer levelWeights,
+                                       double scaleFactor,
+                                       int minNeighbors, int flags,
+                                       @ByVal Size minSize, @ByVal Size maxSize,
+                                       @Cast("bool") boolean outputRejectLevels );
+    public native void detectMultiScale( @ByVal UMat image,
+                                       @ByRef RectVector objects,
+                                       @StdVector int[] rejectLevels,
+                                       @StdVector double[] levelWeights,
+                                       double scaleFactor,
+                                       int minNeighbors, int flags,
+                                       @ByVal Size minSize, @ByVal Size maxSize,
+                                       @Cast("bool") boolean outputRejectLevels );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                                       @ByRef RectVector objects,
+                                       @StdVector IntPointer rejectLevels,
+                                       @StdVector DoublePointer levelWeights,
+                                       double scaleFactor,
+                                       int minNeighbors, int flags,
+                                       @ByVal Size minSize, @ByVal Size maxSize,
+                                       @Cast("bool") boolean outputRejectLevels );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                                       @ByRef RectVector objects,
+                                       @StdVector IntBuffer rejectLevels,
+                                       @StdVector DoubleBuffer levelWeights,
+                                       double scaleFactor,
+                                       int minNeighbors, int flags,
+                                       @ByVal Size minSize, @ByVal Size maxSize,
+                                       @Cast("bool") boolean outputRejectLevels );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                                       @ByRef RectVector objects,
+                                       @StdVector int[] rejectLevels,
+                                       @StdVector double[] levelWeights,
                                        double scaleFactor,
                                        int minNeighbors, int flags,
                                        @ByVal Size minSize, @ByVal Size maxSize,
@@ -660,6 +735,14 @@ This program demonstrates usage of the Cascade classifier class
                               @ByVal(nullValue = "cv::Size()") Size maxSize );
     public native void detectMultiScale( @ByVal UMat image,
                               @ByRef RectVector objects );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native void detectMultiScale( @ByVal GpuMat image,
+                              @ByRef RectVector objects );
 
     /** \overload
     @param image Matrix of the type CV_8U containing an image where objects are detected.
@@ -696,14 +779,14 @@ This program demonstrates usage of the Cascade classifier class
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
                               @ByRef RectVector objects,
                               @StdVector IntBuffer numDetections );
-    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
                               @ByRef RectVector objects,
                               @StdVector int[] numDetections,
                               double scaleFactor/*=1.1*/,
                               int minNeighbors/*=3*/, int flags/*=0*/,
                               @ByVal(nullValue = "cv::Size()") Size minSize,
                               @ByVal(nullValue = "cv::Size()") Size maxSize );
-    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal Mat image,
                               @ByRef RectVector objects,
                               @StdVector int[] numDetections );
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
@@ -716,6 +799,56 @@ This program demonstrates usage of the Cascade classifier class
     public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
                               @ByRef RectVector objects,
                               @StdVector IntPointer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal UMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntPointer numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntPointer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector IntBuffer numDetections );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections,
+                              double scaleFactor/*=1.1*/,
+                              int minNeighbors/*=3*/, int flags/*=0*/,
+                              @ByVal(nullValue = "cv::Size()") Size minSize,
+                              @ByVal(nullValue = "cv::Size()") Size maxSize );
+    public native @Name("detectMultiScale") void detectMultiScale2( @ByVal GpuMat image,
+                              @ByRef RectVector objects,
+                              @StdVector int[] numDetections );
 
     /** \overload
     This function allows you to retrieve the final stage decision certainty of classification.
@@ -760,7 +893,7 @@ This program demonstrates usage of the Cascade classifier class
                                       @ByRef RectVector objects,
                                       @StdVector IntBuffer rejectLevels,
                                       @StdVector DoubleBuffer levelWeights );
-    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
                                       @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights,
@@ -769,7 +902,7 @@ This program demonstrates usage of the Cascade classifier class
                                       @ByVal(nullValue = "cv::Size()") Size minSize,
                                       @ByVal(nullValue = "cv::Size()") Size maxSize,
                                       @Cast("bool") boolean outputRejectLevels/*=false*/ );
-    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
                                       @StdVector int[] rejectLevels,
                                       @StdVector double[] levelWeights );
@@ -786,6 +919,71 @@ This program demonstrates usage of the Cascade classifier class
                                       @ByRef RectVector objects,
                                       @StdVector IntPointer rejectLevels,
                                       @StdVector DoublePointer levelWeights );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector IntBuffer rejectLevels,
+                                      @StdVector DoubleBuffer levelWeights,
+                                      double scaleFactor/*=1.1*/,
+                                      int minNeighbors/*=3*/, int flags/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size minSize,
+                                      @ByVal(nullValue = "cv::Size()") Size maxSize,
+                                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector IntBuffer rejectLevels,
+                                      @StdVector DoubleBuffer levelWeights );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector int[] rejectLevels,
+                                      @StdVector double[] levelWeights,
+                                      double scaleFactor/*=1.1*/,
+                                      int minNeighbors/*=3*/, int flags/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size minSize,
+                                      @ByVal(nullValue = "cv::Size()") Size maxSize,
+                                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal UMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector int[] rejectLevels,
+                                      @StdVector double[] levelWeights );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector IntPointer rejectLevels,
+                                      @StdVector DoublePointer levelWeights,
+                                      double scaleFactor/*=1.1*/,
+                                      int minNeighbors/*=3*/, int flags/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size minSize,
+                                      @ByVal(nullValue = "cv::Size()") Size maxSize,
+                                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector IntPointer rejectLevels,
+                                      @StdVector DoublePointer levelWeights );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector IntBuffer rejectLevels,
+                                      @StdVector DoubleBuffer levelWeights,
+                                      double scaleFactor/*=1.1*/,
+                                      int minNeighbors/*=3*/, int flags/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size minSize,
+                                      @ByVal(nullValue = "cv::Size()") Size maxSize,
+                                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector IntBuffer rejectLevels,
+                                      @StdVector DoubleBuffer levelWeights );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector int[] rejectLevels,
+                                      @StdVector double[] levelWeights,
+                                      double scaleFactor/*=1.1*/,
+                                      int minNeighbors/*=3*/, int flags/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size minSize,
+                                      @ByVal(nullValue = "cv::Size()") Size maxSize,
+                                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
+    public native @Name("detectMultiScale") void detectMultiScale3( @ByVal GpuMat image,
+                                      @ByRef RectVector objects,
+                                      @StdVector int[] rejectLevels,
+                                      @StdVector double[] levelWeights );
 
     public native @Cast("bool") boolean isOldFormatCascade();
     public native @ByVal Size getOriginalWindowSize();
@@ -934,6 +1132,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     */
     public native void setSVMDetector(@ByVal Mat _svmdetector);
     public native void setSVMDetector(@ByVal UMat _svmdetector);
+    public native void setSVMDetector(@ByVal GpuMat _svmdetector);
 
     /** \brief Reads HOGDescriptor parameters from a file node.
     @param fn File node
@@ -991,11 +1190,11 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
                              @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
     public native void compute(@ByVal Mat img,
                              @StdVector FloatBuffer descriptors);
-    public native void compute(@ByVal UMat img,
+    public native void compute(@ByVal Mat img,
                              @StdVector float[] descriptors,
                              @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding,
                              @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
-    public native void compute(@ByVal UMat img,
+    public native void compute(@ByVal Mat img,
                              @StdVector float[] descriptors);
     public native void compute(@ByVal UMat img,
                              @StdVector FloatPointer descriptors,
@@ -1003,6 +1202,36 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
                              @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
     public native void compute(@ByVal UMat img,
                              @StdVector FloatPointer descriptors);
+    public native void compute(@ByVal UMat img,
+                             @StdVector FloatBuffer descriptors,
+                             @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding,
+                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
+    public native void compute(@ByVal UMat img,
+                             @StdVector FloatBuffer descriptors);
+    public native void compute(@ByVal UMat img,
+                             @StdVector float[] descriptors,
+                             @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding,
+                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
+    public native void compute(@ByVal UMat img,
+                             @StdVector float[] descriptors);
+    public native void compute(@ByVal GpuMat img,
+                             @StdVector FloatPointer descriptors,
+                             @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding,
+                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
+    public native void compute(@ByVal GpuMat img,
+                             @StdVector FloatPointer descriptors);
+    public native void compute(@ByVal GpuMat img,
+                             @StdVector FloatBuffer descriptors,
+                             @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding,
+                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
+    public native void compute(@ByVal GpuMat img,
+                             @StdVector FloatBuffer descriptors);
+    public native void compute(@ByVal GpuMat img,
+                             @StdVector float[] descriptors,
+                             @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding,
+                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector locations);
+    public native void compute(@ByVal GpuMat img,
+                             @StdVector float[] descriptors);
 
     /** \brief Performs object detection without a multi-scale window.
     @param img Matrix of the type CV_8U or CV_8UC3 containing an image where objects are detected.
@@ -1079,11 +1308,11 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
                                       double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights);
-    public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
+    public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
                                       double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
-    public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
+    public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights, double hitThreshold/*=0*/,
@@ -1091,6 +1320,36 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
                                       double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights);
+    public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
+                                      @StdVector DoubleBuffer foundWeights, double hitThreshold/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
+                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
+                                      @StdVector DoubleBuffer foundWeights);
+    public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
+                                      @StdVector double[] foundWeights, double hitThreshold/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
+                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
+                                      @StdVector double[] foundWeights);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      @StdVector DoublePointer foundWeights, double hitThreshold/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
+                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      @StdVector DoublePointer foundWeights);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      @StdVector DoubleBuffer foundWeights, double hitThreshold/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
+                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      @StdVector DoubleBuffer foundWeights);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      @StdVector double[] foundWeights, double hitThreshold/*=0*/,
+                                      @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
+                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      @StdVector double[] foundWeights);
 
     /** \brief Detects objects of different sizes in the input image. The detected objects are returned as a list
     of rectangles.
@@ -1115,6 +1374,11 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
                                       @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
                                       double finalThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
+                                      double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                      @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
+                                      double finalThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations);
 
     /** \brief  Computes gradients and quantized gradient orientations.
     @param img Matrix contains the image to be computed

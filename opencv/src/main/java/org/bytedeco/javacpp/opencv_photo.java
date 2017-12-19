@@ -198,6 +198,8 @@ objects from still images or video. See <http://en.wikipedia.org/wiki/Inpainting
         @ByVal Mat dst, double inpaintRadius, int flags );
 @Namespace("cv") public static native void inpaint( @ByVal UMat src, @ByVal UMat inpaintMask,
         @ByVal UMat dst, double inpaintRadius, int flags );
+@Namespace("cv") public static native void inpaint( @ByVal GpuMat src, @ByVal GpuMat inpaintMask,
+        @ByVal GpuMat dst, double inpaintRadius, int flags );
 
 /** \addtogroup photo_denoise
  *  \{
@@ -228,6 +230,9 @@ parameter.
 @Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst, float h/*=3*/,
         int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
 @Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst, float h/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Perform image denoising using Non-local Means Denoising algorithm
 <http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/> with several computational
@@ -265,11 +270,11 @@ parameter.
                                         int normType/*=cv::NORM_L2*/);
 @Namespace("cv") public static native void fastNlMeansDenoising( @ByVal Mat src, @ByVal Mat dst,
                                         @StdVector FloatBuffer h);
-@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal Mat src, @ByVal Mat dst,
                                         @StdVector float[] h,
                                         int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
                                         int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal Mat src, @ByVal Mat dst,
                                         @StdVector float[] h);
 @Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
                                         @StdVector FloatPointer h,
@@ -277,6 +282,36 @@ parameter.
                                         int normType/*=cv::NORM_L2*/);
 @Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
                                         @StdVector FloatPointer h);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
+                                        @StdVector FloatBuffer h,
+                                        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
+                                        int normType/*=cv::NORM_L2*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
+                                        @StdVector FloatBuffer h);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
+                                        @StdVector float[] h,
+                                        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
+                                        int normType/*=cv::NORM_L2*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal UMat src, @ByVal UMat dst,
+                                        @StdVector float[] h);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                        @StdVector FloatPointer h,
+                                        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
+                                        int normType/*=cv::NORM_L2*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                        @StdVector FloatPointer h);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                        @StdVector FloatBuffer h,
+                                        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
+                                        int normType/*=cv::NORM_L2*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                        @StdVector FloatBuffer h);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                        @StdVector float[] h,
+                                        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
+                                        int normType/*=cv::NORM_L2*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal GpuMat src, @ByVal GpuMat dst,
+                                        @StdVector float[] h);
 
 /** \brief Modification of fastNlMeansDenoising function for colored images
 <p>
@@ -304,6 +339,10 @@ with given h parameters using fastNlMeansDenoising function.
         float h/*=3*/, float hColor/*=3*/,
         int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
 @Namespace("cv") public static native void fastNlMeansDenoisingColored( @ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void fastNlMeansDenoisingColored( @ByVal GpuMat src, @ByVal GpuMat dst,
+        float h/*=3*/, float hColor/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColored( @ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Modification of fastNlMeansDenoising function for images sequence where consequtive images have been
 captured in small period of time. For example video. This version of the function is for grayscale
@@ -338,6 +377,11 @@ value preserves details but also preserves some noise
         float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
         int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal Mat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal Mat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
         int imgToDenoiseIndex, int temporalWindowSize,
         float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
@@ -347,6 +391,26 @@ value preserves details but also preserves some noise
         int imgToDenoiseIndex, int temporalWindowSize,
         float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal UMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal UMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal GpuMat dst,
         int imgToDenoiseIndex, int temporalWindowSize);
 
 /** \brief Modification of fastNlMeansDenoising function for images sequence where consequtive images have been
@@ -390,36 +454,12 @@ value preserves details but also preserves some noise
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector FloatBuffer h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal Mat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector float[] h,
                                              int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
                                              int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
-                                             int imgToDenoiseIndex, int temporalWindowSize,
-                                             @StdVector float[] h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
-                                             int imgToDenoiseIndex, int temporalWindowSize,
-                                             @StdVector FloatPointer h,
-                                             int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
-                                             int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
-                                             int imgToDenoiseIndex, int temporalWindowSize,
-                                             @StdVector FloatPointer h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
-                                             int imgToDenoiseIndex, int temporalWindowSize,
-                                             @StdVector FloatBuffer h,
-                                             int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
-                                             int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
-                                             int imgToDenoiseIndex, int temporalWindowSize,
-                                             @StdVector FloatBuffer h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
-                                             int imgToDenoiseIndex, int temporalWindowSize,
-                                             @StdVector float[] h,
-                                             int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
-                                             int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal Mat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector float[] h);
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
@@ -438,36 +478,36 @@ value preserves details but also preserves some noise
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector FloatBuffer h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal UMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector float[] h,
                                              int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
                                              int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal UMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector float[] h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal GpuMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector FloatPointer h,
                                              int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
                                              int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal GpuMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector FloatPointer h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal GpuMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector FloatBuffer h,
                                              int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
                                              int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal GpuMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector FloatBuffer h);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal GpuMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector float[] h,
                                              int templateWindowSize/*=7*/, int searchWindowSize/*=21*/,
                                              int normType/*=cv::NORM_L2*/);
-@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal GpuMatVector srcImgs, @ByVal GpuMat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              @StdVector float[] h);
 
@@ -506,6 +546,12 @@ with given h parameters using fastNlMeansDenoisingMulti function.
         int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
 @Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal UMatVector srcImgs, @ByVal Mat dst,
         int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal GpuMatVector srcImgs, @ByVal Mat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, float hColor/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal GpuMatVector srcImgs, @ByVal Mat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
 @Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal MatVector srcImgs, @ByVal UMat dst,
         int imgToDenoiseIndex, int temporalWindowSize,
         float h/*=3*/, float hColor/*=3*/,
@@ -517,6 +563,30 @@ with given h parameters using fastNlMeansDenoisingMulti function.
         float h/*=3*/, float hColor/*=3*/,
         int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
 @Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal UMatVector srcImgs, @ByVal UMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal GpuMatVector srcImgs, @ByVal UMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, float hColor/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal GpuMatVector srcImgs, @ByVal UMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal MatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, float hColor/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal MatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal UMatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, float hColor/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal UMatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal GpuMatVector srcImgs, @ByVal GpuMat dst,
+        int imgToDenoiseIndex, int temporalWindowSize,
+        float h/*=3*/, float hColor/*=3*/,
+        int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal GpuMatVector srcImgs, @ByVal GpuMat dst,
         int imgToDenoiseIndex, int temporalWindowSize);
 
 /** \brief Primal-dual algorithm is an algorithm for solving special types of variational problems (that is,
@@ -581,6 +651,7 @@ public static final int LDR_SIZE = 256;
      */
     public native void process(@ByVal Mat src, @ByVal Mat dst);
     public native void process(@ByVal UMat src, @ByVal UMat dst);
+    public native void process(@ByVal GpuMat src, @ByVal GpuMat dst);
 
     public native float getGamma();
     public native void setGamma(float gamma);
@@ -750,10 +821,20 @@ dynamic range. Values from 0.6 to 0.9 produce best results.
                                      @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+                                     @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
     public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+                                     @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
 }
 
 /** \brief This algorithm converts images to median threshold bitmaps (1 for pixels brighter than median
@@ -774,10 +855,20 @@ For more information see \cite GW03 .
                                      @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+                                     @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
     public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+                                     @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
 
     /** \brief Short version of process, that doesn't take extra arguments.
     <p>
@@ -786,6 +877,7 @@ For more information see \cite GW03 .
      */
     public native void process(@ByVal MatVector src, @ByRef MatVector dst);
     public native void process(@ByVal UMatVector src, @ByRef MatVector dst);
+    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst);
 
     /** \brief Calculates shift between two images, i. e. how to shift the second image to correspond it with the
     first.
@@ -795,6 +887,7 @@ For more information see \cite GW03 .
      */
     public native @ByVal Point calculateShift(@ByVal Mat img0, @ByVal Mat img1);
     public native @ByVal Point calculateShift(@ByVal UMat img0, @ByVal UMat img1);
+    public native @ByVal Point calculateShift(@ByVal GpuMat img0, @ByVal GpuMat img1);
     /** \brief Helper function, that shift Mat filling new regions with zeros.
     <p>
     @param src input image
@@ -803,6 +896,7 @@ For more information see \cite GW03 .
      */
     public native void shiftMat(@ByVal Mat src, @ByVal Mat dst, @Const @ByVal Point shift);
     public native void shiftMat(@ByVal UMat src, @ByVal UMat dst, @Const @ByVal Point shift);
+    public native void shiftMat(@ByVal GpuMat src, @ByVal GpuMat dst, @Const @ByVal Point shift);
     /** \brief Computes median threshold and exclude bitmaps of given image.
     <p>
     @param img input image
@@ -811,6 +905,7 @@ For more information see \cite GW03 .
      */
     public native void computeBitmaps(@ByVal Mat img, @ByVal Mat tb, @ByVal Mat eb);
     public native void computeBitmaps(@ByVal UMat img, @ByVal UMat tb, @ByVal UMat eb);
+    public native void computeBitmaps(@ByVal GpuMat img, @ByVal GpuMat tb, @ByVal GpuMat eb);
 
     public native int getMaxBits();
     public native void setMaxBits(int max_bits);
@@ -848,8 +943,13 @@ median value.
      */
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal MatVector src, @ByVal UMat dst, @ByVal UMat times);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst, @ByVal UMat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst, @ByVal UMat times);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
 }
 
 /** \brief Inverse camera response function is extracted for each brightness value by minimizing an objective
@@ -930,10 +1030,20 @@ For more information see \cite RB99 .
                                      @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+                                     @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+                                     @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
 }
 
 /** \brief The resulting HDR image is calculated as weighted average of the exposures considering exposure
@@ -950,14 +1060,29 @@ For more information see \cite DM97 .
                                      @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+                                     @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+                                     @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal MatVector src, @ByVal UMat dst, @ByVal UMat times);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst, @ByVal UMat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst, @ByVal UMat times);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
 }
 
 /** \brief Creates MergeDebevec object
@@ -984,10 +1109,20 @@ For more information see \cite MK07 .
                                      @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+                                     @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+                                     @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
     /** \brief Short version of process, that doesn't take extra arguments.
     <p>
     @param src vector of input images
@@ -995,8 +1130,13 @@ For more information see \cite MK07 .
      */
     public native void process(@ByVal MatVector src, @ByVal Mat dst);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst);
     public native void process(@ByVal MatVector src, @ByVal UMat dst);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst);
 
     public native float getContrastWeight();
     public native void setContrastWeight(float contrast_weiht);
@@ -1031,14 +1171,29 @@ For more information see \cite RB99 .
                                      @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+                                     @ByVal Mat times, @ByVal Mat response);
     public native void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+                                     @ByVal UMat times, @ByVal UMat response);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+                                     @ByVal GpuMat times, @ByVal GpuMat response);
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal MatVector src, @ByVal UMat dst, @ByVal UMat times);
     public native void process(@ByVal UMatVector src, @ByVal UMat dst, @ByVal UMat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst, @ByVal UMat times);
+    public native void process(@ByVal MatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
+    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
+    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst, @ByVal GpuMat times);
 }
 
 /** \brief Creates MergeRobertson object
@@ -1059,6 +1214,7 @@ This function is to be applied on color images.
  */
 @Namespace("cv") public static native void decolor( @ByVal Mat src, @ByVal Mat grayscale, @ByVal Mat color_boost);
 @Namespace("cv") public static native void decolor( @ByVal UMat src, @ByVal UMat grayscale, @ByVal UMat color_boost);
+@Namespace("cv") public static native void decolor( @ByVal GpuMat src, @ByVal GpuMat grayscale, @ByVal GpuMat color_boost);
 
 /** \addtogroup photo_clone
  *  \{
@@ -1091,6 +1247,8 @@ one object by alternative features.
         @ByVal Mat blend, int flags);
 @Namespace("cv") public static native void seamlessClone( @ByVal UMat src, @ByVal UMat dst, @ByVal UMat mask, @ByVal Point p,
         @ByVal UMat blend, int flags);
+@Namespace("cv") public static native void seamlessClone( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat mask, @ByVal Point p,
+        @ByVal GpuMat blend, int flags);
 
 /** \brief Given an original color image, two differently colored versions of this image can be mixed
 seamlessly.
@@ -1110,6 +1268,9 @@ Multiplication factor is between .5 to 2.5.
 @Namespace("cv") public static native void colorChange(@ByVal UMat src, @ByVal UMat mask, @ByVal UMat dst, float red_mul/*=1.0f*/,
         float green_mul/*=1.0f*/, float blue_mul/*=1.0f*/);
 @Namespace("cv") public static native void colorChange(@ByVal UMat src, @ByVal UMat mask, @ByVal UMat dst);
+@Namespace("cv") public static native void colorChange(@ByVal GpuMat src, @ByVal GpuMat mask, @ByVal GpuMat dst, float red_mul/*=1.0f*/,
+        float green_mul/*=1.0f*/, float blue_mul/*=1.0f*/);
+@Namespace("cv") public static native void colorChange(@ByVal GpuMat src, @ByVal GpuMat mask, @ByVal GpuMat dst);
 
 /** \brief Applying an appropriate non-linear transformation to the gradient field inside the selection and
 then integrating back with a Poisson solver, modifies locally the apparent illumination of an image.
@@ -1128,6 +1289,9 @@ This is useful to highlight under-exposed foreground objects or to reduce specul
 @Namespace("cv") public static native void illuminationChange(@ByVal UMat src, @ByVal UMat mask, @ByVal UMat dst,
         float alpha/*=0.2f*/, float beta/*=0.4f*/);
 @Namespace("cv") public static native void illuminationChange(@ByVal UMat src, @ByVal UMat mask, @ByVal UMat dst);
+@Namespace("cv") public static native void illuminationChange(@ByVal GpuMat src, @ByVal GpuMat mask, @ByVal GpuMat dst,
+        float alpha/*=0.2f*/, float beta/*=0.4f*/);
+@Namespace("cv") public static native void illuminationChange(@ByVal GpuMat src, @ByVal GpuMat mask, @ByVal GpuMat dst);
 
 /** \brief By retaining only the gradients at edge locations, before integrating with the Poisson solver, one
 washes out the texture of the selected region, giving its contents a flat aspect. Here Canny Edge
@@ -1154,6 +1318,10 @@ color of the destination image.
         float low_threshold/*=30*/, float high_threshold/*=45*/,
         int kernel_size/*=3*/);
 @Namespace("cv") public static native void textureFlattening(@ByVal UMat src, @ByVal UMat mask, @ByVal UMat dst);
+@Namespace("cv") public static native void textureFlattening(@ByVal GpuMat src, @ByVal GpuMat mask, @ByVal GpuMat dst,
+        float low_threshold/*=30*/, float high_threshold/*=45*/,
+        int kernel_size/*=3*/);
+@Namespace("cv") public static native void textureFlattening(@ByVal GpuMat src, @ByVal GpuMat mask, @ByVal GpuMat dst);
 
 /** \} photo_clone
  <p>
@@ -1177,6 +1345,9 @@ filters are used in many different applications \cite EM11 .
 @Namespace("cv") public static native void edgePreservingFilter(@ByVal UMat src, @ByVal UMat dst, int flags/*=1*/,
         float sigma_s/*=60*/, float sigma_r/*=0.4f*/);
 @Namespace("cv") public static native void edgePreservingFilter(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void edgePreservingFilter(@ByVal GpuMat src, @ByVal GpuMat dst, int flags/*=1*/,
+        float sigma_s/*=60*/, float sigma_r/*=0.4f*/);
+@Namespace("cv") public static native void edgePreservingFilter(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief This filter enhances the details of a particular image.
 <p>
@@ -1191,6 +1362,9 @@ filters are used in many different applications \cite EM11 .
 @Namespace("cv") public static native void detailEnhance(@ByVal UMat src, @ByVal UMat dst, float sigma_s/*=10*/,
         float sigma_r/*=0.15f*/);
 @Namespace("cv") public static native void detailEnhance(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void detailEnhance(@ByVal GpuMat src, @ByVal GpuMat dst, float sigma_s/*=10*/,
+        float sigma_r/*=0.15f*/);
+@Namespace("cv") public static native void detailEnhance(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \example npr_demo.cpp
 An example using non-photorealistic line drawing functions
@@ -1210,6 +1384,9 @@ An example using non-photorealistic line drawing functions
 @Namespace("cv") public static native void pencilSketch(@ByVal UMat src, @ByVal UMat dst1, @ByVal UMat dst2,
         float sigma_s/*=60*/, float sigma_r/*=0.07f*/, float shade_factor/*=0.02f*/);
 @Namespace("cv") public static native void pencilSketch(@ByVal UMat src, @ByVal UMat dst1, @ByVal UMat dst2);
+@Namespace("cv") public static native void pencilSketch(@ByVal GpuMat src, @ByVal GpuMat dst1, @ByVal GpuMat dst2,
+        float sigma_s/*=60*/, float sigma_r/*=0.07f*/, float shade_factor/*=0.02f*/);
+@Namespace("cv") public static native void pencilSketch(@ByVal GpuMat src, @ByVal GpuMat dst1, @ByVal GpuMat dst2);
 
 /** \brief Stylization aims to produce digital imagery with a wide variety of effects not focused on
 photorealism. Edge-aware filters are ideal for stylization, as they can abstract regions of low
@@ -1226,6 +1403,9 @@ contrast while preserving, or enhancing, high-contrast features.
 @Namespace("cv") public static native void stylization(@ByVal UMat src, @ByVal UMat dst, float sigma_s/*=60*/,
         float sigma_r/*=0.45f*/);
 @Namespace("cv") public static native void stylization(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void stylization(@ByVal GpuMat src, @ByVal GpuMat dst, float sigma_s/*=60*/,
+        float sigma_r/*=0.45f*/);
+@Namespace("cv") public static native void stylization(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \} photo_render
  <p>
@@ -1322,6 +1502,14 @@ BORDER_REPLICATE , BORDER_CONSTANT , BORDER_REFLECT and BORDER_WRAP are supporte
                               @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal UMat src, @ByVal UMat dst,
                               float h);
+@Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal GpuMat src, @ByVal GpuMat dst,
+                              float h,
+                              int search_window/*=21*/,
+                              int block_size/*=7*/,
+                              int borderMode/*=cv::BORDER_DEFAULT*/,
+                              @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal GpuMat src, @ByVal GpuMat dst,
+                              float h);
 
 /** \brief Perform image denoising using Non-local Means Denoising algorithm
 <http://www.ipol.im/pub/algo/bcm_non_local_means_denoising> with several computational
@@ -1358,6 +1546,13 @@ FastNonLocalMeansDenoising::labMethod.
                                      @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal UMat src, @ByVal UMat dst,
                                      float h);
+@Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                     float h,
+                                     int search_window/*=21*/,
+                                     int block_size/*=7*/,
+                                     @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                     float h);
 
 /** \brief Modification of fastNlMeansDenoising function for colored images
 <p>
@@ -1393,6 +1588,13 @@ with given h parameters using FastNonLocalMeansDenoising::simpleMethod function.
                                             int block_size/*=7*/,
                                             @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal UMat src, @ByVal UMat dst,
+                                            float h_luminance, float photo_render);
+@Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                            float h_luminance, float photo_render,
+                                            int search_window/*=21*/,
+                                            int block_size/*=7*/,
+                                            @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal GpuMat src, @ByVal GpuMat dst,
                                             float h_luminance, float photo_render);
 
 /** \} photo */

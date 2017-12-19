@@ -419,6 +419,8 @@ See the OpenCV sample camshiftdemo.c that tracks colored objects.
                                    @ByVal TermCriteria criteria );
 @Namespace("cv") public static native @ByVal RotatedRect CamShift( @ByVal UMat probImage, @ByRef Rect window,
                                    @ByVal TermCriteria criteria );
+@Namespace("cv") public static native @ByVal RotatedRect CamShift( @ByVal GpuMat probImage, @ByRef Rect window,
+                                   @ByVal TermCriteria criteria );
 /** \example camshiftdemo.cpp
 An example using the mean-shift tracking algorithm
 */
@@ -443,6 +445,7 @@ remaining contours with drawContours.
  */
 @Namespace("cv") public static native int meanShift( @ByVal Mat probImage, @ByRef Rect window, @ByVal TermCriteria criteria );
 @Namespace("cv") public static native int meanShift( @ByVal UMat probImage, @ByRef Rect window, @ByVal TermCriteria criteria );
+@Namespace("cv") public static native int meanShift( @ByVal GpuMat probImage, @ByRef Rect window, @ByVal TermCriteria criteria );
 
 /** \brief Constructs the image pyramid which can be passed to calcOpticalFlowPyrLK.
 <p>
@@ -473,6 +476,13 @@ to force data copying.
                                           @Cast("bool") boolean tryReuseInputImage/*=true*/ );
 @Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal Mat img, @ByVal UMatVector pyramid,
                                           @ByVal Size winSize, int maxLevel );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal Mat img, @ByVal GpuMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
+                                          int pyrBorder/*=cv::BORDER_REFLECT_101*/,
+                                          int derivBorder/*=cv::BORDER_CONSTANT*/,
+                                          @Cast("bool") boolean tryReuseInputImage/*=true*/ );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal Mat img, @ByVal GpuMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel );
 @Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal UMat img, @ByVal MatVector pyramid,
                                           @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
                                           int pyrBorder/*=cv::BORDER_REFLECT_101*/,
@@ -486,6 +496,34 @@ to force data copying.
                                           int derivBorder/*=cv::BORDER_CONSTANT*/,
                                           @Cast("bool") boolean tryReuseInputImage/*=true*/ );
 @Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal UMat img, @ByVal UMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal UMat img, @ByVal GpuMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
+                                          int pyrBorder/*=cv::BORDER_REFLECT_101*/,
+                                          int derivBorder/*=cv::BORDER_CONSTANT*/,
+                                          @Cast("bool") boolean tryReuseInputImage/*=true*/ );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal UMat img, @ByVal GpuMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal GpuMat img, @ByVal MatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
+                                          int pyrBorder/*=cv::BORDER_REFLECT_101*/,
+                                          int derivBorder/*=cv::BORDER_CONSTANT*/,
+                                          @Cast("bool") boolean tryReuseInputImage/*=true*/ );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal GpuMat img, @ByVal MatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal GpuMat img, @ByVal UMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
+                                          int pyrBorder/*=cv::BORDER_REFLECT_101*/,
+                                          int derivBorder/*=cv::BORDER_CONSTANT*/,
+                                          @Cast("bool") boolean tryReuseInputImage/*=true*/ );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal GpuMat img, @ByVal UMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal GpuMat img, @ByVal GpuMatVector pyramid,
+                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
+                                          int pyrBorder/*=cv::BORDER_REFLECT_101*/,
+                                          int derivBorder/*=cv::BORDER_CONSTANT*/,
+                                          @Cast("bool") boolean tryReuseInputImage/*=true*/ );
+@Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal GpuMat img, @ByVal GpuMatVector pyramid,
                                           @ByVal Size winSize, int maxLevel );
 
 /** \example lkdemo.cpp
@@ -556,6 +594,15 @@ The function implements a sparse iterative version of the Lucas-Kanade optical f
 @Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal UMat prevImg, @ByVal UMat nextImg,
                                         @ByVal UMat prevPts, @ByVal UMat nextPts,
                                         @ByVal UMat status, @ByVal UMat err );
+@Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal GpuMat prevImg, @ByVal GpuMat nextImg,
+                                        @ByVal GpuMat prevPts, @ByVal GpuMat nextPts,
+                                        @ByVal GpuMat status, @ByVal GpuMat err,
+                                        @ByVal(nullValue = "cv::Size(21,21)") Size winSize, int maxLevel/*=3*/,
+                                        @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 0.01)") TermCriteria criteria,
+                                        int flags/*=0*/, double minEigThreshold/*=1e-4*/ );
+@Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal GpuMat prevImg, @ByVal GpuMat nextImg,
+                                        @ByVal GpuMat prevPts, @ByVal GpuMat nextPts,
+                                        @ByVal GpuMat status, @ByVal GpuMat err );
 
 /** \brief Computes a dense optical flow using the Gunnar Farneback's algorithm.
 <p>
@@ -603,6 +650,10 @@ The function finds an optical flow for each prev pixel using the \cite Farneback
                                             double pyr_scale, int levels, int winsize,
                                             int iterations, int poly_n, double poly_sigma,
                                             int flags );
+@Namespace("cv") public static native void calcOpticalFlowFarneback( @ByVal GpuMat prev, @ByVal GpuMat next, @ByVal GpuMat flow,
+                                            double pyr_scale, int levels, int winsize,
+                                            int iterations, int poly_n, double poly_sigma,
+                                            int flags );
 
 /** \brief Computes an optimal affine transformation between two 2D point sets.
 <p>
@@ -633,6 +684,7 @@ estimateAffine2D, estimateAffinePartial2D, getAffineTransform, getPerspectiveTra
  */
 @Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine );
 @Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine );
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine );
 
 
 /** enum cv:: */
@@ -708,6 +760,12 @@ estimateAffine2D, estimateAffinePartial2D, findHomography
                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat inputMask);
 @Namespace("cv") public static native double findTransformECC( @ByVal UMat templateImage, @ByVal UMat inputImage,
                                       @ByVal UMat warpMatrix);
+@Namespace("cv") public static native double findTransformECC( @ByVal GpuMat templateImage, @ByVal GpuMat inputImage,
+                                      @ByVal GpuMat warpMatrix, int motionType/*=cv::MOTION_AFFINE*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 50, 0.001)") TermCriteria criteria,
+                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat inputMask);
+@Namespace("cv") public static native double findTransformECC( @ByVal GpuMat templateImage, @ByVal GpuMat inputImage,
+                                      @ByVal GpuMat warpMatrix);
 
 /** \example kalman.cpp
 An example using the standard Kalman filter
@@ -810,6 +868,7 @@ with cvReleaseKalman(&kalmanFilter)
      */
     public native void calc( @ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow );
     public native void calc( @ByVal UMat I0, @ByVal UMat I1, @ByVal UMat flow );
+    public native void calc( @ByVal GpuMat I0, @ByVal GpuMat I1, @ByVal GpuMat flow );
     /** \brief Releases all inner buffers.
     */
     public native void collectGarbage();
@@ -846,6 +905,13 @@ with cvReleaseKalman(&kalmanFilter)
     public native void calc(@ByVal UMat prevImg, @ByVal UMat nextImg,
                           @ByVal UMat prevPts, @ByVal UMat nextPts,
                           @ByVal UMat status);
+    public native void calc(@ByVal GpuMat prevImg, @ByVal GpuMat nextImg,
+                          @ByVal GpuMat prevPts, @ByVal GpuMat nextPts,
+                          @ByVal GpuMat status,
+                          @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat err);
+    public native void calc(@ByVal GpuMat prevImg, @ByVal GpuMat nextImg,
+                          @ByVal GpuMat prevPts, @ByVal GpuMat nextPts,
+                          @ByVal GpuMat status);
 }
 
 /** \brief "Dual TV L1" Optical Flow Algorithm.
@@ -1140,6 +1206,8 @@ segmentation algorithms.
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
 
     /** \brief Computes a background image.
     <p>
@@ -1150,6 +1218,7 @@ segmentation algorithms.
      */
     public native void getBackgroundImage(@ByVal Mat backgroundImage);
     public native void getBackgroundImage(@ByVal UMat backgroundImage);
+    public native void getBackgroundImage(@ByVal GpuMat backgroundImage);
 }
 
 
@@ -1282,6 +1351,8 @@ and \cite Zivkovic2006 .
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
 }
 
 /** \brief Creates MOG2 Background Subtractor

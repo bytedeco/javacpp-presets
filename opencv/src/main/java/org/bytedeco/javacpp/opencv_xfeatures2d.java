@@ -293,6 +293,9 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
     public static native @Ptr DAISY create( float radius/*=15*/, int q_radius/*=3*/, int q_theta/*=8*/,
                     int q_hist/*=8*/, int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat H,
                     @Cast("bool") boolean interpolation/*=true*/, @Cast("bool") boolean use_orientation/*=false*/ );
+    public static native @Ptr DAISY create( float radius/*=15*/, int q_radius/*=3*/, int q_theta/*=8*/,
+                    int q_hist/*=8*/, int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat H,
+                    @Cast("bool") boolean interpolation/*=true*/, @Cast("bool") boolean use_orientation/*=false*/ );
 
     /** \overload
      * @param image image to extract descriptors
@@ -301,6 +304,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
      */
     public native void compute( @ByVal Mat image, @ByRef KeyPointVector keypoints, @ByVal Mat descriptors );
     public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat descriptors );
+    public native void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat descriptors );
 
     public native void compute( @ByVal MatVector images,
                               @ByRef KeyPointVectorVector keypoints,
@@ -308,6 +312,9 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
     public native void compute( @ByVal UMatVector images,
                               @ByRef KeyPointVectorVector keypoints,
                               @ByVal UMatVector descriptors );
+    public native void compute( @ByVal GpuMatVector images,
+                              @ByRef KeyPointVectorVector keypoints,
+                              @ByVal GpuMatVector descriptors );
 
     /** \overload
      * @param image image to extract descriptors
@@ -316,6 +323,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
      */
     public native void compute( @ByVal Mat image, @ByVal Rect roi, @ByVal Mat descriptors );
     public native void compute( @ByVal UMat image, @ByVal Rect roi, @ByVal UMat descriptors );
+    public native void compute( @ByVal GpuMat image, @ByVal Rect roi, @ByVal GpuMat descriptors );
 
     /**\overload
      * @param image image to extract descriptors
@@ -323,6 +331,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
      */
     public native void compute( @ByVal Mat image, @ByVal Mat descriptors );
     public native void compute( @ByVal UMat image, @ByVal UMat descriptors );
+    public native void compute( @ByVal GpuMat image, @ByVal GpuMat descriptors );
 
     /**
      * @param y position y on image
@@ -440,6 +449,7 @@ Available types are VGG::VGG_120, VGG::VGG_80, VGG::VGG_64, VGG::VGG_48
      */
     public native void compute( @ByVal Mat image, @ByRef KeyPointVector keypoints, @ByVal Mat descriptors );
     public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat descriptors );
+    public native void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat descriptors );
 
 }
 
@@ -618,6 +628,9 @@ samples subfolder.
     public native void computeSignature(
             @ByVal UMat image,
             @ByVal UMat signature);
+    public native void computeSignature(
+            @ByVal GpuMat image,
+            @ByVal GpuMat signature);
 
     /**
     * \brief Computes signatures for multiple images in parallel.
@@ -660,6 +673,16 @@ samples subfolder.
             @ByVal UMat source,
             @ByVal UMat signature,
             @ByVal UMat result);
+    public static native void drawSignature(
+            @ByVal GpuMat source,
+            @ByVal GpuMat signature,
+            @ByVal GpuMat result,
+            float radiusToShorterSideRatio/*=1.0 / 8*/,
+            int borderThickness/*=1*/);
+    public static native void drawSignature(
+            @ByVal GpuMat source,
+            @ByVal GpuMat signature,
+            @ByVal GpuMat result);
 
     /**
     * \brief Generates initial sampling points according to selected point distribution.
@@ -994,6 +1017,9 @@ samples subfolder.
     public native float computeQuadraticFormDistance(
             @ByVal UMat _signature0,
             @ByVal UMat _signature1);
+    public native float computeQuadraticFormDistance(
+            @ByVal GpuMat _signature0,
+            @ByVal GpuMat _signature1);
 
     /**
     * \brief Computes Signature Quadratic Form Distance between the reference signature
@@ -1124,6 +1150,13 @@ samples subfolder.
             @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
     public native void detect(
             @ByVal UMat image,
+            @StdVector Elliptic_KeyPoint keypoints );
+    public native void detect(
+            @ByVal GpuMat image,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+    public native void detect(
+            @ByVal GpuMat image,
             @StdVector Elliptic_KeyPoint keypoints ); // overload, don't hide
     /**
      * \brief Detects keypoints and computes descriptors for their surrounding
@@ -1151,6 +1184,17 @@ samples subfolder.
             @ByVal UMat mask,
             @StdVector Elliptic_KeyPoint keypoints,
             @ByVal UMat descriptors );
+    public native void detectAndCompute(
+            @ByVal GpuMat image,
+            @ByVal GpuMat mask,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal GpuMat descriptors,
+            @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native void detectAndCompute(
+            @ByVal GpuMat image,
+            @ByVal GpuMat mask,
+            @StdVector Elliptic_KeyPoint keypoints,
+            @ByVal GpuMat descriptors );
 }
 
 
@@ -1176,6 +1220,10 @@ Detects corners using the FAST algorithm by \cite Rosten06 .
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal UMat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal UMat image, @ByRef KeyPointVector keypoints,
+                      int threshold);
+@Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
+@Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
                       int threshold);
 
 

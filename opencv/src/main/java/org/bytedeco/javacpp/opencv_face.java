@@ -376,8 +376,13 @@ String name = model->name();
      */
     public native void train(@ByVal MatVector src, @ByVal Mat labels);
     public native void train(@ByVal UMatVector src, @ByVal Mat labels);
+    public native void train(@ByVal GpuMatVector src, @ByVal Mat labels);
     public native void train(@ByVal MatVector src, @ByVal UMat labels);
     public native void train(@ByVal UMatVector src, @ByVal UMat labels);
+    public native void train(@ByVal GpuMatVector src, @ByVal UMat labels);
+    public native void train(@ByVal MatVector src, @ByVal GpuMat labels);
+    public native void train(@ByVal UMatVector src, @ByVal GpuMat labels);
+    public native void train(@ByVal GpuMatVector src, @ByVal GpuMat labels);
 
     /** \brief Updates a FaceRecognizer with given data and associated labels.
     <p>
@@ -428,12 +433,18 @@ String name = model->name();
      */
     public native void update(@ByVal MatVector src, @ByVal Mat labels);
     public native void update(@ByVal UMatVector src, @ByVal Mat labels);
+    public native void update(@ByVal GpuMatVector src, @ByVal Mat labels);
     public native void update(@ByVal MatVector src, @ByVal UMat labels);
     public native void update(@ByVal UMatVector src, @ByVal UMat labels);
+    public native void update(@ByVal GpuMatVector src, @ByVal UMat labels);
+    public native void update(@ByVal MatVector src, @ByVal GpuMat labels);
+    public native void update(@ByVal UMatVector src, @ByVal GpuMat labels);
+    public native void update(@ByVal GpuMatVector src, @ByVal GpuMat labels);
 
     /** \overload */
     public native @Name("predict") int predict_label(@ByVal Mat src);
     public native @Name("predict") int predict_label(@ByVal UMat src);
+    public native @Name("predict") int predict_label(@ByVal GpuMat src);
 
 
     /** \brief Predicts a label and associated confidence (e.g. distance) for a given input image.
@@ -473,8 +484,13 @@ String name = model->name();
      */
     public native void predict(@ByVal Mat src, @ByRef IntPointer label, @ByRef DoublePointer confidence);
     public native void predict(@ByVal Mat src, @ByRef IntBuffer label, @ByRef DoubleBuffer confidence);
-    public native void predict(@ByVal UMat src, @ByRef int[] label, @ByRef double[] confidence);
+    public native void predict(@ByVal Mat src, @ByRef int[] label, @ByRef double[] confidence);
     public native void predict(@ByVal UMat src, @ByRef IntPointer label, @ByRef DoublePointer confidence);
+    public native void predict(@ByVal UMat src, @ByRef IntBuffer label, @ByRef DoubleBuffer confidence);
+    public native void predict(@ByVal UMat src, @ByRef int[] label, @ByRef double[] confidence);
+    public native void predict(@ByVal GpuMat src, @ByRef IntPointer label, @ByRef DoublePointer confidence);
+    public native void predict(@ByVal GpuMat src, @ByRef IntBuffer label, @ByRef DoubleBuffer confidence);
+    public native void predict(@ByVal GpuMat src, @ByRef int[] label, @ByRef double[] confidence);
 
 
     /** \brief - if implemented - send all result of prediction to collector that can be used for somehow custom result handling
@@ -486,6 +502,7 @@ String name = model->name();
     */
     public native @Name("predict") void predict_collect(@ByVal Mat src, @Ptr PredictCollector collector);
     public native @Name("predict") void predict_collect(@ByVal UMat src, @Ptr PredictCollector collector);
+    public native @Name("predict") void predict_collect(@ByVal GpuMat src, @Ptr PredictCollector collector);
 
     /** \brief Saves a FaceRecognizer and its model state.
     <p>

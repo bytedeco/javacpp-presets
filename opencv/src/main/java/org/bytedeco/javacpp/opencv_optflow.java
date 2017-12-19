@@ -102,6 +102,8 @@ Functions reading and writing .flo files in "Middlebury" format, see: <http://vi
                                      int layers, int averaging_block_size, int max_flow);
 @Namespace("cv::optflow") public static native void calcOpticalFlowSF( @ByVal UMat from, @ByVal UMat to, @ByVal UMat flow,
                                      int layers, int averaging_block_size, int max_flow);
+@Namespace("cv::optflow") public static native void calcOpticalFlowSF( @ByVal GpuMat from, @ByVal GpuMat to, @ByVal GpuMat flow,
+                                     int layers, int averaging_block_size, int max_flow);
 
 /** \brief Calculate an optical flow using "SimpleFlow" algorithm.
 <p>
@@ -141,6 +143,12 @@ See \cite Tao2012 . And site of project - <http://graphics.berkeley.edu/papers/T
                                      double sigma_dist_fix, double sigma_color_fix, double occ_thr,
                                      int upscale_averaging_radius, double upscale_sigma_dist,
                                      double upscale_sigma_color, double speed_up_thr );
+@Namespace("cv::optflow") public static native void calcOpticalFlowSF( @ByVal GpuMat from, @ByVal GpuMat to, @ByVal GpuMat flow, int layers,
+                                     int averaging_block_size, int max_flow,
+                                     double sigma_dist, double sigma_color, int postprocess_window,
+                                     double sigma_dist_fix, double sigma_color_fix, double occ_thr,
+                                     int upscale_averaging_radius, double upscale_sigma_dist,
+                                     double upscale_sigma_color, double speed_up_thr );
 
 /** \brief Fast dense optical flow based on PyrLK sparse matches interpolation.
 <p>
@@ -170,6 +178,11 @@ See \cite Tao2012 . And site of project - <http://graphics.berkeley.edu/papers/T
                                                  @Cast("bool") boolean use_post_proc/*=true*/, float fgs_lambda/*=500.0f*/,
                                                  float fgs_sigma/*=1.5f*/ );
 @Namespace("cv::optflow") public static native void calcOpticalFlowSparseToDense( @ByVal UMat from, @ByVal UMat to, @ByVal UMat flow );
+@Namespace("cv::optflow") public static native void calcOpticalFlowSparseToDense( @ByVal GpuMat from, @ByVal GpuMat to, @ByVal GpuMat flow,
+                                                 int grid_step/*=8*/, int k/*=128*/, float sigma/*=0.05f*/,
+                                                 @Cast("bool") boolean use_post_proc/*=true*/, float fgs_lambda/*=500.0f*/,
+                                                 float fgs_sigma/*=1.5f*/ );
+@Namespace("cv::optflow") public static native void calcOpticalFlowSparseToDense( @ByVal GpuMat from, @ByVal GpuMat to, @ByVal GpuMat flow );
 
 /** \brief Read a .flo file
 <p>
@@ -192,8 +205,10 @@ to the flow in the horizontal direction (u), second - vertical (v).
  */
 @Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal Mat flow );
 @Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal Mat flow );
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal UMat flow );
 @Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal UMat flow );
+@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal UMat flow );
+@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal GpuMat flow );
+@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal GpuMat flow );
 
 /** \brief Variational optical flow refinement
 <p>
@@ -214,6 +229,7 @@ procedure can be found in \cite Brox2004
     (to avoid extra splits/merges) */
     public native void calcUV(@ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow_u, @ByVal Mat flow_v);
     public native void calcUV(@ByVal UMat I0, @ByVal UMat I1, @ByVal UMat flow_u, @ByVal UMat flow_v);
+    public native void calcUV(@ByVal GpuMat I0, @ByVal GpuMat I1, @ByVal GpuMat flow_u, @ByVal GpuMat flow_v);
 
     /** \brief Number of outer (fixed-point) iterations in the minimization procedure.
     @see setFixedPointIterations */
@@ -478,6 +494,8 @@ templates technique described in \cite Davis97 and \cite Bradski00 .
                                        double timestamp, double duration );
 @Namespace("cv::motempl") public static native void updateMotionHistory( @ByVal UMat silhouette, @ByVal UMat mhi,
                                        double timestamp, double duration );
+@Namespace("cv::motempl") public static native void updateMotionHistory( @ByVal GpuMat silhouette, @ByVal GpuMat mhi,
+                                       double timestamp, double duration );
 
 /** \brief Calculates a gradient orientation of a motion history image.
 <p>
@@ -515,6 +533,10 @@ valid.
                                       double delta1, double delta2, int apertureSize/*=3*/ );
 @Namespace("cv::motempl") public static native void calcMotionGradient( @ByVal UMat mhi, @ByVal UMat mask, @ByVal UMat orientation,
                                       double delta1, double delta2 );
+@Namespace("cv::motempl") public static native void calcMotionGradient( @ByVal GpuMat mhi, @ByVal GpuMat mask, @ByVal GpuMat orientation,
+                                      double delta1, double delta2, int apertureSize/*=3*/ );
+@Namespace("cv::motempl") public static native void calcMotionGradient( @ByVal GpuMat mhi, @ByVal GpuMat mask, @ByVal GpuMat orientation,
+                                      double delta1, double delta2 );
 
 /** \brief Calculates a global motion orientation in a selected region.
 <p>
@@ -533,6 +555,8 @@ smaller weight, as recorded in mhi .
 @Namespace("cv::motempl") public static native double calcGlobalOrientation( @ByVal Mat orientation, @ByVal Mat mask, @ByVal Mat mhi,
                                            double timestamp, double duration );
 @Namespace("cv::motempl") public static native double calcGlobalOrientation( @ByVal UMat orientation, @ByVal UMat mask, @ByVal UMat mhi,
+                                           double timestamp, double duration );
+@Namespace("cv::motempl") public static native double calcGlobalOrientation( @ByVal GpuMat orientation, @ByVal GpuMat mask, @ByVal GpuMat mhi,
                                            double timestamp, double duration );
 
 /** \brief Splits a motion history image into a few parts corresponding to separate independent motions (for
@@ -554,6 +578,9 @@ of the particular component.
                                  @ByRef RectVector boundingRects,
                                  double timestamp, double segThresh );
 @Namespace("cv::motempl") public static native void segmentMotion( @ByVal UMat mhi, @ByVal UMat segmask,
+                                 @ByRef RectVector boundingRects,
+                                 double timestamp, double segThresh );
+@Namespace("cv::motempl") public static native void segmentMotion( @ByVal GpuMat mhi, @ByVal GpuMat segmask,
                                  @ByRef RectVector boundingRects,
                                  double timestamp, double segThresh );
                                  

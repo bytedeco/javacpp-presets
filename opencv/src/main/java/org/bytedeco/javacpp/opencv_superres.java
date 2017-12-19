@@ -85,6 +85,7 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
             public native void nextFrame(@ByVal Mat frame);
             public native void nextFrame(@ByVal UMat frame);
+            public native void nextFrame(@ByVal GpuMat frame);
             public native void reset();
         }
 
@@ -122,6 +123,7 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
              */
             public native void nextFrame(@ByVal Mat frame);
             public native void nextFrame(@ByVal UMat frame);
+            public native void nextFrame(@ByVal GpuMat frame);
             public native void reset();
 
             /** \brief Clear all inner buffers.
@@ -280,6 +282,8 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
             public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1);
             public native void calc(@ByVal UMat frame0, @ByVal UMat frame1, @ByVal UMat flow1, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat flow2);
             public native void calc(@ByVal UMat frame0, @ByVal UMat frame1, @ByVal UMat flow1);
+            public native void calc(@ByVal GpuMat frame0, @ByVal GpuMat frame1, @ByVal GpuMat flow1, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat flow2);
+            public native void calc(@ByVal GpuMat frame0, @ByVal GpuMat frame1, @ByVal GpuMat flow1);
             public native void collectGarbage();
         }
 
