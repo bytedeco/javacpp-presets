@@ -9,6 +9,7 @@ echo Architecture: $MSYS2_ARCH
 echo MSYS2 directory: $MSYS2_DIR
 echo MSYS2 system: $MSYSTEM
 echo Bits: $BIT
+echo Extension: $EXT
 echo Branch: $APPVEYOR_REPO_BRANCH
 
 bash --version
@@ -59,7 +60,7 @@ if [ "$projectName" == "mkl" ]; then
        echo Finished mkl 
 fi
 
-if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
+if [ "$projectName" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        if [[ $(find /c/Downloads/cudnn-9.0-windows10-x64-v7.zip -type f -size +1000000c 2>/dev/null) ]]; then
          echo "Found cudnn in cache and size seems OK"

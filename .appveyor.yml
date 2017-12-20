@@ -359,6 +359,15 @@ environment:
       MSYSTEM: MINGW64
       BIT: 64
 
+    - PLATFORM: x64
+      PROJ: "opencv"
+      COMPILER: msys2
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      BIT: 64
+      EXT: -gpu
+
 init:
 # uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
