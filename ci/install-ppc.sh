@@ -44,7 +44,6 @@ if [[ "$PROJ" =~ cuda ]]; then
    rm -rf $HOME/downloads
 fi
 
-
 echo "Running install for $PROJ"
 echo "container id is $DOCKER_CONTAINER_ID"
 if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
