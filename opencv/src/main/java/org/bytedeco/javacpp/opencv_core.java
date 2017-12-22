@@ -129,10 +129,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @Str BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringVector put(BytePointer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -142,10 +152,14 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         return this;
     }
 
+    public StringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringVector put(String value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -185,10 +199,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point get();
     }
 
+    public Point pop_back() {
+        long size = size();
+        Point value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public PointVector push_back(Point value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public PointVector put(Point value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public PointVector put(Point ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -228,10 +252,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2f get();
     }
 
+    public Point2f pop_back() {
+        long size = size();
+        Point2f value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2fVector push_back(Point2f value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public Point2fVector put(Point2f value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public Point2fVector put(Point2f ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -271,10 +305,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2d get();
     }
 
+    public Point2d pop_back() {
+        long size = size();
+        Point2d value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2dVector push_back(Point2d value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public Point2dVector put(Point2d value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public Point2dVector put(Point2d ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -314,10 +358,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Size get();
     }
 
+    public Size pop_back() {
+        long size = size();
+        Size value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public SizeVector push_back(Size value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public SizeVector put(Size value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public SizeVector put(Size ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -357,10 +411,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Rect get();
     }
 
+    public Rect pop_back() {
+        long size = size();
+        Rect value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public RectVector push_back(Rect value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public RectVector put(Rect value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public RectVector put(Rect ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -400,10 +464,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef KeyPoint get();
     }
 
+    public KeyPoint pop_back() {
+        long size = size();
+        KeyPoint value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public KeyPointVector push_back(KeyPoint value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public KeyPointVector put(KeyPoint value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public KeyPointVector put(KeyPoint ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -443,10 +517,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef DMatch get();
     }
 
+    public DMatch pop_back() {
+        long size = size();
+        DMatch value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DMatchVector push_back(DMatch value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DMatchVector put(DMatch value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DMatchVector put(DMatch ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -486,10 +570,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef PointVector get();
     }
 
+    public PointVector pop_back() {
+        long size = size();
+        PointVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public PointVectorVector push_back(PointVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public PointVectorVector put(PointVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public PointVectorVector put(PointVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -529,10 +623,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2fVector get();
     }
 
+    public Point2fVector pop_back() {
+        long size = size();
+        Point2fVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2fVectorVector push_back(Point2fVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public Point2fVectorVector put(Point2fVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public Point2fVectorVector put(Point2fVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -572,10 +676,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2dVector get();
     }
 
+    public Point2dVector pop_back() {
+        long size = size();
+        Point2dVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2dVectorVector push_back(Point2dVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public Point2dVectorVector put(Point2dVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public Point2dVectorVector put(Point2dVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -615,10 +729,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef RectVector get();
     }
 
+    public RectVector pop_back() {
+        long size = size();
+        RectVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public RectVectorVector push_back(RectVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public RectVectorVector put(RectVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public RectVectorVector put(RectVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -658,10 +782,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef KeyPointVector get();
     }
 
+    public KeyPointVector pop_back() {
+        long size = size();
+        KeyPointVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public KeyPointVectorVector push_back(KeyPointVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public KeyPointVectorVector put(KeyPointVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public KeyPointVectorVector put(KeyPointVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -701,10 +835,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef DMatchVector get();
     }
 
+    public DMatchVector pop_back() {
+        long size = size();
+        DMatchVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DMatchVectorVector push_back(DMatchVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DMatchVectorVector put(DMatchVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DMatchVectorVector put(DMatchVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -744,10 +888,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Mat get();
     }
 
+    public Mat pop_back() {
+        long size = size();
+        Mat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatVector push_back(Mat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public MatVector put(Mat value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public MatVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -787,10 +941,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef UMat get();
     }
 
+    public UMat pop_back() {
+        long size = size();
+        UMat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public UMatVector push_back(UMat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public UMatVector put(UMat value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public UMatVector put(UMat ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -830,10 +994,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef GpuMat get();
     }
 
+    public GpuMat pop_back() {
+        long size = size();
+        GpuMat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public GpuMatVector push_back(GpuMat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public GpuMatVector put(GpuMat value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public GpuMatVector put(GpuMat ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -977,10 +1151,20 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") NodeDataTls get();
     }
 
+    public NodeDataTls pop_back() {
+        long size = size();
+        NodeDataTls value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public NodeDataTlsVector push_back(NodeDataTls value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public NodeDataTlsVector put(NodeDataTls value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public NodeDataTlsVector put(NodeDataTls ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -1250,7 +1434,6 @@ public static final int CV_HAL_GEMM_3_T = 4;
 
 
 // #ifdef __OPENCV_BUILD
-// #include "cvconfig.h"
 // #endif
 
 // #ifndef __CV_EXPAND
@@ -1450,7 +1633,6 @@ public static class Cv64suf extends Pointer {
 public static final int OPENCV_ABI_COMPATIBILITY = 300;
 
 // #ifdef __OPENCV_BUILD
-// #  define DISABLE_OPENCV_24_COMPATIBILITY
 // #endif
 
 // #if (defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined CVAPI_EXPORTS
@@ -16474,6 +16656,809 @@ capability can always be compiled to binary code of greater or equal compute cap
 // #include "opencv2/core/cuda.inl.hpp"
 
 // #endif /* OPENCV_CORE_CUDA_HPP */
+
+
+// Parsed from <opencv2/core/ocl.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the OpenCV Foundation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef OPENCV_OPENCL_HPP
+// #define OPENCV_OPENCL_HPP
+
+// #include "opencv2/core.hpp"
+
+/** \addtogroup core_opencl
+ *  \{ */
+
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveOpenCL();
+@Namespace("cv::ocl") public static native @Cast("bool") boolean useOpenCL();
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveAmdBlas();
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveAmdFft();
+@Namespace("cv::ocl") public static native void setUseOpenCL(@Cast("bool") boolean flag);
+@Namespace("cv::ocl") public static native void finish();
+
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveSVM();
+
+@Namespace("cv::ocl") @NoOffset public static class Device extends Pointer {
+    static { Loader.load(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Device(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Device position(long position) {
+        return (Device)super.position(position);
+    }
+
+    public Device() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Device(Pointer d) { super((Pointer)null); allocate(d); }
+    private native void allocate(Pointer d);
+    public Device(@Const @ByRef Device d) { super((Pointer)null); allocate(d); }
+    private native void allocate(@Const @ByRef Device d);
+    public native @ByRef @Name("operator =") Device put(@Const @ByRef Device d);
+
+    public native void set(Pointer d);
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        TYPE_DEFAULT     =  (1 << 0),
+        TYPE_CPU         =  (1 << 1),
+        TYPE_GPU         =  (1 << 2),
+        TYPE_ACCELERATOR =  (1 << 3),
+        TYPE_DGPU        =  TYPE_GPU + (1 << 16),
+        TYPE_IGPU        =  TYPE_GPU + (1 << 17),
+        TYPE_ALL         =  0xFFFFFFFF;
+
+    public native @Str BytePointer name();
+    public native @Str BytePointer extensions();
+    public native @Cast("bool") boolean isExtensionSupported(@Str BytePointer extensionName);
+    public native @Cast("bool") boolean isExtensionSupported(@Str String extensionName);
+    public native @Str BytePointer version();
+    public native @Str BytePointer vendorName();
+    public native @Str BytePointer OpenCL_C_Version();
+    public native @Str BytePointer OpenCLVersion();
+    public native int deviceVersionMajor();
+    public native int deviceVersionMinor();
+    public native @Str BytePointer driverVersion();
+    public native Pointer ptr();
+
+    public native int type();
+
+    public native int addressBits();
+    public native @Cast("bool") boolean available();
+    public native @Cast("bool") boolean compilerAvailable();
+    public native @Cast("bool") boolean linkerAvailable();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        FP_DENORM= (1 << 0),
+        FP_INF_NAN= (1 << 1),
+        FP_ROUND_TO_NEAREST= (1 << 2),
+        FP_ROUND_TO_ZERO= (1 << 3),
+        FP_ROUND_TO_INF= (1 << 4),
+        FP_FMA= (1 << 5),
+        FP_SOFT_FLOAT= (1 << 6),
+        FP_CORRECTLY_ROUNDED_DIVIDE_SQRT= (1 << 7);
+    public native int doubleFPConfig();
+    public native int singleFPConfig();
+    public native int halfFPConfig();
+
+    public native @Cast("bool") boolean endianLittle();
+    public native @Cast("bool") boolean errorCorrectionSupport();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        EXEC_KERNEL= (1 << 0),
+        EXEC_NATIVE_KERNEL= (1 << 1);
+    public native int executionCapabilities();
+
+    public native @Cast("size_t") long globalMemCacheSize();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        NO_CACHE= 0,
+        READ_ONLY_CACHE= 1,
+        READ_WRITE_CACHE= 2;
+    public native int globalMemCacheType();
+    public native int globalMemCacheLineSize();
+    public native @Cast("size_t") long globalMemSize();
+
+    public native @Cast("size_t") long localMemSize();
+    /** enum cv::ocl::Device:: */
+    public static final int
+        NO_LOCAL_MEM= 0,
+        LOCAL_IS_LOCAL= 1,
+        LOCAL_IS_GLOBAL= 2;
+    public native int localMemType();
+    public native @Cast("bool") boolean hostUnifiedMemory();
+
+    public native @Cast("bool") boolean imageSupport();
+
+    public native @Cast("bool") boolean imageFromBufferSupport();
+    public native @Cast("uint") int imagePitchAlignment();
+    public native @Cast("uint") int imageBaseAddressAlignment();
+
+    /** deprecated, use isExtensionSupported() method (probably with "cl_khr_subgroups" value) */
+    public native @Cast("bool") boolean intelSubgroupsSupport();
+
+    public native @Cast("size_t") long image2DMaxWidth();
+    public native @Cast("size_t") long image2DMaxHeight();
+
+    public native @Cast("size_t") long image3DMaxWidth();
+    public native @Cast("size_t") long image3DMaxHeight();
+    public native @Cast("size_t") long image3DMaxDepth();
+
+    public native @Cast("size_t") long imageMaxBufferSize();
+    public native @Cast("size_t") long imageMaxArraySize();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        UNKNOWN_VENDOR= 0,
+        VENDOR_AMD= 1,
+        VENDOR_INTEL= 2,
+        VENDOR_NVIDIA= 3;
+    public native int vendorID();
+    // FIXIT
+    // dev.isAMD() doesn't work for OpenCL CPU devices from AMD OpenCL platform.
+    // This method should use platform name instead of vendor name.
+    // After fix restore code in arithm.cpp: ocl_compare()
+    public native @Cast("bool") boolean isAMD();
+    public native @Cast("bool") boolean isIntel();
+    public native @Cast("bool") boolean isNVidia();
+
+    public native int maxClockFrequency();
+    public native int maxComputeUnits();
+    public native int maxConstantArgs();
+    public native @Cast("size_t") long maxConstantBufferSize();
+
+    public native @Cast("size_t") long maxMemAllocSize();
+    public native @Cast("size_t") long maxParameterSize();
+
+    public native int maxReadImageArgs();
+    public native int maxWriteImageArgs();
+    public native int maxSamplers();
+
+    public native @Cast("size_t") long maxWorkGroupSize();
+    public native int maxWorkItemDims();
+    public native void maxWorkItemSizes(@Cast("size_t*") SizeTPointer arg0);
+
+    public native int memBaseAddrAlign();
+
+    public native int nativeVectorWidthChar();
+    public native int nativeVectorWidthShort();
+    public native int nativeVectorWidthInt();
+    public native int nativeVectorWidthLong();
+    public native int nativeVectorWidthFloat();
+    public native int nativeVectorWidthDouble();
+    public native int nativeVectorWidthHalf();
+
+    public native int preferredVectorWidthChar();
+    public native int preferredVectorWidthShort();
+    public native int preferredVectorWidthInt();
+    public native int preferredVectorWidthLong();
+    public native int preferredVectorWidthFloat();
+    public native int preferredVectorWidthDouble();
+    public native int preferredVectorWidthHalf();
+
+    public native @Cast("size_t") long printfBufferSize();
+    public native @Cast("size_t") long profilingTimerResolution();
+
+    public static native @Const @ByRef Device getDefault();
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class Context extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Context(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Context(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Context position(long position) {
+        return (Context)super.position(position);
+    }
+
+    public Context() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Context(int dtype) { super((Pointer)null); allocate(dtype); }
+    private native void allocate(int dtype);
+    public Context(@Const @ByRef Context c) { super((Pointer)null); allocate(c); }
+    private native void allocate(@Const @ByRef Context c);
+    public native @ByRef @Name("operator =") Context put(@Const @ByRef Context c);
+
+    public native @Cast("bool") boolean create();
+    public native @Cast("bool") boolean create(int dtype);
+    public native @Cast("size_t") long ndevices();
+    public native @Const @ByRef Device device(@Cast("size_t") long idx);
+    public native @ByVal Program getProg(@Const @ByRef ProgramSource prog,
+                        @Str BytePointer buildopt, @Str BytePointer errmsg);
+    public native @ByVal Program getProg(@Const @ByRef ProgramSource prog,
+                        @Str String buildopt, @Str String errmsg);
+    public native void unloadProg(@ByRef Program prog);
+
+    public static native @ByRef Context getDefault(@Cast("bool") boolean initialize/*=true*/);
+    public static native @ByRef Context getDefault();
+    public native Pointer ptr();
+
+    
+
+    public native @Cast("bool") boolean useSVM();
+    public native void setUseSVM(@Cast("bool") boolean enabled);
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl p(); public native Context p(Impl p);
+}
+
+@Name("cv::ocl::Platform") @NoOffset public static class OclPlatform extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OclPlatform(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OclPlatform(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OclPlatform position(long position) {
+        return (OclPlatform)super.position(position);
+    }
+
+    public OclPlatform() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public OclPlatform(@Const @ByRef OclPlatform p) { super((Pointer)null); allocate(p); }
+    private native void allocate(@Const @ByRef OclPlatform p);
+    public native @ByRef @Name("operator =") OclPlatform put(@Const @ByRef OclPlatform p);
+
+    public native Pointer ptr();
+    public static native @ByRef OclPlatform getDefault();
+
+    
+}
+
+/** \brief Attaches OpenCL context to OpenCV
+\note
+  OpenCV will check if available OpenCL platform has platformName name, then assign context to
+  OpenCV and call {@code clRetainContext} function. The deviceID device will be used as target device and
+  new command queue will be created.
+@param platformName name of OpenCL platform to attach, this string is used to check if platform is available to OpenCV at runtime
+@param platformID ID of platform attached context was created for
+@param context OpenCL context to be attached to OpenCV
+@param deviceID ID of device, must be created from attached context
+*/
+@Namespace("cv::ocl") public static native void attachContext(@Str BytePointer platformName, Pointer platformID, Pointer context, Pointer deviceID);
+@Namespace("cv::ocl") public static native void attachContext(@Str String platformName, Pointer platformID, Pointer context, Pointer deviceID);
+
+/** \brief Convert OpenCL buffer to UMat
+\note
+  OpenCL buffer (cl_mem_buffer) should contain 2D image data, compatible with OpenCV. Memory
+  content is not copied from {@code clBuffer} to UMat. Instead, buffer handle assigned to UMat and
+  {@code clRetainMemObject} is called.
+@param cl_mem_buffer source clBuffer handle
+@param step num of bytes in single row
+@param rows number of rows
+@param cols number of cols
+@param type OpenCV type of image
+@param dst destination UMat
+*/
+@Namespace("cv::ocl") public static native void convertFromBuffer(Pointer cl_mem_buffer, @Cast("size_t") long step, int rows, int cols, int type, @ByRef UMat dst);
+
+/** \brief Convert OpenCL image2d_t to UMat
+\note
+  OpenCL {@code image2d_t} (cl_mem_image), should be compatible with OpenCV UMat formats. Memory content
+  is copied from image to UMat with {@code clEnqueueCopyImageToBuffer} function.
+@param cl_mem_image source image2d_t handle
+@param dst destination UMat
+*/
+@Namespace("cv::ocl") public static native void convertFromImage(Pointer cl_mem_image, @ByRef UMat dst);
+
+// TODO Move to internal header
+
+
+@Namespace("cv::ocl") @NoOffset public static class Queue extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Queue(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Queue(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Queue position(long position) {
+        return (Queue)super.position(position);
+    }
+
+    public Queue() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Queue(@Const @ByRef Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d) { super((Pointer)null); allocate(c, d); }
+    private native void allocate(@Const @ByRef Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d);
+    public Queue(@Const @ByRef Context c) { super((Pointer)null); allocate(c); }
+    private native void allocate(@Const @ByRef Context c);
+    public Queue(@Const @ByRef Queue q) { super((Pointer)null); allocate(q); }
+    private native void allocate(@Const @ByRef Queue q);
+    public native @ByRef @Name("operator =") Queue put(@Const @ByRef Queue q);
+
+    public native @Cast("bool") boolean create(@Const @ByRef(nullValue = "cv::ocl::Context()") Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d);
+    public native @Cast("bool") boolean create();
+    public native void finish();
+    public native Pointer ptr();
+    public static native @ByRef Queue getDefault();
+
+    /** \brief Returns OpenCL command queue with enable profiling mode support */
+    public native @Const @ByRef Queue getProfilingQueue();
+    public native @Cast("cv::ocl::Queue::Impl*") Pointer getImpl();
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class KernelArg extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelArg(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KernelArg(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KernelArg position(long position) {
+        return (KernelArg)super.position(position);
+    }
+
+    /** enum cv::ocl::KernelArg:: */
+    public static final int LOCAL= 1, READ_ONLY= 2, WRITE_ONLY= 4, READ_WRITE= 6, CONSTANT= 8, PTR_ONLY = 16, NO_SIZE= 256;
+    public KernelArg(int _flags, UMat _m, int wscale/*=1*/, int iwscale/*=1*/, @Const Pointer _obj/*=0*/, @Cast("size_t") long _sz/*=0*/) { super((Pointer)null); allocate(_flags, _m, wscale, iwscale, _obj, _sz); }
+    private native void allocate(int _flags, UMat _m, int wscale/*=1*/, int iwscale/*=1*/, @Const Pointer _obj/*=0*/, @Cast("size_t") long _sz/*=0*/);
+    public KernelArg(int _flags, UMat _m) { super((Pointer)null); allocate(_flags, _m); }
+    private native void allocate(int _flags, UMat _m);
+    public KernelArg() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public static native @ByVal KernelArg Local();
+    public static native @ByVal KernelArg PtrWriteOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg PtrReadOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg PtrReadWrite(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadWrite(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadWrite(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadWriteNoSize(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadWriteNoSize(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadOnly(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg WriteOnly(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg WriteOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadOnlyNoSize(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadOnlyNoSize(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg WriteOnlyNoSize(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg WriteOnlyNoSize(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg Constant(@Const @ByRef Mat m);
+
+    public native int flags(); public native KernelArg flags(int flags);
+    public native UMat m(); public native KernelArg m(UMat m);
+    @MemberGetter public native @Const Pointer obj();
+    public native @Cast("size_t") long sz(); public native KernelArg sz(long sz);
+    public native int wscale(); public native KernelArg wscale(int wscale);
+    public native int iwscale(); public native KernelArg iwscale(int iwscale);
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class Kernel extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Kernel(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Kernel(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Kernel position(long position) {
+        return (Kernel)super.position(position);
+    }
+
+    public Kernel() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Kernel(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog) { super((Pointer)null); allocate(kname, prog); }
+    private native void allocate(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog);
+    public Kernel(String kname, @Const @ByRef Program prog) { super((Pointer)null); allocate(kname, prog); }
+    private native void allocate(String kname, @Const @ByRef Program prog);
+    public Kernel(String kname, @Const @ByRef ProgramSource prog,
+                @Str String buildopts, @Str BytePointer errmsg) { allocate(kname, prog, buildopts, errmsg); }
+    private native void allocate(String kname, @Const @ByRef ProgramSource prog,
+                @Str String buildopts, @Cast({"", "cv::String*"}) @Str BytePointer errmsg/*=NULL*/);
+    public Kernel(@Const @ByRef Kernel k) { super((Pointer)null); allocate(k); }
+    private native void allocate(@Const @ByRef Kernel k);
+    public native @ByRef @Name("operator =") Kernel put(@Const @ByRef Kernel k);
+
+    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") boolean create(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog);
+    public native @Cast("bool") boolean create(String kname, @Const @ByRef Program prog);
+    public native @Cast("bool") boolean create(String kname, @Const @ByRef ProgramSource prog,
+                @Str String buildopts, @Cast({"", "cv::String*"}) @Str BytePointer errmsg/*=NULL*/);
+
+    public native int set(int i, @Const Pointer value, @Cast("size_t") long sz);
+    public native int set(int i, @Const @ByRef Image2D image2D);
+    public native int set(int i, @Const @ByRef UMat m);
+    public native int set(int i, @Const @ByRef KernelArg arg);
+    /** \brief Run the OpenCL kernel.
+    @param dims the work problem dimensions. It is the length of globalsize and localsize. It can be either 1, 2 or 3.
+    @param globalsize work items for each dimension. It is not the final globalsize passed to
+      OpenCL. Each dimension will be adjusted to the nearest integer divisible by the corresponding
+      value in localsize. If localsize is NULL, it will still be adjusted depending on dims. The
+      adjusted values are greater than or equal to the original values.
+    @param localsize work-group size for each dimension.
+    @param sync specify whether to wait for OpenCL computation to finish before return.
+    @param q command queue
+    */
+    public native @Cast("bool") boolean run(int dims, @Cast("size_t*") SizeTPointer globalsize,
+                 @Cast("size_t*") SizeTPointer localsize, @Cast("bool") boolean sync, @Const @ByRef(nullValue = "cv::ocl::Queue()") Queue q);
+    public native @Cast("bool") boolean run(int dims, @Cast("size_t*") SizeTPointer globalsize,
+                 @Cast("size_t*") SizeTPointer localsize, @Cast("bool") boolean sync);
+    public native @Cast("bool") boolean runTask(@Cast("bool") boolean sync, @Const @ByRef(nullValue = "cv::ocl::Queue()") Queue q);
+    public native @Cast("bool") boolean runTask(@Cast("bool") boolean sync);
+
+    /** \brief Similar to synchronized run() call with returning of kernel execution time
+     * Separate OpenCL command queue may be used (with CL_QUEUE_PROFILING_ENABLE)
+     * @return Execution time in nanoseconds or negative number on error
+     */
+    public native @Cast("int64") long runProfiling(int dims, @Cast("size_t*") SizeTPointer globalsize, @Cast("size_t*") SizeTPointer localsize, @Const @ByRef(nullValue = "cv::ocl::Queue()") Queue q);
+    public native @Cast("int64") long runProfiling(int dims, @Cast("size_t*") SizeTPointer globalsize, @Cast("size_t*") SizeTPointer localsize);
+
+    public native @Cast("size_t") long workGroupSize();
+    public native @Cast("size_t") long preferedWorkGroupSizeMultiple();
+    public native @Cast("bool") boolean compileWorkGroupSize(@Cast("size_t*") SizeTPointer wsz);
+    public native @Cast("size_t") long localMemSize();
+
+    public native Pointer ptr();
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+}
+
+@Namespace("cv::ocl") @NoOffset public static class Program extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Program(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Program(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Program position(long position) {
+        return (Program)super.position(position);
+    }
+
+    public Program() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Program(@Const @ByRef ProgramSource src,
+                @Str BytePointer buildflags, @Str BytePointer errmsg) { super((Pointer)null); allocate(src, buildflags, errmsg); }
+    private native void allocate(@Const @ByRef ProgramSource src,
+                @Str BytePointer buildflags, @Str BytePointer errmsg);
+    public Program(@Const @ByRef ProgramSource src,
+                @Str String buildflags, @Str String errmsg) { super((Pointer)null); allocate(src, buildflags, errmsg); }
+    private native void allocate(@Const @ByRef ProgramSource src,
+                @Str String buildflags, @Str String errmsg);
+    public Program(@Const @ByRef Program prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Const @ByRef Program prog);
+
+    public native @ByRef @Name("operator =") Program put(@Const @ByRef Program prog);
+
+    public native @Cast("bool") boolean create(@Const @ByRef ProgramSource src,
+                    @Str BytePointer buildflags, @Str BytePointer errmsg);
+    public native @Cast("bool") boolean create(@Const @ByRef ProgramSource src,
+                    @Str String buildflags, @Str String errmsg);
+    public native @Cast("bool") boolean read(@Str BytePointer buf, @Str BytePointer buildflags);
+    public native @Cast("bool") boolean read(@Str String buf, @Str String buildflags);
+    public native @Cast("bool") boolean write(@Str BytePointer buf);
+    public native @Cast("bool") boolean write(@Str String buf);
+
+    public native @Const @ByRef ProgramSource source();
+    public native Pointer ptr();
+
+    public native @Str BytePointer getPrefix();
+    public static native @Str BytePointer getPrefix(@Str BytePointer buildflags);
+    public static native @Str String getPrefix(@Str String buildflags);
+
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl getImpl();
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class ProgramSource extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ProgramSource(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ProgramSource(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ProgramSource position(long position) {
+        return (ProgramSource)super.position(position);
+    }
+ // deprecated
+
+    public ProgramSource() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public ProgramSource(@Str BytePointer module, @Str BytePointer name, @Str BytePointer codeStr, @Str BytePointer codeHash) { super((Pointer)null); allocate(module, name, codeStr, codeHash); }
+    private native void allocate(@Str BytePointer module, @Str BytePointer name, @Str BytePointer codeStr, @Str BytePointer codeHash);
+    public ProgramSource(@Str String module, @Str String name, @Str String codeStr, @Str String codeHash) { super((Pointer)null); allocate(module, name, codeStr, codeHash); }
+    private native void allocate(@Str String module, @Str String name, @Str String codeStr, @Str String codeHash);
+    public ProgramSource(@Str BytePointer prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Str BytePointer prog);
+    public ProgramSource(@Str String prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Str String prog); // deprecated // deprecated
+    public ProgramSource(@Const @ByRef ProgramSource prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Const @ByRef ProgramSource prog);
+    public native @ByRef @Name("operator =") ProgramSource put(@Const @ByRef ProgramSource prog);
+
+    public native @Str BytePointer source();
+    public native @Cast("cv::ocl::ProgramSource::hash_t") int hash(); // deprecated
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl getImpl();
+}
+
+@Namespace("cv::ocl") @NoOffset public static class PlatformInfo extends Pointer {
+    static { Loader.load(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PlatformInfo(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PlatformInfo position(long position) {
+        return (PlatformInfo)super.position(position);
+    }
+
+    public PlatformInfo() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public PlatformInfo(Pointer id) { super((Pointer)null); allocate(id); }
+    private native void allocate(Pointer id);
+
+    public PlatformInfo(@Const @ByRef PlatformInfo i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Const @ByRef PlatformInfo i);
+    public native @ByRef @Name("operator =") PlatformInfo put(@Const @ByRef PlatformInfo i);
+
+    public native @Str BytePointer name();
+    public native @Str BytePointer vendor();
+    public native @Str BytePointer version();
+    public native int deviceNumber();
+    public native void getDevice(@ByRef Device device, int d);
+}
+
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer convertTypeStr(int sdepth, int ddepth, int cn, @Cast("char*") BytePointer buf);
+@Namespace("cv::ocl") public static native String convertTypeStr(int sdepth, int ddepth, int cn, @Cast("char*") ByteBuffer buf);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer convertTypeStr(int sdepth, int ddepth, int cn, @Cast("char*") byte[] buf);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer typeToStr(int t);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer memopTypeToStr(int t);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer vecopTypeToStr(int t);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer getOpenCLErrorString(int errorCode);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal Mat _kernel, int ddepth/*=-1*/, @Cast("const char*") BytePointer name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal Mat _kernel);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal Mat _kernel, int ddepth/*=-1*/, String name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal UMat _kernel, int ddepth/*=-1*/, String name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal UMat _kernel);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal UMat _kernel, int ddepth/*=-1*/, @Cast("const char*") BytePointer name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal GpuMat _kernel, int ddepth/*=-1*/, @Cast("const char*") BytePointer name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal GpuMat _kernel);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal GpuMat _kernel, int ddepth/*=-1*/, String name/*=NULL*/);
+@Namespace("cv::ocl") public static native void getPlatfomsInfo(@StdVector PlatformInfo platform_info);
+
+
+/** enum cv::ocl::OclVectorStrategy */
+public static final int
+    // all matrices have its own vector width
+    OCL_VECTOR_OWN = 0,
+    // all matrices have maximal vector width among all matrices
+    // (useful for cases when matrices have different data types)
+    OCL_VECTOR_MAX = 1,
+
+    // default strategy
+    OCL_VECTOR_DEFAULT =  OCL_VECTOR_OWN;
+
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                         @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal Mat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                         @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal UMat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                         @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal GpuMat src1);
+
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal Mat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal Mat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal Mat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal UMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal UMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal UMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal GpuMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal GpuMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal GpuMat src1);
+
+// with OCL_VECTOR_MAX strategy
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal Mat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal UMat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal GpuMat src1);
+
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str BytePointer buildOptions, @Str BytePointer name, @ByVal Mat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str String buildOptions, @Str String name, @ByVal Mat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str String buildOptions, @Str String name, @ByVal UMat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str BytePointer buildOptions, @Str BytePointer name, @ByVal UMat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str BytePointer buildOptions, @Str BytePointer name, @ByVal GpuMat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str String buildOptions, @Str String name, @ByVal GpuMat _m);
+
+@Namespace("cv::ocl") @NoOffset public static class Image2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Image2D(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Image2D(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Image2D position(long position) {
+        return (Image2D)super.position(position);
+    }
+
+    public Image2D() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /**
+    @param src UMat object from which to get image properties and data
+    @param norm flag to enable the use of normalized channel data types
+    @param alias flag indicating that the image should alias the src UMat. If true, changes to the
+        image or src will be reflected in both objects.
+    */
+    public Image2D(@Const @ByRef UMat src, @Cast("bool") boolean norm/*=false*/, @Cast("bool") boolean alias/*=false*/) { super((Pointer)null); allocate(src, norm, alias); }
+    private native void allocate(@Const @ByRef UMat src, @Cast("bool") boolean norm/*=false*/, @Cast("bool") boolean alias/*=false*/);
+    public Image2D(@Const @ByRef UMat src) { super((Pointer)null); allocate(src); }
+    private native void allocate(@Const @ByRef UMat src);
+    public Image2D(@Const @ByRef Image2D i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Const @ByRef Image2D i);
+
+    public native @ByRef @Name("operator =") Image2D put(@Const @ByRef Image2D i);
+
+    /** Indicates if creating an aliased image should succeed.
+    Depends on the underlying platform and the dimensions of the UMat.
+    */
+    public static native @Cast("bool") boolean canCreateAlias(@Const @ByRef UMat u);
+
+    /** Indicates if the image format is supported.
+    */
+    public static native @Cast("bool") boolean isFormatSupported(int depth, int cn, @Cast("bool") boolean norm);
+
+    public native Pointer ptr();
+}
+
+@Namespace("cv::ocl") @NoOffset public static class Timer extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Timer(Pointer p) { super(p); }
+
+    public Timer(@Const @ByRef Queue q) { super((Pointer)null); allocate(q); }
+    private native void allocate(@Const @ByRef Queue q);
+    public native void start();
+    public native void stop();
+
+    public native @Cast("uint64") int durationNS();
+}
+
+@Namespace("cv::ocl") public static native MatAllocator getOpenCLAllocator();
+
+
+// #ifdef __OPENCV_BUILD
+// #endif
+
+/** \} */
+
+
+
+// #endif
 
 
 // Parsed from <opencv2/core/operations.hpp>

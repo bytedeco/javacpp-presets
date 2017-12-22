@@ -46,8 +46,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(value = {
     @Platform(include = {"<opencv2/core/hal/interface.h>", "<opencv2/core/cvdef.h>", "<opencv2/core/hal/hal.hpp>", "<opencv2/core/fast_math.hpp>",
         "<algorithm>", "<map>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
-        "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
-        "<opencv2/core.hpp>", "<opencv2/core/cuda.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
+        "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
+        "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.3", "opencv_imgproc@.3.3"},
         resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}),
     @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = {"gomp@.1", "opencv_cudev@.3.3"}),
@@ -69,7 +69,7 @@ public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("algorithm", "map", "opencv_adapters.h").skip())
                .put(new Info("__cplusplus", "CV_StaticAssert").define())
-               .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
+               .put(new Info("__OPENCV_BUILD", "defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
                              "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
                              "defined __GNUC__ || defined __clang__", "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA",
                              "__cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)", "CV_CXX11", "CV_FP16_TYPE").define(false))
@@ -93,6 +93,18 @@ public class opencv_core implements InfoMapper {
                .put(new Info("CV_MAT_CN", "CV_MAT_TYPE", "CV_IS_CONT_MAT", "CV_IS_MAT_CONT").cppTypes("int", "int"))
                .put(new Info("CV_VERSION").pointerTypes("String").translate(false))
                .put(new Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate())
+               .put(new Info("std::uint32_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("cv::ocl::initializeContextFromHandle").skip())
+               .put(new Info("cv::ocl::Platform").pointerTypes("OclPlatform"))
+               .put(new Info("cv::ocl::Queue::Impl").cast().pointerTypes("Pointer"))
+               .put(new Info("cv::ocl::Kernel(const char*, const cv::ocl::ProgramSource&, const cv::String&, cv::String*)").javaText(
+                       "public Kernel(String kname, @Const @ByRef ProgramSource prog,\n"
+                     + "            @Str String buildopts, @Str BytePointer errmsg) { allocate(kname, prog, buildopts, errmsg); }\n"
+                     + "private native void allocate(String kname, @Const @ByRef ProgramSource prog,\n"
+                     + "            @Str String buildopts, @Cast({\"\", \"cv::String*\"}) @Str BytePointer errmsg/*=NULL*/);"))
+               .put(new Info("cv::ocl::Kernel::create(const char*, const cv::ocl::ProgramSource&, const cv::String&, cv::String*)").javaText(
+                       "public native @Cast(\"bool\") boolean create(String kname, @Const @ByRef ProgramSource prog,\n"
+                     + "            @Str String buildopts, @Cast({\"\", \"cv::String*\"}) @Str BytePointer errmsg/*=NULL*/);"))
                .put(new Info("CvArr").skip().pointerTypes("CvArr"))
                .put(new Info("_IplROI").pointerTypes("IplROI"))
                .put(new Info("_IplImage").pointerTypes("IplImage"))

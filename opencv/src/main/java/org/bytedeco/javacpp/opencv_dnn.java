@@ -41,10 +41,20 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @StdVector IntPointer get();
     }
 
+    public IntPointer pop_back() {
+        long size = size();
+        IntPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatShapeVector push_back(IntPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public MatShapeVector put(IntPointer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public MatShapeVector put(IntPointer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -84,10 +94,20 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @ByRef MatShapeVector get();
     }
 
+    public MatShapeVector pop_back() {
+        long size = size();
+        MatShapeVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatShapeVectorVector push_back(MatShapeVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public MatShapeVectorVector put(MatShapeVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public MatShapeVectorVector put(MatShapeVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -158,10 +178,20 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") Mat get();
     }
 
+    public Mat pop_back() {
+        long size = size();
+        Mat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatPointerVector push_back(Mat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public MatPointerVector put(Mat value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public MatPointerVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }

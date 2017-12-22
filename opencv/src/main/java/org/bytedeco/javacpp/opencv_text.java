@@ -82,10 +82,20 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @ByRef ERStat get();
     }
 
+    public ERStat pop_back() {
+        long size = size();
+        ERStat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ERStatVector push_back(ERStat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public ERStatVector put(ERStat value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public ERStatVector put(ERStat ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -125,10 +135,20 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @ByRef ERStatVector get();
     }
 
+    public ERStatVector pop_back() {
+        long size = size();
+        ERStatVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ERStatVectorVector push_back(ERStatVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public ERStatVectorVector put(ERStatVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public ERStatVectorVector put(ERStatVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -168,10 +188,20 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") double get();
     }
 
+    public double pop_back() {
+        long size = size();
+        double value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleVector push_back(double value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleVector put(double value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleVector put(double ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -214,10 +244,20 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @StdString BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StdStringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StdStringVector put(BytePointer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StdStringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -227,10 +267,14 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         return this;
     }
 
+    public StdStringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StdStringVector put(String value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StdStringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
