@@ -36,7 +36,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    tar xvf data.tar.xz
    mkdir $HOME/downloads/cudaFS
    cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/downloads/cudaFS; done
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /usr;cp -R $HOME/downloads/cudaFS/usr/*"  
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /; cp -R $HOME/downloads/cudaFS/* ." 
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.1 /usr/local/cuda"  
    #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"  
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xzf $HOME/downloads/cudnn-9.1-linux-ppc64le-v7.tgz -C /usr/local/"
