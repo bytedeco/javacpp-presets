@@ -34,7 +34,9 @@ if [[ "$PROJ" =~ cuda ]]; then
    curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.5/cudnn-9.1-linux-ppc64le-v7.tgz -o $HOME/downloads/cudnn-9.1-linux-ppc64le-v7.tgz
    ar vx $HOME/downloads/cuda-ppc64.deb
    tar xvf data.tar.xz
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find $HOME/downloads/var/. -name *.deb | while read line; do ar vx $line; tar --totals xf data.tar.xz -C /; done"
+   mkdir $HOME/downloads/cudaFS
+   cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/downloads/cudaFS; done
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv $HOME/downloads/cudaFS/* /"  
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.0 /usr/local/cuda"  
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"  
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xzf cudnn-9.1-linux-ppc64le-v7.tgz -C /usr/local/"
