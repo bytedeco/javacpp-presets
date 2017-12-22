@@ -29,13 +29,15 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y remove libxdmcp-
 
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
-   #cp /usr/include/cudnn.h /usr/local/cuda/include/  
-   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFlrT3FtNXFSRW8 $HOME/downloads/cudappc64.tar
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xf $HOME/downloads/cudappc64.tar -C /usr/local/"
+   cd $HOME/downloads 
+   wget https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda-repo-ubuntu1604-9-1-local_9.1.85-1_ppc64el -O $HOME/downloads/cuda-ppc64.deb
+   wget http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.5/cudnn-9.1-linux-ppc64le-v7.tgz
+   ar vx $HOME/downloads/cuda-ppc64.deb
+   tar xvf data.tar.xz
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find $HOME/downloads/ -name *.deb | while read line; do ar vx $line; tar --totals xf data.tar.xz -C /; done"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.0 /usr/local/cuda"  
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"  
-   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFJveFVxWlF3UnM $HOME/downloads/cudnnppc64.tar
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xf $HOME/downloads/cudnnppc64.tar -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xzf cudnn-9.1-linux-ppc64le-v7.tgz -C /usr/local/"
 fi
 
 echo "Running install for $PROJ"
