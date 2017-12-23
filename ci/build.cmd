@@ -22,6 +22,8 @@ C:\%MSYS2_DIR%\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git t
 C:\%MSYS2_DIR%\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git"
 
 C:\%MSYS2_DIR%\usr\bin\bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
+SET CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.0
+SET CUDA_PATH_V9_0=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.0
 SET PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.0\libnvvp;C:\%MSYS2_DIR%\usr\bin\core_perl;C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
 echo %PATH%
 
