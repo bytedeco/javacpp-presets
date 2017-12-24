@@ -29,7 +29,7 @@ export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 
-TENSORFLOW_VERSION=1.4.0
+TENSORFLOW_VERSION=1.4.1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -41,6 +41,10 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
+
+# https://github.com/tensorflow/tensorflow/issues/15389
+sed -i="" "s/429aa5254200/034b6c3e1017/g" tensorflow/workspace.bzl
+sed -i="" "s/61d8b6fc4279dd1dda986fb1677d15e3d641c07a3ea5abe255790b1f0c0c14e9/0a8ac1e83ef9c26c0e362bd7968650b710ce54e2d883f0df84e5e45a3abe842a/g" tensorflow/workspace.bzl
 
 export GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then

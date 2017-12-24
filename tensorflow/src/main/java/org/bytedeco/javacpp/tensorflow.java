@@ -17,6 +17,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate();
     public native @Name("operator=") @ByRef LongVector put(@ByRef LongVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @Cast("tensorflow::int64") long get(@Cast("size_t") long i);
@@ -31,6 +32,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate();
     public native @Name("operator=") @ByRef DataTypeVector put(@ByRef DataTypeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @Cast("tensorflow::DataType") int get(@Cast("size_t") long i);
@@ -45,6 +47,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate();
     public native @Name("operator=") @ByRef StringAttrValueMap put(@ByRef StringAttrValueMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @ByRef AttrValue get(@StdString BytePointer i);
@@ -71,6 +74,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate();
     public native @Name("operator=") @ByRef TensorIdTensorIdMap put(@ByRef TensorIdTensorIdMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @ByRef TensorId get(@ByRef TensorId i);
@@ -103,7 +107,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringPieceVector put(@ByRef StringPieceVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StringPiece BytePointer get(@Cast("size_t") long i);
@@ -121,10 +127,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @StringPiece BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StringPieceVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringPieceVector put(BytePointer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringPieceVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -134,10 +150,14 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         return this;
     }
 
+    public StringPieceVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringPieceVector put(String value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringPieceVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -162,7 +182,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer get(@Cast("size_t") long i);
@@ -180,10 +202,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @StdString BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringVector put(BytePointer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -193,10 +225,14 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         return this;
     }
 
+    public StringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringVector put(String value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -219,7 +255,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringStringPairVector put(@ByRef StringStringPairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer first(@Cast("size_t") long i); public native StringStringPairVector first(@Cast("size_t") long i, BytePointer first);
@@ -256,7 +294,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef TensorVector put(@ByRef TensorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Tensor get(@Cast("size_t") long i);
@@ -273,10 +313,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef Tensor get();
     }
 
+    public Tensor pop_back() {
+        long size = size();
+        Tensor value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public TensorVector push_back(Tensor value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public TensorVector put(Tensor value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public TensorVector put(Tensor ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -299,7 +349,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef TensorProtoVector put(@ByRef TensorProtoVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef TensorProto get(@Cast("size_t") long i);
@@ -316,10 +368,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef TensorProto get();
     }
 
+    public TensorProto pop_back() {
+        long size = size();
+        TensorProto value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public TensorProtoVector push_back(TensorProto value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public TensorProtoVector put(TensorProto value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public TensorProtoVector put(TensorProto ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -342,7 +404,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef TensorShapeVector put(@ByRef TensorShapeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef TensorShape get(@Cast("size_t") long i);
@@ -359,10 +423,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef TensorShape get();
     }
 
+    public TensorShape pop_back() {
+        long size = size();
+        TensorShape value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public TensorShapeVector push_back(TensorShape value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public TensorShapeVector put(TensorShape value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public TensorShapeVector put(TensorShape ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -385,7 +459,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef NodeOutVector put(@ByRef NodeOutVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef NodeBuilder.NodeOut get(@Cast("size_t") long i);
@@ -402,10 +478,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @ByRef NodeBuilder.NodeOut get();
     }
 
+    public NodeBuilder.NodeOut pop_back() {
+        long size = size();
+        NodeBuilder.NodeOut value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public NodeOutVector push_back(NodeBuilder.NodeOut value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public NodeOutVector put(NodeBuilder.NodeOut value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public NodeOutVector put(NodeBuilder.NodeOut ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -428,7 +514,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef NodeVector put(@ByRef NodeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native Node get(@Cast("size_t") long i);
@@ -445,10 +533,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") Node get();
     }
 
+    public Node pop_back() {
+        long size = size();
+        Node value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public NodeVector push_back(Node value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public NodeVector put(Node value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public NodeVector put(Node ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -470,7 +568,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef NodeIntPairVector put(@ByRef NodeIntPairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native Node first(@Cast("size_t") long i); public native NodeIntPairVector first(@Cast("size_t") long i, Node first);
@@ -497,7 +597,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringAttrPairVector put(@ByRef StringAttrPairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer first(@Cast("size_t") long i); public native StringAttrPairVector first(@Cast("size_t") long i, BytePointer first);
@@ -533,7 +635,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ConstTensorPtrVector put(@ByRef ConstTensorPtrVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Const Tensor get(@Cast("size_t") long i);
@@ -550,10 +654,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @Const Tensor get();
     }
 
+    public Tensor pop_back() {
+        long size = size();
+        Tensor value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ConstTensorPtrVector push_back(Tensor value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public ConstTensorPtrVector put(Tensor value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public ConstTensorPtrVector put(Tensor ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -576,7 +690,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ConstDimensionPtrVector put(@ByRef ConstDimensionPtrVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Const Dimension get(@Cast("size_t") long i);
@@ -593,10 +709,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") @Const Dimension get();
     }
 
+    public Dimension pop_back() {
+        long size = size();
+        Dimension value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ConstDimensionPtrVector push_back(Dimension value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public ConstDimensionPtrVector put(Dimension value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public ConstDimensionPtrVector put(Dimension ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -619,7 +745,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringTensorPairVector put(@ByRef StringTensorPairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer first(@Cast("size_t") long i); public native StringTensorPairVector first(@Cast("size_t") long i, BytePointer first);
@@ -655,7 +783,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef EdgeVector put(@ByRef EdgeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native Edge get(@Cast("size_t") long i);
@@ -672,10 +802,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator*") Edge get();
     }
 
+    public Edge pop_back() {
+        long size = size();
+        Edge value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public EdgeVector push_back(Edge value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public EdgeVector put(Edge value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public EdgeVector put(Edge ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -742,6 +882,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate();
     public native @Name("operator=") @ByRef NameRangeMap put(@ByRef NameRangeMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native int first(@StdString BytePointer i); public native NameRangeMap first(@StdString BytePointer i, int first);
@@ -756,6 +897,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     private native void allocate();
     public native @Name("operator=") @ByRef StringSet put(@ByRef StringSet x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     public native @ByVal Iterator begin();

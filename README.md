@@ -125,7 +125,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.0  https://developer.nvidia.com/cuda-downloads
  * MXnet 1.0.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.4.0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.4.1  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
