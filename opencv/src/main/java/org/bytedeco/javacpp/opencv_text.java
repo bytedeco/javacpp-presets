@@ -27,7 +27,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef IntDeque put(@ByRef IntDeque x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native int get(@Cast("size_t") long i);
@@ -65,7 +67,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ERStatVector put(@ByRef ERStatVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef ERStat get(@Cast("size_t") long i);
@@ -118,7 +122,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ERStatVectorVector put(@ByRef ERStatVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef ERStatVector get(@Cast("size_t") long i);
@@ -171,7 +177,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleVector put(@ByRef DoubleVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native double get(@Cast("size_t") long i);
@@ -226,7 +234,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StdStringVector put(@ByRef StdStringVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer get(@Cast("size_t") long i);

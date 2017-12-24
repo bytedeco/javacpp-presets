@@ -24,7 +24,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatShapeVector put(@ByRef MatShapeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdVector IntPointer get(@Cast("size_t") long i);
@@ -77,7 +79,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatShapeVectorVector put(@ByRef MatShapeVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef MatShapeVector get(@Cast("size_t") long i);
@@ -129,9 +133,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef RangeVectorVector put(@ByRef RangeVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
+    public boolean empty(@Cast("size_t") long i) { return size(i) == 0; }
     public native @Index long size(@Cast("size_t") long i);
+    public void clear(@Cast("size_t") long i) { resize(i, 0); }
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
     @Index public native @ByRef Range get(@Cast("size_t") long i, @Cast("size_t") long j);
@@ -161,7 +169,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatPointerVector put(@ByRef MatPointerVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native Mat get(@Cast("size_t") long i);
