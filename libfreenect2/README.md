@@ -29,14 +29,14 @@ Here is the full code of the example found in the [`example/`](example/) folder.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
     <artifactId>freenect2Example</artifactId>
-    <version>0.2.0</version>
+    <version>1.3.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>freenect2Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>libfreenect2</artifactId>
+            <artifactId>libfreenect2-platform</artifactId>
             <version>0.2.0-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
