@@ -39,7 +39,7 @@ case $PLATFORM in
         export LDFLAGS="-undefined dynamic_lookup"
         export TOOLSET="clang"
         export BINARY=64
-        export BLAS=atlas
+        export BLAS=open
         export CUDAFLAGS=
         ;;
     *)

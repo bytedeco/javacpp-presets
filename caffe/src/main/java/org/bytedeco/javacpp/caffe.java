@@ -25,6 +25,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate();
     public native @Name("operator=") @ByRef FloatRegistry put(@ByRef FloatRegistry x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native FloatLayerRegistry.Creator get(@StdString BytePointer i);
@@ -51,6 +52,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate();
     public native @Name("operator=") @ByRef DoubleRegistry put(@ByRef DoubleRegistry x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native DoubleLayerRegistry.Creator get(@StdString BytePointer i);
@@ -77,6 +79,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate();
     public native @Name("operator=") @ByRef StringIntMap put(@ByRef StringIntMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native int get(@StdString BytePointer i);
@@ -109,7 +112,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer get(@Cast("size_t") long i);
@@ -127,10 +132,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @StdString BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringVector put(BytePointer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -140,10 +155,14 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         return this;
     }
 
+    public StringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public StringVector put(String value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -166,7 +185,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FieldDescriptorVector put(@ByRef FieldDescriptorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Const FieldDescriptor get(@Cast("size_t") long i);
@@ -183,10 +204,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @Const FieldDescriptor get();
     }
 
+    public FieldDescriptor pop_back() {
+        long size = size();
+        FieldDescriptor value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FieldDescriptorVector push_back(FieldDescriptor value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FieldDescriptorVector put(FieldDescriptor value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FieldDescriptorVector put(FieldDescriptor ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -209,7 +240,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DatumVector put(@ByRef DatumVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Datum get(@Cast("size_t") long i);
@@ -226,10 +259,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @ByRef Datum get();
     }
 
+    public Datum pop_back() {
+        long size = size();
+        Datum value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DatumVector push_back(Datum value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DatumVector put(Datum value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DatumVector put(Datum ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -252,7 +295,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FloatBlobSharedVector put(@ByRef FloatBlobSharedVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @SharedPtr FloatBlob get(@Cast("size_t") long i);
@@ -269,10 +314,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @SharedPtr FloatBlob get();
     }
 
+    public FloatBlob pop_back() {
+        long size = size();
+        FloatBlob value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FloatBlobSharedVector push_back(FloatBlob value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FloatBlobSharedVector put(FloatBlob value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FloatBlobSharedVector put(FloatBlob ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -295,7 +350,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleBlobSharedVector put(@ByRef DoubleBlobSharedVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @SharedPtr DoubleBlob get(@Cast("size_t") long i);
@@ -312,10 +369,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @SharedPtr DoubleBlob get();
     }
 
+    public DoubleBlob pop_back() {
+        long size = size();
+        DoubleBlob value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleBlobSharedVector push_back(DoubleBlob value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleBlobSharedVector put(DoubleBlob value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleBlobSharedVector put(DoubleBlob ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -338,7 +405,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FloatLayerSharedVector put(@ByRef FloatLayerSharedVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr FloatLayer get(@Cast("size_t") long i);
@@ -355,10 +424,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr FloatLayer get();
     }
 
+    public FloatLayer pop_back() {
+        long size = size();
+        FloatLayer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FloatLayerSharedVector push_back(FloatLayer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FloatLayerSharedVector put(FloatLayer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FloatLayerSharedVector put(FloatLayer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -381,7 +460,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleLayerSharedVector put(@ByRef DoubleLayerSharedVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr DoubleLayer get(@Cast("size_t") long i);
@@ -398,10 +479,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr DoubleLayer get();
     }
 
+    public DoubleLayer pop_back() {
+        long size = size();
+        DoubleLayer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleLayerSharedVector push_back(DoubleLayer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleLayerSharedVector put(DoubleLayer value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleLayerSharedVector put(DoubleLayer ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -424,7 +515,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FloatNetSharedVector put(@ByRef FloatNetSharedVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @SharedPtr FloatNet get(@Cast("size_t") long i);
@@ -441,10 +534,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @SharedPtr FloatNet get();
     }
 
+    public FloatNet pop_back() {
+        long size = size();
+        FloatNet value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FloatNetSharedVector push_back(FloatNet value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FloatNetSharedVector put(FloatNet value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FloatNetSharedVector put(FloatNet ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -467,7 +570,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleNetSharedVector put(@ByRef DoubleNetSharedVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @SharedPtr DoubleNet get(@Cast("size_t") long i);
@@ -484,10 +589,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @SharedPtr DoubleNet get();
     }
 
+    public DoubleNet pop_back() {
+        long size = size();
+        DoubleNet value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleNetSharedVector push_back(DoubleNet value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleNetSharedVector put(DoubleNet value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleNetSharedVector put(DoubleNet ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -510,7 +625,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FloatBlobVector put(@ByRef FloatBlobVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native FloatBlob get(@Cast("size_t") long i);
@@ -527,10 +644,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") FloatBlob get();
     }
 
+    public FloatBlob pop_back() {
+        long size = size();
+        FloatBlob value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FloatBlobVector push_back(FloatBlob value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FloatBlobVector put(FloatBlob value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FloatBlobVector put(FloatBlob ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -553,7 +680,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleBlobVector put(@ByRef DoubleBlobVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native DoubleBlob get(@Cast("size_t") long i);
@@ -570,10 +699,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") DoubleBlob get();
     }
 
+    public DoubleBlob pop_back() {
+        long size = size();
+        DoubleBlob value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleBlobVector push_back(DoubleBlob value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleBlobVector put(DoubleBlob value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleBlobVector put(DoubleBlob ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -596,7 +735,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FloatBlobVectorVector put(@ByRef FloatBlobVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef FloatBlobVector get(@Cast("size_t") long i);
@@ -613,10 +754,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @ByRef FloatBlobVector get();
     }
 
+    public FloatBlobVector pop_back() {
+        long size = size();
+        FloatBlobVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FloatBlobVectorVector push_back(FloatBlobVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FloatBlobVectorVector put(FloatBlobVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FloatBlobVectorVector put(FloatBlobVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -639,7 +790,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleBlobVectorVector put(@ByRef DoubleBlobVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef DoubleBlobVector get(@Cast("size_t") long i);
@@ -656,10 +809,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @ByRef DoubleBlobVector get();
     }
 
+    public DoubleBlobVector pop_back() {
+        long size = size();
+        DoubleBlobVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleBlobVectorVector push_back(DoubleBlobVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleBlobVectorVector put(DoubleBlobVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleBlobVectorVector put(DoubleBlobVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -682,7 +845,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef BoolVector put(@ByRef BoolVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Cast("bool") boolean get(@Cast("size_t") long i);
@@ -699,10 +864,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @Cast("bool") boolean get();
     }
 
+    public boolean pop_back() {
+        long size = size();
+        boolean value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public BoolVector push_back(boolean value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public BoolVector put(boolean value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public BoolVector put(boolean ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -725,7 +900,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef BoolVectorVector put(@ByRef BoolVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef BoolVector get(@Cast("size_t") long i);
@@ -742,10 +919,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") @ByRef BoolVector get();
     }
 
+    public BoolVector pop_back() {
+        long size = size();
+        BoolVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public BoolVectorVector push_back(BoolVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public BoolVectorVector put(BoolVector value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public BoolVectorVector put(BoolVector ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -768,7 +955,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef FloatCallbackVector put(@ByRef FloatCallbackVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native FloatSolver.Callback get(@Cast("size_t") long i);
@@ -785,10 +974,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") FloatSolver.Callback get();
     }
 
+    public FloatSolver.Callback pop_back() {
+        long size = size();
+        FloatSolver.Callback value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public FloatCallbackVector push_back(FloatSolver.Callback value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public FloatCallbackVector put(FloatSolver.Callback value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public FloatCallbackVector put(FloatSolver.Callback ... array) {
         if (size() != array.length) { resize(array.length); }
@@ -811,7 +1010,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleCallbackVector put(@ByRef DoubleCallbackVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native DoubleSolver.Callback get(@Cast("size_t") long i);
@@ -828,10 +1029,20 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
         public native @Name("operator*") DoubleSolver.Callback get();
     }
 
+    public DoubleSolver.Callback pop_back() {
+        long size = size();
+        DoubleSolver.Callback value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleCallbackVector push_back(DoubleSolver.Callback value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
     public DoubleCallbackVector put(DoubleSolver.Callback value) {
         if (size() != 1) { resize(1); }
-        put(0, value);
-        return this;
+        return put(0, value);
     }
     public DoubleCallbackVector put(DoubleSolver.Callback ... array) {
         if (size() != array.length) { resize(array.length); }
