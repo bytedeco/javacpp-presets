@@ -7,6 +7,8 @@ mkdir %APPVEYOR_BUILD_FOLDER%\tmp
 set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 mkdir %APPVEYOR_BUILD_FOLDER%\buildlogs
 
+SET MAKEJ=2
+
 IF "%MSYS2_ARCH%"=="x86_64" (
    echo Callings vcvarsall for amd64
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64

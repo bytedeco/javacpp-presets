@@ -10,6 +10,9 @@ pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
+export MAKEJ=2
+echo "export MAKEJ=2" | tee --append $HOME/vars.list
+
 export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
 
 echo "Starting docker for ppc cross compile"
