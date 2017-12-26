@@ -21,6 +21,7 @@
     <module>../libdc1394/platform</module>
     <module>../libfreenect/platform</module>
     <module>../libfreenect2/platform</module>
+    <module>../libpostal/platform</module>
     <module>../librealsense/platform</module>
     <module>../videoinput/platform</module>
     <module>../artoolkitplus/platform</module>

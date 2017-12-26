@@ -43,6 +43,7 @@
     <module>libdc1394</module>
     <module>libfreenect</module>
     <module>libfreenect2</module>
+    <module>libpostal</module>
     <module>librealsense</module>
     <module>videoinput</module>
     <module>artoolkitplus</module>
