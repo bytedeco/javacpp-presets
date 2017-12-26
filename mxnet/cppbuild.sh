@@ -8,6 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 export ADD_LDFLAGS=
+export USE_OPENMP=1
 case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
@@ -85,7 +86,7 @@ export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_P
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" ADD_CFLAGS="-DMXNET_USE_LAPACK -fopenmp" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" ADD_CFLAGS="-DMXNET_USE_LAPACK" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
 cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
 
