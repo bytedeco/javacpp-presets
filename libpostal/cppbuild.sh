@@ -22,6 +22,10 @@ case $PLATFORM in
     ./configure --disable-data-download
     make -j4
     sudo make install
+    mkdir -p ../lib
+    mkdir -p ../include
+    cp src/.libs/libpostal.so ../lib/liblibpostal.so
+    cp src/libpostal.h ../include
         ;;
     macosx-*)
     ./bootstrap.sh
@@ -29,7 +33,11 @@ case $PLATFORM in
     ./configure --disable-data-download
     make -j4
     sudo make install
-    ;;
+    mkdir -p ../lib
+    mkdir -p ../include
+    cp src/.libs/libpostal.so ../lib/liblibpostal.so
+    cp src/libpostal.h ../include
+        ;;
     windows-x86_64)
     cp -rf windows/* ./
     cwd=$(pwd)
