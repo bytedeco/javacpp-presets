@@ -21,7 +21,7 @@ case $PLATFORM in
     #./configure --datadir=[...some dir with a few GB of space...]
     ./configure --disable-data-download
     make -j4
-    sudo make install
+    make install
     mkdir -p ../lib
     mkdir -p ../include
     cp src/.libs/libpostal.so ../lib/liblibpostal.so
@@ -32,7 +32,7 @@ case $PLATFORM in
     #./configure --datadir=[...some dir with a few GB of space...]
     ./configure --disable-data-download
     make -j4
-    sudo make install
+    make install
     mkdir -p ../lib
     mkdir -p ../include
     cp src/.libs/libpostal.so ../lib/liblibpostal.so
