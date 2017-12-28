@@ -1,4 +1,5 @@
 
+ * Link `jnivideoInputLib.dll` statically to avoid missing dependencies ([issue bytedeco/javacv#864](https://github.com/bytedeco/javacv/issues/864))
  * Add "org.bytedeco.javacpp.openblas.nomkl" system property to let users disable MKL easily
  * Add initial set of CUDA bindings for OpenCV ([pull #416](https://github.com/bytedeco/javacpp-presets/pull/416))
  * Add CUDA/OpenCL-enabled builds for OpenCV, Caffe, and TensorFlow via `-gpu` extension ([issue bytedeco/javacv#481](https://github.com/bytedeco/javacv/issues/481))
