@@ -35,7 +35,7 @@ case $PLATFORM in
     make install
     mkdir -p ../lib
     mkdir -p ../include
-    cp src/.libs/libpostal.so ../lib/liblibpostal.so
+    cp src/.libs/libpostal.dylib ../lib/liblibpostal.dylib
     cp src/libpostal.h ../include
         ;;
     windows-x86_64)
