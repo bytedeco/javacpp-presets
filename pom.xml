@@ -37,6 +37,7 @@
   </developers>
 
   <modules>
+    <module>accelerateblas</module>
     <module>opencv</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
