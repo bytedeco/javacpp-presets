@@ -40,6 +40,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=libpostal OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=librealsense OS=android-arm
         install: true
         script: ./ci/install-travis.sh
@@ -138,6 +142,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=libfreenect2 OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=libpostal OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -242,6 +250,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=libpostal OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=librealsense OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
@@ -340,6 +352,10 @@ matrix:
         script: ./ci/install-ppc.sh
       - os: linux
         env: PROJ=libfreenect2 OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=libpostal OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -572,6 +588,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=libfreenect2 OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=libpostal OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux

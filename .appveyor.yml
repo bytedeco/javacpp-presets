@@ -50,6 +50,13 @@ environment:
       MSYSTEM: MINGW32
       BIT: 32
     - PLATFORM: x86
+      PROJ: "libpostal"
+      COMPILER: msys2
+      MSYS2_ARCH: x86
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
+      BIT: 32
+    - PLATFORM: x86
       PROJ: "librealsense"
       COMPILER: msys2
       MSYS2_ARCH: x86
