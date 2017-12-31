@@ -32,8 +32,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Maurice Betzel, Samuel Audet
  */
 @Properties(target = "org.bytedeco.javacpp.libpostal", value = {
-        @Platform(include = "<libpostal.h>", link = {"libpostal@1.0"}),
-        @Platform(value = "windows", link = "libpostal")})
+        @Platform(value = {"windows-x86_64", "linux-x86_64", "macosx"}, link = "libpostal"),
+        @Platform(include = "<libpostal.h>", link = {"libpostal@1.0"})})
 public class libpostal implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPOSTAL_EXPORT").cppTypes().annotations())
