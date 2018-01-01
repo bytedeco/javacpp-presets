@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Maurice Betzel, Samuel Audet
+ * Copyright (C) 2014-2018 Maurice Betzel, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,18 +32,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Maurice Betzel, Samuel Audet
  */
 @Properties(target = "org.bytedeco.javacpp.libpostal",
-            value = {
-                    @Platform(
-                            value = {"windows-x86_64", "linux-x86_64", "macosx"},
-                            include = {"libpostal.h"},
-                            link = {"libpostal"},
-                            compiler = "cpp11"
-                    )
-                }
-           )
+        value = {
+                @Platform(
+                        value = {"windows-x86_64", "linux-x86_64", "macosx"},
+                        cinclude = "libpostal.h",
+                        link = "libpostal",
+                        compiler = "cpp11"
+                )
+        }
+)
 public class libpostal implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPOSTAL_EXPORT").cppTypes().annotations())
                 .put(new Info("char").cast().valueTypes("byte").pointerTypes("BytePointer", "String"));
     }
+
 }
