@@ -60,11 +60,6 @@ case $PLATFORM in
           for x in 1 2; do
               cmake -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" || true
           done
-          make -j $MAKEJ || true
-          touch H5Tinit.c
-          touch H5lib_settings.c
-          cp H5Tinit.c shared
-          cp H5lib_settings.c shared
           make -j $MAKEJ
           make install
         fi
