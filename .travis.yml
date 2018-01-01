@@ -24,43 +24,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=flycapture OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=libdc1394 OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=libfreenect OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=libfreenect2 OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=librealsense OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=videoinput OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=artoolkitplus OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=chilitags OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=hdf5 OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=mkl OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -76,43 +44,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=llvm OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=leptonica,tesseract OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=caffe OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=cuda OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=mxnet OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=tensorflow OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=ale OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=liquidfun OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=skia OS=android-arm
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=systems OS=android-arm
         install: true
         script: ./ci/install-travis.sh
 
@@ -125,43 +61,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=flycapture OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=libdc1394 OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=libfreenect OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=libfreenect2 OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=librealsense OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=videoinput OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=artoolkitplus OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=chilitags OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=hdf5 OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=mkl OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -177,43 +81,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=llvm OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=leptonica,tesseract OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=caffe OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=cuda OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=mxnet OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=tensorflow OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=ale OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=liquidfun OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=skia OS=android-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=systems OS=android-x86
         install: true
         script: ./ci/install-travis.sh
 
@@ -238,31 +110,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=libfreenect2 OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=librealsense OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=videoinput OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=artoolkitplus OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=chilitags OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=hdf5 OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=mkl OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -278,39 +130,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=llvm OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=leptonica,tesseract OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=caffe OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=cuda OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=mxnet OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=tensorflow OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=ale OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=liquidfun OS=linux-armhf
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=skia OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -327,27 +147,11 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=flycapture OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
         env: PROJ=libdc1394 OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
         env: PROJ=libfreenect OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=libfreenect2 OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=librealsense OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=videoinput OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -363,10 +167,6 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=mkl OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
         env: PROJ=openblas OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
@@ -379,39 +179,11 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=llvm OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
         env: PROJ=leptonica,tesseract OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=caffe OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
         env: PROJ=cuda OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=mxnet OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=tensorflow OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=ale OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=liquidfun OS=linux-ppc64le
-        install: true
-        script: ./ci/install-ppc.sh
-      - os: linux
-        env: PROJ=skia OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -427,11 +199,6 @@ matrix:
       - os: osx
         osx_image: xcode7.3
         env: PROJ=ffmpeg OS=macosx-x86_64
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode7.3
-        env: PROJ=flycapture OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -452,11 +219,6 @@ matrix:
       - os: osx
         osx_image: xcode7.3
         env: PROJ=librealsense OS=macosx-x86_64
-        install: true
-        script: ./ci/install-travis.sh
-      - os: osx
-        osx_image: xcode7.3
-        env: PROJ=videoinput OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -574,10 +336,6 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=videoinput OS=linux-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=artoolkitplus OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
@@ -615,10 +373,6 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=caffe OS=linux-x86
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=cuda OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -672,10 +426,6 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=librealsense OS=linux-x86_64
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        env: PROJ=videoinput OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
