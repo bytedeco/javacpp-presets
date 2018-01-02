@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class libpostal extends org.bytedeco.javacpp.presets.libpostal {
     static { Loader.load(); }
 
-// Parsed from <libpostal.h>
+// Parsed from libpostal.h
 
 // #ifndef LIBPOSTAL_H
 // #define LIBPOSTAL_H
@@ -100,14 +100,14 @@ public static class libpostal_normalize_options_t extends Pointer {
 
 }
 
-public static native @ByVal libpostal_normalize_options_t libpostal_get_default_options();
+@NoException public static native @ByVal libpostal_normalize_options_t libpostal_get_default_options();
 
-public static native @Cast("char**") PointerPointer libpostal_expand_address(@Cast("char*") BytePointer input, @ByVal libpostal_normalize_options_t options, @Cast("size_t*") SizeTPointer n);
-public static native @Cast("char**") @ByPtrPtr String libpostal_expand_address(@Cast("char*") String input, @ByVal libpostal_normalize_options_t options, @Cast("size_t*") SizeTPointer n);
+@NoException public static native @Cast("char**") PointerPointer libpostal_expand_address(@Cast("char*") BytePointer input, @ByVal libpostal_normalize_options_t options, @Cast("size_t*") SizeTPointer n);
+@NoException public static native @Cast("char**") @ByPtrPtr String libpostal_expand_address(@Cast("char*") String input, @ByVal libpostal_normalize_options_t options, @Cast("size_t*") SizeTPointer n);
 
-public static native void libpostal_expansion_array_destroy(@Cast("char**") PointerPointer expansions, @Cast("size_t") long n);
-public static native void libpostal_expansion_array_destroy(@Cast("char**") @ByPtrPtr BytePointer expansions, @Cast("size_t") long n);
-public static native void libpostal_expansion_array_destroy(@Cast("char**") @ByPtrPtr String expansions, @Cast("size_t") long n);
+@NoException public static native void libpostal_expansion_array_destroy(@Cast("char**") PointerPointer expansions, @Cast("size_t") long n);
+@NoException public static native void libpostal_expansion_array_destroy(@Cast("char**") @ByPtrPtr BytePointer expansions, @Cast("size_t") long n);
+@NoException public static native void libpostal_expansion_array_destroy(@Cast("char**") @ByPtrPtr String expansions, @Cast("size_t") long n);
 
 /*
 Address parser
@@ -152,31 +152,31 @@ public static class libpostal_address_parser_options_t extends Pointer {
     public native @Cast("char*") BytePointer country(); public native libpostal_address_parser_options_t country(BytePointer country);
 }
 
-public static native void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t self);
+@NoException public static native void libpostal_address_parser_response_destroy(libpostal_address_parser_response_t self);
 
-public static native @ByVal libpostal_address_parser_options_t libpostal_get_address_parser_default_options();
+@NoException public static native @ByVal libpostal_address_parser_options_t libpostal_get_address_parser_default_options();
 
-public static native libpostal_address_parser_response_t libpostal_parse_address(@Cast("char*") BytePointer address, @ByVal libpostal_address_parser_options_t options);
-public static native libpostal_address_parser_response_t libpostal_parse_address(@Cast("char*") String address, @ByVal libpostal_address_parser_options_t options);
+@NoException public static native libpostal_address_parser_response_t libpostal_parse_address(@Cast("char*") BytePointer address, @ByVal libpostal_address_parser_options_t options);
+@NoException public static native libpostal_address_parser_response_t libpostal_parse_address(@Cast("char*") String address, @ByVal libpostal_address_parser_options_t options);
 
-public static native @Cast("bool") boolean libpostal_parser_print_features(@Cast("bool") boolean print_features);
+@NoException public static native @Cast("bool") boolean libpostal_parser_print_features(@Cast("bool") boolean print_features);
 
 // Setup/teardown methods
 
-public static native @Cast("bool") boolean libpostal_setup();
-public static native @Cast("bool") boolean libpostal_setup_datadir(@Cast("char*") BytePointer datadir);
-public static native @Cast("bool") boolean libpostal_setup_datadir(@Cast("char*") String datadir);
-public static native void libpostal_teardown();
+@NoException public static native @Cast("bool") boolean libpostal_setup();
+@NoException public static native @Cast("bool") boolean libpostal_setup_datadir(@Cast("char*") BytePointer datadir);
+@NoException public static native @Cast("bool") boolean libpostal_setup_datadir(@Cast("char*") String datadir);
+@NoException public static native void libpostal_teardown();
 
-public static native @Cast("bool") boolean libpostal_setup_parser();
-public static native @Cast("bool") boolean libpostal_setup_parser_datadir(@Cast("char*") BytePointer datadir);
-public static native @Cast("bool") boolean libpostal_setup_parser_datadir(@Cast("char*") String datadir);
-public static native void libpostal_teardown_parser();
+@NoException public static native @Cast("bool") boolean libpostal_setup_parser();
+@NoException public static native @Cast("bool") boolean libpostal_setup_parser_datadir(@Cast("char*") BytePointer datadir);
+@NoException public static native @Cast("bool") boolean libpostal_setup_parser_datadir(@Cast("char*") String datadir);
+@NoException public static native void libpostal_teardown_parser();
 
-public static native @Cast("bool") boolean libpostal_setup_language_classifier();
-public static native @Cast("bool") boolean libpostal_setup_language_classifier_datadir(@Cast("char*") BytePointer datadir);
-public static native @Cast("bool") boolean libpostal_setup_language_classifier_datadir(@Cast("char*") String datadir);
-public static native void libpostal_teardown_language_classifier();
+@NoException public static native @Cast("bool") boolean libpostal_setup_language_classifier();
+@NoException public static native @Cast("bool") boolean libpostal_setup_language_classifier_datadir(@Cast("char*") BytePointer datadir);
+@NoException public static native @Cast("bool") boolean libpostal_setup_language_classifier_datadir(@Cast("char*") String datadir);
+@NoException public static native void libpostal_teardown_language_classifier();
 
 // #ifdef __cplusplus
 // #endif
