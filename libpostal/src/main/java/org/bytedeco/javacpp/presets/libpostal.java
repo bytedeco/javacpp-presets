@@ -36,8 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 @Platform(
                         value = {"windows-x86_64", "linux-x86_64", "macosx"},
                         cinclude = "libpostal.h",
-                        link = "libpostal",
-                        compiler = "cpp11"
+                        link = "libpostal"
                 )
         }
 )
