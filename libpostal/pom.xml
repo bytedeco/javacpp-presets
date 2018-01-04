@@ -13,7 +13,7 @@
 
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>libpostal</artifactId>
-    <version>1.0.0-${project.parent.version}</version>
+    <version>20171226-1e7cc23-${project.parent.version}</version>
     <name>JavaCPP Presets for libpostal</name>
 
     <dependencies>

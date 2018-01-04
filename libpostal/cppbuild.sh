@@ -7,13 +7,13 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBPOSTAL_VERSION=1bb62784466623eeb8b281205a1108c0b3bfc00c
-download https://github.com/openvenues/libpostal/archive/$LIBPOSTAL_VERSION.tar.gz libpostal-$LIBPOSTAL_VERSION.tar.gz
+LIBPOSTAL_SHA=1e7cc23
+download https://github.com/openvenues/libpostal/archive/$LIBPOSTAL_SHA.tar.gz libpostal-$LIBPOSTAL_SHA.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
-tar -xzvf ../libpostal-$LIBPOSTAL_VERSION.tar.gz
-cd libpostal-$LIBPOSTAL_VERSION
+tar -xzvf ../libpostal-$LIBPOSTAL_SHA.tar.gz
+cd libpostal-*
 
 case $PLATFORM in
     linux-x86_64)
