@@ -17,6 +17,7 @@ public class freenect2 extends org.bytedeco.javacpp.presets.freenect2 {
     private native void allocate();
     public native @Name("operator=") @ByRef FrameMap put(@ByRef FrameMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native Frame get(@Cast("libfreenect2::Frame::Type") int i);

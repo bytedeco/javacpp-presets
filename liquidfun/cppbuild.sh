@@ -7,15 +7,16 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIQUIDFUN_SHA=43d53e063cd349f7d09ee9dd37842afcc0247f44 # 20170717
-download https://github.com/google/liquidfun/archive/$LIQUIDFUN_SHA.zip liquidfun_$LIQUIDFUN_SHA.zip
+LIQUIDFUN_VERSION=43d53e063cd349f7d09ee9dd37842afcc0247f44 # 20170717
+download https://github.com/google/liquidfun/archive/$LIQUIDFUN_VERSION.tar.gz liquidfun-$LIQUIDFUN_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 mkdir -p include lib bin
-unzip -o ../liquidfun_$LIQUIDFUN_SHA.zip
-cd `ls -d liquidfun-*`
+echo "Decompressing archives..."
+tar --totals -xzf ../liquidfun-$LIQUIDFUN_VERSION.tar.gz
+cd liquidfun-$LIQUIDFUN_VERSION
 
 case $PLATFORM in
     linux-x86)

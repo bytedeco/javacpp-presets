@@ -16,6 +16,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatShapeVector(Pointer p) { super(p); }
+    public MatShapeVector(IntPointer value) { this(1); put(0, value); }
     public MatShapeVector(IntPointer ... array) { this(array.length); put(array); }
     public MatShapeVector()       { allocate();  }
     public MatShapeVector(long n) { allocate(n); }
@@ -23,7 +24,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatShapeVector put(@ByRef MatShapeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdVector IntPointer get(@Cast("size_t") long i);
@@ -40,6 +43,21 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @StdVector IntPointer get();
     }
 
+    public IntPointer pop_back() {
+        long size = size();
+        IntPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatShapeVector push_back(IntPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public MatShapeVector put(IntPointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public MatShapeVector put(IntPointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -53,6 +71,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatShapeVectorVector(Pointer p) { super(p); }
+    public MatShapeVectorVector(MatShapeVector value) { this(1); put(0, value); }
     public MatShapeVectorVector(MatShapeVector ... array) { this(array.length); put(array); }
     public MatShapeVectorVector()       { allocate();  }
     public MatShapeVectorVector(long n) { allocate(n); }
@@ -60,7 +79,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatShapeVectorVector put(@ByRef MatShapeVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef MatShapeVector get(@Cast("size_t") long i);
@@ -77,6 +98,21 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @ByRef MatShapeVector get();
     }
 
+    public MatShapeVector pop_back() {
+        long size = size();
+        MatShapeVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatShapeVectorVector push_back(MatShapeVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public MatShapeVectorVector put(MatShapeVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public MatShapeVectorVector put(MatShapeVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -97,9 +133,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef RangeVectorVector put(@ByRef RangeVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
+    public boolean empty(@Cast("size_t") long i) { return size(i) == 0; }
     public native @Index long size(@Cast("size_t") long i);
+    public void clear(@Cast("size_t") long i) { resize(i, 0); }
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
     @Index public native @ByRef Range get(@Cast("size_t") long i, @Cast("size_t") long j);
@@ -121,6 +161,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatPointerVector(Pointer p) { super(p); }
+    public MatPointerVector(Mat value) { this(1); put(0, value); }
     public MatPointerVector(Mat ... array) { this(array.length); put(array); }
     public MatPointerVector()       { allocate();  }
     public MatPointerVector(long n) { allocate(n); }
@@ -128,7 +169,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatPointerVector put(@ByRef MatPointerVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native Mat get(@Cast("size_t") long i);
@@ -145,6 +188,21 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") Mat get();
     }
 
+    public Mat pop_back() {
+        long size = size();
+        Mat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatPointerVector push_back(Mat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public MatPointerVector put(Mat value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public MatPointerVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {

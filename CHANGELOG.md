@@ -1,4 +1,9 @@
 
+ * Remove the need for empty artifacts of unsupported platforms ([issue #434](https://github.com/bytedeco/javacpp-presets/issues/434))
+ * Link `jnivideoInputLib.dll` statically to avoid missing dependencies ([issue bytedeco/javacv#864](https://github.com/bytedeco/javacv/issues/864))
+ * Add "org.bytedeco.javacpp.openblas.nomkl" system property to let users disable MKL easily
+ * Add initial set of CUDA bindings for OpenCV ([pull #416](https://github.com/bytedeco/javacpp-presets/pull/416))
+ * Add CUDA/OpenCL-enabled builds for OpenCV, Caffe, and TensorFlow via `-gpu` extension ([issue bytedeco/javacv#481](https://github.com/bytedeco/javacv/issues/481))
  * Enable NVIDIA CUDA, CUVID, and NVENC acceleration for FFmpeg ([pull #492](https://github.com/bytedeco/javacpp-presets/pull/492))
  * Include `message_lite.h`, `saver.pb.h`, `meta_graph.pb.h`, and `loader.h` for TensorFlow ([issue #494](https://github.com/bytedeco/javacpp-presets/issues/494))
  * Add `getString()` helper methods to `CXString`, `CXTUResourceUsageKind`, and `CXEvalResult` for `clang` ([issue bytedeco/javacpp#51](https://github.com/bytedeco/javacpp/issues/51))
@@ -25,7 +30,7 @@
  * Link TensorFlow statically with `cudart` to avoid dependency on CUDA ([issue #396](https://github.com/bytedeco/javacpp-presets/issues/396))
  * Add missing call to `Loader.load()` in helper class for `opencv_ml` ([issue bytedeco/javacv#638](https://github.com/bytedeco/javacv/issues/638))
  * Work around issues with TensorFlow on some versions of Mac OS X ([issue #335](https://github.com/bytedeco/javacpp-presets/issues/335))
- * Upgrade presets for OpenCV 3.3.1, FFmpeg 3.4.1, FlyCapture 2.11.3.121 ([pull #424](https://github.com/bytedeco/javacpp-presets/pull/424)), libdc1394 2.2.5, librealsense 1.12.1, Chilitags, HDF5 1.10.1, OpenBLAS 0.2.20, FFTW 3.3.7, GSL 2.4, LLVM 4.0.0 ([pull #404](https://github.com/bytedeco/javacpp-presets/pull/404)), Leptonica 1.74.4, Tesseract 3.05.01, Caffe 1.0, CUDA 9.0, cuDNN 7.0, MXNet 1.0.0, TensorFlow 1.4.0, and their dependencies
+ * Upgrade presets for OpenCV 3.3.1, FFmpeg 3.4.1, FlyCapture 2.11.3.121 ([pull #424](https://github.com/bytedeco/javacpp-presets/pull/424)), libdc1394 2.2.5, librealsense 1.12.1, Chilitags, HDF5 1.10.1, OpenBLAS 0.2.20, FFTW 3.3.7, GSL 2.4, LLVM 5.0.1 ([pull #404](https://github.com/bytedeco/javacpp-presets/pull/404)), Leptonica 1.74.4, Tesseract 3.05.01, Caffe 1.0, CUDA 9.0, cuDNN 7.0, MXNet 1.0.0, TensorFlow 1.4.1, and their dependencies
  * Add presets for libfreenect2 ([pull #340](https://github.com/bytedeco/javacpp-presets/pull/340)), MKL 2018.1 ([issue #112](https://github.com/bytedeco/javacpp-presets/issues/112)), The Arcade Learning Environment, LiquidFun ([pull #356](https://github.com/bytedeco/javacpp-presets/pull/356)), Skia ([pull #418](https://github.com/bytedeco/javacpp-presets/pull/418)), and system APIs (Linux, Mac OS X, and Windows)
  * Fix the `FlyCapture2` module for some versions on Windows ([issue #337](https://github.com/bytedeco/javacpp-presets/issues/337))
  * Add functions missing from the presets of MXNet ([issue #332](https://github.com/bytedeco/javacpp-presets/issues/332))

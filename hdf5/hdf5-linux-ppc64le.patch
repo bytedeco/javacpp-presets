@@ -1167,3 +1167,49 @@ diff -ruN hdf5-1.10.1/ppc.cmake hdf5-1.10.1-linux-ppc64le/ppc.cmake
 +set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 +set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 +set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+diff -ruN hdf5-1.10.1/src/CMakeLists.txt hdf5-1.10.1-linux-ppc64le/src/CMakeLists.txt
+--- hdf5-1.10.1/src/CMakeLists.txt	2017-04-14 02:26:11.000000000 +0900
++++ hdf5-1.10.1-linux-ppc64le/src/CMakeLists.txt	2018-01-01 22:58:46.181626971 +0900
+@@ -851,8 +851,8 @@
+ set (CMD $<TARGET_FILE:H5detect>)
+ add_custom_command (
+     OUTPUT ${HDF5_BINARY_DIR}/H5Tinit.c
+-    COMMAND ${CMD}
+-    ARGS > ${HDF5_BINARY_DIR}/H5Tinit.c
++    COMMAND touch
++    ARGS ${HDF5_BINARY_DIR}/H5Tinit.c
+     DEPENDS H5detect
+ )
+ 
+@@ -865,8 +865,8 @@
+ set (CMD $<TARGET_FILE:H5make_libsettings>)
+ add_custom_command (
+     OUTPUT ${HDF5_BINARY_DIR}/H5lib_settings.c
+-    COMMAND ${CMD}
+-    ARGS > ${HDF5_BINARY_DIR}/H5lib_settings.c
++    COMMAND touch
++    ARGS ${HDF5_BINARY_DIR}/H5lib_settings.c
+     DEPENDS H5make_libsettings
+     WORKING_DIRECTORY ${HDF5_BINARY_DIR}
+ )
+@@ -906,16 +906,16 @@
+   set (CMD $<TARGET_FILE:H5detect>)
+   add_custom_command (
+       OUTPUT ${HDF5_BINARY_DIR}/shared/H5Tinit.c
+-      COMMAND ${CMD}
+-      ARGS > ${HDF5_BINARY_DIR}/shared/H5Tinit.c
++      COMMAND cp
++      ARGS ${HDF5_BINARY_DIR}/H5Tinit.c ${HDF5_BINARY_DIR}/shared/H5Tinit.c
+       DEPENDS H5detect
+       WORKING_DIRECTORY ${HDF5_BINARY_DIR}/shared
+   )
+   set (CMD $<TARGET_FILE:H5make_libsettings>)
+   add_custom_command (
+       OUTPUT ${HDF5_BINARY_DIR}/shared/H5lib_settings.c
+-      COMMAND ${CMD}
+-      ARGS > ${HDF5_BINARY_DIR}/shared/H5lib_settings.c
++      COMMAND cp
++      ARGS ${HDF5_BINARY_DIR}/H5lib_settings.c ${HDF5_BINARY_DIR}/shared/H5lib_settings.c
+       DEPENDS H5make_libsettings
+       WORKING_DIRECTORY ${HDF5_BINARY_DIR}
+   )

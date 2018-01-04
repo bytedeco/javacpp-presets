@@ -158,6 +158,12 @@ Other techniques can be specified, see cv::ximgproc::LocalBinarizationMethods.
 @Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal UMat _src, @ByVal UMat _dst,
                                     double maxValue, int type,
                                     int blockSize, double k );
+@Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal GpuMat _src, @ByVal GpuMat _dst,
+                                    double maxValue, int type,
+                                    int blockSize, double k, int binarizationMethod/*=cv::ximgproc::BINARIZATION_NIBLACK*/ );
+@Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal GpuMat _src, @ByVal GpuMat _dst,
+                                    double maxValue, int type,
+                                    int blockSize, double k );
 
 /** \brief Applies a binary blob thinning operation, to achieve a skeletization of the input image.
 <p>
@@ -171,6 +177,8 @@ The function transforms a binary blob image into a skeletized form using the tec
 @Namespace("cv::ximgproc") public static native void thinning( @ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native void thinning( @ByVal UMat src, @ByVal UMat dst, int thinningType/*=cv::ximgproc::THINNING_ZHANGSUEN*/);
 @Namespace("cv::ximgproc") public static native void thinning( @ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native void thinning( @ByVal GpuMat src, @ByVal GpuMat dst, int thinningType/*=cv::ximgproc::THINNING_ZHANGSUEN*/);
+@Namespace("cv::ximgproc") public static native void thinning( @ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Performs anisotropic diffusian on an image.
  <p>
@@ -194,6 +202,7 @@ The function transforms a binary blob image into a skeletized form using the tec
 */
 @Namespace("cv::ximgproc") public static native void anisotropicDiffusion(@ByVal Mat src, @ByVal Mat dst, float alpha, float K, int niters );
 @Namespace("cv::ximgproc") public static native void anisotropicDiffusion(@ByVal UMat src, @ByVal UMat dst, float alpha, float K, int niters );
+@Namespace("cv::ximgproc") public static native void anisotropicDiffusion(@ByVal GpuMat src, @ByVal GpuMat dst, float alpha, float K, int niters );
 
 /** \} */
 
@@ -283,6 +292,8 @@ For more details about this filter see \cite Gastal11 .
     public native void filter(@ByVal Mat src, @ByVal Mat dst);
     public native void filter(@ByVal UMat src, @ByVal UMat dst, int dDepth/*=-1*/);
     public native void filter(@ByVal UMat src, @ByVal UMat dst);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst, int dDepth/*=-1*/);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst);
 }
 
 /** \brief Factory method, create instance of DTFilter and produce initialization routines.
@@ -308,6 +319,8 @@ For more details about Domain Transform filter parameters, see the original arti
 @Namespace("cv::ximgproc") public static native @Ptr DTFilter createDTFilter(@ByVal Mat guide, double sigmaSpatial, double sigmaColor);
 @Namespace("cv::ximgproc") public static native @Ptr DTFilter createDTFilter(@ByVal UMat guide, double sigmaSpatial, double sigmaColor, int mode/*=cv::ximgproc::DTF_NC*/, int numIters/*=3*/);
 @Namespace("cv::ximgproc") public static native @Ptr DTFilter createDTFilter(@ByVal UMat guide, double sigmaSpatial, double sigmaColor);
+@Namespace("cv::ximgproc") public static native @Ptr DTFilter createDTFilter(@ByVal GpuMat guide, double sigmaSpatial, double sigmaColor, int mode/*=cv::ximgproc::DTF_NC*/, int numIters/*=3*/);
+@Namespace("cv::ximgproc") public static native @Ptr DTFilter createDTFilter(@ByVal GpuMat guide, double sigmaSpatial, double sigmaColor);
 
 /** \brief Simple one-line Domain Transform filter call. If you have multiple images to filter with the same
 guided image then use DTFilter interface to avoid extra computations on initialization stage.
@@ -329,6 +342,8 @@ filtering 2D signals in the article.
 @Namespace("cv::ximgproc") public static native void dtFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, double sigmaSpatial, double sigmaColor);
 @Namespace("cv::ximgproc") public static native void dtFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, double sigmaSpatial, double sigmaColor, int mode/*=cv::ximgproc::DTF_NC*/, int numIters/*=3*/);
 @Namespace("cv::ximgproc") public static native void dtFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, double sigmaSpatial, double sigmaColor);
+@Namespace("cv::ximgproc") public static native void dtFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat dst, double sigmaSpatial, double sigmaColor, int mode/*=cv::ximgproc::DTF_NC*/, int numIters/*=3*/);
+@Namespace("cv::ximgproc") public static native void dtFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat dst, double sigmaSpatial, double sigmaColor);
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -356,6 +371,8 @@ For more details about this filter see \cite Kaiming10 .
     public native void filter(@ByVal Mat src, @ByVal Mat dst);
     public native void filter(@ByVal UMat src, @ByVal UMat dst, int dDepth/*=-1*/);
     public native void filter(@ByVal UMat src, @ByVal UMat dst);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst, int dDepth/*=-1*/);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst);
 }
 
 /** \brief Factory method, create instance of GuidedFilter and produce initialization routines.
@@ -372,6 +389,7 @@ For more details about Guided Filter parameters, see the original article \cite 
  */
 @Namespace("cv::ximgproc") public static native @Ptr GuidedFilter createGuidedFilter(@ByVal Mat guide, int radius, double eps);
 @Namespace("cv::ximgproc") public static native @Ptr GuidedFilter createGuidedFilter(@ByVal UMat guide, int radius, double eps);
+@Namespace("cv::ximgproc") public static native @Ptr GuidedFilter createGuidedFilter(@ByVal GpuMat guide, int radius, double eps);
 
 /** \brief Simple one-line Guided Filter call.
 <p>
@@ -397,6 +415,8 @@ space into bilateralFilter.
 @Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, int radius, double eps);
 @Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, int radius, double eps, int dDepth/*=-1*/);
 @Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, int radius, double eps);
+@Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat dst, int radius, double eps, int dDepth/*=-1*/);
+@Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat dst, int radius, double eps);
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -436,6 +456,8 @@ Specify use random number generator to compute eigenvector or not.
     public native void filter(@ByVal Mat src, @ByVal Mat dst);
     public native void filter(@ByVal UMat src, @ByVal UMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat joint);
     public native void filter(@ByVal UMat src, @ByVal UMat dst);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat joint);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst);
 
     public native void collectGarbage();
 
@@ -510,6 +532,8 @@ sigmas in bilateralFilter and dtFilter functions. \sa bilateralFilter, dtFilter,
 @Namespace("cv::ximgproc") public static native void amFilter(@ByVal Mat joint, @ByVal Mat src, @ByVal Mat dst, double sigma_s, double sigma_r);
 @Namespace("cv::ximgproc") public static native void amFilter(@ByVal UMat joint, @ByVal UMat src, @ByVal UMat dst, double sigma_s, double sigma_r, @Cast("bool") boolean adjust_outliers/*=false*/);
 @Namespace("cv::ximgproc") public static native void amFilter(@ByVal UMat joint, @ByVal UMat src, @ByVal UMat dst, double sigma_s, double sigma_r);
+@Namespace("cv::ximgproc") public static native void amFilter(@ByVal GpuMat joint, @ByVal GpuMat src, @ByVal GpuMat dst, double sigma_s, double sigma_r, @Cast("bool") boolean adjust_outliers/*=false*/);
+@Namespace("cv::ximgproc") public static native void amFilter(@ByVal GpuMat joint, @ByVal GpuMat src, @ByVal GpuMat dst, double sigma_s, double sigma_r);
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -545,6 +569,8 @@ proportional to sigmaSpace .
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal Mat joint, @ByVal Mat src, @ByVal Mat dst, int d, double sigmaColor, double sigmaSpace);
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal UMat joint, @ByVal UMat src, @ByVal UMat dst, int d, double sigmaColor, double sigmaSpace, int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal UMat joint, @ByVal UMat src, @ByVal UMat dst, int d, double sigmaColor, double sigmaSpace);
+@Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal GpuMat joint, @ByVal GpuMat src, @ByVal GpuMat dst, int d, double sigmaColor, double sigmaSpace, int borderType/*=cv::BORDER_DEFAULT*/);
+@Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal GpuMat joint, @ByVal GpuMat src, @ByVal GpuMat dst, int d, double sigmaColor, double sigmaSpace);
 
 /** \brief Applies the bilateral texture filter to an image. It performs structure-preserving texture filter.
 For more details about this filter see \cite Cho2014.
@@ -569,6 +595,8 @@ value is negative, it is automatically calculated as described in the paper.
 @Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal UMat src, @ByVal UMat dst, int fr/*=3*/, int numIter/*=1*/, double sigmaAlpha/*=-1.*/, double sigmaAvg/*=-1.*/);
 @Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal GpuMat src, @ByVal GpuMat dst, int fr/*=3*/, int numIter/*=1*/, double sigmaAlpha/*=-1.*/, double sigmaAvg/*=-1.*/);
+@Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -605,6 +633,8 @@ proportional to sigmaSpace .
 @Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal UMat src, @ByVal UMat dst, int d/*=-1*/, double sigmaColor/*=25*/, double sigmaSpace/*=3*/, int numOfIter/*=4*/, int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal GpuMat src, @ByVal GpuMat dst, int d/*=-1*/, double sigmaColor/*=25*/, double sigmaSpace/*=3*/, int numOfIter/*=4*/, int borderType/*=cv::BORDER_DEFAULT*/);
+@Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -627,6 +657,7 @@ For more details about this filter see \cite Min2014 and \cite Farbman2008 .
     */
     public native void filter(@ByVal Mat src, @ByVal Mat dst);
     public native void filter(@ByVal UMat src, @ByVal UMat dst);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat dst);
 }
 
 /** \brief Factory method, create instance of FastGlobalSmootherFilter and execute the initialization routines.
@@ -653,6 +684,8 @@ was not implemented here.
 @Namespace("cv::ximgproc") public static native @Ptr FastGlobalSmootherFilter createFastGlobalSmootherFilter(@ByVal Mat guide, double lambda, double sigma_color);
 @Namespace("cv::ximgproc") public static native @Ptr FastGlobalSmootherFilter createFastGlobalSmootherFilter(@ByVal UMat guide, double lambda, double sigma_color, double lambda_attenuation/*=0.25*/, int num_iter/*=3*/);
 @Namespace("cv::ximgproc") public static native @Ptr FastGlobalSmootherFilter createFastGlobalSmootherFilter(@ByVal UMat guide, double lambda, double sigma_color);
+@Namespace("cv::ximgproc") public static native @Ptr FastGlobalSmootherFilter createFastGlobalSmootherFilter(@ByVal GpuMat guide, double lambda, double sigma_color, double lambda_attenuation/*=0.25*/, int num_iter/*=3*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastGlobalSmootherFilter createFastGlobalSmootherFilter(@ByVal GpuMat guide, double lambda, double sigma_color);
 
 /** \brief Simple one-line Fast Global Smoother filter call. If you have multiple images to filter with the same
 guide then use FastGlobalSmootherFilter interface to avoid extra computations.
@@ -676,6 +709,8 @@ it should be 0.25. Setting it to 1.0 may lead to streaking artifacts.
 @Namespace("cv::ximgproc") public static native void fastGlobalSmootherFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, double lambda, double sigma_color);
 @Namespace("cv::ximgproc") public static native void fastGlobalSmootherFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, double lambda, double sigma_color, double lambda_attenuation/*=0.25*/, int num_iter/*=3*/);
 @Namespace("cv::ximgproc") public static native void fastGlobalSmootherFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, double lambda, double sigma_color);
+@Namespace("cv::ximgproc") public static native void fastGlobalSmootherFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat dst, double lambda, double sigma_color, double lambda_attenuation/*=0.25*/, int num_iter/*=3*/);
+@Namespace("cv::ximgproc") public static native void fastGlobalSmootherFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat dst, double lambda, double sigma_color);
 
 /** \brief Global image smoothing via L0 gradient minimization.
 <p>
@@ -693,6 +728,8 @@ For more details about L0 Smoother, see the original paper \cite xu2011image.
 @Namespace("cv::ximgproc") public static native void l0Smooth(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native void l0Smooth(@ByVal UMat src, @ByVal UMat dst, double lambda/*=0.02*/, double kappa/*=2.0*/);
 @Namespace("cv::ximgproc") public static native void l0Smooth(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native void l0Smooth(@ByVal GpuMat src, @ByVal GpuMat dst, double lambda/*=0.02*/, double kappa/*=2.0*/);
+@Namespace("cv::ximgproc") public static native void l0Smooth(@ByVal GpuMat src, @ByVal GpuMat dst);
 /** \} */
 
 
@@ -779,6 +816,8 @@ For more details about L0 Smoother, see the original paper \cite xu2011image.
     public native void filter(@ByVal Mat disparity_map_left, @ByVal Mat left_view, @ByVal Mat filtered_disparity_map);
     public native void filter(@ByVal UMat disparity_map_left, @ByVal UMat left_view, @ByVal UMat filtered_disparity_map, @ByVal(nullValue = "cv::InputArray(cv::Mat())") UMat disparity_map_right, @ByVal(nullValue = "cv::Rect()") Rect ROI, @ByVal(nullValue = "cv::InputArray(cv::Mat())") UMat right_view);
     public native void filter(@ByVal UMat disparity_map_left, @ByVal UMat left_view, @ByVal UMat filtered_disparity_map);
+    public native void filter(@ByVal GpuMat disparity_map_left, @ByVal GpuMat left_view, @ByVal GpuMat filtered_disparity_map, @ByVal(nullValue = "cv::InputArray(cv::Mat())") GpuMat disparity_map_right, @ByVal(nullValue = "cv::Rect()") Rect ROI, @ByVal(nullValue = "cv::InputArray(cv::Mat())") GpuMat right_view);
+    public native void filter(@ByVal GpuMat disparity_map_left, @ByVal GpuMat left_view, @ByVal GpuMat filtered_disparity_map);
 }
 
 /** \brief Disparity map filter based on Weighted Least Squares filter (in form of Fast Global Smoother that
@@ -867,8 +906,10 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
  */
 @Namespace("cv::ximgproc") public static native int readGT(@Str BytePointer src_path,@ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native int readGT(@Str String src_path,@ByVal Mat dst);
-@Namespace("cv::ximgproc") public static native int readGT(@Str BytePointer src_path,@ByVal UMat dst);
 @Namespace("cv::ximgproc") public static native int readGT(@Str String src_path,@ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native int readGT(@Str BytePointer src_path,@ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native int readGT(@Str BytePointer src_path,@ByVal GpuMat dst);
+@Namespace("cv::ximgproc") public static native int readGT(@Str String src_path,@ByVal GpuMat dst);
 
 /** \brief Function for computing mean square error for disparity maps
 <p>
@@ -882,6 +923,7 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
  */
 @Namespace("cv::ximgproc") public static native double computeMSE(@ByVal Mat GT, @ByVal Mat src, @ByVal Rect ROI);
 @Namespace("cv::ximgproc") public static native double computeMSE(@ByVal UMat GT, @ByVal UMat src, @ByVal Rect ROI);
+@Namespace("cv::ximgproc") public static native double computeMSE(@ByVal GpuMat GT, @ByVal GpuMat src, @ByVal Rect ROI);
 
 /** \brief Function for computing the percent of "bad" pixels in the disparity map
 (pixels where error is higher than a specified threshold)
@@ -900,6 +942,8 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
 @Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal Mat GT, @ByVal Mat src, @ByVal Rect ROI);
 @Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal UMat GT, @ByVal UMat src, @ByVal Rect ROI, int thresh/*=24*/);
 @Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal UMat GT, @ByVal UMat src, @ByVal Rect ROI);
+@Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal GpuMat GT, @ByVal GpuMat src, @ByVal Rect ROI, int thresh/*=24*/);
+@Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal GpuMat GT, @ByVal GpuMat src, @ByVal Rect ROI);
 
 /** \brief Function for creating a disparity map visualization (clamped CV_8U image)
 <p>
@@ -913,6 +957,8 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
 @Namespace("cv::ximgproc") public static native void getDisparityVis(@ByVal Mat src,@ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native void getDisparityVis(@ByVal UMat src,@ByVal UMat dst,double scale/*=1.0*/);
 @Namespace("cv::ximgproc") public static native void getDisparityVis(@ByVal UMat src,@ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native void getDisparityVis(@ByVal GpuMat src,@ByVal GpuMat dst,double scale/*=1.0*/);
+@Namespace("cv::ximgproc") public static native void getDisparityVis(@ByVal GpuMat src,@ByVal GpuMat dst);
 
 /** \} */
 
@@ -996,6 +1042,9 @@ input and produce a dense per-pixel matching (optical flow) as an output.
     public native void interpolate(@ByVal UMat from_image, @ByVal UMat from_points,
                                          @ByVal UMat to_image, @ByVal UMat to_points,
                                          @ByVal UMat dense_flow);
+    public native void interpolate(@ByVal GpuMat from_image, @ByVal GpuMat from_points,
+                                         @ByVal GpuMat to_image, @ByVal GpuMat to_points,
+                                         @ByVal GpuMat dense_flow);
 }
 
 /** \brief Sparse match interpolation algorithm based on modified locally-weighted affine
@@ -1171,6 +1220,7 @@ EdgeAwareInterpolator.
      */
     public native void detectEdges(@ByVal Mat _src, @ByVal Mat _dst);
     public native void detectEdges(@ByVal UMat _src, @ByVal UMat _dst);
+    public native void detectEdges(@ByVal GpuMat _src, @ByVal GpuMat _dst);
 
     /** \brief The function computes orientation from edge image.
     <p>
@@ -1179,6 +1229,7 @@ EdgeAwareInterpolator.
      */
     public native void computeOrientation(@ByVal Mat _src, @ByVal Mat _dst);
     public native void computeOrientation(@ByVal UMat _src, @ByVal UMat _dst);
+    public native void computeOrientation(@ByVal GpuMat _src, @ByVal GpuMat _dst);
 
 
     /** \brief The function edgenms in edge image and suppress edges where edge is stronger in orthogonal direction.
@@ -1195,6 +1246,8 @@ EdgeAwareInterpolator.
     public native void edgesNms(@ByVal Mat edge_image, @ByVal Mat orientation_image, @ByVal Mat _dst);
     public native void edgesNms(@ByVal UMat edge_image, @ByVal UMat orientation_image, @ByVal UMat _dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
     public native void edgesNms(@ByVal UMat edge_image, @ByVal UMat orientation_image, @ByVal UMat _dst);
+    public native void edgesNms(@ByVal GpuMat edge_image, @ByVal GpuMat orientation_image, @ByVal GpuMat _dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
+    public native void edgesNms(@ByVal GpuMat edge_image, @ByVal GpuMat orientation_image, @ByVal GpuMat _dst);
 }
 
 /**
@@ -1321,6 +1374,8 @@ solution. The algorithm runs in real-time using a single CPU.
     public native void iterate(@ByVal Mat img);
     public native void iterate(@ByVal UMat img, int num_iterations/*=4*/);
     public native void iterate(@ByVal UMat img);
+    public native void iterate(@ByVal GpuMat img, int num_iterations/*=4*/);
+    public native void iterate(@ByVal GpuMat img);
 
     /** \brief Returns the segmentation labeling of the image.
     <p>
@@ -1334,6 +1389,7 @@ solution. The algorithm runs in real-time using a single CPU.
      */
     public native void getLabels(@ByVal Mat labels_out);
     public native void getLabels(@ByVal UMat labels_out);
+    public native void getLabels(@ByVal GpuMat labels_out);
 
     /** \brief Returns the mask of the superpixel segmentation stored in SuperpixelSEEDS object.
     <p>
@@ -1365,6 +1421,8 @@ solution. The algorithm runs in real-time using a single CPU.
     public native void getLabelContourMask(@ByVal Mat image);
     public native void getLabelContourMask(@ByVal UMat image, @Cast("bool") boolean thick_line/*=false*/);
     public native void getLabelContourMask(@ByVal UMat image);
+    public native void getLabelContourMask(@ByVal GpuMat image, @Cast("bool") boolean thick_line/*=false*/);
+    public native void getLabelContourMask(@ByVal GpuMat image);
 }
 
 /** \brief Initializes a SuperpixelSEEDS object.
@@ -1466,6 +1524,7 @@ the use of this software, even if advised of the possibility of such damage.
                             */
                             public native void processImage(@ByVal Mat src, @ByVal Mat dst);
                             public native void processImage(@ByVal UMat src, @ByVal UMat dst);
+                            public native void processImage(@ByVal GpuMat src, @ByVal GpuMat dst);
 
                             public native void setSigma(double sigma);
                             public native double getSigma();
@@ -1503,6 +1562,8 @@ the use of this software, even if advised of the possibility of such damage.
                             public native void setImage(@ByVal Mat img, @ByVal Mat regions, @ByVal Mat sizes);
                             public native void setImage(@ByVal UMat img, @ByVal UMat regions, @ByVal UMat sizes, int image_id/*=-1*/);
                             public native void setImage(@ByVal UMat img, @ByVal UMat regions, @ByVal UMat sizes);
+                            public native void setImage(@ByVal GpuMat img, @ByVal GpuMat regions, @ByVal GpuMat sizes, int image_id/*=-1*/);
+                            public native void setImage(@ByVal GpuMat img, @ByVal GpuMat regions, @ByVal GpuMat sizes);
 
                             /** \brief Return the score between two regions (between 0 and 1)
                                 @param r1 The first region
@@ -1631,6 +1692,7 @@ the use of this software, even if advised of the possibility of such damage.
                             */
                             public native void setBaseImage(@ByVal Mat img);
                             public native void setBaseImage(@ByVal UMat img);
+                            public native void setBaseImage(@ByVal GpuMat img);
 
                             /** \brief Initialize the class with the 'Single stragegy' parameters describled in \cite uijlings2013selective.
                                 @param k The k parameter for the graph segmentation
@@ -1660,6 +1722,7 @@ the use of this software, even if advised of the possibility of such damage.
                             */
                             public native void addImage(@ByVal Mat img);
                             public native void addImage(@ByVal UMat img);
+                            public native void addImage(@ByVal GpuMat img);
 
                             /** \brief Clear the list of images to process
                             */
@@ -1850,6 +1913,15 @@ public static final int
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal UMat src,
                                     @ByVal UMat dst,
                                     int dstMatDepth );
+@Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal GpuMat src,
+                                    @ByVal GpuMat dst,
+                                    int dstMatDepth,
+                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                    int op/*=cv::ximgproc::FHT_ADD*/,
+                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
+@Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal GpuMat src,
+                                    @ByVal GpuMat dst,
+                                    int dstMatDepth );
 
 /**
 * \brief   Calculates coordinates of line segment corresponded by point in Hough space.
@@ -1880,6 +1952,13 @@ public static final int
                                  int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                  @ByVal UMat srcImgInfo );
+@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+                                 @ByVal GpuMat srcImgInfo,
+                                 int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                 int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
+                                 int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
+@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+                                 @ByVal GpuMat srcImgInfo );
 
  // namespace cv::ximgproc
 
@@ -1962,6 +2041,7 @@ and the number of elements in the estimated covariance matrix.
 
 @Namespace("cv::ximgproc") public static native void covarianceEstimation(@ByVal Mat src, @ByVal Mat dst, int windowRows, int windowCols);
 @Namespace("cv::ximgproc") public static native void covarianceEstimation(@ByVal UMat src, @ByVal UMat dst, int windowRows, int windowCols);
+@Namespace("cv::ximgproc") public static native void covarianceEstimation(@ByVal GpuMat src, @ByVal GpuMat dst, int windowRows, int windowCols);
 
 
 
@@ -2084,6 +2164,7 @@ MSLIC stands for "Manifold SLIC" and it is an optimization of baseline SLIC desc
      */
     public native void getLabels( @ByVal Mat labels_out );
     public native void getLabels( @ByVal UMat labels_out );
+    public native void getLabels( @ByVal GpuMat labels_out );
 
     /** \brief Returns the mask of the superpixel segmentation stored in SuperpixelSLIC object.
     <p>
@@ -2099,6 +2180,8 @@ MSLIC stands for "Manifold SLIC" and it is an optimization of baseline SLIC desc
     public native void getLabelContourMask( @ByVal Mat image );
     public native void getLabelContourMask( @ByVal UMat image, @Cast("bool") boolean thick_line/*=true*/ );
     public native void getLabelContourMask( @ByVal UMat image );
+    public native void getLabelContourMask( @ByVal GpuMat image, @Cast("bool") boolean thick_line/*=true*/ );
+    public native void getLabelContourMask( @ByVal GpuMat image );
 
     /** \brief Enforce label connectivity.
     <p>
@@ -2140,6 +2223,9 @@ CieLAB color space. An example of SLIC versus SLICO and MSLIC is ilustrated in t
     @Namespace("cv::ximgproc") public static native @Ptr SuperpixelSLIC createSuperpixelSLIC( @ByVal UMat image, int algorithm/*=cv::ximgproc::SLICO*/,
                                                                int region_size/*=10*/, float ruler/*=10.0f*/ );
     @Namespace("cv::ximgproc") public static native @Ptr SuperpixelSLIC createSuperpixelSLIC( @ByVal UMat image );
+    @Namespace("cv::ximgproc") public static native @Ptr SuperpixelSLIC createSuperpixelSLIC( @ByVal GpuMat image, int algorithm/*=cv::ximgproc::SLICO*/,
+                                                               int region_size/*=10*/, float ruler/*=10.0f*/ );
+    @Namespace("cv::ximgproc") public static native @Ptr SuperpixelSLIC createSuperpixelSLIC( @ByVal GpuMat image );
 
 /** \} */
 
@@ -2256,6 +2342,7 @@ complexity and high memory efficiency and is able to preserve global properties 
      */
     public native void getLabels( @ByVal Mat labels_out );
     public native void getLabels( @ByVal UMat labels_out );
+    public native void getLabels( @ByVal GpuMat labels_out );
 
     /** \brief Returns the mask of the superpixel segmentation stored in SuperpixelLSC object.
     <p>
@@ -2271,6 +2358,8 @@ complexity and high memory efficiency and is able to preserve global properties 
     public native void getLabelContourMask( @ByVal Mat image );
     public native void getLabelContourMask( @ByVal UMat image, @Cast("bool") boolean thick_line/*=true*/ );
     public native void getLabelContourMask( @ByVal UMat image );
+    public native void getLabelContourMask( @ByVal GpuMat image, @Cast("bool") boolean thick_line/*=true*/ );
+    public native void getLabelContourMask( @ByVal GpuMat image );
 
     /** \brief Enforce label connectivity.
     <p>
@@ -2307,6 +2396,8 @@ with a small 3 x 3 kernel and additional conversion into CieLAB color space.
     @Namespace("cv::ximgproc") public static native @Ptr SuperpixelLSC createSuperpixelLSC( @ByVal Mat image );
     @Namespace("cv::ximgproc") public static native @Ptr SuperpixelLSC createSuperpixelLSC( @ByVal UMat image, int region_size/*=10*/, float ratio/*=0.075f*/ );
     @Namespace("cv::ximgproc") public static native @Ptr SuperpixelLSC createSuperpixelLSC( @ByVal UMat image );
+    @Namespace("cv::ximgproc") public static native @Ptr SuperpixelLSC createSuperpixelLSC( @ByVal GpuMat image, int region_size/*=10*/, float ratio/*=0.075f*/ );
+    @Namespace("cv::ximgproc") public static native @Ptr SuperpixelLSC createSuperpixelLSC( @ByVal GpuMat image );
 
 /** \} */
 

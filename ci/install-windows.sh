@@ -1,14 +1,12 @@
 #!/bin/bash
  
-export projectName=$1
+export PROJ=$1
 cd $APPVEYOR_BUILD_FOLDER
 
-echo Building $projectName
-echo Compiler: $COMPILER
-echo Architecture: $MSYS2_ARCH
-echo MSYS2 directory: $MSYS2_DIR
+echo Building $PROJ
+echo Platform: $OS
 echo MSYS2 system: $MSYSTEM
-echo Bits: $BIT
+echo Extension: $EXT
 echo Branch: $APPVEYOR_REPO_BRANCH
 
 bash --version
@@ -25,9 +23,9 @@ mkdir -p /c/Downloads
 
 echo Perform download files out of main repo
 cd ..
-if [ "$projectName" == "flycapture" ]; then
+if [ "$PROJ" == "flycapture" ]; then
        echo Flycapture install
-       if [ "$MSYS2_ARCH" == "x86_64" ]; then
+       if [ "$OS" == "windows-x86_64" ]; then
            if [[ $(find /c/Downloads/pgr.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap in cache and size seems ok"
            else
@@ -36,7 +34,7 @@ if [ "$projectName" == "flycapture" ]; then
            fi
            unzip /c/Downloads/pgr.zip
            mv Point\ Grey\ Research /c/Program\ Files
-       elif [ "$MSYS2_ARCH" == "x86" ]; then
+       elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/pgr32.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
            else
@@ -49,7 +47,7 @@ if [ "$projectName" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
-if [ "$projectName" == "mkl" ]; then
+if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
        curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/12394/w_mkl_2018.1.156.exe"
        ./mkl.exe --s --x --f .
@@ -59,7 +57,7 @@ if [ "$projectName" == "mkl" ]; then
        echo Finished mkl 
 fi
 
-if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
+if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        if [[ $(find /c/Downloads/cudnn-9.0-windows10-x64-v7.zip -type f -size +1000000c 2>/dev/null) ]]; then
          echo "Found cudnn in cache and size seems OK"
@@ -77,7 +75,7 @@ if [ "$projectName" == "cuda" ] || [ "$projectName" == "opencv" ]; then
        echo Finished cuda install
 fi 
 
-if [ "$projectName" == "libdc1394" ]; then 
+if [ "$PROJ" == "libdc1394" ]; then
        echo Installing libdc1394 
        /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShVnNJM3JCclpuTE0 CMU.zip
        unzip CMU.zip
@@ -85,9 +83,9 @@ if [ "$projectName" == "libdc1394" ]; then
        echo Finished libdc1394 install
 fi
 
-if [[ "$projectName" =~ "hdf5" ]]; then
+if [[ "$PROJ" =~ "hdf5" ]]; then
        echo Installing HDF5
-       if [ "$MSYS2_ARCH" == "x86_64" ]; then 
+       if [ "$OS" == "windows-x86_64" ]; then
           echo 64bit hdf5 
           if [[ $(find /c/Downloads/hdf5-64.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found hdf5-64 in cache and size seems OK"
@@ -97,7 +95,7 @@ if [[ "$projectName" =~ "hdf5" ]]; then
           unzip /c/Downloads/hdf5-64.zip 
           cd hdf 
           msiexec //i HDF5-1.10.1-win64.msi //quiet
-       elif [ "$MSYS2_ARCH" == "x86" ]; then
+       elif [ "$OS" == "windows-x86" ]; then
           echo 32bit copy for hdf5 
           if [[ $(find /c/Downloads/hdf5-32.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found hdf5-32 in cache and size seems OK"

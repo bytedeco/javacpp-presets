@@ -22,7 +22,7 @@ Sample Usage
 ------------
 Here is a simple example of the predict API of MXNet ported to Java from this C++ source file and for this data:
 
- * https://github.com/dmlc/mxnet/blob/master/example/image-classification/predict-cpp/image-classification-predict.cc
+ * https://github.com/dmlc/mxnet/blob/v0.8.0/example/image-classification/predict-cpp/image-classification-predict.cc
  * http://data.dmlc.ml/mxnet/models/imagenet/inception-bn.tar.gz
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ImageClassificationPredict.java` source files below, simply execute on the command line:
@@ -205,6 +205,9 @@ public class ImageClassificationPredict {
     }
 
     public static void main(String[] args) {
+        // Preload required by JavaCPP
+        Loader.load(org.bytedeco.javacpp.mxnet.class);
+
         if (args.length < 1) {
             System.out.println("No test image here.");
             System.out.println("Usage: java ImageClassificationPredict apple.jpg");
@@ -213,12 +216,9 @@ public class ImageClassificationPredict {
 
         String test_file = args[0];
 
-        // Preload required by JavaCPP
-        Loader.load(org.bytedeco.javacpp.mxnet.class);
-
         // Models path for your model, you have to modify it
-        BufferFile json_data = new BufferFile("model/Inception_BN-symbol.json");
-        BufferFile param_data = new BufferFile("model/Inception_BN-0039.params");
+        BufferFile json_data = new BufferFile("model/Inception-BN-symbol.json");
+        BufferFile param_data = new BufferFile("model/Inception-BN-0126.params");
 
         // Parameters
         int dev_type = 1;  // 1: cpu, 2: gpu

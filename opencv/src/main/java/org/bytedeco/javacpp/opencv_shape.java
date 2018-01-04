@@ -140,6 +140,7 @@ the histogram in each bin.
  */
 @Namespace("cv") public static native float EMDL1(@ByVal Mat signature1, @ByVal Mat signature2);
 @Namespace("cv") public static native float EMDL1(@ByVal UMat signature1, @ByVal UMat signature2);
+@Namespace("cv") public static native float EMDL1(@ByVal GpuMat signature1, @ByVal GpuMat signature2);
 
 /** \} */
 
@@ -219,6 +220,8 @@ the histogram in each bin.
                                                      @ByRef DMatchVector matches);
     public native void estimateTransformation(@ByVal UMat transformingShape, @ByVal UMat targetShape,
                                                      @ByRef DMatchVector matches);
+    public native void estimateTransformation(@ByVal GpuMat transformingShape, @ByVal GpuMat targetShape,
+                                                     @ByRef DMatchVector matches);
 
     /** \brief Apply a transformation, given a pre-estimated transformation parameters.
     <p>
@@ -229,6 +232,8 @@ the histogram in each bin.
     public native float applyTransformation(@ByVal Mat input);
     public native float applyTransformation(@ByVal UMat input, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat output);
     public native float applyTransformation(@ByVal UMat input);
+    public native float applyTransformation(@ByVal GpuMat input, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat output);
+    public native float applyTransformation(@ByVal GpuMat input);
 
     /** \brief Apply a transformation, given a pre-estimated transformation parameters, to an Image.
     <p>
@@ -246,6 +251,10 @@ the histogram in each bin.
                                        int flags/*=cv::INTER_LINEAR*/, int borderMode/*=cv::BORDER_CONSTANT*/,
                                        @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
     public native void warpImage(@ByVal UMat transformingImage, @ByVal UMat output);
+    public native void warpImage(@ByVal GpuMat transformingImage, @ByVal GpuMat output,
+                                       int flags/*=cv::INTER_LINEAR*/, int borderMode/*=cv::BORDER_CONSTANT*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue);
+    public native void warpImage(@ByVal GpuMat transformingImage, @ByVal GpuMat output);
 }
 
 /***********************************************************************************/
@@ -359,6 +368,7 @@ F.L. Bookstein (PAMI 1989). :
 
     public native void buildCostMatrix(@ByVal Mat descriptors1, @ByVal Mat descriptors2, @ByVal Mat costMatrix);
     public native void buildCostMatrix(@ByVal UMat descriptors1, @ByVal UMat descriptors2, @ByVal UMat costMatrix);
+    public native void buildCostMatrix(@ByVal GpuMat descriptors1, @ByVal GpuMat descriptors2, @ByVal GpuMat costMatrix);
 
     public native void setNDummies(int nDummies);
     public native int getNDummies();
@@ -496,6 +506,7 @@ An example using shape distance algorithm
      */
     public native float computeDistance(@ByVal Mat contour1, @ByVal Mat contour2);
     public native float computeDistance(@ByVal UMat contour1, @ByVal UMat contour2);
+    public native float computeDistance(@ByVal GpuMat contour1, @ByVal GpuMat contour2);
 }
 
 /***********************************************************************************/
@@ -585,8 +596,10 @@ implementation of the common variations of the original pipeline.
      */
     public native void setImages(@ByVal Mat image1, @ByVal Mat image2);
     public native void setImages(@ByVal UMat image1, @ByVal UMat image2);
+    public native void setImages(@ByVal GpuMat image1, @ByVal GpuMat image2);
     public native void getImages(@ByVal Mat image1, @ByVal Mat image2);
     public native void getImages(@ByVal UMat image1, @ByVal UMat image2);
+    public native void getImages(@ByVal GpuMat image1, @ByVal GpuMat image2);
 
     public native void setIterations(int iterations);
     public native int getIterations();

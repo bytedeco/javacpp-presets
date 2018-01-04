@@ -1,7 +1,7 @@
 JavaCPP Presets
 ===============
 
-[![Join the chat at https://gitter.im/bytedeco/javacpp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bytedeco/javacpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Travis CI](https://travis-ci.org/bytedeco/javacpp-presets.svg?branch=master)](https://travis-ci.org/bytedeco/javacpp-presets) [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/bytedeco/javacpp-presets?branch=master&svg=true)](https://ci.appveyor.com/project/bytedeco/javacpp-presets)
+[![Join the chat at https://gitter.im/bytedeco/javacpp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bytedeco/javacpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/) [![Travis CI](https://travis-ci.org/bytedeco/javacpp-presets.svg?branch=master)](https://travis-ci.org/bytedeco/javacpp-presets) [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/bytedeco/javacpp-presets?branch=master&svg=true)](https://ci.appveyor.com/project/bytedeco/javacpp-presets)
 
 
 Introduction
@@ -119,13 +119,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenBLAS 0.2.20  http://www.openblas.net/
  * FFTW 3.3.7  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
- * LLVM 5.0.0  http://llvm.org/releases/download.html
+ * LLVM 5.0.x  http://llvm.org/releases/download.html
  * Leptonica 1.74.4  http://www.leptonica.org/download.html
  * Tesseract 3.05.01  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.0  https://developer.nvidia.com/cuda-downloads
  * MXnet 1.0.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.4.0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.4.1  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org

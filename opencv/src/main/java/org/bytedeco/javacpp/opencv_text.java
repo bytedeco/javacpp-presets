@@ -27,7 +27,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef IntDeque put(@ByRef IntDeque x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native int get(@Cast("size_t") long i);
@@ -57,6 +59,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ERStatVector(Pointer p) { super(p); }
+    public ERStatVector(ERStat value) { this(1); put(0, value); }
     public ERStatVector(ERStat ... array) { this(array.length); put(array); }
     public ERStatVector()       { allocate();  }
     public ERStatVector(long n) { allocate(n); }
@@ -64,7 +67,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ERStatVector put(@ByRef ERStatVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef ERStat get(@Cast("size_t") long i);
@@ -81,6 +86,21 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @ByRef ERStat get();
     }
 
+    public ERStat pop_back() {
+        long size = size();
+        ERStat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ERStatVector push_back(ERStat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public ERStatVector put(ERStat value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public ERStatVector put(ERStat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -94,6 +114,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ERStatVectorVector(Pointer p) { super(p); }
+    public ERStatVectorVector(ERStatVector value) { this(1); put(0, value); }
     public ERStatVectorVector(ERStatVector ... array) { this(array.length); put(array); }
     public ERStatVectorVector()       { allocate();  }
     public ERStatVectorVector(long n) { allocate(n); }
@@ -101,7 +122,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ERStatVectorVector put(@ByRef ERStatVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef ERStatVector get(@Cast("size_t") long i);
@@ -118,6 +141,21 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @ByRef ERStatVector get();
     }
 
+    public ERStatVector pop_back() {
+        long size = size();
+        ERStatVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ERStatVectorVector push_back(ERStatVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public ERStatVectorVector put(ERStatVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public ERStatVectorVector put(ERStatVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -131,6 +169,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleVector(Pointer p) { super(p); }
+    public DoubleVector(double value) { this(1); put(0, value); }
     public DoubleVector(double ... array) { this(array.length); put(array); }
     public DoubleVector()       { allocate();  }
     public DoubleVector(long n) { allocate(n); }
@@ -138,7 +177,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DoubleVector put(@ByRef DoubleVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native double get(@Cast("size_t") long i);
@@ -155,6 +196,21 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") double get();
     }
 
+    public double pop_back() {
+        long size = size();
+        double value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DoubleVector push_back(double value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public DoubleVector put(double value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public DoubleVector put(double ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -168,7 +224,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StdStringVector(Pointer p) { super(p); }
+    public StdStringVector(BytePointer value) { this(1); put(0, value); }
     public StdStringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StdStringVector(String value) { this(1); put(0, value); }
     public StdStringVector(String ... array) { this(array.length); put(array); }
     public StdStringVector()       { allocate();  }
     public StdStringVector(long n) { allocate(n); }
@@ -176,7 +234,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StdStringVector put(@ByRef StdStringVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @StdString BytePointer get(@Cast("size_t") long i);
@@ -194,6 +254,21 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") @StdString BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StdStringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public StdStringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public StdStringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -202,6 +277,15 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         return this;
     }
 
+    public StdStringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public StdStringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public StdStringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -485,6 +569,7 @@ Extracts the component tree (if needed) and filter the extremal regions (ER's) b
      */
     public native void run( @ByVal Mat image, @ByRef ERStatVector regions );
     public native void run( @ByVal UMat image, @ByRef ERStatVector regions );
+    public native void run( @ByVal GpuMat image, @ByRef ERStatVector regions );
 
 
     /** set/get methods to set the algorithm properties, */
@@ -614,10 +699,20 @@ magnitude (Grad).
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal Mat _src, @ByVal MatVector _channels);
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal Mat _src, @ByVal UMatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal Mat _src, @ByVal UMatVector _channels);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal Mat _src, @ByVal GpuMatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal Mat _src, @ByVal GpuMatVector _channels);
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal UMat _src, @ByVal MatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal UMat _src, @ByVal MatVector _channels);
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal UMat _src, @ByVal UMatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
 @Namespace("cv::text") public static native void computeNMChannels(@ByVal UMat _src, @ByVal UMatVector _channels);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal UMat _src, @ByVal GpuMatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal UMat _src, @ByVal GpuMatVector _channels);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal GpuMat _src, @ByVal MatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal GpuMat _src, @ByVal MatVector _channels);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal GpuMat _src, @ByVal UMatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal GpuMat _src, @ByVal UMatVector _channels);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal GpuMat _src, @ByVal GpuMatVector _channels, int _mode/*=cv::text::ERFILTER_NM_RGBLGrad*/);
+@Namespace("cv::text") public static native void computeNMChannels(@ByVal GpuMat _src, @ByVal GpuMatVector _channels);
 
 
 
@@ -691,6 +786,104 @@ method is ERGROUPING_ORIENTATION_ANY.
                                            @ByRef ERStatVectorVector regions,
                                            @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
                                            @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal MatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal MatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal UMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal UMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal MatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal MatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal UMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal UMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat img, @ByVal MatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat img, @ByVal UMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal Mat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
 @Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal MatVector channels,
                                            @ByRef ERStatVectorVector regions,
                                            @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
@@ -698,10 +891,6 @@ method is ERGROUPING_ORIENTATION_ANY.
                                            int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
                                            @StdString BytePointer filename/*=std::string()*/,
                                            float minProbablity/*=0.5*/);
-@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal MatVector channels,
-                                           @ByRef ERStatVectorVector regions,
-                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
-                                           @ByRef RectVector groups_rects);
 @Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal UMatVector channels,
                                            @ByRef ERStatVectorVector regions,
                                            @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
@@ -709,10 +898,34 @@ method is ERGROUPING_ORIENTATION_ANY.
                                            int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
                                            @StdString String filename/*=std::string()*/,
                                            float minProbablity/*=0.5*/);
-@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal UMatVector channels,
+@Namespace("cv::text") public static native void erGrouping(@ByVal UMat img, @ByVal GpuMatVector channels,
                                            @ByRef ERStatVectorVector regions,
                                            @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
-                                           @ByRef RectVector groups_rects);
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal MatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal UMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString BytePointer filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat img, @ByVal GpuMatVector channels,
+                                           @ByRef ERStatVectorVector regions,
+                                           @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector groups,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @StdString String filename/*=std::string()*/,
+                                           float minProbablity/*=0.5*/);
 
 @Namespace("cv::text") public static native void erGrouping(@ByVal Mat image, @ByVal Mat channel,
                                            @ByVal PointVectorVector regions,
@@ -733,12 +946,27 @@ method is ERGROUPING_ORIENTATION_ANY.
                                            @ByVal PointVectorVector regions,
                                            @ByRef RectVector groups_rects,
                                            int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
-                                           @Str BytePointer filename/*=cv::String()*/,
+                                           @Str String filename/*=cv::String()*/,
                                            float minProbablity/*=(float)0.5*/);
 @Namespace("cv::text") public static native void erGrouping(@ByVal UMat image, @ByVal UMat channel,
                                            @ByVal PointVectorVector regions,
                                            @ByRef RectVector groups_rects);
 @Namespace("cv::text") public static native void erGrouping(@ByVal UMat image, @ByVal UMat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbablity/*=(float)0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat image, @ByVal GpuMat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbablity/*=(float)0.5*/);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat image, @ByVal GpuMat channel,
+                                           @ByVal PointVectorVector regions,
+                                           @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void erGrouping(@ByVal GpuMat image, @ByVal GpuMat channel,
                                            @ByVal PointVectorVector regions,
                                            @ByRef RectVector groups_rects,
                                            int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
@@ -765,10 +993,13 @@ An example of MSERsToERStats in use can be found in the text detection webcam_de
                                @ByRef ERStatVectorVector regions);
 @Namespace("cv::text") public static native void MSERsToERStats(@ByVal UMat image, @ByRef PointVectorVector contours,
                                @ByRef ERStatVectorVector regions);
+@Namespace("cv::text") public static native void MSERsToERStats(@ByVal GpuMat image, @ByRef PointVectorVector contours,
+                               @ByRef ERStatVectorVector regions);
 
 // Utility funtion for scripting
 @Namespace("cv::text") public static native void detectRegions(@ByVal Mat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
 @Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
+@Namespace("cv::text") public static native void detectRegions(@ByVal GpuMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef PointVectorVector regions);
 
 
 /** \brief Extracts text regions from image.
@@ -794,10 +1025,19 @@ An example of MSERsToERStats in use can be found in the text detection webcam_de
                                            float minProbability/*=(float)0.5*/);
 @Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
                                            int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
-                                           @Str BytePointer filename/*=cv::String()*/,
+                                           @Str String filename/*=cv::String()*/,
                                            float minProbability/*=(float)0.5*/);
 @Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects);
 @Namespace("cv::text") public static native void detectRegions(@ByVal UMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbability/*=(float)0.5*/);
+@Namespace("cv::text") public static native void detectRegions(@ByVal GpuMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
+                                           int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
+                                           @Str BytePointer filename/*=cv::String()*/,
+                                           float minProbability/*=(float)0.5*/);
+@Namespace("cv::text") public static native void detectRegions(@ByVal GpuMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects);
+@Namespace("cv::text") public static native void detectRegions(@ByVal GpuMat image, @Ptr ERFilter er_filter1, @Ptr ERFilter er_filter2, @ByRef RectVector groups_rects,
                                            int method/*=cv::text::ERGROUPING_ORIENTATION_HORIZ*/,
                                            @Str String filename/*=cv::String()*/,
                                            float minProbability/*=(float)0.5*/);
@@ -1017,13 +1257,17 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
     // aliases for scripting
     public native @Str BytePointer run(@ByVal Mat image, int min_confidence, int component_level/*=0*/);
     public native @Str BytePointer run(@ByVal Mat image, int min_confidence);
-    public native @Str BytePointer run(@ByVal UMat image, int min_confidence, int component_level/*=0*/);
-    public native @Str BytePointer run(@ByVal UMat image, int min_confidence);
+    public native @Str String run(@ByVal UMat image, int min_confidence, int component_level/*=0*/);
+    public native @Str String run(@ByVal UMat image, int min_confidence);
+    public native @Str BytePointer run(@ByVal GpuMat image, int min_confidence, int component_level/*=0*/);
+    public native @Str BytePointer run(@ByVal GpuMat image, int min_confidence);
 
     public native @Str BytePointer run(@ByVal Mat image, @ByVal Mat mask, int min_confidence, int component_level/*=0*/);
     public native @Str BytePointer run(@ByVal Mat image, @ByVal Mat mask, int min_confidence);
-    public native @Str BytePointer run(@ByVal UMat image, @ByVal UMat mask, int min_confidence, int component_level/*=0*/);
-    public native @Str BytePointer run(@ByVal UMat image, @ByVal UMat mask, int min_confidence);
+    public native @Str String run(@ByVal UMat image, @ByVal UMat mask, int min_confidence, int component_level/*=0*/);
+    public native @Str String run(@ByVal UMat image, @ByVal UMat mask, int min_confidence);
+    public native @Str BytePointer run(@ByVal GpuMat image, @ByVal GpuMat mask, int min_confidence, int component_level/*=0*/);
+    public native @Str BytePointer run(@ByVal GpuMat image, @ByVal GpuMat mask, int min_confidence);
 
     public native void setWhiteList(@Str BytePointer char_whitelist);
     public native void setWhiteList(@Str String char_whitelist);
@@ -1118,8 +1362,13 @@ public static final int
          */
         public native void eval( @ByVal Mat image, @StdVector IntPointer out_class, @ByRef DoubleVector out_confidence);
         public native void eval( @ByVal Mat image, @StdVector IntBuffer out_class, @ByRef DoubleVector out_confidence);
-        public native void eval( @ByVal UMat image, @StdVector int[] out_class, @ByRef DoubleVector out_confidence);
+        public native void eval( @ByVal Mat image, @StdVector int[] out_class, @ByRef DoubleVector out_confidence);
         public native void eval( @ByVal UMat image, @StdVector IntPointer out_class, @ByRef DoubleVector out_confidence);
+        public native void eval( @ByVal UMat image, @StdVector IntBuffer out_class, @ByRef DoubleVector out_confidence);
+        public native void eval( @ByVal UMat image, @StdVector int[] out_class, @ByRef DoubleVector out_confidence);
+        public native void eval( @ByVal GpuMat image, @StdVector IntPointer out_class, @ByRef DoubleVector out_confidence);
+        public native void eval( @ByVal GpuMat image, @StdVector IntBuffer out_class, @ByRef DoubleVector out_confidence);
+        public native void eval( @ByVal GpuMat image, @StdVector int[] out_class, @ByRef DoubleVector out_confidence);
     }
     /** \brief Recognize text using HMM.
     <p>
@@ -1210,13 +1459,17 @@ public static final int
     // aliases for scripting
     public native @Str BytePointer run(@ByVal Mat image, int min_confidence, int component_level/*=0*/);
     public native @Str BytePointer run(@ByVal Mat image, int min_confidence);
-    public native @Str BytePointer run(@ByVal UMat image, int min_confidence, int component_level/*=0*/);
-    public native @Str BytePointer run(@ByVal UMat image, int min_confidence);
+    public native @Str String run(@ByVal UMat image, int min_confidence, int component_level/*=0*/);
+    public native @Str String run(@ByVal UMat image, int min_confidence);
+    public native @Str BytePointer run(@ByVal GpuMat image, int min_confidence, int component_level/*=0*/);
+    public native @Str BytePointer run(@ByVal GpuMat image, int min_confidence);
 
     public native @Str BytePointer run(@ByVal Mat image, @ByVal Mat mask, int min_confidence, int component_level/*=0*/);
     public native @Str BytePointer run(@ByVal Mat image, @ByVal Mat mask, int min_confidence);
-    public native @Str BytePointer run(@ByVal UMat image, @ByVal UMat mask, int min_confidence, int component_level/*=0*/);
-    public native @Str BytePointer run(@ByVal UMat image, @ByVal UMat mask, int min_confidence);
+    public native @Str String run(@ByVal UMat image, @ByVal UMat mask, int min_confidence, int component_level/*=0*/);
+    public native @Str String run(@ByVal UMat image, @ByVal UMat mask, int min_confidence);
+    public native @Str BytePointer run(@ByVal GpuMat image, @ByVal GpuMat mask, int min_confidence, int component_level/*=0*/);
+    public native @Str BytePointer run(@ByVal GpuMat image, @ByVal GpuMat mask, int min_confidence);
 
     /** \brief Creates an instance of the OCRHMMDecoder class. Initializes HMMDecoder.
     <p>
@@ -1253,6 +1506,15 @@ public static final int
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+    public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
@@ -1262,14 +1524,23 @@ public static final int
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+    public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);         // HMM Decoding algorithm (only Viterbi for the moment)         // HMM Decoding algorithm (only Viterbi for the moment)
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);         // HMM Decoding algorithm (only Viterbi for the moment)         // HMM Decoding algorithm (only Viterbi for the moment)
 
     /** \brief Creates an instance of the OCRHMMDecoder class. Loads and initializes HMMDecoder from the specified path
      <p>
@@ -1301,19 +1572,6 @@ public static final int
                                          @Str String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table);
-    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
-    
-                                         @Str BytePointer vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-    
-                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
-    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
-    
-                                         @Str BytePointer vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Str String filename,
     
                                          @Str String vocabulary,
@@ -1327,6 +1585,45 @@ public static final int
                                          @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str BytePointer filename,
+    
+                                         @Str BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);
+    public static native @Ptr OCRHMMDecoder create(@Str String filename,
+    
+                                         @Str String vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+    
+                                         int classifier/*=cv::text::OCR_KNN_CLASSIFIER*/);
+    public static native @Ptr OCRHMMDecoder create(@Str String filename,
+    
+                                         @Str String vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);
 }
 
 /** \brief Allow to implicitly load the default character classifier when creating an OCRHMMDecoder object.
@@ -1386,8 +1683,10 @@ at each window location.
  **/
 @Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
 @Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
 @Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal GpuMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal GpuMat transition_probabilities_table);
 
 @Namespace("cv::text") public static native @ByVal Mat createOCRHMMTransitionsTable(@Str BytePointer vocabulary, @ByRef StringVector lexicon);
 @Namespace("cv::text") public static native @ByVal Mat createOCRHMMTransitionsTable(@Str String vocabulary, @ByRef StringVector lexicon);
@@ -1450,8 +1749,13 @@ at each window location.
          */
         public native void eval( @ByVal Mat image, @StdVector DoubleVector recognition_probabilities, @StdVector IntPointer oversegmentation );
         public native void eval( @ByVal Mat image, @StdVector DoubleVector recognition_probabilities, @StdVector IntBuffer oversegmentation );
-        public native void eval( @ByVal UMat image, @StdVector DoubleVector recognition_probabilities, @StdVector int[] oversegmentation );
+        public native void eval( @ByVal Mat image, @StdVector DoubleVector recognition_probabilities, @StdVector int[] oversegmentation );
         public native void eval( @ByVal UMat image, @StdVector DoubleVector recognition_probabilities, @StdVector IntPointer oversegmentation );
+        public native void eval( @ByVal UMat image, @StdVector DoubleVector recognition_probabilities, @StdVector IntBuffer oversegmentation );
+        public native void eval( @ByVal UMat image, @StdVector DoubleVector recognition_probabilities, @StdVector int[] oversegmentation );
+        public native void eval( @ByVal GpuMat image, @StdVector DoubleVector recognition_probabilities, @StdVector IntPointer oversegmentation );
+        public native void eval( @ByVal GpuMat image, @StdVector DoubleVector recognition_probabilities, @StdVector IntBuffer oversegmentation );
+        public native void eval( @ByVal GpuMat image, @StdVector DoubleVector recognition_probabilities, @StdVector int[] oversegmentation );
 
         public native int getWindowSize();
         public native int getStepSize();
@@ -1522,13 +1826,17 @@ at each window location.
     // aliases for scripting
     public native @Str BytePointer run(@ByVal Mat image, int min_confidence, int component_level/*=0*/);
     public native @Str BytePointer run(@ByVal Mat image, int min_confidence);
-    public native @Str BytePointer run(@ByVal UMat image, int min_confidence, int component_level/*=0*/);
-    public native @Str BytePointer run(@ByVal UMat image, int min_confidence);
+    public native @Str String run(@ByVal UMat image, int min_confidence, int component_level/*=0*/);
+    public native @Str String run(@ByVal UMat image, int min_confidence);
+    public native @Str BytePointer run(@ByVal GpuMat image, int min_confidence, int component_level/*=0*/);
+    public native @Str BytePointer run(@ByVal GpuMat image, int min_confidence);
 
     public native @Str BytePointer run(@ByVal Mat image, @ByVal Mat mask, int min_confidence, int component_level/*=0*/);
     public native @Str BytePointer run(@ByVal Mat image, @ByVal Mat mask, int min_confidence);
-    public native @Str BytePointer run(@ByVal UMat image, @ByVal UMat mask, int min_confidence, int component_level/*=0*/);
-    public native @Str BytePointer run(@ByVal UMat image, @ByVal UMat mask, int min_confidence);
+    public native @Str String run(@ByVal UMat image, @ByVal UMat mask, int min_confidence, int component_level/*=0*/);
+    public native @Str String run(@ByVal UMat image, @ByVal UMat mask, int min_confidence);
+    public native @Str BytePointer run(@ByVal GpuMat image, @ByVal GpuMat mask, int min_confidence, int component_level/*=0*/);
+    public native @Str BytePointer run(@ByVal GpuMat image, @ByVal GpuMat mask, int min_confidence);
 
     /** \brief Creates an instance of the OCRBeamSearchDecoder class. Initializes HMMDecoder.
     <p>
@@ -1569,6 +1877,16 @@ at each window location.
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString String vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
@@ -1579,15 +1897,25 @@ at each window location.
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
+                                         @StdString BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
                                          int beam_size/*=500*/);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);                              // Size of the beam in Beam Search algorithm                              // Size of the beam in Beam Search algorithm
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);                              // Size of the beam in Beam Search algorithm                              // Size of the beam in Beam Search algorithm
 
     /** \brief Creates an instance of the OCRBeamSearchDecoder class. Initializes HMMDecoder from the specified path.
     <p>
@@ -1614,16 +1942,6 @@ at each window location.
                                          @Str String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
-                                         @Str BytePointer vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
-                                         @Str BytePointer vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
@@ -1634,6 +1952,36 @@ at each window location.
                                          @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal UMat transition_probabilities_table,
+                                         @ByVal UMat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
+                                         @Str BytePointer vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
+                                         @Str String vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
+    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
+                                         @Str String vocabulary,
+                                         @ByVal GpuMat transition_probabilities_table,
+                                         @ByVal GpuMat emission_probabilities_table);
 }
 
 /** \brief Allow to implicitly load the default character classifier when creating an OCRBeamSearchDecoder object.

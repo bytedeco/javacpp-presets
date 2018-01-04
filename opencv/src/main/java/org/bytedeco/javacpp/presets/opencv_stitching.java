@@ -38,8 +38,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
         "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
         "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
-              link = "opencv_stitching@.3.3", preload = "opencv_cuda@.3.3"),
-    @Platform(value = "windows", link = "opencv_stitching331", preload = "opencv_cuda331")},
+              link = "opencv_stitching@.3.3", preload = {"opencv_cuda@.3.3", "opencv_cudaarithm@.3.3", "opencv_cudafilters@.3.3",
+              "opencv_cudaimgproc@.3.3", "opencv_cudafeatures2d@.3.3", "opencv_cudalegacy@.3.3", "opencv_cudawarping@.3.3"}),
+    @Platform(value = "windows", link = "opencv_stitching331", preload = {"opencv_cuda331", "opencv_cudaarithm331", "opencv_cudafilters331",
+              "opencv_cudaimgproc331", "opencv_cudafeatures2d331", "opencv_cudalegacy331", "opencv_cudawarping331"})},
         target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -65,3 +67,4 @@ public class opencv_stitching implements InfoMapper {
                .put(new Info("cv::detail::GraphCutSeamFinderGpu").pointerTypes("GraphCutSeamFinderGpu"));
     }
 }
+

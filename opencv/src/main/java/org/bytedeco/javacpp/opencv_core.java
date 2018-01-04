@@ -17,6 +17,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate();
     public native @Name("operator=") @ByRef IntDoubleMap put(@ByRef IntDoubleMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native double get(int i);
@@ -46,9 +47,13 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef ByteVectorVector put(@ByRef ByteVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
+    public boolean empty(@Cast("size_t") long i) { return size(i) == 0; }
     public native @Index long size(@Cast("size_t") long i);
+    public void clear(@Cast("size_t") long i) { resize(i, 0); }
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
     @Index public native @Cast("char") byte get(@Cast("size_t") long i, @Cast("size_t") long j);
@@ -77,9 +82,13 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef IntVectorVector put(@ByRef IntVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
+    public boolean empty(@Cast("size_t") long i) { return size(i) == 0; }
     public native @Index long size(@Cast("size_t") long i);
+    public void clear(@Cast("size_t") long i) { resize(i, 0); }
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
     @Index public native int get(@Cast("size_t") long i, @Cast("size_t") long j);
@@ -101,7 +110,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
+    public StringVector(BytePointer value) { this(1); put(0, value); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String value) { this(1); put(0, value); }
     public StringVector(String ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
@@ -109,7 +120,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @Str BytePointer get(@Cast("size_t") long i);
@@ -127,6 +140,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @Str BytePointer get();
     }
 
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public StringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -135,6 +163,15 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         return this;
     }
 
+    public StringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public StringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -148,6 +185,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVector(Pointer p) { super(p); }
+    public PointVector(Point value) { this(1); put(0, value); }
     public PointVector(Point ... array) { this(array.length); put(array); }
     public PointVector()       { allocate();  }
     public PointVector(long n) { allocate(n); }
@@ -155,7 +193,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef PointVector put(@ByRef PointVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Point get(@Cast("size_t") long i);
@@ -172,6 +212,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point get();
     }
 
+    public Point pop_back() {
+        long size = size();
+        Point value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public PointVector push_back(Point value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public PointVector put(Point value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public PointVector put(Point ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -185,6 +240,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVector(Pointer p) { super(p); }
+    public Point2fVector(Point2f value) { this(1); put(0, value); }
     public Point2fVector(Point2f ... array) { this(array.length); put(array); }
     public Point2fVector()       { allocate();  }
     public Point2fVector(long n) { allocate(n); }
@@ -192,7 +248,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef Point2fVector put(@ByRef Point2fVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Point2f get(@Cast("size_t") long i);
@@ -209,6 +267,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2f get();
     }
 
+    public Point2f pop_back() {
+        long size = size();
+        Point2f value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2fVector push_back(Point2f value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Point2fVector put(Point2f value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public Point2fVector put(Point2f ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -222,6 +295,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVector(Pointer p) { super(p); }
+    public Point2dVector(Point2d value) { this(1); put(0, value); }
     public Point2dVector(Point2d ... array) { this(array.length); put(array); }
     public Point2dVector()       { allocate();  }
     public Point2dVector(long n) { allocate(n); }
@@ -229,7 +303,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef Point2dVector put(@ByRef Point2dVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Point2d get(@Cast("size_t") long i);
@@ -246,6 +322,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2d get();
     }
 
+    public Point2d pop_back() {
+        long size = size();
+        Point2d value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2dVector push_back(Point2d value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Point2dVector put(Point2d value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public Point2dVector put(Point2d ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -259,6 +350,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SizeVector(Pointer p) { super(p); }
+    public SizeVector(Size value) { this(1); put(0, value); }
     public SizeVector(Size ... array) { this(array.length); put(array); }
     public SizeVector()       { allocate();  }
     public SizeVector(long n) { allocate(n); }
@@ -266,7 +358,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef SizeVector put(@ByRef SizeVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Size get(@Cast("size_t") long i);
@@ -283,6 +377,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Size get();
     }
 
+    public Size pop_back() {
+        long size = size();
+        Size value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public SizeVector push_back(Size value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public SizeVector put(Size value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public SizeVector put(Size ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -296,6 +405,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVector(Pointer p) { super(p); }
+    public RectVector(Rect value) { this(1); put(0, value); }
     public RectVector(Rect ... array) { this(array.length); put(array); }
     public RectVector()       { allocate();  }
     public RectVector(long n) { allocate(n); }
@@ -303,7 +413,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef RectVector put(@ByRef RectVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Rect get(@Cast("size_t") long i);
@@ -320,6 +432,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Rect get();
     }
 
+    public Rect pop_back() {
+        long size = size();
+        Rect value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public RectVector push_back(Rect value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public RectVector put(Rect value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public RectVector put(Rect ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -333,6 +460,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointVector(Pointer p) { super(p); }
+    public KeyPointVector(KeyPoint value) { this(1); put(0, value); }
     public KeyPointVector(KeyPoint ... array) { this(array.length); put(array); }
     public KeyPointVector()       { allocate();  }
     public KeyPointVector(long n) { allocate(n); }
@@ -340,7 +468,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef KeyPointVector put(@ByRef KeyPointVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef KeyPoint get(@Cast("size_t") long i);
@@ -357,6 +487,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef KeyPoint get();
     }
 
+    public KeyPoint pop_back() {
+        long size = size();
+        KeyPoint value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public KeyPointVector push_back(KeyPoint value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public KeyPointVector put(KeyPoint value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public KeyPointVector put(KeyPoint ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -370,6 +515,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatchVector(Pointer p) { super(p); }
+    public DMatchVector(DMatch value) { this(1); put(0, value); }
     public DMatchVector(DMatch ... array) { this(array.length); put(array); }
     public DMatchVector()       { allocate();  }
     public DMatchVector(long n) { allocate(n); }
@@ -377,7 +523,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DMatchVector put(@ByRef DMatchVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef DMatch get(@Cast("size_t") long i);
@@ -394,6 +542,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef DMatch get();
     }
 
+    public DMatch pop_back() {
+        long size = size();
+        DMatch value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DMatchVector push_back(DMatch value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public DMatchVector put(DMatch value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public DMatchVector put(DMatch ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -407,6 +570,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVectorVector(Pointer p) { super(p); }
+    public PointVectorVector(PointVector value) { this(1); put(0, value); }
     public PointVectorVector(PointVector ... array) { this(array.length); put(array); }
     public PointVectorVector()       { allocate();  }
     public PointVectorVector(long n) { allocate(n); }
@@ -414,7 +578,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef PointVectorVector put(@ByRef PointVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef PointVector get(@Cast("size_t") long i);
@@ -431,6 +597,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef PointVector get();
     }
 
+    public PointVector pop_back() {
+        long size = size();
+        PointVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public PointVectorVector push_back(PointVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public PointVectorVector put(PointVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public PointVectorVector put(PointVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -444,6 +625,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVectorVector(Pointer p) { super(p); }
+    public Point2fVectorVector(Point2fVector value) { this(1); put(0, value); }
     public Point2fVectorVector(Point2fVector ... array) { this(array.length); put(array); }
     public Point2fVectorVector()       { allocate();  }
     public Point2fVectorVector(long n) { allocate(n); }
@@ -451,7 +633,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef Point2fVectorVector put(@ByRef Point2fVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Point2fVector get(@Cast("size_t") long i);
@@ -468,6 +652,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2fVector get();
     }
 
+    public Point2fVector pop_back() {
+        long size = size();
+        Point2fVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2fVectorVector push_back(Point2fVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Point2fVectorVector put(Point2fVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public Point2fVectorVector put(Point2fVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -481,6 +680,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVectorVector(Pointer p) { super(p); }
+    public Point2dVectorVector(Point2dVector value) { this(1); put(0, value); }
     public Point2dVectorVector(Point2dVector ... array) { this(array.length); put(array); }
     public Point2dVectorVector()       { allocate();  }
     public Point2dVectorVector(long n) { allocate(n); }
@@ -488,7 +688,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef Point2dVectorVector put(@ByRef Point2dVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Point2dVector get(@Cast("size_t") long i);
@@ -505,6 +707,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Point2dVector get();
     }
 
+    public Point2dVector pop_back() {
+        long size = size();
+        Point2dVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point2dVectorVector push_back(Point2dVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Point2dVectorVector put(Point2dVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public Point2dVectorVector put(Point2dVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -518,6 +735,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVectorVector(Pointer p) { super(p); }
+    public RectVectorVector(RectVector value) { this(1); put(0, value); }
     public RectVectorVector(RectVector ... array) { this(array.length); put(array); }
     public RectVectorVector()       { allocate();  }
     public RectVectorVector(long n) { allocate(n); }
@@ -525,7 +743,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef RectVectorVector put(@ByRef RectVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef RectVector get(@Cast("size_t") long i);
@@ -542,6 +762,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef RectVector get();
     }
 
+    public RectVector pop_back() {
+        long size = size();
+        RectVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public RectVectorVector push_back(RectVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public RectVectorVector put(RectVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public RectVectorVector put(RectVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -555,6 +790,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointVectorVector(Pointer p) { super(p); }
+    public KeyPointVectorVector(KeyPointVector value) { this(1); put(0, value); }
     public KeyPointVectorVector(KeyPointVector ... array) { this(array.length); put(array); }
     public KeyPointVectorVector()       { allocate();  }
     public KeyPointVectorVector(long n) { allocate(n); }
@@ -562,7 +798,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef KeyPointVectorVector put(@ByRef KeyPointVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef KeyPointVector get(@Cast("size_t") long i);
@@ -579,6 +817,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef KeyPointVector get();
     }
 
+    public KeyPointVector pop_back() {
+        long size = size();
+        KeyPointVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public KeyPointVectorVector push_back(KeyPointVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public KeyPointVectorVector put(KeyPointVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public KeyPointVectorVector put(KeyPointVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -592,6 +845,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatchVectorVector(Pointer p) { super(p); }
+    public DMatchVectorVector(DMatchVector value) { this(1); put(0, value); }
     public DMatchVectorVector(DMatchVector ... array) { this(array.length); put(array); }
     public DMatchVectorVector()       { allocate();  }
     public DMatchVectorVector(long n) { allocate(n); }
@@ -599,7 +853,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef DMatchVectorVector put(@ByRef DMatchVectorVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef DMatchVector get(@Cast("size_t") long i);
@@ -616,6 +872,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef DMatchVector get();
     }
 
+    public DMatchVector pop_back() {
+        long size = size();
+        DMatchVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DMatchVectorVector push_back(DMatchVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public DMatchVectorVector put(DMatchVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public DMatchVectorVector put(DMatchVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -629,6 +900,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatVector(Pointer p) { super(p); }
+    public MatVector(Mat value) { this(1); put(0, value); }
     public MatVector(Mat ... array) { this(array.length); put(array); }
     public MatVector()       { allocate();  }
     public MatVector(long n) { allocate(n); }
@@ -636,7 +908,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatVector put(@ByRef MatVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Mat get(@Cast("size_t") long i);
@@ -653,6 +927,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef Mat get();
     }
 
+    public Mat pop_back() {
+        long size = size();
+        Mat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatVector push_back(Mat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public MatVector put(Mat value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public MatVector put(Mat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -666,6 +955,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMatVector(Pointer p) { super(p); }
+    public UMatVector(UMat value) { this(1); put(0, value); }
     public UMatVector(UMat ... array) { this(array.length); put(array); }
     public UMatVector()       { allocate();  }
     public UMatVector(long n) { allocate(n); }
@@ -673,7 +963,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef UMatVector put(@ByRef UMatVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef UMat get(@Cast("size_t") long i);
@@ -690,7 +982,77 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") @ByRef UMat get();
     }
 
+    public UMat pop_back() {
+        long size = size();
+        UMat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public UMatVector push_back(UMat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public UMatVector put(UMat value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public UMatVector put(UMat ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::cuda::GpuMat>") public static class GpuMatVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GpuMatVector(Pointer p) { super(p); }
+    public GpuMatVector(GpuMat value) { this(1); put(0, value); }
+    public GpuMatVector(GpuMat ... array) { this(array.length); put(array); }
+    public GpuMatVector()       { allocate();  }
+    public GpuMatVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef GpuMatVector put(@ByRef GpuMatVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef GpuMat get(@Cast("size_t") long i);
+    public native GpuMatVector put(@Cast("size_t") long i, GpuMat value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef GpuMat get();
+    }
+
+    public GpuMat pop_back() {
+        long size = size();
+        GpuMat value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public GpuMatVector push_back(GpuMat value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public GpuMatVector put(GpuMat value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public GpuMatVector put(GpuMat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -710,7 +1072,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef IntDoublePairVector put(@ByRef IntDoublePairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native int first(@Cast("size_t") long i); public native IntDoublePairVector first(@Cast("size_t") long i, int first);
@@ -736,7 +1100,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef IntIntPairVector put(@ByRef IntIntPairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native int first(@Cast("size_t") long i); public native IntIntPairVector first(@Cast("size_t") long i, int first);
@@ -762,7 +1128,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef MatBytePairVector put(@ByRef MatBytePairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Mat first(@Cast("size_t") long i); public native MatBytePairVector first(@Cast("size_t") long i, Mat first);
@@ -788,7 +1156,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef UMatBytePairVector put(@ByRef UMatBytePairVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef UMat first(@Cast("size_t") long i); public native UMatBytePairVector first(@Cast("size_t") long i, UMat first);
@@ -807,6 +1177,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeDataTlsVector(Pointer p) { super(p); }
+    public NodeDataTlsVector(NodeDataTls value) { this(1); put(0, value); }
     public NodeDataTlsVector(NodeDataTls ... array) { this(array.length); put(array); }
     public NodeDataTlsVector()       { allocate();  }
     public NodeDataTlsVector(long n) { allocate(n); }
@@ -814,7 +1185,9 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     private native void allocate(@Cast("size_t") long n);
     public native @Name("operator=") @ByRef NodeDataTlsVector put(@ByRef NodeDataTlsVector x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
+    public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
     @Index public native NodeDataTls get(@Cast("size_t") long i);
@@ -831,6 +1204,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         public native @Name("operator*") NodeDataTls get();
     }
 
+    public NodeDataTls pop_back() {
+        long size = size();
+        NodeDataTls value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public NodeDataTlsVector push_back(NodeDataTls value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public NodeDataTlsVector put(NodeDataTls value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public NodeDataTlsVector put(NodeDataTls ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -1099,7 +1487,6 @@ public static final int CV_HAL_GEMM_3_T = 4;
 
 
 // #ifdef __OPENCV_BUILD
-// #include "cvconfig.h"
 // #endif
 
 // #ifndef __CV_EXPAND
@@ -1299,7 +1686,6 @@ public static class Cv64suf extends Pointer {
 public static final int OPENCV_ABI_COMPATIBILITY = 300;
 
 // #ifdef __OPENCV_BUILD
-// #  define DISABLE_OPENCV_24_COMPATIBILITY
 // #endif
 
 // #if (defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined CVAPI_EXPORTS
@@ -2985,24 +3371,6 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
         public Arrays(Pointer p) { super(p); }
     }
 
-    @Namespace("cv::cuda") @Opaque public static class HostMem extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public HostMem() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public HostMem(Pointer p) { super(p); }
-    }
-    @Namespace("cv::cuda") @Opaque public static class Stream extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public Stream() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Stream(Pointer p) { super(p); }
-    }
-    @Namespace("cv::cuda") @Opaque public static class Event extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public Event() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Event(Pointer p) { super(p); }
-    }
 
 
 // #if OPENCV_ABI_COMPATIBILITY > 300
@@ -9783,11 +10151,15 @@ public static final String cvFuncName = "";
 @Namespace("cv") public static native void extractImageCOI(@Const CvArr arr, @ByVal Mat coiimg);
 @Namespace("cv") public static native void extractImageCOI(@Const CvArr arr, @ByVal UMat coiimg, int coi/*=-1*/);
 @Namespace("cv") public static native void extractImageCOI(@Const CvArr arr, @ByVal UMat coiimg);
+@Namespace("cv") public static native void extractImageCOI(@Const CvArr arr, @ByVal GpuMat coiimg, int coi/*=-1*/);
+@Namespace("cv") public static native void extractImageCOI(@Const CvArr arr, @ByVal GpuMat coiimg);
 /** inserts single-channel cv::Mat into a multi-channel CvMat or IplImage */
 @Namespace("cv") public static native void insertImageCOI(@ByVal Mat coiimg, CvArr arr, int coi/*=-1*/);
 @Namespace("cv") public static native void insertImageCOI(@ByVal Mat coiimg, CvArr arr);
 @Namespace("cv") public static native void insertImageCOI(@ByVal UMat coiimg, CvArr arr, int coi/*=-1*/);
 @Namespace("cv") public static native void insertImageCOI(@ByVal UMat coiimg, CvArr arr);
+@Namespace("cv") public static native void insertImageCOI(@ByVal GpuMat coiimg, CvArr arr, int coi/*=-1*/);
+@Namespace("cv") public static native void insertImageCOI(@ByVal GpuMat coiimg, CvArr arr);
 
 
 
@@ -11727,6 +12099,12 @@ to be built.
 @Namespace("cv") public static native void copyMakeBorder(@ByVal UMat src, @ByVal UMat dst,
                                  int top, int bottom, int left, int right,
                                  int borderType );
+@Namespace("cv") public static native void copyMakeBorder(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                 int top, int bottom, int left, int right,
+                                 int borderType, @Const @ByRef(nullValue = "cv::Scalar()") Scalar value );
+@Namespace("cv") public static native void copyMakeBorder(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                 int top, int bottom, int left, int right,
+                                 int borderType );
 
 /** \brief Calculates the per-element sum of two arrays or an array and a scalar.
 <p>
@@ -11770,6 +12148,9 @@ output array to be changed.
 @Namespace("cv") public static native void add(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst,
                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask, int dtype/*=-1*/);
 @Namespace("cv") public static native void add(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void add(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst,
+                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask, int dtype/*=-1*/);
+@Namespace("cv") public static native void add(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 
 /** \brief Calculates the per-element difference between two arrays or array and a scalar.
 <p>
@@ -11814,6 +12195,9 @@ of the output array to be changed.
 @Namespace("cv") public static native void subtract(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst,
                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask, int dtype/*=-1*/);
 @Namespace("cv") public static native void subtract(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void subtract(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst,
+                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask, int dtype/*=-1*/);
+@Namespace("cv") public static native void subtract(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 
 
 /** \brief Calculates the per-element scaled product of two arrays.
@@ -11845,6 +12229,10 @@ Mat::convertTo
                            @ByVal UMat dst, double scale/*=1*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void multiply(@ByVal UMat src1, @ByVal UMat src2,
                            @ByVal UMat dst);
+@Namespace("cv") public static native void multiply(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                           @ByVal GpuMat dst, double scale/*=1*/, int dtype/*=-1*/);
+@Namespace("cv") public static native void multiply(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                           @ByVal GpuMat dst);
 
 /** \brief Performs per-element division of two arrays or a scalar by an array.
 <p>
@@ -11872,6 +12260,9 @@ case of an array-by-array division, you can only pass -1 when src1.depth()==src2
 @Namespace("cv") public static native void divide(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst,
                          double scale/*=1*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void divide(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void divide(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst,
+                         double scale/*=1*/, int dtype/*=-1*/);
+@Namespace("cv") public static native void divide(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 
 /** \overload */
 @Namespace("cv") public static native void divide(double scale, @ByVal Mat src2,
@@ -11882,6 +12273,10 @@ case of an array-by-array division, you can only pass -1 when src1.depth()==src2
                          @ByVal UMat dst, int dtype/*=-1*/);
 @Namespace("cv") public static native void divide(double scale, @ByVal UMat src2,
                          @ByVal UMat dst);
+@Namespace("cv") public static native void divide(double scale, @ByVal GpuMat src2,
+                         @ByVal GpuMat dst, int dtype/*=-1*/);
+@Namespace("cv") public static native void divide(double scale, @ByVal GpuMat src2,
+                         @ByVal GpuMat dst);
 
 /** \brief Calculates the sum of a scaled array and another array.
 <p>
@@ -11903,6 +12298,7 @@ The function can also be emulated with a matrix expression, for example:
 */
 @Namespace("cv") public static native void scaleAdd(@ByVal Mat src1, double alpha, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void scaleAdd(@ByVal UMat src1, double alpha, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void scaleAdd(@ByVal GpuMat src1, double alpha, @ByVal GpuMat src2, @ByVal GpuMat dst);
 
 /** \example AddingImagesTrackbar.cpp
  <p>
@@ -11937,6 +12333,10 @@ can be set to -1, which will be equivalent to src1.depth().
                               double beta, double gamma, @ByVal UMat dst, int dtype/*=-1*/);
 @Namespace("cv") public static native void addWeighted(@ByVal UMat src1, double alpha, @ByVal UMat src2,
                               double beta, double gamma, @ByVal UMat dst);
+@Namespace("cv") public static native void addWeighted(@ByVal GpuMat src1, double alpha, @ByVal GpuMat src2,
+                              double beta, double gamma, @ByVal GpuMat dst, int dtype/*=-1*/);
+@Namespace("cv") public static native void addWeighted(@ByVal GpuMat src1, double alpha, @ByVal GpuMat src2,
+                              double beta, double gamma, @ByVal GpuMat dst);
 
 /** \brief Scales, calculates absolute values, and converts the result to 8-bit.
 <p>
@@ -11969,6 +12369,9 @@ For example:
 @Namespace("cv") public static native void convertScaleAbs(@ByVal UMat src, @ByVal UMat dst,
                                   double alpha/*=1*/, double beta/*=0*/);
 @Namespace("cv") public static native void convertScaleAbs(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void convertScaleAbs(@ByVal GpuMat src, @ByVal GpuMat dst,
+                                  double alpha/*=1*/, double beta/*=0*/);
+@Namespace("cv") public static native void convertScaleAbs(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Converts an array to half precision floating number.
 <p>
@@ -11981,6 +12384,7 @@ The format of half precision floating point is defined in IEEE 754-2008.
 */
 @Namespace("cv") public static native void convertFp16(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void convertFp16(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void convertFp16(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Performs a look-up table transform of an array.
 <p>
@@ -11998,6 +12402,7 @@ number of channels as in the input array.
 */
 @Namespace("cv") public static native void LUT(@ByVal Mat src, @ByVal Mat lut, @ByVal Mat dst);
 @Namespace("cv") public static native void LUT(@ByVal UMat src, @ByVal UMat lut, @ByVal UMat dst);
+@Namespace("cv") public static native void LUT(@ByVal GpuMat src, @ByVal GpuMat lut, @ByVal GpuMat dst);
 
 /** \brief Calculates the sum of array elements.
 <p>
@@ -12008,6 +12413,7 @@ independently for each channel.
 */
 @Namespace("cv") public static native @ByVal @Name("sum") Scalar sumElems(@ByVal Mat src);
 @Namespace("cv") public static native @ByVal @Name("sum") Scalar sumElems(@ByVal UMat src);
+@Namespace("cv") public static native @ByVal @Name("sum") Scalar sumElems(@ByVal GpuMat src);
 
 /** \brief Counts non-zero array elements.
 <p>
@@ -12018,6 +12424,7 @@ The function returns the number of non-zero elements in src :
 */
 @Namespace("cv") public static native int countNonZero( @ByVal Mat src );
 @Namespace("cv") public static native int countNonZero( @ByVal UMat src );
+@Namespace("cv") public static native int countNonZero( @ByVal GpuMat src );
 
 /** \brief Returns the list of locations of non-zero pixels
 <p>
@@ -12047,6 +12454,7 @@ or
 */
 @Namespace("cv") public static native void findNonZero( @ByVal Mat src, @ByVal Mat idx );
 @Namespace("cv") public static native void findNonZero( @ByVal UMat src, @ByVal UMat idx );
+@Namespace("cv") public static native void findNonZero( @ByVal GpuMat src, @ByVal GpuMat idx );
 
 /** \brief Calculates an average (mean) of array elements.
 <p>
@@ -12063,6 +12471,8 @@ Scalar_ .
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src);
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal UMat src, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal UMat src);
+@Namespace("cv") public static native @ByVal Scalar mean(@ByVal GpuMat src, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native @ByVal Scalar mean(@ByVal GpuMat src);
 
 /** Calculates a mean and standard deviation of array elements.
 <p>
@@ -12090,6 +12500,9 @@ Scalar_ 's.
 @Namespace("cv") public static native void meanStdDev(@ByVal UMat src, @ByVal UMat mean, @ByVal UMat stddev,
                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void meanStdDev(@ByVal UMat src, @ByVal UMat mean, @ByVal UMat stddev);
+@Namespace("cv") public static native void meanStdDev(@ByVal GpuMat src, @ByVal GpuMat mean, @ByVal GpuMat stddev,
+                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void meanStdDev(@ByVal GpuMat src, @ByVal GpuMat mean, @ByVal GpuMat stddev);
 
 /** \brief Calculates the  absolute norm of an array.
 <p>
@@ -12131,6 +12544,8 @@ Hamming norms can only be calculated with CV_8U depth arrays.
 @Namespace("cv") public static native double norm(@ByVal Mat src1);
 @Namespace("cv") public static native double norm(@ByVal UMat src1, int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native double norm(@ByVal UMat src1);
+@Namespace("cv") public static native double norm(@ByVal GpuMat src1, int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native double norm(@ByVal GpuMat src1);
 
 /** \brief Calculates an absolute difference norm or a relative difference norm.
 <p>
@@ -12149,6 +12564,9 @@ The type of norm to calculate is specified using cv::NormTypes.
 @Namespace("cv") public static native double norm(@ByVal UMat src1, @ByVal UMat src2,
                          int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native double norm(@ByVal UMat src1, @ByVal UMat src2);
+@Namespace("cv") public static native double norm(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                         int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native double norm(@ByVal GpuMat src1, @ByVal GpuMat src2);
 /** \overload
 @param src first input array.
 @param normType type of the norm (see cv::NormTypes).
@@ -12173,6 +12591,7 @@ where R is the maximum integer value of depth CV_8U (255) and MSE is the mean sq
   */
 @Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2);
 @Namespace("cv") public static native double PSNR(@ByVal UMat src1, @ByVal UMat src2);
+@Namespace("cv") public static native double PSNR(@ByVal GpuMat src1, @ByVal GpuMat src2);
 
 /** \brief naive nearest neighbor finder
 <p>
@@ -12193,6 +12612,13 @@ see http://en.wikipedia.org/wiki/Nearest_neighbor_search
                                 @Cast("bool") boolean crosscheck/*=false*/);
 @Namespace("cv") public static native void batchDistance(@ByVal UMat src1, @ByVal UMat src2,
                                 @ByVal UMat dist, int dtype, @ByVal UMat nidx);
+@Namespace("cv") public static native void batchDistance(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                                @ByVal GpuMat dist, int dtype, @ByVal GpuMat nidx,
+                                int normType/*=cv::NORM_L2*/, int K/*=0*/,
+                                @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask, int update/*=0*/,
+                                @Cast("bool") boolean crosscheck/*=false*/);
+@Namespace("cv") public static native void batchDistance(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                                @ByVal GpuMat dist, int dtype, @ByVal GpuMat nidx);
 
 /** \brief Normalizes the norm or value range of an array.
 <p>
@@ -12258,6 +12684,9 @@ number of channels as src and the depth =CV_MAT_DEPTH(dtype).
 @Namespace("cv") public static native void normalize( @ByVal UMat src, @ByVal UMat dst, double alpha/*=1*/, double beta/*=0*/,
                              int norm_type/*=cv::NORM_L2*/, int dtype/*=-1*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void normalize( @ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void normalize( @ByVal GpuMat src, @ByVal GpuMat dst, double alpha/*=1*/, double beta/*=0*/,
+                             int norm_type/*=cv::NORM_L2*/, int dtype/*=-1*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void normalize( @ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \overload
 @param src input array.
@@ -12294,14 +12723,34 @@ mixChannels , or split .
                             DoubleBuffer maxVal/*=0*/, Point minLoc/*=0*/,
                             Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoubleBuffer minVal);
-@Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, double[] minVal,
+@Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, double[] minVal,
                             double[] maxVal/*=0*/, Point minLoc/*=0*/,
-                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
-@Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, double[] minVal);
+                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
+@Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, double[] minVal);
 @Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, DoublePointer minVal,
                             DoublePointer maxVal/*=0*/, Point minLoc/*=0*/,
                             Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, DoublePointer minVal);
+@Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, DoubleBuffer minVal,
+                            DoubleBuffer maxVal/*=0*/, Point minLoc/*=0*/,
+                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
+@Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, DoubleBuffer minVal);
+@Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, double[] minVal,
+                            double[] maxVal/*=0*/, Point minLoc/*=0*/,
+                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
+@Namespace("cv") public static native void minMaxLoc(@ByVal UMat src, double[] minVal);
+@Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, DoublePointer minVal,
+                            DoublePointer maxVal/*=0*/, Point minLoc/*=0*/,
+                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, DoublePointer minVal);
+@Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, DoubleBuffer minVal,
+                            DoubleBuffer maxVal/*=0*/, Point minLoc/*=0*/,
+                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, DoubleBuffer minVal);
+@Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, double[] minVal,
+                            double[] maxVal/*=0*/, Point minLoc/*=0*/,
+                            Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, double[] minVal);
 
 
 /** \brief Finds the global minimum and maximum in an array
@@ -12333,12 +12782,27 @@ in each dimension are stored there sequentially.
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, DoubleBuffer minVal, DoubleBuffer maxVal/*=0*/,
                           IntBuffer minIdx/*=0*/, IntBuffer maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, DoubleBuffer minVal);
-@Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, double[] minVal, double[] maxVal/*=0*/,
-                          int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
-@Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, double[] minVal);
+@Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, double[] minVal, double[] maxVal/*=0*/,
+                          int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
+@Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, double[] minVal);
 @Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, DoublePointer minVal, DoublePointer maxVal/*=0*/,
                           IntPointer minIdx/*=0*/, IntPointer maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, DoublePointer minVal);
+@Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, DoubleBuffer minVal, DoubleBuffer maxVal/*=0*/,
+                          IntBuffer minIdx/*=0*/, IntBuffer maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
+@Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, DoubleBuffer minVal);
+@Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, double[] minVal, double[] maxVal/*=0*/,
+                          int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
+@Namespace("cv") public static native void minMaxIdx(@ByVal UMat src, double[] minVal);
+@Namespace("cv") public static native void minMaxIdx(@ByVal GpuMat src, DoublePointer minVal, DoublePointer maxVal/*=0*/,
+                          IntPointer minIdx/*=0*/, IntPointer maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void minMaxIdx(@ByVal GpuMat src, DoublePointer minVal);
+@Namespace("cv") public static native void minMaxIdx(@ByVal GpuMat src, DoubleBuffer minVal, DoubleBuffer maxVal/*=0*/,
+                          IntBuffer minIdx/*=0*/, IntBuffer maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void minMaxIdx(@ByVal GpuMat src, DoubleBuffer minVal);
+@Namespace("cv") public static native void minMaxIdx(@ByVal GpuMat src, double[] minVal, double[] maxVal/*=0*/,
+                          int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void minMaxIdx(@ByVal GpuMat src, double[] minVal);
 
 /** \overload
 @param a input single-channel array.
@@ -12390,6 +12854,8 @@ otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype);
 @Namespace("cv") public static native void reduce(@ByVal UMat src, @ByVal UMat dst, int dim, int rtype, int dtype/*=-1*/);
 @Namespace("cv") public static native void reduce(@ByVal UMat src, @ByVal UMat dst, int dim, int rtype);
+@Namespace("cv") public static native void reduce(@ByVal GpuMat src, @ByVal GpuMat dst, int dim, int rtype, int dtype/*=-1*/);
+@Namespace("cv") public static native void reduce(@ByVal GpuMat src, @ByVal GpuMat dst, int dim, int rtype);
 
 /** \brief Creates one multi-channel array out of several single-channel ones.
 <p>
@@ -12412,6 +12878,7 @@ be equal to the parameter count.
 */
 @Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal Mat dst);
 @Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal UMat dst);
+@Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal GpuMat dst);
 
 /** \overload
 @param mv input vector of matrices to be merged; all the matrices in mv must have the same
@@ -12421,8 +12888,13 @@ be the total number of channels in the matrix array.
   */
 @Namespace("cv") public static native void merge(@ByVal MatVector mv, @ByVal Mat dst);
 @Namespace("cv") public static native void merge(@ByVal UMatVector mv, @ByVal Mat dst);
+@Namespace("cv") public static native void merge(@ByVal GpuMatVector mv, @ByVal Mat dst);
 @Namespace("cv") public static native void merge(@ByVal MatVector mv, @ByVal UMat dst);
 @Namespace("cv") public static native void merge(@ByVal UMatVector mv, @ByVal UMat dst);
+@Namespace("cv") public static native void merge(@ByVal GpuMatVector mv, @ByVal UMat dst);
+@Namespace("cv") public static native void merge(@ByVal MatVector mv, @ByVal GpuMat dst);
+@Namespace("cv") public static native void merge(@ByVal UMatVector mv, @ByVal GpuMat dst);
+@Namespace("cv") public static native void merge(@ByVal GpuMatVector mv, @ByVal GpuMat dst);
 
 /** \brief Divides a multi-channel array into several single-channel arrays.
 <p>
@@ -12447,8 +12919,13 @@ reallocated, if needed.
 */
 @Namespace("cv") public static native void split(@ByVal Mat m, @ByVal MatVector mv);
 @Namespace("cv") public static native void split(@ByVal Mat m, @ByVal UMatVector mv);
+@Namespace("cv") public static native void split(@ByVal Mat m, @ByVal GpuMatVector mv);
 @Namespace("cv") public static native void split(@ByVal UMat m, @ByVal MatVector mv);
 @Namespace("cv") public static native void split(@ByVal UMat m, @ByVal UMatVector mv);
+@Namespace("cv") public static native void split(@ByVal UMat m, @ByVal GpuMatVector mv);
+@Namespace("cv") public static native void split(@ByVal GpuMat m, @ByVal MatVector mv);
+@Namespace("cv") public static native void split(@ByVal GpuMat m, @ByVal UMatVector mv);
+@Namespace("cv") public static native void split(@ByVal GpuMat m, @ByVal GpuMatVector mv);
 
 /** \brief Copies specified channels from input arrays to the specified channels of
 output arrays.
@@ -12516,13 +12993,7 @@ filled with zero .
                             @Const IntPointer fromTo, @Cast("size_t") long npairs);
 @Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
                             @Const IntBuffer fromTo, @Cast("size_t") long npairs);
-@Namespace("cv") public static native void mixChannels(@ByVal MatVector src, @ByVal MatVector dst,
-                            @Const int[] fromTo, @Cast("size_t") long npairs);
-@Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
-                            @Const IntPointer fromTo, @Cast("size_t") long npairs);
-@Namespace("cv") public static native void mixChannels(@ByVal MatVector src, @ByVal MatVector dst,
-                            @Const IntBuffer fromTo, @Cast("size_t") long npairs);
-@Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
+@Namespace("cv") public static native void mixChannels(@ByVal GpuMatVector src, @ByVal GpuMatVector dst,
                             @Const int[] fromTo, @Cast("size_t") long npairs);
 
 /** \overload
@@ -12542,13 +13013,7 @@ filled with zero .
                               @StdVector IntPointer fromTo);
 @Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
                               @StdVector IntBuffer fromTo);
-@Namespace("cv") public static native void mixChannels(@ByVal MatVector src, @ByVal MatVector dst,
-                              @StdVector int[] fromTo);
-@Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
-                              @StdVector IntPointer fromTo);
-@Namespace("cv") public static native void mixChannels(@ByVal MatVector src, @ByVal MatVector dst,
-                              @StdVector IntBuffer fromTo);
-@Namespace("cv") public static native void mixChannels(@ByVal UMatVector src, @ByVal UMatVector dst,
+@Namespace("cv") public static native void mixChannels(@ByVal GpuMatVector src, @ByVal GpuMatVector dst,
                               @StdVector int[] fromTo);
 
 /** \brief Extracts a single channel from src (coi is 0-based index)
@@ -12559,6 +13024,7 @@ filled with zero .
 */
 @Namespace("cv") public static native void extractChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 @Namespace("cv") public static native void extractChannel(@ByVal UMat src, @ByVal UMat dst, int coi);
+@Namespace("cv") public static native void extractChannel(@ByVal GpuMat src, @ByVal GpuMat dst, int coi);
 
 /** \brief Inserts a single channel to dst (coi is 0-based index)
 @param src input array
@@ -12568,6 +13034,7 @@ filled with zero .
 */
 @Namespace("cv") public static native void insertChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 @Namespace("cv") public static native void insertChannel(@ByVal UMat src, @ByVal UMat dst, int coi);
+@Namespace("cv") public static native void insertChannel(@ByVal GpuMat src, @ByVal GpuMat dst, int coi);
 
 /** \brief Flips a 2D array around vertical, horizontal, or both axes.
 <p>
@@ -12603,6 +13070,7 @@ around both axes.
 */
 @Namespace("cv") public static native void flip(@ByVal Mat src, @ByVal Mat dst, int flipCode);
 @Namespace("cv") public static native void flip(@ByVal UMat src, @ByVal UMat dst, int flipCode);
+@Namespace("cv") public static native void flip(@ByVal GpuMat src, @ByVal GpuMat dst, int flipCode);
 
 /** enum cv::RotateFlags */
 public static final int
@@ -12622,6 +13090,7 @@ and the rows and cols are switched for ROTATE_90 and ROTATE_270.
 */
 @Namespace("cv") public static native void rotate(@ByVal Mat src, @ByVal Mat dst, int rotateCode);
 @Namespace("cv") public static native void rotate(@ByVal UMat src, @ByVal UMat dst, int rotateCode);
+@Namespace("cv") public static native void rotate(@ByVal GpuMat src, @ByVal GpuMat dst, int rotateCode);
 
 /** \brief Fills the output array with repeated copies of the input array.
 <p>
@@ -12638,6 +13107,7 @@ horizontal axis.
 */
 @Namespace("cv") public static native void repeat(@ByVal Mat src, int ny, int nx, @ByVal Mat dst);
 @Namespace("cv") public static native void repeat(@ByVal UMat src, int ny, int nx, @ByVal UMat dst);
+@Namespace("cv") public static native void repeat(@ByVal GpuMat src, int ny, int nx, @ByVal GpuMat dst);
 
 /** \overload
 @param src input array to replicate.
@@ -12671,6 +13141,7 @@ The function horizontally concatenates two or more cv::Mat matrices (with the sa
 */
 @Namespace("cv") public static native void hconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal Mat dst);
 @Namespace("cv") public static native void hconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal UMat dst);
+@Namespace("cv") public static native void hconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal GpuMat dst);
 /** \overload
  <pre>{@code {.cpp}
     cv::Mat_<float> A = (cv::Mat_<float>(3, 2) << 1, 4,
@@ -12693,6 +13164,7 @@ The function horizontally concatenates two or more cv::Mat matrices (with the sa
  */
 @Namespace("cv") public static native void hconcat(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void hconcat(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void hconcat(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 /** \overload
  <pre>{@code {.cpp}
     std::vector<cv::Mat> matrices = { cv::Mat(4, 1, CV_8UC1, cv::Scalar(1)),
@@ -12713,8 +13185,13 @@ same depth.
  */
 @Namespace("cv") public static native void hconcat(@ByVal MatVector src, @ByVal Mat dst);
 @Namespace("cv") public static native void hconcat(@ByVal UMatVector src, @ByVal Mat dst);
+@Namespace("cv") public static native void hconcat(@ByVal GpuMatVector src, @ByVal Mat dst);
 @Namespace("cv") public static native void hconcat(@ByVal MatVector src, @ByVal UMat dst);
 @Namespace("cv") public static native void hconcat(@ByVal UMatVector src, @ByVal UMat dst);
+@Namespace("cv") public static native void hconcat(@ByVal GpuMatVector src, @ByVal UMat dst);
+@Namespace("cv") public static native void hconcat(@ByVal MatVector src, @ByVal GpuMat dst);
+@Namespace("cv") public static native void hconcat(@ByVal UMatVector src, @ByVal GpuMat dst);
+@Namespace("cv") public static native void hconcat(@ByVal GpuMatVector src, @ByVal GpuMat dst);
 
 /** \brief Applies vertical concatenation to given matrices.
 <p>
@@ -12738,6 +13215,7 @@ The function vertically concatenates two or more cv::Mat matrices (with the same
 */
 @Namespace("cv") public static native void vconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal Mat dst);
 @Namespace("cv") public static native void vconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal UMat dst);
+@Namespace("cv") public static native void vconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal GpuMat dst);
 /** \overload
  <pre>{@code {.cpp}
     cv::Mat_<float> A = (cv::Mat_<float>(3, 2) << 1, 7,
@@ -12763,6 +13241,7 @@ The function vertically concatenates two or more cv::Mat matrices (with the same
  */
 @Namespace("cv") public static native void vconcat(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void vconcat(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void vconcat(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 /** \overload
  <pre>{@code {.cpp}
     std::vector<cv::Mat> matrices = { cv::Mat(1, 4, CV_8UC1, cv::Scalar(1)),
@@ -12782,8 +13261,13 @@ same depth.
  */
 @Namespace("cv") public static native void vconcat(@ByVal MatVector src, @ByVal Mat dst);
 @Namespace("cv") public static native void vconcat(@ByVal UMatVector src, @ByVal Mat dst);
+@Namespace("cv") public static native void vconcat(@ByVal GpuMatVector src, @ByVal Mat dst);
 @Namespace("cv") public static native void vconcat(@ByVal MatVector src, @ByVal UMat dst);
 @Namespace("cv") public static native void vconcat(@ByVal UMatVector src, @ByVal UMat dst);
+@Namespace("cv") public static native void vconcat(@ByVal GpuMatVector src, @ByVal UMat dst);
+@Namespace("cv") public static native void vconcat(@ByVal MatVector src, @ByVal GpuMat dst);
+@Namespace("cv") public static native void vconcat(@ByVal UMatVector src, @ByVal GpuMat dst);
+@Namespace("cv") public static native void vconcat(@ByVal GpuMatVector src, @ByVal GpuMat dst);
 
 /** \brief computes bitwise conjunction of the two arrays (dst = src1 & src2)
 Calculates the per-element bit-wise conjunction of two arrays or an
@@ -12818,6 +13302,10 @@ specifies elements of the output array to be changed.
                               @ByVal UMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void bitwise_and(@ByVal UMat src1, @ByVal UMat src2,
                               @ByVal UMat dst);
+@Namespace("cv") public static native void bitwise_and(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                              @ByVal GpuMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void bitwise_and(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                              @ByVal GpuMat dst);
 
 /** \brief Calculates the per-element bit-wise disjunction of two arrays or an
 array and a scalar.
@@ -12851,6 +13339,10 @@ specifies elements of the output array to be changed.
                              @ByVal UMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void bitwise_or(@ByVal UMat src1, @ByVal UMat src2,
                              @ByVal UMat dst);
+@Namespace("cv") public static native void bitwise_or(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                             @ByVal GpuMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void bitwise_or(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                             @ByVal GpuMat dst);
 
 /** \brief Calculates the per-element bit-wise "exclusive or" operation on two
 arrays or an array and a scalar.
@@ -12885,6 +13377,10 @@ specifies elements of the output array to be changed.
                               @ByVal UMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void bitwise_xor(@ByVal UMat src1, @ByVal UMat src2,
                               @ByVal UMat dst);
+@Namespace("cv") public static native void bitwise_xor(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                              @ByVal GpuMat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void bitwise_xor(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                              @ByVal GpuMat dst);
 
 /** \brief  Inverts every bit of an array.
 <p>
@@ -12906,6 +13402,9 @@ specifies elements of the output array to be changed.
 @Namespace("cv") public static native void bitwise_not(@ByVal UMat src, @ByVal UMat dst,
                               @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
 @Namespace("cv") public static native void bitwise_not(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void bitwise_not(@ByVal GpuMat src, @ByVal GpuMat dst,
+                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv") public static native void bitwise_not(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Calculates the per-element absolute difference between two arrays or between an array and a scalar.
 <p>
@@ -12932,6 +13431,7 @@ You may even get a negative value in the case of overflow.
 */
 @Namespace("cv") public static native void absdiff(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void absdiff(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+@Namespace("cv") public static native void absdiff(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 
 /** \brief  Checks if array elements lie between the elements of two other arrays.
 <p>
@@ -12956,6 +13456,8 @@ When the lower and/or upper boundary parameters are scalars, the indexes
                           @ByVal Mat upperb, @ByVal Mat dst);
 @Namespace("cv") public static native void inRange(@ByVal UMat src, @ByVal UMat lowerb,
                           @ByVal UMat upperb, @ByVal UMat dst);
+@Namespace("cv") public static native void inRange(@ByVal GpuMat src, @ByVal GpuMat lowerb,
+                          @ByVal GpuMat upperb, @ByVal GpuMat dst);
 
 /** \brief Performs the per-element comparison of two arrays or an array and scalar value.
 <p>
@@ -12985,6 +13487,7 @@ equivalent matrix expressions:
 */
 @Namespace("cv") public static native void compare(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst, int cmpop);
 @Namespace("cv") public static native void compare(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst, int cmpop);
+@Namespace("cv") public static native void compare(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst, int cmpop);
 
 /** \brief Calculates per-element minimum of two arrays or an array and a scalar.
 <p>
@@ -12997,14 +13500,15 @@ or array and a scalar:
 @param dst output array of the same size and type as src1.
 \sa max, compare, inRange, minMaxLoc
 */
-@Namespace("cv") public static native void min(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
-@Namespace("cv") public static native void min(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+
 /** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
+@Namespace("cv") public static native void min(@Const @ByRef Mat src1, @Const @ByRef Mat src2, @ByRef Mat dst);
 /** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
+@Namespace("cv") public static native void min(@Const @ByRef UMat src1, @Const @ByRef UMat src2, @ByRef UMat dst);
 
 /** \brief Calculates per-element maximum of two arrays or an array and a scalar.
 <p>
@@ -13017,14 +13521,15 @@ or array and a scalar:
 @param dst output array of the same size and type as src1.
 \sa  min, compare, inRange, minMaxLoc, \ref MatrixExpressions
 */
-@Namespace("cv") public static native void max(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
-@Namespace("cv") public static native void max(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
+
 /** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
+@Namespace("cv") public static native void max(@Const @ByRef Mat src1, @Const @ByRef Mat src2, @ByRef Mat dst);
 /** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
+@Namespace("cv") public static native void max(@Const @ByRef UMat src1, @Const @ByRef UMat src2, @ByRef UMat dst);
 
 /** \brief Calculates a square root of array elements.
 <p>
@@ -13037,6 +13542,7 @@ std::sqrt .
 */
 @Namespace("cv") public static native void sqrt(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void sqrt(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void sqrt(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Raises every array element to a power.
 <p>
@@ -13063,6 +13569,7 @@ Special values (NaN, Inf) are not handled.
 */
 @Namespace("cv") public static native void pow(@ByVal Mat src, double power, @ByVal Mat dst);
 @Namespace("cv") public static native void pow(@ByVal UMat src, double power, @ByVal UMat dst);
+@Namespace("cv") public static native void pow(@ByVal GpuMat src, double power, @ByVal GpuMat dst);
 
 /** \brief Calculates the exponent of every array element.
 <p>
@@ -13080,6 +13587,7 @@ Inf) are not handled.
 */
 @Namespace("cv") public static native void exp(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void exp(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void exp(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Calculates the natural logarithm of every array element.
 <p>
@@ -13094,6 +13602,7 @@ Output on zero, negative and special (NaN, Inf) values is undefined.
 */
 @Namespace("cv") public static native void log(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void log(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void log(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Calculates x and y coordinates of 2D vectors from their magnitude and angle.
 <p>
@@ -13123,6 +13632,10 @@ degrees, otherwise, they are measured in radians.
                               @ByVal UMat x, @ByVal UMat y, @Cast("bool") boolean angleInDegrees/*=false*/);
 @Namespace("cv") public static native void polarToCart(@ByVal UMat magnitude, @ByVal UMat angle,
                               @ByVal UMat x, @ByVal UMat y);
+@Namespace("cv") public static native void polarToCart(@ByVal GpuMat magnitude, @ByVal GpuMat angle,
+                              @ByVal GpuMat x, @ByVal GpuMat y, @Cast("bool") boolean angleInDegrees/*=false*/);
+@Namespace("cv") public static native void polarToCart(@ByVal GpuMat magnitude, @ByVal GpuMat angle,
+                              @ByVal GpuMat x, @ByVal GpuMat y);
 
 /** \brief Calculates the magnitude and angle of 2D vectors.
 <p>
@@ -13152,6 +13665,11 @@ in radians (which is by default), or in degrees.
                               @Cast("bool") boolean angleInDegrees/*=false*/);
 @Namespace("cv") public static native void cartToPolar(@ByVal UMat x, @ByVal UMat y,
                               @ByVal UMat magnitude, @ByVal UMat angle);
+@Namespace("cv") public static native void cartToPolar(@ByVal GpuMat x, @ByVal GpuMat y,
+                              @ByVal GpuMat magnitude, @ByVal GpuMat angle,
+                              @Cast("bool") boolean angleInDegrees/*=false*/);
+@Namespace("cv") public static native void cartToPolar(@ByVal GpuMat x, @ByVal GpuMat y,
+                              @ByVal GpuMat magnitude, @ByVal GpuMat angle);
 
 /** \brief Calculates the rotation angle of 2D vectors.
 <p>
@@ -13175,6 +13693,9 @@ degrees, otherwise, they are measured in radians.
 @Namespace("cv") public static native void phase(@ByVal UMat x, @ByVal UMat y, @ByVal UMat angle,
                         @Cast("bool") boolean angleInDegrees/*=false*/);
 @Namespace("cv") public static native void phase(@ByVal UMat x, @ByVal UMat y, @ByVal UMat angle);
+@Namespace("cv") public static native void phase(@ByVal GpuMat x, @ByVal GpuMat y, @ByVal GpuMat angle,
+                        @Cast("bool") boolean angleInDegrees/*=false*/);
+@Namespace("cv") public static native void phase(@ByVal GpuMat x, @ByVal GpuMat y, @ByVal GpuMat angle);
 
 /** \brief Calculates the magnitude of 2D vectors.
 <p>
@@ -13189,6 +13710,7 @@ have the same size as x.
 */
 @Namespace("cv") public static native void magnitude(@ByVal Mat x, @ByVal Mat y, @ByVal Mat magnitude);
 @Namespace("cv") public static native void magnitude(@ByVal UMat x, @ByVal UMat y, @ByVal UMat magnitude);
+@Namespace("cv") public static native void magnitude(@ByVal GpuMat x, @ByVal GpuMat y, @ByVal GpuMat magnitude);
 
 /** \brief Checks every element of an input array for invalid values.
 <p>
@@ -13211,6 +13733,9 @@ elements.
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal UMat a, @Cast("bool") boolean quiet/*=true*/, Point pos/*=0*/,
                             double minVal/*=-DBL_MAX*/, double maxVal/*=DBL_MAX*/);
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal UMat a);
+@Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal GpuMat a, @Cast("bool") boolean quiet/*=true*/, Point pos/*=0*/,
+                            double minVal/*=-DBL_MAX*/, double maxVal/*=DBL_MAX*/);
+@Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal GpuMat a);
 
 /** \brief converts NaN's to the given number
 */
@@ -13218,6 +13743,8 @@ elements.
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a);
 @Namespace("cv") public static native void patchNaNs(@ByVal UMat a, double val/*=0*/);
 @Namespace("cv") public static native void patchNaNs(@ByVal UMat a);
+@Namespace("cv") public static native void patchNaNs(@ByVal GpuMat a, double val/*=0*/);
+@Namespace("cv") public static native void patchNaNs(@ByVal GpuMat a);
 
 /** \brief Performs generalized matrix multiplication.
 <p>
@@ -13255,6 +13782,10 @@ input matrices.
                        @ByVal UMat src3, double beta, @ByVal UMat dst, int flags/*=0*/);
 @Namespace("cv") public static native void gemm(@ByVal UMat src1, @ByVal UMat src2, double alpha,
                        @ByVal UMat src3, double beta, @ByVal UMat dst);
+@Namespace("cv") public static native void gemm(@ByVal GpuMat src1, @ByVal GpuMat src2, double alpha,
+                       @ByVal GpuMat src3, double beta, @ByVal GpuMat dst, int flags/*=0*/);
+@Namespace("cv") public static native void gemm(@ByVal GpuMat src1, @ByVal GpuMat src2, double alpha,
+                       @ByVal GpuMat src3, double beta, @ByVal GpuMat dst);
 
 /** \brief Calculates the product of a matrix and its transposition.
 <p>
@@ -13292,6 +13823,10 @@ type=CV_MAT_DEPTH(dtype) that should be either CV_32F or CV_64F .
                                  @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat delta,
                                  double scale/*=1*/, int dtype/*=-1*/ );
 @Namespace("cv") public static native void mulTransposed( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean aTa );
+@Namespace("cv") public static native void mulTransposed( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean aTa,
+                                 @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat delta,
+                                 double scale/*=1*/, int dtype/*=-1*/ );
+@Namespace("cv") public static native void mulTransposed( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean aTa );
 
 /** \brief Transposes a matrix.
 <p>
@@ -13304,6 +13839,7 @@ should be done separately if needed.
 */
 @Namespace("cv") public static native void transpose(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void transpose(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void transpose(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Performs the matrix transformation of every array element.
 <p>
@@ -13331,6 +13867,7 @@ many channels as m.rows.
 */
 @Namespace("cv") public static native void transform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 @Namespace("cv") public static native void transform(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat m );
+@Namespace("cv") public static native void transform(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat m );
 
 /** \brief Performs the perspective matrix transformation of vectors.
 <p>
@@ -13359,6 +13896,7 @@ element is a 2D/3D vector to be transformed.
 */
 @Namespace("cv") public static native void perspectiveTransform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 @Namespace("cv") public static native void perspectiveTransform(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat m );
+@Namespace("cv") public static native void perspectiveTransform(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat m );
 
 /** \brief Copies the lower or the upper half of a square matrix to another half.
 <p>
@@ -13377,6 +13915,8 @@ the upper half. Otherwise, the upper half is copied to the lower half.
 @Namespace("cv") public static native void completeSymm(@ByVal Mat mtx);
 @Namespace("cv") public static native void completeSymm(@ByVal UMat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
 @Namespace("cv") public static native void completeSymm(@ByVal UMat mtx);
+@Namespace("cv") public static native void completeSymm(@ByVal GpuMat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
+@Namespace("cv") public static native void completeSymm(@ByVal GpuMat mtx);
 
 /** \brief Initializes a scaled identity matrix.
 <p>
@@ -13397,6 +13937,8 @@ matrix expressions:
 @Namespace("cv") public static native void setIdentity(@ByVal Mat mtx);
 @Namespace("cv") public static native void setIdentity(@ByVal UMat mtx, @Const @ByRef(nullValue = "cv::Scalar(1)") Scalar s);
 @Namespace("cv") public static native void setIdentity(@ByVal UMat mtx);
+@Namespace("cv") public static native void setIdentity(@ByVal GpuMat mtx, @Const @ByRef(nullValue = "cv::Scalar(1)") Scalar s);
+@Namespace("cv") public static native void setIdentity(@ByVal GpuMat mtx);
 
 /** \brief Returns the determinant of a square floating-point matrix.
 <p>
@@ -13413,6 +13955,7 @@ square size.
 */
 @Namespace("cv") public static native double determinant(@ByVal Mat mtx);
 @Namespace("cv") public static native double determinant(@ByVal UMat mtx);
+@Namespace("cv") public static native double determinant(@ByVal GpuMat mtx);
 
 /** \brief Returns the trace of a matrix.
 <p>
@@ -13423,6 +13966,7 @@ matrix mtx .
 */
 @Namespace("cv") public static native @ByVal Scalar trace(@ByVal Mat mtx);
 @Namespace("cv") public static native @ByVal Scalar trace(@ByVal UMat mtx);
+@Namespace("cv") public static native @ByVal Scalar trace(@ByVal GpuMat mtx);
 
 /** \brief Finds the inverse or pseudo-inverse of a matrix.
 <p>
@@ -13453,6 +13997,8 @@ matrix in dst and returns non-zero. Otherwise, it returns 0.
 @Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native double invert(@ByVal UMat src, @ByVal UMat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native double invert(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native double invert(@ByVal GpuMat src, @ByVal GpuMat dst, int flags/*=cv::DECOMP_LU*/);
+@Namespace("cv") public static native double invert(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Solves one or more linear systems or least-squares problems.
 <p>
@@ -13484,6 +14030,10 @@ will not do the work. Use SVD::solveZ instead.
                         @ByVal UMat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal UMat src1, @ByVal UMat src2,
                         @ByVal UMat dst);
+@Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                        @ByVal GpuMat dst, int flags/*=cv::DECOMP_LU*/);
+@Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal GpuMat src1, @ByVal GpuMat src2,
+                        @ByVal GpuMat dst);
 
 /** \brief Sorts each row or each column of a matrix.
 <p>
@@ -13500,6 +14050,7 @@ proper comparison predicate.
 */
 @Namespace("cv") public static native void sort(@ByVal Mat src, @ByVal Mat dst, int flags);
 @Namespace("cv") public static native void sort(@ByVal UMat src, @ByVal UMat dst, int flags);
+@Namespace("cv") public static native void sort(@ByVal GpuMat src, @ByVal GpuMat dst, int flags);
 
 /** \brief Sorts each row or each column of a matrix.
 <p>
@@ -13521,6 +14072,7 @@ stores the indices of sorted elements in the output array. For example:
 */
 @Namespace("cv") public static native void sortIdx(@ByVal Mat src, @ByVal Mat dst, int flags);
 @Namespace("cv") public static native void sortIdx(@ByVal UMat src, @ByVal UMat dst, int flags);
+@Namespace("cv") public static native void sortIdx(@ByVal GpuMat src, @ByVal GpuMat dst, int flags);
 
 /** \brief Finds the real roots of a cubic equation.
 <p>
@@ -13536,6 +14088,7 @@ The roots are stored in the roots array.
 */
 @Namespace("cv") public static native int solveCubic(@ByVal Mat coeffs, @ByVal Mat roots);
 @Namespace("cv") public static native int solveCubic(@ByVal UMat coeffs, @ByVal UMat roots);
+@Namespace("cv") public static native int solveCubic(@ByVal GpuMat coeffs, @ByVal GpuMat roots);
 
 /** \brief Finds the real or complex roots of a polynomial equation.
 <p>
@@ -13549,6 +14102,8 @@ The function cv::solvePoly finds real and complex roots of a polynomial equation
 @Namespace("cv") public static native double solvePoly(@ByVal Mat coeffs, @ByVal Mat roots);
 @Namespace("cv") public static native double solvePoly(@ByVal UMat coeffs, @ByVal UMat roots, int maxIters/*=300*/);
 @Namespace("cv") public static native double solvePoly(@ByVal UMat coeffs, @ByVal UMat roots);
+@Namespace("cv") public static native double solvePoly(@ByVal GpuMat coeffs, @ByVal GpuMat roots, int maxIters/*=300*/);
+@Namespace("cv") public static native double solvePoly(@ByVal GpuMat coeffs, @ByVal GpuMat roots);
 
 /** \brief Calculates eigenvalues and eigenvectors of a symmetric matrix.
 <p>
@@ -13575,6 +14130,9 @@ eigenvalues.
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal UMat src, @ByVal UMat eigenvalues,
                         @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat eigenvectors);
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal UMat src, @ByVal UMat eigenvalues);
+@Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal GpuMat src, @ByVal GpuMat eigenvalues,
+                        @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat eigenvectors);
+@Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal GpuMat src, @ByVal GpuMat eigenvalues);
 
 /** \brief Calculates eigenvalues and eigenvectors of a non-symmetric matrix (real eigenvalues only).
 <p>
@@ -13594,6 +14152,8 @@ The function calculates eigenvalues and eigenvectors (optional) of the square ma
                                     @ByVal Mat eigenvectors);
 @Namespace("cv") public static native void eigenNonSymmetric(@ByVal UMat src, @ByVal UMat eigenvalues,
                                     @ByVal UMat eigenvectors);
+@Namespace("cv") public static native void eigenNonSymmetric(@ByVal GpuMat src, @ByVal GpuMat eigenvalues,
+                                    @ByVal GpuMat eigenvectors);
 
 /** \brief Calculates the covariance matrix of a set of vectors.
 <p>
@@ -13629,6 +14189,10 @@ the set of input vectors.
                                    @ByVal UMat mean, int flags, int ctype/*=CV_64F*/);
 @Namespace("cv") public static native void calcCovarMatrix( @ByVal UMat samples, @ByVal UMat covar,
                                    @ByVal UMat mean, int flags);
+@Namespace("cv") public static native void calcCovarMatrix( @ByVal GpuMat samples, @ByVal GpuMat covar,
+                                   @ByVal GpuMat mean, int flags, int ctype/*=CV_64F*/);
+@Namespace("cv") public static native void calcCovarMatrix( @ByVal GpuMat samples, @ByVal GpuMat covar,
+                                   @ByVal GpuMat mean, int flags);
 
 /** wrap PCA::operator() */
 @Namespace("cv") public static native void PCACompute(@ByVal Mat data, @ByVal Mat mean,
@@ -13639,36 +14203,50 @@ the set of input vectors.
                              @ByVal UMat eigenvectors, int maxComponents/*=0*/);
 @Namespace("cv") public static native void PCACompute(@ByVal UMat data, @ByVal UMat mean,
                              @ByVal UMat eigenvectors);
+@Namespace("cv") public static native void PCACompute(@ByVal GpuMat data, @ByVal GpuMat mean,
+                             @ByVal GpuMat eigenvectors, int maxComponents/*=0*/);
+@Namespace("cv") public static native void PCACompute(@ByVal GpuMat data, @ByVal GpuMat mean,
+                             @ByVal GpuMat eigenvectors);
 
 /** wrap PCA::operator() */
 @Namespace("cv") public static native void PCACompute(@ByVal Mat data, @ByVal Mat mean,
                              @ByVal Mat eigenvectors, double retainedVariance);
 @Namespace("cv") public static native void PCACompute(@ByVal UMat data, @ByVal UMat mean,
                              @ByVal UMat eigenvectors, double retainedVariance);
+@Namespace("cv") public static native void PCACompute(@ByVal GpuMat data, @ByVal GpuMat mean,
+                             @ByVal GpuMat eigenvectors, double retainedVariance);
 
 /** wrap PCA::project */
 @Namespace("cv") public static native void PCAProject(@ByVal Mat data, @ByVal Mat mean,
                              @ByVal Mat eigenvectors, @ByVal Mat result);
 @Namespace("cv") public static native void PCAProject(@ByVal UMat data, @ByVal UMat mean,
                              @ByVal UMat eigenvectors, @ByVal UMat result);
+@Namespace("cv") public static native void PCAProject(@ByVal GpuMat data, @ByVal GpuMat mean,
+                             @ByVal GpuMat eigenvectors, @ByVal GpuMat result);
 
 /** wrap PCA::backProject */
 @Namespace("cv") public static native void PCABackProject(@ByVal Mat data, @ByVal Mat mean,
                                  @ByVal Mat eigenvectors, @ByVal Mat result);
 @Namespace("cv") public static native void PCABackProject(@ByVal UMat data, @ByVal UMat mean,
                                  @ByVal UMat eigenvectors, @ByVal UMat result);
+@Namespace("cv") public static native void PCABackProject(@ByVal GpuMat data, @ByVal GpuMat mean,
+                                 @ByVal GpuMat eigenvectors, @ByVal GpuMat result);
 
 /** wrap SVD::compute */
 @Namespace("cv") public static native void SVDecomp( @ByVal Mat src, @ByVal Mat w, @ByVal Mat u, @ByVal Mat vt, int flags/*=0*/ );
 @Namespace("cv") public static native void SVDecomp( @ByVal Mat src, @ByVal Mat w, @ByVal Mat u, @ByVal Mat vt );
 @Namespace("cv") public static native void SVDecomp( @ByVal UMat src, @ByVal UMat w, @ByVal UMat u, @ByVal UMat vt, int flags/*=0*/ );
 @Namespace("cv") public static native void SVDecomp( @ByVal UMat src, @ByVal UMat w, @ByVal UMat u, @ByVal UMat vt );
+@Namespace("cv") public static native void SVDecomp( @ByVal GpuMat src, @ByVal GpuMat w, @ByVal GpuMat u, @ByVal GpuMat vt, int flags/*=0*/ );
+@Namespace("cv") public static native void SVDecomp( @ByVal GpuMat src, @ByVal GpuMat w, @ByVal GpuMat u, @ByVal GpuMat vt );
 
 /** wrap SVD::backSubst */
 @Namespace("cv") public static native void SVBackSubst( @ByVal Mat w, @ByVal Mat u, @ByVal Mat vt,
                                @ByVal Mat rhs, @ByVal Mat dst );
 @Namespace("cv") public static native void SVBackSubst( @ByVal UMat w, @ByVal UMat u, @ByVal UMat vt,
                                @ByVal UMat rhs, @ByVal UMat dst );
+@Namespace("cv") public static native void SVBackSubst( @ByVal GpuMat w, @ByVal GpuMat u, @ByVal GpuMat vt,
+                               @ByVal GpuMat rhs, @ByVal GpuMat dst );
 
 /** \brief Calculates the Mahalanobis distance between two vectors.
 <p>
@@ -13682,6 +14260,7 @@ the invert function (preferably using the cv::DECOMP_SVD method, as the most acc
 */
 @Namespace("cv") public static native double Mahalanobis(@ByVal Mat v1, @ByVal Mat v2, @ByVal Mat icovar);
 @Namespace("cv") public static native double Mahalanobis(@ByVal UMat v1, @ByVal UMat v2, @ByVal UMat icovar);
+@Namespace("cv") public static native double Mahalanobis(@ByVal GpuMat v1, @ByVal GpuMat v2, @ByVal GpuMat icovar);
 
 /** \brief Performs a forward or inverse Discrete Fourier transform of a 1D or 2D floating-point array.
 <p>
@@ -13819,6 +14398,8 @@ magnitude , phase
 @Namespace("cv") public static native void dft(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void dft(@ByVal UMat src, @ByVal UMat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
 @Namespace("cv") public static native void dft(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void dft(@ByVal GpuMat src, @ByVal GpuMat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
+@Namespace("cv") public static native void dft(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Calculates the inverse Discrete Fourier Transform of a 1D or 2D array.
 <p>
@@ -13836,6 +14417,8 @@ the convolution sample in dft description.
 @Namespace("cv") public static native void idft(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void idft(@ByVal UMat src, @ByVal UMat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
 @Namespace("cv") public static native void idft(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void idft(@ByVal GpuMat src, @ByVal GpuMat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
+@Namespace("cv") public static native void idft(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Performs a forward or inverse discrete Cosine transform of 1D or 2D array.
 <p>
@@ -13880,6 +14463,8 @@ of a vector of size N/2 . Thus, the optimal DCT size N1 \>= N can be calculated 
 @Namespace("cv") public static native void dct(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void dct(@ByVal UMat src, @ByVal UMat dst, int flags/*=0*/);
 @Namespace("cv") public static native void dct(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void dct(@ByVal GpuMat src, @ByVal GpuMat dst, int flags/*=0*/);
+@Namespace("cv") public static native void dct(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Calculates the inverse Discrete Cosine Transform of a 1D or 2D array.
 <p>
@@ -13893,6 +14478,8 @@ idct(src, dst, flags) is equivalent to dct(src, dst, flags | DCT_INVERSE).
 @Namespace("cv") public static native void idct(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void idct(@ByVal UMat src, @ByVal UMat dst, int flags/*=0*/);
 @Namespace("cv") public static native void idct(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native void idct(@ByVal GpuMat src, @ByVal GpuMat dst, int flags/*=0*/);
+@Namespace("cv") public static native void idct(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 /** \brief Performs the per-element multiplication of two Fourier spectrums.
 <p>
@@ -13918,6 +14505,10 @@ or not (false).
 @Namespace("cv") public static native void mulSpectrums(@ByVal UMat a, @ByVal UMat b, @ByVal UMat c,
                                int flags, @Cast("bool") boolean conjB/*=false*/);
 @Namespace("cv") public static native void mulSpectrums(@ByVal UMat a, @ByVal UMat b, @ByVal UMat c,
+                               int flags);
+@Namespace("cv") public static native void mulSpectrums(@ByVal GpuMat a, @ByVal GpuMat b, @ByVal GpuMat c,
+                               int flags, @Cast("bool") boolean conjB/*=false*/);
+@Namespace("cv") public static native void mulSpectrums(@ByVal GpuMat a, @ByVal GpuMat b, @ByVal GpuMat c,
                                int flags);
 
 /** \brief Returns the optimal DFT size for a given vector size.
@@ -13974,6 +14565,7 @@ random numbers from the specified range:
 */
 @Namespace("cv") public static native void randu(@ByVal Mat dst, @ByVal Mat low, @ByVal Mat high);
 @Namespace("cv") public static native void randu(@ByVal UMat dst, @ByVal UMat low, @ByVal UMat high);
+@Namespace("cv") public static native void randu(@ByVal GpuMat dst, @ByVal GpuMat low, @ByVal GpuMat high);
 
 /** \brief Fills the array with normally distributed random numbers.
 <p>
@@ -13988,6 +14580,7 @@ which case a diagonal standard deviation matrix is assumed) or a square matrix.
 */
 @Namespace("cv") public static native void randn(@ByVal Mat dst, @ByVal Mat mean, @ByVal Mat stddev);
 @Namespace("cv") public static native void randn(@ByVal UMat dst, @ByVal UMat mean, @ByVal UMat stddev);
+@Namespace("cv") public static native void randn(@ByVal GpuMat dst, @ByVal GpuMat mean, @ByVal GpuMat stddev);
 
 /** \brief Shuffles the array elements randomly.
 <p>
@@ -14004,6 +14597,8 @@ instead.
 @Namespace("cv") public static native void randShuffle(@ByVal Mat dst);
 @Namespace("cv") public static native void randShuffle(@ByVal UMat dst, double iterFactor/*=1.*/, RNG rng/*=0*/);
 @Namespace("cv") public static native void randShuffle(@ByVal UMat dst);
+@Namespace("cv") public static native void randShuffle(@ByVal GpuMat dst, double iterFactor/*=1.*/, RNG rng/*=0*/);
+@Namespace("cv") public static native void randShuffle(@ByVal GpuMat dst);
 
 /** \brief Principal Component Analysis
 <p>
@@ -14114,6 +14709,10 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     private native void allocate(@ByVal UMat data, @ByVal UMat mean, int flags, int maxComponents/*=0*/);
     public PCA(@ByVal UMat data, @ByVal UMat mean, int flags) { super((Pointer)null); allocate(data, mean, flags); }
     private native void allocate(@ByVal UMat data, @ByVal UMat mean, int flags);
+    public PCA(@ByVal GpuMat data, @ByVal GpuMat mean, int flags, int maxComponents/*=0*/) { super((Pointer)null); allocate(data, mean, flags, maxComponents); }
+    private native void allocate(@ByVal GpuMat data, @ByVal GpuMat mean, int flags, int maxComponents/*=0*/);
+    public PCA(@ByVal GpuMat data, @ByVal GpuMat mean, int flags) { super((Pointer)null); allocate(data, mean, flags); }
+    private native void allocate(@ByVal GpuMat data, @ByVal GpuMat mean, int flags);
 
     /** \overload
     @param data input samples stored as matrix rows or matrix columns.
@@ -14129,6 +14728,8 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     private native void allocate(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance);
     public PCA(@ByVal UMat data, @ByVal UMat mean, int flags, double retainedVariance) { super((Pointer)null); allocate(data, mean, flags, retainedVariance); }
     private native void allocate(@ByVal UMat data, @ByVal UMat mean, int flags, double retainedVariance);
+    public PCA(@ByVal GpuMat data, @ByVal GpuMat mean, int flags, double retainedVariance) { super((Pointer)null); allocate(data, mean, flags, retainedVariance); }
+    private native void allocate(@ByVal GpuMat data, @ByVal GpuMat mean, int flags, double retainedVariance);
 
     /** \brief performs %PCA
     <p>
@@ -14154,6 +14755,8 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags);
     public native @ByRef @Name("operator ()") PCA apply(@ByVal UMat data, @ByVal UMat mean, int flags, int maxComponents/*=0*/);
     public native @ByRef @Name("operator ()") PCA apply(@ByVal UMat data, @ByVal UMat mean, int flags);
+    public native @ByRef @Name("operator ()") PCA apply(@ByVal GpuMat data, @ByVal GpuMat mean, int flags, int maxComponents/*=0*/);
+    public native @ByRef @Name("operator ()") PCA apply(@ByVal GpuMat data, @ByVal GpuMat mean, int flags);
 
     /** \overload
     @param data input samples stored as the matrix rows or as the matrix
@@ -14168,6 +14771,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance);
     public native @ByRef @Name("operator ()") PCA apply(@ByVal UMat data, @ByVal UMat mean, int flags, double retainedVariance);
+    public native @ByRef @Name("operator ()") PCA apply(@ByVal GpuMat data, @ByVal GpuMat mean, int flags, double retainedVariance);
 
     /** \brief Projects vector(s) to the principal component subspace.
     <p>
@@ -14185,6 +14789,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     */
     public native @ByVal Mat project(@ByVal Mat vec);
     public native @ByVal Mat project(@ByVal UMat vec);
+    public native @ByVal Mat project(@ByVal GpuMat vec);
 
     /** \overload
     @param vec input vector(s); must have the same dimensionality and the
@@ -14200,6 +14805,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native void project(@ByVal Mat vec, @ByVal Mat result);
     public native void project(@ByVal UMat vec, @ByVal UMat result);
+    public native void project(@ByVal GpuMat vec, @ByVal GpuMat result);
 
     /** \brief Reconstructs vectors from their PC projections.
     <p>
@@ -14216,6 +14822,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native @ByVal Mat backProject(@ByVal Mat vec);
     public native @ByVal Mat backProject(@ByVal UMat vec);
+    public native @ByVal Mat backProject(@ByVal GpuMat vec);
 
     /** \overload
     @param vec coordinates of the vectors in the principal component
@@ -14226,6 +14833,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native void backProject(@ByVal Mat vec, @ByVal Mat result);
     public native void backProject(@ByVal UMat vec, @ByVal UMat result);
+    public native void backProject(@ByVal GpuMat vec, @ByVal GpuMat result);
 
     /** \brief write PCA objects
     <p>
@@ -14287,6 +14895,10 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     private native void allocate(@ByVal UMatVector src, @ByVal Mat labels, int num_components/*=0*/);
     public LDA(@ByVal UMatVector src, @ByVal Mat labels) { super((Pointer)null); allocate(src, labels); }
     private native void allocate(@ByVal UMatVector src, @ByVal Mat labels);
+    public LDA(@ByVal GpuMatVector src, @ByVal Mat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
+    private native void allocate(@ByVal GpuMatVector src, @ByVal Mat labels, int num_components/*=0*/);
+    public LDA(@ByVal GpuMatVector src, @ByVal Mat labels) { super((Pointer)null); allocate(src, labels); }
+    private native void allocate(@ByVal GpuMatVector src, @ByVal Mat labels);
     public LDA(@ByVal MatVector src, @ByVal UMat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
     private native void allocate(@ByVal MatVector src, @ByVal UMat labels, int num_components/*=0*/);
     public LDA(@ByVal MatVector src, @ByVal UMat labels) { super((Pointer)null); allocate(src, labels); }
@@ -14295,6 +14907,22 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     private native void allocate(@ByVal UMatVector src, @ByVal UMat labels, int num_components/*=0*/);
     public LDA(@ByVal UMatVector src, @ByVal UMat labels) { super((Pointer)null); allocate(src, labels); }
     private native void allocate(@ByVal UMatVector src, @ByVal UMat labels);
+    public LDA(@ByVal GpuMatVector src, @ByVal UMat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
+    private native void allocate(@ByVal GpuMatVector src, @ByVal UMat labels, int num_components/*=0*/);
+    public LDA(@ByVal GpuMatVector src, @ByVal UMat labels) { super((Pointer)null); allocate(src, labels); }
+    private native void allocate(@ByVal GpuMatVector src, @ByVal UMat labels);
+    public LDA(@ByVal MatVector src, @ByVal GpuMat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
+    private native void allocate(@ByVal MatVector src, @ByVal GpuMat labels, int num_components/*=0*/);
+    public LDA(@ByVal MatVector src, @ByVal GpuMat labels) { super((Pointer)null); allocate(src, labels); }
+    private native void allocate(@ByVal MatVector src, @ByVal GpuMat labels);
+    public LDA(@ByVal UMatVector src, @ByVal GpuMat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
+    private native void allocate(@ByVal UMatVector src, @ByVal GpuMat labels, int num_components/*=0*/);
+    public LDA(@ByVal UMatVector src, @ByVal GpuMat labels) { super((Pointer)null); allocate(src, labels); }
+    private native void allocate(@ByVal UMatVector src, @ByVal GpuMat labels);
+    public LDA(@ByVal GpuMatVector src, @ByVal GpuMat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
+    private native void allocate(@ByVal GpuMatVector src, @ByVal GpuMat labels, int num_components/*=0*/);
+    public LDA(@ByVal GpuMatVector src, @ByVal GpuMat labels) { super((Pointer)null); allocate(src, labels); }
+    private native void allocate(@ByVal GpuMatVector src, @ByVal GpuMat labels);
 
     /** Serializes this object to a given filename.
       */
@@ -14321,20 +14949,27 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
       */
     public native void compute(@ByVal MatVector src, @ByVal Mat labels);
     public native void compute(@ByVal UMatVector src, @ByVal Mat labels);
+    public native void compute(@ByVal GpuMatVector src, @ByVal Mat labels);
     public native void compute(@ByVal MatVector src, @ByVal UMat labels);
     public native void compute(@ByVal UMatVector src, @ByVal UMat labels);
+    public native void compute(@ByVal GpuMatVector src, @ByVal UMat labels);
+    public native void compute(@ByVal MatVector src, @ByVal GpuMat labels);
+    public native void compute(@ByVal UMatVector src, @ByVal GpuMat labels);
+    public native void compute(@ByVal GpuMatVector src, @ByVal GpuMat labels);
 
     /** Projects samples into the LDA subspace.
         src may be one or more row aligned samples.
       */
     public native @ByVal Mat project(@ByVal Mat src);
     public native @ByVal Mat project(@ByVal UMat src);
+    public native @ByVal Mat project(@ByVal GpuMat src);
 
     /** Reconstructs projections from the LDA subspace.
         src may be one or more row aligned projections.
       */
     public native @ByVal Mat reconstruct(@ByVal Mat src);
     public native @ByVal Mat reconstruct(@ByVal UMat src);
+    public native @ByVal Mat reconstruct(@ByVal GpuMat src);
 
     /** Returns the eigenvectors of this LDA.
       */
@@ -14346,8 +14981,10 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
 
     public static native @ByVal Mat subspaceProject(@ByVal Mat W, @ByVal Mat mean, @ByVal Mat src);
     public static native @ByVal Mat subspaceProject(@ByVal UMat W, @ByVal UMat mean, @ByVal UMat src);
+    public static native @ByVal Mat subspaceProject(@ByVal GpuMat W, @ByVal GpuMat mean, @ByVal GpuMat src);
     public static native @ByVal Mat subspaceReconstruct(@ByVal Mat W, @ByVal Mat mean, @ByVal Mat src);
     public static native @ByVal Mat subspaceReconstruct(@ByVal UMat W, @ByVal UMat mean, @ByVal UMat src);
+    public static native @ByVal Mat subspaceReconstruct(@ByVal GpuMat W, @ByVal GpuMat mean, @ByVal GpuMat src);
 }
 
 /** \brief Singular Value Decomposition
@@ -14408,6 +15045,10 @@ and vt must be computed, which is not necessary most of the time.
     private native void allocate( @ByVal UMat src, int flags/*=0*/ );
     public SVD( @ByVal UMat src ) { super((Pointer)null); allocate(src); }
     private native void allocate( @ByVal UMat src );
+    public SVD( @ByVal GpuMat src, int flags/*=0*/ ) { super((Pointer)null); allocate(src, flags); }
+    private native void allocate( @ByVal GpuMat src, int flags/*=0*/ );
+    public SVD( @ByVal GpuMat src ) { super((Pointer)null); allocate(src); }
+    private native void allocate( @ByVal GpuMat src );
 
     /** \brief the operator that performs SVD. The previously allocated u, w and vt are released.
     <p>
@@ -14424,6 +15065,8 @@ and vt must be computed, which is not necessary most of the time.
     public native @ByRef @Name("operator ()") SVD apply( @ByVal Mat src );
     public native @ByRef @Name("operator ()") SVD apply( @ByVal UMat src, int flags/*=0*/ );
     public native @ByRef @Name("operator ()") SVD apply( @ByVal UMat src );
+    public native @ByRef @Name("operator ()") SVD apply( @ByVal GpuMat src, int flags/*=0*/ );
+    public native @ByRef @Name("operator ()") SVD apply( @ByVal GpuMat src );
 
     /** \brief decomposes matrix and stores the results to user-provided matrices
     <p>
@@ -14450,6 +15093,10 @@ and vt must be computed, which is not necessary most of the time.
                              @ByVal UMat u, @ByVal UMat vt, int flags/*=0*/ );
     public static native void compute( @ByVal UMat src, @ByVal UMat w,
                              @ByVal UMat u, @ByVal UMat vt );
+    public static native void compute( @ByVal GpuMat src, @ByVal GpuMat w,
+                             @ByVal GpuMat u, @ByVal GpuMat vt, int flags/*=0*/ );
+    public static native void compute( @ByVal GpuMat src, @ByVal GpuMat w,
+                             @ByVal GpuMat u, @ByVal GpuMat vt );
 
     /** \overload
     computes singular values of a matrix
@@ -14461,6 +15108,8 @@ and vt must be computed, which is not necessary most of the time.
     public static native void compute( @ByVal Mat src, @ByVal Mat w );
     public static native void compute( @ByVal UMat src, @ByVal UMat w, int flags/*=0*/ );
     public static native void compute( @ByVal UMat src, @ByVal UMat w );
+    public static native void compute( @ByVal GpuMat src, @ByVal GpuMat w, int flags/*=0*/ );
+    public static native void compute( @ByVal GpuMat src, @ByVal GpuMat w );
 
     /** \brief performs back substitution
       */
@@ -14470,6 +15119,9 @@ and vt must be computed, which is not necessary most of the time.
     public static native void backSubst( @ByVal UMat w, @ByVal UMat u,
                                @ByVal UMat vt, @ByVal UMat rhs,
                                @ByVal UMat dst );
+    public static native void backSubst( @ByVal GpuMat w, @ByVal GpuMat u,
+                               @ByVal GpuMat vt, @ByVal GpuMat rhs,
+                               @ByVal GpuMat dst );
 
     /** \brief solves an under-determined singular linear system
     <p>
@@ -14483,6 +15135,7 @@ and vt must be computed, which is not necessary most of the time.
       */
     public static native void solveZ( @ByVal Mat src, @ByVal Mat dst );
     public static native void solveZ( @ByVal UMat src, @ByVal UMat dst );
+    public static native void solveZ( @ByVal GpuMat src, @ByVal GpuMat dst );
 
     /** \brief performs a singular value back substitution.
     <p>
@@ -14508,6 +15161,7 @@ and vt must be computed, which is not necessary most of the time.
       */
     public native void backSubst( @ByVal Mat rhs, @ByVal Mat dst );
     public native void backSubst( @ByVal UMat rhs, @ByVal UMat dst );
+    public native void backSubst( @ByVal GpuMat rhs, @ByVal GpuMat dst );
 
     /** \todo document */
 
@@ -14678,6 +15332,8 @@ introduced by G. Marsaglia and W. W. Tsang.
     public native @Name("fill") void _fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b );
     public native @Name("fill") void _fill( @ByVal UMat mat, int distType, @ByVal UMat a, @ByVal UMat b, @Cast("bool") boolean saturateRange/*=false*/ );
     public native @Name("fill") void _fill( @ByVal UMat mat, int distType, @ByVal UMat a, @ByVal UMat b );
+    public native @Name("fill") void _fill( @ByVal GpuMat mat, int distType, @ByVal GpuMat a, @ByVal GpuMat b, @Cast("bool") boolean saturateRange/*=false*/ );
+    public native @Name("fill") void _fill( @ByVal GpuMat mat, int distType, @ByVal GpuMat a, @ByVal GpuMat b );
 
     /** \brief Returns the next random number sampled from the Gaussian distribution
     @param sigma standard deviation of the distribution.
@@ -14791,6 +15447,12 @@ pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose t
                             @ByVal TermCriteria criteria, int attempts,
                             int flags, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat centers );
 @Namespace("cv") public static native double kmeans( @ByVal UMat data, int K, @ByVal UMat bestLabels,
+                            @ByVal TermCriteria criteria, int attempts,
+                            int flags );
+@Namespace("cv") public static native double kmeans( @ByVal GpuMat data, int K, @ByVal GpuMat bestLabels,
+                            @ByVal TermCriteria criteria, int attempts,
+                            int flags, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat centers );
+@Namespace("cv") public static native double kmeans( @ByVal GpuMat data, int K, @ByVal GpuMat bestLabels,
                             @ByVal TermCriteria criteria, int attempts,
                             int flags );
 
@@ -14990,6 +15652,1868 @@ Here is example of SIFT use in your application via Algorithm interface:
 // #endif /*OPENCV_CORE_HPP*/
 
 
+// Parsed from <opencv2/core/cuda.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                          License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef OPENCV_CORE_CUDA_HPP
+// #define OPENCV_CORE_CUDA_HPP
+
+// #ifndef __cplusplus
+// #endif
+
+// #include "opencv2/core.hpp"
+// #include "opencv2/core/cuda_types.hpp"
+
+/**
+  \defgroup cuda CUDA-accelerated Computer Vision
+  \{
+    \defgroup cudacore Core part
+    \{
+      \defgroup cudacore_init Initalization and Information
+      \defgroup cudacore_struct Data Structures
+    \}
+  \}
+ */
+
+/** \addtogroup cudacore_struct
+ *  \{ */
+
+//===================================================================================
+// GpuMat
+//===================================================================================
+
+/** \brief Base storage class for GPU memory with reference counting.
+<p>
+Its interface matches the Mat interface with the following limitations:
+<p>
+-   no arbitrary dimensions support (only 2D)
+-   no functions that return references to their data (because references on GPU are not valid for
+    CPU)
+-   no expression templates technique support
+<p>
+Beware that the latter limitation may lead to overloaded matrix operators that cause memory
+allocations. The GpuMat class is convertible to cuda::PtrStepSz and cuda::PtrStep so it can be
+passed directly to the kernel.
+<p>
+\note In contrast with Mat, in most cases GpuMat::isContinuous() == false . This means that rows are
+aligned to a size depending on the hardware. Single-row GpuMat is always a continuous matrix.
+<p>
+\note You are not recommended to leave static or global GpuMat variables allocated, that is, to rely
+on its destructor. The destruction order of such variables and CUDA context is undefined. GPU memory
+release function returns error if the CUDA context has been destroyed before.
+<p>
+\sa Mat
+ */
+@Namespace("cv::cuda") @NoOffset public static class GpuMat extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GpuMat(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GpuMat(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GpuMat position(long position) {
+        return (GpuMat)super.position(position);
+    }
+
+    public static class Allocator extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Allocator(Pointer p) { super(p); }
+    
+
+        // allocator must fill data, step and refcount fields
+        public native @Cast("bool") @Name("allocate") boolean _allocate(GpuMat mat, int rows, int cols, @Cast("size_t") long elemSize);
+        public native void free(GpuMat mat);
+    }
+
+    /** default allocator */
+    public static native Allocator defaultAllocator();
+    public static native void setDefaultAllocator(Allocator allocator);
+
+    /** default constructor */
+    public GpuMat(Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(allocator); }
+    private native void allocate(Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** constructs GpuMat of the specified size and type */
+    public GpuMat(int rows, int cols, int type, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(rows, cols, type, allocator); }
+    private native void allocate(int rows, int cols, int type, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat(int rows, int cols, int type) { super((Pointer)null); allocate(rows, cols, type); }
+    private native void allocate(int rows, int cols, int type);
+    public GpuMat(@ByVal Size size, int type, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(size, type, allocator); }
+    private native void allocate(@ByVal Size size, int type, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
+    private native void allocate(@ByVal Size size, int type);
+
+    /** constucts GpuMat and fills it with the specified value _s */
+    public GpuMat(int rows, int cols, int type, @ByVal Scalar s, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(rows, cols, type, s, allocator); }
+    private native void allocate(int rows, int cols, int type, @ByVal Scalar s, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat(int rows, int cols, int type, @ByVal Scalar s) { super((Pointer)null); allocate(rows, cols, type, s); }
+    private native void allocate(int rows, int cols, int type, @ByVal Scalar s);
+    public GpuMat(@ByVal Size size, int type, @ByVal Scalar s, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(size, type, s, allocator); }
+    private native void allocate(@ByVal Size size, int type, @ByVal Scalar s, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat(@ByVal Size size, int type, @ByVal Scalar s) { super((Pointer)null); allocate(size, type, s); }
+    private native void allocate(@ByVal Size size, int type, @ByVal Scalar s);
+
+    /** copy constructor */
+    public GpuMat(@Const @ByRef GpuMat m) { super((Pointer)null); allocate(m); }
+    private native void allocate(@Const @ByRef GpuMat m);
+
+    /** constructor for GpuMat headers pointing to user-allocated data */
+    public GpuMat(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=cv::Mat::AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); }
+    private native void allocate(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=cv::Mat::AUTO_STEP*/);
+    public GpuMat(int rows, int cols, int type, Pointer data) { super((Pointer)null); allocate(rows, cols, type, data); }
+    private native void allocate(int rows, int cols, int type, Pointer data);
+    public GpuMat(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=cv::Mat::AUTO_STEP*/) { super((Pointer)null); allocate(size, type, data, step); }
+    private native void allocate(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=cv::Mat::AUTO_STEP*/);
+    public GpuMat(@ByVal Size size, int type, Pointer data) { super((Pointer)null); allocate(size, type, data); }
+    private native void allocate(@ByVal Size size, int type, Pointer data);
+
+    /** creates a GpuMat header for a part of the bigger matrix */
+    public GpuMat(@Const @ByRef GpuMat m, @ByVal Range rowRange, @ByVal Range colRange) { super((Pointer)null); allocate(m, rowRange, colRange); }
+    private native void allocate(@Const @ByRef GpuMat m, @ByVal Range rowRange, @ByVal Range colRange);
+    public GpuMat(@Const @ByRef GpuMat m, @ByVal Rect roi) { super((Pointer)null); allocate(m, roi); }
+    private native void allocate(@Const @ByRef GpuMat m, @ByVal Rect roi);
+
+    /** builds GpuMat from host memory (Blocking call) */
+    public GpuMat(@ByVal Mat arr, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(arr, allocator); }
+    private native void allocate(@ByVal Mat arr, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat(@ByVal Mat arr) { super((Pointer)null); allocate(arr); }
+    private native void allocate(@ByVal Mat arr);
+    public GpuMat(@ByVal UMat arr, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(arr, allocator); }
+    private native void allocate(@ByVal UMat arr, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+    public GpuMat(@ByVal UMat arr) { super((Pointer)null); allocate(arr); }
+    private native void allocate(@ByVal UMat arr);
+    public GpuMat(@ByVal GpuMat arr, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(arr, allocator); }
+    private native void allocate(@ByVal GpuMat arr, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
+
+    /** destructor - calls release() */
+
+    /** assignment operators */
+    public native @ByRef @Name("operator =") GpuMat put(@Const @ByRef GpuMat m);
+
+    /** allocates new GpuMat data unless the GpuMat already has specified size and type */
+    public native void create(int rows, int cols, int type);
+    public native void create(@ByVal Size size, int type);
+
+    /** decreases reference counter, deallocate the data when reference counter reaches 0 */
+    public native void release();
+
+    /** swaps with other smart pointer */
+    public native void swap(@ByRef GpuMat mat);
+
+    /** pefroms upload data to GpuMat (Blocking call) */
+    public native void upload(@ByVal Mat arr);
+    public native void upload(@ByVal UMat arr);
+    public native void upload(@ByVal GpuMat arr);
+
+    /** pefroms upload data to GpuMat (Non-Blocking call) */
+    public native void upload(@ByVal Mat arr, @ByRef Stream stream);
+    public native void upload(@ByVal UMat arr, @ByRef Stream stream);
+    public native void upload(@ByVal GpuMat arr, @ByRef Stream stream);
+
+    /** pefroms download data from device to host memory (Blocking call) */
+    public native void download(@ByVal Mat dst);
+    public native void download(@ByVal UMat dst);
+    public native void download(@ByVal GpuMat dst);
+
+    /** pefroms download data from device to host memory (Non-Blocking call) */
+    public native void download(@ByVal Mat dst, @ByRef Stream stream);
+    public native void download(@ByVal UMat dst, @ByRef Stream stream);
+    public native void download(@ByVal GpuMat dst, @ByRef Stream stream);
+
+    /** returns deep copy of the GpuMat, i.e. the data is copied */
+    public native @ByVal GpuMat clone();
+
+    /** copies the GpuMat content to device memory (Blocking call) */
+    public native void copyTo(@ByVal Mat dst);
+    public native void copyTo(@ByVal UMat dst);
+    public native void copyTo(@ByVal GpuMat dst);
+
+    /** copies the GpuMat content to device memory (Non-Blocking call) */
+    public native void copyTo(@ByVal Mat dst, @ByRef Stream stream);
+    public native void copyTo(@ByVal UMat dst, @ByRef Stream stream);
+    public native void copyTo(@ByVal GpuMat dst, @ByRef Stream stream);
+
+    /** copies those GpuMat elements to "m" that are marked with non-zero mask elements (Blocking call) */
+    public native void copyTo(@ByVal Mat dst, @ByVal Mat mask);
+    public native void copyTo(@ByVal UMat dst, @ByVal UMat mask);
+    public native void copyTo(@ByVal GpuMat dst, @ByVal GpuMat mask);
+
+    /** copies those GpuMat elements to "m" that are marked with non-zero mask elements (Non-Blocking call) */
+    public native void copyTo(@ByVal Mat dst, @ByVal Mat mask, @ByRef Stream stream);
+    public native void copyTo(@ByVal UMat dst, @ByVal UMat mask, @ByRef Stream stream);
+    public native void copyTo(@ByVal GpuMat dst, @ByVal GpuMat mask, @ByRef Stream stream);
+
+    /** sets some of the GpuMat elements to s (Blocking call) */
+    public native @ByRef GpuMat setTo(@ByVal Scalar s);
+
+    /** sets some of the GpuMat elements to s (Non-Blocking call) */
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByRef Stream stream);
+
+    /** sets some of the GpuMat elements to s, according to the mask (Blocking call) */
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByVal Mat mask);
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByVal UMat mask);
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByVal GpuMat mask);
+
+    /** sets some of the GpuMat elements to s, according to the mask (Non-Blocking call) */
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByVal Mat mask, @ByRef Stream stream);
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByVal UMat mask, @ByRef Stream stream);
+    public native @ByRef GpuMat setTo(@ByVal Scalar s, @ByVal GpuMat mask, @ByRef Stream stream);
+
+    /** converts GpuMat to another datatype (Blocking call) */
+    public native void convertTo(@ByVal Mat dst, int rtype);
+    public native void convertTo(@ByVal UMat dst, int rtype);
+    public native void convertTo(@ByVal GpuMat dst, int rtype);
+
+    /** converts GpuMat to another datatype (Non-Blocking call) */
+    public native void convertTo(@ByVal Mat dst, int rtype, @ByRef Stream stream);
+    public native void convertTo(@ByVal UMat dst, int rtype, @ByRef Stream stream);
+    public native void convertTo(@ByVal GpuMat dst, int rtype, @ByRef Stream stream);
+
+    /** converts GpuMat to another datatype with scaling (Blocking call) */
+    public native void convertTo(@ByVal Mat dst, int rtype, double alpha, double beta/*=0.0*/);
+    public native void convertTo(@ByVal Mat dst, int rtype, double alpha);
+    public native void convertTo(@ByVal UMat dst, int rtype, double alpha, double beta/*=0.0*/);
+    public native void convertTo(@ByVal UMat dst, int rtype, double alpha);
+    public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha, double beta/*=0.0*/);
+    public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha);
+
+    /** converts GpuMat to another datatype with scaling (Non-Blocking call) */
+    public native void convertTo(@ByVal Mat dst, int rtype, double alpha, @ByRef Stream stream);
+    public native void convertTo(@ByVal UMat dst, int rtype, double alpha, @ByRef Stream stream);
+    public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha, @ByRef Stream stream);
+
+    /** converts GpuMat to another datatype with scaling (Non-Blocking call) */
+    public native void convertTo(@ByVal Mat dst, int rtype, double alpha, double beta, @ByRef Stream stream);
+    public native void convertTo(@ByVal UMat dst, int rtype, double alpha, double beta, @ByRef Stream stream);
+    public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha, double beta, @ByRef Stream stream);
+
+    public native void assignTo(@ByRef GpuMat m, int type/*=-1*/);
+    public native void assignTo(@ByRef GpuMat m);
+
+    /** returns pointer to y-th row */
+    public native @Cast("uchar*") BytePointer ptr(int y/*=0*/);
+    public native @Cast("uchar*") BytePointer ptr();
+
+    /** template version of the above method */
+
+    /** returns a new GpuMat header for the specified row */
+    public native @ByVal GpuMat row(int y);
+
+    /** returns a new GpuMat header for the specified column */
+    public native @ByVal GpuMat col(int x);
+
+    /** ... for the specified row span */
+    public native @ByVal GpuMat rowRange(int startrow, int endrow);
+    public native @ByVal GpuMat rowRange(@ByVal Range r);
+
+    /** ... for the specified column span */
+    public native @ByVal GpuMat colRange(int startcol, int endcol);
+    public native @ByVal GpuMat colRange(@ByVal Range r);
+
+    /** extracts a rectangular sub-GpuMat (this is a generalized form of row, rowRange etc.) */
+    public native @ByVal @Name("operator ()") GpuMat apply(@ByVal Range rowRange, @ByVal Range colRange);
+    public native @ByVal @Name("operator ()") GpuMat apply(@ByVal Rect roi);
+
+    /** creates alternative GpuMat header for the same data, with different
+     *  number of channels and/or different number of rows */
+    public native @ByVal GpuMat reshape(int cn, int rows/*=0*/);
+    public native @ByVal GpuMat reshape(int cn);
+
+    /** locates GpuMat header within a parent GpuMat */
+    public native void locateROI(@ByRef Size wholeSize, @ByRef Point ofs);
+
+    /** moves/resizes the current GpuMat ROI inside the parent GpuMat */
+    public native @ByRef GpuMat adjustROI(int dtop, int dbottom, int dleft, int dright);
+
+    /** returns true iff the GpuMat data is continuous
+     *  (i.e. when there are no gaps between successive rows) */
+    public native @Cast("bool") boolean isContinuous();
+
+    /** returns element size in bytes */
+    public native @Cast("size_t") long elemSize();
+
+    /** returns the size of element channel in bytes */
+    public native @Cast("size_t") long elemSize1();
+
+    /** returns element type */
+    public native int type();
+
+    /** returns element type */
+    public native int depth();
+
+    /** returns number of channels */
+    public native int channels();
+
+    /** returns step/elemSize1() */
+    public native @Cast("size_t") long step1();
+
+    /** returns GpuMat size : width == number of columns, height == number of rows */
+    public native @ByVal Size size();
+
+    /** returns true if GpuMat data is NULL */
+    public native @Cast("bool") boolean empty();
+
+    /** includes several bit-fields:
+    - the magic signature
+    - continuity flag
+    - depth
+    - number of channels
+    */
+    public native int flags(); public native GpuMat flags(int flags);
+
+    /** the number of rows and columns */
+    public native int rows(); public native GpuMat rows(int rows);
+    public native int cols(); public native GpuMat cols(int cols);
+
+    /** a distance between successive rows in bytes; includes the gap if any */
+    public native @Cast("size_t") long step(); public native GpuMat step(long step);
+
+    /** pointer to the data */
+    public native @Cast("uchar*") BytePointer data(); public native GpuMat data(BytePointer data);
+
+    /** pointer to the reference counter;
+     *  when GpuMat points to user-allocated data, the pointer is NULL */
+    public native IntPointer refcount(); public native GpuMat refcount(IntPointer refcount);
+
+    /** helper fields used in locateROI and adjustROI */
+    public native @Cast("uchar*") BytePointer datastart(); public native GpuMat datastart(BytePointer datastart);
+    @MemberGetter public native @Cast("const uchar*") BytePointer dataend();
+
+    /** allocator */
+    public native Allocator allocator(); public native GpuMat allocator(Allocator allocator);
+}
+
+/** \brief Creates a continuous matrix.
+<p>
+@param rows Row count.
+@param cols Column count.
+@param type Type of the matrix.
+@param arr Destination matrix. This parameter changes only if it has a proper type and area (
+\f$\texttt{rows} \times \texttt{cols}\f$ ).
+<p>
+Matrix is called continuous if its elements are stored continuously, that is, without gaps at the
+end of each row.
+ */
+@Namespace("cv::cuda") public static native void createContinuous(int rows, int cols, int type, @ByVal Mat arr);
+@Namespace("cv::cuda") public static native void createContinuous(int rows, int cols, int type, @ByVal UMat arr);
+@Namespace("cv::cuda") public static native void createContinuous(int rows, int cols, int type, @ByVal GpuMat arr);
+
+/** \brief Ensures that the size of a matrix is big enough and the matrix has a proper type.
+<p>
+@param rows Minimum desired number of rows.
+@param cols Minimum desired number of columns.
+@param type Desired matrix type.
+@param arr Destination matrix.
+<p>
+The function does not reallocate memory if the matrix has proper attributes already.
+ */
+@Namespace("cv::cuda") public static native void ensureSizeIsEnough(int rows, int cols, int type, @ByVal Mat arr);
+@Namespace("cv::cuda") public static native void ensureSizeIsEnough(int rows, int cols, int type, @ByVal UMat arr);
+@Namespace("cv::cuda") public static native void ensureSizeIsEnough(int rows, int cols, int type, @ByVal GpuMat arr);
+
+/** \brief BufferPool for use with CUDA streams
+ <p>
+ * BufferPool utilizes cuda::Stream's allocator to create new buffers. It is
+ * particularly useful when BufferPoolUsage is set to true, or a custom
+ * allocator is specified for the cuda::Stream, and you want to implement your
+ * own stream based functions utilizing the same underlying GPU memory
+ * management.
+ */
+@Namespace("cv::cuda") @NoOffset public static class BufferPool extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BufferPool(Pointer p) { super(p); }
+
+
+    /** Gets the BufferPool for the given stream. */
+    public BufferPool(@ByRef Stream stream) { super((Pointer)null); allocate(stream); }
+    private native void allocate(@ByRef Stream stream);
+
+    /** Allocates a new GpuMat of given size and type. */
+    public native @ByVal GpuMat getBuffer(int rows, int cols, int type);
+
+    /** Allocates a new GpuMat of given size and type. */
+    public native @ByVal GpuMat getBuffer(@ByVal Size size, int type);
+
+    /** Returns the allocator associated with the stream. */
+    public native @Ptr GpuMat.Allocator getAllocator();
+}
+
+/** BufferPool management (must be called before Stream creation) */
+@Namespace("cv::cuda") public static native void setBufferPoolUsage(@Cast("bool") boolean on);
+@Namespace("cv::cuda") public static native void setBufferPoolConfig(int deviceId, @Cast("size_t") long stackSize, int stackCount);
+
+//===================================================================================
+// HostMem
+//===================================================================================
+
+/** \brief Class with reference counting wrapping special memory type allocation functions from CUDA.
+<p>
+Its interface is also Mat-like but with additional memory type parameters.
+<p>
+-   **PAGE_LOCKED** sets a page locked memory type used commonly for fast and asynchronous
+    uploading/downloading data from/to GPU.
+-   **SHARED** specifies a zero copy memory allocation that enables mapping the host memory to GPU
+    address space, if supported.
+-   **WRITE_COMBINED** sets the write combined buffer that is not cached by CPU. Such buffers are
+    used to supply GPU with data when GPU only reads it. The advantage is a better CPU cache
+    utilization.
+<p>
+\note Allocation size of such memory types is usually limited. For more details, see *CUDA 2.2
+Pinned Memory APIs* document or *CUDA C Programming Guide*.
+ */
+@Namespace("cv::cuda") @NoOffset public static class HostMem extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public HostMem(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public HostMem(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public HostMem position(long position) {
+        return (HostMem)super.position(position);
+    }
+
+    /** enum cv::cuda::HostMem::AllocType */
+    public static final int PAGE_LOCKED = 1, SHARED = 2, WRITE_COMBINED = 4;
+
+    public static native MatAllocator getAllocator(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public static native MatAllocator getAllocator();
+
+    public HostMem(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(alloc_type); }
+    private native void allocate(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public HostMem(@Const @ByRef HostMem m) { super((Pointer)null); allocate(m); }
+    private native void allocate(@Const @ByRef HostMem m);
+
+    public HostMem(int rows, int cols, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(rows, cols, type, alloc_type); }
+    private native void allocate(int rows, int cols, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(int rows, int cols, int type) { super((Pointer)null); allocate(rows, cols, type); }
+    private native void allocate(int rows, int cols, int type);
+    public HostMem(@ByVal Size size, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(size, type, alloc_type); }
+    private native void allocate(@ByVal Size size, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
+    private native void allocate(@ByVal Size size, int type);
+
+    /** creates from host memory with coping data */
+    public HostMem(@ByVal Mat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
+    private native void allocate(@ByVal Mat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal Mat arr) { super((Pointer)null); allocate(arr); }
+    private native void allocate(@ByVal Mat arr);
+    public HostMem(@ByVal UMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
+    private native void allocate(@ByVal UMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal UMat arr) { super((Pointer)null); allocate(arr); }
+    private native void allocate(@ByVal UMat arr);
+    public HostMem(@ByVal GpuMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
+    private native void allocate(@ByVal GpuMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal GpuMat arr) { super((Pointer)null); allocate(arr); }
+    private native void allocate(@ByVal GpuMat arr);
+
+    public native @ByRef @Name("operator =") HostMem put(@Const @ByRef HostMem m);
+
+    /** swaps with other smart pointer */
+    public native void swap(@ByRef HostMem b);
+
+    /** returns deep copy of the matrix, i.e. the data is copied */
+    public native @ByVal HostMem clone();
+
+    /** allocates new matrix data unless the matrix already has specified size and type. */
+    public native void create(int rows, int cols, int type);
+    public native void create(@ByVal Size size, int type);
+
+    /** creates alternative HostMem header for the same data, with different
+     *  number of channels and/or different number of rows */
+    public native @ByVal HostMem reshape(int cn, int rows/*=0*/);
+    public native @ByVal HostMem reshape(int cn);
+
+    /** decrements reference counter and released memory if needed. */
+    public native void release();
+
+    /** returns matrix header with disabled reference counting for HostMem data. */
+    public native @ByVal Mat createMatHeader();
+
+    /** \brief Maps CPU memory to GPU address space and creates the cuda::GpuMat header without reference counting
+    for it.
+    <p>
+    This can be done only if memory was allocated with the SHARED flag and if it is supported by the
+    hardware. Laptops often share video and CPU memory, so address spaces can be mapped, which
+    eliminates an extra copy.
+     */
+    public native @ByVal GpuMat createGpuMatHeader();
+
+    // Please see cv::Mat for descriptions
+    public native @Cast("bool") boolean isContinuous();
+    public native @Cast("size_t") long elemSize();
+    public native @Cast("size_t") long elemSize1();
+    public native int type();
+    public native int depth();
+    public native int channels();
+    public native @Cast("size_t") long step1();
+    public native @ByVal Size size();
+    public native @Cast("bool") boolean empty();
+
+    // Please see cv::Mat for descriptions
+    public native int flags(); public native HostMem flags(int flags);
+    public native int rows(); public native HostMem rows(int rows);
+    public native int cols(); public native HostMem cols(int cols);
+    public native @Cast("size_t") long step(); public native HostMem step(long step);
+
+    public native @Cast("uchar*") BytePointer data(); public native HostMem data(BytePointer data);
+    public native IntPointer refcount(); public native HostMem refcount(IntPointer refcount);
+
+    public native @Cast("uchar*") BytePointer datastart(); public native HostMem datastart(BytePointer datastart);
+    @MemberGetter public native @Cast("const uchar*") BytePointer dataend();
+
+    public native @Cast("cv::cuda::HostMem::AllocType") int alloc_type(); public native HostMem alloc_type(int alloc_type);
+}
+
+/** \brief Page-locks the memory of matrix and maps it for the device(s).
+<p>
+@param m Input matrix.
+ */
+@Namespace("cv::cuda") public static native void registerPageLocked(@ByRef Mat m);
+
+/** \brief Unmaps the memory of matrix and makes it pageable again.
+<p>
+@param m Input matrix.
+ */
+@Namespace("cv::cuda") public static native void unregisterPageLocked(@ByRef Mat m);
+
+//===================================================================================
+// Stream
+//===================================================================================
+
+/** \brief This class encapsulates a queue of asynchronous calls.
+<p>
+\note Currently, you may face problems if an operation is enqueued twice with different data. Some
+functions use the constant GPU memory, and next call may update the memory before the previous one
+has been finished. But calling different operations asynchronously is safe because each operation
+has its own constant buffer. Memory copy/upload/download/set operations to the buffers you hold are
+also safe.
+<p>
+\note The Stream class is not thread-safe. Please use different Stream objects for different CPU threads.
+<p>
+<pre>{@code
+void thread1()
+{
+    cv::cuda::Stream stream1;
+    cv::cuda::func1(..., stream1);
+}
+
+void thread2()
+{
+    cv::cuda::Stream stream2;
+    cv::cuda::func2(..., stream2);
+}
+}</pre>
+<p>
+\note By default all CUDA routines are launched in Stream::Null() object, if the stream is not specified by user.
+In multi-threading environment the stream objects must be passed explicitly (see previous note).
+ */
+@Namespace("cv::cuda") @NoOffset public static class Stream extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Stream(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Stream(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Stream position(long position) {
+        return (Stream)super.position(position);
+    }
+
+    public static class StreamCallback extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    StreamCallback(Pointer p) { super(p); }
+        protected StreamCallback() { allocate(); }
+        private native void allocate();
+        public native void call(int status, Pointer userData);
+    }
+
+    /** creates a new asynchronous stream */
+    public Stream() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** creates a new asynchronous stream with custom allocator */
+    public Stream(@Ptr GpuMat.Allocator allocator) { super((Pointer)null); allocate(allocator); }
+    private native void allocate(@Ptr GpuMat.Allocator allocator);
+
+    /** \brief Returns true if the current stream queue is finished. Otherwise, it returns false.
+    */
+    public native @Cast("bool") boolean queryIfComplete();
+
+    /** \brief Blocks the current CPU thread until all operations in the stream are complete.
+    */
+    public native void waitForCompletion();
+
+    /** \brief Makes a compute stream wait on an event.
+    */
+    public native void waitEvent(@Const @ByRef Event event);
+
+    /** \brief Adds a callback to be called on the host after all currently enqueued items in the stream have
+    completed.
+    <p>
+    \note Callbacks must not make any CUDA API calls. Callbacks must not perform any synchronization
+    that may depend on outstanding device work or other callbacks that are not mandated to run earlier.
+    Callbacks without a mandated order (in independent streams) execute in undefined order and may be
+    serialized.
+     */
+    public native void enqueueHostCallback(StreamCallback callback, Pointer userData);
+
+    /** return Stream object for default CUDA stream */
+    public static native @ByRef Stream Null();
+
+    /** returns true if stream object is not default (!= 0) */
+    
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+}
+
+@Namespace("cv::cuda") @NoOffset public static class Event extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Event(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Event(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Event position(long position) {
+        return (Event)super.position(position);
+    }
+
+    /** enum cv::cuda::Event::CreateFlags */
+    public static final int
+        /** Default event flag */
+        DEFAULT        =  0x00,
+        /** Event uses blocking synchronization */
+        BLOCKING_SYNC  =  0x01,
+        /** Event will not record timing data */
+        DISABLE_TIMING =  0x02,
+        /** Event is suitable for interprocess use. DisableTiming must be set */
+        INTERPROCESS   =  0x04;
+
+    public Event(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::DEFAULT*/) { super((Pointer)null); allocate(flags); }
+    private native void allocate(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::DEFAULT*/);
+    public Event() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** records an event */
+    public native void record(@ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+    public native void record();
+
+    /** queries an event's status */
+    public native @Cast("bool") boolean queryIfComplete();
+
+    /** waits for an event to complete */
+    public native void waitForCompletion();
+
+    /** computes the elapsed time between events */
+    public static native float elapsedTime(@Const @ByRef Event start, @Const @ByRef Event end);
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+}
+
+/** \} cudacore_struct */
+
+//===================================================================================
+// Initialization & Info
+//===================================================================================
+
+/** \addtogroup cudacore_init
+/** \{
+<p>
+/** \brief Returns the number of installed CUDA-enabled devices.
+<p>
+Use this function before any other CUDA functions calls. If OpenCV is compiled without CUDA support,
+this function returns 0. If the CUDA driver is not installed, or is incompatible, this function
+returns -1.
+ */
+@Namespace("cv::cuda") public static native int getCudaEnabledDeviceCount();
+
+/** \brief Sets a device and initializes it for the current thread.
+<p>
+@param device System index of a CUDA device starting with 0.
+<p>
+If the call of this function is omitted, a default device is initialized at the fist CUDA usage.
+ */
+@Namespace("cv::cuda") public static native void setDevice(int device);
+
+/** \brief Returns the current device index set by cuda::setDevice or initialized by default.
+ */
+@Namespace("cv::cuda") public static native int getDevice();
+
+/** \brief Explicitly destroys and cleans up all resources associated with the current device in the current
+process.
+<p>
+Any subsequent API call to this device will reinitialize the device.
+ */
+@Namespace("cv::cuda") public static native void resetDevice();
+
+/** \brief Enumeration providing CUDA computing features.
+ */
+/** enum cv::cuda::FeatureSet */
+public static final int
+    FEATURE_SET_COMPUTE_10 = 10,
+    FEATURE_SET_COMPUTE_11 = 11,
+    FEATURE_SET_COMPUTE_12 = 12,
+    FEATURE_SET_COMPUTE_13 = 13,
+    FEATURE_SET_COMPUTE_20 = 20,
+    FEATURE_SET_COMPUTE_21 = 21,
+    FEATURE_SET_COMPUTE_30 = 30,
+    FEATURE_SET_COMPUTE_32 = 32,
+    FEATURE_SET_COMPUTE_35 = 35,
+    FEATURE_SET_COMPUTE_50 = 50,
+
+    GLOBAL_ATOMICS =  FEATURE_SET_COMPUTE_11,
+    SHARED_ATOMICS =  FEATURE_SET_COMPUTE_12,
+    NATIVE_DOUBLE =  FEATURE_SET_COMPUTE_13,
+    WARP_SHUFFLE_FUNCTIONS =  FEATURE_SET_COMPUTE_30,
+    DYNAMIC_PARALLELISM =  FEATURE_SET_COMPUTE_35;
+
+/** checks whether current device supports the given feature */
+@Namespace("cv::cuda") public static native @Cast("bool") boolean deviceSupports(@Cast("cv::cuda::FeatureSet") int feature_set);
+
+/** \brief Class providing a set of static methods to check what NVIDIA\* card architecture the CUDA module was
+built for.
+<p>
+According to the CUDA C Programming Guide Version 3.2: "PTX code produced for some specific compute
+capability can always be compiled to binary code of greater or equal compute capability".
+ */
+@Namespace("cv::cuda") public static class TargetArchs extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public TargetArchs() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TargetArchs(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TargetArchs(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public TargetArchs position(long position) {
+        return (TargetArchs)super.position(position);
+    }
+
+    /** \brief The following method checks whether the module was built with the support of the given feature:
+    <p>
+    @param feature_set Features to be checked. See :ocvcuda::FeatureSet.
+     */
+    public static native @Cast("bool") boolean builtWith(@Cast("cv::cuda::FeatureSet") int feature_set);
+
+    /** \brief There is a set of methods to check whether the module contains intermediate (PTX) or binary CUDA
+    code for the given architecture(s):
+    <p>
+    @param major Major compute capability version.
+    @param minor Minor compute capability version.
+     */
+    public static native @Cast("bool") boolean has(int major, int minor);
+    public static native @Cast("bool") boolean hasPtx(int major, int minor);
+    public static native @Cast("bool") boolean hasBin(int major, int minor);
+
+    public static native @Cast("bool") boolean hasEqualOrLessPtx(int major, int minor);
+    public static native @Cast("bool") boolean hasEqualOrGreater(int major, int minor);
+    public static native @Cast("bool") boolean hasEqualOrGreaterPtx(int major, int minor);
+    public static native @Cast("bool") boolean hasEqualOrGreaterBin(int major, int minor);
+}
+
+/** \brief Class providing functionality for querying the specified GPU properties.
+ */
+@Namespace("cv::cuda") @NoOffset public static class DeviceInfo extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceInfo(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DeviceInfo(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DeviceInfo position(long position) {
+        return (DeviceInfo)super.position(position);
+    }
+
+    /** creates DeviceInfo object for the current GPU */
+    public DeviceInfo() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** \brief The constructors.
+    <p>
+    @param device_id System index of the CUDA device starting with 0.
+    <p>
+    Constructs the DeviceInfo object for the specified device. If device_id parameter is missed, it
+    constructs an object for the current device.
+     */
+    public DeviceInfo(int device_id) { super((Pointer)null); allocate(device_id); }
+    private native void allocate(int device_id);
+
+    /** \brief Returns system index of the CUDA device starting with 0.
+    */
+    public native int deviceID();
+
+    /** ASCII string identifying device */
+    public native @Cast("const char*") BytePointer name();
+
+    /** global memory available on device in bytes */
+    public native @Cast("size_t") long totalGlobalMem();
+
+    /** shared memory available per block in bytes */
+    public native @Cast("size_t") long sharedMemPerBlock();
+
+    /** 32-bit registers available per block */
+    public native int regsPerBlock();
+
+    /** warp size in threads */
+    public native int warpSize();
+
+    /** maximum pitch in bytes allowed by memory copies */
+    public native @Cast("size_t") long memPitch();
+
+    /** maximum number of threads per block */
+    public native int maxThreadsPerBlock();
+
+    /** maximum size of each dimension of a block */
+    public native @ByVal Point3i maxThreadsDim();
+
+    /** maximum size of each dimension of a grid */
+    public native @ByVal Point3i maxGridSize();
+
+    /** clock frequency in kilohertz */
+    public native int clockRate();
+
+    /** constant memory available on device in bytes */
+    public native @Cast("size_t") long totalConstMem();
+
+    /** major compute capability */
+    public native int majorVersion();
+
+    /** minor compute capability */
+    public native int minorVersion();
+
+    /** alignment requirement for textures */
+    public native @Cast("size_t") long textureAlignment();
+
+    /** pitch alignment requirement for texture references bound to pitched memory */
+    public native @Cast("size_t") long texturePitchAlignment();
+
+    /** number of multiprocessors on device */
+    public native int multiProcessorCount();
+
+    /** specified whether there is a run time limit on kernels */
+    public native @Cast("bool") boolean kernelExecTimeoutEnabled();
+
+    /** device is integrated as opposed to discrete */
+    public native @Cast("bool") boolean integrated();
+
+    /** device can map host memory with cudaHostAlloc/cudaHostGetDevicePointer */
+    public native @Cast("bool") boolean canMapHostMemory();
+
+    /** enum cv::cuda::DeviceInfo::ComputeMode */
+    public static final int
+        /** default compute mode (Multiple threads can use cudaSetDevice with this device) */
+        ComputeModeDefault = 0,
+        /** compute-exclusive-thread mode (Only one thread in one process will be able to use cudaSetDevice with this device) */
+        ComputeModeExclusive = 1,
+        /** compute-prohibited mode (No threads can use cudaSetDevice with this device) */
+        ComputeModeProhibited = 2,
+        /** compute-exclusive-process mode (Many threads in one process will be able to use cudaSetDevice with this device) */
+        ComputeModeExclusiveProcess = 3;
+
+    /** compute mode */
+    public native @Cast("cv::cuda::DeviceInfo::ComputeMode") int computeMode();
+
+    /** maximum 1D texture size */
+    public native int maxTexture1D();
+
+    /** maximum 1D mipmapped texture size */
+    public native int maxTexture1DMipmap();
+
+    /** maximum size for 1D textures bound to linear memory */
+    public native int maxTexture1DLinear();
+
+    /** maximum 2D texture dimensions */
+    public native @ByVal Point maxTexture2D();
+
+    /** maximum 2D mipmapped texture dimensions */
+    public native @ByVal Point maxTexture2DMipmap();
+
+    /** maximum dimensions (width, height, pitch) for 2D textures bound to pitched memory */
+    public native @ByVal Point3i maxTexture2DLinear();
+
+    /** maximum 2D texture dimensions if texture gather operations have to be performed */
+    public native @ByVal Point maxTexture2DGather();
+
+    /** maximum 3D texture dimensions */
+    public native @ByVal Point3i maxTexture3D();
+
+    /** maximum Cubemap texture dimensions */
+    public native int maxTextureCubemap();
+
+    /** maximum 1D layered texture dimensions */
+    public native @ByVal Point maxTexture1DLayered();
+
+    /** maximum 2D layered texture dimensions */
+    public native @ByVal Point3i maxTexture2DLayered();
+
+    /** maximum Cubemap layered texture dimensions */
+    public native @ByVal Point maxTextureCubemapLayered();
+
+    /** maximum 1D surface size */
+    public native int maxSurface1D();
+
+    /** maximum 2D surface dimensions */
+    public native @ByVal Point maxSurface2D();
+
+    /** maximum 3D surface dimensions */
+    public native @ByVal Point3i maxSurface3D();
+
+    /** maximum 1D layered surface dimensions */
+    public native @ByVal Point maxSurface1DLayered();
+
+    /** maximum 2D layered surface dimensions */
+    public native @ByVal Point3i maxSurface2DLayered();
+
+    /** maximum Cubemap surface dimensions */
+    public native int maxSurfaceCubemap();
+
+    /** maximum Cubemap layered surface dimensions */
+    public native @ByVal Point maxSurfaceCubemapLayered();
+
+    /** alignment requirements for surfaces */
+    public native @Cast("size_t") long surfaceAlignment();
+
+    /** device can possibly execute multiple kernels concurrently */
+    public native @Cast("bool") boolean concurrentKernels();
+
+    /** device has ECC support enabled */
+    public native @Cast("bool") boolean ECCEnabled();
+
+    /** PCI bus ID of the device */
+    public native int pciBusID();
+
+    /** PCI device ID of the device */
+    public native int pciDeviceID();
+
+    /** PCI domain ID of the device */
+    public native int pciDomainID();
+
+    /** true if device is a Tesla device using TCC driver, false otherwise */
+    public native @Cast("bool") boolean tccDriver();
+
+    /** number of asynchronous engines */
+    public native int asyncEngineCount();
+
+    /** device shares a unified address space with the host */
+    public native @Cast("bool") boolean unifiedAddressing();
+
+    /** peak memory clock frequency in kilohertz */
+    public native int memoryClockRate();
+
+    /** global memory bus width in bits */
+    public native int memoryBusWidth();
+
+    /** size of L2 cache in bytes */
+    public native int l2CacheSize();
+
+    /** maximum resident threads per multiprocessor */
+    public native int maxThreadsPerMultiProcessor();
+
+    /** gets free and total device memory */
+    public native void queryMemory(@Cast("size_t*") @ByRef SizeTPointer totalMemory, @Cast("size_t*") @ByRef SizeTPointer freeMemory);
+    public native @Cast("size_t") long freeMemory();
+    public native @Cast("size_t") long totalMemory();
+
+    /** \brief Provides information on CUDA feature support.
+    <p>
+    @param feature_set Features to be checked. See cuda::FeatureSet.
+    <p>
+    This function returns true if the device has the specified CUDA feature. Otherwise, it returns false
+     */
+    public native @Cast("bool") boolean supports(@Cast("cv::cuda::FeatureSet") int feature_set);
+
+    /** \brief Checks the CUDA module and device compatibility.
+    <p>
+    This function returns true if the CUDA module can be run on the specified device. Otherwise, it
+    returns false .
+     */
+    public native @Cast("bool") boolean isCompatible();
+}
+
+@Namespace("cv::cuda") public static native void printCudaDeviceInfo(int device);
+@Namespace("cv::cuda") public static native void printShortCudaDeviceInfo(int device);
+
+/** \brief Converts an array to half precision floating number.
+<p>
+@param _src input array.
+@param _dst output array.
+@param stream Stream for the asynchronous version.
+\sa convertFp16
+*/
+
+
+/** \} cudacore_init */
+
+ // namespace cv { namespace cuda {
+
+
+// #include "opencv2/core/cuda.inl.hpp"
+
+// #endif /* OPENCV_CORE_CUDA_HPP */
+
+
+// Parsed from <opencv2/core/ocl.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the OpenCV Foundation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef OPENCV_OPENCL_HPP
+// #define OPENCV_OPENCL_HPP
+
+// #include "opencv2/core.hpp"
+
+/** \addtogroup core_opencl
+ *  \{ */
+
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveOpenCL();
+@Namespace("cv::ocl") public static native @Cast("bool") boolean useOpenCL();
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveAmdBlas();
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveAmdFft();
+@Namespace("cv::ocl") public static native void setUseOpenCL(@Cast("bool") boolean flag);
+@Namespace("cv::ocl") public static native void finish();
+
+@Namespace("cv::ocl") public static native @Cast("bool") boolean haveSVM();
+
+@Namespace("cv::ocl") @NoOffset public static class Device extends Pointer {
+    static { Loader.load(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Device(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Device position(long position) {
+        return (Device)super.position(position);
+    }
+
+    public Device() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Device(Pointer d) { super((Pointer)null); allocate(d); }
+    private native void allocate(Pointer d);
+    public Device(@Const @ByRef Device d) { super((Pointer)null); allocate(d); }
+    private native void allocate(@Const @ByRef Device d);
+    public native @ByRef @Name("operator =") Device put(@Const @ByRef Device d);
+
+    public native void set(Pointer d);
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        TYPE_DEFAULT     =  (1 << 0),
+        TYPE_CPU         =  (1 << 1),
+        TYPE_GPU         =  (1 << 2),
+        TYPE_ACCELERATOR =  (1 << 3),
+        TYPE_DGPU        =  TYPE_GPU + (1 << 16),
+        TYPE_IGPU        =  TYPE_GPU + (1 << 17),
+        TYPE_ALL         =  0xFFFFFFFF;
+
+    public native @Str BytePointer name();
+    public native @Str BytePointer extensions();
+    public native @Cast("bool") boolean isExtensionSupported(@Str BytePointer extensionName);
+    public native @Cast("bool") boolean isExtensionSupported(@Str String extensionName);
+    public native @Str BytePointer version();
+    public native @Str BytePointer vendorName();
+    public native @Str BytePointer OpenCL_C_Version();
+    public native @Str BytePointer OpenCLVersion();
+    public native int deviceVersionMajor();
+    public native int deviceVersionMinor();
+    public native @Str BytePointer driverVersion();
+    public native Pointer ptr();
+
+    public native int type();
+
+    public native int addressBits();
+    public native @Cast("bool") boolean available();
+    public native @Cast("bool") boolean compilerAvailable();
+    public native @Cast("bool") boolean linkerAvailable();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        FP_DENORM= (1 << 0),
+        FP_INF_NAN= (1 << 1),
+        FP_ROUND_TO_NEAREST= (1 << 2),
+        FP_ROUND_TO_ZERO= (1 << 3),
+        FP_ROUND_TO_INF= (1 << 4),
+        FP_FMA= (1 << 5),
+        FP_SOFT_FLOAT= (1 << 6),
+        FP_CORRECTLY_ROUNDED_DIVIDE_SQRT= (1 << 7);
+    public native int doubleFPConfig();
+    public native int singleFPConfig();
+    public native int halfFPConfig();
+
+    public native @Cast("bool") boolean endianLittle();
+    public native @Cast("bool") boolean errorCorrectionSupport();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        EXEC_KERNEL= (1 << 0),
+        EXEC_NATIVE_KERNEL= (1 << 1);
+    public native int executionCapabilities();
+
+    public native @Cast("size_t") long globalMemCacheSize();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        NO_CACHE= 0,
+        READ_ONLY_CACHE= 1,
+        READ_WRITE_CACHE= 2;
+    public native int globalMemCacheType();
+    public native int globalMemCacheLineSize();
+    public native @Cast("size_t") long globalMemSize();
+
+    public native @Cast("size_t") long localMemSize();
+    /** enum cv::ocl::Device:: */
+    public static final int
+        NO_LOCAL_MEM= 0,
+        LOCAL_IS_LOCAL= 1,
+        LOCAL_IS_GLOBAL= 2;
+    public native int localMemType();
+    public native @Cast("bool") boolean hostUnifiedMemory();
+
+    public native @Cast("bool") boolean imageSupport();
+
+    public native @Cast("bool") boolean imageFromBufferSupport();
+    public native @Cast("uint") int imagePitchAlignment();
+    public native @Cast("uint") int imageBaseAddressAlignment();
+
+    /** deprecated, use isExtensionSupported() method (probably with "cl_khr_subgroups" value) */
+    public native @Cast("bool") boolean intelSubgroupsSupport();
+
+    public native @Cast("size_t") long image2DMaxWidth();
+    public native @Cast("size_t") long image2DMaxHeight();
+
+    public native @Cast("size_t") long image3DMaxWidth();
+    public native @Cast("size_t") long image3DMaxHeight();
+    public native @Cast("size_t") long image3DMaxDepth();
+
+    public native @Cast("size_t") long imageMaxBufferSize();
+    public native @Cast("size_t") long imageMaxArraySize();
+
+    /** enum cv::ocl::Device:: */
+    public static final int
+        UNKNOWN_VENDOR= 0,
+        VENDOR_AMD= 1,
+        VENDOR_INTEL= 2,
+        VENDOR_NVIDIA= 3;
+    public native int vendorID();
+    // FIXIT
+    // dev.isAMD() doesn't work for OpenCL CPU devices from AMD OpenCL platform.
+    // This method should use platform name instead of vendor name.
+    // After fix restore code in arithm.cpp: ocl_compare()
+    public native @Cast("bool") boolean isAMD();
+    public native @Cast("bool") boolean isIntel();
+    public native @Cast("bool") boolean isNVidia();
+
+    public native int maxClockFrequency();
+    public native int maxComputeUnits();
+    public native int maxConstantArgs();
+    public native @Cast("size_t") long maxConstantBufferSize();
+
+    public native @Cast("size_t") long maxMemAllocSize();
+    public native @Cast("size_t") long maxParameterSize();
+
+    public native int maxReadImageArgs();
+    public native int maxWriteImageArgs();
+    public native int maxSamplers();
+
+    public native @Cast("size_t") long maxWorkGroupSize();
+    public native int maxWorkItemDims();
+    public native void maxWorkItemSizes(@Cast("size_t*") SizeTPointer arg0);
+
+    public native int memBaseAddrAlign();
+
+    public native int nativeVectorWidthChar();
+    public native int nativeVectorWidthShort();
+    public native int nativeVectorWidthInt();
+    public native int nativeVectorWidthLong();
+    public native int nativeVectorWidthFloat();
+    public native int nativeVectorWidthDouble();
+    public native int nativeVectorWidthHalf();
+
+    public native int preferredVectorWidthChar();
+    public native int preferredVectorWidthShort();
+    public native int preferredVectorWidthInt();
+    public native int preferredVectorWidthLong();
+    public native int preferredVectorWidthFloat();
+    public native int preferredVectorWidthDouble();
+    public native int preferredVectorWidthHalf();
+
+    public native @Cast("size_t") long printfBufferSize();
+    public native @Cast("size_t") long profilingTimerResolution();
+
+    public static native @Const @ByRef Device getDefault();
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class Context extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Context(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Context(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Context position(long position) {
+        return (Context)super.position(position);
+    }
+
+    public Context() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Context(int dtype) { super((Pointer)null); allocate(dtype); }
+    private native void allocate(int dtype);
+    public Context(@Const @ByRef Context c) { super((Pointer)null); allocate(c); }
+    private native void allocate(@Const @ByRef Context c);
+    public native @ByRef @Name("operator =") Context put(@Const @ByRef Context c);
+
+    public native @Cast("bool") boolean create();
+    public native @Cast("bool") boolean create(int dtype);
+    public native @Cast("size_t") long ndevices();
+    public native @Const @ByRef Device device(@Cast("size_t") long idx);
+    public native @ByVal Program getProg(@Const @ByRef ProgramSource prog,
+                        @Str BytePointer buildopt, @Str BytePointer errmsg);
+    public native @ByVal Program getProg(@Const @ByRef ProgramSource prog,
+                        @Str String buildopt, @Str String errmsg);
+    public native void unloadProg(@ByRef Program prog);
+
+    public static native @ByRef Context getDefault(@Cast("bool") boolean initialize/*=true*/);
+    public static native @ByRef Context getDefault();
+    public native Pointer ptr();
+
+    
+
+    public native @Cast("bool") boolean useSVM();
+    public native void setUseSVM(@Cast("bool") boolean enabled);
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl p(); public native Context p(Impl p);
+}
+
+@Name("cv::ocl::Platform") @NoOffset public static class OclPlatform extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OclPlatform(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OclPlatform(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OclPlatform position(long position) {
+        return (OclPlatform)super.position(position);
+    }
+
+    public OclPlatform() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public OclPlatform(@Const @ByRef OclPlatform p) { super((Pointer)null); allocate(p); }
+    private native void allocate(@Const @ByRef OclPlatform p);
+    public native @ByRef @Name("operator =") OclPlatform put(@Const @ByRef OclPlatform p);
+
+    public native Pointer ptr();
+    public static native @ByRef OclPlatform getDefault();
+
+    
+}
+
+/** \brief Attaches OpenCL context to OpenCV
+\note
+  OpenCV will check if available OpenCL platform has platformName name, then assign context to
+  OpenCV and call {@code clRetainContext} function. The deviceID device will be used as target device and
+  new command queue will be created.
+@param platformName name of OpenCL platform to attach, this string is used to check if platform is available to OpenCV at runtime
+@param platformID ID of platform attached context was created for
+@param context OpenCL context to be attached to OpenCV
+@param deviceID ID of device, must be created from attached context
+*/
+@Namespace("cv::ocl") public static native void attachContext(@Str BytePointer platformName, Pointer platformID, Pointer context, Pointer deviceID);
+@Namespace("cv::ocl") public static native void attachContext(@Str String platformName, Pointer platformID, Pointer context, Pointer deviceID);
+
+/** \brief Convert OpenCL buffer to UMat
+\note
+  OpenCL buffer (cl_mem_buffer) should contain 2D image data, compatible with OpenCV. Memory
+  content is not copied from {@code clBuffer} to UMat. Instead, buffer handle assigned to UMat and
+  {@code clRetainMemObject} is called.
+@param cl_mem_buffer source clBuffer handle
+@param step num of bytes in single row
+@param rows number of rows
+@param cols number of cols
+@param type OpenCV type of image
+@param dst destination UMat
+*/
+@Namespace("cv::ocl") public static native void convertFromBuffer(Pointer cl_mem_buffer, @Cast("size_t") long step, int rows, int cols, int type, @ByRef UMat dst);
+
+/** \brief Convert OpenCL image2d_t to UMat
+\note
+  OpenCL {@code image2d_t} (cl_mem_image), should be compatible with OpenCV UMat formats. Memory content
+  is copied from image to UMat with {@code clEnqueueCopyImageToBuffer} function.
+@param cl_mem_image source image2d_t handle
+@param dst destination UMat
+*/
+@Namespace("cv::ocl") public static native void convertFromImage(Pointer cl_mem_image, @ByRef UMat dst);
+
+// TODO Move to internal header
+
+
+@Namespace("cv::ocl") @NoOffset public static class Queue extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Queue(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Queue(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Queue position(long position) {
+        return (Queue)super.position(position);
+    }
+
+    public Queue() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Queue(@Const @ByRef Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d) { super((Pointer)null); allocate(c, d); }
+    private native void allocate(@Const @ByRef Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d);
+    public Queue(@Const @ByRef Context c) { super((Pointer)null); allocate(c); }
+    private native void allocate(@Const @ByRef Context c);
+    public Queue(@Const @ByRef Queue q) { super((Pointer)null); allocate(q); }
+    private native void allocate(@Const @ByRef Queue q);
+    public native @ByRef @Name("operator =") Queue put(@Const @ByRef Queue q);
+
+    public native @Cast("bool") boolean create(@Const @ByRef(nullValue = "cv::ocl::Context()") Context c, @Const @ByRef(nullValue = "cv::ocl::Device()") Device d);
+    public native @Cast("bool") boolean create();
+    public native void finish();
+    public native Pointer ptr();
+    public static native @ByRef Queue getDefault();
+
+    /** \brief Returns OpenCL command queue with enable profiling mode support */
+    public native @Const @ByRef Queue getProfilingQueue();
+    public native @Cast("cv::ocl::Queue::Impl*") Pointer getImpl();
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class KernelArg extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelArg(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KernelArg(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KernelArg position(long position) {
+        return (KernelArg)super.position(position);
+    }
+
+    /** enum cv::ocl::KernelArg:: */
+    public static final int LOCAL= 1, READ_ONLY= 2, WRITE_ONLY= 4, READ_WRITE= 6, CONSTANT= 8, PTR_ONLY = 16, NO_SIZE= 256;
+    public KernelArg(int _flags, UMat _m, int wscale/*=1*/, int iwscale/*=1*/, @Const Pointer _obj/*=0*/, @Cast("size_t") long _sz/*=0*/) { super((Pointer)null); allocate(_flags, _m, wscale, iwscale, _obj, _sz); }
+    private native void allocate(int _flags, UMat _m, int wscale/*=1*/, int iwscale/*=1*/, @Const Pointer _obj/*=0*/, @Cast("size_t") long _sz/*=0*/);
+    public KernelArg(int _flags, UMat _m) { super((Pointer)null); allocate(_flags, _m); }
+    private native void allocate(int _flags, UMat _m);
+    public KernelArg() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public static native @ByVal KernelArg Local();
+    public static native @ByVal KernelArg PtrWriteOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg PtrReadOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg PtrReadWrite(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadWrite(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadWrite(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadWriteNoSize(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadWriteNoSize(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadOnly(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg WriteOnly(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg WriteOnly(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg ReadOnlyNoSize(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg ReadOnlyNoSize(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg WriteOnlyNoSize(@Const @ByRef UMat m, int wscale/*=1*/, int iwscale/*=1*/);
+    public static native @ByVal KernelArg WriteOnlyNoSize(@Const @ByRef UMat m);
+    public static native @ByVal KernelArg Constant(@Const @ByRef Mat m);
+
+    public native int flags(); public native KernelArg flags(int flags);
+    public native UMat m(); public native KernelArg m(UMat m);
+    @MemberGetter public native @Const Pointer obj();
+    public native @Cast("size_t") long sz(); public native KernelArg sz(long sz);
+    public native int wscale(); public native KernelArg wscale(int wscale);
+    public native int iwscale(); public native KernelArg iwscale(int iwscale);
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class Kernel extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Kernel(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Kernel(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Kernel position(long position) {
+        return (Kernel)super.position(position);
+    }
+
+    public Kernel() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Kernel(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog) { super((Pointer)null); allocate(kname, prog); }
+    private native void allocate(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog);
+    public Kernel(String kname, @Const @ByRef Program prog) { super((Pointer)null); allocate(kname, prog); }
+    private native void allocate(String kname, @Const @ByRef Program prog);
+    public Kernel(String kname, @Const @ByRef ProgramSource prog,
+                @Str String buildopts, @Str BytePointer errmsg) { allocate(kname, prog, buildopts, errmsg); }
+    private native void allocate(String kname, @Const @ByRef ProgramSource prog,
+                @Str String buildopts, @Cast({"", "cv::String*"}) @Str BytePointer errmsg/*=NULL*/);
+    public Kernel(@Const @ByRef Kernel k) { super((Pointer)null); allocate(k); }
+    private native void allocate(@Const @ByRef Kernel k);
+    public native @ByRef @Name("operator =") Kernel put(@Const @ByRef Kernel k);
+
+    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") boolean create(@Cast("const char*") BytePointer kname, @Const @ByRef Program prog);
+    public native @Cast("bool") boolean create(String kname, @Const @ByRef Program prog);
+    public native @Cast("bool") boolean create(String kname, @Const @ByRef ProgramSource prog,
+                @Str String buildopts, @Cast({"", "cv::String*"}) @Str BytePointer errmsg/*=NULL*/);
+
+    public native int set(int i, @Const Pointer value, @Cast("size_t") long sz);
+    public native int set(int i, @Const @ByRef Image2D image2D);
+    public native int set(int i, @Const @ByRef UMat m);
+    public native int set(int i, @Const @ByRef KernelArg arg);
+    /** \brief Run the OpenCL kernel.
+    @param dims the work problem dimensions. It is the length of globalsize and localsize. It can be either 1, 2 or 3.
+    @param globalsize work items for each dimension. It is not the final globalsize passed to
+      OpenCL. Each dimension will be adjusted to the nearest integer divisible by the corresponding
+      value in localsize. If localsize is NULL, it will still be adjusted depending on dims. The
+      adjusted values are greater than or equal to the original values.
+    @param localsize work-group size for each dimension.
+    @param sync specify whether to wait for OpenCL computation to finish before return.
+    @param q command queue
+    */
+    public native @Cast("bool") boolean run(int dims, @Cast("size_t*") SizeTPointer globalsize,
+                 @Cast("size_t*") SizeTPointer localsize, @Cast("bool") boolean sync, @Const @ByRef(nullValue = "cv::ocl::Queue()") Queue q);
+    public native @Cast("bool") boolean run(int dims, @Cast("size_t*") SizeTPointer globalsize,
+                 @Cast("size_t*") SizeTPointer localsize, @Cast("bool") boolean sync);
+    public native @Cast("bool") boolean runTask(@Cast("bool") boolean sync, @Const @ByRef(nullValue = "cv::ocl::Queue()") Queue q);
+    public native @Cast("bool") boolean runTask(@Cast("bool") boolean sync);
+
+    /** \brief Similar to synchronized run() call with returning of kernel execution time
+     * Separate OpenCL command queue may be used (with CL_QUEUE_PROFILING_ENABLE)
+     * @return Execution time in nanoseconds or negative number on error
+     */
+    public native @Cast("int64") long runProfiling(int dims, @Cast("size_t*") SizeTPointer globalsize, @Cast("size_t*") SizeTPointer localsize, @Const @ByRef(nullValue = "cv::ocl::Queue()") Queue q);
+    public native @Cast("int64") long runProfiling(int dims, @Cast("size_t*") SizeTPointer globalsize, @Cast("size_t*") SizeTPointer localsize);
+
+    public native @Cast("size_t") long workGroupSize();
+    public native @Cast("size_t") long preferedWorkGroupSizeMultiple();
+    public native @Cast("bool") boolean compileWorkGroupSize(@Cast("size_t*") SizeTPointer wsz);
+    public native @Cast("size_t") long localMemSize();
+
+    public native Pointer ptr();
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+}
+
+@Namespace("cv::ocl") @NoOffset public static class Program extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Program(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Program(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Program position(long position) {
+        return (Program)super.position(position);
+    }
+
+    public Program() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Program(@Const @ByRef ProgramSource src,
+                @Str BytePointer buildflags, @Str BytePointer errmsg) { super((Pointer)null); allocate(src, buildflags, errmsg); }
+    private native void allocate(@Const @ByRef ProgramSource src,
+                @Str BytePointer buildflags, @Str BytePointer errmsg);
+    public Program(@Const @ByRef ProgramSource src,
+                @Str String buildflags, @Str String errmsg) { super((Pointer)null); allocate(src, buildflags, errmsg); }
+    private native void allocate(@Const @ByRef ProgramSource src,
+                @Str String buildflags, @Str String errmsg);
+    public Program(@Const @ByRef Program prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Const @ByRef Program prog);
+
+    public native @ByRef @Name("operator =") Program put(@Const @ByRef Program prog);
+
+    public native @Cast("bool") boolean create(@Const @ByRef ProgramSource src,
+                    @Str BytePointer buildflags, @Str BytePointer errmsg);
+    public native @Cast("bool") boolean create(@Const @ByRef ProgramSource src,
+                    @Str String buildflags, @Str String errmsg);
+    public native @Cast("bool") boolean read(@Str BytePointer buf, @Str BytePointer buildflags);
+    public native @Cast("bool") boolean read(@Str String buf, @Str String buildflags);
+    public native @Cast("bool") boolean write(@Str BytePointer buf);
+    public native @Cast("bool") boolean write(@Str String buf);
+
+    public native @Const @ByRef ProgramSource source();
+    public native Pointer ptr();
+
+    public native @Str BytePointer getPrefix();
+    public static native @Str BytePointer getPrefix(@Str BytePointer buildflags);
+    public static native @Str String getPrefix(@Str String buildflags);
+
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl getImpl();
+}
+
+
+@Namespace("cv::ocl") @NoOffset public static class ProgramSource extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ProgramSource(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ProgramSource(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ProgramSource position(long position) {
+        return (ProgramSource)super.position(position);
+    }
+ // deprecated
+
+    public ProgramSource() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public ProgramSource(@Str BytePointer module, @Str BytePointer name, @Str BytePointer codeStr, @Str BytePointer codeHash) { super((Pointer)null); allocate(module, name, codeStr, codeHash); }
+    private native void allocate(@Str BytePointer module, @Str BytePointer name, @Str BytePointer codeStr, @Str BytePointer codeHash);
+    public ProgramSource(@Str String module, @Str String name, @Str String codeStr, @Str String codeHash) { super((Pointer)null); allocate(module, name, codeStr, codeHash); }
+    private native void allocate(@Str String module, @Str String name, @Str String codeStr, @Str String codeHash);
+    public ProgramSource(@Str BytePointer prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Str BytePointer prog);
+    public ProgramSource(@Str String prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Str String prog); // deprecated // deprecated
+    public ProgramSource(@Const @ByRef ProgramSource prog) { super((Pointer)null); allocate(prog); }
+    private native void allocate(@Const @ByRef ProgramSource prog);
+    public native @ByRef @Name("operator =") ProgramSource put(@Const @ByRef ProgramSource prog);
+
+    public native @Str BytePointer source();
+    public native @Cast("cv::ocl::ProgramSource::hash_t") int hash(); // deprecated
+
+    @Opaque public static class Impl extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public Impl() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Impl(Pointer p) { super(p); }
+    }
+    public native Impl getImpl();
+}
+
+@Namespace("cv::ocl") @NoOffset public static class PlatformInfo extends Pointer {
+    static { Loader.load(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PlatformInfo(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PlatformInfo position(long position) {
+        return (PlatformInfo)super.position(position);
+    }
+
+    public PlatformInfo() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public PlatformInfo(Pointer id) { super((Pointer)null); allocate(id); }
+    private native void allocate(Pointer id);
+
+    public PlatformInfo(@Const @ByRef PlatformInfo i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Const @ByRef PlatformInfo i);
+    public native @ByRef @Name("operator =") PlatformInfo put(@Const @ByRef PlatformInfo i);
+
+    public native @Str BytePointer name();
+    public native @Str BytePointer vendor();
+    public native @Str BytePointer version();
+    public native int deviceNumber();
+    public native void getDevice(@ByRef Device device, int d);
+}
+
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer convertTypeStr(int sdepth, int ddepth, int cn, @Cast("char*") BytePointer buf);
+@Namespace("cv::ocl") public static native String convertTypeStr(int sdepth, int ddepth, int cn, @Cast("char*") ByteBuffer buf);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer convertTypeStr(int sdepth, int ddepth, int cn, @Cast("char*") byte[] buf);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer typeToStr(int t);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer memopTypeToStr(int t);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer vecopTypeToStr(int t);
+@Namespace("cv::ocl") public static native @Cast("const char*") BytePointer getOpenCLErrorString(int errorCode);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal Mat _kernel, int ddepth/*=-1*/, @Cast("const char*") BytePointer name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal Mat _kernel);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal Mat _kernel, int ddepth/*=-1*/, String name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal UMat _kernel, int ddepth/*=-1*/, String name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal UMat _kernel);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal UMat _kernel, int ddepth/*=-1*/, @Cast("const char*") BytePointer name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal GpuMat _kernel, int ddepth/*=-1*/, @Cast("const char*") BytePointer name/*=NULL*/);
+@Namespace("cv::ocl") public static native @Str BytePointer kernelToStr(@ByVal GpuMat _kernel);
+@Namespace("cv::ocl") public static native @Str String kernelToStr(@ByVal GpuMat _kernel, int ddepth/*=-1*/, String name/*=NULL*/);
+@Namespace("cv::ocl") public static native void getPlatfomsInfo(@StdVector PlatformInfo platform_info);
+
+
+/** enum cv::ocl::OclVectorStrategy */
+public static final int
+    // all matrices have its own vector width
+    OCL_VECTOR_OWN = 0,
+    // all matrices have maximal vector width among all matrices
+    // (useful for cases when matrices have different data types)
+    OCL_VECTOR_MAX = 1,
+
+    // default strategy
+    OCL_VECTOR_DEFAULT =  OCL_VECTOR_OWN;
+
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                         @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal Mat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                         @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal UMat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                         @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                         @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal GpuMat src1);
+
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal Mat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal Mat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal Mat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal UMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal UMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal UMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntPointer vectorWidths,
+                                       @ByVal GpuMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const IntBuffer vectorWidths,
+                                       @ByVal GpuMat src1);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9,
+                                       @Cast("cv::ocl::OclVectorStrategy") int strat/*=cv::ocl::OCL_VECTOR_DEFAULT*/);
+@Namespace("cv::ocl") public static native int checkOptimalVectorWidth(@Const int[] vectorWidths,
+                                       @ByVal GpuMat src1);
+
+// with OCL_VECTOR_MAX strategy
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src9);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal Mat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal UMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src3,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src6,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat src9);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal UMat src1);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal GpuMat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src3,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src6,
+                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src7, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src8, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat src9);
+@Namespace("cv::ocl") public static native int predictOptimalVectorWidthMax(@ByVal GpuMat src1);
+
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str BytePointer buildOptions, @Str BytePointer name, @ByVal Mat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str String buildOptions, @Str String name, @ByVal Mat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str String buildOptions, @Str String name, @ByVal UMat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str BytePointer buildOptions, @Str BytePointer name, @ByVal UMat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str BytePointer buildOptions, @Str BytePointer name, @ByVal GpuMat _m);
+@Namespace("cv::ocl") public static native void buildOptionsAddMatrixDescription(@Str String buildOptions, @Str String name, @ByVal GpuMat _m);
+
+@Namespace("cv::ocl") @NoOffset public static class Image2D extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Image2D(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Image2D(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Image2D position(long position) {
+        return (Image2D)super.position(position);
+    }
+
+    public Image2D() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /**
+    @param src UMat object from which to get image properties and data
+    @param norm flag to enable the use of normalized channel data types
+    @param alias flag indicating that the image should alias the src UMat. If true, changes to the
+        image or src will be reflected in both objects.
+    */
+    public Image2D(@Const @ByRef UMat src, @Cast("bool") boolean norm/*=false*/, @Cast("bool") boolean alias/*=false*/) { super((Pointer)null); allocate(src, norm, alias); }
+    private native void allocate(@Const @ByRef UMat src, @Cast("bool") boolean norm/*=false*/, @Cast("bool") boolean alias/*=false*/);
+    public Image2D(@Const @ByRef UMat src) { super((Pointer)null); allocate(src); }
+    private native void allocate(@Const @ByRef UMat src);
+    public Image2D(@Const @ByRef Image2D i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Const @ByRef Image2D i);
+
+    public native @ByRef @Name("operator =") Image2D put(@Const @ByRef Image2D i);
+
+    /** Indicates if creating an aliased image should succeed.
+    Depends on the underlying platform and the dimensions of the UMat.
+    */
+    public static native @Cast("bool") boolean canCreateAlias(@Const @ByRef UMat u);
+
+    /** Indicates if the image format is supported.
+    */
+    public static native @Cast("bool") boolean isFormatSupported(int depth, int cn, @Cast("bool") boolean norm);
+
+    public native Pointer ptr();
+}
+
+@Namespace("cv::ocl") @NoOffset public static class Timer extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Timer(Pointer p) { super(p); }
+
+    public Timer(@Const @ByRef Queue q) { super((Pointer)null); allocate(q); }
+    private native void allocate(@Const @ByRef Queue q);
+    public native void start();
+    public native void stop();
+
+    public native @Cast("uint64") int durationNS();
+}
+
+@Namespace("cv::ocl") public static native MatAllocator getOpenCLAllocator();
+
+
+// #ifdef __OPENCV_BUILD
+// #endif
+
+/** \} */
+
+
+
+// #endif
+
+
 // Parsed from <opencv2/core/operations.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -15150,6 +17674,7 @@ Here is example of SIFT use in your application via Algorithm interface:
 
 @Namespace("cv") public static native @Ptr Formatted format(@ByVal Mat mtx, int fmt);
 @Namespace("cv") public static native @Ptr Formatted format(@ByVal UMat mtx, int fmt);
+@Namespace("cv") public static native @Ptr Formatted format(@ByVal GpuMat mtx, int fmt);
 
 @Namespace("cv") public static native int print(@Ptr Formatted fmtd, @Cast("FILE*") Pointer stream/*=stdout*/);
 @Namespace("cv") public static native int print(@Ptr Formatted fmtd);
@@ -16093,6 +18618,8 @@ including std::sort().
     */
 
     /** download data from GpuMat */
+    public Mat(@Const @ByRef GpuMat m) { super((Pointer)null); allocate(m); }
+    private native void allocate(@Const @ByRef GpuMat m);
 
     /** destructor - calls release() */
 
@@ -16259,6 +18786,7 @@ including std::sort().
      */
     public native void copyTo( @ByVal Mat m );
     public native void copyTo( @ByVal UMat m );
+    public native void copyTo( @ByVal GpuMat m );
 
     /** \overload
     @param m Destination matrix. If it does not have a proper size or type before the operation, it is
@@ -16268,6 +18796,7 @@ including std::sort().
     */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
     public native void copyTo( @ByVal UMat m, @ByVal UMat mask );
+    public native void copyTo( @ByVal GpuMat m, @ByVal GpuMat mask );
 
     /** \brief Converts an array to another data type with optional scaling.
     <p>
@@ -16286,6 +18815,8 @@ including std::sort().
     public native void convertTo( @ByVal Mat m, int rtype );
     public native void convertTo( @ByVal UMat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByVal UMat m, int rtype );
+    public native void convertTo( @ByVal GpuMat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
+    public native void convertTo( @ByVal GpuMat m, int rtype );
 
     /** \brief Provides a functional form of convertTo.
     <p>
@@ -16312,6 +18843,8 @@ including std::sort().
     public native @ByRef Mat setTo(@ByVal Mat value);
     public native @ByRef Mat setTo(@ByVal UMat value, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
     public native @ByRef Mat setTo(@ByVal UMat value);
+    public native @ByRef Mat setTo(@ByVal GpuMat value, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+    public native @ByRef Mat setTo(@ByVal GpuMat value);
 
     /** \brief Changes the shape and/or the number of channels of a 2D matrix without copying the data.
     <p>
@@ -16388,6 +18921,8 @@ including std::sort().
     public native @ByVal MatExpr mul(@ByVal Mat m);
     public native @ByVal MatExpr mul(@ByVal UMat m, double scale/*=1*/);
     public native @ByVal MatExpr mul(@ByVal UMat m);
+    public native @ByVal MatExpr mul(@ByVal GpuMat m, double scale/*=1*/);
+    public native @ByVal MatExpr mul(@ByVal GpuMat m);
 
     /** \brief Computes a cross-product of two 3-element vectors.
     <p>
@@ -16398,6 +18933,7 @@ including std::sort().
      */
     public native @ByVal Mat cross(@ByVal Mat m);
     public native @ByVal Mat cross(@ByVal UMat m);
+    public native @ByVal Mat cross(@ByVal GpuMat m);
 
     /** \brief Computes a dot-product of two vectors.
     <p>
@@ -16409,6 +18945,7 @@ including std::sort().
      */
     public native double dot(@ByVal Mat m);
     public native double dot(@ByVal UMat m);
+    public native double dot(@ByVal GpuMat m);
 
     /** \brief Returns a zero array of the specified size and type.
     <p>
@@ -17315,14 +19852,18 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     // It calls m.create(this->size(), this->type()).
     public native void copyTo( @ByVal Mat m );
     public native void copyTo( @ByVal UMat m );
+    public native void copyTo( @ByVal GpuMat m );
     /** copies those matrix elements to "m" that are marked with non-zero mask elements. */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
     public native void copyTo( @ByVal UMat m, @ByVal UMat mask );
+    public native void copyTo( @ByVal GpuMat m, @ByVal GpuMat mask );
     /** converts matrix to another datatype with optional scaling. See cvConvertScale. */
     public native void convertTo( @ByVal Mat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByVal Mat m, int rtype );
     public native void convertTo( @ByVal UMat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByVal UMat m, int rtype );
+    public native void convertTo( @ByVal GpuMat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
+    public native void convertTo( @ByVal GpuMat m, int rtype );
 
     public native void assignTo( @ByRef UMat m, int type/*=-1*/ );
     public native void assignTo( @ByRef UMat m );
@@ -17334,6 +19875,8 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     public native @ByRef UMat setTo(@ByVal Mat value);
     public native @ByRef UMat setTo(@ByVal UMat value, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
     public native @ByRef UMat setTo(@ByVal UMat value);
+    public native @ByRef UMat setTo(@ByVal GpuMat value, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+    public native @ByRef UMat setTo(@ByVal GpuMat value);
     /** creates alternative matrix header for the same data, with different */
     // number of channels and/or different number of rows. see cvReshape.
     public native @ByVal UMat reshape(int cn, int rows/*=0*/);
@@ -17352,10 +19895,13 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     public native @ByVal UMat mul(@ByVal Mat m);
     public native @ByVal UMat mul(@ByVal UMat m, double scale/*=1*/);
     public native @ByVal UMat mul(@ByVal UMat m);
+    public native @ByVal UMat mul(@ByVal GpuMat m, double scale/*=1*/);
+    public native @ByVal UMat mul(@ByVal GpuMat m);
 
     /** computes dot-product */
     public native double dot(@ByVal Mat m);
     public native double dot(@ByVal UMat m);
+    public native double dot(@ByVal GpuMat m);
 
     /** Matlab-style matrix initialization */
     public static native @ByVal UMat zeros(int rows, int cols, int type);
@@ -18984,8 +21530,10 @@ reading data to/from a file.
     /** \overload */
     public native void write(@Str BytePointer name, @ByVal Mat val);
     public native void write(@Str String name, @ByVal Mat val);
-    public native void write(@Str BytePointer name, @ByVal UMat val);
     public native void write(@Str String name, @ByVal UMat val);
+    public native void write(@Str BytePointer name, @ByVal UMat val);
+    public native void write(@Str BytePointer name, @ByVal GpuMat val);
+    public native void write(@Str String name, @ByVal GpuMat val);
 
     /** \brief Writes a comment.
     <p>
@@ -19681,6 +22229,7 @@ without any constraints.
      */
     public native double minimize(@ByVal Mat x);
     public native double minimize(@ByVal UMat x);
+    public native double minimize(@ByVal GpuMat x);
 }
 
 /** \brief This class is used to perform the non-linear non-constrained minimization of a function,
@@ -19726,6 +22275,7 @@ module.
      */
     public native void getInitStep(@ByVal Mat step);
     public native void getInitStep(@ByVal UMat step);
+    public native void getInitStep(@ByVal GpuMat step);
 
     /** \brief Sets the initial step that will be used in downhill simplex algorithm.
     <p>
@@ -19743,6 +22293,7 @@ module.
      */
     public native void setInitStep(@ByVal Mat step);
     public native void setInitStep(@ByVal UMat step);
+    public native void setInitStep(@ByVal GpuMat step);
 
     /** \brief This function returns the reference to the ready-to-use DownhillSolver object.
     <p>
@@ -19766,6 +22317,9 @@ module.
     public static native @Ptr DownhillSolver create();
     public static native @Ptr DownhillSolver create(@Ptr Function f/*=cv::Ptr<cv::MinProblemSolver::Function>()*/,
                                           @ByVal(nullValue = "cv::InputArray(cv::Mat_<double>(1,1,0.0))") UMat initStep,
+                                          @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER+cv::TermCriteria::EPS,5000,0.000001)") TermCriteria termcrit);
+    public static native @Ptr DownhillSolver create(@Ptr Function f/*=cv::Ptr<cv::MinProblemSolver::Function>()*/,
+                                          @ByVal(nullValue = "cv::InputArray(cv::Mat_<double>(1,1,0.0))") GpuMat initStep,
                                           @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER+cv::TermCriteria::EPS,5000,0.000001)") TermCriteria termcrit);
 }
 

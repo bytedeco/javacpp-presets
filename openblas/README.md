@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/openblas/apidocs/
 
-&lowast; The JNI bindings actually link with [Intel MKL](https://software.intel.com/intel-mkl) instead if found on the "java.library.path".
+&lowast; The JNI bindings actually link with [Intel MKL](https://software.intel.com/intel-mkl) instead if found on the "java.library.path", unless the "org.bytedeco.javacpp.openblas.nomkl" system property is set to "true".
 
 
 Sample Usage

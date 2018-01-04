@@ -1,7 +1,7 @@
-diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-windows/configure
---- ffmpeg-3.4/configure	2017-10-16 00:59:36.000000000 +0900
-+++ ffmpeg-3.4-windows/configure	2017-10-22 11:38:54.921954199 +0900
-@@ -5925,7 +5925,7 @@
+diff -ruN ffmpeg-3.4.1/configure ffmpeg-3.4.1-windows/configure
+--- ffmpeg-3.4.1/configure	2017-12-11 06:35:18.000000000 +0900
++++ ffmpeg-3.4.1-windows/configure	2017-12-28 20:19:26.149051500 +0900
+@@ -5926,7 +5926,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
  enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
@@ -10,7 +10,17 @@ diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-windows/configure
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
  enabled libgme            && { use_pkg_config libgme libgme gme/gme.h gme_new_emu ||
                                 require libgme gme/gme.h gme_new_emu -lgme -lstdc++; }
-@@ -5954,7 +5954,7 @@
+@@ -5941,8 +5941,7 @@
+ # Media SDK or Intel Media Server Studio, these don't come with
+ # pkg-config support.  Instead, users should make sure that the build
+ # can find the libraries and headers through other means.
+-enabled libmfx            && { use_pkg_config libmfx libmfx "mfx/mfxvideo.h" MFXInit ||
+-                               { require libmfx "mfx/mfxvideo.h" MFXInit -llibmfx && warn "using libmfx without pkg-config"; } }
++enabled libmfx            && require libmfx "mfx/mfxvideo.h" MFXInit -lmfx && warn "using libmfx without pkg-config";
+ enabled libmodplug        && require_pkg_config libmodplug libmodplug libmodplug/modplug.h ModPlug_Load
+ enabled libmp3lame        && require "libmp3lame >= 3.98.3" lame/lame.h lame_set_VBR_quality -lmp3lame
+ enabled libmysofa         && require libmysofa "mysofa.h" mysofa_load -lmysofa
+@@ -5955,7 +5954,7 @@
                                 { use_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -19,7 +29,7 @@ diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-windows/configure
  enabled libopenjpeg       && { { check_lib libopenjpeg openjpeg-2.3/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
                                 check_lib libopenjpeg openjpeg-2.3/openjpeg.h opj_version -lopenjp2 ||
                                 { check_lib libopenjpeg openjpeg-2.2/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
-@@ -5966,14 +5966,7 @@
+@@ -5967,14 +5966,7 @@
                                 { check_lib libopenjpeg openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
                                 die "ERROR: libopenjpeg not found"; }
  enabled libopenmpt        && require_pkg_config libopenmpt "libopenmpt >= 0.2.6557" libopenmpt/libopenmpt.h openmpt_module_create
@@ -35,7 +45,7 @@ diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-windows/configure
  enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
  enabled librsvg           && require_pkg_config librsvg librsvg-2.0 librsvg-2.0/librsvg/rsvg.h rsvg_handle_render_cairo
  enabled librtmp           && require_pkg_config librtmp librtmp librtmp/rtmp.h RTMP_Socket
-@@ -5984,7 +5977,7 @@
+@@ -5985,7 +5977,7 @@
  enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
  enabled libssh            && require_pkg_config libssh libssh libssh/sftp.h sftp_init
@@ -44,7 +54,7 @@ diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-windows/configure
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
  enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
-@@ -5999,21 +5992,17 @@
+@@ -6000,21 +5992,17 @@
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -66,7 +76,7 @@ diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-windows/configure
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VP9E_SET_AQ_MODE" -lvpx
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -6025,13 +6014,13 @@
+@@ -6026,13 +6014,13 @@
  enabled libwebp           && {
      enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
      enabled libwebp_anim_encoder && use_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }

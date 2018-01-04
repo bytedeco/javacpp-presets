@@ -46,11 +46,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(value = {
     @Platform(include = {"<opencv2/core/hal/interface.h>", "<opencv2/core/cvdef.h>", "<opencv2/core/hal/hal.hpp>", "<opencv2/core/fast_math.hpp>",
         "<algorithm>", "<map>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
-        "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
-        "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
+        "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
+        "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.3", "opencv_imgproc@.3.3"},
         resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}),
-    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = "gomp@.1"),
+    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = {"gomp@.1", "opencv_cudev@.3.3"}),
     @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
@@ -58,17 +58,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core331", "opencv_imgproc331"}, preload = {"concrt140", "msvcp140", "vcruntime140",
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"}),
+        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0", "opencv_cudev331"}),
     @Platform(value = "windows-x86", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
                                                     "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
-                                                       "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"})},
+                                                       "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
+    @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("algorithm", "map", "opencv_adapters.h").skip())
                .put(new Info("__cplusplus", "CV_StaticAssert").define())
-               .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
+               .put(new Info("__OPENCV_BUILD", "defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
                              "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
                              "defined __GNUC__ || defined __clang__", "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA",
                              "__cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)", "CV_CXX11", "CV_FP16_TYPE").define(false))
@@ -92,6 +93,18 @@ public class opencv_core implements InfoMapper {
                .put(new Info("CV_MAT_CN", "CV_MAT_TYPE", "CV_IS_CONT_MAT", "CV_IS_MAT_CONT").cppTypes("int", "int"))
                .put(new Info("CV_VERSION").pointerTypes("String").translate(false))
                .put(new Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate())
+               .put(new Info("std::uint32_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("cv::ocl::initializeContextFromHandle").skip())
+               .put(new Info("cv::ocl::Platform").pointerTypes("OclPlatform"))
+               .put(new Info("cv::ocl::Queue::Impl").cast().pointerTypes("Pointer"))
+               .put(new Info("cv::ocl::Kernel(const char*, const cv::ocl::ProgramSource&, const cv::String&, cv::String*)").javaText(
+                       "public Kernel(String kname, @Const @ByRef ProgramSource prog,\n"
+                     + "            @Str String buildopts, @Str BytePointer errmsg) { allocate(kname, prog, buildopts, errmsg); }\n"
+                     + "private native void allocate(String kname, @Const @ByRef ProgramSource prog,\n"
+                     + "            @Str String buildopts, @Cast({\"\", \"cv::String*\"}) @Str BytePointer errmsg/*=NULL*/);"))
+               .put(new Info("cv::ocl::Kernel::create(const char*, const cv::ocl::ProgramSource&, const cv::String&, cv::String*)").javaText(
+                       "public native @Cast(\"bool\") boolean create(String kname, @Const @ByRef ProgramSource prog,\n"
+                     + "            @Str String buildopts, @Cast({\"\", \"cv::String*\"}) @Str BytePointer errmsg/*=NULL*/);"))
                .put(new Info("CvArr").skip().pointerTypes("CvArr"))
                .put(new Info("_IplROI").pointerTypes("IplROI"))
                .put(new Info("_IplImage").pointerTypes("IplImage"))
@@ -161,6 +174,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define())
                .put(new Info("std::vector<cv::Mat>").pointerTypes("MatVector").define())
                .put(new Info("std::vector<cv::UMat>").pointerTypes("UMatVector").define())
+               .put(new Info("std::vector<cv::cuda::GpuMat>").pointerTypes("GpuMatVector").define())
                .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
                .put(new Info("std::map<int,double>").pointerTypes("IntDoubleMap").define())
                .put(new Info("std::vector<std::pair<int,double> >").pointerTypes("IntDoublePairVector").define())
@@ -179,7 +193,7 @@ public class opencv_core implements InfoMapper {
 
                .put(new Info("CvModule::first", "CvModule::last", "CvType::first", "CvType::last",
                              "cv::fromUtf16", "cv::toUtf16", "cv::Exception", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
-                             "cv::_InputArray", "cv::_OutputArray", "cv::Mat_", "cv::SparseMat_", "cv::cuda::GpuMat",
+                             "cv::_InputArray", "cv::_OutputArray", "cv::Mat_", "cv::SparseMat_",
                              "cv::Matx_AddOp", "cv::Matx_SubOp", "cv::Matx_ScaleOp", "cv::Matx_MulOp", "cv::Matx_MatMulOp", "cv::Matx_TOp",
                              "cv::Matx", "cv::Vec", "cv::MatIterator_", "cv::MatConstIterator_", "cv::Mat::MSize", "cv::Mat::MStep",
                              "cv::MatCommaInitializer_", "cv::MatxCommaInitializer", "cv::VecCommaInitializer",
@@ -228,8 +242,10 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::UMat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
 
-               .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray").skip()./*cast().*/pointerTypes("Mat", "Mat", "UMat", "UMat"))
-               .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip()./*cast().*/pointerTypes("MatVector", "UMatVector"))
+               .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray")
+                       .skip()./*cast().*/pointerTypes("Mat", "Mat", "Mat", "UMat", "UMat", "UMat", "GpuMat", "GpuMat", "GpuMat"))
+               .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays")
+                       .skip()./*cast().*/pointerTypes("MatVector", "UMatVector", "GpuMatVector"))
 
                .put(new Info("cv::traits::Depth", "cv::traits::Type").skip())
                .put(new Info("cv::Complex<float>").pointerTypes("Complexf").base("FloatPointer"))
@@ -253,6 +269,7 @@ public class opencv_core implements InfoMapper {
 
                .put(new Info("cv::Vec2i").pointerTypes("Point"))
                .put(new Info("cv::Vec2d").pointerTypes("Point2d"))
+               .put(new Info("cv::Vec3i").pointerTypes("Point3i"))
                .put(new Info("cv::Vec3d").pointerTypes("Point3d"))
                .put(new Info("cv::Vec4i").pointerTypes("Scalar4i"))
 
@@ -278,10 +295,14 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::MinProblemSolver", "cv::DownhillSolver", "cv::ConjGradSolver").purify())
                .put(new Info("cv::MinProblemSolver::Function").virtualize())
 
-               .put(new Info("HAVE_OPENCV_CUDA", "HAVE_OPENCV_CUDAIMGPROC", "HAVE_OPENCV_CUDAOPTFLOW", "HAVE_OPENCV_CUDAWARPING",
+               .put(new Info("HAVE_OPENCV_CUDAOPTFLOW", "HAVE_OPENCV_CUDAWARPING",
                              "HAVE_OPENCV_CUDALEGACY", "HAVE_OPENCV_XFEATURES2D", "defined(HAVE_OPENCV_CUDAWARPING)",
                              "defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDAOPTFLOW)",
                              "defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAWARPING)").define(false))
+               .put(new Info("operator cv::cuda::Stream::bool_type", // basically a check to see if the Stream is cv::cuda:Stream::Null
+                             "cv::cuda::convertFp16").skip())
+               .put(new Info("cv::min(cv::InputArray, cv::InputArray, cv::OutputArray)",
+                             "cv::max(cv::InputArray, cv::InputArray, cv::OutputArray)").skip()) // don't work with GpuMat
 
                .put(new Info("std::function<void(const Range&)>").pointerTypes("Functor"))
                .put(new Info("cv::Ptr").skip().annotations("@Ptr"))

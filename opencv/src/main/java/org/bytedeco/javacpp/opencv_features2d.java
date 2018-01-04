@@ -198,6 +198,11 @@ This section describes approaches based on local 2D features and used to categor
                                      @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
     public native void detect( @ByVal UMat image,
                                      @ByRef KeyPointVector keypoints );
+    public native void detect( @ByVal GpuMat image,
+                                     @ByRef KeyPointVector keypoints,
+                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+    public native void detect( @ByVal GpuMat image,
+                                     @ByRef KeyPointVector keypoints );
 
     /** \overload
     @param images Image set.
@@ -215,6 +220,11 @@ This section describes approaches based on local 2D features and used to categor
                              @ByRef KeyPointVectorVector keypoints,
                              @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks );
     public native void detect( @ByVal UMatVector images,
+                             @ByRef KeyPointVectorVector keypoints );
+    public native void detect( @ByVal GpuMatVector images,
+                             @ByRef KeyPointVectorVector keypoints,
+                             @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks );
+    public native void detect( @ByVal GpuMatVector images,
                              @ByRef KeyPointVectorVector keypoints );
 
     /** \brief Computes the descriptors for a set of keypoints detected in an image (first variant) or image set
@@ -234,6 +244,9 @@ This section describes approaches based on local 2D features and used to categor
     public native void compute( @ByVal UMat image,
                                       @ByRef KeyPointVector keypoints,
                                       @ByVal UMat descriptors );
+    public native void compute( @ByVal GpuMat image,
+                                      @ByRef KeyPointVector keypoints,
+                                      @ByVal GpuMat descriptors );
 
     /** \overload
     <p>
@@ -251,6 +264,9 @@ This section describes approaches based on local 2D features and used to categor
     public native void compute( @ByVal UMatVector images,
                               @ByRef KeyPointVectorVector keypoints,
                               @ByVal UMatVector descriptors );
+    public native void compute( @ByVal GpuMatVector images,
+                              @ByRef KeyPointVectorVector keypoints,
+                              @ByVal GpuMatVector descriptors );
 
     /** Detects keypoints and computes the descriptors */
     public native void detectAndCompute( @ByVal Mat image, @ByVal Mat mask,
@@ -267,6 +283,13 @@ This section describes approaches based on local 2D features and used to categor
     public native void detectAndCompute( @ByVal UMat image, @ByVal UMat mask,
                                                @ByRef KeyPointVector keypoints,
                                                @ByVal UMat descriptors );
+    public native void detectAndCompute( @ByVal GpuMat image, @ByVal GpuMat mask,
+                                               @ByRef KeyPointVector keypoints,
+                                               @ByVal GpuMat descriptors,
+                                               @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native void detectAndCompute( @ByVal GpuMat image, @ByVal GpuMat mask,
+                                               @ByRef KeyPointVector keypoints,
+                                               @ByVal GpuMat descriptors );
 
     public native int descriptorSize();
     public native int descriptorType();
@@ -507,6 +530,9 @@ code which is distributed under GPL.
     public native void detectRegions( @ByVal UMat image,
                                             @ByRef PointVectorVector msers,
                                             @ByRef RectVector bboxes );
+    public native void detectRegions( @ByVal GpuMat image,
+                                            @ByRef PointVectorVector msers,
+                                            @ByRef RectVector bboxes );
 
     public native void setDelta(int delta);
     public native int getDelta();
@@ -531,6 +557,10 @@ code which is distributed under GPL.
                       int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/ );
 @Namespace("cv") public static native void FAST( @ByVal UMat image, @ByRef KeyPointVector keypoints,
                       int threshold );
+@Namespace("cv") public static native void FAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/ );
+@Namespace("cv") public static native void FAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
+                      int threshold );
 
 /** \brief Detects corners using the FAST algorithm
 <p>
@@ -553,6 +583,8 @@ detection, use cv2.FAST.detect() method.
 @Namespace("cv") public static native void FAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 @Namespace("cv") public static native void FAST( @ByVal UMat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+@Namespace("cv") public static native void FAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 
 /** \} features2d_main
@@ -597,6 +629,10 @@ detection, use cv2.FAST.detect() method.
                       int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/ );
 @Namespace("cv") public static native void AGAST( @ByVal UMat image, @ByRef KeyPointVector keypoints,
                       int threshold );
+@Namespace("cv") public static native void AGAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/ );
+@Namespace("cv") public static native void AGAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
+                      int threshold );
 
 /** \brief Detects corners using the AGAST algorithm
 <p>
@@ -619,6 +655,8 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
 @Namespace("cv") public static native void AGAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 @Namespace("cv") public static native void AGAST( @ByVal UMat image, @ByRef KeyPointVector keypoints,
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+@Namespace("cv") public static native void AGAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 /** \} features2d_main
  <p>
@@ -979,6 +1017,7 @@ an image set.
      */
     public native void add( @ByVal MatVector descriptors );
     public native void add( @ByVal UMatVector descriptors );
+    public native void add( @ByVal GpuMatVector descriptors );
 
     /** \brief Returns a constant link to the train descriptor collection trainDescCollection .
      */
@@ -1029,6 +1068,10 @@ an image set.
                     @ByRef DMatchVector matches, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask );
     public native void match( @ByVal UMat queryDescriptors, @ByVal UMat trainDescriptors,
                     @ByRef DMatchVector matches );
+    public native void match( @ByVal GpuMat queryDescriptors, @ByVal GpuMat trainDescriptors,
+                    @ByRef DMatchVector matches, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
+    public native void match( @ByVal GpuMat queryDescriptors, @ByVal GpuMat trainDescriptors,
+                    @ByRef DMatchVector matches );
 
     /** \brief Finds the k best matches for each descriptor from a query set.
     <p>
@@ -1057,6 +1100,11 @@ an image set.
                        @ByRef DMatchVectorVector matches, int k,
                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @ByVal UMat queryDescriptors, @ByVal UMat trainDescriptors,
+                       @ByRef DMatchVectorVector matches, int k );
+    public native void knnMatch( @ByVal GpuMat queryDescriptors, @ByVal GpuMat trainDescriptors,
+                       @ByRef DMatchVectorVector matches, int k,
+                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @ByVal GpuMat queryDescriptors, @ByVal GpuMat trainDescriptors,
                        @ByRef DMatchVectorVector matches, int k );
 
     /** \brief For each query descriptor, finds the training descriptors not farther than the specified distance.
@@ -1088,6 +1136,11 @@ an image set.
                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @ByVal UMat queryDescriptors, @ByVal UMat trainDescriptors,
                           @ByRef DMatchVectorVector matches, float maxDistance );
+    public native void radiusMatch( @ByVal GpuMat queryDescriptors, @ByVal GpuMat trainDescriptors,
+                          @ByRef DMatchVectorVector matches, float maxDistance,
+                          @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @ByVal GpuMat queryDescriptors, @ByVal GpuMat trainDescriptors,
+                          @ByRef DMatchVectorVector matches, float maxDistance );
 
     /** \overload
     @param queryDescriptors Query set of descriptors.
@@ -1101,11 +1154,22 @@ an image set.
     public native void match( @ByVal Mat queryDescriptors, @ByRef DMatchVector matches );
     public native void match( @ByVal Mat queryDescriptors, @ByRef DMatchVector matches,
                             @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks );
+    public native void match( @ByVal Mat queryDescriptors, @ByRef DMatchVector matches,
+                            @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks );
     public native void match( @ByVal UMat queryDescriptors, @ByRef DMatchVector matches,
                             @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks );
     public native void match( @ByVal UMat queryDescriptors, @ByRef DMatchVector matches );
     public native void match( @ByVal UMat queryDescriptors, @ByRef DMatchVector matches,
                             @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks );
+    public native void match( @ByVal UMat queryDescriptors, @ByRef DMatchVector matches,
+                            @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks );
+    public native void match( @ByVal GpuMat queryDescriptors, @ByRef DMatchVector matches,
+                            @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks );
+    public native void match( @ByVal GpuMat queryDescriptors, @ByRef DMatchVector matches );
+    public native void match( @ByVal GpuMat queryDescriptors, @ByRef DMatchVector matches,
+                            @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks );
+    public native void match( @ByVal GpuMat queryDescriptors, @ByRef DMatchVector matches,
+                            @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks );
     /** \overload
     @param queryDescriptors Query set of descriptors.
     @param matches Matches. Each matches[i] is k or less matches for the same query descriptor.
@@ -1122,11 +1186,22 @@ an image set.
     public native void knnMatch( @ByVal Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k );
     public native void knnMatch( @ByVal Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
                                @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @ByVal Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
+                               @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
                                @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, int k );
     public native void knnMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
                                @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
+                               @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
+                               @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, int k );
+    public native void knnMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
+                               @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
+                               @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
     /** \overload
     @param queryDescriptors Query set of descriptors.
     @param matches Found matches.
@@ -1144,11 +1219,22 @@ an image set.
     public native void radiusMatch( @ByVal Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance );
     public native void radiusMatch( @ByVal Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
                           @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @ByVal Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
+                          @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
                           @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance );
     public native void radiusMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
                           @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @ByVal UMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
+                          @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
+                          @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance );
+    public native void radiusMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
+                          @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @ByVal GpuMat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
+                          @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks, @Cast("bool") boolean compactResult/*=false*/ );
 
 
     public native void write( @Str BytePointer fileName );
@@ -1263,6 +1349,7 @@ matches of descriptor sets because flann::Index does not support this. :
 
     public native void add( @ByVal MatVector descriptors );
     public native void add( @ByVal UMatVector descriptors );
+    public native void add( @ByVal GpuMatVector descriptors );
     public native void clear();
 
     // Reads matcher object from a file node
@@ -1342,6 +1429,9 @@ cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS
 @Namespace("cv") public static native void drawKeypoints( @ByVal UMat image, @Const @ByRef KeyPointVector keypoints, @ByVal UMat outImage,
                                @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawKeypoints( @ByVal UMat image, @Const @ByRef KeyPointVector keypoints, @ByVal UMat outImage );
+@Namespace("cv") public static native void drawKeypoints( @ByVal GpuMat image, @Const @ByRef KeyPointVector keypoints, @ByVal GpuMat outImage,
+                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawKeypoints( @ByVal GpuMat image, @Const @ByRef KeyPointVector keypoints, @ByVal GpuMat outImage );
 
 /** \brief Draws the found matches of keypoints from two images.
 <p>
@@ -1378,11 +1468,16 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @Const @ByRef DMatchVector matches1to2, @ByVal Mat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
                              @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @ByVal Mat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVector matches1to2, @ByVal Mat outImg,
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg );
@@ -1390,7 +1485,30 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
+                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg,
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg,
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
                              @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg );
+@Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg,
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
+                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg,
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 
 /** \overload */
 @Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal Mat img1, @Const @ByRef KeyPointVector keypoints1,
@@ -1409,6 +1527,14 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
 @Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal UMat outImg );
+@Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVectorVector matches1to2, @ByVal GpuMat outImg,
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
+                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
+                             @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
+                             @Const @ByRef DMatchVectorVector matches1to2, @ByVal GpuMat outImg );
 
 /** \} features2d_draw
 <p>
@@ -1577,6 +1703,9 @@ vocabulary in the given image.
     public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat imgDescriptor,
                       IntVectorVector pointIdxsOfClusters/*=0*/, Mat descriptors/*=0*/ );
     public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat imgDescriptor );
+    public native void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat imgDescriptor,
+                      IntVectorVector pointIdxsOfClusters/*=0*/, Mat descriptors/*=0*/ );
+    public native void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat imgDescriptor );
     /** \overload
     @param keypointDescriptors Computed descriptors to match with vocabulary.
     @param imgDescriptor Computed output image descriptor.
@@ -1590,6 +1719,9 @@ vocabulary in the given image.
     public native void compute( @ByVal UMat keypointDescriptors, @ByVal UMat imgDescriptor,
                       IntVectorVector pointIdxsOfClusters/*=0*/ );
     public native void compute( @ByVal UMat keypointDescriptors, @ByVal UMat imgDescriptor );
+    public native void compute( @ByVal GpuMat keypointDescriptors, @ByVal GpuMat imgDescriptor,
+                      IntVectorVector pointIdxsOfClusters/*=0*/ );
+    public native void compute( @ByVal GpuMat keypointDescriptors, @ByVal GpuMat imgDescriptor );
     // compute() is not constant because DescriptorMatcher::match is not constant
 
     /** \brief Returns an image descriptor size if the vocabulary is set. Otherwise, it returns 0.

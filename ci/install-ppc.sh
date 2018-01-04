@@ -10,6 +10,9 @@ pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
+export MAKEJ=2
+echo "export MAKEJ=2" | tee --append $HOME/vars.list
+
 export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
 
 echo "Starting docker for ppc cross compile"
@@ -22,20 +25,26 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=ppc64el] ht
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-backports main restricted universe multiverse" >> /etc/apt/sources.list'
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=ppc64el] http://ports.ubuntu.com/ubuntu-ports trusty-security main restricted universe multiverse" >> /etc/apt/sources.list'
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:ppc64el libasound2-dev:ppc64el libusb-dev:ppc64el libusb-1.0-0-dev:ppc64el zlib1g-dev:ppc64el libxcb1-dev:ppc64el"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch default-jdk maven python python-dev python-numpy swig git file wget unzip tar bzip2 patch autogen automake make libtool perl nasm yasm curl cmake3"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y remove libxdmcp-dev libx11-dev libxcb1-dev libxt-dev"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update > /dev/null"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:ppc64el libasound2-dev:ppc64el libusb-dev:ppc64el libusb-1.0-0-dev:ppc64el zlib1g-dev:ppc64el libxcb1-dev:ppc64el > /dev/null"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch default-jdk maven python python-dev python-numpy swig git file wget unzip tar bzip2 patch autogen automake make libtool perl nasm yasm curl cmake3 > /dev/null"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y remove libxdmcp-dev libx11-dev libxcb1-dev libxt-dev > /dev/null"
 
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
-   #cp /usr/include/cudnn.h /usr/local/cuda/include/  
-   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFlrT3FtNXFSRW8 $HOME/downloads/cudappc64.tar
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/cudappc64.tar -C /usr/local/"  
+   cd $HOME/downloads 
+   curl -L https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda-repo-ubuntu1604-9-0-local_9.0.176-1_ppc64el-deb -o $HOME/downloads/cuda-ppc64.deb
+   curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.5/cudnn-9.0-linux-ppc64le-v7.tgz -o $HOME/downloads/cudnn.tgz
+   ar vx $HOME/downloads/cuda-ppc64.deb
+   tar xvf data.tar.xz
+   mkdir $HOME/downloads/cudaFS
+   cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/downloads/cudaFS; done
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /; cp -R $HOME/downloads/cudaFS/* ." 
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.0 /usr/local/cuda"  
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"  
-   python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShdFJveFVxWlF3UnM $HOME/downloads/cudnnppc64.tar
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/cudnnppc64.tar -C /usr/local/"  
+   #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"  
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xzf $HOME/downloads/cudnn.tgz -C /usr/local/"
+   #as we're downloading each time, clear downloads dir to prevent time wasted/errors with cache updates
+   rm -rf $HOME/downloads
 fi
 
 echo "Running install for $PROJ"
@@ -45,20 +54,20 @@ if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
    while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 $HOME/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
      echo "Not a pull request so attempting to deploy using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean deploy -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true $BUILD_COMPILER $BUILD_ROOT -Djavacpp.platform=$OS -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true $BUILD_COMPILER $BUILD_ROOT -Djavacpp.platform=$OS -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
    else
      echo "Pull request so install using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true $BUILD_COMPILER $BUILD_ROOT -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true $BUILD_COMPILER $BUILD_ROOT -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
    fi
  else
    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
      echo "Not a pull request so attempting to deploy using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean deploy -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true $BUILD_COMPILER $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true $BUILD_COMPILER $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
      if [ $BUILD_STATUS -eq 0 ]; then
        echo "Deploying platform"
        for i in ${PROJ//,/ }
        do
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn -U -f platform/pom.xml -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn -B -U -f platform/pom.xml -Djavacpp.platform=$OS --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
         if [ $BUILD_STATUS -ne 0 ]; then
          echo "Build Failed"
          exit $BUILD_STATUS
@@ -68,7 +77,7 @@ if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
         
    else
      echo "Pull request so install using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true $BUILD_COMPILER $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true $BUILD_COMPILER $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
    fi
  fi
  echo "Build status $BUILD_STATUS"

@@ -22,6 +22,10 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.util.Iterator;
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -39,6 +43,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "quadmath@.0", "gfortran@.3"}, compiler = "fastfpu",
               preloadpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
     @Platform(value = "android", include = {"openblas_config.h", "cblas.h", "blas_extra.h" /* no LAPACK */}, link = "openblas", preload = "", compiler = "fastfpu"),
+    @Platform(value = "macosx",  link = "openblas",
+                                 preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_core", "mkl_gnu_thread",
+                                            "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas", "gcc_s@.1", "quadmath@.0", "gfortran@.3"}),
     @Platform(value = "windows", preload = {"libiomp5md#libiomp5md", "mkl_avx#mkl_avx", "mkl_avx2#mkl_avx2", "mkl_avx512#mkl_avx512", "mkl_avx512_mic#mkl_avx512_mic",
                                             "mkl_def#mkl_def", "mkl_mc#mkl_mc", "mkl_mc3#mkl_mc3", "mkl_core#mkl_core", "mkl_intel_lp64#mkl_intel_lp64",
                                             "mkl_intel_thread#mkl_intel_thread", "mkl_rt#mkl_rt", "mkl_rt#libopenblas", "libopenblas"}),
@@ -51,8 +58,23 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/", "/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
     @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/", "/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
     @Platform(value = "linux-ppc64",    preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}) })
-public class openblas implements InfoMapper {
-    public void map(InfoMap infoMap) {
+public class openblas implements LoadEnabled, InfoMapper {
+
+    @Override public void init(ClassProperties properties) {
+        String s = System.getProperty("org.bytedeco.javacpp.openblas.nomkl", "false").toLowerCase();
+        if (s.equals("true") || s.equals("t") || s.equals("")) {
+            List<String> preloads = properties.get("platform.preload");
+            Iterator<String> it = preloads.iterator();
+            while (it.hasNext()) {
+                String p = it.next();
+                if (p.contains("iomp5") || p.contains("mkl")) {
+                    it.remove();
+                }
+            }
+        }
+    }
+
+    @Override public void map(InfoMap infoMap) {
         // skip LAPACK 3.7.0 until supported by MKL, at least
         infoMap.put(new Info("lapacke.h").linePatterns(".*LAPACKE_ssysv_aa.*", ".*LAPACK_ssysv_aa.*",
                                                        ".*LAPACK_ssysv_aa.*",  "#ifdef __cplusplus",

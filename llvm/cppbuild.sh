@@ -28,7 +28,7 @@ case $PLATFORM in
         ;;
 esac
 
-LLVM_VERSION=5.0.0
+LLVM_VERSION=5.0.1
 download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
 
@@ -47,6 +47,6 @@ cd ../build
 
 $CMAKE -DCMAKE_INSTALL_PREFIX=../.. -DDLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLIBXML2_LIBRARIES= ..
 make -j $MAKEJ
-make install
+make install > /dev/null
 
 cd ../..

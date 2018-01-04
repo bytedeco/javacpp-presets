@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Samuel Audet
+ * Copyright (C) 2017 Sam Carlberg, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -28,19 +28,26 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
-/**
- *   Wrapper for OpenCV module xfeatures2d, part of OpenCV_Contrib.
- *
- * @author Jarek Sacha
- */
-@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_shape.class}, value = {
-    @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.3.3",
-              preload = {"opencv_cuda@.3.3", "opencv_cudaarithm@.3.3"}),
-    @Platform(value = "windows", link = "opencv_xfeatures2d331",
-              preload = {"opencv_cuda331", "opencv_cudaarithm331"})},
-        target = "org.bytedeco.javacpp.opencv_xfeatures2d")
-public class opencv_xfeatures2d implements InfoMapper {
+@Properties(
+    inherit = opencv_core.class,
+    value = {
+        @Platform(
+            include = "<opencv2/cudawarping.hpp>",
+            link = "opencv_cudawarping@.3.3",
+            extension = "-gpu"
+        ),
+        @Platform(
+            value = "windows",
+            link = "opencv_cudawarping331",
+            extension = "-gpu"
+        )
+    },
+    target = "org.bytedeco.javacpp.opencv_cudawarping"
+)
+public class opencv_cudawarping implements InfoMapper {
+
+    @Override
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::Matx23f").cast().pointerTypes("FloatPointer"));
+
     }
 }
