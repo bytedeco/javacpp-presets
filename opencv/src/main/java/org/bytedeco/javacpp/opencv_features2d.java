@@ -303,11 +303,16 @@ This section describes approaches based on local 2D features and used to categor
 
     public native void write( @ByRef FileStorage arg0);
 
+    // see corresponding cv::Algorithm method
     public native void read( @Const @ByRef FileNode arg0);
 
     /** Return true if detector object is empty */
     public native @Cast("bool") boolean empty();
     public native @Str BytePointer getDefaultName();
+
+    // see corresponding cv::Algorithm method
+    public native void write(@Ptr FileStorage fs, @Str BytePointer name/*=cv::String()*/);
+    public native void write(@Ptr FileStorage fs, @Str String name/*=cv::String()*/);
 }
 
 /** Feature detectors in OpenCV have wrappers with a common interface that enables you to easily switch
@@ -1243,6 +1248,7 @@ an image set.
     public native void read( @Str BytePointer fileName );
     public native void read( @Str String fileName );
     // Reads matcher object from a file node
+    // see corresponding cv::Algorithm method
     public native void read( @Const @ByRef FileNode arg0 );
     // Writes matcher object to a file storage
     public native void write( @ByRef FileStorage arg0 );
@@ -1271,6 +1277,11 @@ an image set.
     public static native @Ptr DescriptorMatcher create( @Str String descriptorMatcherType );
 
     public static native @Ptr DescriptorMatcher create( int matcherType );
+
+
+    // see corresponding cv::Algorithm method
+    public native void write(@Ptr FileStorage fs, @Str BytePointer name/*=cv::String()*/);
+    public native void write(@Ptr FileStorage fs, @Str String name/*=cv::String()*/);
 }
 
 /** \brief Brute-force descriptor matcher.

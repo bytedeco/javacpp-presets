@@ -35,8 +35,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = opencv_imgproc.class, value = {
     @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
                          "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
-              link = "opencv_dnn@.3.3"),
-    @Platform(value = "windows", link = "opencv_dnn331")},
+              link = "opencv_dnn@.3.4"),
+    @Platform(value = "windows", link = "opencv_dnn340")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -56,7 +56,7 @@ public class opencv_dnn implements InfoMapper {
                              "cv::dnn::ChannelsPReLULayer", "cv::dnn::ELULayer", "cv::dnn::TanHLayer", "cv::dnn::SigmoidLayer",
                              "cv::dnn::BNLLLayer", "cv::dnn::AbsLayer", "cv::dnn::PowerLayer", "cv::dnn::CropLayer", "cv::dnn::EltwiseLayer",
                              "cv::dnn::BatchNormLayer", "cv::dnn::MaxUnpoolLayer", "cv::dnn::ScaleLayer", "cv::dnn::ShiftLayer",
-                             "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer",
+                             "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer", "cv::dnn::ProposalLayer",
                              "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer").purify())
                .put(new Info("cv::dnn::Net::forward(cv::dnn::Net::LayerId, cv::dnn::Net::LayerId)",
                              "cv::dnn::Net::forward(cv::dnn::Net::LayerId*, cv::dnn::Net::LayerId*)",

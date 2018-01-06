@@ -930,6 +930,12 @@ optimization procedures like calibrateCamera, stereoCalibrate, or solvePnP .
 @Namespace("cv") public static native void Rodrigues( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian );
 @Namespace("cv") public static native void Rodrigues( @ByVal GpuMat src, @ByVal GpuMat dst );
 
+/** \example pose_from_homography.cpp
+  An example program about pose estimation from coplanar points
+  <p>
+  Check \ref tutorial_homography "the corresponding tutorial" for more details
+ */
+
 /** \brief Finds a perspective transformation between two planes.
 <p>
 @param srcPoints Coordinates of the points in the original plane, a matrix of the type CV_32FC2
@@ -988,12 +994,6 @@ cannot be estimated, an empty one will be returned.
 \sa
 getAffineTransform, estimateAffine2D, estimateAffinePartial2D, getPerspectiveTransform, warpPerspective,
 perspectiveTransform
-<p>
-<p>
-\note
-   -   A example on calculating a homography for image matching can be found at
-        opencv_source_code/samples/cpp/video_homography.cpp
- <p>
  */
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal Mat srcPoints, @ByVal Mat dstPoints,
                                  int method/*=0*/, double ransacReprojThreshold/*=3*/,
@@ -1041,7 +1041,7 @@ and a rotation matrix.
 It optionally returns three rotation matrices, one for each axis, and the three Euler angles in
 degrees (as the return value) that could be used in OpenGL. Note, there is always more than one
 sequence of rotations about the three principal axes that results in the same orientation of an
-object, eg. see \cite Slabaugh . Returned tree rotation matrices and corresponding three Euler angules
+object, e.g. see \cite Slabaugh . Returned tree rotation matrices and corresponding three Euler angles
 are only one of the possible solutions.
  */
 @Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ,
@@ -1077,8 +1077,8 @@ matrix and the position of a camera.
 <p>
 It optionally returns three rotation matrices, one for each axis, and three Euler angles that could
 be used in OpenGL. Note, there is always more than one sequence of rotations about the three
-principal axes that results in the same orientation of an object, eg. see \cite Slabaugh . Returned
-tree rotation matrices and corresponding three Euler angules are only one of the possible solutions.
+principal axes that results in the same orientation of an object, e.g. see \cite Slabaugh . Returned
+tree rotation matrices and corresponding three Euler angles are only one of the possible solutions.
 <p>
 The function is based on RQDecomp3x3 .
  */
@@ -1248,6 +1248,12 @@ perspective transformation (and also compute the derivatives) in the ideal zero-
                                  @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                  @ByVal GpuMat imagePoints );
 
+/** \example homography_from_camera_displacement.cpp
+  An example program about homography from the camera displacement
+  <p>
+  Check \ref tutorial_homography "the corresponding tutorial" for more details
+ */
+
 /** \brief Finds an object pose from 3D-2D point correspondences.
 <p>
 @param objectPoints Array of object points in the object coordinate space, Nx3 1-channel or
@@ -1286,11 +1292,101 @@ Estimation" (\cite penate2013exhaustive). In this case the function also estimat
 assuming that both have the same value. Then the cameraMatrix is updated with the estimated
 focal length.
 -   **SOLVEPNP_AP3P** Method is based on the paper of Tong Ke and Stergios I. Roumeliotis.
-"An Efficient Algebraic Solution to the Perspective-Three-Point Problem". In this case the
+"An Efficient Algebraic Solution to the Perspective-Three-Point Problem" (\cite Ke17). In this case the
 function requires exactly four object and image points.
 <p>
 The function estimates the object pose given a set of object points, their corresponding image
-projections, as well as the camera matrix and the distortion coefficients.
+projections, as well as the camera matrix and the distortion coefficients, see the figure below
+(more precisely, the X-axis of the camera frame is pointing to the right, the Y-axis downward
+and the Z-axis forward).
+<p>
+![](pnp.jpg)
+<p>
+Points expressed in the world frame \f$ \bf{X}_w \f$ are projected into the image plane \f$ \left[ u, v \right] \f$
+using the perspective projection model \f$ \Pi \f$ and the camera intrinsic parameters matrix \f$ \bf{A} \f$:
+<p>
+\f[
+  \begin{align*}
+  \begin{bmatrix}
+  u \\
+  v \\
+  1
+  \end{bmatrix} &=
+  \bf{A} \hspace{0.1em} \Pi \hspace{0.2em} ^{c}\bf{M}_w
+  \begin{bmatrix}
+  X_{w} \\
+  Y_{w} \\
+  Z_{w} \\
+  1
+  \end{bmatrix} \\
+  \begin{bmatrix}
+  u \\
+  v \\
+  1
+  \end{bmatrix} &=
+  \begin{bmatrix}
+  f_x & 0 & c_x \\
+  0 & f_y & c_y \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 \\
+  0 & 0 & 1 & 0
+  \end{bmatrix}
+  \begin{bmatrix}
+  r_{11} & r_{12} & r_{13} & t_x \\
+  r_{21} & r_{22} & r_{23} & t_y \\
+  r_{31} & r_{32} & r_{33} & t_z \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  X_{w} \\
+  Y_{w} \\
+  Z_{w} \\
+  1
+  \end{bmatrix}
+  \end{align*}
+\f]
+<p>
+The estimated pose is thus the rotation ({@code rvec}) and the translation ({@code tvec}) vectors that allow to transform
+a 3D point expressed in the world frame into the camera frame:
+<p>
+\f[
+  \begin{align*}
+  \begin{bmatrix}
+  X_c \\
+  Y_c \\
+  Z_c \\
+  1
+  \end{bmatrix} &=
+  \hspace{0.2em} ^{c}\bf{M}_w
+  \begin{bmatrix}
+  X_{w} \\
+  Y_{w} \\
+  Z_{w} \\
+  1
+  \end{bmatrix} \\
+  \begin{bmatrix}
+  X_c \\
+  Y_c \\
+  Z_c \\
+  1
+  \end{bmatrix} &=
+  \begin{bmatrix}
+  r_{11} & r_{12} & r_{13} & t_x \\
+  r_{21} & r_{22} & r_{23} & t_y \\
+  r_{31} & r_{32} & r_{33} & t_z \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  X_{w} \\
+  Y_{w} \\
+  Z_{w} \\
+  1
+  \end{bmatrix}
+  \end{align*}
+\f]
 <p>
 \note
    -   An example of how to use solvePnP for planar augmented reality can be found at
@@ -1306,11 +1402,14 @@ projections, as well as the camera matrix and the distortion coefficients.
         it as, e.g., imagePoints, one must effectively copy it into a new array: imagePoints =
         np.ascontiguousarray(D[:,:2]).reshape((N,1,2))
    -   The methods **SOLVEPNP_DLS** and **SOLVEPNP_UPNP** cannot be used as the current implementations are
-       unstable and sometimes give completly wrong results. If you pass one of these two
+       unstable and sometimes give completely wrong results. If you pass one of these two
        flags, **SOLVEPNP_EPNP** method will be used instead.
-   -   The minimum number of points is 4. In the case of **SOLVEPNP_P3P** and **SOLVEPNP_AP3P**
+   -   The minimum number of points is 4 in the general case. In the case of **SOLVEPNP_P3P** and **SOLVEPNP_AP3P**
        methods, it is required to use exactly 4 points (the first 3 points are used to estimate all the solutions
        of the P3P problem, the last one is used to retain the best solution that minimizes the reprojection error).
+   -   With **SOLVEPNP_ITERATIVE** method and {@code useExtrinsicGuess=true}, the minimum number of points is 3 (3 points
+       are sufficient to compute a pose but there are up to 4 solutions). The initial solution should be close to the
+       global solution to converge.
  */
 @Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal Mat objectPoints, @ByVal Mat imagePoints,
                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
@@ -1419,9 +1518,9 @@ the model coordinate system to the camera coordinate system. A P3P problem has u
 @param tvecs Output translation vectors.
 @param flags Method for solving a P3P problem:
 -   **SOLVEPNP_P3P** Method is based on the paper of X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang
-"Complete Solution Classification for the Perspective-Three-Point Problem".
+"Complete Solution Classification for the Perspective-Three-Point Problem" (\cite gao2003complete).
 -   **SOLVEPNP_AP3P** Method is based on the paper of Tong Ke and Stergios I. Roumeliotis.
-"An Efficient Algebraic Solution to the Perspective-Three-Point Problem".
+"An Efficient Algebraic Solution to the Perspective-Three-Point Problem" (\cite Ke17).
 <p>
 The function estimates the object pose given 3 object points, their corresponding image
 projections, as well as the camera matrix and the distortion coefficients.
@@ -2469,7 +2568,7 @@ findFundamentalMat .
 @param threshold Optional threshold used to filter out the outliers. If the parameter is greater
 than zero, all the point pairs that do not comply with the epipolar geometry (that is, the points
 for which \f$|\texttt{points2[i]}^T*\texttt{F}*\texttt{points1[i]}|>\texttt{threshold}\f$ ) are
-rejected prior to computing the homographies. Otherwise,all the points are considered inliers.
+rejected prior to computing the homographies. Otherwise, all the points are considered inliers.
 <p>
 The function computes the rectification transformations without knowing intrinsic parameters of the
 cameras and their relative position in the space, which explains the suffix "uncalibrated". Another
@@ -2610,7 +2709,7 @@ assumed.
 @param alpha Free scaling parameter between 0 (when all the pixels in the undistorted image are
 valid) and 1 (when all the source image pixels are retained in the undistorted image). See
 stereoRectify for details.
-@param newImgSize Image size after rectification. By default,it is set to imageSize .
+@param newImgSize Image size after rectification. By default, it is set to imageSize .
 @param validPixROI Optional output rectangle that outlines all-good-pixels region in the
 undistorted image. See roi1, roi2 description in stereoRectify .
 @param centerPrincipalPoint Optional flag that indicates whether in the new camera matrix the
@@ -2621,7 +2720,7 @@ best fit a subset of the source image (determined by alpha) to the corrected ima
 The function computes and returns the optimal new camera matrix based on the free scaling parameter.
 By varying this parameter, you may retrieve only sensible pixels alpha=0 , keep all the original
 image pixels if there is valuable information in the corners alpha=1 , or get something in between.
-When alpha\>0 , the undistortion result is likely to have some black pixels corresponding to
+When alpha\>0 , the undistorted result is likely to have some black pixels corresponding to
 "virtual" pixels outside of the captured distorted image. The original camera matrix, distortion
 coefficients, the computed new camera matrix, and newImageSize should be passed to
 initUndistortRectifyMap to produce the maps for remap .
@@ -2775,9 +2874,9 @@ be floating-point (single or double precision).
 @param cameraMatrix Camera matrix \f$K = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
 Note that this function assumes that points1 and points2 are feature points from cameras with the
 same camera matrix.
-@param method Method for computing a fundamental matrix.
+@param method Method for computing an essential matrix.
 -   **RANSAC** for the RANSAC algorithm.
--   **MEDS** for the LMedS algorithm.
+-   **LMEDS** for the LMedS algorithm.
 @param prob Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of
 confidence (probability) that the estimated matrix is correct.
 @param threshold Parameter used for RANSAC. It is the maximum distance from a point to an epipolar
@@ -2887,7 +2986,7 @@ floating-point (single or double precision).
 Note that this function assumes that points1 and points2 are feature points from cameras with the
 same camera matrix.
 @param R Recovered relative rotation.
-@param t Recoverd relative translation.
+@param t Recovered relative translation.
 @param mask Input/output mask for inliers in points1 and points2.
 :   If it is not empty, then it marks inliers in points1 and points2 for then given essential
 matrix E. Only these inliers will be used to recover pose. In the output mask only inliers
@@ -2942,7 +3041,7 @@ points1 and points2 are the same input for findEssentialMat. :
 floating-point (single or double precision).
 @param points2 Array of the second image points of the same size and format as points1 .
 @param R Recovered relative rotation.
-@param t Recoverd relative translation.
+@param t Recovered relative translation.
 @param focal Focal length of the camera. Note that this function assumes that points1 and points2
 are feature points from cameras with same focal length and principal point.
 @param pp principal point of the camera.
@@ -2989,7 +3088,7 @@ floating-point (single or double precision).
 Note that this function assumes that points1 and points2 are feature points from cameras with the
 same camera matrix.
 @param R Recovered relative rotation.
-@param t Recoverd relative translation.
+@param t Recovered relative translation.
 @param distanceThresh threshold distance which is used to filter out far away points (i.e. infinite points).
 @param mask Input/output mask for inliers in points1 and points2.
 :   If it is not empty, then it marks inliers in points1 and points2 for then given essential
@@ -3162,7 +3261,7 @@ to 3D points with a very large Z value (currently set to 10000).
 depth. ddepth can also be set to CV_16S, CV_32S or CV_32F.
 <p>
 The function transforms a single-channel disparity map to a 3-channel image representing a 3D
-surface. That is, for each pixel (x,y) andthe corresponding disparity d=disparity(x,y) , it
+surface. That is, for each pixel (x,y) and the corresponding disparity d=disparity(x,y) , it
 computes:
 <p>
 \f[\begin{array}{l} [X \; Y \; Z \; W]^T =  \texttt{Q} *[x \; y \; \texttt{disparity} (x,y) \; 1]^T  \\ \texttt{\_3dImage} (x,y) = (X/W, \; Y/W, \; Z/W) \end{array}\f]
@@ -3239,7 +3338,7 @@ RANSAC algorithm.
 @param from First input 2D point set.
 @param to Second input 2D point set.
 @param inliers Output vector indicating which points are inliers.
-@param method Robust method used to compute tranformation. The following methods are possible:
+@param method Robust method used to compute transformation. The following methods are possible:
 -   cv::RANSAC - RANSAC-based robust method
 -   cv::LMEDS - Least-Median robust method
 RANSAC is the default method.
@@ -3290,7 +3389,7 @@ two 2D point sets.
 @param from First input 2D point set.
 @param to Second input 2D point set.
 @param inliers Output vector indicating which points are inliers.
-@param method Robust method used to compute tranformation. The following methods are possible:
+@param method Robust method used to compute transformation. The following methods are possible:
 -   cv::RANSAC - RANSAC-based robust method
 -   cv::LMEDS - Least-Median robust method
 RANSAC is the default method.
@@ -3342,6 +3441,12 @@ correctly only when there are more than 50% of inliers.
                                   @Cast("size_t") long maxIters/*=2000*/, double confidence/*=0.99*/,
                                   @Cast("size_t") long refineIters/*=10*/);
 @Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal GpuMat from, @ByVal GpuMat to);
+
+/** \example decompose_homography.cpp
+  An example program with homography decomposition.
+  <p>
+  Check \ref tutorial_homography "the corresponding tutorial" for more details.
+ */
 
 /** \brief Decompose a homography matrix to rotation(s), translation(s) and plane normal(s).
 <p>
@@ -3663,7 +3768,7 @@ check, quadratic interpolation and speckle filtering).
     @param alpha The skew coefficient.
     @param distorted Output array of image points, 1xN/Nx1 2-channel, or vector\<Point2f\> .
     <p>
-    Note that the function assumes the camera matrix of the undistorted points to be indentity.
+    Note that the function assumes the camera matrix of the undistorted points to be identity.
     This means if you want to transform back points undistorted with undistortPoints() you have to
     multiply them with \f$P^{-1}\f$.
      */

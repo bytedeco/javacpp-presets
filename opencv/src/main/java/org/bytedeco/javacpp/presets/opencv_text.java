@@ -33,22 +33,20 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Bram Biesbrouck
  */
-@Properties(inherit = {opencv_highgui.class, opencv_ml.class}, value = {
+@Properties(inherit = {opencv_dnn.class, opencv_features2d.class, opencv_ml.class}, value = {
     @Platform(include = {"<opencv2/text.hpp>", "<opencv2/text/erfilter.hpp>", "<opencv2/text/ocr.hpp>"},
-              link = "opencv_text@.3.3"),
-    @Platform(value = "windows", link = "opencv_text331")},
+              link = "opencv_text@.3.4"),
+    @Platform(value = "windows", link = "opencv_text340")},
               target = "org.bytedeco.javacpp.opencv_text")
 public class opencv_text implements InfoMapper {
     public void map(InfoMap infoMap) {
-	
-	infoMap.put(new Info("std::deque<int>").pointerTypes("IntDeque").define());
-	infoMap.put(new Info("std::vector<cv::text::ERStat>").pointerTypes("ERStatVector").define());
-	infoMap.put(new Info("std::vector<std::vector<cv::text::ERStat> >").pointerTypes("ERStatVectorVector").define());
-	infoMap.put(new Info("std::vector<double>").pointerTypes("DoubleVector").define());
-	infoMap.put(new Info("std::vector<std::string>").pointerTypes("StdStringVector").define());
-	
-	infoMap.put(new Info("std::vector<cv::Vec2i>").pointerTypes("PointVector").cast());
-	infoMap.put(new Info("std::vector<std::vector<cv::Vec2i> >").pointerTypes("PointVectorVector").cast());
-	
+        infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
+               .put(new Info("std::deque<int>").pointerTypes("IntDeque").define())
+               .put(new Info("std::vector<cv::text::ERStat>").pointerTypes("ERStatVector").define())
+               .put(new Info("std::vector<std::vector<cv::text::ERStat> >").pointerTypes("ERStatVectorVector").define())
+               .put(new Info("std::vector<double>").pointerTypes("DoubleVector").define())
+               .put(new Info("std::vector<std::string>").pointerTypes("StdStringVector").define())
+               .put(new Info("std::vector<cv::Vec2i>").pointerTypes("PointVector").cast())
+               .put(new Info("std::vector<std::vector<cv::Vec2i> >").pointerTypes("PointVectorVector").cast());
     }
 }

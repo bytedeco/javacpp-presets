@@ -1666,12 +1666,14 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
         /** The back-propagation algorithm. */
         BACKPROP= 0,
         /** The RPROP algorithm. See \cite RPROP93 for details. */
-        RPROP= 1;
+        RPROP = 1,
+        /** The simulated annealing algorithm. See \cite Kirkpatrick83 for details. */
+        ANNEAL = 2;
 
     /** Sets training method and common parameters.
     @param method Default value is ANN_MLP::RPROP. See ANN_MLP::TrainingMethods.
-    @param param1 passed to setRpropDW0 for ANN_MLP::RPROP and to setBackpropWeightScale for ANN_MLP::BACKPROP
-    @param param2 passed to setRpropDWMin for ANN_MLP::RPROP and to setBackpropMomentumScale for ANN_MLP::BACKPROP.
+    @param param1 passed to setRpropDW0 for ANN_MLP::RPROP and to setBackpropWeightScale for ANN_MLP::BACKPROP and to initialT for ANN_MLP::ANNEAL.
+    @param param2 passed to setRpropDWMin for ANN_MLP::RPROP and to setBackpropMomentumScale for ANN_MLP::BACKPROP and to finalT for ANN_MLP::ANNEAL.
     */
     public native void setTrainMethod(int method, double param1/*=0*/, double param2/*=0*/);
     public native void setTrainMethod(int method);
@@ -1762,19 +1764,54 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     /** \copybrief getRpropDWMax @see getRpropDWMax */
     public native void setRpropDWMax(double val);
 
+    /** ANNEAL: Update initial temperature.
+    It must be \>=0. Default value is 10.*/
+    /** @see setAnnealInitialT */
+    public native double getAnnealInitialT();
+    /** \copybrief getAnnealInitialT @see getAnnealInitialT */
+    public native void setAnnealInitialT(double val);
+
+    /** ANNEAL: Update final temperature.
+    It must be \>=0 and less than initialT. Default value is 0.1.*/
+    /** @see setAnnealFinalT */
+    public native double getAnnealFinalT();
+    /** \copybrief getAnnealFinalT @see getAnnealFinalT */
+    public native void setAnnealFinalT(double val);
+
+    /** ANNEAL: Update cooling ratio.
+    It must be \>0 and less than 1. Default value is 0.95.*/
+    /** @see setAnnealCoolingRatio */
+    public native double getAnnealCoolingRatio();
+    /** \copybrief getAnnealCoolingRatio @see getAnnealCoolingRatio */
+    public native void setAnnealCoolingRatio(double val);
+
+    /** ANNEAL: Update iteration per step.
+    It must be \>0 . Default value is 10.*/
+    /** @see setAnnealItePerStep */
+    public native int getAnnealItePerStep();
+    /** \copybrief getAnnealItePerStep @see getAnnealItePerStep */
+    public native void setAnnealItePerStep(int val);
+
+    /** \brief Set/initialize anneal RNG */
+    public native void setAnnealEnergyRNG(@Const @ByRef RNG rng);
+
     /** possible activation functions */
     /** enum cv::ml::ANN_MLP::ActivationFunctions */
     public static final int
         /** Identity function: \f$f(x)=x\f$ */
         IDENTITY = 0,
-        /** Symmetrical sigmoid: \f$f(x)=\beta*(1-e^{-\alpha x})/(1+e^{-\alpha x}\f$
+        /** Symmetrical sigmoid: \f$f(x)=\beta*(1-e^{-\alpha x})/(1+e^{-\alpha x})\f$
         \note
         If you are using the default sigmoid activation function with the default parameter values
         fparam1=0 and fparam2=0 then the function used is y = 1.7159\*tanh(2/3 \* x), so the output
         will range from [-1.7159, 1.7159], instead of [0,1].*/
         SIGMOID_SYM = 1,
         /** Gaussian function: \f$f(x)=\beta e^{-\alpha x*x}\f$ */
-        GAUSSIAN = 2;
+        GAUSSIAN = 2,
+        /** ReLU function: \f$f(x)=max(0,x)\f$ */
+        RELU = 3,
+        /** Leaky ReLU function: for x>0 \f$f(x)=x \f$ and x<=0 \f$f(x)=\alpha x \f$*/
+        LEAKYRELU= 4;
 
     /** Train options */
     /** enum cv::ml::ANN_MLP::TrainFlags */
@@ -2126,10 +2163,72 @@ svmsgd->predict(samples, responses);
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
                                                 @ByVal GpuMat samples, @ByVal GpuMat responses);
 
+/** \brief Artificial Neural Networks - Multi-Layer Perceptrons.
+<p>
+\sa \ref ml_intro_ann
+*/
+@Namespace("cv::ml") public static class ANN_MLP_ANNEAL extends ANN_MLP {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ANN_MLP_ANNEAL(Pointer p) { super(p); }
+
+    /** @see setAnnealInitialT */
+    public native double getAnnealInitialT();
+    /** \copybrief getAnnealInitialT @see getAnnealInitialT */
+    public native void setAnnealInitialT(double val);
+
+    /** ANNEAL: Update final temperature.
+    It must be \>=0 and less than initialT. Default value is 0.1.*/
+    /** @see setAnnealFinalT */
+    public native double getAnnealFinalT();
+    /** \copybrief getAnnealFinalT @see getAnnealFinalT */
+    public native void setAnnealFinalT(double val);
+
+    /** ANNEAL: Update cooling ratio.
+    It must be \>0 and less than 1. Default value is 0.95.*/
+    /** @see setAnnealCoolingRatio */
+    public native double getAnnealCoolingRatio();
+    /** \copybrief getAnnealCoolingRatio @see getAnnealCoolingRatio */
+    public native void setAnnealCoolingRatio(double val);
+
+    /** ANNEAL: Update iteration per step.
+    It must be \>0 . Default value is 10.*/
+    /** @see setAnnealItePerStep */
+    public native int getAnnealItePerStep();
+    /** \copybrief getAnnealItePerStep @see getAnnealItePerStep */
+    public native void setAnnealItePerStep(int val);
+
+    /** \brief Set/initialize anneal RNG */
+    public native void setAnnealEnergyRNG(@Const @ByRef RNG rng);
+}
+
+
+/****************************************************************************************\
+*                                   Simulated annealing solver                             *
+\****************************************************************************************/
+
+// #ifdef CV_DOXYGEN
+// #endif // CV_DOXYGEN
+
+/** \brief The class implements simulated annealing for optimization.
+<p>
+\cite Kirkpatrick83 for details
+<p>
+@param solverSystem optimization system (see SimulatedAnnealingSolverSystem)
+@param initialTemperature initial temperature
+@param finalTemperature final temperature
+@param coolingRatio temperature step multiplies
+@param iterationsPerStep number of iterations per temperature changing step
+@param lastTemperature optional output for last used temperature
+@param rngEnergy specify custom random numbers generator (cv::theRNG() by default)
+*/
+
 /** \} ml */
 
 
 
+
+// #include <opencv2/ml/ml.inl.hpp>
 
 // #endif // __cplusplus
 // #endif // OPENCV_ML_HPP

@@ -8,11 +8,10 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
-import static org.bytedeco.javacpp.opencv_videoio.*;
-import static org.bytedeco.javacpp.opencv_highgui.*;
-import static org.bytedeco.javacpp.opencv_ml.*;
+import static org.bytedeco.javacpp.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_objdetect.*;
+import static org.bytedeco.javacpp.opencv_photo.*;
+import static org.bytedeco.javacpp.opencv_video.*;
 
 public class opencv_face extends org.bytedeco.javacpp.presets.opencv_face {
     static { Loader.load(); }
@@ -210,7 +209,7 @@ the use of this software, even if advised of the possibility of such damage.
 // #define __OPENCV_FACE_HPP__
 
 /**
-\defgroup face Face Recognition
+\defgroup face Face Analysis
 <p>
 - \ref face_changelog
 - \ref tutorial_face_main
@@ -238,7 +237,7 @@ which is available since the 2.4 release. I suggest you take a look at its descr
 <p>
 Algorithm provides the following features for all derived classes:
 <p>
--   So called “virtual constructor”. That is, each Algorithm derivative is registered at program
+-   So called "virtual constructor". That is, each Algorithm derivative is registered at program
     start and you can get the list of registered algorithms and create instance of a particular
     algorithm by its name (see Algorithm::create). If you plan to add your own algorithms, it is
     good practice to add a unique prefix to your algorithms to distinguish them from other
@@ -573,8 +572,12 @@ String name = model->name();
 
 
 // #include "opencv2/face/facerec.hpp"
+// #include "opencv2/face/facemark.hpp"
+// #include "opencv2/face/facemarkLBF.hpp"
+// #include "opencv2/face/facemarkAAM.hpp"
+// #include "opencv2/face/face_alignment.hpp"
 
-// #endif
+// #endif // __OPENCV_FACE_HPP__
 
 
 // Parsed from <opencv2/face/facerec.hpp>
