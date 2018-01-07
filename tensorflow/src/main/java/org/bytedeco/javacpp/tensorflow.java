@@ -874,6 +874,34 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@NoOffset @Name("std::pair<tensorflow::TensorSlice,tensorflow::string>") public static class TensorSlideStringPair extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSlideStringPair(Pointer p) { super(p); }
+    public TensorSlideStringPair(TensorSlice firstValue, BytePointer secondValue) { this(); put(firstValue, secondValue); }
+    public TensorSlideStringPair(TensorSlice firstValue, String secondValue) { this(); put(firstValue, secondValue); }
+    public TensorSlideStringPair()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef TensorSlideStringPair put(@ByRef TensorSlideStringPair x);
+
+
+    @MemberGetter public native @ByRef TensorSlice first(); public native TensorSlideStringPair first(TensorSlice first);
+    @MemberGetter public native @StdString BytePointer second();  public native TensorSlideStringPair second(BytePointer second);
+    @MemberSetter @Index public native TensorSlideStringPair second(@StdString String second);
+
+    public TensorSlideStringPair put(TensorSlice firstValue, BytePointer secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+
+    public TensorSlideStringPair put(TensorSlice firstValue, String secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+}
+
 @Name("std::unordered_map<std::string,std::pair<int,int> >") public static class NameRangeMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -887,6 +915,114 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
     @Index public native int first(@StdString BytePointer i); public native NameRangeMap first(@StdString BytePointer i, int first);
     @Index public native int second(@StdString BytePointer i);  public native NameRangeMap second(@StdString BytePointer i, int second);
+}
+
+@Name("std::unordered_map<std::string,tensorflow::TensorShape>") public static class VarToShapeMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public VarToShapeMap(Pointer p) { super(p); }
+    public VarToShapeMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef VarToShapeMap put(@ByRef VarToShapeMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @ByRef TensorShape get(@StdString BytePointer i);
+    public native VarToShapeMap put(@StdString BytePointer i, TensorShape value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef TensorShape second();
+    }
+}
+
+@Name("std::unordered_map<std::string,tensorflow::DataType>") public static class VarToDataTypeMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public VarToDataTypeMap(Pointer p) { super(p); }
+    public VarToDataTypeMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef VarToDataTypeMap put(@ByRef VarToDataTypeMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @Cast("tensorflow::DataType") int get(@StdString BytePointer i);
+    public native VarToDataTypeMap put(@StdString BytePointer i, int value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @Cast("tensorflow::DataType") int second();
+    }
+}
+
+@Name("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet*>") public static class StringTensorSliceSetMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringTensorSliceSetMap(Pointer p) { super(p); }
+    public StringTensorSliceSetMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringTensorSliceSetMap put(@ByRef StringTensorSliceSetMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native TensorSliceSet get(@StdString BytePointer i);
+    public native StringTensorSliceSetMap put(@StdString BytePointer i, TensorSliceSet value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter TensorSliceSet second();
+    }
+}
+
+@Name("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>") public static class StringSliceInfoMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringSliceInfoMap(Pointer p) { super(p); }
+    public StringSliceInfoMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringSliceInfoMap put(@ByRef StringSliceInfoMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @ByRef TensorSliceSet.SliceInfo get(@StdString BytePointer i);
+    public native StringSliceInfoMap put(@StdString BytePointer i, TensorSliceSet.SliceInfo value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef TensorSliceSet.SliceInfo second();
+    }
 }
 
 @Name("std::unordered_set<tensorflow::string>") public static class StringSet extends Pointer {
@@ -14891,6 +15027,1183 @@ limitations under the License.
   // end namespace tensorflow
 
 // #endif  // TENSORFLOW_PUBLIC_SESSION_H_
+
+
+// Parsed from tensorflow/core/framework/tensor_slice.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/framework/tensor_slice.proto
+
+// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto__INCLUDED
+// #define PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto__INCLUDED
+
+// #include <string>
+
+// #include <google/protobuf/stubs/common.h>
+
+// #if GOOGLE_PROTOBUF_VERSION < 3004000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please update
+// #error your headers.
+// #endif
+// #if 3004000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// @@protoc_insertion_point(includes)
+  // namespace tensorflow
+// Internal implementation detail -- do not call these.
+  // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
+
+// ===================================================================
+
+@Namespace("tensorflow") @NoOffset public static class TensorSliceProto_Extent extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSliceProto_Extent(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorSliceProto_Extent(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorSliceProto_Extent position(long position) {
+        return (TensorSliceProto_Extent)super.position(position);
+    }
+
+  public TensorSliceProto_Extent() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public TensorSliceProto_Extent(@Const @ByRef TensorSliceProto_Extent from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef TensorSliceProto_Extent from);
+
+  public native @ByRef @Name("operator =") TensorSliceProto_Extent put(@Const @ByRef TensorSliceProto_Extent from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef TensorSliceProto_Extent default_instance();
+
+  /** enum tensorflow::TensorSliceProto_Extent::HasLengthCase */
+  public static final int
+    kLength = 2,
+    HAS_LENGTH_NOT_SET = 0;
+
+  public static native @Const TensorSliceProto_Extent internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(TensorSliceProto_Extent other);
+  public native void Swap(TensorSliceProto_Extent other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native TensorSliceProto_Extent New();
+
+  public native TensorSliceProto_Extent New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef TensorSliceProto_Extent from);
+  public native void MergeFrom(@Const @ByRef TensorSliceProto_Extent from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 start = 1;
+  public native void clear_start();
+  @MemberGetter public static native int kStartFieldNumber();
+  public static final int kStartFieldNumber = kStartFieldNumber();
+  public native @Cast("google::protobuf::int64") long start();
+  public native void set_start(@Cast("google::protobuf::int64") long value);
+  public native void clear_length();
+  @MemberGetter public static native int kLengthFieldNumber();
+  public static final int kLengthFieldNumber = kLengthFieldNumber();
+  public native @Cast("google::protobuf::int64") long length();
+  public native void set_length(@Cast("google::protobuf::int64") long value);
+
+  public native @Cast("tensorflow::TensorSliceProto_Extent::HasLengthCase") int has_length_case();
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class TensorSliceProto extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSliceProto(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorSliceProto(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorSliceProto position(long position) {
+        return (TensorSliceProto)super.position(position);
+    }
+
+  public TensorSliceProto() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public TensorSliceProto(@Const @ByRef TensorSliceProto from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef TensorSliceProto from);
+
+  public native @ByRef @Name("operator =") TensorSliceProto put(@Const @ByRef TensorSliceProto from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef TensorSliceProto default_instance();
+
+  public static native @Const TensorSliceProto internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(TensorSliceProto other);
+  public native void Swap(TensorSliceProto other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native TensorSliceProto New();
+
+  public native TensorSliceProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef TensorSliceProto from);
+  public native void MergeFrom(@Const @ByRef TensorSliceProto from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.TensorSliceProto.Extent extent = 1;
+  public native int extent_size();
+  public native void clear_extent();
+  @MemberGetter public static native int kExtentFieldNumber();
+  public static final int kExtentFieldNumber = kExtentFieldNumber();
+  public native @Const @ByRef TensorSliceProto_Extent extent(int index);
+  public native TensorSliceProto_Extent mutable_extent(int index);
+  public native TensorSliceProto_Extent add_extent();
+}
+// ===================================================================
+
+
+// ===================================================================
+
+// #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// TensorSliceProto_Extent
+
+// int64 start = 1;
+
+
+
+
+// int64 length = 2;
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TensorSliceProto
+
+// repeated .tensorflow.TensorSliceProto.Extent extent = 1;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto__INCLUDED
+
+
+// Parsed from tensorflow/core/framework/tensor_slice.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
+// #define TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
+
+// #include <string>
+// #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_slice.pb.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/platform/logging.h"
+
+// A tensor slice represents a slice of a given tensor. It is represented by a
+// list of (start, length) pairs, where the size of the list is the rank of the
+// tensor.
+
+@Namespace("tensorflow") @NoOffset public static class TensorSlice extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSlice(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorSlice(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorSlice position(long position) {
+        return (TensorSlice)super.position(position);
+    }
+
+  // Construct a tensor slice: you have a number of ways:
+  // -- creating an empty slice
+  // -- from just a dimension (in this case it will create a full slice)
+  // -- from an array of pairs of integers.
+  // -- from a TensorSliceProto protocol buffer
+  // -- from a string format of "start,length:start,length..." where each
+  //    "start,length" pair represents the slice on one dimension. We allow a
+  //    special "-" that means "everything for this dimension". One such example
+  //    is:  0,10:-:14,1:-:-
+  public TensorSlice() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public TensorSlice(int dim) { super((Pointer)null); allocate(dim); }
+  private native void allocate(int dim);
+  public TensorSlice(@Const @ByRef TensorSliceProto proto) { super((Pointer)null); allocate(proto); }
+  private native void allocate(@Const @ByRef TensorSliceProto proto);
+
+  public static native @ByVal Status Parse(@StdString BytePointer str, TensorSlice output);
+  public static native @ByVal Status Parse(@StdString String str, TensorSlice output);
+  public static native @ByVal TensorSlice ParseOrDie(@StdString BytePointer str);
+  public static native @ByVal TensorSlice ParseOrDie(@StdString String str);
+
+  public native void Clear();
+
+  // Accessors
+  public native int dims();
+
+  public native @Cast("tensorflow::int64") long start(int d);
+
+  public native @Cast("tensorflow::int64") long length(int d);
+
+  public native @Cast("tensorflow::int64") long end(int d);
+
+  public native void set_start(int d, @Cast("tensorflow::int64") long x);
+
+  public native void set_length(int d, @Cast("tensorflow::int64") long x);
+
+  // If we have a full slice along dimension "d".
+  public native @Cast("bool") boolean IsFullAt(int d);
+
+  // If this is a full slice, i.e. IsFullAt(d) for every d.
+  public native @Cast("bool") boolean IsFull();
+
+  // Set the slice to be a full slice of "dim" dimensions
+  public native void SetFullSlice(int dim);
+
+  // Extend a slice to "dim" dimensions: all the added dimensions are full.
+  // Requires: dim >= dims().
+  public native void Extend(int dim);
+
+  // Conversion of a TensorSlice to other formats
+  public native void AsProto(TensorSliceProto proto);
+  public native @StdString BytePointer DebugString();
+
+  // Fill *indices and *sizes from *this (so that we can use the slice()
+  // function in eigen tensor). We need a tensor shape in case some of the
+  // slices are full slices.
+  // We allow NDIMS to be greater than dims(), in which case we will pad the
+  // higher dimensions with trivial dimensions.
+
+  // Interaction with other TensorSlices.
+
+  // Compute the intersection with another slice and if "result" is not
+  // nullptr, store the results in *result; returns true if there is any real
+  // intersection.
+  public native @Cast("bool") boolean Intersect(@Const @ByRef TensorSlice other, TensorSlice result);
+  // A short hand.
+  public native @Cast("bool") boolean Overlaps(@Const @ByRef TensorSlice other);
+
+  // Equals iff "*this" and "other" are logically equivalent.
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef TensorSlice other);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef TensorSlice other);
+
+  // Interaction with TensorShape.
+
+  // Slices a shape and stores the result into *result_shape.
+  // Requires that the shape and *this have the same rank.
+  // For example, given a tensor shape of {3, 4, 5}, and a slice of
+  // 1,2:-:0,2, the result shape is {2, 4, 2}.
+  public native @ByVal Status SliceTensorShape(@Const @ByRef TensorShape shape,
+                            TensorShape result_shape);
+
+  // Given slice "sub" where "sub" is fully contained in *this,
+  // (meaning that the intersection of "sub" and *this equals "sub"), computes
+  // the "relative" slice of "sub" with respect to *this.
+  //
+  // In other words, if we use A>S to denote slicing a shape S with a slice A,
+  // then the function is computing a slice X such that:
+  //   X > (this > S) = sub > S
+  // for any shape S.
+  //
+  // In general, along every dimension, the start of the relative slice is the
+  // start of the "sub" slice minus the start of *this; the length of the
+  // relative slice is the length of the "sub" slice.
+  //
+  // For example, say we have a shape of {3, 4, 5}, "this" is 0,2:-:1,2, and
+  // "sub" is 1,1:2:2,1,2, then the related slice is 1,1:2,2:0,2.
+  //
+  // The caller needs to make sure that "sub" is indeed a sub-slice of *this;
+  // otherwise the result is undefined.
+  public native void ComputeRelative(@Const @ByRef TensorSlice sub, TensorSlice relative);
+
+  // Updates the slice in such a way that it fully covers "other" slice.
+  // Note, "other" slice should refer to the same tensor shape.
+  // Example:
+  //   given a slice [2:4, :, 3:] and "other" slice [:, 1:4, 2:4] the
+  //   updated slice would be [:, :, 2:]. Here is why:
+  //   dim 0: "2:4"  U  ":"    ->  ":"
+  //   dim 1: ":"    U  "1-4"  ->  ":"
+  //   dim 2: "3:"   U  "2:4"  ->  "2:"
+  public native void UpdateToCover(@Const @ByRef TensorSlice other);
+
+  // Returns true if the length field was specified in an Extent.
+  public static native @Cast("bool") boolean HasExtentLength(@Cast("const tensorflow::TensorSliceProto::Extent*") @ByRef TensorSliceProto_Extent extent);
+
+  // Returns the value of the length field in an Extent, or -1 if it
+  // is not present.
+  public static native @Cast("tensorflow::int64") long GetExtentLength(@Cast("const tensorflow::TensorSliceProto::Extent*") @ByRef TensorSliceProto_Extent extent);
+}
+
+
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
+
+
+// Parsed from tensorflow/core/util/tensor_slice_set.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// A class to manage slices of a tensor. You can "register" set of slices for a
+// tensor and then "query" if we have data for a given slice.
+
+// TODO(yangke): consider moving it to a more private place so that we don't
+// need to expose the API.
+
+// #ifndef TENSORFLOW_UTIL_TENSOR_SLICE_SET_H_
+// #define TENSORFLOW_UTIL_TENSOR_SLICE_SET_H_
+
+// #include <string>  // for string
+// #include <unordered_map>
+// #include <vector>
+
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_slice.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/core/status.h"       // for Status
+// #include "tensorflow/core/lib/core/stringpiece.h"  // for StringPiece
+// #include "tensorflow/core/platform/types.h"        // for int64
+
+@Namespace("tensorflow::checkpoint") @NoOffset public static class TensorSliceSet extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSliceSet(Pointer p) { super(p); }
+
+  public TensorSliceSet(@Const @ByRef TensorShape shape, @Cast("tensorflow::DataType") int type) { super((Pointer)null); allocate(shape, type); }
+  private native void allocate(@Const @ByRef TensorShape shape, @Cast("tensorflow::DataType") int type);
+
+  public native @Const @ByRef TensorShape shape();
+  public native @Cast("const tensorflow::DataType") int type();
+
+  // Register a new slice for the tensor. The "tag" is an arbitrary string
+  // associated with the slice (in one application it denotes the name of the
+  // file that contains the slice); the "data" points to the data of the tensor
+  // slice (it can be a nullptr).
+  // We don't take the ownership of "data" and the caller needs to make sure
+  // the data is always available during the life time of the tensor slice set
+  // if it is not nullptr.
+  public native @ByVal Status Register(@Const @ByRef TensorSlice slice, @StdString BytePointer tag,
+                    @Const FloatPointer data);
+  public native @ByVal Status Register(@Const @ByRef TensorSlice slice, @StdString String tag,
+                    @Const FloatBuffer data);
+  public native @ByVal Status Register(@Const @ByRef TensorSlice slice, @StdString BytePointer tag,
+                    @Const float... data);
+  public native @ByVal Status Register(@Const @ByRef TensorSlice slice, @StdString String tag,
+                    @Const FloatPointer data);
+  public native @ByVal Status Register(@Const @ByRef TensorSlice slice, @StdString BytePointer tag,
+                    @Const FloatBuffer data);
+  public native @ByVal Status Register(@Const @ByRef TensorSlice slice, @StdString String tag,
+                    @Const float... data);
+
+  // Query about a new slice: checks if we have data for "slice" and if we have
+  // the data and "data" is not nullptr, fill "data" with the slice data. The
+  // caller needs to make sure "data" point to a large enough buffer.
+  // TODO(yangke): avoid unnecessary copying by using a core::RefCounted
+  // pointer.
+  public native @Cast("bool") boolean Query(@Const @ByRef TensorSlice slice, FloatPointer data);
+  public native @Cast("bool") boolean Query(@Const @ByRef TensorSlice slice, FloatBuffer data);
+  public native @Cast("bool") boolean Query(@Const @ByRef TensorSlice slice, float... data);
+
+  // Alternative way of querying about a new slice: instead of copying the
+  // data, it returns a list of meta data about the stored slices that will
+  // supply data for the slice.
+  public native @Cast("bool") boolean QueryMeta(
+        @Const @ByRef TensorSlice slice,
+        @StdVector TensorSlideStringPair results);
+
+  public static class SliceInfo extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public SliceInfo() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public SliceInfo(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public SliceInfo(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public SliceInfo position(long position) {
+          return (SliceInfo)super.position(position);
+      }
+  
+    public native @ByRef TensorSlice slice(); public native SliceInfo slice(TensorSlice slice);
+    public native @StdString BytePointer tag(); public native SliceInfo tag(BytePointer tag);
+    @MemberGetter public native @Const FloatPointer data();
+    public native @Cast("tensorflow::int64") long num_floats(); public native SliceInfo num_floats(long num_floats);
+  }
+
+  // Returns the map from slice string to SliceInfo.
+  public native @Const @ByRef StringSliceInfoMap Slices();
+}
+
+// Registers "slice" in the TensorSliceSet stored in "tensor_slices", under key
+// "name".  Other arguments are used for validations.  Does not modify the map
+// or its values on non-OK.
+// REQUIRES: tensor_slices != nullptr
+@Namespace("tensorflow::checkpoint") public static native @ByVal Status RegisterTensorSlice(
+    @StdString BytePointer name, @Const @ByRef TensorShape shape, @Cast("tensorflow::DataType") int type,
+    @StdString BytePointer tag, @Const @ByRef TensorSlice slice,
+    StringTensorSliceSetMap tensor_slices);
+@Namespace("tensorflow::checkpoint") public static native @ByVal Status RegisterTensorSlice(
+    @StdString String name, @Const @ByRef TensorShape shape, @Cast("tensorflow::DataType") int type,
+    @StdString String tag, @Const @ByRef TensorSlice slice,
+    StringTensorSliceSetMap tensor_slices);
+
+  // namespace checkpoint
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_UTIL_TENSOR_SLICE_SET_H_
+
+
+// Parsed from tensorflow/core/util/tensor_slice_util.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_UTIL_TENSOR_SLICE_UTIL_H_
+// #define TENSORFLOW_UTIL_TENSOR_SLICE_UTIL_H_
+
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_slice.h"
+// #include "tensorflow/core/platform/logging.h"
+
+// Some hackery to invoke eigen tensor to copy over tensor slices with variable
+// dimension tensors.
+// TODO(yangke): get rid of that once the variable dimension tensor support is
+// in.
+@MemberGetter public static native int kTensorSliceMaxRank();
+public static final int kTensorSliceMaxRank = kTensorSliceMaxRank();
+
+// Create a tensor map with the given shape: we support up to 8 dimensions. If
+// the shape has less than 8 dimensions, we pad the remaining dimension with 1.
+
+// For everything except string, a standard Eigen cast and assignment works
+
+// Eigen makes it extremely difficult to dereference a tensor of string* into
+// string, so we roll our own loop instead.
+@Name("CopyThatWorksWithStringPointer<string>") public static class CopyThatWorksWithStringPointer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public CopyThatWorksWithStringPointer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CopyThatWorksWithStringPointer(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CopyThatWorksWithStringPointer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public CopyThatWorksWithStringPointer position(long position) {
+        return (CopyThatWorksWithStringPointer)super.position(position);
+    }
+
+}
+
+// Checkpointing of half is done by storing the raw 16 bits as a signed 32bit
+// integer. To restore the checkpoint we need to do the reverse operation by
+// reinterpreting the integer as a 16 bit float. This prevents us from using
+// the default cast operation.
+
+// Given a tensor described by "shape", two slices "slice_s" and "slice_d",
+// and two pointers "ptr_s" and "ptr_d", where "ptr_s" points to a chunk of
+// memory that stores the data for "slice_s" and "ptr_d" points to a chunk of
+// memory that stores the data for "slice_d". This function copies the data
+// that belongs to the intersection of the two slices from slice_s to
+// slice_d.  Uses Tensor cast<DstT>() to convert from SrcT to DstT. Returns true
+// iff the two slices share any intersection (and thus some data is copied).
+// TODO(yangke): figure out if we can make it private.
+
+  // namespace
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_UTIL_TENSOR_SLICE_UTIL_H_
+
+
+// Parsed from tensorflow/core/util/tensor_slice_reader.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// The utility to read checkpoints for google brain tensor ops and v3
+// checkpoints for dist_belief.
+//
+
+// #ifndef TENSORFLOW_UTIL_TENSOR_SLICE_READER_H_
+// #define TENSORFLOW_UTIL_TENSOR_SLICE_READER_H_
+
+// #include <unordered_map>
+
+// #include <vector>
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_slice.h"
+// #include "tensorflow/core/framework/types.pb.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/gtl/map_util.h"
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/protobuf.h"
+// #include "tensorflow/core/platform/types.h"
+// #include "tensorflow/core/util/saved_tensor_slice.pb.h"
+// #include "tensorflow/core/util/saved_tensor_slice_util.h"
+// #include "tensorflow/core/util/tensor_slice_set.h"
+// #include "tensorflow/core/util/tensor_slice_util.h"
+
+// The reader reads in all the meta data about all the tensor slices. Then it
+// will try to read the relevant data on-demand to produce the data for the
+// slices needed.
+// NOTE(yangke): another way to do this is to first load a list of the tensor
+// slices needed and then just selectively read some of the meta data. That
+// might optimize the loading but makes the logic a bit more complicated. We
+// might want to revisit that.
+// TODO(yangke): consider moving to TensorProto.
+@Namespace("tensorflow::checkpoint") @NoOffset public static class TensorSliceReader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSliceReader(Pointer p) { super(p); }
+
+  // Abstract interface for reading data out of a tensor slice checkpoint file
+  public static class Table extends Pointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Table(Pointer p) { super(p); }
+  
+    public native @Cast("bool") boolean Get(@StdString BytePointer key, @StdString @Cast({"char*", "std::string*"}) BytePointer value);
+    public native @Cast("bool") boolean Get(@StdString String key, @StdString @Cast({"char*", "std::string*"}) BytePointer value);
+  }
+
+  @MemberGetter public static native int kLoadAllShards();
+  public static final int kLoadAllShards = kLoadAllShards();
+  public TensorSliceReader(@StdString BytePointer filepattern) { super((Pointer)null); allocate(filepattern); }
+  private native void allocate(@StdString BytePointer filepattern);
+  public TensorSliceReader(@StdString String filepattern) { super((Pointer)null); allocate(filepattern); }
+  private native void allocate(@StdString String filepattern);
+  public TensorSliceReader(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function) { super((Pointer)null); allocate(filepattern, open_function); }
+  private native void allocate(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function);
+  public TensorSliceReader(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function) { super((Pointer)null); allocate(filepattern, open_function); }
+  private native void allocate(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function);
+  public TensorSliceReader(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+                      int preferred_shard) { super((Pointer)null); allocate(filepattern, open_function, preferred_shard); }
+  private native void allocate(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+                      int preferred_shard);
+  public TensorSliceReader(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+                      int preferred_shard) { super((Pointer)null); allocate(filepattern, open_function, preferred_shard); }
+  private native void allocate(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+                      int preferred_shard);
+
+  // Get the filename this reader is attached to.
+  public native @StdString BytePointer filepattern();
+
+  // Get the number of files matched.
+  public native int num_files();
+
+  // Get the status of the reader.
+  public native @Const @ByVal Status status();
+
+  // Checks if the reader contains any slice of a tensor. In case the reader
+  // does contain the tensor, if "shape" is not nullptr, fill "shape" with the
+  // shape of the tensor; if "type" is not nullptr, fill "type" with the type
+  // of the tensor.
+  public native @Cast("bool") boolean HasTensor(@StdString BytePointer name, TensorShape shape, @Cast("tensorflow::DataType*") IntPointer type);
+  public native @Cast("bool") boolean HasTensor(@StdString String name, TensorShape shape, @Cast("tensorflow::DataType*") IntPointer type);
+
+  // Checks if the reader contains all the data about a tensor slice, and if
+  // yes, copies the data of the slice to "data". The caller needs to make sure
+  // that "data" points to a buffer that holds enough data.
+  // This is a slow function since it needs to read sstables.
+
+  // Get the tensors.
+  public native @Const @ByRef StringTensorSliceSetMap Tensors();
+
+  // Returns value for one tensor. Only single slice checkpoints are supported
+  // at the moment.
+  public native @ByVal Status GetTensor(@StdString BytePointer name,
+                     @UniquePtr Tensor out_tensor);
+  public native @ByVal Status GetTensor(@StdString String name,
+                     @UniquePtr Tensor out_tensor);
+
+  // Returns a map from tensor name to shape.
+  public native @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::VarToShapeMap*") NameRangeMap GetVariableToShapeMap();
+
+  // Returns a map from tensor name to data type.
+  public native @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::VarToDataTypeMap*") NameRangeMap GetVariableToDataTypeMap();
+
+  // Returns a string containing names and shapes of all the tensors.
+  public native @StdString BytePointer DebugString();
+}
+
+@Namespace("tensorflow::checkpoint") public static native @ByVal Status OpenTableTensorSliceReader(@StdString BytePointer fname,
+                                  @Cast("tensorflow::checkpoint::TensorSliceReader::Table**") PointerPointer table);
+@Namespace("tensorflow::checkpoint") public static native @ByVal Status OpenTableTensorSliceReader(@StdString BytePointer fname,
+                                  @ByPtrPtr TensorSliceReader.Table table);
+@Namespace("tensorflow::checkpoint") public static native @ByVal Status OpenTableTensorSliceReader(@StdString String fname,
+                                  @ByPtrPtr TensorSliceReader.Table table);
+
+
+
+  // namespace checkpoint
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_UTIL_TENSOR_SLICE_READER_H_
+
+
+// Parsed from tensorflow/core/util/tensor_bundle/tensor_bundle.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// A tensor bundle is a set of immutable persistent files storing a set of named
+// tensors.  It is designed for checkpointing TensorFlow tensors.
+//
+// The paths of the managed files share a common prefix; e.g., with the prefix:
+//   /fs/model/train/ckpt-step/ckpt
+//
+// the bundle may contain a metadata file, and sharded data files:
+//   /fs/model/train/ckpt-step/
+//       ckpt.index
+//       ckpt.data-00000-of-00020
+//       ckpt.data-00001-of-00020
+//       ...
+//       ckpt.data-00019-of-00020
+//
+// The ".index" file is a string-string immutable table
+// (tensorflow::table::Table).  Each key is a name of a tensor and its value is
+// a serialized BundleEntryProto.  Each BundleEntryProto describes the metadata
+// of a tensor: which of the "data" files contains the content of a tensor, the
+// offset into that file, checksum, some auxiliary data, etc.
+//
+// A tensor bundle can be accessed randomly using a BundleReader.  Usage:
+//
+//   BundleReader reader(env, "/fs/model/train/ckpt-step/ckpt");
+//   reader.Lookup("name", &tensor);
+//
+// A tensor bundle can be built using BundleWriter.  Each BundleWriter builds a
+// single data file bundle.  Multiple bundles can then be merged by
+// MergeBundles() without reading and writing large chunk of data: it reads the
+// metadata files and outputs a single merged metadata.  Typical usage:
+//
+//   worker 0:
+//     BundleWriter writer(env, "/fs/model/train/ckpt-step/tmp/worker0-step");
+//     writer.Add(...);  // Adds the tensors on this worker.
+//     writer.Finish();  // Flushes.
+//   worker 1:
+//     BundleWriter writer(env, "/fs/model/train/ckpt-step/tmp/worker1-step");
+//     writer.Add(...);
+//     writer.Finish();
+//   worker 2:
+//     MergeBundles(env,
+//       {"/fs/model/train/ckpt-step/tmp/worker0-step",
+//        "/fs/model/train/ckpt-step/tmp/worker1-step"},
+//       "/fs/model/train/ckpt-step/ckpt" /* merged prefix */);
+//
+
+// #ifndef TENSORFLOW_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
+// #define TENSORFLOW_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
+
+// #include "tensorflow/core/protobuf/tensor_bundle.pb.h"
+
+// #include <map>
+// #include <string>
+// #include <unordered_map>
+
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_slice.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/lib/io/inputbuffer.h"
+// #include "tensorflow/core/lib/io/table.h"
+// #include "tensorflow/core/platform/env.h"
+// #include "tensorflow/core/platform/file_system.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/types.h"
+// #include "tensorflow/core/util/tensor_bundle/naming.h"
+// #include "tensorflow/core/util/tensor_slice_set.h"
+
+// Versioning of the tensor bundle format.
+// Follows the same rules as 3p/tf/core/public/version.h.
+//
+// History:
+// 0. Any tensor bundles produced before this field was added.
+// 1. Added this field (2016-09-14).
+@Namespace("tensorflow") @MemberGetter public static native int kTensorBundleMinProducer();
+@Namespace("tensorflow") @MemberGetter public static native int kTensorBundleMinConsumer();
+@Namespace("tensorflow") @MemberGetter public static native int kTensorBundleVersion();
+
+// The empty string, hence always the first key in the metadata table.  Its
+// corresponding value is a BundleHeaderProto.
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kHeaderEntryKey();
+
+// Builds a string-string table of tensor names to BundleEntryProto (metadata).
+//
+// On construction, attempts to create a directory given by the dirname of
+// "prefix", so "status()" must be checked before calling any member functions.
+//
+// All threads accessing the same BundleWriter must synchronize.
+@Namespace("tensorflow") @NoOffset public static class BundleWriter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BundleWriter(Pointer p) { super(p); }
+
+  public BundleWriter(Env env, @StringPiece BytePointer prefix) { super((Pointer)null); allocate(env, prefix); }
+  private native void allocate(Env env, @StringPiece BytePointer prefix);
+  public BundleWriter(Env env, @StringPiece String prefix) { super((Pointer)null); allocate(env, prefix); }
+  private native void allocate(Env env, @StringPiece String prefix);
+
+  // Adds the tensor "val" under key "key".
+  // Across calls "key" must be unique but can be added in any order.
+  public native @ByVal Status Add(@StringPiece BytePointer key, @Const @ByRef Tensor val);
+  public native @ByVal Status Add(@StringPiece String key, @Const @ByRef Tensor val);
+
+  // Partitioned variables support.
+  // A slice of a full tensor is stored in two entries in the metadata table:
+  //
+  //   full_tensor_key   -> BundleEntryProto, describing all stored slices
+  //                        of this full tensor.  Does not append to the data
+  //                        file.
+  //   encoded slice key -> BundleEntryProto, describing one particular slice.
+  //                        Appends values of this slice to the data file.
+  //
+  // Slices of a full tensor can be added in any order.
+  //
+  // If a full tensor has slices placed on N devices and N BundleWriter's are
+  // concurrently used, the caller must use MergeBundles() to ensure that a
+  // consistent entry for "full_tensor_key" is produced.
+  //
+  // Returns an error if the same slice is added the second time.
+  public native @ByVal Status AddSlice(@StringPiece BytePointer full_tensor_key,
+                    @Const @ByRef TensorShape full_tensor_shape,
+                    @Const @ByRef TensorSlice slice_spec, @Const @ByRef Tensor slice_tensor);
+  public native @ByVal Status AddSlice(@StringPiece String full_tensor_key,
+                    @Const @ByRef TensorShape full_tensor_shape,
+                    @Const @ByRef TensorSlice slice_spec, @Const @ByRef Tensor slice_tensor);
+
+  // Finishes the writer and flushes.
+  public native @ByVal Status Finish();
+
+  public native @ByVal Status status();
+}
+
+// Merges a set of bundles (given their prefixes) into a single bundle with the
+// given "merged_prefix".  The merged metadata is guaranteed to be consistent.
+//
+// If there are N bundles in "prefixes", during the merge the data files will be
+// renamed to contain a proper sharded file spec, with num_shards set to the sum
+// of num_shards across the N input bundles.
+//
+// The caller should only rely on the metadata file of the merged bundle to
+// query information about a tensor.  In particular, this function does not
+// guarantee not to re-order the input data files.
+//
+// Once merged, makes a best effort to delete the old metadata files.
+// Returns OK iff all bundles are successfully merged.
+@Namespace("tensorflow") public static native @ByVal Status MergeBundles(Env env, @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector prefixes,
+                    @StringPiece BytePointer merged_prefix);
+@Namespace("tensorflow") public static native @ByVal Status MergeBundles(Env env, @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector prefixes,
+                    @StringPiece String merged_prefix);
+
+// On construction, silently attempts to read the metadata associated with
+// "prefix".  If caller intends to call any function afterwards, "status()"
+// must be checked.
+// All threads accessing the same BundleReader must synchronize.
+@Namespace("tensorflow") @NoOffset public static class BundleReader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BundleReader(Pointer p) { super(p); }
+
+  public BundleReader(Env env, @StringPiece BytePointer prefix) { super((Pointer)null); allocate(env, prefix); }
+  private native void allocate(Env env, @StringPiece BytePointer prefix);
+  public BundleReader(Env env, @StringPiece String prefix) { super((Pointer)null); allocate(env, prefix); }
+  private native void allocate(Env env, @StringPiece String prefix);
+
+  // Is ok() iff the reader construction is successful (completed the read of
+  // the metadata).
+  public native @ByVal Status status();
+
+  // Queries whether the bundle contains an entry keyed by "key".  Calls Seek()
+  // internally, so this call invalidates the reader's current position.
+  // REQUIRES: status().ok()
+  public native @Cast("bool") boolean Contains(@StringPiece BytePointer key);
+  public native @Cast("bool") boolean Contains(@StringPiece String key);
+
+  // Looks up the dtype and the shape of the tensor keyed by "key".
+  // REQUIRES: status().ok()
+  public native @ByVal Status LookupDtypeAndShape(@StringPiece BytePointer key, @Cast("tensorflow::DataType*") IntPointer dtype,
+                               TensorShape shape);
+  public native @ByVal Status LookupDtypeAndShape(@StringPiece String key, @Cast("tensorflow::DataType*") IntPointer dtype,
+                               TensorShape shape);
+
+  // Looks up the shape of the tensor keyed by "key".
+  // Clears "shape" if not found.
+  // REQUIRES: status().ok()
+  public native @ByVal Status LookupTensorShape(@StringPiece BytePointer key,
+                             TensorShape shape);
+  public native @ByVal Status LookupTensorShape(@StringPiece String key,
+                             TensorShape shape);
+
+  // Looks up the tensor keyed by "key".  If "key" refers to a partitioned
+  // tensor, attempts to look up the full contents using all stored slices.
+  //
+  // Caller must make sure "val" has the same shape and dtype as the
+  // corresponding contents, so that its buffer can be filled without needing
+  // extra allocation.  These can be queried via "LookupDtypeAndShape()".
+  //
+  // On error, "val" may contain nonsense data.  Returns a NotFound error if
+  // tensor keyed by "key" does not exist in this bundle.
+  //
+  // Validates the stored crc32c checksum against the restored bytes.
+  // REQUIRES: status().ok()
+  public native @ByVal Status Lookup(@StringPiece BytePointer key, Tensor val);
+  public native @ByVal Status Lookup(@StringPiece String key, Tensor val);
+
+  // Looks up the tensor pointed to by the internal iterator.
+  //
+  // On error, "val" may contain nonsense data.
+  //
+  // Validates the stored crc32c checksum against the restored bytes.
+  // REQUIRES: status().ok() && Valid()
+  public native @ByVal Status ReadCurrent(Tensor val);
+
+  // Looks up the slices of the tensor keyed by "key".  On OK, "slices"
+  // is non-empty if and only if the tensor is a partitioned tensor.
+  //
+  // Warning - there is no guaranteed ordering for the returned slices, so
+  // a slice with a larger start index in some dimension could come before
+  // another slice with a smaller start index in the same dimension.
+  // REQUIRES: status().ok()
+  public native @ByVal Status LookupTensorSlices(@StringPiece BytePointer key, @StdVector TensorSlice slices);
+  public native @ByVal Status LookupTensorSlices(@StringPiece String key, @StdVector TensorSlice slices);
+
+  // Looks up a specific slice of a partitioned tensor.
+  // It is only required that the stored slices cover the requested slice,
+  // namely "slice_spec" is a subset of the union of the stored slices.
+  // REQUIRES: status().ok()
+  public native @ByVal Status LookupSlice(@StringPiece BytePointer full_tensor_key, @Const @ByRef TensorSlice slice_spec,
+                       Tensor val);
+  public native @ByVal Status LookupSlice(@StringPiece String full_tensor_key, @Const @ByRef TensorSlice slice_spec,
+                       Tensor val);
+
+  // Seeks to the first position in the bundle whose key is no less than "key".
+  // REQUIRES: status().ok()
+  public native void Seek(@StringPiece BytePointer key);
+  public native void Seek(@StringPiece String key);
+  // Moves to the next position in the bundle.
+  // REQUIRES: status().ok()
+  public native void Next();
+  // Returns true iff the reader is positioned to a key/val pair.
+  // REQUIRES: status().ok()
+  public native @Cast("bool") boolean Valid();
+
+  // Returns the key at the current position.
+  // REQUIRES: status().ok() && Valid()
+  public native @StringPiece BytePointer key();
+  // Returns the raw value at the current position.
+  // REQUIRES: status().ok() && Valid()
+  public native @StringPiece BytePointer value();
+
+  public native @StdString BytePointer DebugString();
+}
+
+// A buffering wrapper for a WritableFile.  Useful if the caller wishes to issue
+// small writes to a file (e.g. writing out a list of small varints).
+// External synchronization must be used in the presence of concurrent callers.
+@Namespace("tensorflow") @NoOffset public static class FileOutputBuffer extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FileOutputBuffer(Pointer p) { super(p); }
+
+  public FileOutputBuffer(WritableFile file, @Cast("size_t") long buffer_size) { super((Pointer)null); allocate(file, buffer_size); }
+  private native void allocate(WritableFile file, @Cast("size_t") long buffer_size);
+
+  // Buffered append.
+  public native @ByVal Status Append(@StringPiece BytePointer data);
+  public native @ByVal Status Append(@StringPiece String data);
+
+  // Returns the running crc32c checksum of all currently appended bytes.
+  public native int crc32c();
+  // Clears the running crc32c checksum.
+  public native void clear_crc32c();
+
+  // Appends the buffered data, then closes the underlying file.
+  public native @ByVal Status Close();
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
+
+
+// Parsed from tensorflow/c/tf_status_helper.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_C_TF_STATUS_HELPER_H
+// #define TENSORFLOW_C_TF_STATUS_HELPER_H
+
+// #include "tensorflow/c/c_api.h"
+// #include "tensorflow/core/lib/core/status.h"
+
+// Set the attribute of "tf_status" from the attributes of "status".
+@Namespace("tensorflow") public static native void Set_TF_Status_from_Status(TF_Status tf_status, @Const @ByRef Status status);
+
+// Returns a "status" from "tf_status".
+@Namespace("tensorflow") public static native @ByVal Status StatusFromTF_Status(@Const TF_Status tf_status);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_C_TF_STATUS_HELPER_H
+
+
+// Parsed from tensorflow/c/checkpoint_reader.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_C_CHECKPOINT_READER_H
+// #define TENSORFLOW_C_CHECKPOINT_READER_H
+
+// #include <memory>
+// #include <string>
+
+// #include "tensorflow/c/tf_status_helper.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/types.h"
+// #include "tensorflow/core/util/tensor_bundle/tensor_bundle.h"
+// #include "tensorflow/core/util/tensor_slice_reader.h"
+
+// A wrapper around BundleReader (for V2 checkpoints) and
+// checkpoint::TensorSliceReader (for V1), that is more easily SWIG wrapped for
+// other languages.
+//
+// The class currently only interacts with single-slice (i.e., non-partitioned)
+// variables.
+@Namespace("tensorflow::checkpoint") @NoOffset public static class CheckpointReader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CheckpointReader(Pointer p) { super(p); }
+
+  public CheckpointReader(@StdString BytePointer filepattern, TF_Status out_status) { super((Pointer)null); allocate(filepattern, out_status); }
+  private native void allocate(@StdString BytePointer filepattern, TF_Status out_status);
+  public CheckpointReader(@StdString String filepattern, TF_Status out_status) { super((Pointer)null); allocate(filepattern, out_status); }
+  private native void allocate(@StdString String filepattern, TF_Status out_status);
+
+  public native @Cast("bool") boolean HasTensor(@StdString BytePointer name);
+  public native @Cast("bool") boolean HasTensor(@StdString String name);
+  public native @StdString BytePointer DebugString();
+
+  // Returns a map from variable names to their shapes.  Slices of a partitioned
+  // tensor are combined into a single entry.
+  public native @Cast("const tensorflow::checkpoint::TensorSliceReader::VarToShapeMap*") @ByRef NameRangeMap GetVariableToShapeMap();
+
+  // Returns a map from variable names to their data types.  Slices of a
+  // partitioned tensor are combined into a single entry.
+  public native @Cast("const tensorflow::checkpoint::TensorSliceReader::VarToDataTypeMap*") @ByRef NameRangeMap GetVariableToDataTypeMap();
+
+  // Attempts to look up the tensor named "name" and stores the found result in
+  // "out_tensor".
+  public native void GetTensor(@StdString BytePointer name,
+                   @UniquePtr Tensor out_tensor,
+                   TF_Status out_status);
+  public native void GetTensor(@StdString String name,
+                   @UniquePtr Tensor out_tensor,
+                   TF_Status out_status);
+}
+
+  // namespace checkpoint
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_C_CHECKPOINT_READER_H
 
 
 // Parsed from tensorflow/c/c_api.h

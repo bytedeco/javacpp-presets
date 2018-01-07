@@ -5,7 +5,7 @@
  * Add initial set of CUDA bindings for OpenCV ([pull #416](https://github.com/bytedeco/javacpp-presets/pull/416))
  * Add CUDA/OpenCL-enabled builds for OpenCV, Caffe, and TensorFlow via `-gpu` extension ([issue bytedeco/javacv#481](https://github.com/bytedeco/javacv/issues/481))
  * Enable NVIDIA CUDA, CUVID, and NVENC acceleration for FFmpeg ([pull #492](https://github.com/bytedeco/javacpp-presets/pull/492))
- * Include `message_lite.h`, `saver.pb.h`, `meta_graph.pb.h`, and `loader.h` for TensorFlow ([issue #494](https://github.com/bytedeco/javacpp-presets/issues/494))
+ * Include `message_lite.h`, `checkpoint_reader.h`, `saver.pb.h`, `meta_graph.pb.h`, and `loader.h` for TensorFlow ([issue #494](https://github.com/bytedeco/javacpp-presets/issues/494))
  * Add `getString()` helper methods to `CXString`, `CXTUResourceUsageKind`, and `CXEvalResult` for `clang` ([issue bytedeco/javacpp#51](https://github.com/bytedeco/javacpp/issues/51))
  * Add support for Mac OS X and Windows to presets for librealsense ([issue #447](https://github.com/bytedeco/javacpp-presets/issues/447))
  * Enable MMAL and OpenMAX acceleration for FFmpeg on `linux-armhf` ([pull #388](https://github.com/bytedeco/javacpp-presets/pull/388))

@@ -99,6 +99,14 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/partial_tensor_shape.h",
                         "tensorflow/core/framework/device_attributes.pb.h",
                         "tensorflow/core/public/session.h",
+                        "tensorflow/core/framework/tensor_slice.pb.h",
+                        "tensorflow/core/framework/tensor_slice.h",
+                        "tensorflow/core/util/tensor_slice_set.h",
+                        "tensorflow/core/util/tensor_slice_util.h",
+                        "tensorflow/core/util/tensor_slice_reader.h",
+                        "tensorflow/core/util/tensor_bundle/tensor_bundle.h",
+                        "tensorflow/c/tf_status_helper.h",
+                        "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/op_def_builder.h",
@@ -197,6 +205,14 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/partial_tensor_shape.h",
                         "tensorflow/core/framework/device_attributes.pb.h",
                         "tensorflow/core/public/session.h",
+                        "tensorflow/core/framework/tensor_slice.pb.h",
+                        "tensorflow/core/framework/tensor_slice.h",
+                        "tensorflow/core/util/tensor_slice_set.h",
+                        "tensorflow/core/util/tensor_slice_util.h",
+                        "tensorflow/core/util/tensor_slice_reader.h",
+                        "tensorflow/core/util/tensor_bundle/tensor_bundle.h",
+                        "tensorflow/c/tf_status_helper.h",
+                        "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/op_def_builder.h",
@@ -302,7 +318,8 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::MetaGraphDef_CollectionDefEntryDefaultTypeInternal", "tensorflow::MetaGraphDef_CollectionDefEntryDefaultTypeInternal",
                              "tensorflow::MetaGraphDef_MetaInfoDefDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntryDefaultTypeInternal",
                              "tensorflow::MetaGraphDef_SignatureDefEntryDefaultTypeInternal", "tensorflow::SignatureDefDefaultTypeInternal", "tensorflow::SignatureDef_InputsEntryDefaultTypeInternal",
-                             "tensorflow::SignatureDef_OutputsEntryDefaultTypeInternal", "tensorflow::TensorInfoDefaultTypeInternal", "tensorflow::TensorInfo_CooSparseDefaultTypeInternal").skip())
+                             "tensorflow::SignatureDef_OutputsEntryDefaultTypeInternal", "tensorflow::TensorInfoDefaultTypeInternal", "tensorflow::TensorInfo_CooSparseDefaultTypeInternal",
+                             "tensorflow::TensorSliceProtoDefaultTypeInternal", "tensorflow::TensorSliceProto_ExtentDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -380,8 +397,14 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").pointerTypes("TrueOpDefBuilderWrapper"))
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))
 
+               .put(new Info("tensorflow::checkpoint::TensorSliceSet::SliceInfo").pointerTypes("TensorSliceSet.SliceInfo"))
                .put(new Info("std::pair<tensorflow::StringPiece,int>").pointerTypes("StringPieceIntPair").define())
+               .put(new Info("std::pair<tensorflow::TensorSlice,tensorflow::string>").pointerTypes("TensorSlideStringPair").define())
                .put(new Info("std::map<tensorflow::TensorId,tensorflow::TensorId>").pointerTypes("TensorIdTensorIdMap").define())
+               .put(new Info("std::unordered_map<std::string,tensorflow::TensorShape>").pointerTypes("VarToShapeMap").define())
+               .put(new Info("std::unordered_map<std::string,tensorflow::DataType>").pointerTypes("VarToDataTypeMap").define())
+               .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet*>").pointerTypes("StringTensorSliceSetMap").define())
+               .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>").pointerTypes("StringSliceInfoMap").define())
                .put(new Info("std::vector<tensorflow::Input>::iterator", "std::vector<tensorflow::Input>::const_iterator").skip())
                .put(new Info("TF_WhileParams").purify())
                .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
