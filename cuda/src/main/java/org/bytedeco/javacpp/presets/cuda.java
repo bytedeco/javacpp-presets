@@ -36,13 +36,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<cuda.h>", "<crt/host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
-              includepath = "/usr/local/cuda-9.0/include/", link = {"cudart@.9.0", "cuda@.9.0"}, linkpath = "/usr/local/cuda-9.0/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-9.0/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-9.0/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-9.0/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0/lib/x64/") },
+              includepath = "/usr/local/cuda-9.1/include/", link = {"cudart@.9.1", "cuda@.9.1"}, linkpath = "/usr/local/cuda-9.1/lib/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-9.1/lib64/"),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-9.1/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-9.1/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/lib/x64/") },
         target = "org.bytedeco.javacpp.cuda")
 public class cuda implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -22,11 +22,11 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     CENTOS_VERSION=7
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.0-cudnn7-devel-centos$CENTOS_VERSION /bin/bash > /dev/null
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash > /dev/null
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install centos-release-scl-rh epel-release" > /dev/null
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install devtoolset-3-toolchain maven30 clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel" > /dev/null
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install devtoolset-4-toolchain rh-maven33 clang gcc-c++ gcc-gfortran java-devel maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel" > /dev/null
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -y install > /dev/null"
   fi
@@ -100,8 +100,12 @@ fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update > /dev/null
+   brew upgrade maven
    brew install gcc swig libtool libusb nasm yasm xz sdl
    brew link --overwrite gcc
+
+   mvn -version
+   /usr/local/bin/gcc-? --version
 fi
 
 if [[ "$OS" =~ android ]]; then
@@ -172,10 +176,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         export CHILDPID=$!
         echo "Child PID $CHILDPID"
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_mac-dmg -o $HOME/cuda.dmg
+        curl -L https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_mac -o $HOME/cuda_9.1.85_mac.dmg
+        curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.4/cudnn-9.0-osx-x64-v7.tgz -o $HOME/cudnn-9.0-osx-x64-v7.tgz
 
         echo "Mount dmg"
-        hdiutil mount $HOME/cuda.dmg
+        hdiutil mount $HOME/cuda_9.1.85_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
@@ -186,13 +191,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         fi
         kill $CHILDPID
 
-        if [[ $(find $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz -type f -size +1000000c 2>/dev/null) ]]; then
-          echo "Found cudnn in cache and size seems ok" 
-        else
-          echo "Downloading cudnn as not found in cache" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B8dyy7cU8B67UEtYVmh1akU1d1U $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz
-        fi
-        tar xvf $HOME/downloads/cudnn-9.0-osx-x64-v7.tgz
+        tar xvf $HOME/cudnn-9.0-osx-x64-v7.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
@@ -201,12 +200,12 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.5.4/bazel-0.5.4-installer-darwin-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.5.4/bazel-0.5.4-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1
         fi
-        sudo bash $HOME/downloads/bazel.sh
+        sudo bash $HOME/bazel.sh
      fi
 fi  
 
@@ -221,20 +220,20 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
      while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 $HOME/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/maven30/root/usr/bin/mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/maven30/root/usr/bin/mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    else
      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/maven30/root/usr/bin/mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
        if [ $BUILD_STATUS -eq 0 ]; then
          echo "Deploying platform"
          for i in ${PROJ//,/ }
          do
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; /opt/rh/maven30/root/usr/bin/mvn clean -B -U -f platform/pom.xml -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
+          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; /opt/rh/rh-maven33/root/usr/bin/mvn clean -B -U -f platform/pom.xml -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT --settings ../ci/settings.xml deploy"; export BUILD_STATUS=$?
           if [ $BUILD_STATUS -ne 0 ]; then
            echo "Build Failed"
            exit $BUILD_STATUS
@@ -244,7 +243,7 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
         
      else
        echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/maven30/root/usr/bin/mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
      fi
    fi
    echo "Build status $BUILD_STATUS"
