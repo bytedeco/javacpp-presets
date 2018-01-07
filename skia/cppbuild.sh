@@ -44,7 +44,10 @@ sed -i="" /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
 export PATH="$PWD/depot_tools:$PATH"
 
 cd skia-$SKIA_VERSION
+# Work around the disappearance of https://skia.googlesource.com/third_party/libjpeg-turbo.git
+patch -Np1 < ../../../skia.patch || true
 python tools/git-sync-deps
+cp third_party/libjpeg-turbo/* third_party/externals/libjpeg-turbo/
 
 bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-DSKIA_C_DLL\"]"
 ninja -C out/Shared
