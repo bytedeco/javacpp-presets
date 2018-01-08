@@ -77,6 +77,7 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib64/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
