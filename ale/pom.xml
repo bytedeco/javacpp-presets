@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>ale</artifactId>
-  <version>20170911-6eddb8d-${project.parent.version}</version>
+  <version>20171230-f7fff87-${project.parent.version}</version>
   <name>JavaCPP Presets for ALE</name>
 
   <properties>

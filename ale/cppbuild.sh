@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ALE_VERSION=6eddb8d4a700022623ac284c8829702f26021277
+ALE_VERSION=f7fff8733c8cc0f54d749ddeaf29bd7f478d6f0f
 download https://github.com/mgbellemare/Arcade-Learning-Environment/archive/$ALE_VERSION.tar.gz ale-$ALE_VERSION.tar.gz
 
 mkdir -p $PLATFORM

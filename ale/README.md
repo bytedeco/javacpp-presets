@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>20170911-6eddb8d-1.3.4-SNAPSHOT</version>
+            <version>20171230-f7fff87-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

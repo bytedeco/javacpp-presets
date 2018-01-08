@@ -168,7 +168,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ale-platform</artifactId>
-      <version>20170911-6eddb8d-${project.version}</version>
+      <version>20171230-f7fff87-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
