@@ -24,7 +24,6 @@ case $PLATFORM in
     #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
     make -j4
     make install
-    cp ../lib/libpostal.so ../lib/liblibpostal.so
         ;;
     macosx-*)
     ./bootstrap.sh
@@ -32,7 +31,6 @@ case $PLATFORM in
     #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
     make -j4
     make install
-    cp ../lib/libpostal.dylib ../lib/liblibpostal.dylib
         ;;
     windows-x86_64)
     cp -rf windows/* ./
