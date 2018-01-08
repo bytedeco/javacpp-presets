@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class libpostal extends org.bytedeco.javacpp.presets.libpostal {
     static { Loader.load(); }
 
-// Parsed from libpostal.h
+// Parsed from libpostal/libpostal.h
 
 // #ifndef LIBPOSTAL_H
 // #define LIBPOSTAL_H

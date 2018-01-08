@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,11 +11,14 @@
         <version>1.3.4-SNAPSHOT</version>
     </parent>
 
-
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>libpostal</artifactId>
     <version>20171226-1e7cc23-${project.parent.version}</version>
     <name>JavaCPP Presets for libpostal</name>
+
+    <properties>
+        <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -34,6 +38,18 @@
             <plugin>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>javacpp</artifactId>
+                <configuration>
+                    <propertyKeysAndValues>
+                        <property>
+                            <name>platform.root</name>
+                            <value>${javacpp.platform.root}</value>
+                        </property>
+                        <property>
+                            <name>platform.compiler</name>
+                            <value>${javacpp.platform.oldcompiler}</value>
+                        </property>
+                    </propertyKeysAndValues>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -49,5 +65,37 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>mingw</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.bytedeco</groupId>
+                        <artifactId>javacpp</artifactId>
+                        <configuration>
+                            <properties>${javacpp.platform}-mingw</properties>
+                            <compilerOptions>
+                                <compilerOption>-static-libgcc</compilerOption>
+                                <compilerOption>-static-libstdc++</compilerOption>
+                                <compilerOption>-Wl,-Bstatic</compilerOption>
+                                <compilerOption>-lstdc++</compilerOption>
+                                <compilerOption>-lgcc</compilerOption>
+                                <compilerOption>-lgcc_eh</compilerOption>
+                                <compilerOption>-lpthread</compilerOption>
+                                <compilerOption>-Wl,-Bdynamic</compilerOption>
+                            </compilerOptions>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
