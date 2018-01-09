@@ -7,15 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ALE_VERSION=f7fff8733c8cc0f54d749ddeaf29bd7f478d6f0f
-download https://github.com/mgbellemare/Arcade-Learning-Environment/archive/$ALE_VERSION.tar.gz ale-$ALE_VERSION.tar.gz
+ALE_VERSION=0.6.0
+download https://github.com/mgbellemare/Arcade-Learning-Environment/archive/v$ALE_VERSION.tar.gz ale-v$ALE_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 mkdir -p include lib bin
 echo "Decompressing archives..."
-tar --totals -xzf ../ale-$ALE_VERSION.tar.gz
+tar --totals -xzf ../ale-v$ALE_VERSION.tar.gz
 cd Arcade-Learning-Environment-$ALE_VERSION
 
 case $PLATFORM in

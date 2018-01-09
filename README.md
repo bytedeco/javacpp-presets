@@ -126,7 +126,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 9.1  https://developer.nvidia.com/cuda-downloads
  * MXnet 1.0.0  https://github.com/dmlc/mxnet
  * TensorFlow 1.4.1  https://github.com/tensorflow/tensorflow
- * The Arcade Learning Environment  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
  * System APIs of the build environments:
