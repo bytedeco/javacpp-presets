@@ -129,6 +129,8 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/gradients.h",
                         "tensorflow/cc/framework/scope.h",
                         "tensorflow/cc/framework/ops.h",
+                        "tensorflow/core/framework/api_def.pb.h",
+                        "tensorflow/core/framework/op_gen_lib.h",
                         "tensorflow/cc/framework/cc_op_gen.h",
                         "tensorflow/cc/framework/gradients.h",
                         "tensorflow/core/protobuf/saver.pb.h",
@@ -319,7 +321,10 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::MetaGraphDef_MetaInfoDefDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntryDefaultTypeInternal",
                              "tensorflow::MetaGraphDef_SignatureDefEntryDefaultTypeInternal", "tensorflow::SignatureDefDefaultTypeInternal", "tensorflow::SignatureDef_InputsEntryDefaultTypeInternal",
                              "tensorflow::SignatureDef_OutputsEntryDefaultTypeInternal", "tensorflow::TensorInfoDefaultTypeInternal", "tensorflow::TensorInfo_CooSparseDefaultTypeInternal",
-                             "tensorflow::TensorSliceProtoDefaultTypeInternal", "tensorflow::TensorSliceProto_ExtentDefaultTypeInternal").skip())
+                             "tensorflow::TensorSliceProtoDefaultTypeInternal", "tensorflow::TensorSliceProto_ExtentDefaultTypeInternal", "tensorflow::ApiDefDefaultTypeInternal",
+                             "tensorflow::ApiDef_ArgDefaultTypeInternal", "tensorflow::ApiDef_AttrDefaultTypeInternal", "tensorflow::ApiDef_EndpointDefaultTypeInternal",
+                             "tensorflow::ApiDefsDefaultTypeInternal", "tensorflow::DebuggedSourceFileDefaultTypeInternal", "tensorflow::DebuggedSourceFilesDefaultTypeInternal",
+                             "tensorflow::AllocationRecordDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -342,6 +347,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<std::unique_ptr<std::vector<tensorflow::shape_inference::ShapeAndType> > >",
                              "std::vector<std::unique_ptr<std::vector<std::pair<tensorflow::TensorShapeProto,tensorflow::DataType> > > >",
                              "std::vector<std::unique_ptr<std::vector<std::pair<tensorflow::PartialTensorShape,tensorflow::DataType> > > >").skip())
+               .put(new Info("std::pair<tensorflow::shape_inference::ShapeHandle,tensorflow::shape_inference::ShapeHandle>").pointerTypes("ShapeHandlePair").define())
+               .put(new Info("std::pair<tensorflow::shape_inference::DimensionHandle,tensorflow::shape_inference::DimensionHandle>").pointerTypes("DimensionHandlePair").define())
                .put(new Info("std::vector<tensorflow::Tensor>").pointerTypes("TensorVector").define())
                .put(new Info("std::vector<tensorflow::TensorProto>").pointerTypes("TensorProtoVector").define())
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
@@ -406,6 +413,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet*>").pointerTypes("StringTensorSliceSetMap").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>").pointerTypes("StringSliceInfoMap").define())
                .put(new Info("std::vector<tensorflow::Input>::iterator", "std::vector<tensorflow::Input>::const_iterator").skip())
+               .put(new Info("tensorflow::ImportGraphDefResults::Index").cast().valueTypes("int").pointerTypes("IntPointer"))
+               .put(new Info("std::pair<tensorflow::Node*,tensorflow::ImportGraphDefResults::Index>").pointerTypes("NodeIndexPair").define())
                .put(new Info("TF_WhileParams").purify())
                .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
                .put(new Info("TF_GraphImportGraphDefOptionsRemapControlDependency").annotations("@Platform(not=\"android\")").javaNames("TF_GraphImportGraphDefOptionsRemapControlDependency"))
