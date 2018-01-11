@@ -37,13 +37,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(value = @Platform(value = {"linux-x86", "macosx"}, include = {"emucore/m6502/src/bspf/src/bspf.hxx", "emucore/Event.hxx",
-    "common/Constants.h", "common/ColourPalette.hpp", "common/ScreenExporter.hpp", "environment/ale_ram.hpp", "environment/ale_screen.hpp",
-    "environment/ale_state.hpp", "ale_interface.hpp"}, link = "ale"), target = "org.bytedeco.javacpp.ale")
+@Properties(
+    value = {
+        @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11", link = "ale",
+            include = {"emucore/m6502/src/bspf/src/bspf.hxx", "emucore/Event.hxx", "common/Constants.h",
+                       "common/ColourPalette.hpp", "common/ScreenExporter.hpp", "environment/ale_ram.hpp",
+                       "environment/ale_screen.hpp", "environment/ale_state.hpp", "ale_interface.hpp"}),
+        @Platform(value = "linux-x86",     preload = "SDL-1.2@.0", preloadpath = {"/usr/lib32/", "/usr/lib/"}),
+        @Platform(value = "linux-x86_64",  preload = "SDL-1.2@.0", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
+        @Platform(value = "macosx-x86_64", preload = "SDL-1.2@.0", preloadpath = "/usr/local/lib/"),
+        @Platform(value = "windows-x86",    preload = {"SDL", "libale"}, preloadpath = "/mingw32/bin/"),
+        @Platform(value = "windows-x86_64", preload = {"SDL", "libale"}, preloadpath = "/mingw64/bin")},
+    target = "org.bytedeco.javacpp.ale")
 public class ale implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("BSPF_strcasecmp", "BSPF_strncasecmp", "BSPF_snprintf", "BSPF_vsnprintf").cppTypes())
-               .put(new Info("ALEInterface::theOSystem", "ALEInterface::theSettings", "ALEInterface::romSettings",
+               .put(new Info("ALEState::reset", "ALEInterface::theOSystem", "ALEInterface::theSettings", "ALEInterface::romSettings",
                              "ALEInterface::environment", "ALEInterface::createOSystem", "ALEInterface::loadSettings").skip());
     }
 }

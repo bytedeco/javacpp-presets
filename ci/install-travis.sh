@@ -1,6 +1,7 @@
 #!/bin/bash 
 set -vx
-#export
+
+while true; do echo .; sleep 60; done &
 
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
@@ -172,9 +173,6 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda.."
-        while true; do echo .; sleep 60; done &
-        export CHILDPID=$!
-        echo "Child PID $CHILDPID"
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_mac -o $HOME/cuda_9.1.85_mac.dmg
         curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.4/cudnn-9.0-osx-x64-v7.tgz -o $HOME/cudnn-9.0-osx-x64-v7.tgz
@@ -189,7 +187,6 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           echo "Brew Failed"
           exit $BREW_STATUS
         fi
-        kill $CHILDPID
 
         tar xvf $HOME/cudnn-9.0-osx-x64-v7.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/

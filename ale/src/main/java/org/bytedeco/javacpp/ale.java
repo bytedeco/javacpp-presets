@@ -689,8 +689,7 @@ public static final int PADDLE_DEFAULT_VALUE = (((PADDLE_MAX - PADDLE_MIN) / 2) 
 
     /** Resets the system to its start state. numResetSteps 'RESET' actions are taken after the
       *  start. */
-    public native void reset(int numResetSteps/*=1*/);
-    public native void reset();
+    
 
     /** Returns true if the two states contain the same saved information */
     public native @Cast("bool") boolean equals(@ByRef ALEState state);

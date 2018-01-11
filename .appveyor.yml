@@ -37,6 +37,8 @@ environment:
       OS: windows-x86
     - PROJ: "leptonica,tesseract"
       OS: windows-x86
+    - PROJ: "ale"
+      OS: windows-x86
     - PROJ: "systems"
       OS: windows-x86
 
@@ -73,6 +75,8 @@ environment:
     - PROJ: "leptonica,tesseract"
       OS: windows-x86_64
     - PROJ: "cuda"
+      OS: windows-x86_64
+    - PROJ: "ale"
       OS: windows-x86_64
     - PROJ: "systems"
       OS: windows-x86_64
