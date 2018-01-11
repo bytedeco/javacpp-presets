@@ -52,8 +52,6 @@ environment:
       OS: windows-x86_64
     - PROJ: "libfreenect2"
       OS: windows-x86_64
-    - PROJ: "libpostal"
-      OS: windows-x86_64
     - PROJ: "librealsense"
       OS: windows-x86_64
     - PROJ: "videoinput"
@@ -63,6 +61,8 @@ environment:
     - PROJ: "chilitags"
       OS: windows-x86_64
     - PROJ: "hdf5"
+      OS: windows-x86_64
+    - PROJ: "libpostal"
       OS: windows-x86_64
     - PROJ: "mkl"
       OS: windows-x86_64
@@ -100,3 +100,4 @@ test_script:
 on_finish:
 #    uncomment this for the RDP session to remain active after the build ends
 #    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+

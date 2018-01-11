@@ -483,7 +483,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libpostal</module>
         <module>librealsense</module>
         <module>videoinput</module>
         <module>artoolkitplus</module>
@@ -495,6 +494,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -786,7 +786,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libpostal</module>
         <module>librealsense</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
@@ -797,6 +796,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -835,7 +835,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libpostal</module>
         <module>librealsense</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
@@ -846,6 +845,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -926,13 +926,13 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libpostal</module>
         <module>librealsense</module>
         <module>videoinput</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
         <module>hdf5</module>
+        <module>libpostal</module>
         <module>mkl</module>
         <module>openblas</module>
         <module>fftw</module>
