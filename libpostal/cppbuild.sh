@@ -18,7 +18,6 @@ cd libpostal-*
 
 case $PLATFORM in
     linux-x86_64)
-    CC="$OLDCC -m64"
     ./bootstrap.sh
     ./configure --prefix=$INSTALL_PATH --disable-data-download
     #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
