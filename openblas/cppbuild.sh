@@ -128,6 +128,7 @@ esac
 
 make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN
 make install "PREFIX=$INSTALL_PATH"
-export LDFLAGS=
+unset CC
+unset LDFLAGS
 
 cd ../..

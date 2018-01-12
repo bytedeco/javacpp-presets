@@ -89,6 +89,8 @@ sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcode
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" ADD_CFLAGS="-DMXNET_USE_LAPACK" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
 cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
+unset CC
+unset CXX
 
 case $PLATFORM in
     macosx-*)

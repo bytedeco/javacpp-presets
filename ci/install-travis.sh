@@ -32,6 +32,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -y install > /dev/null"
   fi
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gcc --version"
 
   if [ "$PROJ" == "flycapture" ]; then
     if [ "$OS" == "linux-x86_64" ]; then

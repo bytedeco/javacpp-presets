@@ -898,6 +898,7 @@
         <module>gsl</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>ale</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -941,6 +942,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>ale</module>
         <module>systems</module>
       </modules>
       <properties>

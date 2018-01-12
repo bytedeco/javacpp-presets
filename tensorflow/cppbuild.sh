@@ -88,13 +88,15 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx $GPU_FLAGS --copt=-m64 --linkopt=-m64"
+        export CUDA_HOME=$CUDA_TOOLKIT_PATH
+        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
 
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
-        export CUDA_HOME=/usr/local/cuda
+        export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
         export PATH=$DYLD_LIBRARY_PATH:$PATH
