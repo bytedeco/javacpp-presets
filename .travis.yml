@@ -446,10 +446,6 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=libpostal OS=linux-x86_64
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
         env: PROJ=mkl OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -467,6 +463,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=llvm OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=libpostal OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux

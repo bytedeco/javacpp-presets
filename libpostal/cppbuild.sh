@@ -7,13 +7,13 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBPOSTAL_SHA=1e7cc23
-download https://github.com/openvenues/libpostal/archive/$LIBPOSTAL_SHA.tar.gz libpostal-$LIBPOSTAL_SHA.tar.gz
+LIBPOSTAL_VERSION=1.1-alpha
+download https://github.com/openvenues/libpostal/archive/v$LIBPOSTAL_VERSION.tar.gz libpostal-$LIBPOSTAL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=$(pwd)
-tar -xzvf ../libpostal-$LIBPOSTAL_SHA.tar.gz
+tar -xzvf ../libpostal-$LIBPOSTAL_VERSION.tar.gz
 cd libpostal-*
 
 case $PLATFORM in

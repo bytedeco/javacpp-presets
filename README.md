@@ -120,6 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.7  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 5.0.x  http://llvm.org/releases/download.html
+ * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.74.4  http://www.leptonica.org/download.html
  * Tesseract 3.05.01  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe

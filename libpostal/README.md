@@ -5,12 +5,12 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * libpostal 1.0  https://github.com/openvenues/libpostal
+ * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  
 libpostal is a C library for parsing/normalizing street addresses around the world using statistical NLP and open data.
 The goal of this project is to understand location-based strings in every language, everywhere.
 
-Data files
+Data Files
 ----------
 
 libpostal needs to download a few gigabytes of data from S3. The basic files are on-disk representations of the data structures necessary to perform expansion.
@@ -53,7 +53,7 @@ To run this sample code, after creating the `pom.xml` and `src/main/java/Example
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>libpostal-platform</artifactId>
-            <version>1.0.0-1.3.4-SNAPSHOT</version>
+            <version>1.1-alpha-1.3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

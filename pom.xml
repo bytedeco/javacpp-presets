@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
@@ -393,7 +393,7 @@
         </executions>
       </plugin>
     </plugins>
-</pluginManagement>
+    </pluginManagement>
 
     <plugins>
       <plugin>
@@ -1154,11 +1154,11 @@
         <module>chilitags</module>
         <module>flandmark</module>
         <module>hdf5</module>
-        <module>libpostal</module>
         <module>mkl</module>
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
