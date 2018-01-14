@@ -485,8 +485,7 @@ public static class libpostal_normalized_token_t extends Pointer {
     public native @ByRef libpostal_token_t token(); public native libpostal_normalized_token_t token(libpostal_token_t token);
 }
 
-@NoException public static native libpostal_normalized_token_t libpostal_normalized_tokens(@Cast("char*") BytePointer input, @Cast("uint64_t") long string_options, @Cast("uint64_t") long token_options, @Cast("bool") boolean whitespace, @Cast("size_t*") SizeTPointer n);
-@NoException public static native libpostal_normalized_token_t libpostal_normalized_tokens(@Cast("char*") String input, @Cast("uint64_t") long string_options, @Cast("uint64_t") long token_options, @Cast("bool") boolean whitespace, @Cast("size_t*") SizeTPointer n);
+
 
 // #ifdef __cplusplus
 // #endif
