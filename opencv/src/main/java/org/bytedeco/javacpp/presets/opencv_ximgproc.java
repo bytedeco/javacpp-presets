@@ -32,12 +32,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = opencv_calib3d.class, value = {
+@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class}, value = {
     @Platform(include = {"<opencv2/ximgproc.hpp>", "opencv2/ximgproc/edge_filter.hpp", "opencv2/ximgproc/disparity_filter.hpp",
         "opencv2/ximgproc/sparse_match_interpolator.hpp", "opencv2/ximgproc/structured_edge_detection.hpp", "opencv2/ximgproc/seeds.hpp",
         "opencv2/ximgproc/segmentation.hpp", "opencv2/ximgproc/fast_hough_transform.hpp", "opencv2/ximgproc/estimated_covariance.hpp",
-        "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.3"),
-    @Platform(value = "windows", link = "opencv_ximgproc331")},
+        "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.4"),
+    @Platform(value = "windows", link = "opencv_ximgproc340")},
         target = "org.bytedeco.javacpp.opencv_ximgproc")
 public class opencv_ximgproc implements InfoMapper {
     public void map(InfoMap infoMap) {

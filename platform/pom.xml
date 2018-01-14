@@ -54,7 +54,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>3.3.1-${project.version}</version>
+      <version>3.4.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -154,7 +154,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>9.0-7.0-${project.version}</version>
+      <version>9.1-7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -164,12 +164,12 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.4.1-${project.version}</version>
+      <version>1.5.0-rc0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ale-platform</artifactId>
-      <version>20170911-6eddb8d-${project.version}</version>
+      <version>0.6.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

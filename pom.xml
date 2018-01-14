@@ -69,8 +69,15 @@
     <javacpp.platform.compiler></javacpp.platform.compiler>
     <javacpp.platform.extension></javacpp.platform.extension>
     <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
+    <javacpp.platform.android-arm64>android-arm64</javacpp.platform.android-arm64>
     <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
+    <javacpp.platform.android-x86_64>android-x86_64</javacpp.platform.android-x86_64>
+    <javacpp.platform.ios-arm>ios-arm</javacpp.platform.ios-arm>
+    <javacpp.platform.ios-arm64>ios-arm64</javacpp.platform.ios-arm64>
+    <javacpp.platform.ios-x86>ios-x86</javacpp.platform.ios-x86>
+    <javacpp.platform.ios-x86_64>ios-x86_64</javacpp.platform.ios-x86_64>
     <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
+    <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
     <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
     <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
     <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
@@ -188,7 +195,10 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
-          <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+          <linkPaths>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkPath>
+          </linkPaths>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
             <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
@@ -209,8 +219,10 @@
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib64/</linkResource>
           </linkResources>
         </configuration>
         <executions>
@@ -520,8 +532,15 @@
       </activation>
       <properties>
         <javacpp.platform.android-arm>${javacpp.platform}</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64>${javacpp.platform}</javacpp.platform.android-arm64>
         <javacpp.platform.android-x86>${javacpp.platform}</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64>${javacpp.platform}</javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm>${javacpp.platform}</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>${javacpp.platform}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86>${javacpp.platform}</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>${javacpp.platform}</javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf>${javacpp.platform}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64>${javacpp.platform}</javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le>${javacpp.platform}</javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86>${javacpp.platform}</javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64>${javacpp.platform}</javacpp.platform.linux-x86_64>
@@ -541,8 +560,15 @@
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
         <javacpp.platform.android-arm>${os.name}-${os.arch}</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64>${os.name}-${os.arch}</javacpp.platform.android-arm64>
         <javacpp.platform.android-x86>${os.name}-${os.arch}</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64>${os.name}-${os.arch}</javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm>${os.name}-${os.arch}</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>${os.name}-${os.arch}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86>${os.name}-${os.arch}</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>${os.name}-${os.arch}</javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf>${os.name}-${os.arch}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64>${os.name}-${os.arch}</javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le>${os.name}-${os.arch}</javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86>${os.name}-${os.arch}</javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64>${os.name}-${os.arch}</javacpp.platform.linux-x86_64>
@@ -562,8 +588,15 @@
       <properties>
         <javacpp.platform></javacpp.platform>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -600,8 +633,59 @@
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/arm-linux-androideabi-4.9/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</javacpp.platform.compiler>
         <javacpp.platform.android-arm>${javacpp.platform}</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-android-arm64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>android-arm64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>ffmpeg</module>
+        <module>artoolkitplus</module>
+        <module>chilitags</module>
+        <module>flandmark</module>
+        <module>openblas</module>
+        <module>fftw</module>
+        <module>gsl</module>
+        <module>leptonica</module>
+        <module>tesseract</module>
+        <module>tensorflow</module>
+      </modules>
+      <properties>
+        <javacpp.platform>android-arm64</javacpp.platform>
+        <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
+        <javacpp.platform.compiler>toolchains/aarch64-linux-android-4.9/prebuilt/${os.name}-${os.arch}/bin/aarch64-linux-android-g++</javacpp.platform.compiler>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64>${javacpp.platform}</javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -637,8 +721,59 @@
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/x86-4.9/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</javacpp.platform.compiler>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86>${javacpp.platform}</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-android-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>android-x86_64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>ffmpeg</module>
+        <module>artoolkitplus</module>
+        <module>chilitags</module>
+        <module>flandmark</module>
+        <module>openblas</module>
+        <module>fftw</module>
+        <module>gsl</module>
+        <module>leptonica</module>
+        <module>tesseract</module>
+        <module>tensorflow</module>
+      </modules>
+      <properties>
+        <javacpp.platform>android-x86_64</javacpp.platform>
+        <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
+        <javacpp.platform.compiler>toolchains/x86_64-4.9/prebuilt/${os.name}-${os.arch}/bin/x86_64-linux-android-g++</javacpp.platform.compiler>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64>${javacpp.platform}</javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -674,8 +809,59 @@
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf>${javacpp.platform}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-linux-arm64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>linux-arm64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>ffmpeg</module>
+        <module>flycapture</module>
+        <module>libdc1394</module>
+        <module>libfreenect</module>
+        <module>artoolkitplus</module>
+        <module>chilitags</module>
+        <module>flandmark</module>
+        <module>openblas</module>
+        <module>fftw</module>
+        <module>gsl</module>
+        <module>leptonica</module>
+        <module>tesseract</module>
+        <module>systems</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64>${javacpp.platform}</javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -712,8 +898,15 @@
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le>${javacpp.platform}</javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -760,8 +953,15 @@
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86>${javacpp.platform}</javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -810,8 +1010,15 @@
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64>${javacpp.platform}</javacpp.platform.linux-x86_64>
@@ -859,8 +1066,15 @@
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -896,12 +1110,20 @@
         <module>gsl</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>ale</module>
         <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -940,12 +1162,20 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>ale</module>
         <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>

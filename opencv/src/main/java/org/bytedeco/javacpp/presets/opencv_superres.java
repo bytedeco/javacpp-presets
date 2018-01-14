@@ -33,14 +33,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_video.class, opencv_videoio.class}, value = {
-    @Platform(include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.3.3",
-              preload = {"opencv_cuda@.3.3", "opencv_cudacodec@.3.3", "opencv_cudaarithm@.3.3", "opencv_cudafilters@.3.3",
-                         "opencv_cudaimgproc@.3.3", "opencv_cudafeatures2d@.3.3", "opencv_cudalegacy@.3.3",
-                         "opencv_cudaoptflow@.3.3", "opencv_cudawarping@.3.3"}),
-    @Platform(value = "windows", link = "opencv_superres331",
-              preload = {"opencv_cuda331", "opencv_cudacodec331", "opencv_cudaarithm331", "opencv_cudafilters331",
-                         "opencv_cudaimgproc331", "opencv_cudafeatures2d331", "opencv_cudalegacy331",
-                         "opencv_cudaoptflow331", "opencv_cudawarping331"})},
+    @Platform(include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.3.4",
+              preload = {"opencv_cuda@.3.4", "opencv_cudacodec@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
+                         "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4",
+                         "opencv_cudaoptflow@.3.4", "opencv_cudawarping@.3.4"}),
+    @Platform(value = "windows", link = "opencv_superres340",
+              preload = {"opencv_cuda340", "opencv_cudacodec340", "opencv_cudaarithm340", "opencv_cudafilters340",
+                         "opencv_cudaimgproc340", "opencv_cudafeatures2d340", "opencv_cudalegacy340",
+                         "opencv_cudaoptflow340", "opencv_cudawarping340"})},
         target = "org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {

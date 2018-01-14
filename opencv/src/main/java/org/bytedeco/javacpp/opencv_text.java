@@ -2,16 +2,20 @@
 
 package org.bytedeco.javacpp;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 import static org.bytedeco.javacpp.opencv_videoio.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_flann.*;
 import static org.bytedeco.javacpp.opencv_ml.*;
+import static org.bytedeco.javacpp.opencv_features2d.*;
 
 public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
@@ -340,6 +344,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 // #include "opencv2/text/erfilter.hpp"
 // #include "opencv2/text/ocr.hpp"
+// #include "opencv2/text/textDetector.hpp"
 
 /** \defgroup text Scene Text Detection and Recognition
 <p>
@@ -1096,6 +1101,8 @@ An example of MSERsToERStats in use can be found in the text detection webcam_de
 
 // #ifndef __OPENCV_TEXT_OCR_HPP__
 // #define __OPENCV_TEXT_OCR_HPP__
+
+// #include <opencv2/core.hpp>
 
 // #include <vector>
 // #include <string>

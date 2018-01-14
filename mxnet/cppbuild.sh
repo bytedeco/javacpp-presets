@@ -82,13 +82,15 @@ ln -snf ../nnvm-$NNVM_VERSION nnvm
 
 export C_INCLUDE_PATH="$OPENBLAS_PATH/include/:$OPENCV_PATH/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_PATH/lib/"
+export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_PATH/lib/:$OPENCV_PATH/lib64/"
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" ADD_CFLAGS="-DMXNET_USE_LAPACK" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
 cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
+unset CC
+unset CXX
 
 case $PLATFORM in
     macosx-*)

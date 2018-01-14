@@ -74,7 +74,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
  */
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 9000;
+    public static final int __CUDA_API_VERSION = 9010;
 // #endif /* CUDA_FORCE_API_VERSION */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -127,7 +127,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 9000;
+public static final int CUDA_VERSION = 9010;
 
 // #ifdef __cplusplus
 // #endif
@@ -1144,7 +1144,11 @@ public static final int
     /** Compute device class 6.2.*/
     CU_TARGET_COMPUTE_62 = 62,
     /** Compute device class 7.0.*/
-    CU_TARGET_COMPUTE_70 = 70;
+    CU_TARGET_COMPUTE_70 = 70,
+    /** Compute device class 7.3.*/
+    CU_TARGET_COMPUTE_73 = 73,
+    /** Compute device class 7.5.*/
+    CU_TARGET_COMPUTE_75 = 75;
 
 /**
  * Cubin matching fallback strategies
@@ -8961,20 +8965,10 @@ public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream,
 /**
  * \brief Make a compute stream wait on an event
  *
- * Makes all future work submitted to \p hStream wait until \p hEvent
- * reports completion before beginning execution.  This synchronization
- * will be performed efficiently on the device.  The event \p hEvent may
- * be from a different context than \p hStream, in which case this function
- * will perform cross-device synchronization.
- *
- * The stream \p hStream will wait only for the completion of the most recent
- * host call to ::cuEventRecord() on \p hEvent.  Once this call has returned,
- * any functions (including ::cuEventRecord() and ::cuEventDestroy()) may be
- * called on \p hEvent again, and subsequent calls will not have any
- * effect on \p hStream.
- *
- * If ::cuEventRecord() has not been called on \p hEvent, this call acts as if
- * the record has already completed, and so is a functional no-op.
+ * Makes all future work submitted to \p hStream wait for all work captured in
+ * \p hEvent.  See ::cuEventRecord() for details on what is captured by an event.
+ * The synchronization will be performed efficiently on the device when applicable.
+ * \p hEvent may be from a different context or device than \p hStream.
  *
  * @param hStream - Stream to wait
  * @param hEvent  - Event to wait on (may not be NULL)
@@ -9255,8 +9249,8 @@ public static native @Cast("CUresult") int cuStreamDestroy(CUstream_st hStream);
 /**
  * \brief Creates an event
  *
- * Creates an event *phEvent with the flags specified via \p Flags. Valid flags
- * include:
+ * Creates an event *phEvent for the current context with the flags specified via
+ * \p Flags. Valid flags include:
  * - ::CU_EVENT_DEFAULT: Default event creation flag.
  * - ::CU_EVENT_BLOCKING_SYNC: Specifies that the created event should use blocking
  *   synchronization.  A CPU thread that uses ::cuEventSynchronize() to wait on
@@ -9296,16 +9290,20 @@ public static native @Cast("CUresult") int cuEventCreate(@ByPtrPtr CUevent_st ph
 /**
  * \brief Records an event
  *
- * Records an event. See note on NULL stream behavior. Since operation is
- * asynchronous, ::cuEventQuery or ::cuEventSynchronize() must be used
- * to determine when the event has actually been recorded.
+ * Captures in \p hEvent the contents of \p hStream at the time of this call.
+ * \p hEvent and \p hStream must be from the same context.
+ * Calls such as ::cuEventQuery() or ::cuStreamWaitEvent() will then
+ * examine or wait for completion of the work that was captured. Uses of
+ * \p hStream after this call do not modify \p hEvent. See note on default
+ * stream behavior for what is captured in the default case.
  *
- * If ::cuEventRecord() has previously been called on \p hEvent, then this
- * call will overwrite any existing state in \p hEvent.  Any subsequent calls
- * which examine the status of \p hEvent will only examine the completion of
- * this most recent call to ::cuEventRecord().
- *
- * It is necessary that \p hEvent and \p hStream be created on the same context.
+ * ::cuEventRecord() can be called multiple times on the same event and
+ * will overwrite the previously captured state. Other APIs such as
+ * ::cuStreamWaitEvent() use the most recently captured state at the time
+ * of the API call, and are not affected by later calls to
+ * ::cuEventRecord(). Before the first call to ::cuEventRecord(), an
+ * event represents an empty set of work, so for example ::cuEventQuery()
+ * would return ::CUDA_SUCCESS.
  *
  * @param hEvent  - Event to record
  * @param hStream - Stream to record event for
@@ -9333,14 +9331,11 @@ public static native @Cast("CUresult") int cuEventRecord(CUevent_st hEvent, CUst
 /**
  * \brief Queries an event's status
  *
- * Query the status of all device work preceding the most recent
- * call to ::cuEventRecord() (in the appropriate compute streams,
- * as specified by the arguments to ::cuEventRecord()).
+ * Queries the status of all work currently captured by \p hEvent. See
+ * ::cuEventRecord() for details on what is captured by an event.
  *
- * If this work has successfully been completed by the device, or if
- * ::cuEventRecord() has not been called on \p hEvent, then ::CUDA_SUCCESS is
- * returned. If this work has not yet been completed by the device then
- * ::CUDA_ERROR_NOT_READY is returned.
+ * Returns ::CUDA_SUCCESS if all captured work has been completed, or
+ * ::CUDA_ERROR_NOT_READY if any captured work is incomplete.
  *
  * For the purposes of Unified Memory, a return value of ::CUDA_SUCCESS
  * is equivalent to having called ::cuEventSynchronize().
@@ -9368,12 +9363,8 @@ public static native @Cast("CUresult") int cuEventQuery(CUevent_st hEvent);
 /**
  * \brief Waits for an event to complete
  *
- * Wait until the completion of all device work preceding the most recent
- * call to ::cuEventRecord() (in the appropriate compute streams, as specified
- * by the arguments to ::cuEventRecord()).
- *
- * If ::cuEventRecord() has not been called on \p hEvent, ::CUDA_SUCCESS is
- * returned immediately.
+ * Waits until the completion of all work currently captured in \p hEvent.
+ * See ::cuEventRecord() for details on what is captured by an event.
  *
  * Waiting for an event that was created with the ::CU_EVENT_BLOCKING_SYNC
  * flag will cause the calling CPU thread to block until the event has
@@ -9406,10 +9397,10 @@ public static native @Cast("CUresult") int cuEventSynchronize(CUevent_st hEvent)
  *
  * Destroys the event specified by \p hEvent.
  *
- * In case \p hEvent has been recorded but has not yet been completed
- * when ::cuEventDestroy() is called, the function will return immediately and 
- * the resources associated with \p hEvent will be released automatically once
- * the device has completed \p hEvent.
+ * An event may be destroyed before it is complete (i.e., while
+ * ::cuEventQuery() would return ::CUDA_ERROR_NOT_READY). In this case, the
+ * call does not block on completion of the event, and any associated
+ * resources will automatically be released asynchronously at completion.
  *
  * @param hEvent - Event to destroy
  *
@@ -14328,7 +14319,7 @@ public static class cudaFuncAttributes extends Pointer {
 
    /**
     * On devices where the L1 cache and shared memory use the same hardware resources, 
-    * this sets the shared memory carveout preference, in percent of the maximum shared memory. 
+    * this sets the shared memory carveout preference, in percent of the total resources. 
     * This is only a hint, and the driver can choose a different ratio if required to execute the function.
     */
    public native int preferredShmemCarveout(); public native cudaFuncAttributes preferredShmemCarveout(int preferredShmemCarveout);
@@ -16651,7 +16642,7 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  9000;
+public static final int CUDART_VERSION =  9010;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
@@ -18597,20 +18588,10 @@ public static native @Cast("cudaError_t") int cudaStreamDestroy(CUstream_st stre
 /**
  * \brief Make a compute stream wait on an event
  *
- * Makes all future work submitted to \p stream wait until \p event reports
- * completion before beginning execution.  This synchronization will be
- * performed efficiently on the device.  The event \p event may
- * be from a different context than \p stream, in which case this function
- * will perform cross-device synchronization.
- *
- * The stream \p stream will wait only for the completion of the most recent
- * host call to ::cudaEventRecord() on \p event.  Once this call has returned,
- * any functions (including ::cudaEventRecord() and ::cudaEventDestroy()) may be
- * called on \p event again, and the subsequent calls will not have any effect
- * on \p stream.
- *
- * If ::cudaEventRecord() has not been called on \p event, this call acts as if
- * the record has already completed, and so is a functional no-op.
+ * Makes all future work submitted to \p stream wait for all work captured in
+ * \p event.  See ::cudaEventRecord() for details on what is captured by an event.
+ * The synchronization will be performed efficiently on the device when applicable.
+ * \p event may be from a different device than \p stream.
  *
  * @param stream - Stream to wait
  * @param event  - Event to wait on
@@ -18815,7 +18796,7 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  * @return
  * ::cudaSuccess,
  * ::cudaErrorNotReady,
- * ::cudaErrorInvalidValue
+ * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidResourceHandle
  * \notefnerr
  *
@@ -18842,7 +18823,7 @@ public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_
 /**
  * \brief Creates an event object
  *
- * Creates an event object using ::cudaEventDefault.
+ * Creates an event object for the current device using ::cudaEventDefault.
  *
  * @param event - Newly created event
  *
@@ -18865,7 +18846,8 @@ public static native @Cast("cudaError_t") int cudaEventCreate(@ByPtrPtr CUevent_
 /**
  * \brief Creates an event object with the specified flags
  *
- * Creates an event object with the specified flags. Valid flags include:
+ * Creates an event object for the current device with the specified flags. Valid
+ * flags include:
  * - ::cudaEventDefault: Default event creation flag.
  * - ::cudaEventBlockingSync: Specifies that event should use blocking
  *   synchronization. A host thread that uses ::cudaEventSynchronize() to wait
@@ -18900,14 +18882,20 @@ public static native @Cast("cudaError_t") int cudaEventCreateWithFlags(@ByPtrPtr
 /**
  * \brief Records an event
  *
- * Records an event. See note about NULL stream behavior. Since operation
- * is asynchronous, ::cudaEventQuery() or ::cudaEventSynchronize() must
- * be used to determine when the event has actually been recorded.
+ * Captures in \p event the contents of \p stream at the time of this call.
+ * \p event and \p stream must be on the same device.
+ * Calls such as ::cudaEventQuery() or ::cudaStreamWaitEvent() will then
+ * examine or wait for completion of the work that was captured. Uses of
+ * \p stream after this call do not modify \p event. See note on default
+ * stream behavior for what is captured in the default case.
  *
- * If ::cudaEventRecord() has previously been called on \p event, then this
- * call will overwrite any existing state in \p event.  Any subsequent calls
- * which examine the status of \p event will only examine the completion of
- * this most recent call to ::cudaEventRecord().
+ * ::cudaEventRecord() can be called multiple times on the same event and
+ * will overwrite the previously captured state. Other APIs such as
+ * ::cudaStreamWaitEvent() use the most recently captured state at the time
+ * of the API call, and are not affected by later calls to
+ * ::cudaEventRecord(). Before the first call to ::cudaEventRecord(), an
+ * event represents an empty set of work, so for example ::cudaEventQuery()
+ * would return ::cudaSuccess.
  *
  * @param event  - Event to record
  * @param stream - Stream in which to record event
@@ -18933,14 +18921,11 @@ public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
 /**
  * \brief Queries an event's status
  *
- * Query the status of all device work preceding the most recent call to
- * ::cudaEventRecord() (in the appropriate compute streams, as specified by the
- * arguments to ::cudaEventRecord()).
+ * Queries the status of all work currently captured by \p event. See
+ * ::cudaEventRecord() for details on what is captured by an event.
  *
- * If this work has successfully been completed by the device, or if
- * ::cudaEventRecord() has not been called on \p event, then ::cudaSuccess is
- * returned. If this work has not yet been completed by the device then
- * ::cudaErrorNotReady is returned.
+ * Returns ::cudaSuccess if all captured work has been completed, or
+ * ::cudaErrorNotReady if any captured work is incomplete.
  *
  * For the purposes of Unified Memory, a return value of ::cudaSuccess
  * is equivalent to having called ::cudaEventSynchronize().
@@ -18966,12 +18951,8 @@ public static native @Cast("cudaError_t") int cudaEventQuery(CUevent_st event);
 /**
  * \brief Waits for an event to complete
  *
- * Wait until the completion of all device work preceding the most recent
- * call to ::cudaEventRecord() (in the appropriate compute streams, as specified
- * by the arguments to ::cudaEventRecord()).
- *
- * If ::cudaEventRecord() has not been called on \p event, ::cudaSuccess is
- * returned immediately.
+ * Waits until the completion of all work currently captured in \p event.
+ * See ::cudaEventRecord() for details on what is captured by an event.
  *
  * Waiting for an event that was created with the ::cudaEventBlockingSync
  * flag will cause the calling CPU thread to block until the event has
@@ -19001,10 +18982,10 @@ public static native @Cast("cudaError_t") int cudaEventSynchronize(CUevent_st ev
  *
  * Destroys the event specified by \p event.
  *
- * In case \p event has been recorded but has not yet been completed
- * when ::cudaEventDestroy() is called, the function will return immediately and 
- * the resources associated with \p event will be released automatically once
- * the device has completed \p event.
+ * An event may be destroyed before it is complete (i.e., while
+ * ::cudaEventQuery() would return ::cudaErrorNotReady). In this case, the
+ * call does not block on completion of the event, and any associated
+ * resources will automatically be released asynchronously at completion.
  *
  * @param event - Event to destroy
  *
@@ -19427,19 +19408,19 @@ public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttr
 /**
  * \brief Set attributes for a given function
  *
- * This function sets the attributes of a function specified via \p func.
- * The parameter \p func must be a pointer to a function that executes
- * on the device. The parameter specified by \p func must be declared as a \p __global__
- * function. The enumeration defined by \p attr is set to the value defined by \p value.
+ * This function sets the attributes of a function specified via \p entry.
+ * The parameter \p entry must be a pointer to a function that executes
+ * on the device. The parameter specified by \p entry must be declared as a \p __global__
+ * function. The enumeration defined by \p attr is set to the value defined by \p value
  * If the specified function does not exist, then ::cudaErrorInvalidDeviceFunction is returned.
  * If the specified attribute cannot be written, or if the value is incorrect, 
  * then ::cudaErrorInvalidValue is returned.
  *
  * Valid values for \p attr are:
- * - ::cudaFuncAttributeMaxDynamicSharedMemorySize - Maximum size of dynamic shared memory per block
- * - ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio in percent of maximum shared memory
+ * ::cuFuncAttrMaxDynamicSharedMem - Maximum size of dynamic shared memory per block
+ * ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio
  *
- * @param func  - Function to get attributes of
+ * @param entry - Function to get attributes of
  * @param attr  - Attribute to set
  * @param value - Value to set
  *
@@ -20134,8 +20115,10 @@ public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmapp
  * All of these flags are orthogonal to one another: a developer may allocate
  * memory that is portable, mapped and/or write-combined with no restrictions.
  *
- * ::cudaSetDeviceFlags() must have been called with the ::cudaDeviceMapHost
- * flag in order for the ::cudaHostAllocMapped flag to have any effect.
+ * In order for the ::cudaHostAllocMapped flag to have any effect, the CUDA context
+ * must support the ::cudaDeviceMapHost flag, which can be checked via
+ * ::cudaGetDeviceFlags(). The ::cudaDeviceMapHost flag is implicitly set for
+ * contexts created via the runtime API.
  *
  * The ::cudaHostAllocMapped flag may be specified on CUDA contexts for devices
  * that do not support mapped pinned memory. The failure is deferred to
@@ -20157,6 +20140,7 @@ public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmapp
  * \sa ::cudaSetDeviceFlags,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost,
+ * ::cudaGetDeviceFlags,
  * ::cuMemHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") PointerPointer pHost, @Cast("size_t") long size, @Cast("unsigned int") int flags);
@@ -24282,6 +24266,14 @@ public static native @ByVal double4 make_double4(double x, double y, double z, d
 // #if !defined(CU_COMPLEX_H_)
 // #define CU_COMPLEX_H_
 
+// #if !defined(__CUDACC_RTC__)
+// #if defined(__GNUC__)
+// #if defined(__clang__) || (!defined(__PGIC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)))
+// #pragma GCC diagnostic ignored "-Wunused-function"
+// #endif
+// #endif
+// #endif
+
 /* When trying to include C header file in C++ Code extern "C" is required
  * But the Standard QNX headers already have ifdef extern in them when compiling C++ Code
  * extern "C" cannot be nested
@@ -24491,20 +24483,10 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 
 // #if defined(__cplusplus) && defined(__CUDACC__)
 
-// #if defined(__CUDACC_RTC__)
-// #define __CUDA_FP16_DECL__ __host__ __device__
-// #define __VECTOR_FUNCTIONS_DECL__ __host__ __device__
-// #else /* !__CUDACC_RTC__ */
 // #define __CUDA_FP16_DECL__ static __device__ __inline__
-// #define __VECTOR_FUNCTIONS_DECL__ static __inline__ __host__ __device__
-// #endif /* __CUDACC_RTC__ */
 
 // #define __CUDA_FP16_TYPES_EXIST__
 /* Forward-declaration of structures defined in "cuda_fp16.hpp" */
-
-/* Vector type creation functions, match vector_functions.h */
-
-// #undef __VECTOR_FUNCTIONS_DECL__
 
 /**
 * \ingroup CUDA_MATH__HALF_MISC
@@ -26230,20 +26212,18 @@ public static final int warpSize =    32;
 // #if !defined(__CUDA_FP16_HPP__)
 // #define __CUDA_FP16_HPP__
 
-/* C++11 header for std::move */
-// #if __cplusplus >= 201103L
+/* C++11 header for std::move. 
+ * In RTC mode, std::move is provided implicitly; don't include the header
+*/
+// #if (__cplusplus >= 201103L) && !defined(__CUDACC_RTC__)
 // #include <utility>
-// #endif /* __cplusplus >= 201103L */
+// #endif /* __cplusplus >= 201103L && !defined(__CUDACC_RTC__) */
 
 /* Set up function decorations */
-// #if defined(__CUDACC_RTC__)
-// #define __CUDA_FP16_DECL__ __host__ __device__
-// #define __VECTOR_FUNCTIONS_DECL__ __host__ __device__
-// #define __CUDA_HOSTDEVICE__ __host__ __device__
-// #elif defined(__CUDACC__) /* !__CUDACC_RTC__ but yes __CUDACC__ */
-// #else /* !__CUDACC_RTC and !__CUDACC__ (i.e. host non-nvcc compiler */
+// #if defined(__CUDACC__)
+// #else /* !__CUDACC__ */
 // #define __CUDA_HOSTDEVICE__
-// #endif /* __CUDACC_RTC__ and __CUDACC__ */
+// #endif /* __CUDACC_) */
 
 /* Set up structure-alignment attribute */
 // #if defined(__CUDACC__)

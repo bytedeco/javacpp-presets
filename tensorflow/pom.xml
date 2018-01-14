@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.4.1</tensorflow.version>
+    <tensorflow.version>1.5.0-rc0</tensorflow.version>
   </properties>
 
   <dependencies>

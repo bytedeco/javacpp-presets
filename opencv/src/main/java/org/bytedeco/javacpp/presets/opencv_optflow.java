@@ -31,9 +31,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_ximgproc.class, opencv_video.class}, value = {
-    @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.3.3"),
-    @Platform(value = "windows", link = "opencv_optflow331")},
+@Properties(inherit = {opencv_calib3d.class, opencv_ximgproc.class, opencv_video.class}, value = {
+    @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.3.4"),
+    @Platform(value = "windows", link = "opencv_optflow340")},
         target = "org.bytedeco.javacpp.opencv_optflow")
 public class opencv_optflow implements InfoMapper {
     public void map(InfoMap infoMap) {

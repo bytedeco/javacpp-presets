@@ -1,5 +1,6 @@
 #!/bin/bash
- 
+set -vx
+
 export PROJ=$1
 cd $APPVEYOR_BUILD_FOLDER
 
@@ -59,19 +60,14 @@ fi
 
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
-       if [[ $(find /c/Downloads/cudnn-9.0-windows10-x64-v7.zip -type f -size +1000000c 2>/dev/null) ]]; then
-         echo "Found cudnn in cache and size seems OK"
-       else
-         echo "Downloading cudnn as not found in cache"
-         /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B8dyy7cU8B67cDRUVFFtZzFwREE /c/Downloads/cudnn-9.0-windows10-x64-v7.zip
-       fi
-       curl -L -o cuda_9.0.176_windows-exe "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_windows-exe"
-       ./cuda_9.0.176_windows-exe -s 
-       echo May need to wait while cuda installs..
-       unzip /c/Downloads/cudnn-9.0-windows10-x64-v7.zip
-       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.0/bin
-       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.0/include
-       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.0/lib/x64
+       curl -L -o cuda_9.1.85_windows.exe "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_windows"
+       curl -L -o cudnn-9.1-windows7-x64-v7.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.5/cudnn-9.1-windows7-x64-v7.zip"
+       ./cuda_9.1.85_windows.exe -s
+       sleep 60
+       unzip ./cudnn-9.1-windows7-x64-v7.zip
+       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/bin
+       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/include
+       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/lib/x64
        echo Finished cuda install
 fi 
 

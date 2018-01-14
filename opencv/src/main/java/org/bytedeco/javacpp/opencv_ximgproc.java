@@ -64,6 +64,7 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
 // #include "ximgproc/disparity_filter.hpp"
 // #include "ximgproc/sparse_match_interpolator.hpp"
 // #include "ximgproc/structured_edge_detection.hpp"
+// #include "ximgproc/edgeboxes.hpp"
 // #include "ximgproc/seeds.hpp"
 // #include "ximgproc/segmentation.hpp"
 // #include "ximgproc/fast_hough_transform.hpp"
@@ -75,6 +76,10 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
 // #include "ximgproc/fast_line_detector.hpp"
 // #include "ximgproc/deriche_filter.hpp"
 // #include "ximgproc/peilin.hpp"
+// #include "ximgproc/fourier_descriptors.hpp"
+// #include "ximgproc/ridgefilter.hpp"
+// #include "ximgproc/brightedges.hpp"
+
 
 /** \defgroup ximgproc Extended Image Processing
   \{
@@ -83,6 +88,8 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
 This module contains implementations of modern structured edge detection algorithms,
 i.e. algorithms which somehow takes into account pixel affinities in natural images.
     <p>
+    \defgroup ximgproc_edgeboxes EdgeBoxes
+    <p>
     \defgroup ximgproc_filters Filters
     <p>
     \defgroup ximgproc_superpixel Superpixels
@@ -90,7 +97,9 @@ i.e. algorithms which somehow takes into account pixel affinities in natural ima
     \defgroup ximgproc_segmentation Image segmentation
     <p>
     \defgroup ximgproc_fast_line_detector Fast line detector
-  \}
+    <p>
+    \defgroup ximgproc_fourier Fourier descriptors
+    \}
 */
 
 /** enum cv::ximgproc::ThinningTypes */

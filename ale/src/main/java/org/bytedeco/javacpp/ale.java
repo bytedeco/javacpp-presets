@@ -300,6 +300,10 @@ public static native @StdString BytePointer action_to_string(@Cast("Action") int
 
 //  Define datatypes
 
+// mode type
+
+// difficulty type
+
 // reward type for RL interface
 
 // Other constant values
@@ -556,7 +560,8 @@ public static final int RAM_SIZE = (128);
 // #ifndef __ALE_SCREEN_HPP__
 // #define __ALE_SCREEN_HPP__
 
-// #include <string.h>
+// #include <cassert>
+// #include <cstring>
 // #include <memory>
 // #include <vector>
 
@@ -640,8 +645,14 @@ public static final int RAM_SIZE = (128);
 // #include "../emucore/OSystem.hxx"
 // #include "../emucore/Event.hxx"
 // #include <string>
-// #include "../games/RomSettings.hpp"
 // #include "../common/Log.hpp"
+
+@Opaque public static class RomSettings extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public RomSettings() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RomSettings(Pointer p) { super(p); }
+}
 
 public static final int PADDLE_DELTA = 23000;
 // MGB Values taken from Paddles.cxx (Stella 3.3) - 1400000 * [5,235] / 255
@@ -678,13 +689,15 @@ public static final int PADDLE_DEFAULT_VALUE = (((PADDLE_MAX - PADDLE_MIN) / 2) 
 
     /** Resets the system to its start state. numResetSteps 'RESET' actions are taken after the
       *  start. */
-    public native void reset(int numResetSteps/*=1*/);
-    public native void reset();
+    
 
     /** Returns true if the two states contain the same saved information */
     public native @Cast("bool") boolean equals(@ByRef ALEState state);
 
     public native void resetPaddles(Event arg0);
+
+    //Apply the special select action
+    public native void pressSelect(Event event_obj);
 
     /** Applies paddle actions. This actually modifies the game state by updating the paddle
       *  resistances. */
@@ -703,12 +716,26 @@ public static final int PADDLE_DEFAULT_VALUE = (((PADDLE_MAX - PADDLE_MIN) / 2) 
     //Get the number of frames executed this episode.
     public native int getEpisodeFrameNumber();
 
+    /** set the difficulty according to the value.
+      * If the first bit is 1, then it will put the left difficulty switch to A (otherwise leave it on B)
+      * If the second bit is 1, then it will put the right difficulty switch to A (otherwise leave it on B)
+      */
+    public native void setDifficulty(@Cast("unsigned int") int value);
+
+    // Returns the current difficulty setting.
+    public native @Cast("unsigned int") int getDifficulty();
+
+    //Save the current mode we are supposed to be in.
+    public native void setCurrentMode(@Cast("game_mode_t") int value);
+
+    //Get the current mode we are in.
+    public native @Cast("game_mode_t") int getCurrentMode();
+
     public native @StdString BytePointer serialize();
 
 }
 
 // #endif // __ALE_STATE_HPP__
-
 
 
 
@@ -821,6 +848,33 @@ public static final int PADDLE_DEFAULT_VALUE = (((PADDLE_MAX - PADDLE_MIN) / 2) 
 
   // Resets the game, but not the full system.
   public native void reset_game();
+
+  // Returns the vector of modes available for the current game.
+  // This should be called only after the rom is loaded.
+  public native @Cast("game_mode_t*") @StdVector IntPointer getAvailableModes();
+
+  // Sets the mode of the game.
+  // The mode must be an available mode (otherwise it throws an exception).
+  // This should be called only after the rom is loaded.
+  public native void setMode(@Cast("game_mode_t") int m);
+
+  //Returns the vector of difficulties available for the current game.
+  //This should be called only after the rom is loaded. Notice
+  // that there are 2 levers, the right and left switches. They
+  // are not tied to any specific player. In Venture, for example,
+  // we have the following interpretation for the difficulties:
+  // Skill          Switch
+  // Level          Setting
+  //   1         left B/right B
+  //   2         left B/right A
+  //   3         left A/right B
+  //   4         left A/right A
+  public native @Cast("difficulty_t*") @StdVector IntPointer getAvailableDifficulties();
+
+  // Sets the difficulty of the game.
+  // The difficulty must be an available mode (otherwise it throws an exception).
+  // This should be called only after the rom is loaded.
+  public native void setDifficulty(@Cast("difficulty_t") int m);
 
   // Returns the vector of legal actions. This should be called only
   // after the rom is loaded.

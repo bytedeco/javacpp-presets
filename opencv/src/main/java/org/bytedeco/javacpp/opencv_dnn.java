@@ -470,7 +470,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlankLayer(Pointer p) { super(p); }
 
-        public static native @Ptr BlankLayer create(@Const @ByRef LayerParams params);
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
 
     /** LSTM recurrent layer */
@@ -639,10 +639,6 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LRNLayer(Pointer p) { super(p); }
     
-        /** enum cv::dnn::LRNLayer::Type */
-        public static final int
-            CHANNEL_NRM = 0,
-            SPATIAL_NRM = 1;
         public native @Name("type") int lrnType(); public native LRNLayer lrnType(int lrnType);
 
         public native int size(); public native LRNLayer size(int size);
@@ -659,12 +655,6 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PoolingLayer(Pointer p) { super(p); }
     
-        /** enum cv::dnn::PoolingLayer::Type */
-        public static final int
-            MAX = 0,
-            AVE = 1,
-            STOCHASTIC = 2;
-
         public native @Name("type") int poolingType(); public native PoolingLayer poolingType(int poolingType);
         public native @ByRef Size kernel(); public native PoolingLayer kernel(Size kernel);
         public native @ByRef Size stride(); public native PoolingLayer stride(Size stride);
@@ -673,6 +663,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("bool") boolean computeMaxIdx(); public native PoolingLayer computeMaxIdx(boolean computeMaxIdx);
         public native @Str BytePointer padMode(); public native PoolingLayer padMode(BytePointer padMode);
         public native @Cast("bool") boolean ceilMode(); public native PoolingLayer ceilMode(boolean ceilMode);
+        // ROIPooling parameters.
+        public native @ByRef Size pooledSize(); public native PoolingLayer pooledSize(Size pooledSize);
+        public native float spatialScale(); public native PoolingLayer spatialScale(float spatialScale);
+        // PSROIPooling parameters.
+        public native int psRoiOutChannels(); public native PoolingLayer psRoiOutChannels(int psRoiOutChannels);
 
         public static native @Ptr PoolingLayer create(@Const @ByRef LayerParams params);
     }
@@ -819,6 +814,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *                 starting from the first one. The rest of dimensions won't
      *                 be padded.
      * @param value Value to be padded. Defaults to zero.
+     * @param type Padding type: 'constant', 'reflect'
      * @param input_dims Torch's parameter. If \p input_dims is not equal to the
      *                   actual input dimensionality then the {@code [0]th} dimension
      *                   is considered as a batch dimension and \p paddings are shifted
@@ -943,12 +939,6 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EltwiseLayer(Pointer p) { super(p); }
     
-        /** enum cv::dnn::EltwiseLayer::EltwiseOp */
-        public static final int
-            PROD = 0,
-            SUM = 1,
-            MAX = 2;
-
         public static native @Ptr EltwiseLayer create(@Const @ByRef LayerParams params);
     }
 
@@ -1077,6 +1067,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr ResizeNearestNeighborLayer create(@Const @ByRef LayerParams params);
     }
 
+    @Namespace("cv::dnn") public static class ProposalLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ProposalLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr ProposalLayer create(@Const @ByRef LayerParams params);
+    }
+
 /** \}
  *  \} */
 
@@ -1134,7 +1132,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #include <opencv2/core.hpp>
 
 // #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_EXPERIMENTAL_NS
-// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v2 {
+// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v3 {
 // #define CV__DNN_EXPERIMENTAL_NS_END }
  
 // #else
@@ -1280,15 +1278,29 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          */
         public native void forward(@ByRef MatPointerVector input, @ByRef MatVector output, @ByRef MatVector internals);
 
+        /** \brief Given the \p input blobs, computes the output \p blobs.
+         *  @param [in]  inputs  the input blobs.
+         *  @param [out] outputs allocated output blobs, which will store results of the computation.
+         *  @param [out] internals allocated internal blobs
+         */
+        public native void forward(@ByVal MatVector inputs, @ByVal MatVector outputs, @ByVal MatVector internals);
+        public native void forward(@ByVal UMatVector inputs, @ByVal UMatVector outputs, @ByVal UMatVector internals);
+        public native void forward(@ByVal GpuMatVector inputs, @ByVal GpuMatVector outputs, @ByVal GpuMatVector internals);
+
+        /** \brief Given the \p input blobs, computes the output \p blobs.
+         *  @param [in]  inputs  the input blobs.
+         *  @param [out] outputs allocated output blobs, which will store results of the computation.
+         *  @param [out] internals allocated internal blobs
+         */
+        public native void forward_fallback(@ByVal MatVector inputs, @ByVal MatVector outputs, @ByVal MatVector internals);
+        public native void forward_fallback(@ByVal UMatVector inputs, @ByVal UMatVector outputs, @ByVal UMatVector internals);
+        public native void forward_fallback(@ByVal GpuMatVector inputs, @ByVal GpuMatVector outputs, @ByVal GpuMatVector internals);
+
         /** \brief \overload */
         public native void finalize(@Const @ByRef MatVector inputs, @ByRef MatVector outputs);
 
         /** \brief \overload */
         public native @ByVal MatVector finalize(@Const @ByRef MatVector inputs);
-
-        /** \brief \overload */
-        public native void forward(@Const @ByRef MatVector inputs, @ByRef MatVector outputs,
-                                     @ByRef MatVector internals);
 
         /** \brief Allocates layer and computes output. */
         public native void run(@Const @ByRef MatVector inputs, @ByRef MatVector outputs,
@@ -1507,30 +1519,33 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  @param outputName name for layer which output is needed to get
          *  \details If \p outputName is empty, runs forward pass for the whole network.
          */
-        public native void forward(@ByRef MatVector outputBlobs, @Str BytePointer outputName/*=cv::String()*/);
-        public native void forward(@ByRef MatVector outputBlobs);
-        public native void forward(@ByRef MatVector outputBlobs, @Str String outputName/*=cv::String()*/);
+        public native void forward(@ByVal MatVector outputBlobs, @Str BytePointer outputName/*=cv::String()*/);
+        public native void forward(@ByVal MatVector outputBlobs);
+        public native void forward(@ByVal UMatVector outputBlobs, @Str String outputName/*=cv::String()*/);
+        public native void forward(@ByVal UMatVector outputBlobs);
+        public native void forward(@ByVal GpuMatVector outputBlobs, @Str BytePointer outputName/*=cv::String()*/);
+        public native void forward(@ByVal GpuMatVector outputBlobs);
+        public native void forward(@ByVal MatVector outputBlobs, @Str String outputName/*=cv::String()*/);
+        public native void forward(@ByVal UMatVector outputBlobs, @Str BytePointer outputName/*=cv::String()*/);
+        public native void forward(@ByVal GpuMatVector outputBlobs, @Str String outputName/*=cv::String()*/);
 
         /** \brief Runs forward pass to compute outputs of layers listed in \p outBlobNames.
          *  @param outputBlobs contains blobs for first outputs of specified layers.
          *  @param outBlobNames names for layers which outputs are needed to get
          */
-        public native void forward(@ByRef MatVector outputBlobs,
+        public native void forward(@ByVal MatVector outputBlobs,
+                                     @Const @ByRef StringVector outBlobNames);
+        public native void forward(@ByVal UMatVector outputBlobs,
+                                     @Const @ByRef StringVector outBlobNames);
+        public native void forward(@ByVal GpuMatVector outputBlobs,
                                      @Const @ByRef StringVector outBlobNames);
 
         /** \brief Runs forward pass to compute outputs of layers listed in \p outBlobNames.
          *  @param outputBlobs contains all output blobs for each layer specified in \p outBlobNames.
          *  @param outBlobNames names for layers which outputs are needed to get
          */
-
-        //TODO:
-        /** \brief Optimized forward.
-         *  \warning Not implemented yet.
-         *  \details Makes forward only those layers which weren't changed after previous forward().
-         */
-        
-        /** \overload */
-        
+        public native @Name("forward") void forwardAndRetrieve(@StdVector MatVector outputBlobs,
+                                                            @Const @ByRef StringVector outBlobNames);
 
         /**
          * \brief Compile Halide layers.
@@ -1565,9 +1580,15 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  \note If updating blob is not empty then \p blob must have the same shape,
          *  because network reshaping is not implemented yet.
          */
-        public native void setInput(@Const @ByRef Mat blob, @Str BytePointer name/*=""*/);
-        public native void setInput(@Const @ByRef Mat blob);
-        public native void setInput(@Const @ByRef Mat blob, @Str String name/*=""*/);
+        public native void setInput(@ByVal Mat blob, @Str BytePointer name/*=""*/);
+        public native void setInput(@ByVal Mat blob);
+        public native void setInput(@ByVal Mat blob, @Str String name/*=""*/);
+        public native void setInput(@ByVal UMat blob, @Str String name/*=""*/);
+        public native void setInput(@ByVal UMat blob);
+        public native void setInput(@ByVal UMat blob, @Str BytePointer name/*=""*/);
+        public native void setInput(@ByVal GpuMat blob, @Str BytePointer name/*=""*/);
+        public native void setInput(@ByVal GpuMat blob);
+        public native void setInput(@ByVal GpuMat blob, @Str String name/*=""*/);
 
         /** \brief Sets the new value for the learned param of the layer.
          *  @param layer name or id of the layer.
@@ -1741,83 +1762,75 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("int64") long getPerfProfile(@StdVector double[] timings);
     }
 
-    /**
-     * @deprecated Deprecated as external interface. Will be for internal needs only.
-     * \brief Small interface class for loading trained serialized models of different dnn-frameworks. */
-    @Namespace("cv::dnn") public static class Importer extends Algorithm {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Importer(Pointer p) { super(p); }
-    
-
-        /** \brief Adds loaded layers into the \p net and sets connections between them. */
-        public native void populateNet(@ByVal Net net);
-    }
-
     /** \brief Reads a network model stored in <a href="https://pjreddie.com/darknet/">Darknet</a> model files.
     *  @param cfgFile      path to the .cfg file with text description of the network architecture.
     *  @param darknetModel path to the .weights file with learned network.
     *  @return Network object that ready to do forward, throw an exception in failure cases.
-    * \details This is shortcut consisting from DarknetImporter and Net::populateNet calls.
+    *  @return Net object.
     */
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str BytePointer cfgFile, @Str BytePointer darknetModel/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str BytePointer cfgFile);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str String cfgFile, @Str String darknetModel/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromDarknet(@Str String cfgFile);
 
-    /**
-     *  @deprecated Use \ref readNetFromCaffe instead.
-     *  \brief Creates the importer of <a href="http://caffe.berkeleyvision.org">Caffe</a> framework network.
-     *  @param prototxt   path to the .prototxt file with text description of the network architecture.
-     *  @param caffeModel path to the .caffemodel file with learned network.
-     *  @return Pointer to the created importer, NULL in failure cases.
-     */
-    @Namespace("cv::dnn") public static native @Ptr Importer createCaffeImporter(@Str BytePointer prototxt, @Str BytePointer caffeModel/*=cv::String()*/);
-    @Namespace("cv::dnn") public static native @Ptr Importer createCaffeImporter(@Str BytePointer prototxt);
-    @Namespace("cv::dnn") public static native @Ptr Importer createCaffeImporter(@Str String prototxt, @Str String caffeModel/*=cv::String()*/);
-    @Namespace("cv::dnn") public static native @Ptr Importer createCaffeImporter(@Str String prototxt);
-
-    /** \brief Reads a network model stored in Caffe model files.
-      * \details This is shortcut consisting from createCaffeImporter and Net::populateNet calls.
+    /** \brief Reads a network model stored in <a href="http://caffe.berkeleyvision.org">Caffe</a> framework's format.
+      * @param prototxt   path to the .prototxt file with text description of the network architecture.
+      * @param caffeModel path to the .caffemodel file with learned network.
+      * @return Net object.
       */
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str BytePointer prototxt, @Str BytePointer caffeModel/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str BytePointer prototxt);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str String prototxt, @Str String caffeModel/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Str String prototxt);
 
-    /** \brief Reads a network model stored in Tensorflow model file.
-      * \details This is shortcut consisting from createTensorflowImporter and Net::populateNet calls.
+    /** \brief Reads a network model stored in Caffe model in memory.
+      * \details This is an overloaded member function, provided for convenience.
+      * It differs from the above function only in what argument(s) it accepts.
+      * @param bufferProto buffer containing the content of the .prototxt file
+      * @param lenProto length of bufferProto
+      * @param bufferModel buffer containing the content of the .caffemodel file
+      * @param lenModel length of bufferModel
+      * @return Net object.
+      */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Cast("const char*") BytePointer bufferProto, @Cast("size_t") long lenProto,
+                                        @Cast("const char*") BytePointer bufferModel/*=NULL*/, @Cast("size_t") long lenModel/*=0*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(@Cast("const char*") BytePointer bufferProto, @Cast("size_t") long lenProto);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(String bufferProto, @Cast("size_t") long lenProto,
+                                        String bufferModel/*=NULL*/, @Cast("size_t") long lenModel/*=0*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromCaffe(String bufferProto, @Cast("size_t") long lenProto);
+
+    /** \brief Reads a network model stored in <a href="https://www.tensorflow.org/">TensorFlow</a> framework's format.
+      * @param model  path to the .pb file with binary protobuf description of the network architecture
+      * @param config path to the .pbtxt file that contains text graph definition in protobuf format.
+      *               Resulting Net object is built by text graph using weights from a binary one that
+      *               let us make it more flexible.
+      * @return Net object.
       */
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str BytePointer model, @Str BytePointer config/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str BytePointer model);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str String model, @Str String config/*=cv::String()*/);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Str String model);
 
-    /** \brief Reads a network model stored in Torch model file.
-      * \details This is shortcut consisting from createTorchImporter and Net::populateNet calls.
+    /** \brief Reads a network model stored in <a href="https://www.tensorflow.org/">TensorFlow</a> framework's format.
+      * \details This is an overloaded member function, provided for convenience.
+      * It differs from the above function only in what argument(s) it accepts.
+      * @param bufferModel buffer containing the content of the pb file
+      * @param lenModel length of bufferModel
+      * @param bufferConfig buffer containing the content of the pbtxt file
+      * @param lenConfig length of bufferConfig
       */
-    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model, @Cast("bool") boolean isBinary/*=true*/);
-    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model);
-    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/);
-    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Cast("const char*") BytePointer bufferModel, @Cast("size_t") long lenModel,
+                                             @Cast("const char*") BytePointer bufferConfig/*=NULL*/, @Cast("size_t") long lenConfig/*=0*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(@Cast("const char*") BytePointer bufferModel, @Cast("size_t") long lenModel);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(String bufferModel, @Cast("size_t") long lenModel,
+                                             String bufferConfig/*=NULL*/, @Cast("size_t") long lenConfig/*=0*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromTensorflow(String bufferModel, @Cast("size_t") long lenModel);
 
     /**
-     *  @deprecated Use \ref readNetFromTensorflow instead.
-     *  \brief Creates the importer of <a href="http://www.tensorflow.org">TensorFlow</a> framework network.
-     *  @param model   path to the .pb file with binary protobuf description of the network architecture.
-     *  @return Pointer to the created importer, NULL in failure cases.
-     */
-    @Namespace("cv::dnn") public static native @Ptr Importer createTensorflowImporter(@Str BytePointer model);
-    @Namespace("cv::dnn") public static native @Ptr Importer createTensorflowImporter(@Str String model);
-
-    /**
-     *  @deprecated Use \ref readNetFromTorch instead.
-     *  \brief Creates the importer of <a href="http://torch.ch">Torch7</a> framework network.
-     *  @param filename path to the file, dumped from Torch by using torch.save() function.
+     *  \brief Reads a network model stored in <a href="http://torch.ch">Torch7</a> framework's format.
+     *  @param model    path to the file, dumped from Torch by using torch.save() function.
      *  @param isBinary specifies whether the network was serialized in ascii mode or binary.
-     *  @return Pointer to the created importer, NULL in failure cases.
-     *
-     *  \warning Torch7 importer is experimental now, you need explicitly set CMake {@code opencv_dnn_BUILD_TORCH_IMPORTER} flag to compile its.
+     *  @return Net object.
      *
      *  \note Ascii mode of Torch serializer is more preferable, because binary mode extensively use {@code long} type of C language,
      *  which has various bit-length on different systems.
@@ -1838,13 +1851,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *
      * Also some equivalents of these classes from cunn, cudnn, and fbcunn may be successfully imported.
      */
-    @Namespace("cv::dnn") public static native @Ptr Importer createTorchImporter(@Str BytePointer filename, @Cast("bool") boolean isBinary/*=true*/);
-    @Namespace("cv::dnn") public static native @Ptr Importer createTorchImporter(@Str BytePointer filename);
-    @Namespace("cv::dnn") public static native @Ptr Importer createTorchImporter(@Str String filename, @Cast("bool") boolean isBinary/*=true*/);
-    @Namespace("cv::dnn") public static native @Ptr Importer createTorchImporter(@Str String filename);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model, @Cast("bool") boolean isBinary/*=true*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model);
 
     /** \brief Loads blob which was serialized as torch.Tensor object of Torch7 framework.
-     *  \warning This function has the same limitations as createTorchImporter().
+     *  \warning This function has the same limitations as readNetFromTorch().
      */
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str BytePointer filename, @Cast("bool") boolean isBinary/*=true*/);
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str BytePointer filename);
@@ -1852,7 +1865,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str String filename);
     /** \brief Creates 4-dimensional blob from image. Optionally resizes and crops \p image from center,
      *  subtract \p mean values, scales values by \p scalefactor, swap Blue and Red channels.
-     *  @param image input image (with 1- or 3-channels).
+     *  @param image input image (with 1-, 3- or 4-channels).
      *  @param size spatial size for output image
      *  @param mean scalar with mean values which are subtracted from channels. Values are intended
      *  to be in (mean-R, mean-G, mean-B) order if \p image has BGR ordering and \p swapRB is true.
@@ -1865,13 +1878,19 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *  If \p crop is false, direct resize without cropping and preserving aspect ratio is performed.
      *  @return 4-dimansional Mat with NCHW dimensions order.
      */
-    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@Const @ByRef Mat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal Mat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
                                        @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
-    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@Const @ByRef Mat image);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal Mat image);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal UMat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal UMat image);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal GpuMat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal GpuMat image);
     /** \brief Creates 4-dimensional blob from series of images. Optionally resizes and
      *  crops \p images from center, subtract \p mean values, scales values by \p scalefactor,
      *  swap Blue and Red channels.
-     *  @param images input images (all with 1- or 3-channels).
+     *  @param images input images (all with 1-, 3- or 4-channels).
      *  @param size spatial size for output image
      *  @param mean scalar with mean values which are subtracted from channels. Values are intended
      *  to be in (mean-R, mean-G, mean-B) order if \p image has BGR ordering and \p swapRB is true.
@@ -1892,14 +1911,53 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      * @param src Path to origin model from Caffe framework contains single
      *            precision floating point weights (usually has {@code .caffemodel} extension).
      * @param dst Path to destination model with updated weights.
+     * @param layersTypes Set of layers types which parameters will be converted.
+     *                    By default, converts only Convolutional and Fully-Connected layers'
+     *                    weights.
      *
      * \note Shrinked model has no origin float32 weights so it can't be used
      *       in origin Caffe framework anymore. However the structure of data
      *       is taken from NVidia's Caffe fork: https://github.com/NVIDIA/caffe.
      *       So the resulting model may be used there.
      */
+    @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str BytePointer src, @Str BytePointer dst,
+                                           @Const @ByRef(nullValue = "std::vector<cv::String>()") StringVector layersTypes);
     @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str BytePointer src, @Str BytePointer dst);
+    @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str String src, @Str String dst,
+                                           @Const @ByRef(nullValue = "std::vector<cv::String>()") StringVector layersTypes);
     @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str String src, @Str String dst);
+
+    /** \brief Performs non maximum suppression given boxes and corresponding scores.
+     <p>
+     * @param bboxes a set of bounding boxes to apply NMS.
+     * @param scores a set of corresponding confidences.
+     * @param score_threshold a threshold used to filter boxes by score.
+     * @param nms_threshold a threshold used in non maximum suppression.
+     * @param indices the kept indices of bboxes after NMS.
+     * @param eta a coefficient in adaptive threshold formula: \f$nms\_threshold_{i+1}=eta\cdot nms\_threshold_i\f$.
+     * @param top_k if {@code >0}, keep at most \p top_k picked indices.
+     */
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef RectVector bboxes, @StdVector FloatPointer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntPointer indices,
+                                   float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef RectVector bboxes, @StdVector FloatPointer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntPointer indices);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef RectVector bboxes, @StdVector FloatBuffer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntBuffer indices,
+                                   float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef RectVector bboxes, @StdVector FloatBuffer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntBuffer indices);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef RectVector bboxes, @StdVector float[] scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector int[] indices,
+                                   float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef RectVector bboxes, @StdVector float[] scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector int[] indices);
 
 
 /** \} */
@@ -2091,6 +2149,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
 @Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const @ByRef Mat mat);
 
+@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const @ByRef UMat mat);
+
 public static native @Cast("bool") @Namespace("cv::dnn") boolean is_neg(int i);
 
 @Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(int a0, int a1/*=-1*/, int a2/*=-1*/, int a3/*=-1*/);
@@ -2108,6 +2168,8 @@ public static native @Cast("bool") @Namespace("cv::dnn") boolean is_neg(int i);
 @Namespace("cv::dnn") public static native int clamp(int ax, int dims);
 
 @Namespace("cv::dnn") public static native int clamp(int ax, @Const @StdVector @ByRef IntPointer shape);
+
+@Namespace("cv::dnn") public static native @ByVal Range clamp(@Const @ByRef Range r, int axisSize);
 
 
 

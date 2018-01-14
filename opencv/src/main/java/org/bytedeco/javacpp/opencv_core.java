@@ -1282,6 +1282,9 @@ public static final int CV_HAL_ERROR_UNKNOWN = -1;
 // #if !defined _MSC_VER && !defined __BORLANDC__
 // #  if defined __cplusplus && __cplusplus >= 201103L && !defined __APPLE__
 // #    include <cstdint>
+// #    ifdef __NEWLIB__
+// #    else
+// #    endif
 // #  else
 // #    include <stdint.h>
 // #  endif
@@ -1688,12 +1691,22 @@ public static final int OPENCV_ABI_COMPATIBILITY = 300;
 // #ifdef __OPENCV_BUILD
 // #endif
 
-// #if (defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined CVAPI_EXPORTS
-// #  define CV_EXPORTS __declspec(dllexport)
-// #elif defined __GNUC__ && __GNUC__ >= 4
-// #  define CV_EXPORTS __attribute__ ((visibility ("default")))
+// #ifdef CVAPI_EXPORTS
+// # if (defined _WIN32 || defined WINCE || defined __CYGWIN__)
+// #   define CV_EXPORTS __declspec(dllexport)
+// # elif defined __GNUC__ && __GNUC__ >= 4
+// #   define CV_EXPORTS __attribute__ ((visibility ("default")))
+// # endif
+// #endif
+
+// #ifndef CV_EXPORTS
+// # define CV_EXPORTS
+// #endif
+
+// #ifdef _MSC_VER
+// #   define CV_EXPORTS_TEMPLATE
 // #else
-// #  define CV_EXPORTS
+// #   define CV_EXPORTS_TEMPLATE CV_EXPORTS
 // #endif
 
 // #ifndef CV_DEPRECATED
@@ -2627,8 +2640,8 @@ public static native int cvIsInf( float value );
 <p>
 /** \brief Template function for accurate conversion from one primitive type to another.
  <p>
- The functions saturate_cast resemble the standard C++ cast operations, such as static_cast\<T\>()
- and others. They perform an efficient and accurate conversion from one primitive type to another
+ The function saturate_cast resembles the standard C++ cast operations, such as static_cast\<T\>()
+ and others. It perform an efficient and accurate conversion from one primitive type to another
  (see the introduction chapter). saturate in the name means that when the input value v is out of the
  range of the target type, the result is not formed just by taking low bits of the input, but instead
  the value is clipped. For example:
@@ -2648,32 +2661,35 @@ public static native int cvIsInf( float value );
  @param v Function parameter.
  \sa add, subtract, multiply, divide, Mat::convertTo
  */
-
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("uchar") byte v);
 /** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("schar") byte v);
 /** \overload */
-
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("ushort") short v);
 /** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(short v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(short v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(short v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(short v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(short v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(short v);
 /** \overload */
-
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("unsigned") int v);
 /** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(int v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(int v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(int v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(int v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(int v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(int v);
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(float v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(float v);
@@ -2681,6 +2697,8 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(float v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(float v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(float v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(float v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(float v);
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(double v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(double v);
@@ -2688,6 +2706,8 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(double v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(double v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(double v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(double v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(double v);
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("int64") long v);
@@ -2695,8 +2715,9 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("int64") long v);
 /** \overload */
-
 // we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
 
 /** \} */
@@ -2761,8 +2782,8 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    3;
-public static final int CV_VERSION_MINOR =    3;
-public static final int CV_VERSION_REVISION = 1;
+public static final int CV_VERSION_MINOR =    4;
+public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -3171,7 +3192,23 @@ public static final int
 // #define CV_SUPPRESS_DEPRECATED_START
 // #define CV_SUPPRESS_DEPRECATED_END
 // #endif
+
 // #define CV_UNUSED(name) (void)name
+
+// #if defined __GNUC__ && !defined __EXCEPTIONS
+// #define CV_TRY
+// #define CV_CATCH(A, B) for (A B; false; )
+// #define CV_CATCH_ALL if (false)
+// #define CV_THROW(A) abort()
+// #define CV_RETHROW() abort()
+// #else
+// #define CV_TRY try
+// #define CV_CATCH(A, B) catch(const A & B)
+// #define CV_CATCH_ALL catch(...)
+// #define CV_THROW(A) throw A
+// #define CV_RETHROW() throw
+// #endif
+
 /** \endcond
 <p>
 /** \brief Signals an error and raises the exception.
@@ -7302,7 +7339,7 @@ public static native CvMat cvGetSubArr(CvArr arg1, CvMat arg2, @ByVal CvRect arg
 
 /** \brief Returns array row or row span.
 <p>
-The functions return the header, corresponding to a specified row/row span of the input array.
+The function returns the header, corresponding to a specified row/row span of the input array.
 cvGetRow(arr, submat, row) is a shortcut for cvGetRows(arr, submat, row, row+1).
 @param arr Input array
 @param submat Pointer to the resulting sub-array header
@@ -7327,7 +7364,7 @@ public static native CvMat cvGetRow( @Const CvArr arr, CvMat submat, int row );
 
 /** \brief Returns one of more array columns.
 <p>
-The functions return the header, corresponding to a specified column span of the input array. That
+The function returns the header, corresponding to a specified column span of the input array. That
 <p>
 is, no data is copied. Therefore, any modifications of the submatrix will affect the original array.
 If you need to copy the columns, use cvCloneMat. cvGetCol(arr, submat, col) is a shortcut for
@@ -15566,6 +15603,12 @@ Here is example of SIFT use in your application via Algorithm interface:
     */
     public native void write(@ByRef FileStorage fs);
 
+    /** \brief simplified API for language bindings
+     * \overload
+     */
+    public native void write(@Ptr FileStorage fs, @Str BytePointer name/*=cv::String()*/);
+    public native void write(@Ptr FileStorage fs, @Str String name/*=cv::String()*/);
+
     /** \brief Reads algorithm parameters from a file storage
     */
     public native void read(@Const @ByRef FileNode fn);
@@ -16982,6 +17025,8 @@ capability can always be compiled to binary code of greater or equal compute cap
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Impl(Pointer p) { super(p); }
     }
+    public native Impl getImpl();
+//protected:
     public native Impl p(); public native Context p(Impl p);
 }
 
@@ -17230,26 +17275,33 @@ capability can always be compiled to binary code of greater or equal compute cap
                     @Str BytePointer buildflags, @Str BytePointer errmsg);
     public native @Cast("bool") boolean create(@Const @ByRef ProgramSource src,
                     @Str String buildflags, @Str String errmsg);
-    public native @Cast("bool") boolean read(@Str BytePointer buf, @Str BytePointer buildflags);
-    public native @Cast("bool") boolean read(@Str String buf, @Str String buildflags);
-    public native @Cast("bool") boolean write(@Str BytePointer buf);
-    public native @Cast("bool") boolean write(@Str String buf);
 
-    public native @Const @ByRef ProgramSource source();
     public native Pointer ptr();
 
-    public native @Str BytePointer getPrefix();
+    /**
+     * \brief Query device-specific program binary.
+     *
+     * Returns RAW OpenCL executable binary without additional attachments.
+     *
+     * \sa ProgramSource::fromBinary
+     *
+     * @param [out] binary output buffer
+     */
+    public native void getBinary(@Cast("char*") @StdVector BytePointer binary);
+    public native void getBinary(@Cast("char*") @StdVector ByteBuffer binary);
+    public native void getBinary(@Cast("char*") @StdVector byte[] binary);
+    public native @Cast("cv::ocl::Program::Impl*") Pointer getImpl();
+// #ifndef OPENCV_REMOVE_DEPRECATED_API
+    // TODO Remove this
+    public native @Cast("bool") boolean read(@Str BytePointer buf, @Str BytePointer buildflags);
+    public native @Cast("bool") boolean read(@Str String buf, @Str String buildflags); // removed, use ProgramSource instead
+    public native @Cast("bool") boolean write(@Str BytePointer buf);
+    public native @Cast("bool") boolean write(@Str String buf); // removed, use getBinary() method instead (RAW OpenCL binary)
+    public native @Const @ByRef ProgramSource source(); // implementation removed
+    public native @Str BytePointer getPrefix(); // deprecated, implementation replaced
     public static native @Str BytePointer getPrefix(@Str BytePointer buildflags);
-    public static native @Str String getPrefix(@Str String buildflags);
-
-
-    @Opaque public static class Impl extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public Impl() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Impl(Pointer p) { super(p); }
-    }
-    public native Impl getImpl();
+    public static native @Str String getPrefix(@Str String buildflags); // deprecated, implementation replaced
+// #endif
 }
 
 
@@ -17279,16 +17331,112 @@ capability can always be compiled to binary code of greater or equal compute cap
     private native void allocate(@Const @ByRef ProgramSource prog);
     public native @ByRef @Name("operator =") ProgramSource put(@Const @ByRef ProgramSource prog);
 
-    public native @Str BytePointer source();
+    public native @Str BytePointer source(); // deprecated
     public native @Cast("cv::ocl::ProgramSource::hash_t") int hash(); // deprecated
 
-    @Opaque public static class Impl extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public Impl() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Impl(Pointer p) { super(p); }
-    }
-    public native Impl getImpl();
+
+    /** \brief Describe OpenCL program binary.
+     * Do not call clCreateProgramWithBinary() and/or clBuildProgram().
+     *
+     * Caller should guarantee binary buffer lifetime greater than ProgramSource object (and any of its copies).
+     *
+     * This kind of binary is not portable between platforms in general - it is specific to OpenCL vendor / device / driver version.
+     *
+     * @param module name of program owner module
+     * @param name unique name of program (module+name is used as key for OpenCL program caching)
+     * @param binary buffer address. See buffer lifetime requirement in description.
+     * @param size buffer size
+     * @param buildOptions additional program-related build options passed to clBuildProgram()
+     * @return created ProgramSource object
+     */
+    public static native @ByVal ProgramSource fromBinary(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size,
+                @Str BytePointer buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromBinary(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromBinary(@Str String module, @Str String name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size,
+                @Str String buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromBinary(@Str String module, @Str String name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromBinary(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size,
+                @Str BytePointer buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromBinary(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromBinary(@Str String module, @Str String name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size,
+                @Str String buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromBinary(@Str String module, @Str String name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromBinary(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size,
+                @Str BytePointer buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromBinary(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromBinary(@Str String module, @Str String name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size,
+                @Str String buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromBinary(@Str String module, @Str String name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size);
+
+    /** \brief Describe OpenCL program in SPIR format.
+     * Do not call clCreateProgramWithBinary() and/or clBuildProgram().
+     *
+     * Supports SPIR 1.2 by default (pass '-spir-std=X.Y' in buildOptions to override this behavior)
+     *
+     * Caller should guarantee binary buffer lifetime greater than ProgramSource object (and any of its copies).
+     *
+     * Programs in this format are portable between OpenCL implementations with 'khr_spir' extension:
+     * https://www.khronos.org/registry/OpenCL/sdk/2.0/docs/man/xhtml/cl_khr_spir.html
+     * (but they are not portable between different platforms: 32-bit / 64-bit)
+     *
+     * Note: these programs can't support vendor specific extensions, like 'cl_intel_subgroups'.
+     *
+     * @param module name of program owner module
+     * @param name unique name of program (module+name is used as key for OpenCL program caching)
+     * @param binary buffer address. See buffer lifetime requirement in description.
+     * @param size buffer size
+     * @param buildOptions additional program-related build options passed to clBuildProgram()
+     *        (these options are added automatically: '-x spir' and '-spir-std=1.2')
+     * @return created ProgramSource object.
+     */
+    public static native @ByVal ProgramSource fromSPIR(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size,
+                @Str BytePointer buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromSPIR(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromSPIR(@Str String module, @Str String name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size,
+                @Str String buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromSPIR(@Str String module, @Str String name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromSPIR(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size,
+                @Str BytePointer buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromSPIR(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromSPIR(@Str String module, @Str String name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size,
+                @Str String buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromSPIR(@Str String module, @Str String name,
+                @Cast("const unsigned char*") BytePointer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromSPIR(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size,
+                @Str BytePointer buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromSPIR(@Str BytePointer module, @Str BytePointer name,
+                @Cast("const unsigned char*") ByteBuffer binary, @Cast("const size_t") long size);
+    public static native @ByVal ProgramSource fromSPIR(@Str String module, @Str String name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size,
+                @Str String buildOptions/*=cv::String()*/);
+    public static native @ByVal ProgramSource fromSPIR(@Str String module, @Str String name,
+                @Cast("const unsigned char*") byte[] binary, @Cast("const size_t") long size);
+
+    //OpenCL 2.1+ only
+    //static Program fromSPIRV(const String& module, const String& name,
+    //        const unsigned char* binary, const size_t size,
+    //        const cv::String& buildOptions = cv::String());
+    public native @Cast("cv::ocl::ProgramSource::Impl*") Pointer getImpl();
 }
 
 @Namespace("cv::ocl") @NoOffset public static class PlatformInfo extends Pointer {
@@ -21397,23 +21545,16 @@ reading data to/from a file.
     private native void allocate();
 
     /** \overload
-    @param source Name of the file to open or the text string to read the data from. Extension of the
-    file (.xml, .yml/.yaml, or .json) determines its format (XML, YAML or JSON respectively). Also you can
-    append .gz to work with compressed files, for example myHugeMatrix.xml.gz. If both FileStorage::WRITE
-    and FileStorage::MEMORY flags are specified, source is used just to specify the output file format (e.g.
-    mydata.xml, .yml etc.).
-    @param flags Mode of operation. See  FileStorage::Mode
-    @param encoding Encoding of the file. Note that UTF-16 XML encoding is not supported currently and
-    you should use 8-bit encoding instead of it.
+    \copydoc open()
     */
-    public FileStorage(@Str BytePointer source, int flags, @Str BytePointer encoding/*=cv::String()*/) { super((Pointer)null); allocate(source, flags, encoding); }
-    private native void allocate(@Str BytePointer source, int flags, @Str BytePointer encoding/*=cv::String()*/);
-    public FileStorage(@Str BytePointer source, int flags) { super((Pointer)null); allocate(source, flags); }
-    private native void allocate(@Str BytePointer source, int flags);
-    public FileStorage(@Str String source, int flags, @Str String encoding/*=cv::String()*/) { super((Pointer)null); allocate(source, flags, encoding); }
-    private native void allocate(@Str String source, int flags, @Str String encoding/*=cv::String()*/);
-    public FileStorage(@Str String source, int flags) { super((Pointer)null); allocate(source, flags); }
-    private native void allocate(@Str String source, int flags);
+    public FileStorage(@Str BytePointer filename, int flags, @Str BytePointer encoding/*=cv::String()*/) { super((Pointer)null); allocate(filename, flags, encoding); }
+    private native void allocate(@Str BytePointer filename, int flags, @Str BytePointer encoding/*=cv::String()*/);
+    public FileStorage(@Str BytePointer filename, int flags) { super((Pointer)null); allocate(filename, flags); }
+    private native void allocate(@Str BytePointer filename, int flags);
+    public FileStorage(@Str String filename, int flags, @Str String encoding/*=cv::String()*/) { super((Pointer)null); allocate(filename, flags, encoding); }
+    private native void allocate(@Str String filename, int flags, @Str String encoding/*=cv::String()*/);
+    public FileStorage(@Str String filename, int flags) { super((Pointer)null); allocate(filename, flags); }
+    private native void allocate(@Str String filename, int flags);
 
     /** \overload */
     public FileStorage(CvFileStorage fs, @Cast("bool") boolean owning/*=true*/) { super((Pointer)null); allocate(fs, owning); }

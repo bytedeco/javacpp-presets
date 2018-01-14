@@ -48,17 +48,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<algorithm>", "<map>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
         "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.3", "opencv_imgproc@.3.3"},
-        resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}),
-    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = {"gomp@.1", "opencv_cudev@.3.3"}),
+        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.4", "opencv_imgproc@.3.4"},
+        resource = {"include", "lib", "lib64", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}),
+    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = {"gomp@.1", "opencv_cudev@.3.4"}),
     @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core331", "opencv_imgproc331"}, preload = {"concrt140", "msvcp140", "vcruntime140",
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core340", "opencv_imgproc340"}, preload = {"concrt140", "msvcp140", "vcruntime140",
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0", "opencv_cudev331"}),
+        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0", "opencv_cudev340"}),
     @Platform(value = "windows-x86", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
                                                     "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
@@ -74,8 +74,8 @@ public class opencv_core implements InfoMapper {
                              "defined __GNUC__ || defined __clang__", "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA",
                              "__cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)", "CV_CXX11", "CV_FP16_TYPE").define(false))
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func").cppTypes().cppText(""))
-               .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN",
-                             "CV__DEBUG_NS_END", "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END").cppTypes().annotations())
+               .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN", "CV__DEBUG_NS_END",
+                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL").cppTypes().annotations())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
                .put(new Info("CV_EXPORTS_AS", "CV_WRAP_AS").cppTypes().annotations("@Name").cppText(""))
                .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
@@ -96,7 +96,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::uint32_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("cv::ocl::initializeContextFromHandle").skip())
                .put(new Info("cv::ocl::Platform").pointerTypes("OclPlatform"))
-               .put(new Info("cv::ocl::Queue::Impl").cast().pointerTypes("Pointer"))
+               .put(new Info("cv::ocl::Queue::Impl", "cv::ocl::Program::Impl", "cv::ocl::ProgramSource::Impl").cast().pointerTypes("Pointer"))
                .put(new Info("cv::ocl::Kernel(const char*, const cv::ocl::ProgramSource&, const cv::String&, cv::String*)").javaText(
                        "public Kernel(String kname, @Const @ByRef ProgramSource prog,\n"
                      + "            @Str String buildopts, @Str BytePointer errmsg) { allocate(kname, prog, buildopts, errmsg); }\n"
@@ -276,13 +276,15 @@ public class opencv_core implements InfoMapper {
                .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
                              "defined WIN32 || defined _WIN32 || defined WINCE").define(false))
 
-               .put(new Info("cv::saturate_cast(uchar)", "cv::saturate_cast(ushort)", "cv::saturate_cast(unsigned)").skip())
+//               .put(new Info("cv::saturate_cast(uchar)", "cv::saturate_cast(ushort)", "cv::saturate_cast(unsigned)").skip())
                .put(new Info("cv::saturate_cast<uchar>").javaNames("ucharSaturateCast"))
                .put(new Info("cv::saturate_cast<schar>").javaNames("scharSaturateCast"))
                .put(new Info("cv::saturate_cast<ushort>").javaNames("ushortSaturateCast"))
                .put(new Info("cv::saturate_cast<short>").javaNames("shortSaturateCast"))
                .put(new Info("cv::saturate_cast<int>").javaNames("intSaturate"))
                .put(new Info("cv::saturate_cast<unsigned>").javaNames("unsignedSaturateCast"))
+               .put(new Info("cv::saturate_cast<uint64>").javaNames("uint64SaturateCast"))
+               .put(new Info("cv::saturate_cast<int64>").javaNames("int64SaturateCast"))
 
                .put(new Info("cv::normL2Sqr", "cv::normL1", "cv::seqPopMulti").skip())
 

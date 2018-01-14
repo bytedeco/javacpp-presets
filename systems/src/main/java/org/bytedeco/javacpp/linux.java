@@ -7114,6 +7114,98 @@ public static native int __sigdelset(sigset_t arg0, int arg1);
 // #endif /* ! _SIGSET_H_fns.  */
 
 
+// Parsed from bits/signum.h
+
+/* Signal number definitions.  Linux version.
+   Copyright (C) 1995,1996,1997,1998,1999,2003 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
+
+// #ifdef	_SIGNAL_H
+
+/* Fake signal functions.  */
+public static native @MemberGetter __sighandler_t SIG_ERR();
+public static final __sighandler_t SIG_ERR = SIG_ERR();		/* Error return.  */
+public static native @MemberGetter __sighandler_t SIG_DFL();
+public static final __sighandler_t SIG_DFL = SIG_DFL();		/* Default action.  */
+public static native @MemberGetter __sighandler_t SIG_IGN();
+public static final __sighandler_t SIG_IGN = SIG_IGN();		/* Ignore signal.  */
+
+// #ifdef __USE_UNIX98
+public static native @MemberGetter __sighandler_t SIG_HOLD();
+public static final __sighandler_t SIG_HOLD = SIG_HOLD();	/* Add signal to hold mask.  */
+// #endif
+
+
+/* Signals.  */
+public static final int SIGHUP =		1;	/* Hangup (POSIX).  */
+public static final int SIGINT =		2;	/* Interrupt (ANSI).  */
+public static final int SIGQUIT =		3;	/* Quit (POSIX).  */
+public static final int SIGILL =		4;	/* Illegal instruction (ANSI).  */
+public static final int SIGTRAP =		5;	/* Trace trap (POSIX).  */
+public static final int SIGABRT =		6;	/* Abort (ANSI).  */
+public static final int SIGIOT =		6;	/* IOT trap (4.2 BSD).  */
+public static final int SIGBUS =		7;	/* BUS error (4.2 BSD).  */
+public static final int SIGFPE =		8;	/* Floating-point exception (ANSI).  */
+public static final int SIGKILL =		9;	/* Kill, unblockable (POSIX).  */
+public static final int SIGUSR1 =		10;	/* User-defined signal 1 (POSIX).  */
+public static final int SIGSEGV =		11;	/* Segmentation violation (ANSI).  */
+public static final int SIGUSR2 =		12;	/* User-defined signal 2 (POSIX).  */
+public static final int SIGPIPE =		13;	/* Broken pipe (POSIX).  */
+public static final int SIGALRM =		14;	/* Alarm clock (POSIX).  */
+public static final int SIGTERM =		15;	/* Termination (ANSI).  */
+public static final int SIGSTKFLT =	16;	/* Stack fault.  */
+public static native @MemberGetter int SIGCLD();
+public static final int SIGCLD = SIGCLD();	/* Same as SIGCHLD (System V).  */
+public static final int SIGCHLD =		17;	/* Child status has changed (POSIX).  */
+public static final int SIGCONT =		18;	/* Continue (POSIX).  */
+public static final int SIGSTOP =		19;	/* Stop, unblockable (POSIX).  */
+public static final int SIGTSTP =		20;	/* Keyboard stop (POSIX).  */
+public static final int SIGTTIN =		21;	/* Background read from tty (POSIX).  */
+public static final int SIGTTOU =		22;	/* Background write to tty (POSIX).  */
+public static final int SIGURG =		23;	/* Urgent condition on socket (4.2 BSD).  */
+public static final int SIGXCPU =		24;	/* CPU limit exceeded (4.2 BSD).  */
+public static final int SIGXFSZ =		25;	/* File size limit exceeded (4.2 BSD).  */
+public static final int SIGVTALRM =	26;	/* Virtual alarm clock (4.2 BSD).  */
+public static final int SIGPROF =		27;	/* Profiling alarm clock (4.2 BSD).  */
+public static final int SIGWINCH =	28;	/* Window size change (4.3 BSD, Sun).  */
+public static native @MemberGetter int SIGPOLL();
+public static final int SIGPOLL = SIGPOLL();	/* Pollable event occurred (System V).  */
+public static final int SIGIO =		29;	/* I/O now possible (4.2 BSD).  */
+public static final int SIGPWR =		30;	/* Power failure restart (System V).  */
+public static final int SIGSYS =		31;	/* Bad system call.  */
+public static final int SIGUNUSED =	31;
+
+public static final int _NSIG =		65;	/* Biggest signal number + 1
+				   (including real-time signals).  */
+
+public static native @MemberGetter int SIGRTMIN();
+public static final int SIGRTMIN = SIGRTMIN();
+public static native @MemberGetter int SIGRTMAX();
+public static final int SIGRTMAX = SIGRTMAX();
+
+/* These are the hard limits of the kernel.  These values should not be
+   used directly at user level.  */
+public static final int __SIGRTMIN =	32;
+public static final int __SIGRTMAX =	(_NSIG - 1);
+
+// #endif	/* <signal.h> included.  */
+
+
 // Parsed from bits/sigaction.h
 
 /* The proper definitions for Linux's sigaction.
@@ -7844,74 +7936,6 @@ public static native int __libc_current_sigrtmax();
 // #endif /* signal.h  */
 
 // #endif /* not signal.h */
-
-
-// Parsed from asm/ptrace.h
-
-// #ifndef _ASM_X86_PTRACE_H
-// #define _ASM_X86_PTRACE_H
-
-	/* For */
-// #include <asm/ptrace-abi.h>
-// #include <asm/processor-faLgs.h>
-
-
-// #ifndef __ASSEMBLY__
-
-// #ifdef __i386__
-
-
-// #else /* __i386__ */
-
-
-public static class pt_regs extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public pt_regs() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public pt_regs(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public pt_regs(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public pt_regs position(long position) {
-        return (pt_regs)super.position(position);
-    }
-
-	public native @Cast("unsigned long") long r15(); public native pt_regs r15(long r15);
-	public native @Cast("unsigned long") long r14(); public native pt_regs r14(long r14);
-	public native @Cast("unsigned long") long r13(); public native pt_regs r13(long r13);
-	public native @Cast("unsigned long") long r12(); public native pt_regs r12(long r12);
-	public native @Cast("unsigned long") long rbp(); public native pt_regs rbp(long rbp);
-	public native @Cast("unsigned long") long rbx(); public native pt_regs rbx(long rbx);
-/* arguments: non interrupts/non tracing syscalls only save upto here*/
-	public native @Cast("unsigned long") long r11(); public native pt_regs r11(long r11);
-	public native @Cast("unsigned long") long r10(); public native pt_regs r10(long r10);
-	public native @Cast("unsigned long") long r9(); public native pt_regs r9(long r9);
-	public native @Cast("unsigned long") long r8(); public native pt_regs r8(long r8);
-	public native @Cast("unsigned long") long rax(); public native pt_regs rax(long rax);
-	public native @Cast("unsigned long") long rcx(); public native pt_regs rcx(long rcx);
-	public native @Cast("unsigned long") long rdx(); public native pt_regs rdx(long rdx);
-	public native @Cast("unsigned long") long rsi(); public native pt_regs rsi(long rsi);
-	public native @Cast("unsigned long") long rdi(); public native pt_regs rdi(long rdi);
-	public native @Cast("unsigned long") long orig_rax(); public native pt_regs orig_rax(long orig_rax);
-/* end of arguments */
-/* cpu exception frame or undefined */
-	public native @Cast("unsigned long") long rip(); public native pt_regs rip(long rip);
-	public native @Cast("unsigned long") long cs(); public native pt_regs cs(long cs);
-	public native @Cast("unsigned long") long eflags(); public native pt_regs eflags(long eflags);
-	public native @Cast("unsigned long") long rsp(); public native pt_regs rsp(long rsp);
-	public native @Cast("unsigned long") long ss(); public native pt_regs ss(long ss);
-/* top of stack page */
-}
-
-// #endif /* !__i386__ */
-
-
-
-// #endif /* !__ASSEMBLY__ */
-
-// #endif /* _ASM_X86_PTRACE_H */
 
 
 // Parsed from sys/ucontext.h

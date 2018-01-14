@@ -65,7 +65,7 @@ public:
         this->ptr = ptr;
         this->size = size;
         this->owner = owner;
-        str.set(ptr ? ptr : "", ptr ? (size > 0 ? size : strlen((char*)ptr)) : 0);
+        str = StringPiece(ptr ? ptr : "", ptr ? (size > 0 ? size : strlen((char*)ptr)) : 0);
     }
     static void deallocate(void* owner) { free(owner); }
     operator          char*() { size = str.size(); return (         char*)str.data(); }

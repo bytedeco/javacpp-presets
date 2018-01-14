@@ -114,6 +114,7 @@ public static final int
     CV_IMWRITE_PNG_STRATEGY_RLE = 3,
     CV_IMWRITE_PNG_STRATEGY_FIXED = 4,
     CV_IMWRITE_PXM_BINARY = 32,
+    CV_IMWRITE_EXR_TYPE = 48,
     CV_IMWRITE_WEBP_QUALITY = 64,
     CV_IMWRITE_PAM_TUPLETYPE = 128,
     CV_IMWRITE_PAM_FORMAT_NULL = 0,
@@ -315,10 +316,20 @@ public static final int
        IMWRITE_PNG_BILEVEL         = 18,
        /** For PPM, PGM, or PBM, it can be a binary format flag, 0 or 1. Default value is 1. */
        IMWRITE_PXM_BINARY          = 32,
+       /** override EXR storage type (FLOAT (FP32) is default) */
+       IMWRITE_EXR_TYPE            =  (3 << 4) + 0, /* 48 */
        /** For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used. */
        IMWRITE_WEBP_QUALITY        = 64,
        /** For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format */
        IMWRITE_PAM_TUPLETYPE       = 128;
+
+/** enum cv::ImwriteEXRTypeFlags */
+public static final int
+       /*IMWRITE_EXR_TYPE_UNIT = 0, //!< not supported */
+       /** store as HALF (FP16) */
+       IMWRITE_EXR_TYPE_HALF = 1,
+       /** store as FP32 (default) */
+       IMWRITE_EXR_TYPE_FLOAT = 2;
 
 /** Imwrite PNG specific flags used to tune the compression algorithm.
 /** These flags will be modify the way of PNG image compression and will be passed to the underlying zlib processing stage.

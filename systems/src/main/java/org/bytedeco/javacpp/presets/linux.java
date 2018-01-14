@@ -46,7 +46,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/uio.h", "sys/uio.h", "bits/sockaddr.h", "bits/socket.h", "sys/socket.h", /*"sys/types.h", "bits/timex.h",*/
                "asm-generic/errno-base.h", "asm-generic/errno.h", "bits/errno.h", "errno.h", "string.h", "stdlib.h",
                "bits/time.h", "sys/time.h", "time.h", "utime.h", "bits/stat.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",
-               "bits/siginfo.h", "bits/sigset.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h", "asm/ptrace.h",
+               "bits/siginfo.h", "bits/sigset.h", "bits/signum.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
                "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h", "bits/confname.h", "unistd.h",
                "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
     link = "dl")}, target = "org.bytedeco.javacpp.linux")
@@ -128,7 +128,7 @@ public class linux implements BuildEnabled, InfoMapper {
                .put(new Info("off64_t", "rlim64_t", "__off64_t", "__rlim64_t", "__blkcnt64_t", "greg_t", "__ino64_t", "__u64", "__uint64_t")
                        .cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 
-               .put(new Info("__locale_data", "__spawn_action", "timex").cast().pointerTypes("Pointer"))
+               .put(new Info("__locale_data", "__spawn_action", "timex", "pt_regs").cast().pointerTypes("Pointer"))
                .put(new Info("__timezone_ptr_t").cast().pointerTypes("timezone"))
                .put(new Info("gregset_t").cppTypes("const long long*"))
                .put(new Info("fpregset_t").cppTypes("const void*"))
@@ -204,7 +204,9 @@ public class linux implements BuildEnabled, InfoMapper {
                .put(new Info("RTLD_NEXT", "RTLD_DEFAULT", "RTLD_SELF", "RTLD_MAIN_ONLY").cppTypes("void*").translate(false))
                .put(new Info("RLIM_INFINITY", "RLIM_SAVED_MAX", "RLIM_SAVED_CUR").cppTypes("long").translate(false))
                .put(new Info("CLOCKS_PER_SEC", "NSIG").cppTypes("long").translate(false))
-               .put(new Info("_SS_PADSIZE", "__SI_PAD_SIZE", "__SIGEV_PAD_SIZE", "FP_XSTATE_MAGIC2_SIZE", "WCOREFLAG").cppTypes("int").translate(false))
+               .put(new Info("SIG_ERR", "SIG_DFL", "SIG_IGN", "SIG_HOLD").cppTypes("__sighandler_t*").translate(false))
+               .put(new Info("_SS_PADSIZE", "__SI_PAD_SIZE", "__SIGEV_PAD_SIZE", "SIGCLD", "SIGPOLL",
+                             "FP_XSTATE_MAGIC2_SIZE", "WCOREFLAG").cppTypes("int").translate(false))
 
                .put(new Info("__cpuid").cppTypes("void", "int", "int&", "int&", "int&", "int&"))
                .put(new Info("__cpuid_count").cppTypes("void", "int", "int", "int&", "int&", "int&", "int&"))

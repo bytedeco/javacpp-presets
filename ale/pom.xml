@@ -11,12 +11,8 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>ale</artifactId>
-  <version>20170911-6eddb8d-${project.parent.version}</version>
+  <version>0.6.0-${project.parent.version}</version>
   <name>JavaCPP Presets for ALE</name>
-
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -36,18 +32,6 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

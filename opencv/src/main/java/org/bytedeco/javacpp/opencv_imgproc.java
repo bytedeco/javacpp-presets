@@ -2580,6 +2580,8 @@ where a polynomial function is fit into some neighborhood of the computed pixel 
 f_y(x,y))\f$, and then the value of the polynomial at \f$(f_x(x,y), f_y(x,y))\f$ is taken as the
 interpolated pixel value. In OpenCV, you can choose between several interpolation methods. See
 resize for details.
+<p>
+\note The geometrical transformations do not work with {@code CV_8S} or {@code CV_32S} images.
     <p>
     \defgroup imgproc_misc Miscellaneous Image Transformations
     \defgroup imgproc_draw Drawing Functions
@@ -2750,6 +2752,8 @@ public static final int
     INTER_AREA           = 3,
     /** Lanczos interpolation over 8x8 neighborhood */
     INTER_LANCZOS4       = 4,
+    /** Bit exact bilinear interpolation */
+    INTER_LINEAR_EXACT = 5,
     /** mask for interpolation codes */
     INTER_MAX            = 7,
     /** flag, fills all of the destination image pixels. If some of them correspond to outliers in the
@@ -3813,7 +3817,7 @@ to edit those, as to tailor it for their own application.
 @param _sigma_scale Sigma for Gaussian filter. It is computed as sigma = _sigma_scale/_scale.
 @param _quant Bound to the quantization error on the gradient norm.
 @param _ang_th Gradient angle tolerance in degrees.
-@param _log_eps Detection threshold: -log10(NFA) \> log_eps. Used only when advancent refinement
+@param _log_eps Detection threshold: -log10(NFA) \> log_eps. Used only when advance refinement
 is chosen.
 @param _density_th Minimal density of aligned region points in the enclosing rectangle.
 @param _n_bins Number of bins in pseudo-ordering of gradient modulus.
@@ -4411,7 +4415,7 @@ applied. See getDerivKernels for details.
 
 /** \brief Finds edges in an image using the Canny algorithm \cite Canny86 .
 <p>
-The function finds edges in the input image image and marks them in the output map edges using the
+The function finds edges in the input image and marks them in the output map edges using the
 Canny algorithm. The smallest value between threshold1 and threshold2 is used for edge linking. The
 largest value is used to find initial segments of strong edges. See
 <http://en.wikipedia.org/wiki/Canny_edge_detector>
@@ -4942,7 +4946,7 @@ Example: :
 <p>
 \note Usually the function detects the centers of circles well. However, it may fail to find correct
 radii. You can assist to the function by specifying the radius range ( minRadius and maxRadius ) if
-you know it. Or, you may ignore the returned radius, use only the center, and find the correct
+you know it. Or, you may set maxRadius to 0 to return centers only without radius search, and find the correct
 radius using an additional procedure.
 <p>
 @param image 8-bit, single-channel, grayscale input image.
@@ -5300,7 +5304,7 @@ borderMode=BORDER_TRANSPARENT, it means that the pixels in the destination image
 corresponds to the "outliers" in the source image are not modified by the function.
 @param borderValue Value used in case of a constant border. By default, it is 0.
 \note
-Due to current implementaion limitations the size of an input and output images should be less than 32767x32767.
+Due to current implementation limitations the size of an input and output images should be less than 32767x32767.
  */
 @Namespace("cv") public static native void remap( @ByVal Mat src, @ByVal Mat dst,
                          @ByVal Mat map1, @ByVal Mat map2,
@@ -5456,13 +5460,12 @@ where
 <p>
 The function getRectSubPix extracts pixels from src:
 <p>
-\f[dst(x, y) = src(x +  \texttt{center.x} - ( \texttt{dst.cols} -1)*0.5, y +  \texttt{center.y} - ( \texttt{dst.rows} -1)*0.5)\f]
+\f[patch(x, y) = src(x +  \texttt{center.x} - ( \texttt{dst.cols} -1)*0.5, y +  \texttt{center.y} - ( \texttt{dst.rows} -1)*0.5)\f]
 <p>
 where the values of the pixels at non-integer coordinates are retrieved using bilinear
-interpolation. Every channel of multi-channel images is processed independently. While the center of
-the rectangle must be inside the image, parts of the rectangle may be outside. In this case, the
-replication border mode (see cv::BorderTypes) is used to extrapolate the pixel values outside of
-the image.
+interpolation. Every channel of multi-channel images is processed independently. Also
+the image should be a single channel or three channel image. While the center of the
+rectangle must be inside the image, parts of the rectangle may be outside.
 <p>
 @param image Source image.
 @param patchSize Size of the extracted patch.
@@ -5655,7 +5658,7 @@ CV_64F.
  *  \addtogroup imgproc_motion
  *  \{
 <p>
-/** \brief Adds an image to the accumulator.
+/** \brief Adds an image to the accumulator image.
 <p>
 The function adds src or some of its elements to dst :
 <p>
@@ -5663,7 +5666,7 @@ The function adds src or some of its elements to dst :
 <p>
 The function supports multi-channel images. Each channel is processed independently.
 <p>
-The functions accumulate\* can be used, for example, to collect statistics of a scene background
+The function cv::accumulate can be used, for example, to collect statistics of a scene background
 viewed by a still camera and for the further foreground-background segmentation.
 <p>
 @param src Input image of type CV_8UC(n), CV_16UC(n), CV_32FC(n) or CV_64FC(n), where n is a positive integer.
@@ -5682,7 +5685,7 @@ viewed by a still camera and for the further foreground-background segmentation.
                               @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
 @Namespace("cv") public static native void accumulate( @ByVal GpuMat src, @ByVal GpuMat dst );
 
-/** \brief Adds the square of a source image to the accumulator.
+/** \brief Adds the square of a source image to the accumulator image.
 <p>
 The function adds the input image src or its selected region, raised to a power of 2, to the
 accumulator dst :
@@ -5708,7 +5711,7 @@ floating-point.
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask );
 @Namespace("cv") public static native void accumulateSquare( @ByVal GpuMat src, @ByVal GpuMat dst );
 
-/** \brief Adds the per-element product of two input images to the accumulator.
+/** \brief Adds the per-element product of two input images to the accumulator image.
 <p>
 The function adds the product of two images or their selected regions to the accumulator dst :
 <p>
@@ -5718,7 +5721,7 @@ The function supports multi-channel images. Each channel is processed independen
 <p>
 @param src1 First input image, 1- or 3-channel, 8-bit or 32-bit floating point.
 @param src2 Second input image of the same type and the same size as src1 .
-@param dst %Accumulator with the same number of channels as input images, 32-bit or 64-bit
+@param dst %Accumulator image with the same number of channels as input images, 32-bit or 64-bit
 floating-point.
 @param mask Optional operation mask.
 <p>
@@ -5896,7 +5899,8 @@ The function can process the image in-place.
 @param src Source 8-bit single-channel image.
 @param dst Destination image of the same size and the same type as src.
 @param maxValue Non-zero value assigned to the pixels for which the condition is satisfied
-@param adaptiveMethod Adaptive thresholding algorithm to use, see cv::AdaptiveThresholdTypes
+@param adaptiveMethod Adaptive thresholding algorithm to use, see cv::AdaptiveThresholdTypes.
+The BORDER_REPLICATE | BORDER_ISOLATED is used to process boundaries.
 @param thresholdType Thresholding type that must be either THRESH_BINARY or THRESH_BINARY_INV,
 see cv::ThresholdTypes.
 @param blockSize Size of a pixel neighborhood that is used to calculate a threshold value for the
@@ -7279,7 +7283,8 @@ taller than image. Since this is both an input and output parameter, you must ta
 of initializing it. Flood-filling cannot go across non-zero pixels in the input mask. For example,
 an edge detector output can be used as a mask to stop filling at edges. On output, pixels in the
 mask corresponding to filled pixels in the image are set to 1 or to the a value specified in flags
-as described below. It is therefore possible to use the same mask in multiple calls to the function
+as described below. Additionally, the function fills the border of the mask with ones to simplify
+internal processing. It is therefore possible to use the same mask in multiple calls to the function
 to make sure the filled areas do not overlap.
 @param seedPoint Starting point.
 @param newVal New value of the repainted domain pixels.
@@ -8157,7 +8162,7 @@ intersecting region and the red vertices are returned by the function.
 <p>
 @param rect1 First rectangle
 @param rect2 Second rectangle
-@param intersectingRegion The output array of the verticies of the intersecting region. It returns
+@param intersectingRegion The output array of the vertices of the intersecting region. It returns
 at most 8 vertices. Stored as std::vector\<cv::Point2f\> or cv::Mat as Mx1 of type CV_32FC2.
 @return One of cv::RectanglesIntersectTypes
  */
@@ -8755,6 +8760,11 @@ draws the contours, all the nested contours, all the nested-to-nested contours, 
 parameter is only taken into account when there is hierarchy available.
 @param offset Optional contour shift parameter. Shift all the drawn contours by the specified
 \f$\texttt{offset}=(dx,dy)\f$ .
+\note When thickness=CV_FILLED, the function is designed to handle connected components with holes correctly
+even when no hierarchy date is provided. This is done by analyzing all the outlines together
+using even-odd rule. This may give incorrect results if you have a joint collection of separately retrieved
+contours. In order to solve this problem, you need to call drawContours separately for each sub-group
+of contours, or iterate over the collection using contourIdx parameter.
  */
 @Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal MatVector contours,
                               int contourIdx, @Const @ByRef Scalar color,

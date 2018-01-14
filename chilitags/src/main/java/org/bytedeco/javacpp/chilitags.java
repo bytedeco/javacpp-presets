@@ -29,6 +29,7 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
     private native void allocate();
     public native @Name("operator=") @ByRef TagCornerMap put(@ByRef TagCornerMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @ByRef @Cast("chilitags::Quad*") FloatPointer get(int i);
@@ -55,6 +56,7 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
     private native void allocate();
     public native @Name("operator=") @ByRef TagPoseMap put(@ByRef TagPoseMap x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @ByRef @Cast("chilitags::Chilitags3D_<float>::TransformMatrix*") FloatPointer get(@StdString BytePointer i);
@@ -81,6 +83,7 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
     private native void allocate();
     public native @Name("operator=") @ByRef TagPoseMapd put(@ByRef TagPoseMapd x);
 
+    public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @ByRef @Cast("chilitags::Chilitags3D_<double>::TransformMatrix*") DoublePointer get(@StdString BytePointer i);
@@ -669,6 +672,8 @@ public native void setCalibration(@ByVal Mat newCameraMatrix,
                     @ByVal Mat newDistCoeffs);
 public native void setCalibration(@ByVal UMat newCameraMatrix,
                     @ByVal UMat newDistCoeffs);
+public native void setCalibration(@ByVal GpuMat newCameraMatrix,
+                    @ByVal GpuMat newDistCoeffs);
 
 /**
     For accurate results, Chilitags3D can be provided the calibration data of
@@ -932,6 +937,8 @@ public native void setCalibration(@ByVal Mat newCameraMatrix,
                     @ByVal Mat newDistCoeffs);
 public native void setCalibration(@ByVal UMat newCameraMatrix,
                     @ByVal UMat newDistCoeffs);
+public native void setCalibration(@ByVal GpuMat newCameraMatrix,
+                    @ByVal GpuMat newDistCoeffs);
 
 /**
     For accurate results, Chilitags3D can be provided the calibration data of

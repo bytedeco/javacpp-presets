@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cufft.h>", link = "cufft@.9.0")},
+    @Platform(include = "<cufft.h>", link = "cufft@.9.1")},
         target = "org.bytedeco.javacpp.cufft")
 public class cufft implements InfoMapper {
     public void map(InfoMap infoMap) {

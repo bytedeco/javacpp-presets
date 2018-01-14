@@ -863,7 +863,6 @@ public static final int HADDR_MAX =		(HADDR_UNDEF-1);
  */
 // #if H5_SIZEOF_UINT32_T>=4
 // #elif H5_SIZEOF_SHORT>=4
-// #   undef H5_SIZEOF_UINT32_T
 // #elif H5_SIZEOF_INT>=4
 // #   undef H5_SIZEOF_UINT32_T
 // #elif H5_SIZEOF_LONG>=4
@@ -877,7 +876,6 @@ public static final int HADDR_MAX =		(HADDR_UNDEF-1);
  */
 // #if H5_SIZEOF_INT64_T>=8
 // #elif H5_SIZEOF_INT>=8
-// #   undef H5_SIZEOF_INT64_T
 // #elif H5_SIZEOF_LONG>=8
 // #   undef H5_SIZEOF_INT64_T
 // #elif H5_SIZEOF_LONG_LONG>=8
@@ -891,7 +889,6 @@ public static final int HADDR_MAX =		(HADDR_UNDEF-1);
  */
 // #if H5_SIZEOF_UINT64_T>=8
 // #elif H5_SIZEOF_INT>=8
-// #   undef H5_SIZEOF_UINT64_T
 // #elif H5_SIZEOF_LONG>=8
 // #   undef H5_SIZEOF_UINT64_T
 // #elif H5_SIZEOF_LONG_LONG>=8
@@ -1120,7 +1117,7 @@ public static class H5I_search_func_t extends FunctionPointer {
     public    H5I_search_func_t(Pointer p) { super(p); }
     protected H5I_search_func_t() { allocate(); }
     private native void allocate();
-    public native int call(Pointer obj, @Cast("hid_t") int id, Pointer key);
+    public native int call(Pointer obj, @Cast("hid_t") long id, Pointer key);
 }
 
 // #ifdef __cplusplus
@@ -1128,17 +1125,17 @@ public static class H5I_search_func_t extends FunctionPointer {
 
 /* Public API functions */
 
-public static native @Cast("hid_t") int H5Iregister(@Cast("H5I_type_t") int type, @Const Pointer object);
-public static native Pointer H5Iobject_verify(@Cast("hid_t") int id, @Cast("H5I_type_t") int id_type);
-public static native Pointer H5Iremove_verify(@Cast("hid_t") int id, @Cast("H5I_type_t") int id_type);
-public static native @Cast("H5I_type_t") int H5Iget_type(@Cast("hid_t") int id);
-public static native @Cast("hid_t") int H5Iget_file_id(@Cast("hid_t") int id);
-public static native @Cast("ssize_t") int H5Iget_name(@Cast("hid_t") int id, @Cast("char*") BytePointer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Iget_name(@Cast("hid_t") int id, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Iget_name(@Cast("hid_t") int id, @Cast("char*") byte[] name, @Cast("size_t") long size);
-public static native int H5Iinc_ref(@Cast("hid_t") int id);
-public static native int H5Idec_ref(@Cast("hid_t") int id);
-public static native int H5Iget_ref(@Cast("hid_t") int id);
+public static native @Cast("hid_t") long H5Iregister(@Cast("H5I_type_t") int type, @Const Pointer object);
+public static native Pointer H5Iobject_verify(@Cast("hid_t") long id, @Cast("H5I_type_t") int id_type);
+public static native Pointer H5Iremove_verify(@Cast("hid_t") long id, @Cast("H5I_type_t") int id_type);
+public static native @Cast("H5I_type_t") int H5Iget_type(@Cast("hid_t") long id);
+public static native @Cast("hid_t") long H5Iget_file_id(@Cast("hid_t") long id);
+public static native @Cast("ssize_t") long H5Iget_name(@Cast("hid_t") long id, @Cast("char*") BytePointer name, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Iget_name(@Cast("hid_t") long id, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Iget_name(@Cast("hid_t") long id, @Cast("char*") byte[] name, @Cast("size_t") long size);
+public static native int H5Iinc_ref(@Cast("hid_t") long id);
+public static native int H5Idec_ref(@Cast("hid_t") long id);
+public static native int H5Iget_ref(@Cast("hid_t") long id);
 public static native @Cast("H5I_type_t") int H5Iregister_type(@Cast("size_t") long hash_size, @Cast("unsigned") int reserved, H5I_free_t free_func);
 public static native @Cast("herr_t") int H5Iclear_type(@Cast("H5I_type_t") int type, @Cast("hbool_t") boolean force);
 public static native @Cast("herr_t") int H5Idestroy_type(@Cast("H5I_type_t") int type);
@@ -1150,7 +1147,7 @@ public static native @Cast("herr_t") int H5Inmembers(@Cast("H5I_type_t") int typ
 public static native @Cast("herr_t") int H5Inmembers(@Cast("H5I_type_t") int type, @Cast("hsize_t*") LongBuffer num_members);
 public static native @Cast("herr_t") int H5Inmembers(@Cast("H5I_type_t") int type, @Cast("hsize_t*") long[] num_members);
 public static native @Cast("htri_t") int H5Itype_exists(@Cast("H5I_type_t") int type);
-public static native @Cast("htri_t") int H5Iis_valid(@Cast("hid_t") int id);
+public static native @Cast("htri_t") int H5Iis_valid(@Cast("hid_t") long id);
 
 // #ifdef __cplusplus
 // #endif
@@ -1398,9 +1395,9 @@ public static class H5T_conv_t extends FunctionPointer {
     public    H5T_conv_t(Pointer p) { super(p); }
     protected H5T_conv_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int src_id, @Cast("hid_t") int dst_id, H5T_cdata_t cdata,
+    public native @Cast("herr_t") int call(@Cast("hid_t") long src_id, @Cast("hid_t") long dst_id, H5T_cdata_t cdata,
       @Cast("size_t") long nelmts, @Cast("size_t") long buf_stride, @Cast("size_t") long bkg_stride, Pointer buf,
-      Pointer bkg, @Cast("hid_t") int dset_xfer_plist);
+      Pointer bkg, @Cast("hid_t") long dset_xfer_plist);
 }
 
 /* Exception handler.  If an exception like overflow happenes during conversion,
@@ -1413,7 +1410,7 @@ public static class H5T_conv_except_func_t extends FunctionPointer {
     protected H5T_conv_except_func_t() { allocate(); }
     private native void allocate();
     public native @Cast("H5T_conv_ret_t") int call(@Cast("H5T_conv_except_t") int except_type,
-    @Cast("hid_t") int src_id, @Cast("hid_t") int dst_id, Pointer src_buf, Pointer dst_buf, Pointer user_data);
+    @Cast("hid_t") long src_id, @Cast("hid_t") long dst_id, Pointer src_buf, Pointer dst_buf, Pointer user_data);
 }
 
 /* When this header is included from a private header, don't make calls to H5open() */
@@ -1435,10 +1432,10 @@ public static native @MemberGetter int H5T_IEEE_F64BE();
 public static final int H5T_IEEE_F64BE = H5T_IEEE_F64BE();
 public static native @MemberGetter int H5T_IEEE_F64LE();
 public static final int H5T_IEEE_F64LE = H5T_IEEE_F64LE();
-public static native @Cast("hid_t") int H5T_IEEE_F32BE_g(); public static native void H5T_IEEE_F32BE_g(int H5T_IEEE_F32BE_g);
-public static native @Cast("hid_t") int H5T_IEEE_F32LE_g(); public static native void H5T_IEEE_F32LE_g(int H5T_IEEE_F32LE_g);
-public static native @Cast("hid_t") int H5T_IEEE_F64BE_g(); public static native void H5T_IEEE_F64BE_g(int H5T_IEEE_F64BE_g);
-public static native @Cast("hid_t") int H5T_IEEE_F64LE_g(); public static native void H5T_IEEE_F64LE_g(int H5T_IEEE_F64LE_g);
+public static native @Cast("hid_t") long H5T_IEEE_F32BE_g(); public static native void H5T_IEEE_F32BE_g(long H5T_IEEE_F32BE_g);
+public static native @Cast("hid_t") long H5T_IEEE_F32LE_g(); public static native void H5T_IEEE_F32LE_g(long H5T_IEEE_F32LE_g);
+public static native @Cast("hid_t") long H5T_IEEE_F64BE_g(); public static native void H5T_IEEE_F64BE_g(long H5T_IEEE_F64BE_g);
+public static native @Cast("hid_t") long H5T_IEEE_F64LE_g(); public static native void H5T_IEEE_F64LE_g(long H5T_IEEE_F64LE_g);
 
 /*
  * These are "standard" types.  For instance, signed (2's complement) and
@@ -1496,32 +1493,32 @@ public static native @MemberGetter int H5T_STD_REF_OBJ();
 public static final int H5T_STD_REF_OBJ = H5T_STD_REF_OBJ();
 public static native @MemberGetter int H5T_STD_REF_DSETREG();
 public static final int H5T_STD_REF_DSETREG = H5T_STD_REF_DSETREG();
-public static native @Cast("hid_t") int H5T_STD_I8BE_g(); public static native void H5T_STD_I8BE_g(int H5T_STD_I8BE_g);
-public static native @Cast("hid_t") int H5T_STD_I8LE_g(); public static native void H5T_STD_I8LE_g(int H5T_STD_I8LE_g);
-public static native @Cast("hid_t") int H5T_STD_I16BE_g(); public static native void H5T_STD_I16BE_g(int H5T_STD_I16BE_g);
-public static native @Cast("hid_t") int H5T_STD_I16LE_g(); public static native void H5T_STD_I16LE_g(int H5T_STD_I16LE_g);
-public static native @Cast("hid_t") int H5T_STD_I32BE_g(); public static native void H5T_STD_I32BE_g(int H5T_STD_I32BE_g);
-public static native @Cast("hid_t") int H5T_STD_I32LE_g(); public static native void H5T_STD_I32LE_g(int H5T_STD_I32LE_g);
-public static native @Cast("hid_t") int H5T_STD_I64BE_g(); public static native void H5T_STD_I64BE_g(int H5T_STD_I64BE_g);
-public static native @Cast("hid_t") int H5T_STD_I64LE_g(); public static native void H5T_STD_I64LE_g(int H5T_STD_I64LE_g);
-public static native @Cast("hid_t") int H5T_STD_U8BE_g(); public static native void H5T_STD_U8BE_g(int H5T_STD_U8BE_g);
-public static native @Cast("hid_t") int H5T_STD_U8LE_g(); public static native void H5T_STD_U8LE_g(int H5T_STD_U8LE_g);
-public static native @Cast("hid_t") int H5T_STD_U16BE_g(); public static native void H5T_STD_U16BE_g(int H5T_STD_U16BE_g);
-public static native @Cast("hid_t") int H5T_STD_U16LE_g(); public static native void H5T_STD_U16LE_g(int H5T_STD_U16LE_g);
-public static native @Cast("hid_t") int H5T_STD_U32BE_g(); public static native void H5T_STD_U32BE_g(int H5T_STD_U32BE_g);
-public static native @Cast("hid_t") int H5T_STD_U32LE_g(); public static native void H5T_STD_U32LE_g(int H5T_STD_U32LE_g);
-public static native @Cast("hid_t") int H5T_STD_U64BE_g(); public static native void H5T_STD_U64BE_g(int H5T_STD_U64BE_g);
-public static native @Cast("hid_t") int H5T_STD_U64LE_g(); public static native void H5T_STD_U64LE_g(int H5T_STD_U64LE_g);
-public static native @Cast("hid_t") int H5T_STD_B8BE_g(); public static native void H5T_STD_B8BE_g(int H5T_STD_B8BE_g);
-public static native @Cast("hid_t") int H5T_STD_B8LE_g(); public static native void H5T_STD_B8LE_g(int H5T_STD_B8LE_g);
-public static native @Cast("hid_t") int H5T_STD_B16BE_g(); public static native void H5T_STD_B16BE_g(int H5T_STD_B16BE_g);
-public static native @Cast("hid_t") int H5T_STD_B16LE_g(); public static native void H5T_STD_B16LE_g(int H5T_STD_B16LE_g);
-public static native @Cast("hid_t") int H5T_STD_B32BE_g(); public static native void H5T_STD_B32BE_g(int H5T_STD_B32BE_g);
-public static native @Cast("hid_t") int H5T_STD_B32LE_g(); public static native void H5T_STD_B32LE_g(int H5T_STD_B32LE_g);
-public static native @Cast("hid_t") int H5T_STD_B64BE_g(); public static native void H5T_STD_B64BE_g(int H5T_STD_B64BE_g);
-public static native @Cast("hid_t") int H5T_STD_B64LE_g(); public static native void H5T_STD_B64LE_g(int H5T_STD_B64LE_g);
-public static native @Cast("hid_t") int H5T_STD_REF_OBJ_g(); public static native void H5T_STD_REF_OBJ_g(int H5T_STD_REF_OBJ_g);
-public static native @Cast("hid_t") int H5T_STD_REF_DSETREG_g(); public static native void H5T_STD_REF_DSETREG_g(int H5T_STD_REF_DSETREG_g);
+public static native @Cast("hid_t") long H5T_STD_I8BE_g(); public static native void H5T_STD_I8BE_g(long H5T_STD_I8BE_g);
+public static native @Cast("hid_t") long H5T_STD_I8LE_g(); public static native void H5T_STD_I8LE_g(long H5T_STD_I8LE_g);
+public static native @Cast("hid_t") long H5T_STD_I16BE_g(); public static native void H5T_STD_I16BE_g(long H5T_STD_I16BE_g);
+public static native @Cast("hid_t") long H5T_STD_I16LE_g(); public static native void H5T_STD_I16LE_g(long H5T_STD_I16LE_g);
+public static native @Cast("hid_t") long H5T_STD_I32BE_g(); public static native void H5T_STD_I32BE_g(long H5T_STD_I32BE_g);
+public static native @Cast("hid_t") long H5T_STD_I32LE_g(); public static native void H5T_STD_I32LE_g(long H5T_STD_I32LE_g);
+public static native @Cast("hid_t") long H5T_STD_I64BE_g(); public static native void H5T_STD_I64BE_g(long H5T_STD_I64BE_g);
+public static native @Cast("hid_t") long H5T_STD_I64LE_g(); public static native void H5T_STD_I64LE_g(long H5T_STD_I64LE_g);
+public static native @Cast("hid_t") long H5T_STD_U8BE_g(); public static native void H5T_STD_U8BE_g(long H5T_STD_U8BE_g);
+public static native @Cast("hid_t") long H5T_STD_U8LE_g(); public static native void H5T_STD_U8LE_g(long H5T_STD_U8LE_g);
+public static native @Cast("hid_t") long H5T_STD_U16BE_g(); public static native void H5T_STD_U16BE_g(long H5T_STD_U16BE_g);
+public static native @Cast("hid_t") long H5T_STD_U16LE_g(); public static native void H5T_STD_U16LE_g(long H5T_STD_U16LE_g);
+public static native @Cast("hid_t") long H5T_STD_U32BE_g(); public static native void H5T_STD_U32BE_g(long H5T_STD_U32BE_g);
+public static native @Cast("hid_t") long H5T_STD_U32LE_g(); public static native void H5T_STD_U32LE_g(long H5T_STD_U32LE_g);
+public static native @Cast("hid_t") long H5T_STD_U64BE_g(); public static native void H5T_STD_U64BE_g(long H5T_STD_U64BE_g);
+public static native @Cast("hid_t") long H5T_STD_U64LE_g(); public static native void H5T_STD_U64LE_g(long H5T_STD_U64LE_g);
+public static native @Cast("hid_t") long H5T_STD_B8BE_g(); public static native void H5T_STD_B8BE_g(long H5T_STD_B8BE_g);
+public static native @Cast("hid_t") long H5T_STD_B8LE_g(); public static native void H5T_STD_B8LE_g(long H5T_STD_B8LE_g);
+public static native @Cast("hid_t") long H5T_STD_B16BE_g(); public static native void H5T_STD_B16BE_g(long H5T_STD_B16BE_g);
+public static native @Cast("hid_t") long H5T_STD_B16LE_g(); public static native void H5T_STD_B16LE_g(long H5T_STD_B16LE_g);
+public static native @Cast("hid_t") long H5T_STD_B32BE_g(); public static native void H5T_STD_B32BE_g(long H5T_STD_B32BE_g);
+public static native @Cast("hid_t") long H5T_STD_B32LE_g(); public static native void H5T_STD_B32LE_g(long H5T_STD_B32LE_g);
+public static native @Cast("hid_t") long H5T_STD_B64BE_g(); public static native void H5T_STD_B64BE_g(long H5T_STD_B64BE_g);
+public static native @Cast("hid_t") long H5T_STD_B64LE_g(); public static native void H5T_STD_B64LE_g(long H5T_STD_B64LE_g);
+public static native @Cast("hid_t") long H5T_STD_REF_OBJ_g(); public static native void H5T_STD_REF_OBJ_g(long H5T_STD_REF_OBJ_g);
+public static native @Cast("hid_t") long H5T_STD_REF_DSETREG_g(); public static native void H5T_STD_REF_DSETREG_g(long H5T_STD_REF_DSETREG_g);
 
 /*
  * Types which are particular to Unix.
@@ -1534,10 +1531,10 @@ public static native @MemberGetter int H5T_UNIX_D64BE();
 public static final int H5T_UNIX_D64BE = H5T_UNIX_D64BE();
 public static native @MemberGetter int H5T_UNIX_D64LE();
 public static final int H5T_UNIX_D64LE = H5T_UNIX_D64LE();
-public static native @Cast("hid_t") int H5T_UNIX_D32BE_g(); public static native void H5T_UNIX_D32BE_g(int H5T_UNIX_D32BE_g);
-public static native @Cast("hid_t") int H5T_UNIX_D32LE_g(); public static native void H5T_UNIX_D32LE_g(int H5T_UNIX_D32LE_g);
-public static native @Cast("hid_t") int H5T_UNIX_D64BE_g(); public static native void H5T_UNIX_D64BE_g(int H5T_UNIX_D64BE_g);
-public static native @Cast("hid_t") int H5T_UNIX_D64LE_g(); public static native void H5T_UNIX_D64LE_g(int H5T_UNIX_D64LE_g);
+public static native @Cast("hid_t") long H5T_UNIX_D32BE_g(); public static native void H5T_UNIX_D32BE_g(long H5T_UNIX_D32BE_g);
+public static native @Cast("hid_t") long H5T_UNIX_D32LE_g(); public static native void H5T_UNIX_D32LE_g(long H5T_UNIX_D32LE_g);
+public static native @Cast("hid_t") long H5T_UNIX_D64BE_g(); public static native void H5T_UNIX_D64BE_g(long H5T_UNIX_D64BE_g);
+public static native @Cast("hid_t") long H5T_UNIX_D64LE_g(); public static native void H5T_UNIX_D64LE_g(long H5T_UNIX_D64LE_g);
 
 /*
  * Types particular to the C language.  String types use `bytes' instead
@@ -1545,14 +1542,14 @@ public static native @Cast("hid_t") int H5T_UNIX_D64LE_g(); public static native
  */
 public static native @MemberGetter int H5T_C_S1();
 public static final int H5T_C_S1 = H5T_C_S1();
-public static native @Cast("hid_t") int H5T_C_S1_g(); public static native void H5T_C_S1_g(int H5T_C_S1_g);
+public static native @Cast("hid_t") long H5T_C_S1_g(); public static native void H5T_C_S1_g(long H5T_C_S1_g);
 
 /*
  * Types particular to Fortran.
  */
 public static native @MemberGetter int H5T_FORTRAN_S1();
 public static final int H5T_FORTRAN_S1 = H5T_FORTRAN_S1();
-public static native @Cast("hid_t") int H5T_FORTRAN_S1_g(); public static native void H5T_FORTRAN_S1_g(int H5T_FORTRAN_S1_g);
+public static native @Cast("hid_t") long H5T_FORTRAN_S1_g(); public static native void H5T_FORTRAN_S1_g(long H5T_FORTRAN_S1_g);
 
 /*
  * These types are for Intel CPU's.  They are little endian with IEEE
@@ -1660,8 +1657,8 @@ public static native @MemberGetter int H5T_VAX_F32();
 public static final int H5T_VAX_F32 = H5T_VAX_F32();
 public static native @MemberGetter int H5T_VAX_F64();
 public static final int H5T_VAX_F64 = H5T_VAX_F64();
-public static native @Cast("hid_t") int H5T_VAX_F32_g(); public static native void H5T_VAX_F32_g(int H5T_VAX_F32_g);
-public static native @Cast("hid_t") int H5T_VAX_F64_g(); public static native void H5T_VAX_F64_g(int H5T_VAX_F64_g);
+public static native @Cast("hid_t") long H5T_VAX_F32_g(); public static native void H5T_VAX_F32_g(long H5T_VAX_F32_g);
+public static native @Cast("hid_t") long H5T_VAX_F64_g(); public static native void H5T_VAX_F64_g(long H5T_VAX_F64_g);
 
 /*
  * The predefined native types. These are the types detected by H5detect and
@@ -1722,31 +1719,31 @@ public static native @MemberGetter int H5T_NATIVE_HERR();
 public static final int H5T_NATIVE_HERR = H5T_NATIVE_HERR();
 public static native @MemberGetter int H5T_NATIVE_HBOOL();
 public static final int H5T_NATIVE_HBOOL = H5T_NATIVE_HBOOL();
-public static native @Cast("hid_t") int H5T_NATIVE_SCHAR_g(); public static native void H5T_NATIVE_SCHAR_g(int H5T_NATIVE_SCHAR_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UCHAR_g(); public static native void H5T_NATIVE_UCHAR_g(int H5T_NATIVE_UCHAR_g);
-public static native @Cast("hid_t") int H5T_NATIVE_SHORT_g(); public static native void H5T_NATIVE_SHORT_g(int H5T_NATIVE_SHORT_g);
-public static native @Cast("hid_t") int H5T_NATIVE_USHORT_g(); public static native void H5T_NATIVE_USHORT_g(int H5T_NATIVE_USHORT_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_g(); public static native void H5T_NATIVE_INT_g(int H5T_NATIVE_INT_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_g(); public static native void H5T_NATIVE_UINT_g(int H5T_NATIVE_UINT_g);
-public static native @Cast("hid_t") int H5T_NATIVE_LONG_g(); public static native void H5T_NATIVE_LONG_g(int H5T_NATIVE_LONG_g);
-public static native @Cast("hid_t") int H5T_NATIVE_ULONG_g(); public static native void H5T_NATIVE_ULONG_g(int H5T_NATIVE_ULONG_g);
-public static native @Cast("hid_t") int H5T_NATIVE_LLONG_g(); public static native void H5T_NATIVE_LLONG_g(int H5T_NATIVE_LLONG_g);
-public static native @Cast("hid_t") int H5T_NATIVE_ULLONG_g(); public static native void H5T_NATIVE_ULLONG_g(int H5T_NATIVE_ULLONG_g);
-public static native @Cast("hid_t") int H5T_NATIVE_FLOAT_g(); public static native void H5T_NATIVE_FLOAT_g(int H5T_NATIVE_FLOAT_g);
-public static native @Cast("hid_t") int H5T_NATIVE_DOUBLE_g(); public static native void H5T_NATIVE_DOUBLE_g(int H5T_NATIVE_DOUBLE_g);
+public static native @Cast("hid_t") long H5T_NATIVE_SCHAR_g(); public static native void H5T_NATIVE_SCHAR_g(long H5T_NATIVE_SCHAR_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UCHAR_g(); public static native void H5T_NATIVE_UCHAR_g(long H5T_NATIVE_UCHAR_g);
+public static native @Cast("hid_t") long H5T_NATIVE_SHORT_g(); public static native void H5T_NATIVE_SHORT_g(long H5T_NATIVE_SHORT_g);
+public static native @Cast("hid_t") long H5T_NATIVE_USHORT_g(); public static native void H5T_NATIVE_USHORT_g(long H5T_NATIVE_USHORT_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_g(); public static native void H5T_NATIVE_INT_g(long H5T_NATIVE_INT_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_g(); public static native void H5T_NATIVE_UINT_g(long H5T_NATIVE_UINT_g);
+public static native @Cast("hid_t") long H5T_NATIVE_LONG_g(); public static native void H5T_NATIVE_LONG_g(long H5T_NATIVE_LONG_g);
+public static native @Cast("hid_t") long H5T_NATIVE_ULONG_g(); public static native void H5T_NATIVE_ULONG_g(long H5T_NATIVE_ULONG_g);
+public static native @Cast("hid_t") long H5T_NATIVE_LLONG_g(); public static native void H5T_NATIVE_LLONG_g(long H5T_NATIVE_LLONG_g);
+public static native @Cast("hid_t") long H5T_NATIVE_ULLONG_g(); public static native void H5T_NATIVE_ULLONG_g(long H5T_NATIVE_ULLONG_g);
+public static native @Cast("hid_t") long H5T_NATIVE_FLOAT_g(); public static native void H5T_NATIVE_FLOAT_g(long H5T_NATIVE_FLOAT_g);
+public static native @Cast("hid_t") long H5T_NATIVE_DOUBLE_g(); public static native void H5T_NATIVE_DOUBLE_g(long H5T_NATIVE_DOUBLE_g);
 // #if H5_SIZEOF_LONG_DOUBLE !=0
-public static native @Cast("hid_t") int H5T_NATIVE_LDOUBLE_g(); public static native void H5T_NATIVE_LDOUBLE_g(int H5T_NATIVE_LDOUBLE_g);
+public static native @Cast("hid_t") long H5T_NATIVE_LDOUBLE_g(); public static native void H5T_NATIVE_LDOUBLE_g(long H5T_NATIVE_LDOUBLE_g);
 // #endif
-public static native @Cast("hid_t") int H5T_NATIVE_B8_g(); public static native void H5T_NATIVE_B8_g(int H5T_NATIVE_B8_g);
-public static native @Cast("hid_t") int H5T_NATIVE_B16_g(); public static native void H5T_NATIVE_B16_g(int H5T_NATIVE_B16_g);
-public static native @Cast("hid_t") int H5T_NATIVE_B32_g(); public static native void H5T_NATIVE_B32_g(int H5T_NATIVE_B32_g);
-public static native @Cast("hid_t") int H5T_NATIVE_B64_g(); public static native void H5T_NATIVE_B64_g(int H5T_NATIVE_B64_g);
-public static native @Cast("hid_t") int H5T_NATIVE_OPAQUE_g(); public static native void H5T_NATIVE_OPAQUE_g(int H5T_NATIVE_OPAQUE_g);
-public static native @Cast("hid_t") int H5T_NATIVE_HADDR_g(); public static native void H5T_NATIVE_HADDR_g(int H5T_NATIVE_HADDR_g);
-public static native @Cast("hid_t") int H5T_NATIVE_HSIZE_g(); public static native void H5T_NATIVE_HSIZE_g(int H5T_NATIVE_HSIZE_g);
-public static native @Cast("hid_t") int H5T_NATIVE_HSSIZE_g(); public static native void H5T_NATIVE_HSSIZE_g(int H5T_NATIVE_HSSIZE_g);
-public static native @Cast("hid_t") int H5T_NATIVE_HERR_g(); public static native void H5T_NATIVE_HERR_g(int H5T_NATIVE_HERR_g);
-public static native @Cast("hid_t") int H5T_NATIVE_HBOOL_g(); public static native void H5T_NATIVE_HBOOL_g(int H5T_NATIVE_HBOOL_g);
+public static native @Cast("hid_t") long H5T_NATIVE_B8_g(); public static native void H5T_NATIVE_B8_g(long H5T_NATIVE_B8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_B16_g(); public static native void H5T_NATIVE_B16_g(long H5T_NATIVE_B16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_B32_g(); public static native void H5T_NATIVE_B32_g(long H5T_NATIVE_B32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_B64_g(); public static native void H5T_NATIVE_B64_g(long H5T_NATIVE_B64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_OPAQUE_g(); public static native void H5T_NATIVE_OPAQUE_g(long H5T_NATIVE_OPAQUE_g);
+public static native @Cast("hid_t") long H5T_NATIVE_HADDR_g(); public static native void H5T_NATIVE_HADDR_g(long H5T_NATIVE_HADDR_g);
+public static native @Cast("hid_t") long H5T_NATIVE_HSIZE_g(); public static native void H5T_NATIVE_HSIZE_g(long H5T_NATIVE_HSIZE_g);
+public static native @Cast("hid_t") long H5T_NATIVE_HSSIZE_g(); public static native void H5T_NATIVE_HSSIZE_g(long H5T_NATIVE_HSSIZE_g);
+public static native @Cast("hid_t") long H5T_NATIVE_HERR_g(); public static native void H5T_NATIVE_HERR_g(long H5T_NATIVE_HERR_g);
+public static native @Cast("hid_t") long H5T_NATIVE_HBOOL_g(); public static native void H5T_NATIVE_HBOOL_g(long H5T_NATIVE_HBOOL_g);
 
 /* C9x integer types */
 public static native @MemberGetter int H5T_NATIVE_INT8();
@@ -1761,12 +1758,12 @@ public static native @MemberGetter int H5T_NATIVE_INT_FAST8();
 public static final int H5T_NATIVE_INT_FAST8 = H5T_NATIVE_INT_FAST8();
 public static native @MemberGetter int H5T_NATIVE_UINT_FAST8();
 public static final int H5T_NATIVE_UINT_FAST8 = H5T_NATIVE_UINT_FAST8();
-public static native @Cast("hid_t") int H5T_NATIVE_INT8_g(); public static native void H5T_NATIVE_INT8_g(int H5T_NATIVE_INT8_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT8_g(); public static native void H5T_NATIVE_UINT8_g(int H5T_NATIVE_UINT8_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_LEAST8_g(); public static native void H5T_NATIVE_INT_LEAST8_g(int H5T_NATIVE_INT_LEAST8_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_LEAST8_g(); public static native void H5T_NATIVE_UINT_LEAST8_g(int H5T_NATIVE_UINT_LEAST8_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_FAST8_g(); public static native void H5T_NATIVE_INT_FAST8_g(int H5T_NATIVE_INT_FAST8_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_FAST8_g(); public static native void H5T_NATIVE_UINT_FAST8_g(int H5T_NATIVE_UINT_FAST8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT8_g(); public static native void H5T_NATIVE_INT8_g(long H5T_NATIVE_INT8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT8_g(); public static native void H5T_NATIVE_UINT8_g(long H5T_NATIVE_UINT8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST8_g(); public static native void H5T_NATIVE_INT_LEAST8_g(long H5T_NATIVE_INT_LEAST8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_LEAST8_g(); public static native void H5T_NATIVE_UINT_LEAST8_g(long H5T_NATIVE_UINT_LEAST8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_FAST8_g(); public static native void H5T_NATIVE_INT_FAST8_g(long H5T_NATIVE_INT_FAST8_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST8_g(); public static native void H5T_NATIVE_UINT_FAST8_g(long H5T_NATIVE_UINT_FAST8_g);
 
 public static native @MemberGetter int H5T_NATIVE_INT16();
 public static final int H5T_NATIVE_INT16 = H5T_NATIVE_INT16();
@@ -1780,12 +1777,12 @@ public static native @MemberGetter int H5T_NATIVE_INT_FAST16();
 public static final int H5T_NATIVE_INT_FAST16 = H5T_NATIVE_INT_FAST16();
 public static native @MemberGetter int H5T_NATIVE_UINT_FAST16();
 public static final int H5T_NATIVE_UINT_FAST16 = H5T_NATIVE_UINT_FAST16();
-public static native @Cast("hid_t") int H5T_NATIVE_INT16_g(); public static native void H5T_NATIVE_INT16_g(int H5T_NATIVE_INT16_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT16_g(); public static native void H5T_NATIVE_UINT16_g(int H5T_NATIVE_UINT16_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_LEAST16_g(); public static native void H5T_NATIVE_INT_LEAST16_g(int H5T_NATIVE_INT_LEAST16_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_LEAST16_g(); public static native void H5T_NATIVE_UINT_LEAST16_g(int H5T_NATIVE_UINT_LEAST16_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_FAST16_g(); public static native void H5T_NATIVE_INT_FAST16_g(int H5T_NATIVE_INT_FAST16_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_FAST16_g(); public static native void H5T_NATIVE_UINT_FAST16_g(int H5T_NATIVE_UINT_FAST16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT16_g(); public static native void H5T_NATIVE_INT16_g(long H5T_NATIVE_INT16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT16_g(); public static native void H5T_NATIVE_UINT16_g(long H5T_NATIVE_UINT16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST16_g(); public static native void H5T_NATIVE_INT_LEAST16_g(long H5T_NATIVE_INT_LEAST16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_LEAST16_g(); public static native void H5T_NATIVE_UINT_LEAST16_g(long H5T_NATIVE_UINT_LEAST16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_FAST16_g(); public static native void H5T_NATIVE_INT_FAST16_g(long H5T_NATIVE_INT_FAST16_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST16_g(); public static native void H5T_NATIVE_UINT_FAST16_g(long H5T_NATIVE_UINT_FAST16_g);
 
 public static native @MemberGetter int H5T_NATIVE_INT32();
 public static final int H5T_NATIVE_INT32 = H5T_NATIVE_INT32();
@@ -1799,12 +1796,12 @@ public static native @MemberGetter int H5T_NATIVE_INT_FAST32();
 public static final int H5T_NATIVE_INT_FAST32 = H5T_NATIVE_INT_FAST32();
 public static native @MemberGetter int H5T_NATIVE_UINT_FAST32();
 public static final int H5T_NATIVE_UINT_FAST32 = H5T_NATIVE_UINT_FAST32();
-public static native @Cast("hid_t") int H5T_NATIVE_INT32_g(); public static native void H5T_NATIVE_INT32_g(int H5T_NATIVE_INT32_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT32_g(); public static native void H5T_NATIVE_UINT32_g(int H5T_NATIVE_UINT32_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_LEAST32_g(); public static native void H5T_NATIVE_INT_LEAST32_g(int H5T_NATIVE_INT_LEAST32_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_LEAST32_g(); public static native void H5T_NATIVE_UINT_LEAST32_g(int H5T_NATIVE_UINT_LEAST32_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_FAST32_g(); public static native void H5T_NATIVE_INT_FAST32_g(int H5T_NATIVE_INT_FAST32_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_FAST32_g(); public static native void H5T_NATIVE_UINT_FAST32_g(int H5T_NATIVE_UINT_FAST32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT32_g(); public static native void H5T_NATIVE_INT32_g(long H5T_NATIVE_INT32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT32_g(); public static native void H5T_NATIVE_UINT32_g(long H5T_NATIVE_UINT32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST32_g(); public static native void H5T_NATIVE_INT_LEAST32_g(long H5T_NATIVE_INT_LEAST32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_LEAST32_g(); public static native void H5T_NATIVE_UINT_LEAST32_g(long H5T_NATIVE_UINT_LEAST32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_FAST32_g(); public static native void H5T_NATIVE_INT_FAST32_g(long H5T_NATIVE_INT_FAST32_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST32_g(); public static native void H5T_NATIVE_UINT_FAST32_g(long H5T_NATIVE_UINT_FAST32_g);
 
 public static native @MemberGetter int H5T_NATIVE_INT64();
 public static final int H5T_NATIVE_INT64 = H5T_NATIVE_INT64();
@@ -1818,138 +1815,138 @@ public static native @MemberGetter int H5T_NATIVE_INT_FAST64();
 public static final int H5T_NATIVE_INT_FAST64 = H5T_NATIVE_INT_FAST64();
 public static native @MemberGetter int H5T_NATIVE_UINT_FAST64();
 public static final int H5T_NATIVE_UINT_FAST64 = H5T_NATIVE_UINT_FAST64();
-public static native @Cast("hid_t") int H5T_NATIVE_INT64_g(); public static native void H5T_NATIVE_INT64_g(int H5T_NATIVE_INT64_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT64_g(); public static native void H5T_NATIVE_UINT64_g(int H5T_NATIVE_UINT64_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_LEAST64_g(); public static native void H5T_NATIVE_INT_LEAST64_g(int H5T_NATIVE_INT_LEAST64_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_LEAST64_g(); public static native void H5T_NATIVE_UINT_LEAST64_g(int H5T_NATIVE_UINT_LEAST64_g);
-public static native @Cast("hid_t") int H5T_NATIVE_INT_FAST64_g(); public static native void H5T_NATIVE_INT_FAST64_g(int H5T_NATIVE_INT_FAST64_g);
-public static native @Cast("hid_t") int H5T_NATIVE_UINT_FAST64_g(); public static native void H5T_NATIVE_UINT_FAST64_g(int H5T_NATIVE_UINT_FAST64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT64_g(); public static native void H5T_NATIVE_INT64_g(long H5T_NATIVE_INT64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT64_g(); public static native void H5T_NATIVE_UINT64_g(long H5T_NATIVE_UINT64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_LEAST64_g(); public static native void H5T_NATIVE_INT_LEAST64_g(long H5T_NATIVE_INT_LEAST64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_LEAST64_g(); public static native void H5T_NATIVE_UINT_LEAST64_g(long H5T_NATIVE_UINT_LEAST64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_INT_FAST64_g(); public static native void H5T_NATIVE_INT_FAST64_g(long H5T_NATIVE_INT_FAST64_g);
+public static native @Cast("hid_t") long H5T_NATIVE_UINT_FAST64_g(); public static native void H5T_NATIVE_UINT_FAST64_g(long H5T_NATIVE_UINT_FAST64_g);
 
 /* Operations defined on all datatypes */
-public static native @Cast("hid_t") int H5Tcreate(@Cast("H5T_class_t") int type, @Cast("size_t") long size);
-public static native @Cast("hid_t") int H5Tcopy(@Cast("hid_t") int type_id);
-public static native @Cast("herr_t") int H5Tclose(@Cast("hid_t") int type_id);
-public static native @Cast("htri_t") int H5Tequal(@Cast("hid_t") int type1_id, @Cast("hid_t") int type2_id);
-public static native @Cast("herr_t") int H5Tlock(@Cast("hid_t") int type_id);
-public static native @Cast("herr_t") int H5Tcommit2(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int lcpl_id, @Cast("hid_t") int tcpl_id, @Cast("hid_t") int tapl_id);
-public static native @Cast("herr_t") int H5Tcommit2(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int lcpl_id, @Cast("hid_t") int tcpl_id, @Cast("hid_t") int tapl_id);
-public static native @Cast("hid_t") int H5Topen2(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int tapl_id);
-public static native @Cast("hid_t") int H5Topen2(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int tapl_id);
-public static native @Cast("herr_t") int H5Tcommit_anon(@Cast("hid_t") int loc_id, @Cast("hid_t") int type_id, @Cast("hid_t") int tcpl_id, @Cast("hid_t") int tapl_id);
-public static native @Cast("hid_t") int H5Tget_create_plist(@Cast("hid_t") int type_id);
-public static native @Cast("htri_t") int H5Tcommitted(@Cast("hid_t") int type_id);
-public static native @Cast("herr_t") int H5Tencode(@Cast("hid_t") int obj_id, Pointer buf, @Cast("size_t*") SizeTPointer nalloc);
-public static native @Cast("hid_t") int H5Tdecode(@Const Pointer buf);
-public static native @Cast("herr_t") int H5Tflush(@Cast("hid_t") int type_id);
-public static native @Cast("herr_t") int H5Trefresh(@Cast("hid_t") int type_id);
+public static native @Cast("hid_t") long H5Tcreate(@Cast("H5T_class_t") int type, @Cast("size_t") long size);
+public static native @Cast("hid_t") long H5Tcopy(@Cast("hid_t") long type_id);
+public static native @Cast("herr_t") int H5Tclose(@Cast("hid_t") long type_id);
+public static native @Cast("htri_t") int H5Tequal(@Cast("hid_t") long type1_id, @Cast("hid_t") long type2_id);
+public static native @Cast("herr_t") int H5Tlock(@Cast("hid_t") long type_id);
+public static native @Cast("herr_t") int H5Tcommit2(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long lcpl_id, @Cast("hid_t") long tcpl_id, @Cast("hid_t") long tapl_id);
+public static native @Cast("herr_t") int H5Tcommit2(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long lcpl_id, @Cast("hid_t") long tcpl_id, @Cast("hid_t") long tapl_id);
+public static native @Cast("hid_t") long H5Topen2(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long tapl_id);
+public static native @Cast("hid_t") long H5Topen2(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long tapl_id);
+public static native @Cast("herr_t") int H5Tcommit_anon(@Cast("hid_t") long loc_id, @Cast("hid_t") long type_id, @Cast("hid_t") long tcpl_id, @Cast("hid_t") long tapl_id);
+public static native @Cast("hid_t") long H5Tget_create_plist(@Cast("hid_t") long type_id);
+public static native @Cast("htri_t") int H5Tcommitted(@Cast("hid_t") long type_id);
+public static native @Cast("herr_t") int H5Tencode(@Cast("hid_t") long obj_id, Pointer buf, @Cast("size_t*") SizeTPointer nalloc);
+public static native @Cast("hid_t") long H5Tdecode(@Const Pointer buf);
+public static native @Cast("herr_t") int H5Tflush(@Cast("hid_t") long type_id);
+public static native @Cast("herr_t") int H5Trefresh(@Cast("hid_t") long type_id);
 
 /* Operations defined on compound datatypes */
-public static native @Cast("herr_t") int H5Tinsert(@Cast("hid_t") int parent_id, @Cast("const char*") BytePointer name, @Cast("size_t") long offset,
-			 @Cast("hid_t") int member_id);
-public static native @Cast("herr_t") int H5Tinsert(@Cast("hid_t") int parent_id, String name, @Cast("size_t") long offset,
-			 @Cast("hid_t") int member_id);
-public static native @Cast("herr_t") int H5Tpack(@Cast("hid_t") int type_id);
+public static native @Cast("herr_t") int H5Tinsert(@Cast("hid_t") long parent_id, @Cast("const char*") BytePointer name, @Cast("size_t") long offset,
+			 @Cast("hid_t") long member_id);
+public static native @Cast("herr_t") int H5Tinsert(@Cast("hid_t") long parent_id, String name, @Cast("size_t") long offset,
+			 @Cast("hid_t") long member_id);
+public static native @Cast("herr_t") int H5Tpack(@Cast("hid_t") long type_id);
 
 /* Operations defined on enumeration datatypes */
-public static native @Cast("hid_t") int H5Tenum_create(@Cast("hid_t") int base_id);
-public static native @Cast("herr_t") int H5Tenum_insert(@Cast("hid_t") int type, @Cast("const char*") BytePointer name, @Const Pointer value);
-public static native @Cast("herr_t") int H5Tenum_insert(@Cast("hid_t") int type, String name, @Const Pointer value);
-public static native @Cast("herr_t") int H5Tenum_nameof(@Cast("hid_t") int type, @Const Pointer value, @Cast("char*") BytePointer name,
+public static native @Cast("hid_t") long H5Tenum_create(@Cast("hid_t") long base_id);
+public static native @Cast("herr_t") int H5Tenum_insert(@Cast("hid_t") long type, @Cast("const char*") BytePointer name, @Const Pointer value);
+public static native @Cast("herr_t") int H5Tenum_insert(@Cast("hid_t") long type, String name, @Const Pointer value);
+public static native @Cast("herr_t") int H5Tenum_nameof(@Cast("hid_t") long type, @Const Pointer value, @Cast("char*") BytePointer name,
 			     @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Tenum_nameof(@Cast("hid_t") int type, @Const Pointer value, @Cast("char*") ByteBuffer name,
+public static native @Cast("herr_t") int H5Tenum_nameof(@Cast("hid_t") long type, @Const Pointer value, @Cast("char*") ByteBuffer name,
 			     @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Tenum_nameof(@Cast("hid_t") int type, @Const Pointer value, @Cast("char*") byte[] name,
+public static native @Cast("herr_t") int H5Tenum_nameof(@Cast("hid_t") long type, @Const Pointer value, @Cast("char*") byte[] name,
 			     @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Tenum_valueof(@Cast("hid_t") int type, @Cast("const char*") BytePointer name,
+public static native @Cast("herr_t") int H5Tenum_valueof(@Cast("hid_t") long type, @Cast("const char*") BytePointer name,
 			      Pointer value);
-public static native @Cast("herr_t") int H5Tenum_valueof(@Cast("hid_t") int type, String name,
+public static native @Cast("herr_t") int H5Tenum_valueof(@Cast("hid_t") long type, String name,
 			      Pointer value);
 
 /* Operations defined on variable-length datatypes */
-public static native @Cast("hid_t") int H5Tvlen_create(@Cast("hid_t") int base_id);
+public static native @Cast("hid_t") long H5Tvlen_create(@Cast("hid_t") long base_id);
 
 /* Operations defined on array datatypes */
-public static native @Cast("hid_t") int H5Tarray_create2(@Cast("hid_t") int base_id, @Cast("unsigned") int ndims,
+public static native @Cast("hid_t") long H5Tarray_create2(@Cast("hid_t") long base_id, @Cast("unsigned") int ndims,
             @Cast("const hsize_t*") LongPointer dim);
-public static native @Cast("hid_t") int H5Tarray_create2(@Cast("hid_t") int base_id, @Cast("unsigned") int ndims,
+public static native @Cast("hid_t") long H5Tarray_create2(@Cast("hid_t") long base_id, @Cast("unsigned") int ndims,
             @Cast("const hsize_t*") LongBuffer dim);
-public static native @Cast("hid_t") int H5Tarray_create2(@Cast("hid_t") int base_id, @Cast("unsigned") int ndims,
+public static native @Cast("hid_t") long H5Tarray_create2(@Cast("hid_t") long base_id, @Cast("unsigned") int ndims,
             @Cast("const hsize_t*") long[] dim);
-public static native int H5Tget_array_ndims(@Cast("hid_t") int type_id);
-public static native int H5Tget_array_dims2(@Cast("hid_t") int type_id, @Cast("hsize_t*") LongPointer dims);
-public static native int H5Tget_array_dims2(@Cast("hid_t") int type_id, @Cast("hsize_t*") LongBuffer dims);
-public static native int H5Tget_array_dims2(@Cast("hid_t") int type_id, @Cast("hsize_t*") long[] dims);
+public static native int H5Tget_array_ndims(@Cast("hid_t") long type_id);
+public static native int H5Tget_array_dims2(@Cast("hid_t") long type_id, @Cast("hsize_t*") LongPointer dims);
+public static native int H5Tget_array_dims2(@Cast("hid_t") long type_id, @Cast("hsize_t*") LongBuffer dims);
+public static native int H5Tget_array_dims2(@Cast("hid_t") long type_id, @Cast("hsize_t*") long[] dims);
 
 /* Operations defined on opaque datatypes */
-public static native @Cast("herr_t") int H5Tset_tag(@Cast("hid_t") int type, @Cast("const char*") BytePointer tag);
-public static native @Cast("herr_t") int H5Tset_tag(@Cast("hid_t") int type, String tag);
-public static native @Cast("char*") BytePointer H5Tget_tag(@Cast("hid_t") int type);
+public static native @Cast("herr_t") int H5Tset_tag(@Cast("hid_t") long type, @Cast("const char*") BytePointer tag);
+public static native @Cast("herr_t") int H5Tset_tag(@Cast("hid_t") long type, String tag);
+public static native @Cast("char*") BytePointer H5Tget_tag(@Cast("hid_t") long type);
 
 /* Querying property values */
-public static native @Cast("hid_t") int H5Tget_super(@Cast("hid_t") int type);
-public static native @Cast("H5T_class_t") int H5Tget_class(@Cast("hid_t") int type_id);
-public static native @Cast("htri_t") int H5Tdetect_class(@Cast("hid_t") int type_id, @Cast("H5T_class_t") int cls);
-public static native @Cast("size_t") long H5Tget_size(@Cast("hid_t") int type_id);
-public static native @Cast("H5T_order_t") int H5Tget_order(@Cast("hid_t") int type_id);
-public static native @Cast("size_t") long H5Tget_precision(@Cast("hid_t") int type_id);
-public static native int H5Tget_offset(@Cast("hid_t") int type_id);
-public static native @Cast("herr_t") int H5Tget_pad(@Cast("hid_t") int type_id, @Cast("H5T_pad_t*") IntPointer lsb,
+public static native @Cast("hid_t") long H5Tget_super(@Cast("hid_t") long type);
+public static native @Cast("H5T_class_t") int H5Tget_class(@Cast("hid_t") long type_id);
+public static native @Cast("htri_t") int H5Tdetect_class(@Cast("hid_t") long type_id, @Cast("H5T_class_t") int cls);
+public static native @Cast("size_t") long H5Tget_size(@Cast("hid_t") long type_id);
+public static native @Cast("H5T_order_t") int H5Tget_order(@Cast("hid_t") long type_id);
+public static native @Cast("size_t") long H5Tget_precision(@Cast("hid_t") long type_id);
+public static native int H5Tget_offset(@Cast("hid_t") long type_id);
+public static native @Cast("herr_t") int H5Tget_pad(@Cast("hid_t") long type_id, @Cast("H5T_pad_t*") IntPointer lsb,
 			  @Cast("H5T_pad_t*") IntPointer msb);
-public static native @Cast("herr_t") int H5Tget_pad(@Cast("hid_t") int type_id, @Cast("H5T_pad_t*") IntBuffer lsb,
+public static native @Cast("herr_t") int H5Tget_pad(@Cast("hid_t") long type_id, @Cast("H5T_pad_t*") IntBuffer lsb,
 			  @Cast("H5T_pad_t*") IntBuffer msb);
-public static native @Cast("herr_t") int H5Tget_pad(@Cast("hid_t") int type_id, @Cast("H5T_pad_t*") int[] lsb,
+public static native @Cast("herr_t") int H5Tget_pad(@Cast("hid_t") long type_id, @Cast("H5T_pad_t*") int[] lsb,
 			  @Cast("H5T_pad_t*") int[] msb);
-public static native @Cast("H5T_sign_t") int H5Tget_sign(@Cast("hid_t") int type_id);
-public static native @Cast("herr_t") int H5Tget_fields(@Cast("hid_t") int type_id, @Cast("size_t*") SizeTPointer spos,
+public static native @Cast("H5T_sign_t") int H5Tget_sign(@Cast("hid_t") long type_id);
+public static native @Cast("herr_t") int H5Tget_fields(@Cast("hid_t") long type_id, @Cast("size_t*") SizeTPointer spos,
 			     @Cast("size_t*") SizeTPointer epos, @Cast("size_t*") SizeTPointer esize,
 			     @Cast("size_t*") SizeTPointer mpos, @Cast("size_t*") SizeTPointer msize);
-public static native @Cast("size_t") long H5Tget_ebias(@Cast("hid_t") int type_id);
-public static native @Cast("H5T_norm_t") int H5Tget_norm(@Cast("hid_t") int type_id);
-public static native @Cast("H5T_pad_t") int H5Tget_inpad(@Cast("hid_t") int type_id);
-public static native @Cast("H5T_str_t") int H5Tget_strpad(@Cast("hid_t") int type_id);
-public static native int H5Tget_nmembers(@Cast("hid_t") int type_id);
-public static native @Cast("char*") BytePointer H5Tget_member_name(@Cast("hid_t") int type_id, @Cast("unsigned") int membno);
-public static native int H5Tget_member_index(@Cast("hid_t") int type_id, @Cast("const char*") BytePointer name);
-public static native int H5Tget_member_index(@Cast("hid_t") int type_id, String name);
-public static native @Cast("size_t") long H5Tget_member_offset(@Cast("hid_t") int type_id, @Cast("unsigned") int membno);
-public static native @Cast("H5T_class_t") int H5Tget_member_class(@Cast("hid_t") int type_id, @Cast("unsigned") int membno);
-public static native @Cast("hid_t") int H5Tget_member_type(@Cast("hid_t") int type_id, @Cast("unsigned") int membno);
-public static native @Cast("herr_t") int H5Tget_member_value(@Cast("hid_t") int type_id, @Cast("unsigned") int membno, Pointer value);
-public static native @Cast("H5T_cset_t") int H5Tget_cset(@Cast("hid_t") int type_id);
-public static native @Cast("htri_t") int H5Tis_variable_str(@Cast("hid_t") int type_id);
-public static native @Cast("hid_t") int H5Tget_native_type(@Cast("hid_t") int type_id, @Cast("H5T_direction_t") int direction);
+public static native @Cast("size_t") long H5Tget_ebias(@Cast("hid_t") long type_id);
+public static native @Cast("H5T_norm_t") int H5Tget_norm(@Cast("hid_t") long type_id);
+public static native @Cast("H5T_pad_t") int H5Tget_inpad(@Cast("hid_t") long type_id);
+public static native @Cast("H5T_str_t") int H5Tget_strpad(@Cast("hid_t") long type_id);
+public static native int H5Tget_nmembers(@Cast("hid_t") long type_id);
+public static native @Cast("char*") BytePointer H5Tget_member_name(@Cast("hid_t") long type_id, @Cast("unsigned") int membno);
+public static native int H5Tget_member_index(@Cast("hid_t") long type_id, @Cast("const char*") BytePointer name);
+public static native int H5Tget_member_index(@Cast("hid_t") long type_id, String name);
+public static native @Cast("size_t") long H5Tget_member_offset(@Cast("hid_t") long type_id, @Cast("unsigned") int membno);
+public static native @Cast("H5T_class_t") int H5Tget_member_class(@Cast("hid_t") long type_id, @Cast("unsigned") int membno);
+public static native @Cast("hid_t") long H5Tget_member_type(@Cast("hid_t") long type_id, @Cast("unsigned") int membno);
+public static native @Cast("herr_t") int H5Tget_member_value(@Cast("hid_t") long type_id, @Cast("unsigned") int membno, Pointer value);
+public static native @Cast("H5T_cset_t") int H5Tget_cset(@Cast("hid_t") long type_id);
+public static native @Cast("htri_t") int H5Tis_variable_str(@Cast("hid_t") long type_id);
+public static native @Cast("hid_t") long H5Tget_native_type(@Cast("hid_t") long type_id, @Cast("H5T_direction_t") int direction);
 
 /* Setting property values */
-public static native @Cast("herr_t") int H5Tset_size(@Cast("hid_t") int type_id, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Tset_order(@Cast("hid_t") int type_id, @Cast("H5T_order_t") int order);
-public static native @Cast("herr_t") int H5Tset_precision(@Cast("hid_t") int type_id, @Cast("size_t") long prec);
-public static native @Cast("herr_t") int H5Tset_offset(@Cast("hid_t") int type_id, @Cast("size_t") long offset);
-public static native @Cast("herr_t") int H5Tset_pad(@Cast("hid_t") int type_id, @Cast("H5T_pad_t") int lsb, @Cast("H5T_pad_t") int msb);
-public static native @Cast("herr_t") int H5Tset_sign(@Cast("hid_t") int type_id, @Cast("H5T_sign_t") int sign);
-public static native @Cast("herr_t") int H5Tset_fields(@Cast("hid_t") int type_id, @Cast("size_t") long spos, @Cast("size_t") long epos,
+public static native @Cast("herr_t") int H5Tset_size(@Cast("hid_t") long type_id, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Tset_order(@Cast("hid_t") long type_id, @Cast("H5T_order_t") int order);
+public static native @Cast("herr_t") int H5Tset_precision(@Cast("hid_t") long type_id, @Cast("size_t") long prec);
+public static native @Cast("herr_t") int H5Tset_offset(@Cast("hid_t") long type_id, @Cast("size_t") long offset);
+public static native @Cast("herr_t") int H5Tset_pad(@Cast("hid_t") long type_id, @Cast("H5T_pad_t") int lsb, @Cast("H5T_pad_t") int msb);
+public static native @Cast("herr_t") int H5Tset_sign(@Cast("hid_t") long type_id, @Cast("H5T_sign_t") int sign);
+public static native @Cast("herr_t") int H5Tset_fields(@Cast("hid_t") long type_id, @Cast("size_t") long spos, @Cast("size_t") long epos,
 			     @Cast("size_t") long esize, @Cast("size_t") long mpos, @Cast("size_t") long msize);
-public static native @Cast("herr_t") int H5Tset_ebias(@Cast("hid_t") int type_id, @Cast("size_t") long ebias);
-public static native @Cast("herr_t") int H5Tset_norm(@Cast("hid_t") int type_id, @Cast("H5T_norm_t") int norm);
-public static native @Cast("herr_t") int H5Tset_inpad(@Cast("hid_t") int type_id, @Cast("H5T_pad_t") int pad);
-public static native @Cast("herr_t") int H5Tset_cset(@Cast("hid_t") int type_id, @Cast("H5T_cset_t") int cset);
-public static native @Cast("herr_t") int H5Tset_strpad(@Cast("hid_t") int type_id, @Cast("H5T_str_t") int strpad);
+public static native @Cast("herr_t") int H5Tset_ebias(@Cast("hid_t") long type_id, @Cast("size_t") long ebias);
+public static native @Cast("herr_t") int H5Tset_norm(@Cast("hid_t") long type_id, @Cast("H5T_norm_t") int norm);
+public static native @Cast("herr_t") int H5Tset_inpad(@Cast("hid_t") long type_id, @Cast("H5T_pad_t") int pad);
+public static native @Cast("herr_t") int H5Tset_cset(@Cast("hid_t") long type_id, @Cast("H5T_cset_t") int cset);
+public static native @Cast("herr_t") int H5Tset_strpad(@Cast("hid_t") long type_id, @Cast("H5T_str_t") int strpad);
 
 /* Type conversion database */
-public static native @Cast("herr_t") int H5Tregister(@Cast("H5T_pers_t") int pers, @Cast("const char*") BytePointer name, @Cast("hid_t") int src_id,
-			   @Cast("hid_t") int dst_id, H5T_conv_t func);
-public static native @Cast("herr_t") int H5Tregister(@Cast("H5T_pers_t") int pers, String name, @Cast("hid_t") int src_id,
-			   @Cast("hid_t") int dst_id, H5T_conv_t func);
-public static native @Cast("herr_t") int H5Tunregister(@Cast("H5T_pers_t") int pers, @Cast("const char*") BytePointer name, @Cast("hid_t") int src_id,
-			     @Cast("hid_t") int dst_id, H5T_conv_t func);
-public static native @Cast("herr_t") int H5Tunregister(@Cast("H5T_pers_t") int pers, String name, @Cast("hid_t") int src_id,
-			     @Cast("hid_t") int dst_id, H5T_conv_t func);
-public static native H5T_conv_t H5Tfind(@Cast("hid_t") int src_id, @Cast("hid_t") int dst_id, @Cast("H5T_cdata_t**") PointerPointer pcdata);
-public static native H5T_conv_t H5Tfind(@Cast("hid_t") int src_id, @Cast("hid_t") int dst_id, @ByPtrPtr H5T_cdata_t pcdata);
-public static native @Cast("htri_t") int H5Tcompiler_conv(@Cast("hid_t") int src_id, @Cast("hid_t") int dst_id);
-public static native @Cast("herr_t") int H5Tconvert(@Cast("hid_t") int src_id, @Cast("hid_t") int dst_id, @Cast("size_t") long nelmts,
-			  Pointer buf, Pointer background, @Cast("hid_t") int plist_id);
+public static native @Cast("herr_t") int H5Tregister(@Cast("H5T_pers_t") int pers, @Cast("const char*") BytePointer name, @Cast("hid_t") long src_id,
+			   @Cast("hid_t") long dst_id, H5T_conv_t func);
+public static native @Cast("herr_t") int H5Tregister(@Cast("H5T_pers_t") int pers, String name, @Cast("hid_t") long src_id,
+			   @Cast("hid_t") long dst_id, H5T_conv_t func);
+public static native @Cast("herr_t") int H5Tunregister(@Cast("H5T_pers_t") int pers, @Cast("const char*") BytePointer name, @Cast("hid_t") long src_id,
+			     @Cast("hid_t") long dst_id, H5T_conv_t func);
+public static native @Cast("herr_t") int H5Tunregister(@Cast("H5T_pers_t") int pers, String name, @Cast("hid_t") long src_id,
+			     @Cast("hid_t") long dst_id, H5T_conv_t func);
+public static native H5T_conv_t H5Tfind(@Cast("hid_t") long src_id, @Cast("hid_t") long dst_id, @Cast("H5T_cdata_t**") PointerPointer pcdata);
+public static native H5T_conv_t H5Tfind(@Cast("hid_t") long src_id, @Cast("hid_t") long dst_id, @ByPtrPtr H5T_cdata_t pcdata);
+public static native @Cast("htri_t") int H5Tcompiler_conv(@Cast("hid_t") long src_id, @Cast("hid_t") long dst_id);
+public static native @Cast("herr_t") int H5Tconvert(@Cast("hid_t") long src_id, @Cast("hid_t") long dst_id, @Cast("size_t") long nelmts,
+			  Pointer buf, Pointer background, @Cast("hid_t") long plist_id);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
  *
@@ -2056,9 +2053,9 @@ public static class H5L_info_t extends Pointer {
 
     public native @Cast("H5L_type_t") int type(); public native H5L_info_t type(int type);           /* Type of link                   */
     public native @Cast("hbool_t") boolean corder_valid(); public native H5L_info_t corder_valid(boolean corder_valid);   /* Indicate if creation order is valid */
-    public native @Cast("int64_t") int corder(); public native H5L_info_t corder(int corder);         /* Creation order                 */
+    public native @Cast("int64_t") long corder(); public native H5L_info_t corder(long corder);         /* Creation order                 */
     public native @Cast("H5T_cset_t") int cset(); public native H5L_info_t cset(int cset);           /* Character set of link name     */
-        @Name("u.address") public native @Cast("haddr_t") int u_address(); public native H5L_info_t u_address(int u_address);        /* Address hard link points to    */
+        @Name("u.address") public native @Cast("haddr_t") long u_address(); public native H5L_info_t u_address(long u_address);        /* Address hard link points to    */
         @Name("u.val_size") public native @Cast("size_t") long u_val_size(); public native H5L_info_t u_val_size(long u_val_size);       /* Size of a soft link or UD link value */
 }
 
@@ -2074,8 +2071,8 @@ public static class H5L_create_func_t extends FunctionPointer {
     public    H5L_create_func_t(Pointer p) { super(p); }
     protected H5L_create_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") int loc_group,
-    @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size, @Cast("hid_t") int lcpl_id);
+    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") long loc_group,
+    @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size, @Cast("hid_t") long lcpl_id);
 }
 
 /* Callback for when the link is moved */
@@ -2085,7 +2082,7 @@ public static class H5L_move_func_t extends FunctionPointer {
     public    H5L_move_func_t(Pointer p) { super(p); }
     protected H5L_move_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer new_name, @Cast("hid_t") int new_loc,
+    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer new_name, @Cast("hid_t") long new_loc,
     @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size);
 }
 
@@ -2096,7 +2093,7 @@ public static class H5L_copy_func_t extends FunctionPointer {
     public    H5L_copy_func_t(Pointer p) { super(p); }
     protected H5L_copy_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer new_name, @Cast("hid_t") int new_loc,
+    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer new_name, @Cast("hid_t") long new_loc,
     @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size);
 }
 
@@ -2107,8 +2104,8 @@ public static class H5L_traverse_func_t extends FunctionPointer {
     public    H5L_traverse_func_t(Pointer p) { super(p); }
     protected H5L_traverse_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("hid_t") int call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") int cur_group,
-    @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size, @Cast("hid_t") int lapl_id);
+    public native @Cast("hid_t") long call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") long cur_group,
+    @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size, @Cast("hid_t") long lapl_id);
 }
 
 /* Callback for when the link is deleted */
@@ -2118,7 +2115,7 @@ public static class H5L_delete_func_t extends FunctionPointer {
     public    H5L_delete_func_t(Pointer p) { super(p); }
     protected H5L_delete_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") int file,
+    public native @Cast("herr_t") int call(@Cast("const char*") BytePointer link_name, @Cast("hid_t") long file,
     @Const Pointer lnkdata, @Cast("size_t") long lnkdata_size);
 }
 
@@ -2130,7 +2127,7 @@ public static class H5L_query_func_t extends FunctionPointer {
     public    H5L_query_func_t(Pointer p) { super(p); }
     protected H5L_query_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("ssize_t") int call(@Cast("const char*") BytePointer link_name, @Const Pointer lnkdata,
+    public native @Cast("ssize_t") long call(@Cast("const char*") BytePointer link_name, @Const Pointer lnkdata,
     @Cast("size_t") long lnkdata_size, Pointer buf, @Cast("size_t") long buf_size);
 }
 
@@ -2167,7 +2164,7 @@ public static class H5L_iterate_t extends FunctionPointer {
     public    H5L_iterate_t(Pointer p) { super(p); }
     protected H5L_iterate_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int group, @Cast("const char*") BytePointer name, @Const H5L_info_t info,
+    public native @Cast("herr_t") int call(@Cast("hid_t") long group, @Cast("const char*") BytePointer name, @Const H5L_info_t info,
     Pointer op_data);
 }
 
@@ -2180,7 +2177,7 @@ public static class H5L_elink_traverse_t extends FunctionPointer {
     private native void allocate();
     public native @Cast("herr_t") int call(@Cast("const char*") BytePointer parent_file_name,
     @Cast("const char*") BytePointer parent_group_name, @Cast("const char*") BytePointer child_file_name,
-    @Cast("const char*") BytePointer child_object_name, @Cast("unsigned*") IntPointer acc_flags, @Cast("hid_t") int fapl_id,
+    @Cast("const char*") BytePointer child_object_name, @Cast("unsigned*") IntPointer acc_flags, @Cast("hid_t") long fapl_id,
     Pointer op_data);
 }
 
@@ -2193,108 +2190,108 @@ public static class H5L_elink_traverse_t extends FunctionPointer {
 /*********************/
 /* Public Prototypes */
 /*********************/
-public static native @Cast("herr_t") int H5Lmove(@Cast("hid_t") int src_loc, @Cast("const char*") BytePointer src_name, @Cast("hid_t") int dst_loc,
-    @Cast("const char*") BytePointer dst_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lmove(@Cast("hid_t") int src_loc, String src_name, @Cast("hid_t") int dst_loc,
-    String dst_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcopy(@Cast("hid_t") int src_loc, @Cast("const char*") BytePointer src_name, @Cast("hid_t") int dst_loc,
-    @Cast("const char*") BytePointer dst_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcopy(@Cast("hid_t") int src_loc, String src_name, @Cast("hid_t") int dst_loc,
-    String dst_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcreate_hard(@Cast("hid_t") int cur_loc, @Cast("const char*") BytePointer cur_name,
-    @Cast("hid_t") int dst_loc, @Cast("const char*") BytePointer dst_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcreate_hard(@Cast("hid_t") int cur_loc, String cur_name,
-    @Cast("hid_t") int dst_loc, String dst_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcreate_soft(@Cast("const char*") BytePointer link_target, @Cast("hid_t") int link_loc_id,
-    @Cast("const char*") BytePointer link_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcreate_soft(String link_target, @Cast("hid_t") int link_loc_id,
-    String link_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Ldelete(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Ldelete(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Ldelete_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Ldelete_by_idx(@Cast("hid_t") int loc_id, String group_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_val(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, Pointer buf,
-    @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_val(@Cast("hid_t") int loc_id, String name, Pointer buf,
-    @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_val_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+public static native @Cast("herr_t") int H5Lmove(@Cast("hid_t") long src_loc, @Cast("const char*") BytePointer src_name, @Cast("hid_t") long dst_loc,
+    @Cast("const char*") BytePointer dst_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lmove(@Cast("hid_t") long src_loc, String src_name, @Cast("hid_t") long dst_loc,
+    String dst_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcopy(@Cast("hid_t") long src_loc, @Cast("const char*") BytePointer src_name, @Cast("hid_t") long dst_loc,
+    @Cast("const char*") BytePointer dst_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcopy(@Cast("hid_t") long src_loc, String src_name, @Cast("hid_t") long dst_loc,
+    String dst_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcreate_hard(@Cast("hid_t") long cur_loc, @Cast("const char*") BytePointer cur_name,
+    @Cast("hid_t") long dst_loc, @Cast("const char*") BytePointer dst_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcreate_hard(@Cast("hid_t") long cur_loc, String cur_name,
+    @Cast("hid_t") long dst_loc, String dst_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcreate_soft(@Cast("const char*") BytePointer link_target, @Cast("hid_t") long link_loc_id,
+    @Cast("const char*") BytePointer link_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcreate_soft(String link_target, @Cast("hid_t") long link_loc_id,
+    String link_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ldelete(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ldelete(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ldelete_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ldelete_by_idx(@Cast("hid_t") long loc_id, String group_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_val(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, Pointer buf,
+    @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_val(@Cast("hid_t") long loc_id, String name, Pointer buf,
+    @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_val_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    Pointer buf, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_val_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    Pointer buf, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_val_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    Pointer buf, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("htri_t") int H5Lexists(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int lapl_id);
-public static native @Cast("htri_t") int H5Lexists(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_info(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name,
-    H5L_info_t linfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_info(@Cast("hid_t") int loc_id, String name,
-    H5L_info_t linfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_info_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+    Pointer buf, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("htri_t") int H5Lexists(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long lapl_id);
+public static native @Cast("htri_t") int H5Lexists(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_info(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name,
+    H5L_info_t linfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_info(@Cast("hid_t") long loc_id, String name,
+    H5L_info_t linfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_info_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    H5L_info_t linfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lget_info_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    H5L_info_t linfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lget_info_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    H5L_info_t linfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Lget_name_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+    H5L_info_t linfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Lget_name_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Lget_name_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Lget_name_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Lget_name_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Lget_name_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Lget_name_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Lget_name_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Lget_name_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Lget_name_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Lget_name_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Lget_name_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Literate(@Cast("hid_t") int grp_id, @Cast("H5_index_t") int idx_type,
+    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Literate(@Cast("hid_t") long grp_id, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongPointer idx, H5L_iterate_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Literate(@Cast("hid_t") int grp_id, @Cast("H5_index_t") int idx_type,
+public static native @Cast("herr_t") int H5Literate(@Cast("hid_t") long grp_id, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongBuffer idx, H5L_iterate_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Literate(@Cast("hid_t") int grp_id, @Cast("H5_index_t") int idx_type,
+public static native @Cast("herr_t") int H5Literate(@Cast("hid_t") long grp_id, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") long[] idx, H5L_iterate_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongPointer idx,
-    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") int loc_id, String group_name,
+    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongBuffer idx,
-    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") long[] idx,
-    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") int loc_id, String group_name,
+    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongPointer idx,
-    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongBuffer idx,
-    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") int loc_id, String group_name,
+    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Literate_by_name(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") long[] idx,
-    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lvisit(@Cast("hid_t") int grp_id, @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order,
+    H5L_iterate_t op, Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lvisit(@Cast("hid_t") long grp_id, @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order,
     H5L_iterate_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Lvisit_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+public static native @Cast("herr_t") int H5Lvisit_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, H5L_iterate_t op,
-    Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lvisit_by_name(@Cast("hid_t") int loc_id, String group_name,
+    Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lvisit_by_name(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, H5L_iterate_t op,
-    Pointer op_data, @Cast("hid_t") int lapl_id);
+    Pointer op_data, @Cast("hid_t") long lapl_id);
 
 /* UD link functions */
-public static native @Cast("herr_t") int H5Lcreate_ud(@Cast("hid_t") int link_loc_id, @Cast("const char*") BytePointer link_name,
-    @Cast("H5L_type_t") int link_type, @Const Pointer udata, @Cast("size_t") long udata_size, @Cast("hid_t") int lcpl_id,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Lcreate_ud(@Cast("hid_t") int link_loc_id, String link_name,
-    @Cast("H5L_type_t") int link_type, @Const Pointer udata, @Cast("size_t") long udata_size, @Cast("hid_t") int lcpl_id,
-    @Cast("hid_t") int lapl_id);
+public static native @Cast("herr_t") int H5Lcreate_ud(@Cast("hid_t") long link_loc_id, @Cast("const char*") BytePointer link_name,
+    @Cast("H5L_type_t") int link_type, @Const Pointer udata, @Cast("size_t") long udata_size, @Cast("hid_t") long lcpl_id,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Lcreate_ud(@Cast("hid_t") long link_loc_id, String link_name,
+    @Cast("H5L_type_t") int link_type, @Const Pointer udata, @Cast("size_t") long udata_size, @Cast("hid_t") long lcpl_id,
+    @Cast("hid_t") long lapl_id);
 public static native @Cast("herr_t") int H5Lregister(@Const H5L_class_t cls);
 public static native @Cast("herr_t") int H5Lunregister(@Cast("H5L_type_t") int id);
 public static native @Cast("htri_t") int H5Lis_registered(@Cast("H5L_type_t") int id);
@@ -2309,9 +2306,9 @@ public static native @Cast("herr_t") int H5Lunpack_elink_val(@Const Pointer ext_
 public static native @Cast("herr_t") int H5Lunpack_elink_val(@Const Pointer ext_linkval, @Cast("size_t") long link_size,
    @Cast("unsigned*") int[] flags, @Cast("const char**") @ByPtrPtr byte[] filename, @Cast("const char**") @ByPtrPtr byte[] obj_path);
 public static native @Cast("herr_t") int H5Lcreate_external(@Cast("const char*") BytePointer file_name, @Cast("const char*") BytePointer obj_name,
-    @Cast("hid_t") int link_loc_id, @Cast("const char*") BytePointer link_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
+    @Cast("hid_t") long link_loc_id, @Cast("const char*") BytePointer link_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
 public static native @Cast("herr_t") int H5Lcreate_external(String file_name, String obj_name,
-    @Cast("hid_t") int link_loc_id, String link_name, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
+    @Cast("hid_t") long link_loc_id, String link_name, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
 
 // #ifdef __cplusplus
 // #endif
@@ -2437,8 +2434,8 @@ public static class H5O_hdr_info_t extends Pointer {
         @Name("space.meta") public native @Cast("hsize_t") long space_meta(); public native H5O_hdr_info_t space_meta(long space_meta);		/* Space within header for object header metadata information */
         @Name("space.mesg") public native @Cast("hsize_t") long space_mesg(); public native H5O_hdr_info_t space_mesg(long space_mesg);		/* Space within header for actual message information */
         @Name("space.free") public native @Cast("hsize_t") long space_free(); public native H5O_hdr_info_t space_free(long space_free);		/* Free space within object header */
-        @Name("mesg.present") public native @Cast("uint64_t") int mesg_present(); public native H5O_hdr_info_t mesg_present(int mesg_present);	/* Flags to indicate presence of message type in header */
-        @Name("mesg.shared") public native @Cast("uint64_t") int mesg_shared(); public native H5O_hdr_info_t mesg_shared(int mesg_shared);	/* Flags to indicate message type is shared in header */
+        @Name("mesg.present") public native @Cast("uint64_t") long mesg_present(); public native H5O_hdr_info_t mesg_present(long mesg_present);	/* Flags to indicate presence of message type in header */
+        @Name("mesg.shared") public native @Cast("uint64_t") long mesg_shared(); public native H5O_hdr_info_t mesg_shared(long mesg_shared);	/* Flags to indicate message type is shared in header */
 }
 
 /* Information struct for object (for H5Oget_info/H5Oget_info_by_name/H5Oget_info_by_idx) */
@@ -2457,7 +2454,7 @@ public static class H5O_info_t extends Pointer {
     }
 
     public native @Cast("unsigned long") long fileno(); public native H5O_info_t fileno(long fileno);		/* File number that object is located in */
-    public native @Cast("haddr_t") int addr(); public native H5O_info_t addr(int addr);		/* Object address in file	*/
+    public native @Cast("haddr_t") long addr(); public native H5O_info_t addr(long addr);		/* Object address in file	*/
     public native @Cast("H5O_type_t") int type(); public native H5O_info_t type(int type);		/* Basic object type (group, dataset, etc.) */
     public native @Cast("unsigned") int rc(); public native H5O_info_t rc(int rc);		/* Reference count of object    */
     public native @ByRef @Cast("time_t*") Pointer atime(); public native H5O_info_t atime(Pointer atime);		/* Access time			*/
@@ -2480,7 +2477,7 @@ public static class H5O_iterate_t extends FunctionPointer {
     public    H5O_iterate_t(Pointer p) { super(p); }
     protected H5O_iterate_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int obj, @Cast("const char*") BytePointer name, @Const H5O_info_t info,
+    public native @Cast("herr_t") int call(@Cast("hid_t") long obj, @Cast("const char*") BytePointer name, @Const H5O_info_t info,
     Pointer op_data);
 }
 
@@ -2511,72 +2508,72 @@ public static class H5O_mcdt_search_cb_t extends FunctionPointer {
 /*********************/
 /* Public Prototypes */
 /*********************/
-public static native @Cast("hid_t") int H5Oopen(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Oopen(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Oopen_by_addr(@Cast("hid_t") int loc_id, @Cast("haddr_t") int addr);
-public static native @Cast("hid_t") int H5Oopen_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Oopen_by_idx(@Cast("hid_t") int loc_id, String group_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int lapl_id);
-public static native @Cast("htri_t") int H5Oexists_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int lapl_id);
-public static native @Cast("htri_t") int H5Oexists_by_name(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oget_info(@Cast("hid_t") int loc_id, H5O_info_t oinfo);
-public static native @Cast("herr_t") int H5Oget_info_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, H5O_info_t oinfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oget_info_by_name(@Cast("hid_t") int loc_id, String name, H5O_info_t oinfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oget_info_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+public static native @Cast("hid_t") long H5Oopen(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Oopen(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Oopen_by_addr(@Cast("hid_t") long loc_id, @Cast("haddr_t") long addr);
+public static native @Cast("hid_t") long H5Oopen_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Oopen_by_idx(@Cast("hid_t") long loc_id, String group_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long lapl_id);
+public static native @Cast("htri_t") int H5Oexists_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long lapl_id);
+public static native @Cast("htri_t") int H5Oexists_by_name(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info(@Cast("hid_t") long loc_id, H5O_info_t oinfo);
+public static native @Cast("herr_t") int H5Oget_info_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, H5O_info_t oinfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info_by_name(@Cast("hid_t") long loc_id, String name, H5O_info_t oinfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, H5O_info_t oinfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oget_info_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, H5O_info_t oinfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Olink(@Cast("hid_t") int obj_id, @Cast("hid_t") int new_loc_id, @Cast("const char*") BytePointer new_name,
-    @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Olink(@Cast("hid_t") int obj_id, @Cast("hid_t") int new_loc_id, String new_name,
-    @Cast("hid_t") int lcpl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oincr_refcount(@Cast("hid_t") int object_id);
-public static native @Cast("herr_t") int H5Odecr_refcount(@Cast("hid_t") int object_id);
-public static native @Cast("herr_t") int H5Ocopy(@Cast("hid_t") int src_loc_id, @Cast("const char*") BytePointer src_name, @Cast("hid_t") int dst_loc_id,
-    @Cast("const char*") BytePointer dst_name, @Cast("hid_t") int ocpypl_id, @Cast("hid_t") int lcpl_id);
-public static native @Cast("herr_t") int H5Ocopy(@Cast("hid_t") int src_loc_id, String src_name, @Cast("hid_t") int dst_loc_id,
-    String dst_name, @Cast("hid_t") int ocpypl_id, @Cast("hid_t") int lcpl_id);
-public static native @Cast("herr_t") int H5Oset_comment(@Cast("hid_t") int obj_id, @Cast("const char*") BytePointer comment);
-public static native @Cast("herr_t") int H5Oset_comment(@Cast("hid_t") int obj_id, String comment);
-public static native @Cast("herr_t") int H5Oset_comment_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name,
-    @Cast("const char*") BytePointer comment, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oset_comment_by_name(@Cast("hid_t") int loc_id, String name,
-    String comment, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Oget_comment(@Cast("hid_t") int obj_id, @Cast("char*") BytePointer comment, @Cast("size_t") long bufsize);
-public static native @Cast("ssize_t") int H5Oget_comment(@Cast("hid_t") int obj_id, @Cast("char*") ByteBuffer comment, @Cast("size_t") long bufsize);
-public static native @Cast("ssize_t") int H5Oget_comment(@Cast("hid_t") int obj_id, @Cast("char*") byte[] comment, @Cast("size_t") long bufsize);
-public static native @Cast("ssize_t") int H5Oget_comment_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name,
-    @Cast("char*") BytePointer comment, @Cast("size_t") long bufsize, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Oget_comment_by_name(@Cast("hid_t") int loc_id, String name,
-    @Cast("char*") ByteBuffer comment, @Cast("size_t") long bufsize, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Oget_comment_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name,
-    @Cast("char*") byte[] comment, @Cast("size_t") long bufsize, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Oget_comment_by_name(@Cast("hid_t") int loc_id, String name,
-    @Cast("char*") BytePointer comment, @Cast("size_t") long bufsize, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Oget_comment_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name,
-    @Cast("char*") ByteBuffer comment, @Cast("size_t") long bufsize, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Oget_comment_by_name(@Cast("hid_t") int loc_id, String name,
-    @Cast("char*") byte[] comment, @Cast("size_t") long bufsize, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Ovisit(@Cast("hid_t") int obj_id, @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Olink(@Cast("hid_t") long obj_id, @Cast("hid_t") long new_loc_id, @Cast("const char*") BytePointer new_name,
+    @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Olink(@Cast("hid_t") long obj_id, @Cast("hid_t") long new_loc_id, String new_name,
+    @Cast("hid_t") long lcpl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oincr_refcount(@Cast("hid_t") long object_id);
+public static native @Cast("herr_t") int H5Odecr_refcount(@Cast("hid_t") long object_id);
+public static native @Cast("herr_t") int H5Ocopy(@Cast("hid_t") long src_loc_id, @Cast("const char*") BytePointer src_name, @Cast("hid_t") long dst_loc_id,
+    @Cast("const char*") BytePointer dst_name, @Cast("hid_t") long ocpypl_id, @Cast("hid_t") long lcpl_id);
+public static native @Cast("herr_t") int H5Ocopy(@Cast("hid_t") long src_loc_id, String src_name, @Cast("hid_t") long dst_loc_id,
+    String dst_name, @Cast("hid_t") long ocpypl_id, @Cast("hid_t") long lcpl_id);
+public static native @Cast("herr_t") int H5Oset_comment(@Cast("hid_t") long obj_id, @Cast("const char*") BytePointer comment);
+public static native @Cast("herr_t") int H5Oset_comment(@Cast("hid_t") long obj_id, String comment);
+public static native @Cast("herr_t") int H5Oset_comment_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name,
+    @Cast("const char*") BytePointer comment, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oset_comment_by_name(@Cast("hid_t") long loc_id, String name,
+    String comment, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Oget_comment(@Cast("hid_t") long obj_id, @Cast("char*") BytePointer comment, @Cast("size_t") long bufsize);
+public static native @Cast("ssize_t") long H5Oget_comment(@Cast("hid_t") long obj_id, @Cast("char*") ByteBuffer comment, @Cast("size_t") long bufsize);
+public static native @Cast("ssize_t") long H5Oget_comment(@Cast("hid_t") long obj_id, @Cast("char*") byte[] comment, @Cast("size_t") long bufsize);
+public static native @Cast("ssize_t") long H5Oget_comment_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name,
+    @Cast("char*") BytePointer comment, @Cast("size_t") long bufsize, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Oget_comment_by_name(@Cast("hid_t") long loc_id, String name,
+    @Cast("char*") ByteBuffer comment, @Cast("size_t") long bufsize, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Oget_comment_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name,
+    @Cast("char*") byte[] comment, @Cast("size_t") long bufsize, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Oget_comment_by_name(@Cast("hid_t") long loc_id, String name,
+    @Cast("char*") BytePointer comment, @Cast("size_t") long bufsize, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Oget_comment_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name,
+    @Cast("char*") ByteBuffer comment, @Cast("size_t") long bufsize, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Oget_comment_by_name(@Cast("hid_t") long loc_id, String name,
+    @Cast("char*") byte[] comment, @Cast("size_t") long bufsize, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ovisit(@Cast("hid_t") long obj_id, @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order,
     H5O_iterate_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Ovisit_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
+public static native @Cast("herr_t") int H5Ovisit_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, H5O_iterate_t op,
-    Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Ovisit_by_name(@Cast("hid_t") int loc_id, String obj_name,
+    Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ovisit_by_name(@Cast("hid_t") long loc_id, String obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, H5O_iterate_t op,
-    Pointer op_data, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Oclose(@Cast("hid_t") int object_id);
-public static native @Cast("herr_t") int H5Oflush(@Cast("hid_t") int obj_id);
-public static native @Cast("herr_t") int H5Orefresh(@Cast("hid_t") int oid);
-public static native @Cast("herr_t") int H5Odisable_mdc_flushes(@Cast("hid_t") int object_id);
-public static native @Cast("herr_t") int H5Oenable_mdc_flushes(@Cast("hid_t") int object_id);
-public static native @Cast("herr_t") int H5Oare_mdc_flushes_disabled(@Cast("hid_t") int object_id, @Cast("hbool_t*") BoolPointer are_disabled);
-public static native @Cast("herr_t") int H5Oare_mdc_flushes_disabled(@Cast("hid_t") int object_id, @Cast("hbool_t*") boolean[] are_disabled);
+    Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oclose(@Cast("hid_t") long object_id);
+public static native @Cast("herr_t") int H5Oflush(@Cast("hid_t") long obj_id);
+public static native @Cast("herr_t") int H5Orefresh(@Cast("hid_t") long oid);
+public static native @Cast("herr_t") int H5Odisable_mdc_flushes(@Cast("hid_t") long object_id);
+public static native @Cast("herr_t") int H5Oenable_mdc_flushes(@Cast("hid_t") long object_id);
+public static native @Cast("herr_t") int H5Oare_mdc_flushes_disabled(@Cast("hid_t") long object_id, @Cast("hbool_t*") BoolPointer are_disabled);
+public static native @Cast("herr_t") int H5Oare_mdc_flushes_disabled(@Cast("hid_t") long object_id, @Cast("hbool_t*") boolean[] are_disabled);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
  *
@@ -2777,7 +2774,7 @@ public static class H5Z_can_apply_func_t extends FunctionPointer {
     public    H5Z_can_apply_func_t(Pointer p) { super(p); }
     protected H5Z_can_apply_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("htri_t") int call(@Cast("hid_t") int dcpl_id, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id);
+    public native @Cast("htri_t") int call(@Cast("hid_t") long dcpl_id, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id);
 }
 
 /*
@@ -2807,7 +2804,7 @@ public static class H5Z_set_local_func_t extends FunctionPointer {
     public    H5Z_set_local_func_t(Pointer p) { super(p); }
     protected H5Z_set_local_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int dcpl_id, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long dcpl_id, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id);
 }
 
 /*
@@ -2930,7 +2927,7 @@ public static class H5A_info_t extends Pointer {
     }
 
     public native @Cast("hbool_t") boolean corder_valid(); public native H5A_info_t corder_valid(boolean corder_valid);   /* Indicate if creation order is valid */
-    public native @Cast("H5O_msg_crt_idx_t") short corder(); public native H5A_info_t corder(short corder);         /* Creation order                 */
+    public native @Cast("H5O_msg_crt_idx_t") int corder(); public native H5A_info_t corder(int corder);         /* Creation order                 */
     public native @Cast("H5T_cset_t") int cset(); public native H5A_info_t cset(int cset);           /* Character set of attribute name */
     public native @Cast("hsize_t") long data_size(); public native H5A_info_t data_size(long data_size);      /* Size of raw data		  */
 }
@@ -2942,116 +2939,116 @@ public static class H5A_operator2_t extends FunctionPointer {
     public    H5A_operator2_t(Pointer p) { super(p); }
     protected H5A_operator2_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int location_id,
+    public native @Cast("herr_t") int call(@Cast("hid_t") long location_id,
     @Cast("const char*") BytePointer attr_name, @Const H5A_info_t ainfo, Pointer op_data);
 }
 
 /* Public function prototypes */
-public static native @Cast("hid_t") int H5Acreate2(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer attr_name, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int space_id, @Cast("hid_t") int acpl_id, @Cast("hid_t") int aapl_id);
-public static native @Cast("hid_t") int H5Acreate2(@Cast("hid_t") int loc_id, String attr_name, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int space_id, @Cast("hid_t") int acpl_id, @Cast("hid_t") int aapl_id);
-public static native @Cast("hid_t") int H5Acreate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name, @Cast("const char*") BytePointer attr_name,
-    @Cast("hid_t") int type_id, @Cast("hid_t") int space_id, @Cast("hid_t") int acpl_id, @Cast("hid_t") int aapl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Acreate_by_name(@Cast("hid_t") int loc_id, String obj_name, String attr_name,
-    @Cast("hid_t") int type_id, @Cast("hid_t") int space_id, @Cast("hid_t") int acpl_id, @Cast("hid_t") int aapl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Aopen(@Cast("hid_t") int obj_id, @Cast("const char*") BytePointer attr_name, @Cast("hid_t") int aapl_id);
-public static native @Cast("hid_t") int H5Aopen(@Cast("hid_t") int obj_id, String attr_name, @Cast("hid_t") int aapl_id);
-public static native @Cast("hid_t") int H5Aopen_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("const char*") BytePointer attr_name, @Cast("hid_t") int aapl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Aopen_by_name(@Cast("hid_t") int loc_id, String obj_name,
-    String attr_name, @Cast("hid_t") int aapl_id, @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Aopen_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int aapl_id,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("hid_t") int H5Aopen_by_idx(@Cast("hid_t") int loc_id, String obj_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int aapl_id,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Awrite(@Cast("hid_t") int attr_id, @Cast("hid_t") int type_id, @Const Pointer buf);
-public static native @Cast("herr_t") int H5Aread(@Cast("hid_t") int attr_id, @Cast("hid_t") int type_id, Pointer buf);
-public static native @Cast("herr_t") int H5Aclose(@Cast("hid_t") int attr_id);
-public static native @Cast("hid_t") int H5Aget_space(@Cast("hid_t") int attr_id);
-public static native @Cast("hid_t") int H5Aget_type(@Cast("hid_t") int attr_id);
-public static native @Cast("hid_t") int H5Aget_create_plist(@Cast("hid_t") int attr_id);
-public static native @Cast("ssize_t") int H5Aget_name(@Cast("hid_t") int attr_id, @Cast("size_t") long buf_size, @Cast("char*") BytePointer buf);
-public static native @Cast("ssize_t") int H5Aget_name(@Cast("hid_t") int attr_id, @Cast("size_t") long buf_size, @Cast("char*") ByteBuffer buf);
-public static native @Cast("ssize_t") int H5Aget_name(@Cast("hid_t") int attr_id, @Cast("size_t") long buf_size, @Cast("char*") byte[] buf);
-public static native @Cast("ssize_t") int H5Aget_name_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
+public static native @Cast("hid_t") long H5Acreate2(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer attr_name, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long space_id, @Cast("hid_t") long acpl_id, @Cast("hid_t") long aapl_id);
+public static native @Cast("hid_t") long H5Acreate2(@Cast("hid_t") long loc_id, String attr_name, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long space_id, @Cast("hid_t") long acpl_id, @Cast("hid_t") long aapl_id);
+public static native @Cast("hid_t") long H5Acreate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name, @Cast("const char*") BytePointer attr_name,
+    @Cast("hid_t") long type_id, @Cast("hid_t") long space_id, @Cast("hid_t") long acpl_id, @Cast("hid_t") long aapl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Acreate_by_name(@Cast("hid_t") long loc_id, String obj_name, String attr_name,
+    @Cast("hid_t") long type_id, @Cast("hid_t") long space_id, @Cast("hid_t") long acpl_id, @Cast("hid_t") long aapl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Aopen(@Cast("hid_t") long obj_id, @Cast("const char*") BytePointer attr_name, @Cast("hid_t") long aapl_id);
+public static native @Cast("hid_t") long H5Aopen(@Cast("hid_t") long obj_id, String attr_name, @Cast("hid_t") long aapl_id);
+public static native @Cast("hid_t") long H5Aopen_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("const char*") BytePointer attr_name, @Cast("hid_t") long aapl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Aopen_by_name(@Cast("hid_t") long loc_id, String obj_name,
+    String attr_name, @Cast("hid_t") long aapl_id, @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Aopen_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long aapl_id,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("hid_t") long H5Aopen_by_idx(@Cast("hid_t") long loc_id, String obj_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long aapl_id,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Awrite(@Cast("hid_t") long attr_id, @Cast("hid_t") long type_id, @Const Pointer buf);
+public static native @Cast("herr_t") int H5Aread(@Cast("hid_t") long attr_id, @Cast("hid_t") long type_id, Pointer buf);
+public static native @Cast("herr_t") int H5Aclose(@Cast("hid_t") long attr_id);
+public static native @Cast("hid_t") long H5Aget_space(@Cast("hid_t") long attr_id);
+public static native @Cast("hid_t") long H5Aget_type(@Cast("hid_t") long attr_id);
+public static native @Cast("hid_t") long H5Aget_create_plist(@Cast("hid_t") long attr_id);
+public static native @Cast("ssize_t") long H5Aget_name(@Cast("hid_t") long attr_id, @Cast("size_t") long buf_size, @Cast("char*") BytePointer buf);
+public static native @Cast("ssize_t") long H5Aget_name(@Cast("hid_t") long attr_id, @Cast("size_t") long buf_size, @Cast("char*") ByteBuffer buf);
+public static native @Cast("ssize_t") long H5Aget_name(@Cast("hid_t") long attr_id, @Cast("size_t") long buf_size, @Cast("char*") byte[] buf);
+public static native @Cast("ssize_t") long H5Aget_name_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Aget_name_by_idx(@Cast("hid_t") int loc_id, String obj_name,
+    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Aget_name_by_idx(@Cast("hid_t") long loc_id, String obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Aget_name_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Aget_name_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Aget_name_by_idx(@Cast("hid_t") int loc_id, String obj_name,
+    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Aget_name_by_idx(@Cast("hid_t") long loc_id, String obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Aget_name_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("char*") BytePointer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Aget_name_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("ssize_t") int H5Aget_name_by_idx(@Cast("hid_t") int loc_id, String obj_name,
+    @Cast("char*") ByteBuffer name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("ssize_t") long H5Aget_name_by_idx(@Cast("hid_t") long loc_id, String obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") int lapl_id);
-public static native @Cast("hsize_t") long H5Aget_storage_size(@Cast("hid_t") int attr_id);
-public static native @Cast("herr_t") int H5Aget_info(@Cast("hid_t") int attr_id, H5A_info_t ainfo);
-public static native @Cast("herr_t") int H5Aget_info_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("const char*") BytePointer attr_name, H5A_info_t ainfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Aget_info_by_name(@Cast("hid_t") int loc_id, String obj_name,
-    String attr_name, H5A_info_t ainfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Aget_info_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("char*") byte[] name, @Cast("size_t") long size, @Cast("hid_t") long lapl_id);
+public static native @Cast("hsize_t") long H5Aget_storage_size(@Cast("hid_t") long attr_id);
+public static native @Cast("herr_t") int H5Aget_info(@Cast("hid_t") long attr_id, H5A_info_t ainfo);
+public static native @Cast("herr_t") int H5Aget_info_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("const char*") BytePointer attr_name, H5A_info_t ainfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Aget_info_by_name(@Cast("hid_t") long loc_id, String obj_name,
+    String attr_name, H5A_info_t ainfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Aget_info_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    H5A_info_t ainfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Aget_info_by_idx(@Cast("hid_t") int loc_id, String obj_name,
+    H5A_info_t ainfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Aget_info_by_idx(@Cast("hid_t") long loc_id, String obj_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n,
-    H5A_info_t ainfo, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Arename(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer old_name, @Cast("const char*") BytePointer new_name);
-public static native @Cast("herr_t") int H5Arename(@Cast("hid_t") int loc_id, String old_name, String new_name);
-public static native @Cast("herr_t") int H5Arename_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("const char*") BytePointer old_attr_name, @Cast("const char*") BytePointer new_attr_name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Arename_by_name(@Cast("hid_t") int loc_id, String obj_name,
-    String old_attr_name, String new_attr_name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Aiterate2(@Cast("hid_t") int loc_id, @Cast("H5_index_t") int idx_type,
+    H5A_info_t ainfo, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Arename(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer old_name, @Cast("const char*") BytePointer new_name);
+public static native @Cast("herr_t") int H5Arename(@Cast("hid_t") long loc_id, String old_name, String new_name);
+public static native @Cast("herr_t") int H5Arename_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("const char*") BytePointer old_attr_name, @Cast("const char*") BytePointer new_attr_name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Arename_by_name(@Cast("hid_t") long loc_id, String obj_name,
+    String old_attr_name, String new_attr_name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Aiterate2(@Cast("hid_t") long loc_id, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongPointer idx, H5A_operator2_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Aiterate2(@Cast("hid_t") int loc_id, @Cast("H5_index_t") int idx_type,
+public static native @Cast("herr_t") int H5Aiterate2(@Cast("hid_t") long loc_id, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongBuffer idx, H5A_operator2_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Aiterate2(@Cast("hid_t") int loc_id, @Cast("H5_index_t") int idx_type,
+public static native @Cast("herr_t") int H5Aiterate2(@Cast("hid_t") long loc_id, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") long[] idx, H5A_operator2_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name, @Cast("H5_index_t") int idx_type,
+public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongPointer idx, H5A_operator2_t op, Pointer op_data,
-    @Cast("hid_t") int lapd_id);
-public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") int loc_id, String obj_name, @Cast("H5_index_t") int idx_type,
+    @Cast("hid_t") long lapd_id);
+public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") long loc_id, String obj_name, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongBuffer idx, H5A_operator2_t op, Pointer op_data,
-    @Cast("hid_t") int lapd_id);
-public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name, @Cast("H5_index_t") int idx_type,
+    @Cast("hid_t") long lapd_id);
+public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") long[] idx, H5A_operator2_t op, Pointer op_data,
-    @Cast("hid_t") int lapd_id);
-public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") int loc_id, String obj_name, @Cast("H5_index_t") int idx_type,
+    @Cast("hid_t") long lapd_id);
+public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") long loc_id, String obj_name, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongPointer idx, H5A_operator2_t op, Pointer op_data,
-    @Cast("hid_t") int lapd_id);
-public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name, @Cast("H5_index_t") int idx_type,
+    @Cast("hid_t") long lapd_id);
+public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") LongBuffer idx, H5A_operator2_t op, Pointer op_data,
-    @Cast("hid_t") int lapd_id);
-public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") int loc_id, String obj_name, @Cast("H5_index_t") int idx_type,
+    @Cast("hid_t") long lapd_id);
+public static native @Cast("herr_t") int H5Aiterate_by_name(@Cast("hid_t") long loc_id, String obj_name, @Cast("H5_index_t") int idx_type,
     @Cast("H5_iter_order_t") int order, @Cast("hsize_t*") long[] idx, H5A_operator2_t op, Pointer op_data,
-    @Cast("hid_t") int lapd_id);
-public static native @Cast("herr_t") int H5Adelete(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name);
-public static native @Cast("herr_t") int H5Adelete(@Cast("hid_t") int loc_id, String name);
-public static native @Cast("herr_t") int H5Adelete_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("const char*") BytePointer attr_name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Adelete_by_name(@Cast("hid_t") int loc_id, String obj_name,
-    String attr_name, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Adelete_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Adelete_by_idx(@Cast("hid_t") int loc_id, String obj_name,
-    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") int lapl_id);
-public static native @Cast("htri_t") int H5Aexists(@Cast("hid_t") int obj_id, @Cast("const char*") BytePointer attr_name);
-public static native @Cast("htri_t") int H5Aexists(@Cast("hid_t") int obj_id, String attr_name);
-public static native @Cast("htri_t") int H5Aexists_by_name(@Cast("hid_t") int obj_id, @Cast("const char*") BytePointer obj_name,
-    @Cast("const char*") BytePointer attr_name, @Cast("hid_t") int lapl_id);
-public static native @Cast("htri_t") int H5Aexists_by_name(@Cast("hid_t") int obj_id, String obj_name,
-    String attr_name, @Cast("hid_t") int lapl_id);
+    @Cast("hid_t") long lapd_id);
+public static native @Cast("herr_t") int H5Adelete(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name);
+public static native @Cast("herr_t") int H5Adelete(@Cast("hid_t") long loc_id, String name);
+public static native @Cast("herr_t") int H5Adelete_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("const char*") BytePointer attr_name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Adelete_by_name(@Cast("hid_t") long loc_id, String obj_name,
+    String attr_name, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Adelete_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Adelete_by_idx(@Cast("hid_t") long loc_id, String obj_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, @Cast("hid_t") long lapl_id);
+public static native @Cast("htri_t") int H5Aexists(@Cast("hid_t") long obj_id, @Cast("const char*") BytePointer attr_name);
+public static native @Cast("htri_t") int H5Aexists(@Cast("hid_t") long obj_id, String attr_name);
+public static native @Cast("htri_t") int H5Aexists_by_name(@Cast("hid_t") long obj_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("const char*") BytePointer attr_name, @Cast("hid_t") long lapl_id);
+public static native @Cast("htri_t") int H5Aexists_by_name(@Cast("hid_t") long obj_id, String obj_name,
+    String attr_name, @Cast("hid_t") long lapl_id);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
  *
@@ -3790,7 +3787,7 @@ public static class H5D_append_cb_t extends FunctionPointer {
     public    H5D_append_cb_t(Pointer p) { super(p); }
     protected H5D_append_cb_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int dataset_id, @Cast("hsize_t*") LongPointer cur_dims, Pointer op_data);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long dataset_id, @Cast("hsize_t*") LongPointer cur_dims, Pointer op_data);
 }
 
 /********************/
@@ -3810,7 +3807,7 @@ public static class H5D_operator_t extends FunctionPointer {
     public    H5D_operator_t(Pointer p) { super(p); }
     protected H5D_operator_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(Pointer elem, @Cast("hid_t") int type_id, @Cast("unsigned") int ndim,
+    public native @Cast("herr_t") int call(Pointer elem, @Cast("hid_t") long type_id, @Cast("unsigned") int ndim,
 				 @Cast("const hsize_t*") LongPointer point, Pointer operator_data);
 }
 
@@ -3837,52 +3834,52 @@ public static class H5D_gather_func_t extends FunctionPointer {
                                     @Cast("size_t") long dst_buf_bytes_used, Pointer op_data);
 }
 
-public static native @Cast("hid_t") int H5Dcreate2(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int space_id, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int dcpl_id, @Cast("hid_t") int dapl_id);
-public static native @Cast("hid_t") int H5Dcreate2(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int space_id, @Cast("hid_t") int lcpl_id, @Cast("hid_t") int dcpl_id, @Cast("hid_t") int dapl_id);
-public static native @Cast("hid_t") int H5Dcreate_anon(@Cast("hid_t") int file_id, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id,
-    @Cast("hid_t") int plist_id, @Cast("hid_t") int dapl_id);
-public static native @Cast("hid_t") int H5Dopen2(@Cast("hid_t") int file_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int dapl_id);
-public static native @Cast("hid_t") int H5Dopen2(@Cast("hid_t") int file_id, String name, @Cast("hid_t") int dapl_id);
-public static native @Cast("herr_t") int H5Dclose(@Cast("hid_t") int dset_id);
-public static native @Cast("hid_t") int H5Dget_space(@Cast("hid_t") int dset_id);
-public static native @Cast("herr_t") int H5Dget_space_status(@Cast("hid_t") int dset_id, @Cast("H5D_space_status_t*") IntPointer allocation);
-public static native @Cast("herr_t") int H5Dget_space_status(@Cast("hid_t") int dset_id, @Cast("H5D_space_status_t*") IntBuffer allocation);
-public static native @Cast("herr_t") int H5Dget_space_status(@Cast("hid_t") int dset_id, @Cast("H5D_space_status_t*") int[] allocation);
-public static native @Cast("hid_t") int H5Dget_type(@Cast("hid_t") int dset_id);
-public static native @Cast("hid_t") int H5Dget_create_plist(@Cast("hid_t") int dset_id);
-public static native @Cast("hid_t") int H5Dget_access_plist(@Cast("hid_t") int dset_id);
-public static native @Cast("hsize_t") long H5Dget_storage_size(@Cast("hid_t") int dset_id);
-public static native @Cast("haddr_t") int H5Dget_offset(@Cast("hid_t") int dset_id);
-public static native @Cast("herr_t") int H5Dread(@Cast("hid_t") int dset_id, @Cast("hid_t") int mem_type_id, @Cast("hid_t") int mem_space_id,
-			@Cast("hid_t") int file_space_id, @Cast("hid_t") int plist_id, Pointer buf);
-public static native @Cast("herr_t") int H5Dwrite(@Cast("hid_t") int dset_id, @Cast("hid_t") int mem_type_id, @Cast("hid_t") int mem_space_id,
-			 @Cast("hid_t") int file_space_id, @Cast("hid_t") int plist_id, @Const Pointer buf);
-public static native @Cast("herr_t") int H5Diterate(Pointer buf, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id,
+public static native @Cast("hid_t") long H5Dcreate2(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long space_id, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long dcpl_id, @Cast("hid_t") long dapl_id);
+public static native @Cast("hid_t") long H5Dcreate2(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long space_id, @Cast("hid_t") long lcpl_id, @Cast("hid_t") long dcpl_id, @Cast("hid_t") long dapl_id);
+public static native @Cast("hid_t") long H5Dcreate_anon(@Cast("hid_t") long file_id, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id,
+    @Cast("hid_t") long plist_id, @Cast("hid_t") long dapl_id);
+public static native @Cast("hid_t") long H5Dopen2(@Cast("hid_t") long file_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long dapl_id);
+public static native @Cast("hid_t") long H5Dopen2(@Cast("hid_t") long file_id, String name, @Cast("hid_t") long dapl_id);
+public static native @Cast("herr_t") int H5Dclose(@Cast("hid_t") long dset_id);
+public static native @Cast("hid_t") long H5Dget_space(@Cast("hid_t") long dset_id);
+public static native @Cast("herr_t") int H5Dget_space_status(@Cast("hid_t") long dset_id, @Cast("H5D_space_status_t*") IntPointer allocation);
+public static native @Cast("herr_t") int H5Dget_space_status(@Cast("hid_t") long dset_id, @Cast("H5D_space_status_t*") IntBuffer allocation);
+public static native @Cast("herr_t") int H5Dget_space_status(@Cast("hid_t") long dset_id, @Cast("H5D_space_status_t*") int[] allocation);
+public static native @Cast("hid_t") long H5Dget_type(@Cast("hid_t") long dset_id);
+public static native @Cast("hid_t") long H5Dget_create_plist(@Cast("hid_t") long dset_id);
+public static native @Cast("hid_t") long H5Dget_access_plist(@Cast("hid_t") long dset_id);
+public static native @Cast("hsize_t") long H5Dget_storage_size(@Cast("hid_t") long dset_id);
+public static native @Cast("haddr_t") long H5Dget_offset(@Cast("hid_t") long dset_id);
+public static native @Cast("herr_t") int H5Dread(@Cast("hid_t") long dset_id, @Cast("hid_t") long mem_type_id, @Cast("hid_t") long mem_space_id,
+			@Cast("hid_t") long file_space_id, @Cast("hid_t") long plist_id, Pointer buf);
+public static native @Cast("herr_t") int H5Dwrite(@Cast("hid_t") long dset_id, @Cast("hid_t") long mem_type_id, @Cast("hid_t") long mem_space_id,
+			 @Cast("hid_t") long file_space_id, @Cast("hid_t") long plist_id, @Const Pointer buf);
+public static native @Cast("herr_t") int H5Diterate(Pointer buf, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id,
             H5D_operator_t op, Pointer operator_data);
-public static native @Cast("herr_t") int H5Dvlen_reclaim(@Cast("hid_t") int type_id, @Cast("hid_t") int space_id, @Cast("hid_t") int plist_id, Pointer buf);
-public static native @Cast("herr_t") int H5Dvlen_get_buf_size(@Cast("hid_t") int dataset_id, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id, @Cast("hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Dvlen_get_buf_size(@Cast("hid_t") int dataset_id, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id, @Cast("hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Dvlen_get_buf_size(@Cast("hid_t") int dataset_id, @Cast("hid_t") int type_id, @Cast("hid_t") int space_id, @Cast("hsize_t*") long[] size);
-public static native @Cast("herr_t") int H5Dfill(@Const Pointer fill, @Cast("hid_t") int fill_type, Pointer buf,
-        @Cast("hid_t") int buf_type, @Cast("hid_t") int space);
-public static native @Cast("herr_t") int H5Dset_extent(@Cast("hid_t") int dset_id, @Cast("const hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Dset_extent(@Cast("hid_t") int dset_id, @Cast("const hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Dset_extent(@Cast("hid_t") int dset_id, @Cast("const hsize_t*") long[] size);
-public static native @Cast("herr_t") int H5Dflush(@Cast("hid_t") int dset_id);
-public static native @Cast("herr_t") int H5Drefresh(@Cast("hid_t") int dset_id);
-public static native @Cast("herr_t") int H5Dscatter(H5D_scatter_func_t op, Pointer op_data, @Cast("hid_t") int type_id,
-    @Cast("hid_t") int dst_space_id, Pointer dst_buf);
-public static native @Cast("herr_t") int H5Dgather(@Cast("hid_t") int src_space_id, @Const Pointer src_buf, @Cast("hid_t") int type_id,
+public static native @Cast("herr_t") int H5Dvlen_reclaim(@Cast("hid_t") long type_id, @Cast("hid_t") long space_id, @Cast("hid_t") long plist_id, Pointer buf);
+public static native @Cast("herr_t") int H5Dvlen_get_buf_size(@Cast("hid_t") long dataset_id, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Dvlen_get_buf_size(@Cast("hid_t") long dataset_id, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Dvlen_get_buf_size(@Cast("hid_t") long dataset_id, @Cast("hid_t") long type_id, @Cast("hid_t") long space_id, @Cast("hsize_t*") long[] size);
+public static native @Cast("herr_t") int H5Dfill(@Const Pointer fill, @Cast("hid_t") long fill_type, Pointer buf,
+        @Cast("hid_t") long buf_type, @Cast("hid_t") long space);
+public static native @Cast("herr_t") int H5Dset_extent(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Dset_extent(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Dset_extent(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") long[] size);
+public static native @Cast("herr_t") int H5Dflush(@Cast("hid_t") long dset_id);
+public static native @Cast("herr_t") int H5Drefresh(@Cast("hid_t") long dset_id);
+public static native @Cast("herr_t") int H5Dscatter(H5D_scatter_func_t op, Pointer op_data, @Cast("hid_t") long type_id,
+    @Cast("hid_t") long dst_space_id, Pointer dst_buf);
+public static native @Cast("herr_t") int H5Dgather(@Cast("hid_t") long src_space_id, @Const Pointer src_buf, @Cast("hid_t") long type_id,
     @Cast("size_t") long dst_buf_size, Pointer dst_buf, H5D_gather_func_t op, Pointer op_data);
-public static native @Cast("herr_t") int H5Ddebug(@Cast("hid_t") int dset_id);
+public static native @Cast("herr_t") int H5Ddebug(@Cast("hid_t") long dset_id);
 
 /* Internal API routines */
-public static native @Cast("herr_t") int H5Dformat_convert(@Cast("hid_t") int dset_id);
-public static native @Cast("herr_t") int H5Dget_chunk_index_type(@Cast("hid_t") int did, @Cast("H5D_chunk_index_t*") IntPointer idx_type);
-public static native @Cast("herr_t") int H5Dget_chunk_index_type(@Cast("hid_t") int did, @Cast("H5D_chunk_index_t*") IntBuffer idx_type);
-public static native @Cast("herr_t") int H5Dget_chunk_index_type(@Cast("hid_t") int did, @Cast("H5D_chunk_index_t*") int[] idx_type);
+public static native @Cast("herr_t") int H5Dformat_convert(@Cast("hid_t") long dset_id);
+public static native @Cast("herr_t") int H5Dget_chunk_index_type(@Cast("hid_t") long did, @Cast("H5D_chunk_index_t*") IntPointer idx_type);
+public static native @Cast("herr_t") int H5Dget_chunk_index_type(@Cast("hid_t") long did, @Cast("H5D_chunk_index_t*") IntBuffer idx_type);
+public static native @Cast("herr_t") int H5Dget_chunk_index_type(@Cast("hid_t") long did, @Cast("H5D_chunk_index_t*") int[] idx_type);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
  *
@@ -3950,9 +3947,9 @@ public static class H5E_error2_t extends Pointer {
         return (H5E_error2_t)super.position(position);
     }
 
-    public native @Cast("hid_t") int cls_id(); public native H5E_error2_t cls_id(int cls_id);         /*class ID                           */
-    public native @Cast("hid_t") int maj_num(); public native H5E_error2_t maj_num(int maj_num);	/*major error ID		     */
-    public native @Cast("hid_t") int min_num(); public native H5E_error2_t min_num(int min_num);	/*minor error number		     */
+    public native @Cast("hid_t") long cls_id(); public native H5E_error2_t cls_id(long cls_id);         /*class ID                           */
+    public native @Cast("hid_t") long maj_num(); public native H5E_error2_t maj_num(long maj_num);	/*major error ID		     */
+    public native @Cast("hid_t") long min_num(); public native H5E_error2_t min_num(long min_num);	/*minor error number		     */
     public native @Cast("unsigned") int line(); public native H5E_error2_t line(int line);		/*line in file where error occurs    */
     @MemberGetter public native @Cast("const char*") BytePointer func_name();   	/*function in which error occurred   */
     @MemberGetter public native @Cast("const char*") BytePointer file_name();	/*file in which error occurred       */
@@ -4054,47 +4051,47 @@ public static class H5E_auto2_t extends FunctionPointer {
     public    H5E_auto2_t(Pointer p) { super(p); }
     protected H5E_auto2_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int estack, Pointer client_data);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long estack, Pointer client_data);
 }
 
 /* Public API functions */
-public static native @Cast("hid_t") int H5Eregister_class(@Cast("const char*") BytePointer cls_name, @Cast("const char*") BytePointer lib_name,
+public static native @Cast("hid_t") long H5Eregister_class(@Cast("const char*") BytePointer cls_name, @Cast("const char*") BytePointer lib_name,
     @Cast("const char*") BytePointer version);
-public static native @Cast("hid_t") int H5Eregister_class(String cls_name, String lib_name,
+public static native @Cast("hid_t") long H5Eregister_class(String cls_name, String lib_name,
     String version);
-public static native @Cast("herr_t") int H5Eunregister_class(@Cast("hid_t") int class_id);
-public static native @Cast("herr_t") int H5Eclose_msg(@Cast("hid_t") int err_id);
-public static native @Cast("hid_t") int H5Ecreate_msg(@Cast("hid_t") int cls, @Cast("H5E_type_t") int msg_type, @Cast("const char*") BytePointer msg);
-public static native @Cast("hid_t") int H5Ecreate_msg(@Cast("hid_t") int cls, @Cast("H5E_type_t") int msg_type, String msg);
-public static native @Cast("hid_t") int H5Ecreate_stack();
-public static native @Cast("hid_t") int H5Eget_current_stack();
-public static native @Cast("herr_t") int H5Eclose_stack(@Cast("hid_t") int stack_id);
-public static native @Cast("ssize_t") int H5Eget_class_name(@Cast("hid_t") int class_id, @Cast("char*") BytePointer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Eget_class_name(@Cast("hid_t") int class_id, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Eget_class_name(@Cast("hid_t") int class_id, @Cast("char*") byte[] name, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Eset_current_stack(@Cast("hid_t") int err_stack_id);
-public static native @Cast("herr_t") int H5Epush2(@Cast("hid_t") int err_stack, @Cast("const char*") BytePointer file, @Cast("const char*") BytePointer func, @Cast("unsigned") int line,
-    @Cast("hid_t") int cls_id, @Cast("hid_t") int maj_id, @Cast("hid_t") int min_id, @Cast("const char*") BytePointer msg);
-public static native @Cast("herr_t") int H5Epush2(@Cast("hid_t") int err_stack, String file, String func, @Cast("unsigned") int line,
-    @Cast("hid_t") int cls_id, @Cast("hid_t") int maj_id, @Cast("hid_t") int min_id, String msg);
-public static native @Cast("herr_t") int H5Epop(@Cast("hid_t") int err_stack, @Cast("size_t") long count);
-public static native @Cast("herr_t") int H5Eprint2(@Cast("hid_t") int err_stack, @Cast("FILE*") Pointer stream);
-public static native @Cast("herr_t") int H5Ewalk2(@Cast("hid_t") int err_stack, @Cast("H5E_direction_t") int direction, H5E_walk2_t func,
+public static native @Cast("herr_t") int H5Eunregister_class(@Cast("hid_t") long class_id);
+public static native @Cast("herr_t") int H5Eclose_msg(@Cast("hid_t") long err_id);
+public static native @Cast("hid_t") long H5Ecreate_msg(@Cast("hid_t") long cls, @Cast("H5E_type_t") int msg_type, @Cast("const char*") BytePointer msg);
+public static native @Cast("hid_t") long H5Ecreate_msg(@Cast("hid_t") long cls, @Cast("H5E_type_t") int msg_type, String msg);
+public static native @Cast("hid_t") long H5Ecreate_stack();
+public static native @Cast("hid_t") long H5Eget_current_stack();
+public static native @Cast("herr_t") int H5Eclose_stack(@Cast("hid_t") long stack_id);
+public static native @Cast("ssize_t") long H5Eget_class_name(@Cast("hid_t") long class_id, @Cast("char*") BytePointer name, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Eget_class_name(@Cast("hid_t") long class_id, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Eget_class_name(@Cast("hid_t") long class_id, @Cast("char*") byte[] name, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Eset_current_stack(@Cast("hid_t") long err_stack_id);
+public static native @Cast("herr_t") int H5Epush2(@Cast("hid_t") long err_stack, @Cast("const char*") BytePointer file, @Cast("const char*") BytePointer func, @Cast("unsigned") int line,
+    @Cast("hid_t") long cls_id, @Cast("hid_t") long maj_id, @Cast("hid_t") long min_id, @Cast("const char*") BytePointer msg);
+public static native @Cast("herr_t") int H5Epush2(@Cast("hid_t") long err_stack, String file, String func, @Cast("unsigned") int line,
+    @Cast("hid_t") long cls_id, @Cast("hid_t") long maj_id, @Cast("hid_t") long min_id, String msg);
+public static native @Cast("herr_t") int H5Epop(@Cast("hid_t") long err_stack, @Cast("size_t") long count);
+public static native @Cast("herr_t") int H5Eprint2(@Cast("hid_t") long err_stack, @Cast("FILE*") Pointer stream);
+public static native @Cast("herr_t") int H5Ewalk2(@Cast("hid_t") long err_stack, @Cast("H5E_direction_t") int direction, H5E_walk2_t func,
     Pointer client_data);
-public static native @Cast("herr_t") int H5Eget_auto2(@Cast("hid_t") int estack_id, @ByPtrPtr H5E_auto2_t func, @Cast("void**") PointerPointer client_data);
-public static native @Cast("herr_t") int H5Eget_auto2(@Cast("hid_t") int estack_id, @ByPtrPtr H5E_auto2_t func, @Cast("void**") @ByPtrPtr Pointer client_data);
-public static native @Cast("herr_t") int H5Eset_auto2(@Cast("hid_t") int estack_id, H5E_auto2_t func, Pointer client_data);
-public static native @Cast("herr_t") int H5Eclear2(@Cast("hid_t") int err_stack);
-public static native @Cast("herr_t") int H5Eauto_is_v2(@Cast("hid_t") int err_stack, @Cast("unsigned*") IntPointer is_stack);
-public static native @Cast("herr_t") int H5Eauto_is_v2(@Cast("hid_t") int err_stack, @Cast("unsigned*") IntBuffer is_stack);
-public static native @Cast("herr_t") int H5Eauto_is_v2(@Cast("hid_t") int err_stack, @Cast("unsigned*") int[] is_stack);
-public static native @Cast("ssize_t") int H5Eget_msg(@Cast("hid_t") int msg_id, @Cast("H5E_type_t*") IntPointer type, @Cast("char*") BytePointer msg,
+public static native @Cast("herr_t") int H5Eget_auto2(@Cast("hid_t") long estack_id, @ByPtrPtr H5E_auto2_t func, @Cast("void**") PointerPointer client_data);
+public static native @Cast("herr_t") int H5Eget_auto2(@Cast("hid_t") long estack_id, @ByPtrPtr H5E_auto2_t func, @Cast("void**") @ByPtrPtr Pointer client_data);
+public static native @Cast("herr_t") int H5Eset_auto2(@Cast("hid_t") long estack_id, H5E_auto2_t func, Pointer client_data);
+public static native @Cast("herr_t") int H5Eclear2(@Cast("hid_t") long err_stack);
+public static native @Cast("herr_t") int H5Eauto_is_v2(@Cast("hid_t") long err_stack, @Cast("unsigned*") IntPointer is_stack);
+public static native @Cast("herr_t") int H5Eauto_is_v2(@Cast("hid_t") long err_stack, @Cast("unsigned*") IntBuffer is_stack);
+public static native @Cast("herr_t") int H5Eauto_is_v2(@Cast("hid_t") long err_stack, @Cast("unsigned*") int[] is_stack);
+public static native @Cast("ssize_t") long H5Eget_msg(@Cast("hid_t") long msg_id, @Cast("H5E_type_t*") IntPointer type, @Cast("char*") BytePointer msg,
     @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Eget_msg(@Cast("hid_t") int msg_id, @Cast("H5E_type_t*") IntBuffer type, @Cast("char*") ByteBuffer msg,
+public static native @Cast("ssize_t") long H5Eget_msg(@Cast("hid_t") long msg_id, @Cast("H5E_type_t*") IntBuffer type, @Cast("char*") ByteBuffer msg,
     @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Eget_msg(@Cast("hid_t") int msg_id, @Cast("H5E_type_t*") int[] type, @Cast("char*") byte[] msg,
+public static native @Cast("ssize_t") long H5Eget_msg(@Cast("hid_t") long msg_id, @Cast("H5E_type_t*") int[] type, @Cast("char*") byte[] msg,
     @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Eget_num(@Cast("hid_t") int error_stack_id);
+public static native @Cast("ssize_t") long H5Eget_num(@Cast("hid_t") long error_stack_id);
 
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
@@ -4307,7 +4304,7 @@ public static class H5F_sect_info_t extends Pointer {
         return (H5F_sect_info_t)super.position(position);
     }
 
-    public native @Cast("haddr_t") int addr(); public native H5F_sect_info_t addr(int addr);   /* Address of free space section */
+    public native @Cast("haddr_t") long addr(); public native H5F_sect_info_t addr(long addr);   /* Address of free space section */
     public native @Cast("hsize_t") long size(); public native H5F_sect_info_t size(long size);   /* Size of free space section */
 }
 
@@ -4357,7 +4354,7 @@ public static class H5F_retry_info_t extends Pointer {
     }
 
     public native @Cast("unsigned") int nbins(); public native H5F_retry_info_t nbins(int nbins);
-    public native @Cast("uint32_t*") ShortPointer retries(int i); public native H5F_retry_info_t retries(int i, ShortPointer retries);
+    public native @Cast("uint32_t*") IntPointer retries(int i); public native H5F_retry_info_t retries(int i, IntPointer retries);
     @MemberGetter public native @Cast("uint32_t**") PointerPointer retries();
 }
 
@@ -4368,7 +4365,7 @@ public static class H5F_flush_cb_t extends FunctionPointer {
     public    H5F_flush_cb_t(Pointer p) { super(p); }
     protected H5F_flush_cb_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int object_id, Pointer udata);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long object_id, Pointer udata);
 }
 
 
@@ -4378,85 +4375,85 @@ public static class H5F_flush_cb_t extends FunctionPointer {
 /* Functions in H5F.c */
 public static native @Cast("htri_t") int H5Fis_hdf5(@Cast("const char*") BytePointer filename);
 public static native @Cast("htri_t") int H5Fis_hdf5(String filename);
-public static native @Cast("hid_t") int H5Fcreate(@Cast("const char*") BytePointer filename, @Cast("unsigned") int flags,
-		  	  @Cast("hid_t") int create_plist, @Cast("hid_t") int access_plist);
-public static native @Cast("hid_t") int H5Fcreate(String filename, @Cast("unsigned") int flags,
-		  	  @Cast("hid_t") int create_plist, @Cast("hid_t") int access_plist);
-public static native @Cast("hid_t") int H5Fopen(@Cast("const char*") BytePointer filename, @Cast("unsigned") int flags,
-		        @Cast("hid_t") int access_plist);
-public static native @Cast("hid_t") int H5Fopen(String filename, @Cast("unsigned") int flags,
-		        @Cast("hid_t") int access_plist);
-public static native @Cast("hid_t") int H5Freopen(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fflush(@Cast("hid_t") int object_id, @Cast("H5F_scope_t") int scope);
-public static native @Cast("herr_t") int H5Fclose(@Cast("hid_t") int file_id);
-public static native @Cast("hid_t") int H5Fget_create_plist(@Cast("hid_t") int file_id);
-public static native @Cast("hid_t") int H5Fget_access_plist(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fget_intent(@Cast("hid_t") int file_id, @Cast("unsigned*") IntPointer intent);
-public static native @Cast("herr_t") int H5Fget_intent(@Cast("hid_t") int file_id, @Cast("unsigned*") IntBuffer intent);
-public static native @Cast("herr_t") int H5Fget_intent(@Cast("hid_t") int file_id, @Cast("unsigned*") int[] intent);
-public static native @Cast("ssize_t") int H5Fget_obj_count(@Cast("hid_t") int file_id, @Cast("unsigned") int types);
-public static native @Cast("ssize_t") int H5Fget_obj_ids(@Cast("hid_t") int file_id, @Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") IntPointer obj_id_list);
-public static native @Cast("ssize_t") int H5Fget_obj_ids(@Cast("hid_t") int file_id, @Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") IntBuffer obj_id_list);
-public static native @Cast("ssize_t") int H5Fget_obj_ids(@Cast("hid_t") int file_id, @Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") int[] obj_id_list);
-public static native @Cast("herr_t") int H5Fget_vfd_handle(@Cast("hid_t") int file_id, @Cast("hid_t") int fapl, @Cast("void**") PointerPointer file_handle);
-public static native @Cast("herr_t") int H5Fget_vfd_handle(@Cast("hid_t") int file_id, @Cast("hid_t") int fapl, @Cast("void**") @ByPtrPtr Pointer file_handle);
-public static native @Cast("herr_t") int H5Fmount(@Cast("hid_t") int loc, @Cast("const char*") BytePointer name, @Cast("hid_t") int child, @Cast("hid_t") int plist);
-public static native @Cast("herr_t") int H5Fmount(@Cast("hid_t") int loc, String name, @Cast("hid_t") int child, @Cast("hid_t") int plist);
-public static native @Cast("herr_t") int H5Funmount(@Cast("hid_t") int loc, @Cast("const char*") BytePointer name);
-public static native @Cast("herr_t") int H5Funmount(@Cast("hid_t") int loc, String name);
-public static native @Cast("hssize_t") long H5Fget_freespace(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fget_filesize(@Cast("hid_t") int file_id, @Cast("hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Fget_filesize(@Cast("hid_t") int file_id, @Cast("hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Fget_filesize(@Cast("hid_t") int file_id, @Cast("hsize_t*") long[] size);
-public static native @Cast("ssize_t") int H5Fget_file_image(@Cast("hid_t") int file_id, Pointer buf_ptr, @Cast("size_t") long buf_len);
-public static native @Cast("herr_t") int H5Fget_mdc_config(@Cast("hid_t") int file_id,
+public static native @Cast("hid_t") long H5Fcreate(@Cast("const char*") BytePointer filename, @Cast("unsigned") int flags,
+		  	  @Cast("hid_t") long create_plist, @Cast("hid_t") long access_plist);
+public static native @Cast("hid_t") long H5Fcreate(String filename, @Cast("unsigned") int flags,
+		  	  @Cast("hid_t") long create_plist, @Cast("hid_t") long access_plist);
+public static native @Cast("hid_t") long H5Fopen(@Cast("const char*") BytePointer filename, @Cast("unsigned") int flags,
+		        @Cast("hid_t") long access_plist);
+public static native @Cast("hid_t") long H5Fopen(String filename, @Cast("unsigned") int flags,
+		        @Cast("hid_t") long access_plist);
+public static native @Cast("hid_t") long H5Freopen(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fflush(@Cast("hid_t") long object_id, @Cast("H5F_scope_t") int scope);
+public static native @Cast("herr_t") int H5Fclose(@Cast("hid_t") long file_id);
+public static native @Cast("hid_t") long H5Fget_create_plist(@Cast("hid_t") long file_id);
+public static native @Cast("hid_t") long H5Fget_access_plist(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fget_intent(@Cast("hid_t") long file_id, @Cast("unsigned*") IntPointer intent);
+public static native @Cast("herr_t") int H5Fget_intent(@Cast("hid_t") long file_id, @Cast("unsigned*") IntBuffer intent);
+public static native @Cast("herr_t") int H5Fget_intent(@Cast("hid_t") long file_id, @Cast("unsigned*") int[] intent);
+public static native @Cast("ssize_t") long H5Fget_obj_count(@Cast("hid_t") long file_id, @Cast("unsigned") int types);
+public static native @Cast("ssize_t") long H5Fget_obj_ids(@Cast("hid_t") long file_id, @Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") LongPointer obj_id_list);
+public static native @Cast("ssize_t") long H5Fget_obj_ids(@Cast("hid_t") long file_id, @Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") LongBuffer obj_id_list);
+public static native @Cast("ssize_t") long H5Fget_obj_ids(@Cast("hid_t") long file_id, @Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") long[] obj_id_list);
+public static native @Cast("herr_t") int H5Fget_vfd_handle(@Cast("hid_t") long file_id, @Cast("hid_t") long fapl, @Cast("void**") PointerPointer file_handle);
+public static native @Cast("herr_t") int H5Fget_vfd_handle(@Cast("hid_t") long file_id, @Cast("hid_t") long fapl, @Cast("void**") @ByPtrPtr Pointer file_handle);
+public static native @Cast("herr_t") int H5Fmount(@Cast("hid_t") long loc, @Cast("const char*") BytePointer name, @Cast("hid_t") long child, @Cast("hid_t") long plist);
+public static native @Cast("herr_t") int H5Fmount(@Cast("hid_t") long loc, String name, @Cast("hid_t") long child, @Cast("hid_t") long plist);
+public static native @Cast("herr_t") int H5Funmount(@Cast("hid_t") long loc, @Cast("const char*") BytePointer name);
+public static native @Cast("herr_t") int H5Funmount(@Cast("hid_t") long loc, String name);
+public static native @Cast("hssize_t") long H5Fget_freespace(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fget_filesize(@Cast("hid_t") long file_id, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Fget_filesize(@Cast("hid_t") long file_id, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Fget_filesize(@Cast("hid_t") long file_id, @Cast("hsize_t*") long[] size);
+public static native @Cast("ssize_t") long H5Fget_file_image(@Cast("hid_t") long file_id, Pointer buf_ptr, @Cast("size_t") long buf_len);
+public static native @Cast("herr_t") int H5Fget_mdc_config(@Cast("hid_t") long file_id,
 				H5AC_cache_config_t config_ptr);
-public static native @Cast("herr_t") int H5Fset_mdc_config(@Cast("hid_t") int file_id,
+public static native @Cast("herr_t") int H5Fset_mdc_config(@Cast("hid_t") long file_id,
 				H5AC_cache_config_t config_ptr);
-public static native @Cast("herr_t") int H5Fget_mdc_hit_rate(@Cast("hid_t") int file_id, DoublePointer hit_rate_ptr);
-public static native @Cast("herr_t") int H5Fget_mdc_hit_rate(@Cast("hid_t") int file_id, DoubleBuffer hit_rate_ptr);
-public static native @Cast("herr_t") int H5Fget_mdc_hit_rate(@Cast("hid_t") int file_id, double[] hit_rate_ptr);
-public static native @Cast("herr_t") int H5Fget_mdc_size(@Cast("hid_t") int file_id,
+public static native @Cast("herr_t") int H5Fget_mdc_hit_rate(@Cast("hid_t") long file_id, DoublePointer hit_rate_ptr);
+public static native @Cast("herr_t") int H5Fget_mdc_hit_rate(@Cast("hid_t") long file_id, DoubleBuffer hit_rate_ptr);
+public static native @Cast("herr_t") int H5Fget_mdc_hit_rate(@Cast("hid_t") long file_id, double[] hit_rate_ptr);
+public static native @Cast("herr_t") int H5Fget_mdc_size(@Cast("hid_t") long file_id,
                               @Cast("size_t*") SizeTPointer max_size_ptr,
                               @Cast("size_t*") SizeTPointer min_clean_size_ptr,
                               @Cast("size_t*") SizeTPointer cur_size_ptr,
                               IntPointer cur_num_entries_ptr);
-public static native @Cast("herr_t") int H5Fget_mdc_size(@Cast("hid_t") int file_id,
+public static native @Cast("herr_t") int H5Fget_mdc_size(@Cast("hid_t") long file_id,
                               @Cast("size_t*") SizeTPointer max_size_ptr,
                               @Cast("size_t*") SizeTPointer min_clean_size_ptr,
                               @Cast("size_t*") SizeTPointer cur_size_ptr,
                               IntBuffer cur_num_entries_ptr);
-public static native @Cast("herr_t") int H5Fget_mdc_size(@Cast("hid_t") int file_id,
+public static native @Cast("herr_t") int H5Fget_mdc_size(@Cast("hid_t") long file_id,
                               @Cast("size_t*") SizeTPointer max_size_ptr,
                               @Cast("size_t*") SizeTPointer min_clean_size_ptr,
                               @Cast("size_t*") SizeTPointer cur_size_ptr,
                               int[] cur_num_entries_ptr);
-public static native @Cast("herr_t") int H5Freset_mdc_hit_rate_stats(@Cast("hid_t") int file_id);
-public static native @Cast("ssize_t") int H5Fget_name(@Cast("hid_t") int obj_id, @Cast("char*") BytePointer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Fget_name(@Cast("hid_t") int obj_id, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Fget_name(@Cast("hid_t") int obj_id, @Cast("char*") byte[] name, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Fget_info2(@Cast("hid_t") int obj_id, H5F_info2_t finfo);
-public static native @Cast("herr_t") int H5Fget_metadata_read_retry_info(@Cast("hid_t") int file_id, H5F_retry_info_t info);
-public static native @Cast("herr_t") int H5Fstart_swmr_write(@Cast("hid_t") int file_id);
-public static native @Cast("ssize_t") int H5Fget_free_sections(@Cast("hid_t") int file_id, @Cast("H5F_mem_t") int type,
+public static native @Cast("herr_t") int H5Freset_mdc_hit_rate_stats(@Cast("hid_t") long file_id);
+public static native @Cast("ssize_t") long H5Fget_name(@Cast("hid_t") long obj_id, @Cast("char*") BytePointer name, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Fget_name(@Cast("hid_t") long obj_id, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Fget_name(@Cast("hid_t") long obj_id, @Cast("char*") byte[] name, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Fget_info2(@Cast("hid_t") long obj_id, H5F_info2_t finfo);
+public static native @Cast("herr_t") int H5Fget_metadata_read_retry_info(@Cast("hid_t") long file_id, H5F_retry_info_t info);
+public static native @Cast("herr_t") int H5Fstart_swmr_write(@Cast("hid_t") long file_id);
+public static native @Cast("ssize_t") long H5Fget_free_sections(@Cast("hid_t") long file_id, @Cast("H5F_mem_t") int type,
     @Cast("size_t") long nsects, H5F_sect_info_t sect_info);
-public static native @Cast("herr_t") int H5Fclear_elink_file_cache(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fset_latest_format(@Cast("hid_t") int file_id, @Cast("hbool_t") boolean latest_format);
-public static native @Cast("herr_t") int H5Fstart_mdc_logging(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fstop_mdc_logging(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fget_mdc_logging_status(@Cast("hid_t") int file_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("hbool_t*") BoolPointer is_currently_logging);
-public static native @Cast("herr_t") int H5Fget_mdc_logging_status(@Cast("hid_t") int file_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("hbool_t*") boolean[] is_currently_logging);
-public static native @Cast("herr_t") int H5Fformat_convert(@Cast("hid_t") int fid);
-public static native @Cast("herr_t") int H5Freset_page_buffering_stats(@Cast("hid_t") int file_id);
-public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_t") int file_id, @Cast("unsigned*") IntPointer accesses,
+public static native @Cast("herr_t") int H5Fclear_elink_file_cache(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fset_latest_format(@Cast("hid_t") long file_id, @Cast("hbool_t") boolean latest_format);
+public static native @Cast("herr_t") int H5Fstart_mdc_logging(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fstop_mdc_logging(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fget_mdc_logging_status(@Cast("hid_t") long file_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("hbool_t*") BoolPointer is_currently_logging);
+public static native @Cast("herr_t") int H5Fget_mdc_logging_status(@Cast("hid_t") long file_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("hbool_t*") boolean[] is_currently_logging);
+public static native @Cast("herr_t") int H5Fformat_convert(@Cast("hid_t") long fid);
+public static native @Cast("herr_t") int H5Freset_page_buffering_stats(@Cast("hid_t") long file_id);
+public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_t") long file_id, @Cast("unsigned*") IntPointer accesses,
     @Cast("unsigned*") IntPointer hits, @Cast("unsigned*") IntPointer misses, @Cast("unsigned*") IntPointer evictions, @Cast("unsigned*") IntPointer bypasses);
-public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_t") int file_id, @Cast("unsigned*") IntBuffer accesses,
+public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_t") long file_id, @Cast("unsigned*") IntBuffer accesses,
     @Cast("unsigned*") IntBuffer hits, @Cast("unsigned*") IntBuffer misses, @Cast("unsigned*") IntBuffer evictions, @Cast("unsigned*") IntBuffer bypasses);
-public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_t") int file_id, @Cast("unsigned*") int[] accesses,
+public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_t") long file_id, @Cast("unsigned*") int[] accesses,
     @Cast("unsigned*") int[] hits, @Cast("unsigned*") int[] misses, @Cast("unsigned*") int[] evictions, @Cast("unsigned*") int[] bypasses);
-public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") int file_id, @Cast("haddr_t*") IntPointer image_addr, @Cast("hsize_t*") LongPointer image_size);
-public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") int file_id, @Cast("haddr_t*") IntBuffer image_addr, @Cast("hsize_t*") LongBuffer image_size);
-public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") int file_id, @Cast("haddr_t*") int[] image_addr, @Cast("hsize_t*") long[] image_size);
+public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") long file_id, @Cast("haddr_t*") LongPointer image_addr, @Cast("hsize_t*") LongPointer image_size);
+public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") long file_id, @Cast("haddr_t*") LongBuffer image_addr, @Cast("hsize_t*") LongBuffer image_size);
+public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") long file_id, @Cast("haddr_t*") long[] image_addr, @Cast("hsize_t*") long[] image_size);
 
 // #ifdef H5_HAVE_PARALLEL
 // #endif /* H5_HAVE_PARALLEL */
@@ -4747,7 +4744,7 @@ public static class H5FD_class_t extends Pointer {
     }
 
     @MemberGetter public native @Cast("const char*") BytePointer name();
-    public native @Cast("haddr_t") int maxaddr(); public native H5FD_class_t maxaddr(int maxaddr);
+    public native @Cast("haddr_t") long maxaddr(); public native H5FD_class_t maxaddr(long maxaddr);
     public native @Cast("H5F_close_degree_t") int fc_degree(); public native H5FD_class_t fc_degree(int fc_degree);
     public static class Int_Terminate extends FunctionPointer {
         static { Loader.load(); }
@@ -4833,16 +4830,16 @@ public static class H5FD_class_t extends Pointer {
         public native @Cast("herr_t") int call(Pointer dxpl);
     }
     public native Dxpl_free_Pointer dxpl_free(); public native H5FD_class_t dxpl_free(Dxpl_free_Pointer dxpl_free);
-    public static class Open_BytePointer_int_int_int extends FunctionPointer {
+    public static class Open_BytePointer_int_long_long extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Open_BytePointer_int_int_int(Pointer p) { super(p); }
-        protected Open_BytePointer_int_int_int() { allocate(); }
+        public    Open_BytePointer_int_long_long(Pointer p) { super(p); }
+        protected Open_BytePointer_int_long_long() { allocate(); }
         private native void allocate();
-        public native H5FD_t call(@Cast("const char*") BytePointer name, @Cast("unsigned") int flags, @Cast("hid_t") int fapl,
-                        @Cast("haddr_t") int maxaddr);
+        public native H5FD_t call(@Cast("const char*") BytePointer name, @Cast("unsigned") int flags, @Cast("hid_t") long fapl,
+                        @Cast("haddr_t") long maxaddr);
     }
-    public native Open_BytePointer_int_int_int open(); public native H5FD_class_t open(Open_BytePointer_int_int_int open);
+    public native Open_BytePointer_int_long_long open(); public native H5FD_class_t open(Open_BytePointer_int_long_long open);
     public static class Close_H5FD_t extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4879,99 +4876,99 @@ public static class H5FD_class_t extends Pointer {
         public native @Cast("herr_t") int call(@Const H5FD_t file, @Cast("H5FD_mem_t*") IntPointer type_map);
     }
     public native Get_type_map_H5FD_t_IntPointer get_type_map(); public native H5FD_class_t get_type_map(Get_type_map_H5FD_t_IntPointer get_type_map);
-    public static class Alloc_H5FD_t_int_int_long extends FunctionPointer {
+    public static class Alloc_H5FD_t_int_long_long extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Alloc_H5FD_t_int_int_long(Pointer p) { super(p); }
-        protected Alloc_H5FD_t_int_int_long() { allocate(); }
+        public    Alloc_H5FD_t_int_long_long(Pointer p) { super(p); }
+        protected Alloc_H5FD_t_int_long_long() { allocate(); }
         private native void allocate();
-        public native @Cast("haddr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl_id, @Cast("hsize_t") long size);
+        public native @Cast("haddr_t") long call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl_id, @Cast("hsize_t") long size);
     }
-    public native Alloc_H5FD_t_int_int_long alloc(); public native H5FD_class_t alloc(Alloc_H5FD_t_int_int_long alloc);
-    public static class Free_H5FD_t_int_int_int_long extends FunctionPointer {
+    public native Alloc_H5FD_t_int_long_long alloc(); public native H5FD_class_t alloc(Alloc_H5FD_t_int_long_long alloc);
+    public static class Free_H5FD_t_int_long_long_long extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Free_H5FD_t_int_int_int_long(Pointer p) { super(p); }
-        protected Free_H5FD_t_int_int_int_long() { allocate(); }
+        public    Free_H5FD_t_int_long_long_long(Pointer p) { super(p); }
+        protected Free_H5FD_t_int_long_long_long() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl_id,
-                        @Cast("haddr_t") int addr, @Cast("hsize_t") long size);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl_id,
+                        @Cast("haddr_t") long addr, @Cast("hsize_t") long size);
     }
-    public native Free_H5FD_t_int_int_int_long free(); public native H5FD_class_t free(Free_H5FD_t_int_int_int_long free);
+    public native Free_H5FD_t_int_long_long_long free(); public native H5FD_class_t free(Free_H5FD_t_int_long_long_long free);
     public static class Get_eoa_H5FD_t_int extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_eoa_H5FD_t_int(Pointer p) { super(p); }
         protected Get_eoa_H5FD_t_int() { allocate(); }
         private native void allocate();
-        public native @Cast("haddr_t") int call(@Const H5FD_t file, @Cast("H5FD_mem_t") int type);
+        public native @Cast("haddr_t") long call(@Const H5FD_t file, @Cast("H5FD_mem_t") int type);
     }
     public native Get_eoa_H5FD_t_int get_eoa(); public native H5FD_class_t get_eoa(Get_eoa_H5FD_t_int get_eoa);
-    public static class Set_eoa_H5FD_t_int_int extends FunctionPointer {
+    public static class Set_eoa_H5FD_t_int_long extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Set_eoa_H5FD_t_int_int(Pointer p) { super(p); }
-        protected Set_eoa_H5FD_t_int_int() { allocate(); }
+        public    Set_eoa_H5FD_t_int_long(Pointer p) { super(p); }
+        protected Set_eoa_H5FD_t_int_long() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("haddr_t") int addr);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("haddr_t") long addr);
     }
-    public native Set_eoa_H5FD_t_int_int set_eoa(); public native H5FD_class_t set_eoa(Set_eoa_H5FD_t_int_int set_eoa);
+    public native Set_eoa_H5FD_t_int_long set_eoa(); public native H5FD_class_t set_eoa(Set_eoa_H5FD_t_int_long set_eoa);
     public static class Get_eof_H5FD_t_int extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_eof_H5FD_t_int(Pointer p) { super(p); }
         protected Get_eof_H5FD_t_int() { allocate(); }
         private native void allocate();
-        public native @Cast("haddr_t") int call(@Const H5FD_t file, @Cast("H5FD_mem_t") int type);
+        public native @Cast("haddr_t") long call(@Const H5FD_t file, @Cast("H5FD_mem_t") int type);
     }
     public native Get_eof_H5FD_t_int get_eof(); public native H5FD_class_t get_eof(Get_eof_H5FD_t_int get_eof);
-    public static class Get_handle_H5FD_t_int_PointerPointer extends FunctionPointer {
+    public static class Get_handle_H5FD_t_long_PointerPointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Get_handle_H5FD_t_int_PointerPointer(Pointer p) { super(p); }
-        protected Get_handle_H5FD_t_int_PointerPointer() { allocate(); }
+        public    Get_handle_H5FD_t_long_PointerPointer(Pointer p) { super(p); }
+        protected Get_handle_H5FD_t_long_PointerPointer() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") int fapl, @Cast("void**") PointerPointer file_handle);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long fapl, @Cast("void**") PointerPointer file_handle);
     }
-    public native Get_handle_H5FD_t_int_PointerPointer get_handle(); public native H5FD_class_t get_handle(Get_handle_H5FD_t_int_PointerPointer get_handle);
-    public static class Read_H5FD_t_int_int_int_long_Pointer extends FunctionPointer {
+    public native Get_handle_H5FD_t_long_PointerPointer get_handle(); public native H5FD_class_t get_handle(Get_handle_H5FD_t_long_PointerPointer get_handle);
+    public static class Read_H5FD_t_int_long_long_long_Pointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Read_H5FD_t_int_int_int_long_Pointer(Pointer p) { super(p); }
-        protected Read_H5FD_t_int_int_int_long_Pointer() { allocate(); }
+        public    Read_H5FD_t_int_long_long_long_Pointer(Pointer p) { super(p); }
+        protected Read_H5FD_t_int_long_long_long_Pointer() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl,
-                        @Cast("haddr_t") int addr, @Cast("size_t") long size, Pointer buffer);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl,
+                        @Cast("haddr_t") long addr, @Cast("size_t") long size, Pointer buffer);
     }
-    public native Read_H5FD_t_int_int_int_long_Pointer read(); public native H5FD_class_t read(Read_H5FD_t_int_int_int_long_Pointer read);
-    public static class Write_H5FD_t_int_int_int_long_Pointer extends FunctionPointer {
+    public native Read_H5FD_t_int_long_long_long_Pointer read(); public native H5FD_class_t read(Read_H5FD_t_int_long_long_long_Pointer read);
+    public static class Write_H5FD_t_int_long_long_long_Pointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Write_H5FD_t_int_int_int_long_Pointer(Pointer p) { super(p); }
-        protected Write_H5FD_t_int_int_int_long_Pointer() { allocate(); }
+        public    Write_H5FD_t_int_long_long_long_Pointer(Pointer p) { super(p); }
+        protected Write_H5FD_t_int_long_long_long_Pointer() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl,
-                         @Cast("haddr_t") int addr, @Cast("size_t") long size, @Const Pointer buffer);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl,
+                         @Cast("haddr_t") long addr, @Cast("size_t") long size, @Const Pointer buffer);
     }
-    public native Write_H5FD_t_int_int_int_long_Pointer write(); public native H5FD_class_t write(Write_H5FD_t_int_int_int_long_Pointer write);
-    public static class Flush_H5FD_t_int_boolean extends FunctionPointer {
+    public native Write_H5FD_t_int_long_long_long_Pointer write(); public native H5FD_class_t write(Write_H5FD_t_int_long_long_long_Pointer write);
+    public static class Flush_H5FD_t_long_boolean extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Flush_H5FD_t_int_boolean(Pointer p) { super(p); }
-        protected Flush_H5FD_t_int_boolean() { allocate(); }
+        public    Flush_H5FD_t_long_boolean(Pointer p) { super(p); }
+        protected Flush_H5FD_t_long_boolean() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") int dxpl_id, @Cast("hbool_t") boolean closing);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("hbool_t") boolean closing);
     }
-    public native Flush_H5FD_t_int_boolean flush(); public native H5FD_class_t flush(Flush_H5FD_t_int_boolean flush);
-    public static class Truncate_H5FD_t_int_boolean extends FunctionPointer {
+    public native Flush_H5FD_t_long_boolean flush(); public native H5FD_class_t flush(Flush_H5FD_t_long_boolean flush);
+    public static class Truncate_H5FD_t_long_boolean extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Truncate_H5FD_t_int_boolean(Pointer p) { super(p); }
-        protected Truncate_H5FD_t_int_boolean() { allocate(); }
+        public    Truncate_H5FD_t_long_boolean(Pointer p) { super(p); }
+        protected Truncate_H5FD_t_long_boolean() { allocate(); }
         private native void allocate();
-        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") int dxpl_id, @Cast("hbool_t") boolean closing);
+        public native @Cast("herr_t") int call(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("hbool_t") boolean closing);
     }
-    public native Truncate_H5FD_t_int_boolean truncate(); public native H5FD_class_t truncate(Truncate_H5FD_t_int_boolean truncate);
+    public native Truncate_H5FD_t_long_boolean truncate(); public native H5FD_class_t truncate(Truncate_H5FD_t_long_boolean truncate);
     public static class Lock_H5FD_t_boolean extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -5009,7 +5006,7 @@ public static class H5FD_free_t extends Pointer {
         return (H5FD_free_t)super.position(position);
     }
 
-    public native @Cast("haddr_t") int addr(); public native H5FD_free_t addr(int addr);
+    public native @Cast("haddr_t") long addr(); public native H5FD_free_t addr(long addr);
     public native @Cast("hsize_t") long size(); public native H5FD_free_t size(long size);
     public native H5FD_free_t next(); public native H5FD_free_t next(H5FD_free_t next);
 }
@@ -5032,13 +5029,13 @@ public static class H5FD_t extends Pointer {
         return (H5FD_t)super.position(position);
     }
 
-    public native @Cast("hid_t") int driver_id(); public native H5FD_t driver_id(int driver_id);      /*driver ID for this file   */
+    public native @Cast("hid_t") long driver_id(); public native H5FD_t driver_id(long driver_id);      /*driver ID for this file   */
     @MemberGetter public native @Const H5FD_class_t cls();            /*constant class info       */
     public native @Cast("unsigned long") long fileno(); public native H5FD_t fileno(long fileno);         /* File 'serial' number     */
     public native @Cast("unsigned") int access_flags(); public native H5FD_t access_flags(int access_flags);   /* File access flags (from create or open) */
     public native @Cast("unsigned long") long feature_flags(); public native H5FD_t feature_flags(long feature_flags);  /* VFL Driver feature Flags */
-    public native @Cast("haddr_t") int maxaddr(); public native H5FD_t maxaddr(int maxaddr);        /* For this file, overrides class */
-    public native @Cast("haddr_t") int base_addr(); public native H5FD_t base_addr(int base_addr);      /* Base address for HDF5 data w/in file */
+    public native @Cast("haddr_t") long maxaddr(); public native H5FD_t maxaddr(long maxaddr);        /* For this file, overrides class */
+    public native @Cast("haddr_t") long base_addr(); public native H5FD_t base_addr(long base_addr);      /* Base address for HDF5 data w/in file */
 
     /* Space allocation management fields */
     public native @Cast("hsize_t") long threshold(); public native H5FD_t threshold(long threshold);      /* Threshold for alignment  */
@@ -5138,29 +5135,29 @@ public static class H5FD_file_image_callbacks_t extends Pointer {
 // #endif
 
 /* Function prototypes */
-public static native @Cast("hid_t") int H5FDregister(@Const H5FD_class_t cls);
-public static native @Cast("herr_t") int H5FDunregister(@Cast("hid_t") int driver_id);
-public static native H5FD_t H5FDopen(@Cast("const char*") BytePointer name, @Cast("unsigned") int flags, @Cast("hid_t") int fapl_id,
-                        @Cast("haddr_t") int maxaddr);
-public static native H5FD_t H5FDopen(String name, @Cast("unsigned") int flags, @Cast("hid_t") int fapl_id,
-                        @Cast("haddr_t") int maxaddr);
+public static native @Cast("hid_t") long H5FDregister(@Const H5FD_class_t cls);
+public static native @Cast("herr_t") int H5FDunregister(@Cast("hid_t") long driver_id);
+public static native H5FD_t H5FDopen(@Cast("const char*") BytePointer name, @Cast("unsigned") int flags, @Cast("hid_t") long fapl_id,
+                        @Cast("haddr_t") long maxaddr);
+public static native H5FD_t H5FDopen(String name, @Cast("unsigned") int flags, @Cast("hid_t") long fapl_id,
+                        @Cast("haddr_t") long maxaddr);
 public static native @Cast("herr_t") int H5FDclose(H5FD_t file);
 public static native int H5FDcmp(@Const H5FD_t f1, @Const H5FD_t f2);
 public static native int H5FDquery(@Const H5FD_t f, @Cast("unsigned long*") CLongPointer flags);
-public static native @Cast("haddr_t") int H5FDalloc(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl_id, @Cast("hsize_t") long size);
-public static native @Cast("herr_t") int H5FDfree(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl_id,
-                       @Cast("haddr_t") int addr, @Cast("hsize_t") long size);
-public static native @Cast("haddr_t") int H5FDget_eoa(H5FD_t file, @Cast("H5FD_mem_t") int type);
-public static native @Cast("herr_t") int H5FDset_eoa(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("haddr_t") int eoa);
-public static native @Cast("haddr_t") int H5FDget_eof(H5FD_t file, @Cast("H5FD_mem_t") int type);
-public static native @Cast("herr_t") int H5FDget_vfd_handle(H5FD_t file, @Cast("hid_t") int fapl, @Cast("void**") PointerPointer file_handle);
-public static native @Cast("herr_t") int H5FDget_vfd_handle(H5FD_t file, @Cast("hid_t") int fapl, @Cast("void**") @ByPtrPtr Pointer file_handle);
-public static native @Cast("herr_t") int H5FDread(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl_id,
-                       @Cast("haddr_t") int addr, @Cast("size_t") long size, Pointer buf);
-public static native @Cast("herr_t") int H5FDwrite(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") int dxpl_id,
-                        @Cast("haddr_t") int addr, @Cast("size_t") long size, @Const Pointer buf);
-public static native @Cast("herr_t") int H5FDflush(H5FD_t file, @Cast("hid_t") int dxpl_id, @Cast("hbool_t") boolean closing);
-public static native @Cast("herr_t") int H5FDtruncate(H5FD_t file, @Cast("hid_t") int dxpl_id, @Cast("hbool_t") boolean closing);
+public static native @Cast("haddr_t") long H5FDalloc(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl_id, @Cast("hsize_t") long size);
+public static native @Cast("herr_t") int H5FDfree(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl_id,
+                       @Cast("haddr_t") long addr, @Cast("hsize_t") long size);
+public static native @Cast("haddr_t") long H5FDget_eoa(H5FD_t file, @Cast("H5FD_mem_t") int type);
+public static native @Cast("herr_t") int H5FDset_eoa(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("haddr_t") long eoa);
+public static native @Cast("haddr_t") long H5FDget_eof(H5FD_t file, @Cast("H5FD_mem_t") int type);
+public static native @Cast("herr_t") int H5FDget_vfd_handle(H5FD_t file, @Cast("hid_t") long fapl, @Cast("void**") PointerPointer file_handle);
+public static native @Cast("herr_t") int H5FDget_vfd_handle(H5FD_t file, @Cast("hid_t") long fapl, @Cast("void**") @ByPtrPtr Pointer file_handle);
+public static native @Cast("herr_t") int H5FDread(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl_id,
+                       @Cast("haddr_t") long addr, @Cast("size_t") long size, Pointer buf);
+public static native @Cast("herr_t") int H5FDwrite(H5FD_t file, @Cast("H5FD_mem_t") int type, @Cast("hid_t") long dxpl_id,
+                        @Cast("haddr_t") long addr, @Cast("size_t") long size, @Const Pointer buf);
+public static native @Cast("herr_t") int H5FDflush(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("hbool_t") boolean closing);
+public static native @Cast("herr_t") int H5FDtruncate(H5FD_t file, @Cast("hid_t") long dxpl_id, @Cast("hbool_t") boolean closing);
 public static native @Cast("herr_t") int H5FDlock(H5FD_t file, @Cast("hbool_t") boolean rw);
 public static native @Cast("herr_t") int H5FDunlock(H5FD_t file);
 
@@ -5244,7 +5241,7 @@ public static class H5G_info_t extends Pointer {
 
     public native @Cast("H5G_storage_type_t") int storage_type(); public native H5G_info_t storage_type(int storage_type);	/* Type of storage for links in group */
     public native @Cast("hsize_t") long nlinks(); public native H5G_info_t nlinks(long nlinks);		        /* Number of links in group */
-    public native @Cast("int64_t") int max_corder(); public native H5G_info_t max_corder(int max_corder);             /* Current max. creation order value for group */
+    public native @Cast("int64_t") long max_corder(); public native H5G_info_t max_corder(long max_corder);             /* Current max. creation order value for group */
     public native @Cast("hbool_t") boolean mounted(); public native H5G_info_t mounted(boolean mounted);                /* Whether group has a file mounted on it */
 }
 
@@ -5256,28 +5253,28 @@ public static class H5G_info_t extends Pointer {
 /*********************/
 /* Public Prototypes */
 /*********************/
-public static native @Cast("hid_t") int H5Gcreate2(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int lcpl_id,
-    @Cast("hid_t") int gcpl_id, @Cast("hid_t") int gapl_id);
-public static native @Cast("hid_t") int H5Gcreate2(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int lcpl_id,
-    @Cast("hid_t") int gcpl_id, @Cast("hid_t") int gapl_id);
-public static native @Cast("hid_t") int H5Gcreate_anon(@Cast("hid_t") int loc_id, @Cast("hid_t") int gcpl_id, @Cast("hid_t") int gapl_id);
-public static native @Cast("hid_t") int H5Gopen2(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int gapl_id);
-public static native @Cast("hid_t") int H5Gopen2(@Cast("hid_t") int loc_id, String name, @Cast("hid_t") int gapl_id);
-public static native @Cast("hid_t") int H5Gget_create_plist(@Cast("hid_t") int group_id);
-public static native @Cast("herr_t") int H5Gget_info(@Cast("hid_t") int loc_id, H5G_info_t ginfo);
-public static native @Cast("herr_t") int H5Gget_info_by_name(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name, H5G_info_t ginfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Gget_info_by_name(@Cast("hid_t") int loc_id, String name, H5G_info_t ginfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Gget_info_by_idx(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer group_name,
+public static native @Cast("hid_t") long H5Gcreate2(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long lcpl_id,
+    @Cast("hid_t") long gcpl_id, @Cast("hid_t") long gapl_id);
+public static native @Cast("hid_t") long H5Gcreate2(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long lcpl_id,
+    @Cast("hid_t") long gcpl_id, @Cast("hid_t") long gapl_id);
+public static native @Cast("hid_t") long H5Gcreate_anon(@Cast("hid_t") long loc_id, @Cast("hid_t") long gcpl_id, @Cast("hid_t") long gapl_id);
+public static native @Cast("hid_t") long H5Gopen2(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long gapl_id);
+public static native @Cast("hid_t") long H5Gopen2(@Cast("hid_t") long loc_id, String name, @Cast("hid_t") long gapl_id);
+public static native @Cast("hid_t") long H5Gget_create_plist(@Cast("hid_t") long group_id);
+public static native @Cast("herr_t") int H5Gget_info(@Cast("hid_t") long loc_id, H5G_info_t ginfo);
+public static native @Cast("herr_t") int H5Gget_info_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, H5G_info_t ginfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Gget_info_by_name(@Cast("hid_t") long loc_id, String name, H5G_info_t ginfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Gget_info_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, H5G_info_t ginfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Gget_info_by_idx(@Cast("hid_t") int loc_id, String group_name,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Gget_info_by_idx(@Cast("hid_t") long loc_id, String group_name,
     @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, H5G_info_t ginfo,
-    @Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Gclose(@Cast("hid_t") int group_id);
-public static native @Cast("herr_t") int H5Gflush(@Cast("hid_t") int group_id);
-public static native @Cast("herr_t") int H5Grefresh(@Cast("hid_t") int group_id);
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Gclose(@Cast("hid_t") long group_id);
+public static native @Cast("herr_t") int H5Gflush(@Cast("hid_t") long group_id);
+public static native @Cast("herr_t") int H5Grefresh(@Cast("hid_t") long group_id);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
  *
@@ -5502,7 +5499,7 @@ public static class H5P_cls_create_func_t extends FunctionPointer {
     public    H5P_cls_create_func_t(Pointer p) { super(p); }
     protected H5P_cls_create_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int prop_id, Pointer create_data);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long prop_id, Pointer create_data);
 }
 public static class H5P_cls_copy_func_t extends FunctionPointer {
     static { Loader.load(); }
@@ -5510,7 +5507,7 @@ public static class H5P_cls_copy_func_t extends FunctionPointer {
     public    H5P_cls_copy_func_t(Pointer p) { super(p); }
     protected H5P_cls_copy_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int new_prop_id, @Cast("hid_t") int old_prop_id,
+    public native @Cast("herr_t") int call(@Cast("hid_t") long new_prop_id, @Cast("hid_t") long old_prop_id,
                                       Pointer copy_data);
 }
 public static class H5P_cls_close_func_t extends FunctionPointer {
@@ -5519,7 +5516,7 @@ public static class H5P_cls_close_func_t extends FunctionPointer {
     public    H5P_cls_close_func_t(Pointer p) { super(p); }
     protected H5P_cls_close_func_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int prop_id, Pointer close_data);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long prop_id, Pointer close_data);
 }
 
 /* Define property list callback function pointer types */
@@ -5537,7 +5534,7 @@ public static class H5P_prp_cb2_t extends FunctionPointer {
     public    H5P_prp_cb2_t(Pointer p) { super(p); }
     protected H5P_prp_cb2_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int prop_id, @Cast("const char*") BytePointer name, @Cast("size_t") long size, Pointer value);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long prop_id, @Cast("const char*") BytePointer name, @Cast("size_t") long size, Pointer value);
 }
 public static class H5P_prp_encode_func_t extends FunctionPointer {
     static { Loader.load(); }
@@ -5571,7 +5568,7 @@ public static class H5P_iterate_t extends FunctionPointer {
     public    H5P_iterate_t(Pointer p) { super(p); }
     protected H5P_iterate_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int id, @Cast("const char*") BytePointer name, Pointer iter_data);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long id, @Cast("const char*") BytePointer name, Pointer iter_data);
 }
 
 /* Actual IO mode property */
@@ -5623,538 +5620,538 @@ public static final int
 
 /* Property list class IDs */
 /* (Internal to library, do not use!  Use macros above) */
-public static native @Cast("hid_t") int H5P_CLS_ROOT_ID_g(); public static native void H5P_CLS_ROOT_ID_g(int H5P_CLS_ROOT_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_OBJECT_CREATE_ID_g(); public static native void H5P_CLS_OBJECT_CREATE_ID_g(int H5P_CLS_OBJECT_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_FILE_CREATE_ID_g(); public static native void H5P_CLS_FILE_CREATE_ID_g(int H5P_CLS_FILE_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_FILE_ACCESS_ID_g(); public static native void H5P_CLS_FILE_ACCESS_ID_g(int H5P_CLS_FILE_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_DATASET_CREATE_ID_g(); public static native void H5P_CLS_DATASET_CREATE_ID_g(int H5P_CLS_DATASET_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_DATASET_ACCESS_ID_g(); public static native void H5P_CLS_DATASET_ACCESS_ID_g(int H5P_CLS_DATASET_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_DATASET_XFER_ID_g(); public static native void H5P_CLS_DATASET_XFER_ID_g(int H5P_CLS_DATASET_XFER_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_FILE_MOUNT_ID_g(); public static native void H5P_CLS_FILE_MOUNT_ID_g(int H5P_CLS_FILE_MOUNT_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_GROUP_CREATE_ID_g(); public static native void H5P_CLS_GROUP_CREATE_ID_g(int H5P_CLS_GROUP_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_GROUP_ACCESS_ID_g(); public static native void H5P_CLS_GROUP_ACCESS_ID_g(int H5P_CLS_GROUP_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_DATATYPE_CREATE_ID_g(); public static native void H5P_CLS_DATATYPE_CREATE_ID_g(int H5P_CLS_DATATYPE_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_DATATYPE_ACCESS_ID_g(); public static native void H5P_CLS_DATATYPE_ACCESS_ID_g(int H5P_CLS_DATATYPE_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_STRING_CREATE_ID_g(); public static native void H5P_CLS_STRING_CREATE_ID_g(int H5P_CLS_STRING_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_ATTRIBUTE_CREATE_ID_g(); public static native void H5P_CLS_ATTRIBUTE_CREATE_ID_g(int H5P_CLS_ATTRIBUTE_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_ATTRIBUTE_ACCESS_ID_g(); public static native void H5P_CLS_ATTRIBUTE_ACCESS_ID_g(int H5P_CLS_ATTRIBUTE_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_OBJECT_COPY_ID_g(); public static native void H5P_CLS_OBJECT_COPY_ID_g(int H5P_CLS_OBJECT_COPY_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_LINK_CREATE_ID_g(); public static native void H5P_CLS_LINK_CREATE_ID_g(int H5P_CLS_LINK_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_CLS_LINK_ACCESS_ID_g(); public static native void H5P_CLS_LINK_ACCESS_ID_g(int H5P_CLS_LINK_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_ROOT_ID_g(); public static native void H5P_CLS_ROOT_ID_g(long H5P_CLS_ROOT_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_OBJECT_CREATE_ID_g(); public static native void H5P_CLS_OBJECT_CREATE_ID_g(long H5P_CLS_OBJECT_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_FILE_CREATE_ID_g(); public static native void H5P_CLS_FILE_CREATE_ID_g(long H5P_CLS_FILE_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_FILE_ACCESS_ID_g(); public static native void H5P_CLS_FILE_ACCESS_ID_g(long H5P_CLS_FILE_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_DATASET_CREATE_ID_g(); public static native void H5P_CLS_DATASET_CREATE_ID_g(long H5P_CLS_DATASET_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_DATASET_ACCESS_ID_g(); public static native void H5P_CLS_DATASET_ACCESS_ID_g(long H5P_CLS_DATASET_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_DATASET_XFER_ID_g(); public static native void H5P_CLS_DATASET_XFER_ID_g(long H5P_CLS_DATASET_XFER_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_FILE_MOUNT_ID_g(); public static native void H5P_CLS_FILE_MOUNT_ID_g(long H5P_CLS_FILE_MOUNT_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_GROUP_CREATE_ID_g(); public static native void H5P_CLS_GROUP_CREATE_ID_g(long H5P_CLS_GROUP_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_GROUP_ACCESS_ID_g(); public static native void H5P_CLS_GROUP_ACCESS_ID_g(long H5P_CLS_GROUP_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_DATATYPE_CREATE_ID_g(); public static native void H5P_CLS_DATATYPE_CREATE_ID_g(long H5P_CLS_DATATYPE_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_DATATYPE_ACCESS_ID_g(); public static native void H5P_CLS_DATATYPE_ACCESS_ID_g(long H5P_CLS_DATATYPE_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_STRING_CREATE_ID_g(); public static native void H5P_CLS_STRING_CREATE_ID_g(long H5P_CLS_STRING_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_ATTRIBUTE_CREATE_ID_g(); public static native void H5P_CLS_ATTRIBUTE_CREATE_ID_g(long H5P_CLS_ATTRIBUTE_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_ATTRIBUTE_ACCESS_ID_g(); public static native void H5P_CLS_ATTRIBUTE_ACCESS_ID_g(long H5P_CLS_ATTRIBUTE_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_OBJECT_COPY_ID_g(); public static native void H5P_CLS_OBJECT_COPY_ID_g(long H5P_CLS_OBJECT_COPY_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_LINK_CREATE_ID_g(); public static native void H5P_CLS_LINK_CREATE_ID_g(long H5P_CLS_LINK_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_CLS_LINK_ACCESS_ID_g(); public static native void H5P_CLS_LINK_ACCESS_ID_g(long H5P_CLS_LINK_ACCESS_ID_g);
 
 /* Default roperty list IDs */
 /* (Internal to library, do not use!  Use macros above) */
-public static native @Cast("hid_t") int H5P_LST_FILE_CREATE_ID_g(); public static native void H5P_LST_FILE_CREATE_ID_g(int H5P_LST_FILE_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_LST_FILE_ACCESS_ID_g(); public static native void H5P_LST_FILE_ACCESS_ID_g(int H5P_LST_FILE_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_LST_DATASET_CREATE_ID_g(); public static native void H5P_LST_DATASET_CREATE_ID_g(int H5P_LST_DATASET_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_LST_DATASET_ACCESS_ID_g(); public static native void H5P_LST_DATASET_ACCESS_ID_g(int H5P_LST_DATASET_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_LST_DATASET_XFER_ID_g(); public static native void H5P_LST_DATASET_XFER_ID_g(int H5P_LST_DATASET_XFER_ID_g);
-public static native @Cast("hid_t") int H5P_LST_FILE_MOUNT_ID_g(); public static native void H5P_LST_FILE_MOUNT_ID_g(int H5P_LST_FILE_MOUNT_ID_g);
-public static native @Cast("hid_t") int H5P_LST_GROUP_CREATE_ID_g(); public static native void H5P_LST_GROUP_CREATE_ID_g(int H5P_LST_GROUP_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_LST_GROUP_ACCESS_ID_g(); public static native void H5P_LST_GROUP_ACCESS_ID_g(int H5P_LST_GROUP_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_LST_DATATYPE_CREATE_ID_g(); public static native void H5P_LST_DATATYPE_CREATE_ID_g(int H5P_LST_DATATYPE_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_LST_DATATYPE_ACCESS_ID_g(); public static native void H5P_LST_DATATYPE_ACCESS_ID_g(int H5P_LST_DATATYPE_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_LST_ATTRIBUTE_CREATE_ID_g(); public static native void H5P_LST_ATTRIBUTE_CREATE_ID_g(int H5P_LST_ATTRIBUTE_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_LST_ATTRIBUTE_ACCESS_ID_g(); public static native void H5P_LST_ATTRIBUTE_ACCESS_ID_g(int H5P_LST_ATTRIBUTE_ACCESS_ID_g);
-public static native @Cast("hid_t") int H5P_LST_OBJECT_COPY_ID_g(); public static native void H5P_LST_OBJECT_COPY_ID_g(int H5P_LST_OBJECT_COPY_ID_g);
-public static native @Cast("hid_t") int H5P_LST_LINK_CREATE_ID_g(); public static native void H5P_LST_LINK_CREATE_ID_g(int H5P_LST_LINK_CREATE_ID_g);
-public static native @Cast("hid_t") int H5P_LST_LINK_ACCESS_ID_g(); public static native void H5P_LST_LINK_ACCESS_ID_g(int H5P_LST_LINK_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_LST_FILE_CREATE_ID_g(); public static native void H5P_LST_FILE_CREATE_ID_g(long H5P_LST_FILE_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_LST_FILE_ACCESS_ID_g(); public static native void H5P_LST_FILE_ACCESS_ID_g(long H5P_LST_FILE_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_LST_DATASET_CREATE_ID_g(); public static native void H5P_LST_DATASET_CREATE_ID_g(long H5P_LST_DATASET_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_LST_DATASET_ACCESS_ID_g(); public static native void H5P_LST_DATASET_ACCESS_ID_g(long H5P_LST_DATASET_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_LST_DATASET_XFER_ID_g(); public static native void H5P_LST_DATASET_XFER_ID_g(long H5P_LST_DATASET_XFER_ID_g);
+public static native @Cast("hid_t") long H5P_LST_FILE_MOUNT_ID_g(); public static native void H5P_LST_FILE_MOUNT_ID_g(long H5P_LST_FILE_MOUNT_ID_g);
+public static native @Cast("hid_t") long H5P_LST_GROUP_CREATE_ID_g(); public static native void H5P_LST_GROUP_CREATE_ID_g(long H5P_LST_GROUP_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_LST_GROUP_ACCESS_ID_g(); public static native void H5P_LST_GROUP_ACCESS_ID_g(long H5P_LST_GROUP_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_LST_DATATYPE_CREATE_ID_g(); public static native void H5P_LST_DATATYPE_CREATE_ID_g(long H5P_LST_DATATYPE_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_LST_DATATYPE_ACCESS_ID_g(); public static native void H5P_LST_DATATYPE_ACCESS_ID_g(long H5P_LST_DATATYPE_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_LST_ATTRIBUTE_CREATE_ID_g(); public static native void H5P_LST_ATTRIBUTE_CREATE_ID_g(long H5P_LST_ATTRIBUTE_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_LST_ATTRIBUTE_ACCESS_ID_g(); public static native void H5P_LST_ATTRIBUTE_ACCESS_ID_g(long H5P_LST_ATTRIBUTE_ACCESS_ID_g);
+public static native @Cast("hid_t") long H5P_LST_OBJECT_COPY_ID_g(); public static native void H5P_LST_OBJECT_COPY_ID_g(long H5P_LST_OBJECT_COPY_ID_g);
+public static native @Cast("hid_t") long H5P_LST_LINK_CREATE_ID_g(); public static native void H5P_LST_LINK_CREATE_ID_g(long H5P_LST_LINK_CREATE_ID_g);
+public static native @Cast("hid_t") long H5P_LST_LINK_ACCESS_ID_g(); public static native void H5P_LST_LINK_ACCESS_ID_g(long H5P_LST_LINK_ACCESS_ID_g);
 
 /*********************/
 /* Public Prototypes */
 /*********************/
 
 /* Generic property list routines */
-public static native @Cast("hid_t") int H5Pcreate_class(@Cast("hid_t") int parent, @Cast("const char*") BytePointer name,
+public static native @Cast("hid_t") long H5Pcreate_class(@Cast("hid_t") long parent, @Cast("const char*") BytePointer name,
     H5P_cls_create_func_t cls_create, Pointer create_data,
     H5P_cls_copy_func_t cls_copy, Pointer copy_data,
     H5P_cls_close_func_t cls_close, Pointer close_data);
-public static native @Cast("hid_t") int H5Pcreate_class(@Cast("hid_t") int parent, String name,
+public static native @Cast("hid_t") long H5Pcreate_class(@Cast("hid_t") long parent, String name,
     H5P_cls_create_func_t cls_create, Pointer create_data,
     H5P_cls_copy_func_t cls_copy, Pointer copy_data,
     H5P_cls_close_func_t cls_close, Pointer close_data);
-public static native @Cast("char*") BytePointer H5Pget_class_name(@Cast("hid_t") int pclass_id);
-public static native @Cast("hid_t") int H5Pcreate(@Cast("hid_t") int cls_id);
-public static native @Cast("herr_t") int H5Pregister2(@Cast("hid_t") int cls_id, @Cast("const char*") BytePointer name, @Cast("size_t") long size,
+public static native @Cast("char*") BytePointer H5Pget_class_name(@Cast("hid_t") long pclass_id);
+public static native @Cast("hid_t") long H5Pcreate(@Cast("hid_t") long cls_id);
+public static native @Cast("herr_t") int H5Pregister2(@Cast("hid_t") long cls_id, @Cast("const char*") BytePointer name, @Cast("size_t") long size,
     Pointer def_value, @Cast("H5P_prp_create_func_t") H5P_prp_cb1_t prp_create,
     @Cast("H5P_prp_set_func_t") H5P_prp_cb2_t prp_set, @Cast("H5P_prp_get_func_t") H5P_prp_cb2_t prp_get,
     @Cast("H5P_prp_delete_func_t") H5P_prp_cb2_t prp_del, @Cast("H5P_prp_copy_func_t") H5P_prp_cb1_t prp_copy,
     H5P_prp_compare_func_t prp_cmp, @Cast("H5P_prp_close_func_t") H5P_prp_cb1_t prp_close);
-public static native @Cast("herr_t") int H5Pregister2(@Cast("hid_t") int cls_id, String name, @Cast("size_t") long size,
+public static native @Cast("herr_t") int H5Pregister2(@Cast("hid_t") long cls_id, String name, @Cast("size_t") long size,
     Pointer def_value, @Cast("H5P_prp_create_func_t") H5P_prp_cb1_t prp_create,
     @Cast("H5P_prp_set_func_t") H5P_prp_cb2_t prp_set, @Cast("H5P_prp_get_func_t") H5P_prp_cb2_t prp_get,
     @Cast("H5P_prp_delete_func_t") H5P_prp_cb2_t prp_del, @Cast("H5P_prp_copy_func_t") H5P_prp_cb1_t prp_copy,
     H5P_prp_compare_func_t prp_cmp, @Cast("H5P_prp_close_func_t") H5P_prp_cb1_t prp_close);
-public static native @Cast("herr_t") int H5Pinsert2(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name, @Cast("size_t") long size,
+public static native @Cast("herr_t") int H5Pinsert2(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name, @Cast("size_t") long size,
     Pointer value, @Cast("H5P_prp_set_func_t") H5P_prp_cb2_t prp_set, @Cast("H5P_prp_get_func_t") H5P_prp_cb2_t prp_get,
     @Cast("H5P_prp_delete_func_t") H5P_prp_cb2_t prp_delete, @Cast("H5P_prp_copy_func_t") H5P_prp_cb1_t prp_copy,
     H5P_prp_compare_func_t prp_cmp, @Cast("H5P_prp_close_func_t") H5P_prp_cb1_t prp_close);
-public static native @Cast("herr_t") int H5Pinsert2(@Cast("hid_t") int plist_id, String name, @Cast("size_t") long size,
+public static native @Cast("herr_t") int H5Pinsert2(@Cast("hid_t") long plist_id, String name, @Cast("size_t") long size,
     Pointer value, @Cast("H5P_prp_set_func_t") H5P_prp_cb2_t prp_set, @Cast("H5P_prp_get_func_t") H5P_prp_cb2_t prp_get,
     @Cast("H5P_prp_delete_func_t") H5P_prp_cb2_t prp_delete, @Cast("H5P_prp_copy_func_t") H5P_prp_cb1_t prp_copy,
     H5P_prp_compare_func_t prp_cmp, @Cast("H5P_prp_close_func_t") H5P_prp_cb1_t prp_close);
-public static native @Cast("herr_t") int H5Pset(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name, @Const Pointer value);
-public static native @Cast("herr_t") int H5Pset(@Cast("hid_t") int plist_id, String name, @Const Pointer value);
-public static native @Cast("htri_t") int H5Pexist(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name);
-public static native @Cast("htri_t") int H5Pexist(@Cast("hid_t") int plist_id, String name);
-public static native @Cast("herr_t") int H5Pencode(@Cast("hid_t") int plist_id, Pointer buf, @Cast("size_t*") SizeTPointer nalloc);
-public static native @Cast("hid_t") int H5Pdecode(@Const Pointer buf);
-public static native @Cast("herr_t") int H5Pget_size(@Cast("hid_t") int id, @Cast("const char*") BytePointer name, @Cast("size_t*") SizeTPointer size);
-public static native @Cast("herr_t") int H5Pget_size(@Cast("hid_t") int id, String name, @Cast("size_t*") SizeTPointer size);
-public static native @Cast("herr_t") int H5Pget_nprops(@Cast("hid_t") int id, @Cast("size_t*") SizeTPointer nprops);
-public static native @Cast("hid_t") int H5Pget_class(@Cast("hid_t") int plist_id);
-public static native @Cast("hid_t") int H5Pget_class_parent(@Cast("hid_t") int pclass_id);
-public static native @Cast("herr_t") int H5Pget(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name, Pointer value);
-public static native @Cast("herr_t") int H5Pget(@Cast("hid_t") int plist_id, String name, Pointer value);
-public static native @Cast("htri_t") int H5Pequal(@Cast("hid_t") int id1, @Cast("hid_t") int id2);
-public static native @Cast("htri_t") int H5Pisa_class(@Cast("hid_t") int plist_id, @Cast("hid_t") int pclass_id);
-public static native int H5Piterate(@Cast("hid_t") int id, IntPointer idx, H5P_iterate_t iter_func,
+public static native @Cast("herr_t") int H5Pset(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name, @Const Pointer value);
+public static native @Cast("herr_t") int H5Pset(@Cast("hid_t") long plist_id, String name, @Const Pointer value);
+public static native @Cast("htri_t") int H5Pexist(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name);
+public static native @Cast("htri_t") int H5Pexist(@Cast("hid_t") long plist_id, String name);
+public static native @Cast("herr_t") int H5Pencode(@Cast("hid_t") long plist_id, Pointer buf, @Cast("size_t*") SizeTPointer nalloc);
+public static native @Cast("hid_t") long H5Pdecode(@Const Pointer buf);
+public static native @Cast("herr_t") int H5Pget_size(@Cast("hid_t") long id, @Cast("const char*") BytePointer name, @Cast("size_t*") SizeTPointer size);
+public static native @Cast("herr_t") int H5Pget_size(@Cast("hid_t") long id, String name, @Cast("size_t*") SizeTPointer size);
+public static native @Cast("herr_t") int H5Pget_nprops(@Cast("hid_t") long id, @Cast("size_t*") SizeTPointer nprops);
+public static native @Cast("hid_t") long H5Pget_class(@Cast("hid_t") long plist_id);
+public static native @Cast("hid_t") long H5Pget_class_parent(@Cast("hid_t") long pclass_id);
+public static native @Cast("herr_t") int H5Pget(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name, Pointer value);
+public static native @Cast("herr_t") int H5Pget(@Cast("hid_t") long plist_id, String name, Pointer value);
+public static native @Cast("htri_t") int H5Pequal(@Cast("hid_t") long id1, @Cast("hid_t") long id2);
+public static native @Cast("htri_t") int H5Pisa_class(@Cast("hid_t") long plist_id, @Cast("hid_t") long pclass_id);
+public static native int H5Piterate(@Cast("hid_t") long id, IntPointer idx, H5P_iterate_t iter_func,
             Pointer iter_data);
-public static native int H5Piterate(@Cast("hid_t") int id, IntBuffer idx, H5P_iterate_t iter_func,
+public static native int H5Piterate(@Cast("hid_t") long id, IntBuffer idx, H5P_iterate_t iter_func,
             Pointer iter_data);
-public static native int H5Piterate(@Cast("hid_t") int id, int[] idx, H5P_iterate_t iter_func,
+public static native int H5Piterate(@Cast("hid_t") long id, int[] idx, H5P_iterate_t iter_func,
             Pointer iter_data);
-public static native @Cast("herr_t") int H5Pcopy_prop(@Cast("hid_t") int dst_id, @Cast("hid_t") int src_id, @Cast("const char*") BytePointer name);
-public static native @Cast("herr_t") int H5Pcopy_prop(@Cast("hid_t") int dst_id, @Cast("hid_t") int src_id, String name);
-public static native @Cast("herr_t") int H5Premove(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name);
-public static native @Cast("herr_t") int H5Premove(@Cast("hid_t") int plist_id, String name);
-public static native @Cast("herr_t") int H5Punregister(@Cast("hid_t") int pclass_id, @Cast("const char*") BytePointer name);
-public static native @Cast("herr_t") int H5Punregister(@Cast("hid_t") int pclass_id, String name);
-public static native @Cast("herr_t") int H5Pclose_class(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pclose(@Cast("hid_t") int plist_id);
-public static native @Cast("hid_t") int H5Pcopy(@Cast("hid_t") int plist_id);
+public static native @Cast("herr_t") int H5Pcopy_prop(@Cast("hid_t") long dst_id, @Cast("hid_t") long src_id, @Cast("const char*") BytePointer name);
+public static native @Cast("herr_t") int H5Pcopy_prop(@Cast("hid_t") long dst_id, @Cast("hid_t") long src_id, String name);
+public static native @Cast("herr_t") int H5Premove(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name);
+public static native @Cast("herr_t") int H5Premove(@Cast("hid_t") long plist_id, String name);
+public static native @Cast("herr_t") int H5Punregister(@Cast("hid_t") long pclass_id, @Cast("const char*") BytePointer name);
+public static native @Cast("herr_t") int H5Punregister(@Cast("hid_t") long pclass_id, String name);
+public static native @Cast("herr_t") int H5Pclose_class(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pclose(@Cast("hid_t") long plist_id);
+public static native @Cast("hid_t") long H5Pcopy(@Cast("hid_t") long plist_id);
 
 /* Object creation property list (OCPL) routines */
-public static native @Cast("herr_t") int H5Pset_attr_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned") int max_compact, @Cast("unsigned") int min_dense);
-public static native @Cast("herr_t") int H5Pget_attr_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer max_compact, @Cast("unsigned*") IntPointer min_dense);
-public static native @Cast("herr_t") int H5Pget_attr_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer max_compact, @Cast("unsigned*") IntBuffer min_dense);
-public static native @Cast("herr_t") int H5Pget_attr_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] max_compact, @Cast("unsigned*") int[] min_dense);
-public static native @Cast("herr_t") int H5Pset_attr_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned") int crt_order_flags);
-public static native @Cast("herr_t") int H5Pget_attr_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer crt_order_flags);
-public static native @Cast("herr_t") int H5Pget_attr_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer crt_order_flags);
-public static native @Cast("herr_t") int H5Pget_attr_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] crt_order_flags);
-public static native @Cast("herr_t") int H5Pset_obj_track_times(@Cast("hid_t") int plist_id, @Cast("hbool_t") boolean track_times);
-public static native @Cast("herr_t") int H5Pget_obj_track_times(@Cast("hid_t") int plist_id, @Cast("hbool_t*") BoolPointer track_times);
-public static native @Cast("herr_t") int H5Pget_obj_track_times(@Cast("hid_t") int plist_id, @Cast("hbool_t*") boolean[] track_times);
-public static native @Cast("herr_t") int H5Pmodify_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter,
+public static native @Cast("herr_t") int H5Pset_attr_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned") int max_compact, @Cast("unsigned") int min_dense);
+public static native @Cast("herr_t") int H5Pget_attr_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer max_compact, @Cast("unsigned*") IntPointer min_dense);
+public static native @Cast("herr_t") int H5Pget_attr_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer max_compact, @Cast("unsigned*") IntBuffer min_dense);
+public static native @Cast("herr_t") int H5Pget_attr_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] max_compact, @Cast("unsigned*") int[] min_dense);
+public static native @Cast("herr_t") int H5Pset_attr_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned") int crt_order_flags);
+public static native @Cast("herr_t") int H5Pget_attr_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer crt_order_flags);
+public static native @Cast("herr_t") int H5Pget_attr_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer crt_order_flags);
+public static native @Cast("herr_t") int H5Pget_attr_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] crt_order_flags);
+public static native @Cast("herr_t") int H5Pset_obj_track_times(@Cast("hid_t") long plist_id, @Cast("hbool_t") boolean track_times);
+public static native @Cast("herr_t") int H5Pget_obj_track_times(@Cast("hid_t") long plist_id, @Cast("hbool_t*") BoolPointer track_times);
+public static native @Cast("herr_t") int H5Pget_obj_track_times(@Cast("hid_t") long plist_id, @Cast("hbool_t*") boolean[] track_times);
+public static native @Cast("herr_t") int H5Pmodify_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter,
         @Cast("unsigned int") int flags, @Cast("size_t") long cd_nelmts,
         @Cast("const unsigned int*") IntPointer cd_values);
-public static native @Cast("herr_t") int H5Pmodify_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter,
+public static native @Cast("herr_t") int H5Pmodify_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter,
         @Cast("unsigned int") int flags, @Cast("size_t") long cd_nelmts,
         @Cast("const unsigned int*") IntBuffer cd_values);
-public static native @Cast("herr_t") int H5Pmodify_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter,
+public static native @Cast("herr_t") int H5Pmodify_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter,
         @Cast("unsigned int") int flags, @Cast("size_t") long cd_nelmts,
         @Cast("const unsigned int*") int[] cd_values);
-public static native @Cast("herr_t") int H5Pset_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter,
+public static native @Cast("herr_t") int H5Pset_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter,
         @Cast("unsigned int") int flags, @Cast("size_t") long cd_nelmts,
         @Cast("const unsigned int*") IntPointer c_values);
-public static native @Cast("herr_t") int H5Pset_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter,
+public static native @Cast("herr_t") int H5Pset_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter,
         @Cast("unsigned int") int flags, @Cast("size_t") long cd_nelmts,
         @Cast("const unsigned int*") IntBuffer c_values);
-public static native @Cast("herr_t") int H5Pset_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter,
+public static native @Cast("herr_t") int H5Pset_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter,
         @Cast("unsigned int") int flags, @Cast("size_t") long cd_nelmts,
         @Cast("const unsigned int*") int[] c_values);
-public static native int H5Pget_nfilters(@Cast("hid_t") int plist_id);
-public static native @Cast("H5Z_filter_t") int H5Pget_filter2(@Cast("hid_t") int plist_id, @Cast("unsigned") int filter,
+public static native int H5Pget_nfilters(@Cast("hid_t") long plist_id);
+public static native @Cast("H5Z_filter_t") int H5Pget_filter2(@Cast("hid_t") long plist_id, @Cast("unsigned") int filter,
        @Cast("unsigned int*") IntPointer flags,
        @Cast("size_t*") SizeTPointer cd_nelmts,
        @Cast("unsigned*") IntPointer cd_values,
        @Cast("size_t") long namelen, @Cast("char*") BytePointer name,
        @Cast("unsigned*") IntPointer filter_config);
-public static native @Cast("H5Z_filter_t") int H5Pget_filter2(@Cast("hid_t") int plist_id, @Cast("unsigned") int filter,
+public static native @Cast("H5Z_filter_t") int H5Pget_filter2(@Cast("hid_t") long plist_id, @Cast("unsigned") int filter,
        @Cast("unsigned int*") IntBuffer flags,
        @Cast("size_t*") SizeTPointer cd_nelmts,
        @Cast("unsigned*") IntBuffer cd_values,
        @Cast("size_t") long namelen, @Cast("char*") ByteBuffer name,
        @Cast("unsigned*") IntBuffer filter_config);
-public static native @Cast("H5Z_filter_t") int H5Pget_filter2(@Cast("hid_t") int plist_id, @Cast("unsigned") int filter,
+public static native @Cast("H5Z_filter_t") int H5Pget_filter2(@Cast("hid_t") long plist_id, @Cast("unsigned") int filter,
        @Cast("unsigned int*") int[] flags,
        @Cast("size_t*") SizeTPointer cd_nelmts,
        @Cast("unsigned*") int[] cd_values,
        @Cast("size_t") long namelen, @Cast("char*") byte[] name,
        @Cast("unsigned*") int[] filter_config);
-public static native @Cast("herr_t") int H5Pget_filter_by_id2(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int id,
+public static native @Cast("herr_t") int H5Pget_filter_by_id2(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int id,
        @Cast("unsigned int*") IntPointer flags, @Cast("size_t*") SizeTPointer cd_nelmts,
        @Cast("unsigned*") IntPointer cd_values, @Cast("size_t") long namelen, @Cast("char*") BytePointer name,
        @Cast("unsigned*") IntPointer filter_config);
-public static native @Cast("herr_t") int H5Pget_filter_by_id2(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int id,
+public static native @Cast("herr_t") int H5Pget_filter_by_id2(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int id,
        @Cast("unsigned int*") IntBuffer flags, @Cast("size_t*") SizeTPointer cd_nelmts,
        @Cast("unsigned*") IntBuffer cd_values, @Cast("size_t") long namelen, @Cast("char*") ByteBuffer name,
        @Cast("unsigned*") IntBuffer filter_config);
-public static native @Cast("herr_t") int H5Pget_filter_by_id2(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int id,
+public static native @Cast("herr_t") int H5Pget_filter_by_id2(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int id,
        @Cast("unsigned int*") int[] flags, @Cast("size_t*") SizeTPointer cd_nelmts,
        @Cast("unsigned*") int[] cd_values, @Cast("size_t") long namelen, @Cast("char*") byte[] name,
        @Cast("unsigned*") int[] filter_config);
-public static native @Cast("htri_t") int H5Pall_filters_avail(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Premove_filter(@Cast("hid_t") int plist_id, @Cast("H5Z_filter_t") int filter);
-public static native @Cast("herr_t") int H5Pset_deflate(@Cast("hid_t") int plist_id, @Cast("unsigned") int aggression);
-public static native @Cast("herr_t") int H5Pset_fletcher32(@Cast("hid_t") int plist_id);
+public static native @Cast("htri_t") int H5Pall_filters_avail(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Premove_filter(@Cast("hid_t") long plist_id, @Cast("H5Z_filter_t") int filter);
+public static native @Cast("herr_t") int H5Pset_deflate(@Cast("hid_t") long plist_id, @Cast("unsigned") int aggression);
+public static native @Cast("herr_t") int H5Pset_fletcher32(@Cast("hid_t") long plist_id);
 
 /* File creation property list (FCPL) routines */
-public static native @Cast("herr_t") int H5Pset_userblock(@Cast("hid_t") int plist_id, @Cast("hsize_t") long size);
-public static native @Cast("herr_t") int H5Pget_userblock(@Cast("hid_t") int plist_id, @Cast("hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Pget_userblock(@Cast("hid_t") int plist_id, @Cast("hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Pget_userblock(@Cast("hid_t") int plist_id, @Cast("hsize_t*") long[] size);
-public static native @Cast("herr_t") int H5Pset_sizes(@Cast("hid_t") int plist_id, @Cast("size_t") long sizeof_addr,
+public static native @Cast("herr_t") int H5Pset_userblock(@Cast("hid_t") long plist_id, @Cast("hsize_t") long size);
+public static native @Cast("herr_t") int H5Pget_userblock(@Cast("hid_t") long plist_id, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Pget_userblock(@Cast("hid_t") long plist_id, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Pget_userblock(@Cast("hid_t") long plist_id, @Cast("hsize_t*") long[] size);
+public static native @Cast("herr_t") int H5Pset_sizes(@Cast("hid_t") long plist_id, @Cast("size_t") long sizeof_addr,
        @Cast("size_t") long sizeof_size);
-public static native @Cast("herr_t") int H5Pget_sizes(@Cast("hid_t") int plist_id, @Cast("size_t*") SizeTPointer sizeof_addr,
+public static native @Cast("herr_t") int H5Pget_sizes(@Cast("hid_t") long plist_id, @Cast("size_t*") SizeTPointer sizeof_addr,
        @Cast("size_t*") SizeTPointer sizeof_size);
-public static native @Cast("herr_t") int H5Pset_sym_k(@Cast("hid_t") int plist_id, @Cast("unsigned") int ik, @Cast("unsigned") int lk);
-public static native @Cast("herr_t") int H5Pget_sym_k(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer ik, @Cast("unsigned*") IntPointer lk);
-public static native @Cast("herr_t") int H5Pget_sym_k(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer ik, @Cast("unsigned*") IntBuffer lk);
-public static native @Cast("herr_t") int H5Pget_sym_k(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] ik, @Cast("unsigned*") int[] lk);
-public static native @Cast("herr_t") int H5Pset_istore_k(@Cast("hid_t") int plist_id, @Cast("unsigned") int ik);
-public static native @Cast("herr_t") int H5Pget_istore_k(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer ik);
-public static native @Cast("herr_t") int H5Pget_istore_k(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer ik);
-public static native @Cast("herr_t") int H5Pget_istore_k(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] ik);
-public static native @Cast("herr_t") int H5Pset_shared_mesg_nindexes(@Cast("hid_t") int plist_id, @Cast("unsigned") int nindexes);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_nindexes(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer nindexes);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_nindexes(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer nindexes);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_nindexes(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] nindexes);
-public static native @Cast("herr_t") int H5Pset_shared_mesg_index(@Cast("hid_t") int plist_id, @Cast("unsigned") int index_num, @Cast("unsigned") int mesg_type_flags, @Cast("unsigned") int min_mesg_size);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_index(@Cast("hid_t") int plist_id, @Cast("unsigned") int index_num, @Cast("unsigned*") IntPointer mesg_type_flags, @Cast("unsigned*") IntPointer min_mesg_size);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_index(@Cast("hid_t") int plist_id, @Cast("unsigned") int index_num, @Cast("unsigned*") IntBuffer mesg_type_flags, @Cast("unsigned*") IntBuffer min_mesg_size);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_index(@Cast("hid_t") int plist_id, @Cast("unsigned") int index_num, @Cast("unsigned*") int[] mesg_type_flags, @Cast("unsigned*") int[] min_mesg_size);
-public static native @Cast("herr_t") int H5Pset_shared_mesg_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned") int max_list, @Cast("unsigned") int min_btree);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer max_list, @Cast("unsigned*") IntPointer min_btree);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer max_list, @Cast("unsigned*") IntBuffer min_btree);
-public static native @Cast("herr_t") int H5Pget_shared_mesg_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] max_list, @Cast("unsigned*") int[] min_btree);
-public static native @Cast("herr_t") int H5Pset_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t") int strategy, @Cast("hbool_t") boolean persist, @Cast("hsize_t") long threshold);
-public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t*") IntPointer strategy, @Cast("hbool_t*") BoolPointer persist, @Cast("hsize_t*") LongPointer threshold);
-public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t*") IntBuffer strategy, @Cast("hbool_t*") boolean[] persist, @Cast("hsize_t*") LongBuffer threshold);
-public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t*") int[] strategy, @Cast("hbool_t*") BoolPointer persist, @Cast("hsize_t*") long[] threshold);
-public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t*") IntPointer strategy, @Cast("hbool_t*") boolean[] persist, @Cast("hsize_t*") LongPointer threshold);
-public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t*") IntBuffer strategy, @Cast("hbool_t*") BoolPointer persist, @Cast("hsize_t*") LongBuffer threshold);
-public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") int plist_id, @Cast("H5F_fspace_strategy_t*") int[] strategy, @Cast("hbool_t*") boolean[] persist, @Cast("hsize_t*") long[] threshold);
-public static native @Cast("herr_t") int H5Pset_file_space_page_size(@Cast("hid_t") int plist_id, @Cast("hsize_t") long fsp_size);
-public static native @Cast("herr_t") int H5Pget_file_space_page_size(@Cast("hid_t") int plist_id, @Cast("hsize_t*") LongPointer fsp_size);
-public static native @Cast("herr_t") int H5Pget_file_space_page_size(@Cast("hid_t") int plist_id, @Cast("hsize_t*") LongBuffer fsp_size);
-public static native @Cast("herr_t") int H5Pget_file_space_page_size(@Cast("hid_t") int plist_id, @Cast("hsize_t*") long[] fsp_size);
+public static native @Cast("herr_t") int H5Pset_sym_k(@Cast("hid_t") long plist_id, @Cast("unsigned") int ik, @Cast("unsigned") int lk);
+public static native @Cast("herr_t") int H5Pget_sym_k(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer ik, @Cast("unsigned*") IntPointer lk);
+public static native @Cast("herr_t") int H5Pget_sym_k(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer ik, @Cast("unsigned*") IntBuffer lk);
+public static native @Cast("herr_t") int H5Pget_sym_k(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] ik, @Cast("unsigned*") int[] lk);
+public static native @Cast("herr_t") int H5Pset_istore_k(@Cast("hid_t") long plist_id, @Cast("unsigned") int ik);
+public static native @Cast("herr_t") int H5Pget_istore_k(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer ik);
+public static native @Cast("herr_t") int H5Pget_istore_k(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer ik);
+public static native @Cast("herr_t") int H5Pget_istore_k(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] ik);
+public static native @Cast("herr_t") int H5Pset_shared_mesg_nindexes(@Cast("hid_t") long plist_id, @Cast("unsigned") int nindexes);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_nindexes(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer nindexes);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_nindexes(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer nindexes);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_nindexes(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] nindexes);
+public static native @Cast("herr_t") int H5Pset_shared_mesg_index(@Cast("hid_t") long plist_id, @Cast("unsigned") int index_num, @Cast("unsigned") int mesg_type_flags, @Cast("unsigned") int min_mesg_size);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_index(@Cast("hid_t") long plist_id, @Cast("unsigned") int index_num, @Cast("unsigned*") IntPointer mesg_type_flags, @Cast("unsigned*") IntPointer min_mesg_size);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_index(@Cast("hid_t") long plist_id, @Cast("unsigned") int index_num, @Cast("unsigned*") IntBuffer mesg_type_flags, @Cast("unsigned*") IntBuffer min_mesg_size);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_index(@Cast("hid_t") long plist_id, @Cast("unsigned") int index_num, @Cast("unsigned*") int[] mesg_type_flags, @Cast("unsigned*") int[] min_mesg_size);
+public static native @Cast("herr_t") int H5Pset_shared_mesg_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned") int max_list, @Cast("unsigned") int min_btree);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer max_list, @Cast("unsigned*") IntPointer min_btree);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer max_list, @Cast("unsigned*") IntBuffer min_btree);
+public static native @Cast("herr_t") int H5Pget_shared_mesg_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] max_list, @Cast("unsigned*") int[] min_btree);
+public static native @Cast("herr_t") int H5Pset_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t") int strategy, @Cast("hbool_t") boolean persist, @Cast("hsize_t") long threshold);
+public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t*") IntPointer strategy, @Cast("hbool_t*") BoolPointer persist, @Cast("hsize_t*") LongPointer threshold);
+public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t*") IntBuffer strategy, @Cast("hbool_t*") boolean[] persist, @Cast("hsize_t*") LongBuffer threshold);
+public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t*") int[] strategy, @Cast("hbool_t*") BoolPointer persist, @Cast("hsize_t*") long[] threshold);
+public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t*") IntPointer strategy, @Cast("hbool_t*") boolean[] persist, @Cast("hsize_t*") LongPointer threshold);
+public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t*") IntBuffer strategy, @Cast("hbool_t*") BoolPointer persist, @Cast("hsize_t*") LongBuffer threshold);
+public static native @Cast("herr_t") int H5Pget_file_space_strategy(@Cast("hid_t") long plist_id, @Cast("H5F_fspace_strategy_t*") int[] strategy, @Cast("hbool_t*") boolean[] persist, @Cast("hsize_t*") long[] threshold);
+public static native @Cast("herr_t") int H5Pset_file_space_page_size(@Cast("hid_t") long plist_id, @Cast("hsize_t") long fsp_size);
+public static native @Cast("herr_t") int H5Pget_file_space_page_size(@Cast("hid_t") long plist_id, @Cast("hsize_t*") LongPointer fsp_size);
+public static native @Cast("herr_t") int H5Pget_file_space_page_size(@Cast("hid_t") long plist_id, @Cast("hsize_t*") LongBuffer fsp_size);
+public static native @Cast("herr_t") int H5Pget_file_space_page_size(@Cast("hid_t") long plist_id, @Cast("hsize_t*") long[] fsp_size);
 
 /* File access property list (FAPL) routines */
-public static native @Cast("herr_t") int H5Pset_alignment(@Cast("hid_t") int fapl_id, @Cast("hsize_t") long threshold,
+public static native @Cast("herr_t") int H5Pset_alignment(@Cast("hid_t") long fapl_id, @Cast("hsize_t") long threshold,
     @Cast("hsize_t") long alignment);
-public static native @Cast("herr_t") int H5Pget_alignment(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongPointer threshold,
+public static native @Cast("herr_t") int H5Pget_alignment(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongPointer threshold,
     @Cast("hsize_t*") LongPointer alignment);
-public static native @Cast("herr_t") int H5Pget_alignment(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongBuffer threshold,
+public static native @Cast("herr_t") int H5Pget_alignment(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongBuffer threshold,
     @Cast("hsize_t*") LongBuffer alignment);
-public static native @Cast("herr_t") int H5Pget_alignment(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") long[] threshold,
+public static native @Cast("herr_t") int H5Pget_alignment(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") long[] threshold,
     @Cast("hsize_t*") long[] alignment);
-public static native @Cast("herr_t") int H5Pset_driver(@Cast("hid_t") int plist_id, @Cast("hid_t") int driver_id,
+public static native @Cast("herr_t") int H5Pset_driver(@Cast("hid_t") long plist_id, @Cast("hid_t") long driver_id,
         @Const Pointer driver_info);
-public static native @Cast("hid_t") int H5Pget_driver(@Cast("hid_t") int plist_id);
-public static native @Const Pointer H5Pget_driver_info(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_family_offset(@Cast("hid_t") int fapl_id, @Cast("hsize_t") long offset);
-public static native @Cast("herr_t") int H5Pget_family_offset(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongPointer offset);
-public static native @Cast("herr_t") int H5Pget_family_offset(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongBuffer offset);
-public static native @Cast("herr_t") int H5Pget_family_offset(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") long[] offset);
-public static native @Cast("herr_t") int H5Pset_multi_type(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t") int type);
-public static native @Cast("herr_t") int H5Pget_multi_type(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntPointer type);
-public static native @Cast("herr_t") int H5Pget_multi_type(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntBuffer type);
-public static native @Cast("herr_t") int H5Pget_multi_type(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") int[] type);
-public static native @Cast("herr_t") int H5Pset_cache(@Cast("hid_t") int plist_id, int mdc_nelmts,
+public static native @Cast("hid_t") long H5Pget_driver(@Cast("hid_t") long plist_id);
+public static native @Const Pointer H5Pget_driver_info(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_family_offset(@Cast("hid_t") long fapl_id, @Cast("hsize_t") long offset);
+public static native @Cast("herr_t") int H5Pget_family_offset(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongPointer offset);
+public static native @Cast("herr_t") int H5Pget_family_offset(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongBuffer offset);
+public static native @Cast("herr_t") int H5Pget_family_offset(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") long[] offset);
+public static native @Cast("herr_t") int H5Pset_multi_type(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t") int type);
+public static native @Cast("herr_t") int H5Pget_multi_type(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntPointer type);
+public static native @Cast("herr_t") int H5Pget_multi_type(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntBuffer type);
+public static native @Cast("herr_t") int H5Pget_multi_type(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") int[] type);
+public static native @Cast("herr_t") int H5Pset_cache(@Cast("hid_t") long plist_id, int mdc_nelmts,
        @Cast("size_t") long rdcc_nslots, @Cast("size_t") long rdcc_nbytes,
        double rdcc_w0);
-public static native @Cast("herr_t") int H5Pget_cache(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pget_cache(@Cast("hid_t") long plist_id,
        IntPointer mdc_nelmts,
        @Cast("size_t*") SizeTPointer rdcc_nslots,
        @Cast("size_t*") SizeTPointer rdcc_nbytes, DoublePointer rdcc_w0);
-public static native @Cast("herr_t") int H5Pget_cache(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pget_cache(@Cast("hid_t") long plist_id,
        IntBuffer mdc_nelmts,
        @Cast("size_t*") SizeTPointer rdcc_nslots,
        @Cast("size_t*") SizeTPointer rdcc_nbytes, DoubleBuffer rdcc_w0);
-public static native @Cast("herr_t") int H5Pget_cache(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pget_cache(@Cast("hid_t") long plist_id,
        int[] mdc_nelmts,
        @Cast("size_t*") SizeTPointer rdcc_nslots,
        @Cast("size_t*") SizeTPointer rdcc_nbytes, double[] rdcc_w0);
-public static native @Cast("herr_t") int H5Pset_mdc_config(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pset_mdc_config(@Cast("hid_t") long plist_id,
        H5AC_cache_config_t config_ptr);
-public static native @Cast("herr_t") int H5Pget_mdc_config(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pget_mdc_config(@Cast("hid_t") long plist_id,
        H5AC_cache_config_t config_ptr);	/* out */
-public static native @Cast("herr_t") int H5Pset_gc_references(@Cast("hid_t") int fapl_id, @Cast("unsigned") int gc_ref);
-public static native @Cast("herr_t") int H5Pget_gc_references(@Cast("hid_t") int fapl_id, @Cast("unsigned*") IntPointer gc_ref);
-public static native @Cast("herr_t") int H5Pget_gc_references(@Cast("hid_t") int fapl_id, @Cast("unsigned*") IntBuffer gc_ref);
-public static native @Cast("herr_t") int H5Pget_gc_references(@Cast("hid_t") int fapl_id, @Cast("unsigned*") int[] gc_ref);
-public static native @Cast("herr_t") int H5Pset_fclose_degree(@Cast("hid_t") int fapl_id, @Cast("H5F_close_degree_t") int degree);
-public static native @Cast("herr_t") int H5Pget_fclose_degree(@Cast("hid_t") int fapl_id, @Cast("H5F_close_degree_t*") IntPointer degree);
-public static native @Cast("herr_t") int H5Pget_fclose_degree(@Cast("hid_t") int fapl_id, @Cast("H5F_close_degree_t*") IntBuffer degree);
-public static native @Cast("herr_t") int H5Pget_fclose_degree(@Cast("hid_t") int fapl_id, @Cast("H5F_close_degree_t*") int[] degree);
-public static native @Cast("herr_t") int H5Pset_meta_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t") long size);
-public static native @Cast("herr_t") int H5Pget_meta_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Pget_meta_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Pget_meta_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") long[] size);
-public static native @Cast("herr_t") int H5Pset_sieve_buf_size(@Cast("hid_t") int fapl_id, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Pget_sieve_buf_size(@Cast("hid_t") int fapl_id, @Cast("size_t*") SizeTPointer size);
-public static native @Cast("herr_t") int H5Pset_small_data_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t") long size);
-public static native @Cast("herr_t") int H5Pget_small_data_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Pget_small_data_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Pget_small_data_block_size(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") long[] size);
-public static native @Cast("herr_t") int H5Pset_libver_bounds(@Cast("hid_t") int plist_id, @Cast("H5F_libver_t") int low,
+public static native @Cast("herr_t") int H5Pset_gc_references(@Cast("hid_t") long fapl_id, @Cast("unsigned") int gc_ref);
+public static native @Cast("herr_t") int H5Pget_gc_references(@Cast("hid_t") long fapl_id, @Cast("unsigned*") IntPointer gc_ref);
+public static native @Cast("herr_t") int H5Pget_gc_references(@Cast("hid_t") long fapl_id, @Cast("unsigned*") IntBuffer gc_ref);
+public static native @Cast("herr_t") int H5Pget_gc_references(@Cast("hid_t") long fapl_id, @Cast("unsigned*") int[] gc_ref);
+public static native @Cast("herr_t") int H5Pset_fclose_degree(@Cast("hid_t") long fapl_id, @Cast("H5F_close_degree_t") int degree);
+public static native @Cast("herr_t") int H5Pget_fclose_degree(@Cast("hid_t") long fapl_id, @Cast("H5F_close_degree_t*") IntPointer degree);
+public static native @Cast("herr_t") int H5Pget_fclose_degree(@Cast("hid_t") long fapl_id, @Cast("H5F_close_degree_t*") IntBuffer degree);
+public static native @Cast("herr_t") int H5Pget_fclose_degree(@Cast("hid_t") long fapl_id, @Cast("H5F_close_degree_t*") int[] degree);
+public static native @Cast("herr_t") int H5Pset_meta_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t") long size);
+public static native @Cast("herr_t") int H5Pget_meta_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Pget_meta_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Pget_meta_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") long[] size);
+public static native @Cast("herr_t") int H5Pset_sieve_buf_size(@Cast("hid_t") long fapl_id, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Pget_sieve_buf_size(@Cast("hid_t") long fapl_id, @Cast("size_t*") SizeTPointer size);
+public static native @Cast("herr_t") int H5Pset_small_data_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t") long size);
+public static native @Cast("herr_t") int H5Pget_small_data_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Pget_small_data_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Pget_small_data_block_size(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") long[] size);
+public static native @Cast("herr_t") int H5Pset_libver_bounds(@Cast("hid_t") long plist_id, @Cast("H5F_libver_t") int low,
     @Cast("H5F_libver_t") int high);
-public static native @Cast("herr_t") int H5Pget_libver_bounds(@Cast("hid_t") int plist_id, @Cast("H5F_libver_t*") IntPointer low,
+public static native @Cast("herr_t") int H5Pget_libver_bounds(@Cast("hid_t") long plist_id, @Cast("H5F_libver_t*") IntPointer low,
     @Cast("H5F_libver_t*") IntPointer high);
-public static native @Cast("herr_t") int H5Pget_libver_bounds(@Cast("hid_t") int plist_id, @Cast("H5F_libver_t*") IntBuffer low,
+public static native @Cast("herr_t") int H5Pget_libver_bounds(@Cast("hid_t") long plist_id, @Cast("H5F_libver_t*") IntBuffer low,
     @Cast("H5F_libver_t*") IntBuffer high);
-public static native @Cast("herr_t") int H5Pget_libver_bounds(@Cast("hid_t") int plist_id, @Cast("H5F_libver_t*") int[] low,
+public static native @Cast("herr_t") int H5Pget_libver_bounds(@Cast("hid_t") long plist_id, @Cast("H5F_libver_t*") int[] low,
     @Cast("H5F_libver_t*") int[] high);
-public static native @Cast("herr_t") int H5Pset_elink_file_cache_size(@Cast("hid_t") int plist_id, @Cast("unsigned") int efc_size);
-public static native @Cast("herr_t") int H5Pget_elink_file_cache_size(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer efc_size);
-public static native @Cast("herr_t") int H5Pget_elink_file_cache_size(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer efc_size);
-public static native @Cast("herr_t") int H5Pget_elink_file_cache_size(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] efc_size);
-public static native @Cast("herr_t") int H5Pset_file_image(@Cast("hid_t") int fapl_id, Pointer buf_ptr, @Cast("size_t") long buf_len);
-public static native @Cast("herr_t") int H5Pget_file_image(@Cast("hid_t") int fapl_id, @Cast("void**") PointerPointer buf_ptr_ptr, @Cast("size_t*") SizeTPointer buf_len_ptr);
-public static native @Cast("herr_t") int H5Pget_file_image(@Cast("hid_t") int fapl_id, @Cast("void**") @ByPtrPtr Pointer buf_ptr_ptr, @Cast("size_t*") SizeTPointer buf_len_ptr);
-public static native @Cast("herr_t") int H5Pset_file_image_callbacks(@Cast("hid_t") int fapl_id,
+public static native @Cast("herr_t") int H5Pset_elink_file_cache_size(@Cast("hid_t") long plist_id, @Cast("unsigned") int efc_size);
+public static native @Cast("herr_t") int H5Pget_elink_file_cache_size(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer efc_size);
+public static native @Cast("herr_t") int H5Pget_elink_file_cache_size(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer efc_size);
+public static native @Cast("herr_t") int H5Pget_elink_file_cache_size(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] efc_size);
+public static native @Cast("herr_t") int H5Pset_file_image(@Cast("hid_t") long fapl_id, Pointer buf_ptr, @Cast("size_t") long buf_len);
+public static native @Cast("herr_t") int H5Pget_file_image(@Cast("hid_t") long fapl_id, @Cast("void**") PointerPointer buf_ptr_ptr, @Cast("size_t*") SizeTPointer buf_len_ptr);
+public static native @Cast("herr_t") int H5Pget_file_image(@Cast("hid_t") long fapl_id, @Cast("void**") @ByPtrPtr Pointer buf_ptr_ptr, @Cast("size_t*") SizeTPointer buf_len_ptr);
+public static native @Cast("herr_t") int H5Pset_file_image_callbacks(@Cast("hid_t") long fapl_id,
        H5FD_file_image_callbacks_t callbacks_ptr);
-public static native @Cast("herr_t") int H5Pget_file_image_callbacks(@Cast("hid_t") int fapl_id,
+public static native @Cast("herr_t") int H5Pget_file_image_callbacks(@Cast("hid_t") long fapl_id,
        H5FD_file_image_callbacks_t callbacks_ptr);
-public static native @Cast("herr_t") int H5Pset_core_write_tracking(@Cast("hid_t") int fapl_id, @Cast("hbool_t") boolean is_enabled, @Cast("size_t") long page_size);
-public static native @Cast("herr_t") int H5Pget_core_write_tracking(@Cast("hid_t") int fapl_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("size_t*") SizeTPointer page_size);
-public static native @Cast("herr_t") int H5Pget_core_write_tracking(@Cast("hid_t") int fapl_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("size_t*") SizeTPointer page_size);
-public static native @Cast("herr_t") int H5Pset_metadata_read_attempts(@Cast("hid_t") int plist_id, @Cast("unsigned") int attempts);
-public static native @Cast("herr_t") int H5Pget_metadata_read_attempts(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer attempts);
-public static native @Cast("herr_t") int H5Pget_metadata_read_attempts(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer attempts);
-public static native @Cast("herr_t") int H5Pget_metadata_read_attempts(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] attempts);
-public static native @Cast("herr_t") int H5Pset_object_flush_cb(@Cast("hid_t") int plist_id, H5F_flush_cb_t func, Pointer udata);
-public static native @Cast("herr_t") int H5Pget_object_flush_cb(@Cast("hid_t") int plist_id, @ByPtrPtr H5F_flush_cb_t func, @Cast("void**") PointerPointer udata);
-public static native @Cast("herr_t") int H5Pget_object_flush_cb(@Cast("hid_t") int plist_id, @ByPtrPtr H5F_flush_cb_t func, @Cast("void**") @ByPtrPtr Pointer udata);
-public static native @Cast("herr_t") int H5Pset_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t") boolean is_enabled, @Cast("const char*") BytePointer location, @Cast("hbool_t") boolean start_on_access);
-public static native @Cast("herr_t") int H5Pset_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t") boolean is_enabled, String location, @Cast("hbool_t") boolean start_on_access);
-public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("char*") BytePointer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") BoolPointer start_on_access);
-public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("char*") ByteBuffer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") boolean[] start_on_access);
-public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("char*") byte[] location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") BoolPointer start_on_access);
-public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("char*") BytePointer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") boolean[] start_on_access);
-public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("char*") ByteBuffer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") BoolPointer start_on_access);
-public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") int plist_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("char*") byte[] location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") boolean[] start_on_access);
-public static native @Cast("herr_t") int H5Pset_evict_on_close(@Cast("hid_t") int fapl_id, @Cast("hbool_t") boolean evict_on_close);
-public static native @Cast("herr_t") int H5Pget_evict_on_close(@Cast("hid_t") int fapl_id, @Cast("hbool_t*") BoolPointer evict_on_close);
-public static native @Cast("herr_t") int H5Pget_evict_on_close(@Cast("hid_t") int fapl_id, @Cast("hbool_t*") boolean[] evict_on_close);
+public static native @Cast("herr_t") int H5Pset_core_write_tracking(@Cast("hid_t") long fapl_id, @Cast("hbool_t") boolean is_enabled, @Cast("size_t") long page_size);
+public static native @Cast("herr_t") int H5Pget_core_write_tracking(@Cast("hid_t") long fapl_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("size_t*") SizeTPointer page_size);
+public static native @Cast("herr_t") int H5Pget_core_write_tracking(@Cast("hid_t") long fapl_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("size_t*") SizeTPointer page_size);
+public static native @Cast("herr_t") int H5Pset_metadata_read_attempts(@Cast("hid_t") long plist_id, @Cast("unsigned") int attempts);
+public static native @Cast("herr_t") int H5Pget_metadata_read_attempts(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer attempts);
+public static native @Cast("herr_t") int H5Pget_metadata_read_attempts(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer attempts);
+public static native @Cast("herr_t") int H5Pget_metadata_read_attempts(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] attempts);
+public static native @Cast("herr_t") int H5Pset_object_flush_cb(@Cast("hid_t") long plist_id, H5F_flush_cb_t func, Pointer udata);
+public static native @Cast("herr_t") int H5Pget_object_flush_cb(@Cast("hid_t") long plist_id, @ByPtrPtr H5F_flush_cb_t func, @Cast("void**") PointerPointer udata);
+public static native @Cast("herr_t") int H5Pget_object_flush_cb(@Cast("hid_t") long plist_id, @ByPtrPtr H5F_flush_cb_t func, @Cast("void**") @ByPtrPtr Pointer udata);
+public static native @Cast("herr_t") int H5Pset_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t") boolean is_enabled, @Cast("const char*") BytePointer location, @Cast("hbool_t") boolean start_on_access);
+public static native @Cast("herr_t") int H5Pset_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t") boolean is_enabled, String location, @Cast("hbool_t") boolean start_on_access);
+public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("char*") BytePointer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") BoolPointer start_on_access);
+public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("char*") ByteBuffer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") boolean[] start_on_access);
+public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("char*") byte[] location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") BoolPointer start_on_access);
+public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("char*") BytePointer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") boolean[] start_on_access);
+public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t*") BoolPointer is_enabled, @Cast("char*") ByteBuffer location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") BoolPointer start_on_access);
+public static native @Cast("herr_t") int H5Pget_mdc_log_options(@Cast("hid_t") long plist_id, @Cast("hbool_t*") boolean[] is_enabled, @Cast("char*") byte[] location, @Cast("size_t*") SizeTPointer location_size, @Cast("hbool_t*") boolean[] start_on_access);
+public static native @Cast("herr_t") int H5Pset_evict_on_close(@Cast("hid_t") long fapl_id, @Cast("hbool_t") boolean evict_on_close);
+public static native @Cast("herr_t") int H5Pget_evict_on_close(@Cast("hid_t") long fapl_id, @Cast("hbool_t*") BoolPointer evict_on_close);
+public static native @Cast("herr_t") int H5Pget_evict_on_close(@Cast("hid_t") long fapl_id, @Cast("hbool_t*") boolean[] evict_on_close);
 // #ifdef H5_HAVE_PARALLEL
 // #endif /* H5_HAVE_PARALLEL */
-public static native @Cast("herr_t") int H5Pset_mdc_image_config(@Cast("hid_t") int plist_id, H5AC_cache_image_config_t config_ptr);
-public static native @Cast("herr_t") int H5Pget_mdc_image_config(@Cast("hid_t") int plist_id, H5AC_cache_image_config_t config_ptr);
-public static native @Cast("herr_t") int H5Pset_page_buffer_size(@Cast("hid_t") int plist_id, @Cast("size_t") long buf_size, @Cast("unsigned") int min_meta_per, @Cast("unsigned") int min_raw_per);
-public static native @Cast("herr_t") int H5Pget_page_buffer_size(@Cast("hid_t") int plist_id, @Cast("size_t*") SizeTPointer buf_size, @Cast("unsigned*") IntPointer min_meta_per, @Cast("unsigned*") IntPointer min_raw_per);
-public static native @Cast("herr_t") int H5Pget_page_buffer_size(@Cast("hid_t") int plist_id, @Cast("size_t*") SizeTPointer buf_size, @Cast("unsigned*") IntBuffer min_meta_per, @Cast("unsigned*") IntBuffer min_raw_per);
-public static native @Cast("herr_t") int H5Pget_page_buffer_size(@Cast("hid_t") int plist_id, @Cast("size_t*") SizeTPointer buf_size, @Cast("unsigned*") int[] min_meta_per, @Cast("unsigned*") int[] min_raw_per);
+public static native @Cast("herr_t") int H5Pset_mdc_image_config(@Cast("hid_t") long plist_id, H5AC_cache_image_config_t config_ptr);
+public static native @Cast("herr_t") int H5Pget_mdc_image_config(@Cast("hid_t") long plist_id, H5AC_cache_image_config_t config_ptr);
+public static native @Cast("herr_t") int H5Pset_page_buffer_size(@Cast("hid_t") long plist_id, @Cast("size_t") long buf_size, @Cast("unsigned") int min_meta_per, @Cast("unsigned") int min_raw_per);
+public static native @Cast("herr_t") int H5Pget_page_buffer_size(@Cast("hid_t") long plist_id, @Cast("size_t*") SizeTPointer buf_size, @Cast("unsigned*") IntPointer min_meta_per, @Cast("unsigned*") IntPointer min_raw_per);
+public static native @Cast("herr_t") int H5Pget_page_buffer_size(@Cast("hid_t") long plist_id, @Cast("size_t*") SizeTPointer buf_size, @Cast("unsigned*") IntBuffer min_meta_per, @Cast("unsigned*") IntBuffer min_raw_per);
+public static native @Cast("herr_t") int H5Pget_page_buffer_size(@Cast("hid_t") long plist_id, @Cast("size_t*") SizeTPointer buf_size, @Cast("unsigned*") int[] min_meta_per, @Cast("unsigned*") int[] min_raw_per);
 
 /* Dataset creation property list (DCPL) routines */
-public static native @Cast("herr_t") int H5Pset_layout(@Cast("hid_t") int plist_id, @Cast("H5D_layout_t") int layout);
-public static native @Cast("H5D_layout_t") int H5Pget_layout(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_chunk(@Cast("hid_t") int plist_id, int ndims, @Cast("const hsize_t*") LongPointer dim);
-public static native @Cast("herr_t") int H5Pset_chunk(@Cast("hid_t") int plist_id, int ndims, @Cast("const hsize_t*") LongBuffer dim);
-public static native @Cast("herr_t") int H5Pset_chunk(@Cast("hid_t") int plist_id, int ndims, @Cast("const hsize_t*") long[] dim);
-public static native int H5Pget_chunk(@Cast("hid_t") int plist_id, int max_ndims, @Cast("hsize_t*") LongPointer dim);
-public static native int H5Pget_chunk(@Cast("hid_t") int plist_id, int max_ndims, @Cast("hsize_t*") LongBuffer dim);
-public static native int H5Pget_chunk(@Cast("hid_t") int plist_id, int max_ndims, @Cast("hsize_t*") long[] dim);
-public static native @Cast("herr_t") int H5Pset_virtual(@Cast("hid_t") int dcpl_id, @Cast("hid_t") int vspace_id,
-    @Cast("const char*") BytePointer src_file_name, @Cast("const char*") BytePointer src_dset_name, @Cast("hid_t") int src_space_id);
-public static native @Cast("herr_t") int H5Pset_virtual(@Cast("hid_t") int dcpl_id, @Cast("hid_t") int vspace_id,
-    String src_file_name, String src_dset_name, @Cast("hid_t") int src_space_id);
-public static native @Cast("herr_t") int H5Pget_virtual_count(@Cast("hid_t") int dcpl_id, @Cast("size_t*") SizeTPointer count);
-public static native @Cast("hid_t") int H5Pget_virtual_vspace(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index);
-public static native @Cast("hid_t") int H5Pget_virtual_srcspace(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index);
-public static native @Cast("ssize_t") int H5Pget_virtual_filename(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index,
+public static native @Cast("herr_t") int H5Pset_layout(@Cast("hid_t") long plist_id, @Cast("H5D_layout_t") int layout);
+public static native @Cast("H5D_layout_t") int H5Pget_layout(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_chunk(@Cast("hid_t") long plist_id, int ndims, @Cast("const hsize_t*") LongPointer dim);
+public static native @Cast("herr_t") int H5Pset_chunk(@Cast("hid_t") long plist_id, int ndims, @Cast("const hsize_t*") LongBuffer dim);
+public static native @Cast("herr_t") int H5Pset_chunk(@Cast("hid_t") long plist_id, int ndims, @Cast("const hsize_t*") long[] dim);
+public static native int H5Pget_chunk(@Cast("hid_t") long plist_id, int max_ndims, @Cast("hsize_t*") LongPointer dim);
+public static native int H5Pget_chunk(@Cast("hid_t") long plist_id, int max_ndims, @Cast("hsize_t*") LongBuffer dim);
+public static native int H5Pget_chunk(@Cast("hid_t") long plist_id, int max_ndims, @Cast("hsize_t*") long[] dim);
+public static native @Cast("herr_t") int H5Pset_virtual(@Cast("hid_t") long dcpl_id, @Cast("hid_t") long vspace_id,
+    @Cast("const char*") BytePointer src_file_name, @Cast("const char*") BytePointer src_dset_name, @Cast("hid_t") long src_space_id);
+public static native @Cast("herr_t") int H5Pset_virtual(@Cast("hid_t") long dcpl_id, @Cast("hid_t") long vspace_id,
+    String src_file_name, String src_dset_name, @Cast("hid_t") long src_space_id);
+public static native @Cast("herr_t") int H5Pget_virtual_count(@Cast("hid_t") long dcpl_id, @Cast("size_t*") SizeTPointer count);
+public static native @Cast("hid_t") long H5Pget_virtual_vspace(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index);
+public static native @Cast("hid_t") long H5Pget_virtual_srcspace(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index);
+public static native @Cast("ssize_t") long H5Pget_virtual_filename(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index,
     @Cast("char*") BytePointer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_virtual_filename(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index,
+public static native @Cast("ssize_t") long H5Pget_virtual_filename(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index,
     @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_virtual_filename(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index,
+public static native @Cast("ssize_t") long H5Pget_virtual_filename(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index,
     @Cast("char*") byte[] name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_virtual_dsetname(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index,
+public static native @Cast("ssize_t") long H5Pget_virtual_dsetname(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index,
     @Cast("char*") BytePointer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_virtual_dsetname(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index,
+public static native @Cast("ssize_t") long H5Pget_virtual_dsetname(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index,
     @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_virtual_dsetname(@Cast("hid_t") int dcpl_id, @Cast("size_t") long index,
+public static native @Cast("ssize_t") long H5Pget_virtual_dsetname(@Cast("hid_t") long dcpl_id, @Cast("size_t") long index,
     @Cast("char*") byte[] name, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Pset_external(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name, @Cast("off_t") long offset,
+public static native @Cast("herr_t") int H5Pset_external(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name, @Cast("off_t") long offset,
           @Cast("hsize_t") long size);
-public static native @Cast("herr_t") int H5Pset_external(@Cast("hid_t") int plist_id, String name, @Cast("off_t") long offset,
+public static native @Cast("herr_t") int H5Pset_external(@Cast("hid_t") long plist_id, String name, @Cast("off_t") long offset,
           @Cast("hsize_t") long size);
-public static native @Cast("herr_t") int H5Pset_chunk_opts(@Cast("hid_t") int plist_id, @Cast("unsigned") int opts);
-public static native @Cast("herr_t") int H5Pget_chunk_opts(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer opts);
-public static native @Cast("herr_t") int H5Pget_chunk_opts(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer opts);
-public static native @Cast("herr_t") int H5Pget_chunk_opts(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] opts);
-public static native int H5Pget_external_count(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pget_external(@Cast("hid_t") int plist_id, @Cast("unsigned") int idx, @Cast("size_t") long name_size,
+public static native @Cast("herr_t") int H5Pset_chunk_opts(@Cast("hid_t") long plist_id, @Cast("unsigned") int opts);
+public static native @Cast("herr_t") int H5Pget_chunk_opts(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer opts);
+public static native @Cast("herr_t") int H5Pget_chunk_opts(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer opts);
+public static native @Cast("herr_t") int H5Pget_chunk_opts(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] opts);
+public static native int H5Pget_external_count(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pget_external(@Cast("hid_t") long plist_id, @Cast("unsigned") int idx, @Cast("size_t") long name_size,
           @Cast("char*") BytePointer name, @Cast("off_t*") SizeTPointer offset,
           @Cast("hsize_t*") LongPointer size);
-public static native @Cast("herr_t") int H5Pget_external(@Cast("hid_t") int plist_id, @Cast("unsigned") int idx, @Cast("size_t") long name_size,
+public static native @Cast("herr_t") int H5Pget_external(@Cast("hid_t") long plist_id, @Cast("unsigned") int idx, @Cast("size_t") long name_size,
           @Cast("char*") ByteBuffer name, @Cast("off_t*") SizeTPointer offset,
           @Cast("hsize_t*") LongBuffer size);
-public static native @Cast("herr_t") int H5Pget_external(@Cast("hid_t") int plist_id, @Cast("unsigned") int idx, @Cast("size_t") long name_size,
+public static native @Cast("herr_t") int H5Pget_external(@Cast("hid_t") long plist_id, @Cast("unsigned") int idx, @Cast("size_t") long name_size,
           @Cast("char*") byte[] name, @Cast("off_t*") SizeTPointer offset,
           @Cast("hsize_t*") long[] size);
-public static native @Cast("herr_t") int H5Pset_szip(@Cast("hid_t") int plist_id, @Cast("unsigned") int options_mask, @Cast("unsigned") int pixels_per_block);
-public static native @Cast("herr_t") int H5Pset_shuffle(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_nbit(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_scaleoffset(@Cast("hid_t") int plist_id, @Cast("H5Z_SO_scale_type_t") int scale_type, int scale_factor);
-public static native @Cast("herr_t") int H5Pset_fill_value(@Cast("hid_t") int plist_id, @Cast("hid_t") int type_id,
+public static native @Cast("herr_t") int H5Pset_szip(@Cast("hid_t") long plist_id, @Cast("unsigned") int options_mask, @Cast("unsigned") int pixels_per_block);
+public static native @Cast("herr_t") int H5Pset_shuffle(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_nbit(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_scaleoffset(@Cast("hid_t") long plist_id, @Cast("H5Z_SO_scale_type_t") int scale_type, int scale_factor);
+public static native @Cast("herr_t") int H5Pset_fill_value(@Cast("hid_t") long plist_id, @Cast("hid_t") long type_id,
      @Const Pointer value);
-public static native @Cast("herr_t") int H5Pget_fill_value(@Cast("hid_t") int plist_id, @Cast("hid_t") int type_id,
+public static native @Cast("herr_t") int H5Pget_fill_value(@Cast("hid_t") long plist_id, @Cast("hid_t") long type_id,
      Pointer value);
-public static native @Cast("herr_t") int H5Pfill_value_defined(@Cast("hid_t") int plist, @Cast("H5D_fill_value_t*") IntPointer status);
-public static native @Cast("herr_t") int H5Pfill_value_defined(@Cast("hid_t") int plist, @Cast("H5D_fill_value_t*") IntBuffer status);
-public static native @Cast("herr_t") int H5Pfill_value_defined(@Cast("hid_t") int plist, @Cast("H5D_fill_value_t*") int[] status);
-public static native @Cast("herr_t") int H5Pset_alloc_time(@Cast("hid_t") int plist_id, @Cast("H5D_alloc_time_t") int alloc_time);
-public static native @Cast("herr_t") int H5Pget_alloc_time(@Cast("hid_t") int plist_id, @Cast("H5D_alloc_time_t*") IntPointer alloc_time);
-public static native @Cast("herr_t") int H5Pget_alloc_time(@Cast("hid_t") int plist_id, @Cast("H5D_alloc_time_t*") IntBuffer alloc_time);
-public static native @Cast("herr_t") int H5Pget_alloc_time(@Cast("hid_t") int plist_id, @Cast("H5D_alloc_time_t*") int[] alloc_time);
-public static native @Cast("herr_t") int H5Pset_fill_time(@Cast("hid_t") int plist_id, @Cast("H5D_fill_time_t") int fill_time);
-public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") int plist_id, @Cast("H5D_fill_time_t*") IntPointer fill_time);
-public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") int plist_id, @Cast("H5D_fill_time_t*") IntBuffer fill_time);
-public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") int plist_id, @Cast("H5D_fill_time_t*") int[] fill_time);
+public static native @Cast("herr_t") int H5Pfill_value_defined(@Cast("hid_t") long plist, @Cast("H5D_fill_value_t*") IntPointer status);
+public static native @Cast("herr_t") int H5Pfill_value_defined(@Cast("hid_t") long plist, @Cast("H5D_fill_value_t*") IntBuffer status);
+public static native @Cast("herr_t") int H5Pfill_value_defined(@Cast("hid_t") long plist, @Cast("H5D_fill_value_t*") int[] status);
+public static native @Cast("herr_t") int H5Pset_alloc_time(@Cast("hid_t") long plist_id, @Cast("H5D_alloc_time_t") int alloc_time);
+public static native @Cast("herr_t") int H5Pget_alloc_time(@Cast("hid_t") long plist_id, @Cast("H5D_alloc_time_t*") IntPointer alloc_time);
+public static native @Cast("herr_t") int H5Pget_alloc_time(@Cast("hid_t") long plist_id, @Cast("H5D_alloc_time_t*") IntBuffer alloc_time);
+public static native @Cast("herr_t") int H5Pget_alloc_time(@Cast("hid_t") long plist_id, @Cast("H5D_alloc_time_t*") int[] alloc_time);
+public static native @Cast("herr_t") int H5Pset_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t") int fill_time);
+public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t*") IntPointer fill_time);
+public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t*") IntBuffer fill_time);
+public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t*") int[] fill_time);
 
 /* Dataset access property list (DAPL) routines */
-public static native @Cast("herr_t") int H5Pset_chunk_cache(@Cast("hid_t") int dapl_id, @Cast("size_t") long rdcc_nslots,
+public static native @Cast("herr_t") int H5Pset_chunk_cache(@Cast("hid_t") long dapl_id, @Cast("size_t") long rdcc_nslots,
        @Cast("size_t") long rdcc_nbytes, double rdcc_w0);
-public static native @Cast("herr_t") int H5Pget_chunk_cache(@Cast("hid_t") int dapl_id,
+public static native @Cast("herr_t") int H5Pget_chunk_cache(@Cast("hid_t") long dapl_id,
        @Cast("size_t*") SizeTPointer rdcc_nslots,
        @Cast("size_t*") SizeTPointer rdcc_nbytes,
        DoublePointer rdcc_w0);
-public static native @Cast("herr_t") int H5Pget_chunk_cache(@Cast("hid_t") int dapl_id,
+public static native @Cast("herr_t") int H5Pget_chunk_cache(@Cast("hid_t") long dapl_id,
        @Cast("size_t*") SizeTPointer rdcc_nslots,
        @Cast("size_t*") SizeTPointer rdcc_nbytes,
        DoubleBuffer rdcc_w0);
-public static native @Cast("herr_t") int H5Pget_chunk_cache(@Cast("hid_t") int dapl_id,
+public static native @Cast("herr_t") int H5Pget_chunk_cache(@Cast("hid_t") long dapl_id,
        @Cast("size_t*") SizeTPointer rdcc_nslots,
        @Cast("size_t*") SizeTPointer rdcc_nbytes,
        double[] rdcc_w0);
-public static native @Cast("herr_t") int H5Pset_virtual_view(@Cast("hid_t") int plist_id, @Cast("H5D_vds_view_t") int view);
-public static native @Cast("herr_t") int H5Pget_virtual_view(@Cast("hid_t") int plist_id, @Cast("H5D_vds_view_t*") IntPointer view);
-public static native @Cast("herr_t") int H5Pget_virtual_view(@Cast("hid_t") int plist_id, @Cast("H5D_vds_view_t*") IntBuffer view);
-public static native @Cast("herr_t") int H5Pget_virtual_view(@Cast("hid_t") int plist_id, @Cast("H5D_vds_view_t*") int[] view);
-public static native @Cast("herr_t") int H5Pset_virtual_printf_gap(@Cast("hid_t") int plist_id, @Cast("hsize_t") long gap_size);
-public static native @Cast("herr_t") int H5Pget_virtual_printf_gap(@Cast("hid_t") int plist_id, @Cast("hsize_t*") LongPointer gap_size);
-public static native @Cast("herr_t") int H5Pget_virtual_printf_gap(@Cast("hid_t") int plist_id, @Cast("hsize_t*") LongBuffer gap_size);
-public static native @Cast("herr_t") int H5Pget_virtual_printf_gap(@Cast("hid_t") int plist_id, @Cast("hsize_t*") long[] gap_size);
-public static native @Cast("herr_t") int H5Pset_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int ndims,
+public static native @Cast("herr_t") int H5Pset_virtual_view(@Cast("hid_t") long plist_id, @Cast("H5D_vds_view_t") int view);
+public static native @Cast("herr_t") int H5Pget_virtual_view(@Cast("hid_t") long plist_id, @Cast("H5D_vds_view_t*") IntPointer view);
+public static native @Cast("herr_t") int H5Pget_virtual_view(@Cast("hid_t") long plist_id, @Cast("H5D_vds_view_t*") IntBuffer view);
+public static native @Cast("herr_t") int H5Pget_virtual_view(@Cast("hid_t") long plist_id, @Cast("H5D_vds_view_t*") int[] view);
+public static native @Cast("herr_t") int H5Pset_virtual_printf_gap(@Cast("hid_t") long plist_id, @Cast("hsize_t") long gap_size);
+public static native @Cast("herr_t") int H5Pget_virtual_printf_gap(@Cast("hid_t") long plist_id, @Cast("hsize_t*") LongPointer gap_size);
+public static native @Cast("herr_t") int H5Pget_virtual_printf_gap(@Cast("hid_t") long plist_id, @Cast("hsize_t*") LongBuffer gap_size);
+public static native @Cast("herr_t") int H5Pget_virtual_printf_gap(@Cast("hid_t") long plist_id, @Cast("hsize_t*") long[] gap_size);
+public static native @Cast("herr_t") int H5Pset_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int ndims,
     @Cast("const hsize_t*") LongPointer boundary, H5D_append_cb_t func, Pointer udata);
-public static native @Cast("herr_t") int H5Pset_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int ndims,
+public static native @Cast("herr_t") int H5Pset_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int ndims,
     @Cast("const hsize_t*") LongBuffer boundary, H5D_append_cb_t func, Pointer udata);
-public static native @Cast("herr_t") int H5Pset_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int ndims,
+public static native @Cast("herr_t") int H5Pset_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int ndims,
     @Cast("const hsize_t*") long[] boundary, H5D_append_cb_t func, Pointer udata);
-public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int dims,
+public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int dims,
     @Cast("hsize_t*") LongPointer boundary, @ByPtrPtr H5D_append_cb_t func, @Cast("void**") PointerPointer udata);
-public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int dims,
+public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int dims,
     @Cast("hsize_t*") LongPointer boundary, @ByPtrPtr H5D_append_cb_t func, @Cast("void**") @ByPtrPtr Pointer udata);
-public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int dims,
+public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int dims,
     @Cast("hsize_t*") LongBuffer boundary, @ByPtrPtr H5D_append_cb_t func, @Cast("void**") @ByPtrPtr Pointer udata);
-public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") int plist_id, @Cast("unsigned") int dims,
+public static native @Cast("herr_t") int H5Pget_append_flush(@Cast("hid_t") long plist_id, @Cast("unsigned") int dims,
     @Cast("hsize_t*") long[] boundary, @ByPtrPtr H5D_append_cb_t func, @Cast("void**") @ByPtrPtr Pointer udata);
-public static native @Cast("herr_t") int H5Pset_efile_prefix(@Cast("hid_t") int dapl_id, @Cast("const char*") BytePointer prefix);
-public static native @Cast("herr_t") int H5Pset_efile_prefix(@Cast("hid_t") int dapl_id, String prefix);
-public static native @Cast("ssize_t") int H5Pget_efile_prefix(@Cast("hid_t") int dapl_id, @Cast("char*") BytePointer prefix, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_efile_prefix(@Cast("hid_t") int dapl_id, @Cast("char*") ByteBuffer prefix, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_efile_prefix(@Cast("hid_t") int dapl_id, @Cast("char*") byte[] prefix, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Pset_efile_prefix(@Cast("hid_t") long dapl_id, @Cast("const char*") BytePointer prefix);
+public static native @Cast("herr_t") int H5Pset_efile_prefix(@Cast("hid_t") long dapl_id, String prefix);
+public static native @Cast("ssize_t") long H5Pget_efile_prefix(@Cast("hid_t") long dapl_id, @Cast("char*") BytePointer prefix, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Pget_efile_prefix(@Cast("hid_t") long dapl_id, @Cast("char*") ByteBuffer prefix, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Pget_efile_prefix(@Cast("hid_t") long dapl_id, @Cast("char*") byte[] prefix, @Cast("size_t") long size);
 
 /* Dataset xfer property list (DXPL) routines */
-public static native @Cast("herr_t") int H5Pset_data_transform(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer expression);
-public static native @Cast("herr_t") int H5Pset_data_transform(@Cast("hid_t") int plist_id, String expression);
-public static native @Cast("ssize_t") int H5Pget_data_transform(@Cast("hid_t") int plist_id, @Cast("char*") BytePointer expression, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_data_transform(@Cast("hid_t") int plist_id, @Cast("char*") ByteBuffer expression, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_data_transform(@Cast("hid_t") int plist_id, @Cast("char*") byte[] expression, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Pset_buffer(@Cast("hid_t") int plist_id, @Cast("size_t") long size, Pointer tconv,
+public static native @Cast("herr_t") int H5Pset_data_transform(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer expression);
+public static native @Cast("herr_t") int H5Pset_data_transform(@Cast("hid_t") long plist_id, String expression);
+public static native @Cast("ssize_t") long H5Pget_data_transform(@Cast("hid_t") long plist_id, @Cast("char*") BytePointer expression, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Pget_data_transform(@Cast("hid_t") long plist_id, @Cast("char*") ByteBuffer expression, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Pget_data_transform(@Cast("hid_t") long plist_id, @Cast("char*") byte[] expression, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Pset_buffer(@Cast("hid_t") long plist_id, @Cast("size_t") long size, Pointer tconv,
         Pointer bkg);
-public static native @Cast("size_t") long H5Pget_buffer(@Cast("hid_t") int plist_id, @Cast("void**") PointerPointer tconv,
+public static native @Cast("size_t") long H5Pget_buffer(@Cast("hid_t") long plist_id, @Cast("void**") PointerPointer tconv,
         @Cast("void**") PointerPointer bkg);
-public static native @Cast("size_t") long H5Pget_buffer(@Cast("hid_t") int plist_id, @Cast("void**") @ByPtrPtr Pointer tconv,
+public static native @Cast("size_t") long H5Pget_buffer(@Cast("hid_t") long plist_id, @Cast("void**") @ByPtrPtr Pointer tconv,
         @Cast("void**") @ByPtrPtr Pointer bkg);
-public static native @Cast("herr_t") int H5Pset_preserve(@Cast("hid_t") int plist_id, @Cast("hbool_t") boolean status);
-public static native int H5Pget_preserve(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_edc_check(@Cast("hid_t") int plist_id, @Cast("H5Z_EDC_t") int check);
-public static native @Cast("H5Z_EDC_t") int H5Pget_edc_check(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_filter_callback(@Cast("hid_t") int plist_id, H5Z_filter_func_t func,
+public static native @Cast("herr_t") int H5Pset_preserve(@Cast("hid_t") long plist_id, @Cast("hbool_t") boolean status);
+public static native int H5Pget_preserve(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_edc_check(@Cast("hid_t") long plist_id, @Cast("H5Z_EDC_t") int check);
+public static native @Cast("H5Z_EDC_t") int H5Pget_edc_check(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_filter_callback(@Cast("hid_t") long plist_id, H5Z_filter_func_t func,
                                      Pointer op_data);
-public static native @Cast("herr_t") int H5Pset_btree_ratios(@Cast("hid_t") int plist_id, double left, double middle,
+public static native @Cast("herr_t") int H5Pset_btree_ratios(@Cast("hid_t") long plist_id, double left, double middle,
        double right);
-public static native @Cast("herr_t") int H5Pget_btree_ratios(@Cast("hid_t") int plist_id, DoublePointer left,
+public static native @Cast("herr_t") int H5Pget_btree_ratios(@Cast("hid_t") long plist_id, DoublePointer left,
        DoublePointer middle,
        DoublePointer right);
-public static native @Cast("herr_t") int H5Pget_btree_ratios(@Cast("hid_t") int plist_id, DoubleBuffer left,
+public static native @Cast("herr_t") int H5Pget_btree_ratios(@Cast("hid_t") long plist_id, DoubleBuffer left,
        DoubleBuffer middle,
        DoubleBuffer right);
-public static native @Cast("herr_t") int H5Pget_btree_ratios(@Cast("hid_t") int plist_id, double[] left,
+public static native @Cast("herr_t") int H5Pget_btree_ratios(@Cast("hid_t") long plist_id, double[] left,
        double[] middle,
        double[] right);
-public static native @Cast("herr_t") int H5Pset_vlen_mem_manager(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pset_vlen_mem_manager(@Cast("hid_t") long plist_id,
                                        H5MM_allocate_t alloc_func,
                                        Pointer alloc_info, H5MM_free_t free_func,
                                        Pointer free_info);
-public static native @Cast("herr_t") int H5Pget_vlen_mem_manager(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pget_vlen_mem_manager(@Cast("hid_t") long plist_id,
                                        @ByPtrPtr H5MM_allocate_t alloc_func,
                                        @Cast("void**") PointerPointer alloc_info,
                                        @ByPtrPtr H5MM_free_t free_func,
                                        @Cast("void**") PointerPointer free_info);
-public static native @Cast("herr_t") int H5Pget_vlen_mem_manager(@Cast("hid_t") int plist_id,
+public static native @Cast("herr_t") int H5Pget_vlen_mem_manager(@Cast("hid_t") long plist_id,
                                        @ByPtrPtr H5MM_allocate_t alloc_func,
                                        @Cast("void**") @ByPtrPtr Pointer alloc_info,
                                        @ByPtrPtr H5MM_free_t free_func,
                                        @Cast("void**") @ByPtrPtr Pointer free_info);
-public static native @Cast("herr_t") int H5Pset_hyper_vector_size(@Cast("hid_t") int fapl_id, @Cast("size_t") long size);
-public static native @Cast("herr_t") int H5Pget_hyper_vector_size(@Cast("hid_t") int fapl_id, @Cast("size_t*") SizeTPointer size);
-public static native @Cast("herr_t") int H5Pset_type_conv_cb(@Cast("hid_t") int dxpl_id, H5T_conv_except_func_t op, Pointer operate_data);
-public static native @Cast("herr_t") int H5Pget_type_conv_cb(@Cast("hid_t") int dxpl_id, @ByPtrPtr H5T_conv_except_func_t op, @Cast("void**") PointerPointer operate_data);
-public static native @Cast("herr_t") int H5Pget_type_conv_cb(@Cast("hid_t") int dxpl_id, @ByPtrPtr H5T_conv_except_func_t op, @Cast("void**") @ByPtrPtr Pointer operate_data);
+public static native @Cast("herr_t") int H5Pset_hyper_vector_size(@Cast("hid_t") long fapl_id, @Cast("size_t") long size);
+public static native @Cast("herr_t") int H5Pget_hyper_vector_size(@Cast("hid_t") long fapl_id, @Cast("size_t*") SizeTPointer size);
+public static native @Cast("herr_t") int H5Pset_type_conv_cb(@Cast("hid_t") long dxpl_id, H5T_conv_except_func_t op, Pointer operate_data);
+public static native @Cast("herr_t") int H5Pget_type_conv_cb(@Cast("hid_t") long dxpl_id, @ByPtrPtr H5T_conv_except_func_t op, @Cast("void**") PointerPointer operate_data);
+public static native @Cast("herr_t") int H5Pget_type_conv_cb(@Cast("hid_t") long dxpl_id, @ByPtrPtr H5T_conv_except_func_t op, @Cast("void**") @ByPtrPtr Pointer operate_data);
 // #ifdef H5_HAVE_PARALLEL
 // #endif /* H5_HAVE_PARALLEL */
 
 /* Link creation property list (LCPL) routines */
-public static native @Cast("herr_t") int H5Pset_create_intermediate_group(@Cast("hid_t") int plist_id, @Cast("unsigned") int crt_intmd);
-public static native @Cast("herr_t") int H5Pget_create_intermediate_group(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer crt_intmd);
-public static native @Cast("herr_t") int H5Pget_create_intermediate_group(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer crt_intmd);
-public static native @Cast("herr_t") int H5Pget_create_intermediate_group(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] crt_intmd);
+public static native @Cast("herr_t") int H5Pset_create_intermediate_group(@Cast("hid_t") long plist_id, @Cast("unsigned") int crt_intmd);
+public static native @Cast("herr_t") int H5Pget_create_intermediate_group(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer crt_intmd);
+public static native @Cast("herr_t") int H5Pget_create_intermediate_group(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer crt_intmd);
+public static native @Cast("herr_t") int H5Pget_create_intermediate_group(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] crt_intmd);
 
 /* Group creation property list (GCPL) routines */
-public static native @Cast("herr_t") int H5Pset_local_heap_size_hint(@Cast("hid_t") int plist_id, @Cast("size_t") long size_hint);
-public static native @Cast("herr_t") int H5Pget_local_heap_size_hint(@Cast("hid_t") int plist_id, @Cast("size_t*") SizeTPointer size_hint);
-public static native @Cast("herr_t") int H5Pset_link_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned") int max_compact, @Cast("unsigned") int min_dense);
-public static native @Cast("herr_t") int H5Pget_link_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer max_compact, @Cast("unsigned*") IntPointer min_dense);
-public static native @Cast("herr_t") int H5Pget_link_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer max_compact, @Cast("unsigned*") IntBuffer min_dense);
-public static native @Cast("herr_t") int H5Pget_link_phase_change(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] max_compact, @Cast("unsigned*") int[] min_dense);
-public static native @Cast("herr_t") int H5Pset_est_link_info(@Cast("hid_t") int plist_id, @Cast("unsigned") int est_num_entries, @Cast("unsigned") int est_name_len);
-public static native @Cast("herr_t") int H5Pget_est_link_info(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer est_num_entries, @Cast("unsigned*") IntPointer est_name_len);
-public static native @Cast("herr_t") int H5Pget_est_link_info(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer est_num_entries, @Cast("unsigned*") IntBuffer est_name_len);
-public static native @Cast("herr_t") int H5Pget_est_link_info(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] est_num_entries, @Cast("unsigned*") int[] est_name_len);
-public static native @Cast("herr_t") int H5Pset_link_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned") int crt_order_flags);
-public static native @Cast("herr_t") int H5Pget_link_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer crt_order_flags);
-public static native @Cast("herr_t") int H5Pget_link_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer crt_order_flags);
-public static native @Cast("herr_t") int H5Pget_link_creation_order(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] crt_order_flags);
+public static native @Cast("herr_t") int H5Pset_local_heap_size_hint(@Cast("hid_t") long plist_id, @Cast("size_t") long size_hint);
+public static native @Cast("herr_t") int H5Pget_local_heap_size_hint(@Cast("hid_t") long plist_id, @Cast("size_t*") SizeTPointer size_hint);
+public static native @Cast("herr_t") int H5Pset_link_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned") int max_compact, @Cast("unsigned") int min_dense);
+public static native @Cast("herr_t") int H5Pget_link_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer max_compact, @Cast("unsigned*") IntPointer min_dense);
+public static native @Cast("herr_t") int H5Pget_link_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer max_compact, @Cast("unsigned*") IntBuffer min_dense);
+public static native @Cast("herr_t") int H5Pget_link_phase_change(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] max_compact, @Cast("unsigned*") int[] min_dense);
+public static native @Cast("herr_t") int H5Pset_est_link_info(@Cast("hid_t") long plist_id, @Cast("unsigned") int est_num_entries, @Cast("unsigned") int est_name_len);
+public static native @Cast("herr_t") int H5Pget_est_link_info(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer est_num_entries, @Cast("unsigned*") IntPointer est_name_len);
+public static native @Cast("herr_t") int H5Pget_est_link_info(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer est_num_entries, @Cast("unsigned*") IntBuffer est_name_len);
+public static native @Cast("herr_t") int H5Pget_est_link_info(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] est_num_entries, @Cast("unsigned*") int[] est_name_len);
+public static native @Cast("herr_t") int H5Pset_link_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned") int crt_order_flags);
+public static native @Cast("herr_t") int H5Pget_link_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer crt_order_flags);
+public static native @Cast("herr_t") int H5Pget_link_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer crt_order_flags);
+public static native @Cast("herr_t") int H5Pget_link_creation_order(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] crt_order_flags);
 
 /* String creation property list (STRCPL) routines */
-public static native @Cast("herr_t") int H5Pset_char_encoding(@Cast("hid_t") int plist_id, @Cast("H5T_cset_t") int encoding);
-public static native @Cast("herr_t") int H5Pget_char_encoding(@Cast("hid_t") int plist_id, @Cast("H5T_cset_t*") IntPointer encoding);
-public static native @Cast("herr_t") int H5Pget_char_encoding(@Cast("hid_t") int plist_id, @Cast("H5T_cset_t*") IntBuffer encoding);
-public static native @Cast("herr_t") int H5Pget_char_encoding(@Cast("hid_t") int plist_id, @Cast("H5T_cset_t*") int[] encoding);
+public static native @Cast("herr_t") int H5Pset_char_encoding(@Cast("hid_t") long plist_id, @Cast("H5T_cset_t") int encoding);
+public static native @Cast("herr_t") int H5Pget_char_encoding(@Cast("hid_t") long plist_id, @Cast("H5T_cset_t*") IntPointer encoding);
+public static native @Cast("herr_t") int H5Pget_char_encoding(@Cast("hid_t") long plist_id, @Cast("H5T_cset_t*") IntBuffer encoding);
+public static native @Cast("herr_t") int H5Pget_char_encoding(@Cast("hid_t") long plist_id, @Cast("H5T_cset_t*") int[] encoding);
 
 /* Link access property list (LAPL) routines */
-public static native @Cast("herr_t") int H5Pset_nlinks(@Cast("hid_t") int plist_id, @Cast("size_t") long nlinks);
-public static native @Cast("herr_t") int H5Pget_nlinks(@Cast("hid_t") int plist_id, @Cast("size_t*") SizeTPointer nlinks);
-public static native @Cast("herr_t") int H5Pset_elink_prefix(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer prefix);
-public static native @Cast("herr_t") int H5Pset_elink_prefix(@Cast("hid_t") int plist_id, String prefix);
-public static native @Cast("ssize_t") int H5Pget_elink_prefix(@Cast("hid_t") int plist_id, @Cast("char*") BytePointer prefix, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_elink_prefix(@Cast("hid_t") int plist_id, @Cast("char*") ByteBuffer prefix, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Pget_elink_prefix(@Cast("hid_t") int plist_id, @Cast("char*") byte[] prefix, @Cast("size_t") long size);
-public static native @Cast("hid_t") int H5Pget_elink_fapl(@Cast("hid_t") int lapl_id);
-public static native @Cast("herr_t") int H5Pset_elink_fapl(@Cast("hid_t") int lapl_id, @Cast("hid_t") int fapl_id);
-public static native @Cast("herr_t") int H5Pset_elink_acc_flags(@Cast("hid_t") int lapl_id, @Cast("unsigned") int flags);
-public static native @Cast("herr_t") int H5Pget_elink_acc_flags(@Cast("hid_t") int lapl_id, @Cast("unsigned*") IntPointer flags);
-public static native @Cast("herr_t") int H5Pget_elink_acc_flags(@Cast("hid_t") int lapl_id, @Cast("unsigned*") IntBuffer flags);
-public static native @Cast("herr_t") int H5Pget_elink_acc_flags(@Cast("hid_t") int lapl_id, @Cast("unsigned*") int[] flags);
-public static native @Cast("herr_t") int H5Pset_elink_cb(@Cast("hid_t") int lapl_id, H5L_elink_traverse_t func, Pointer op_data);
-public static native @Cast("herr_t") int H5Pget_elink_cb(@Cast("hid_t") int lapl_id, @ByPtrPtr H5L_elink_traverse_t func, @Cast("void**") PointerPointer op_data);
-public static native @Cast("herr_t") int H5Pget_elink_cb(@Cast("hid_t") int lapl_id, @ByPtrPtr H5L_elink_traverse_t func, @Cast("void**") @ByPtrPtr Pointer op_data);
+public static native @Cast("herr_t") int H5Pset_nlinks(@Cast("hid_t") long plist_id, @Cast("size_t") long nlinks);
+public static native @Cast("herr_t") int H5Pget_nlinks(@Cast("hid_t") long plist_id, @Cast("size_t*") SizeTPointer nlinks);
+public static native @Cast("herr_t") int H5Pset_elink_prefix(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer prefix);
+public static native @Cast("herr_t") int H5Pset_elink_prefix(@Cast("hid_t") long plist_id, String prefix);
+public static native @Cast("ssize_t") long H5Pget_elink_prefix(@Cast("hid_t") long plist_id, @Cast("char*") BytePointer prefix, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Pget_elink_prefix(@Cast("hid_t") long plist_id, @Cast("char*") ByteBuffer prefix, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5Pget_elink_prefix(@Cast("hid_t") long plist_id, @Cast("char*") byte[] prefix, @Cast("size_t") long size);
+public static native @Cast("hid_t") long H5Pget_elink_fapl(@Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Pset_elink_fapl(@Cast("hid_t") long lapl_id, @Cast("hid_t") long fapl_id);
+public static native @Cast("herr_t") int H5Pset_elink_acc_flags(@Cast("hid_t") long lapl_id, @Cast("unsigned") int flags);
+public static native @Cast("herr_t") int H5Pget_elink_acc_flags(@Cast("hid_t") long lapl_id, @Cast("unsigned*") IntPointer flags);
+public static native @Cast("herr_t") int H5Pget_elink_acc_flags(@Cast("hid_t") long lapl_id, @Cast("unsigned*") IntBuffer flags);
+public static native @Cast("herr_t") int H5Pget_elink_acc_flags(@Cast("hid_t") long lapl_id, @Cast("unsigned*") int[] flags);
+public static native @Cast("herr_t") int H5Pset_elink_cb(@Cast("hid_t") long lapl_id, H5L_elink_traverse_t func, Pointer op_data);
+public static native @Cast("herr_t") int H5Pget_elink_cb(@Cast("hid_t") long lapl_id, @ByPtrPtr H5L_elink_traverse_t func, @Cast("void**") PointerPointer op_data);
+public static native @Cast("herr_t") int H5Pget_elink_cb(@Cast("hid_t") long lapl_id, @ByPtrPtr H5L_elink_traverse_t func, @Cast("void**") @ByPtrPtr Pointer op_data);
 
 /* Object copy property list (OCPYPL) routines */
-public static native @Cast("herr_t") int H5Pset_copy_object(@Cast("hid_t") int plist_id, @Cast("unsigned") int crt_intmd);
-public static native @Cast("herr_t") int H5Pget_copy_object(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntPointer crt_intmd);
-public static native @Cast("herr_t") int H5Pget_copy_object(@Cast("hid_t") int plist_id, @Cast("unsigned*") IntBuffer crt_intmd);
-public static native @Cast("herr_t") int H5Pget_copy_object(@Cast("hid_t") int plist_id, @Cast("unsigned*") int[] crt_intmd);
-public static native @Cast("herr_t") int H5Padd_merge_committed_dtype_path(@Cast("hid_t") int plist_id, @Cast("const char*") BytePointer path);
-public static native @Cast("herr_t") int H5Padd_merge_committed_dtype_path(@Cast("hid_t") int plist_id, String path);
-public static native @Cast("herr_t") int H5Pfree_merge_committed_dtype_paths(@Cast("hid_t") int plist_id);
-public static native @Cast("herr_t") int H5Pset_mcdt_search_cb(@Cast("hid_t") int plist_id, H5O_mcdt_search_cb_t func, Pointer op_data);
-public static native @Cast("herr_t") int H5Pget_mcdt_search_cb(@Cast("hid_t") int plist_id, @ByPtrPtr H5O_mcdt_search_cb_t func, @Cast("void**") PointerPointer op_data);
-public static native @Cast("herr_t") int H5Pget_mcdt_search_cb(@Cast("hid_t") int plist_id, @ByPtrPtr H5O_mcdt_search_cb_t func, @Cast("void**") @ByPtrPtr Pointer op_data);
+public static native @Cast("herr_t") int H5Pset_copy_object(@Cast("hid_t") long plist_id, @Cast("unsigned") int crt_intmd);
+public static native @Cast("herr_t") int H5Pget_copy_object(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntPointer crt_intmd);
+public static native @Cast("herr_t") int H5Pget_copy_object(@Cast("hid_t") long plist_id, @Cast("unsigned*") IntBuffer crt_intmd);
+public static native @Cast("herr_t") int H5Pget_copy_object(@Cast("hid_t") long plist_id, @Cast("unsigned*") int[] crt_intmd);
+public static native @Cast("herr_t") int H5Padd_merge_committed_dtype_path(@Cast("hid_t") long plist_id, @Cast("const char*") BytePointer path);
+public static native @Cast("herr_t") int H5Padd_merge_committed_dtype_path(@Cast("hid_t") long plist_id, String path);
+public static native @Cast("herr_t") int H5Pfree_merge_committed_dtype_paths(@Cast("hid_t") long plist_id);
+public static native @Cast("herr_t") int H5Pset_mcdt_search_cb(@Cast("hid_t") long plist_id, H5O_mcdt_search_cb_t func, Pointer op_data);
+public static native @Cast("herr_t") int H5Pget_mcdt_search_cb(@Cast("hid_t") long plist_id, @ByPtrPtr H5O_mcdt_search_cb_t func, @Cast("void**") PointerPointer op_data);
+public static native @Cast("herr_t") int H5Pget_mcdt_search_cb(@Cast("hid_t") long plist_id, @ByPtrPtr H5O_mcdt_search_cb_t func, @Cast("void**") @ByPtrPtr Pointer op_data);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
  *
@@ -6225,9 +6222,9 @@ public static native @Cast("herr_t") int H5PLreplace(String plugin_path, @Cast("
 public static native @Cast("herr_t") int H5PLinsert(@Cast("const char*") BytePointer plugin_path, @Cast("unsigned int") int index);
 public static native @Cast("herr_t") int H5PLinsert(String plugin_path, @Cast("unsigned int") int index);
 public static native @Cast("herr_t") int H5PLremove(@Cast("unsigned int") int index);
-public static native @Cast("ssize_t") int H5PLget(@Cast("unsigned int") int index, @Cast("char*") BytePointer pathname, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5PLget(@Cast("unsigned int") int index, @Cast("char*") ByteBuffer pathname, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5PLget(@Cast("unsigned int") int index, @Cast("char*") byte[] pathname, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5PLget(@Cast("unsigned int") int index, @Cast("char*") BytePointer pathname, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5PLget(@Cast("unsigned int") int index, @Cast("char*") ByteBuffer pathname, @Cast("size_t") long size);
+public static native @Cast("ssize_t") long H5PLget(@Cast("unsigned int") int index, @Cast("char*") byte[] pathname, @Cast("size_t") long size);
 public static native @Cast("herr_t") int H5PLsize(@Cast("unsigned int*") IntPointer listsize);
 public static native @Cast("herr_t") int H5PLsize(@Cast("unsigned int*") IntBuffer listsize);
 public static native @Cast("herr_t") int H5PLsize(@Cast("unsigned int*") int[] listsize);
@@ -6298,23 +6295,23 @@ public static final int H5R_DSET_REG_REF_BUF_SIZE = H5R_DSET_REG_REF_BUF_SIZE();
 // #endif
 
 /* Functions in H5R.c */
-public static native @Cast("herr_t") int H5Rcreate(Pointer ref, @Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name,
-			 @Cast("H5R_type_t") int ref_type, @Cast("hid_t") int space_id);
-public static native @Cast("herr_t") int H5Rcreate(Pointer ref, @Cast("hid_t") int loc_id, String name,
-			 @Cast("H5R_type_t") int ref_type, @Cast("hid_t") int space_id);
-public static native @Cast("hid_t") int H5Rdereference2(@Cast("hid_t") int obj_id, @Cast("hid_t") int oapl_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref);
-public static native @Cast("hid_t") int H5Rget_region(@Cast("hid_t") int dataset, @Cast("H5R_type_t") int ref_type, @Const Pointer ref);
-public static native @Cast("herr_t") int H5Rget_obj_type2(@Cast("hid_t") int id, @Cast("H5R_type_t") int ref_type, @Const Pointer _ref,
+public static native @Cast("herr_t") int H5Rcreate(Pointer ref, @Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name,
+			 @Cast("H5R_type_t") int ref_type, @Cast("hid_t") long space_id);
+public static native @Cast("herr_t") int H5Rcreate(Pointer ref, @Cast("hid_t") long loc_id, String name,
+			 @Cast("H5R_type_t") int ref_type, @Cast("hid_t") long space_id);
+public static native @Cast("hid_t") long H5Rdereference2(@Cast("hid_t") long obj_id, @Cast("hid_t") long oapl_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref);
+public static native @Cast("hid_t") long H5Rget_region(@Cast("hid_t") long dataset, @Cast("H5R_type_t") int ref_type, @Const Pointer ref);
+public static native @Cast("herr_t") int H5Rget_obj_type2(@Cast("hid_t") long id, @Cast("H5R_type_t") int ref_type, @Const Pointer _ref,
     @Cast("H5O_type_t*") IntPointer obj_type);
-public static native @Cast("herr_t") int H5Rget_obj_type2(@Cast("hid_t") int id, @Cast("H5R_type_t") int ref_type, @Const Pointer _ref,
+public static native @Cast("herr_t") int H5Rget_obj_type2(@Cast("hid_t") long id, @Cast("H5R_type_t") int ref_type, @Const Pointer _ref,
     @Cast("H5O_type_t*") IntBuffer obj_type);
-public static native @Cast("herr_t") int H5Rget_obj_type2(@Cast("hid_t") int id, @Cast("H5R_type_t") int ref_type, @Const Pointer _ref,
+public static native @Cast("herr_t") int H5Rget_obj_type2(@Cast("hid_t") long id, @Cast("H5R_type_t") int ref_type, @Const Pointer _ref,
     @Cast("H5O_type_t*") int[] obj_type);
-public static native @Cast("ssize_t") int H5Rget_name(@Cast("hid_t") int loc_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref,
+public static native @Cast("ssize_t") long H5Rget_name(@Cast("hid_t") long loc_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref,
     @Cast("char*") BytePointer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Rget_name(@Cast("hid_t") int loc_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref,
+public static native @Cast("ssize_t") long H5Rget_name(@Cast("hid_t") long loc_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref,
     @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5Rget_name(@Cast("hid_t") int loc_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref,
+public static native @Cast("ssize_t") long H5Rget_name(@Cast("hid_t") long loc_id, @Cast("H5R_type_t") int ref_type, @Const Pointer ref,
     @Cast("char*") byte[] name, @Cast("size_t") long size);
 
 /* Symbols defined for compatibility with previous versions of the HDF5 API.
@@ -6426,47 +6423,47 @@ public static final int
 // #endif
 
 /* Functions in H5S.c */
-public static native @Cast("hid_t") int H5Screate(@Cast("H5S_class_t") int type);
-public static native @Cast("hid_t") int H5Screate_simple(int rank, @Cast("const hsize_t*") LongPointer dims,
+public static native @Cast("hid_t") long H5Screate(@Cast("H5S_class_t") int type);
+public static native @Cast("hid_t") long H5Screate_simple(int rank, @Cast("const hsize_t*") LongPointer dims,
 			       @Cast("const hsize_t*") LongPointer maxdims);
-public static native @Cast("hid_t") int H5Screate_simple(int rank, @Cast("const hsize_t*") LongBuffer dims,
+public static native @Cast("hid_t") long H5Screate_simple(int rank, @Cast("const hsize_t*") LongBuffer dims,
 			       @Cast("const hsize_t*") LongBuffer maxdims);
-public static native @Cast("hid_t") int H5Screate_simple(int rank, @Cast("const hsize_t*") long[] dims,
+public static native @Cast("hid_t") long H5Screate_simple(int rank, @Cast("const hsize_t*") long[] dims,
 			       @Cast("const hsize_t*") long[] maxdims);
-public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") int space_id, int rank,
+public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") long space_id, int rank,
 				    @Cast("const hsize_t*") LongPointer dims,
 				    @Cast("const hsize_t*") LongPointer max);
-public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") int space_id, int rank,
+public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") long space_id, int rank,
 				    @Cast("const hsize_t*") LongBuffer dims,
 				    @Cast("const hsize_t*") LongBuffer max);
-public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") int space_id, int rank,
+public static native @Cast("herr_t") int H5Sset_extent_simple(@Cast("hid_t") long space_id, int rank,
 				    @Cast("const hsize_t*") long[] dims,
 				    @Cast("const hsize_t*") long[] max);
-public static native @Cast("hid_t") int H5Scopy(@Cast("hid_t") int space_id);
-public static native @Cast("herr_t") int H5Sclose(@Cast("hid_t") int space_id);
-public static native @Cast("herr_t") int H5Sencode(@Cast("hid_t") int obj_id, Pointer buf, @Cast("size_t*") SizeTPointer nalloc);
-public static native @Cast("hid_t") int H5Sdecode(@Const Pointer buf);
-public static native @Cast("hssize_t") long H5Sget_simple_extent_npoints(@Cast("hid_t") int space_id);
-public static native int H5Sget_simple_extent_ndims(@Cast("hid_t") int space_id);
-public static native int H5Sget_simple_extent_dims(@Cast("hid_t") int space_id, @Cast("hsize_t*") LongPointer dims,
+public static native @Cast("hid_t") long H5Scopy(@Cast("hid_t") long space_id);
+public static native @Cast("herr_t") int H5Sclose(@Cast("hid_t") long space_id);
+public static native @Cast("herr_t") int H5Sencode(@Cast("hid_t") long obj_id, Pointer buf, @Cast("size_t*") SizeTPointer nalloc);
+public static native @Cast("hid_t") long H5Sdecode(@Const Pointer buf);
+public static native @Cast("hssize_t") long H5Sget_simple_extent_npoints(@Cast("hid_t") long space_id);
+public static native int H5Sget_simple_extent_ndims(@Cast("hid_t") long space_id);
+public static native int H5Sget_simple_extent_dims(@Cast("hid_t") long space_id, @Cast("hsize_t*") LongPointer dims,
 				      @Cast("hsize_t*") LongPointer maxdims);
-public static native int H5Sget_simple_extent_dims(@Cast("hid_t") int space_id, @Cast("hsize_t*") LongBuffer dims,
+public static native int H5Sget_simple_extent_dims(@Cast("hid_t") long space_id, @Cast("hsize_t*") LongBuffer dims,
 				      @Cast("hsize_t*") LongBuffer maxdims);
-public static native int H5Sget_simple_extent_dims(@Cast("hid_t") int space_id, @Cast("hsize_t*") long[] dims,
+public static native int H5Sget_simple_extent_dims(@Cast("hid_t") long space_id, @Cast("hsize_t*") long[] dims,
 				      @Cast("hsize_t*") long[] maxdims);
-public static native @Cast("htri_t") int H5Sis_simple(@Cast("hid_t") int space_id);
-public static native @Cast("hssize_t") long H5Sget_select_npoints(@Cast("hid_t") int spaceid);
-public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") int space_id, @Cast("H5S_seloper_t") int op,
+public static native @Cast("htri_t") int H5Sis_simple(@Cast("hid_t") long space_id);
+public static native @Cast("hssize_t") long H5Sget_select_npoints(@Cast("hid_t") long spaceid);
+public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") long space_id, @Cast("H5S_seloper_t") int op,
 				   @Cast("const hsize_t*") LongPointer start,
 				   @Cast("const hsize_t*") LongPointer _stride,
 				   @Cast("const hsize_t*") LongPointer count,
 				   @Cast("const hsize_t*") LongPointer _block);
-public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") int space_id, @Cast("H5S_seloper_t") int op,
+public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") long space_id, @Cast("H5S_seloper_t") int op,
 				   @Cast("const hsize_t*") LongBuffer start,
 				   @Cast("const hsize_t*") LongBuffer _stride,
 				   @Cast("const hsize_t*") LongBuffer count,
 				   @Cast("const hsize_t*") LongBuffer _block);
-public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") int space_id, @Cast("H5S_seloper_t") int op,
+public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") long space_id, @Cast("H5S_seloper_t") int op,
 				   @Cast("const hsize_t*") long[] start,
 				   @Cast("const hsize_t*") long[] _stride,
 				   @Cast("const hsize_t*") long[] count,
@@ -6476,50 +6473,50 @@ public static native @Cast("herr_t") int H5Sselect_hyperslab(@Cast("hid_t") int 
  *      publicly released - QAK */
 // #ifdef NEW_HYPERSLAB_API
 // #endif /* NEW_HYPERSLAB_API */
-public static native @Cast("herr_t") int H5Sselect_elements(@Cast("hid_t") int space_id, @Cast("H5S_seloper_t") int op,
+public static native @Cast("herr_t") int H5Sselect_elements(@Cast("hid_t") long space_id, @Cast("H5S_seloper_t") int op,
     @Cast("size_t") long num_elem, @Cast("const hsize_t*") LongPointer coord);
-public static native @Cast("herr_t") int H5Sselect_elements(@Cast("hid_t") int space_id, @Cast("H5S_seloper_t") int op,
+public static native @Cast("herr_t") int H5Sselect_elements(@Cast("hid_t") long space_id, @Cast("H5S_seloper_t") int op,
     @Cast("size_t") long num_elem, @Cast("const hsize_t*") LongBuffer coord);
-public static native @Cast("herr_t") int H5Sselect_elements(@Cast("hid_t") int space_id, @Cast("H5S_seloper_t") int op,
+public static native @Cast("herr_t") int H5Sselect_elements(@Cast("hid_t") long space_id, @Cast("H5S_seloper_t") int op,
     @Cast("size_t") long num_elem, @Cast("const hsize_t*") long[] coord);
-public static native @Cast("H5S_class_t") int H5Sget_simple_extent_type(@Cast("hid_t") int space_id);
-public static native @Cast("herr_t") int H5Sset_extent_none(@Cast("hid_t") int space_id);
-public static native @Cast("herr_t") int H5Sextent_copy(@Cast("hid_t") int dst_id,@Cast("hid_t") int src_id);
-public static native @Cast("htri_t") int H5Sextent_equal(@Cast("hid_t") int sid1, @Cast("hid_t") int sid2);
-public static native @Cast("herr_t") int H5Sselect_all(@Cast("hid_t") int spaceid);
-public static native @Cast("herr_t") int H5Sselect_none(@Cast("hid_t") int spaceid);
-public static native @Cast("herr_t") int H5Soffset_simple(@Cast("hid_t") int space_id, @Cast("const hssize_t*") LongPointer offset);
-public static native @Cast("herr_t") int H5Soffset_simple(@Cast("hid_t") int space_id, @Cast("const hssize_t*") LongBuffer offset);
-public static native @Cast("herr_t") int H5Soffset_simple(@Cast("hid_t") int space_id, @Cast("const hssize_t*") long[] offset);
-public static native @Cast("htri_t") int H5Sselect_valid(@Cast("hid_t") int spaceid);
-public static native @Cast("htri_t") int H5Sis_regular_hyperslab(@Cast("hid_t") int spaceid);
-public static native @Cast("htri_t") int H5Sget_regular_hyperslab(@Cast("hid_t") int spaceid, @Cast("hsize_t*") LongPointer start,
+public static native @Cast("H5S_class_t") int H5Sget_simple_extent_type(@Cast("hid_t") long space_id);
+public static native @Cast("herr_t") int H5Sset_extent_none(@Cast("hid_t") long space_id);
+public static native @Cast("herr_t") int H5Sextent_copy(@Cast("hid_t") long dst_id,@Cast("hid_t") long src_id);
+public static native @Cast("htri_t") int H5Sextent_equal(@Cast("hid_t") long sid1, @Cast("hid_t") long sid2);
+public static native @Cast("herr_t") int H5Sselect_all(@Cast("hid_t") long spaceid);
+public static native @Cast("herr_t") int H5Sselect_none(@Cast("hid_t") long spaceid);
+public static native @Cast("herr_t") int H5Soffset_simple(@Cast("hid_t") long space_id, @Cast("const hssize_t*") LongPointer offset);
+public static native @Cast("herr_t") int H5Soffset_simple(@Cast("hid_t") long space_id, @Cast("const hssize_t*") LongBuffer offset);
+public static native @Cast("herr_t") int H5Soffset_simple(@Cast("hid_t") long space_id, @Cast("const hssize_t*") long[] offset);
+public static native @Cast("htri_t") int H5Sselect_valid(@Cast("hid_t") long spaceid);
+public static native @Cast("htri_t") int H5Sis_regular_hyperslab(@Cast("hid_t") long spaceid);
+public static native @Cast("htri_t") int H5Sget_regular_hyperslab(@Cast("hid_t") long spaceid, @Cast("hsize_t*") LongPointer start,
     @Cast("hsize_t*") LongPointer stride, @Cast("hsize_t*") LongPointer count, @Cast("hsize_t*") LongPointer block);
-public static native @Cast("htri_t") int H5Sget_regular_hyperslab(@Cast("hid_t") int spaceid, @Cast("hsize_t*") LongBuffer start,
+public static native @Cast("htri_t") int H5Sget_regular_hyperslab(@Cast("hid_t") long spaceid, @Cast("hsize_t*") LongBuffer start,
     @Cast("hsize_t*") LongBuffer stride, @Cast("hsize_t*") LongBuffer count, @Cast("hsize_t*") LongBuffer block);
-public static native @Cast("htri_t") int H5Sget_regular_hyperslab(@Cast("hid_t") int spaceid, @Cast("hsize_t*") long[] start,
+public static native @Cast("htri_t") int H5Sget_regular_hyperslab(@Cast("hid_t") long spaceid, @Cast("hsize_t*") long[] start,
     @Cast("hsize_t*") long[] stride, @Cast("hsize_t*") long[] count, @Cast("hsize_t*") long[] block);
-public static native @Cast("hssize_t") long H5Sget_select_hyper_nblocks(@Cast("hid_t") int spaceid);
-public static native @Cast("hssize_t") long H5Sget_select_elem_npoints(@Cast("hid_t") int spaceid);
-public static native @Cast("herr_t") int H5Sget_select_hyper_blocklist(@Cast("hid_t") int spaceid, @Cast("hsize_t") long startblock,
+public static native @Cast("hssize_t") long H5Sget_select_hyper_nblocks(@Cast("hid_t") long spaceid);
+public static native @Cast("hssize_t") long H5Sget_select_elem_npoints(@Cast("hid_t") long spaceid);
+public static native @Cast("herr_t") int H5Sget_select_hyper_blocklist(@Cast("hid_t") long spaceid, @Cast("hsize_t") long startblock,
     @Cast("hsize_t") long numblocks, @Cast("hsize_t*") LongPointer buf);
-public static native @Cast("herr_t") int H5Sget_select_hyper_blocklist(@Cast("hid_t") int spaceid, @Cast("hsize_t") long startblock,
+public static native @Cast("herr_t") int H5Sget_select_hyper_blocklist(@Cast("hid_t") long spaceid, @Cast("hsize_t") long startblock,
     @Cast("hsize_t") long numblocks, @Cast("hsize_t*") LongBuffer buf);
-public static native @Cast("herr_t") int H5Sget_select_hyper_blocklist(@Cast("hid_t") int spaceid, @Cast("hsize_t") long startblock,
+public static native @Cast("herr_t") int H5Sget_select_hyper_blocklist(@Cast("hid_t") long spaceid, @Cast("hsize_t") long startblock,
     @Cast("hsize_t") long numblocks, @Cast("hsize_t*") long[] buf);
-public static native @Cast("herr_t") int H5Sget_select_elem_pointlist(@Cast("hid_t") int spaceid, @Cast("hsize_t") long startpoint,
+public static native @Cast("herr_t") int H5Sget_select_elem_pointlist(@Cast("hid_t") long spaceid, @Cast("hsize_t") long startpoint,
     @Cast("hsize_t") long numpoints, @Cast("hsize_t*") LongPointer buf);
-public static native @Cast("herr_t") int H5Sget_select_elem_pointlist(@Cast("hid_t") int spaceid, @Cast("hsize_t") long startpoint,
+public static native @Cast("herr_t") int H5Sget_select_elem_pointlist(@Cast("hid_t") long spaceid, @Cast("hsize_t") long startpoint,
     @Cast("hsize_t") long numpoints, @Cast("hsize_t*") LongBuffer buf);
-public static native @Cast("herr_t") int H5Sget_select_elem_pointlist(@Cast("hid_t") int spaceid, @Cast("hsize_t") long startpoint,
+public static native @Cast("herr_t") int H5Sget_select_elem_pointlist(@Cast("hid_t") long spaceid, @Cast("hsize_t") long startpoint,
     @Cast("hsize_t") long numpoints, @Cast("hsize_t*") long[] buf);
-public static native @Cast("herr_t") int H5Sget_select_bounds(@Cast("hid_t") int spaceid, @Cast("hsize_t*") LongPointer start,
+public static native @Cast("herr_t") int H5Sget_select_bounds(@Cast("hid_t") long spaceid, @Cast("hsize_t*") LongPointer start,
     @Cast("hsize_t*") LongPointer end);
-public static native @Cast("herr_t") int H5Sget_select_bounds(@Cast("hid_t") int spaceid, @Cast("hsize_t*") LongBuffer start,
+public static native @Cast("herr_t") int H5Sget_select_bounds(@Cast("hid_t") long spaceid, @Cast("hsize_t*") LongBuffer start,
     @Cast("hsize_t*") LongBuffer end);
-public static native @Cast("herr_t") int H5Sget_select_bounds(@Cast("hid_t") int spaceid, @Cast("hsize_t*") long[] start,
+public static native @Cast("herr_t") int H5Sget_select_bounds(@Cast("hid_t") long spaceid, @Cast("hsize_t*") long[] start,
     @Cast("hsize_t*") long[] end);
-public static native @Cast("H5S_sel_type") int H5Sget_select_type(@Cast("hid_t") int spaceid);
+public static native @Cast("H5S_sel_type") int H5Sget_select_type(@Cast("hid_t") long spaceid);
 
 // #ifdef __cplusplus
 // #endif
@@ -6556,12 +6553,12 @@ public static final int H5FD_CORE = H5FD_CORE();
 
 // #ifdef __cplusplus
 // #endif
-public static native @Cast("hid_t") int H5FD_core_init();
-public static native @Cast("herr_t") int H5Pset_fapl_core(@Cast("hid_t") int fapl_id, @Cast("size_t") long increment,
+public static native @Cast("hid_t") long H5FD_core_init();
+public static native @Cast("herr_t") int H5Pset_fapl_core(@Cast("hid_t") long fapl_id, @Cast("size_t") long increment,
 				@Cast("hbool_t") boolean backing_store);
-public static native @Cast("herr_t") int H5Pget_fapl_core(@Cast("hid_t") int fapl_id, @Cast("size_t*") SizeTPointer increment,
+public static native @Cast("herr_t") int H5Pget_fapl_core(@Cast("hid_t") long fapl_id, @Cast("size_t*") SizeTPointer increment,
 				@Cast("hbool_t*") BoolPointer backing_store);
-public static native @Cast("herr_t") int H5Pget_fapl_core(@Cast("hid_t") int fapl_id, @Cast("size_t*") SizeTPointer increment,
+public static native @Cast("herr_t") int H5Pget_fapl_core(@Cast("hid_t") long fapl_id, @Cast("size_t*") SizeTPointer increment,
 				@Cast("hbool_t*") boolean[] backing_store);
 // #ifdef __cplusplus
 // #endif
@@ -6637,15 +6634,15 @@ public static final int H5FD_FAMILY = H5FD_FAMILY();
 // #ifdef __cplusplus
 // #endif
 
-public static native @Cast("hid_t") int H5FD_family_init();
-public static native @Cast("herr_t") int H5Pset_fapl_family(@Cast("hid_t") int fapl_id, @Cast("hsize_t") long memb_size,
-			  @Cast("hid_t") int memb_fapl_id);
-public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongPointer memb_size,
-			  @Cast("hid_t*") IntPointer memb_fapl_id);
-public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") LongBuffer memb_size,
-			  @Cast("hid_t*") IntBuffer memb_fapl_id);
-public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") int fapl_id, @Cast("hsize_t*") long[] memb_size,
-			  @Cast("hid_t*") int[] memb_fapl_id);
+public static native @Cast("hid_t") long H5FD_family_init();
+public static native @Cast("herr_t") int H5Pset_fapl_family(@Cast("hid_t") long fapl_id, @Cast("hsize_t") long memb_size,
+			  @Cast("hid_t") long memb_fapl_id);
+public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongPointer memb_size,
+			  @Cast("hid_t*") LongPointer memb_fapl_id);
+public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") LongBuffer memb_size,
+			  @Cast("hid_t*") LongBuffer memb_fapl_id);
+public static native @Cast("herr_t") int H5Pget_fapl_family(@Cast("hid_t") long fapl_id, @Cast("hsize_t*") long[] memb_size,
+			  @Cast("hid_t*") long[] memb_fapl_id);
 
 // #ifdef __cplusplus
 // #endif
@@ -6719,9 +6716,9 @@ public static final int H5FD_LOG_ALL =        (H5FD_LOG_FREE|H5FD_LOG_ALLOC|H5FD
 // #ifdef __cplusplus
 // #endif
 
-public static native @Cast("hid_t") int H5FD_log_init();
-public static native @Cast("herr_t") int H5Pset_fapl_log(@Cast("hid_t") int fapl_id, @Cast("const char*") BytePointer logfile, @Cast("unsigned long long") long flags, @Cast("size_t") long buf_size);
-public static native @Cast("herr_t") int H5Pset_fapl_log(@Cast("hid_t") int fapl_id, String logfile, @Cast("unsigned long long") long flags, @Cast("size_t") long buf_size);
+public static native @Cast("hid_t") long H5FD_log_init();
+public static native @Cast("herr_t") int H5Pset_fapl_log(@Cast("hid_t") long fapl_id, @Cast("const char*") BytePointer logfile, @Cast("unsigned long long") long flags, @Cast("size_t") long buf_size);
+public static native @Cast("herr_t") int H5Pset_fapl_log(@Cast("hid_t") long fapl_id, String logfile, @Cast("unsigned long long") long flags, @Cast("size_t") long buf_size);
 
 // #ifdef __cplusplus
 // #endif
@@ -6823,46 +6820,46 @@ public static final int H5FD_MULTI = H5FD_MULTI();
 
 // #ifdef __cplusplus
 // #endif
-public static native @Cast("hid_t") int H5FD_multi_init();
-public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("const H5FD_mem_t*") IntPointer memb_map,
-			 @Cast("const hid_t*") IntPointer memb_fapl, @Cast("const char*const*") PointerPointer memb_name,
-			 @Cast("const haddr_t*") IntPointer memb_addr, @Cast("hbool_t") boolean relax);
-public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("const H5FD_mem_t*") IntPointer memb_map,
-			 @Cast("const hid_t*") IntPointer memb_fapl, @Cast("const char*const*") @ByPtrPtr BytePointer memb_name,
-			 @Cast("const haddr_t*") IntPointer memb_addr, @Cast("hbool_t") boolean relax);
-public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("const H5FD_mem_t*") IntBuffer memb_map,
-			 @Cast("const hid_t*") IntBuffer memb_fapl, @Cast("const char*const*") @ByPtrPtr ByteBuffer memb_name,
-			 @Cast("const haddr_t*") IntBuffer memb_addr, @Cast("hbool_t") boolean relax);
-public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("const H5FD_mem_t*") int[] memb_map,
-			 @Cast("const hid_t*") int[] memb_fapl, @Cast("const char*const*") @ByPtrPtr byte[] memb_name,
-			 @Cast("const haddr_t*") int[] memb_addr, @Cast("hbool_t") boolean relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntPointer memb_map,
-			 @Cast("hid_t*") IntPointer memb_fapl, @Cast("char**") PointerPointer memb_name,
-			 @Cast("haddr_t*") IntPointer memb_addr, @Cast("hbool_t*") BoolPointer relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntPointer memb_map,
-			 @Cast("hid_t*") IntPointer memb_fapl, @Cast("char**") @ByPtrPtr BytePointer memb_name,
-			 @Cast("haddr_t*") IntPointer memb_addr, @Cast("hbool_t*") BoolPointer relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntBuffer memb_map,
-			 @Cast("hid_t*") IntBuffer memb_fapl, @Cast("char**") @ByPtrPtr ByteBuffer memb_name,
-			 @Cast("haddr_t*") IntBuffer memb_addr, @Cast("hbool_t*") boolean[] relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") int[] memb_map,
-			 @Cast("hid_t*") int[] memb_fapl, @Cast("char**") @ByPtrPtr byte[] memb_name,
-			 @Cast("haddr_t*") int[] memb_addr, @Cast("hbool_t*") BoolPointer relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntPointer memb_map,
-			 @Cast("hid_t*") IntPointer memb_fapl, @Cast("char**") @ByPtrPtr BytePointer memb_name,
-			 @Cast("haddr_t*") IntPointer memb_addr, @Cast("hbool_t*") boolean[] relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") IntBuffer memb_map,
-			 @Cast("hid_t*") IntBuffer memb_fapl, @Cast("char**") @ByPtrPtr ByteBuffer memb_name,
-			 @Cast("haddr_t*") IntBuffer memb_addr, @Cast("hbool_t*") BoolPointer relax);
-public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") int fapl_id, @Cast("H5FD_mem_t*") int[] memb_map,
-			 @Cast("hid_t*") int[] memb_fapl, @Cast("char**") @ByPtrPtr byte[] memb_name,
-			 @Cast("haddr_t*") int[] memb_addr, @Cast("hbool_t*") boolean[] relax);
-public static native @Cast("herr_t") int H5Pset_fapl_split(@Cast("hid_t") int fapl, @Cast("const char*") BytePointer meta_ext,
-			 @Cast("hid_t") int meta_plist_id, @Cast("const char*") BytePointer raw_ext,
-			 @Cast("hid_t") int raw_plist_id);
-public static native @Cast("herr_t") int H5Pset_fapl_split(@Cast("hid_t") int fapl, String meta_ext,
-			 @Cast("hid_t") int meta_plist_id, String raw_ext,
-			 @Cast("hid_t") int raw_plist_id);
+public static native @Cast("hid_t") long H5FD_multi_init();
+public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("const H5FD_mem_t*") IntPointer memb_map,
+			 @Cast("const hid_t*") LongPointer memb_fapl, @Cast("const char*const*") PointerPointer memb_name,
+			 @Cast("const haddr_t*") LongPointer memb_addr, @Cast("hbool_t") boolean relax);
+public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("const H5FD_mem_t*") IntPointer memb_map,
+			 @Cast("const hid_t*") LongPointer memb_fapl, @Cast("const char*const*") @ByPtrPtr BytePointer memb_name,
+			 @Cast("const haddr_t*") LongPointer memb_addr, @Cast("hbool_t") boolean relax);
+public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("const H5FD_mem_t*") IntBuffer memb_map,
+			 @Cast("const hid_t*") LongBuffer memb_fapl, @Cast("const char*const*") @ByPtrPtr ByteBuffer memb_name,
+			 @Cast("const haddr_t*") LongBuffer memb_addr, @Cast("hbool_t") boolean relax);
+public static native @Cast("herr_t") int H5Pset_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("const H5FD_mem_t*") int[] memb_map,
+			 @Cast("const hid_t*") long[] memb_fapl, @Cast("const char*const*") @ByPtrPtr byte[] memb_name,
+			 @Cast("const haddr_t*") long[] memb_addr, @Cast("hbool_t") boolean relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntPointer memb_map,
+			 @Cast("hid_t*") LongPointer memb_fapl, @Cast("char**") PointerPointer memb_name,
+			 @Cast("haddr_t*") LongPointer memb_addr, @Cast("hbool_t*") BoolPointer relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntPointer memb_map,
+			 @Cast("hid_t*") LongPointer memb_fapl, @Cast("char**") @ByPtrPtr BytePointer memb_name,
+			 @Cast("haddr_t*") LongPointer memb_addr, @Cast("hbool_t*") BoolPointer relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntBuffer memb_map,
+			 @Cast("hid_t*") LongBuffer memb_fapl, @Cast("char**") @ByPtrPtr ByteBuffer memb_name,
+			 @Cast("haddr_t*") LongBuffer memb_addr, @Cast("hbool_t*") boolean[] relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") int[] memb_map,
+			 @Cast("hid_t*") long[] memb_fapl, @Cast("char**") @ByPtrPtr byte[] memb_name,
+			 @Cast("haddr_t*") long[] memb_addr, @Cast("hbool_t*") BoolPointer relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntPointer memb_map,
+			 @Cast("hid_t*") LongPointer memb_fapl, @Cast("char**") @ByPtrPtr BytePointer memb_name,
+			 @Cast("haddr_t*") LongPointer memb_addr, @Cast("hbool_t*") boolean[] relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") IntBuffer memb_map,
+			 @Cast("hid_t*") LongBuffer memb_fapl, @Cast("char**") @ByPtrPtr ByteBuffer memb_name,
+			 @Cast("haddr_t*") LongBuffer memb_addr, @Cast("hbool_t*") BoolPointer relax);
+public static native @Cast("herr_t") int H5Pget_fapl_multi(@Cast("hid_t") long fapl_id, @Cast("H5FD_mem_t*") int[] memb_map,
+			 @Cast("hid_t*") long[] memb_fapl, @Cast("char**") @ByPtrPtr byte[] memb_name,
+			 @Cast("haddr_t*") long[] memb_addr, @Cast("hbool_t*") boolean[] relax);
+public static native @Cast("herr_t") int H5Pset_fapl_split(@Cast("hid_t") long fapl, @Cast("const char*") BytePointer meta_ext,
+			 @Cast("hid_t") long meta_plist_id, @Cast("const char*") BytePointer raw_ext,
+			 @Cast("hid_t") long raw_plist_id);
+public static native @Cast("herr_t") int H5Pset_fapl_split(@Cast("hid_t") long fapl, String meta_ext,
+			 @Cast("hid_t") long meta_plist_id, String raw_ext,
+			 @Cast("hid_t") long raw_plist_id);
 // #ifdef __cplusplus
 // #endif
 
@@ -6900,8 +6897,8 @@ public static final int H5FD_SEC2 = H5FD_SEC2();
 // #ifdef __cplusplus
 // #endif
 
-public static native @Cast("hid_t") int H5FD_sec2_init();
-public static native @Cast("herr_t") int H5Pset_fapl_sec2(@Cast("hid_t") int fapl_id);
+public static native @Cast("hid_t") long H5FD_sec2_init();
+public static native @Cast("herr_t") int H5Pset_fapl_sec2(@Cast("hid_t") long fapl_id);
 
 // #ifdef __cplusplus
 // #endif
@@ -6942,8 +6939,8 @@ public static final int H5FD_STDIO = H5FD_STDIO();
 // #ifdef __cplusplus
 // #endif
 
-public static native @Cast("hid_t") int H5FD_stdio_init();
-public static native @Cast("herr_t") int H5Pset_fapl_stdio(@Cast("hid_t") int fapl_id);
+public static native @Cast("hid_t") long H5FD_stdio_init();
+public static native @Cast("herr_t") int H5Pset_fapl_stdio(@Cast("hid_t") long fapl_id);
 
 // #ifdef __cplusplus
 // #endif
@@ -6979,15 +6976,15 @@ public static native @Cast("herr_t") int H5Pset_fapl_stdio(@Cast("hid_t") int fa
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5DOwrite_chunk(@Cast("hid_t") int dset_id, @Cast("hid_t") int dxpl_id, @Cast("uint32_t") short filters, 
+public static native @Cast("herr_t") int H5DOwrite_chunk(@Cast("hid_t") long dset_id, @Cast("hid_t") long dxpl_id, @Cast("uint32_t") int filters, 
     @Cast("const hsize_t*") LongPointer offset, @Cast("size_t") long data_size, @Const Pointer buf);
-public static native @Cast("herr_t") int H5DOwrite_chunk(@Cast("hid_t") int dset_id, @Cast("hid_t") int dxpl_id, @Cast("uint32_t") short filters, 
+public static native @Cast("herr_t") int H5DOwrite_chunk(@Cast("hid_t") long dset_id, @Cast("hid_t") long dxpl_id, @Cast("uint32_t") int filters, 
     @Cast("const hsize_t*") LongBuffer offset, @Cast("size_t") long data_size, @Const Pointer buf);
-public static native @Cast("herr_t") int H5DOwrite_chunk(@Cast("hid_t") int dset_id, @Cast("hid_t") int dxpl_id, @Cast("uint32_t") short filters, 
+public static native @Cast("herr_t") int H5DOwrite_chunk(@Cast("hid_t") long dset_id, @Cast("hid_t") long dxpl_id, @Cast("uint32_t") int filters, 
     @Cast("const hsize_t*") long[] offset, @Cast("size_t") long data_size, @Const Pointer buf);
 
-public static native @Cast("herr_t") int H5DOappend(@Cast("hid_t") int dset_id, @Cast("hid_t") int dxpl_id, @Cast("unsigned") int axis,
-    @Cast("size_t") long extension, @Cast("hid_t") int memtype, @Const Pointer buf);
+public static native @Cast("herr_t") int H5DOappend(@Cast("hid_t") long dset_id, @Cast("hid_t") long dxpl_id, @Cast("unsigned") int axis,
+    @Cast("size_t") long extension, @Cast("hid_t") long memtype, @Const Pointer buf);
 
 // #ifdef __cplusplus
 // #endif
@@ -7028,79 +7025,79 @@ public static class H5DS_iterate_t extends FunctionPointer {
     public    H5DS_iterate_t(Pointer p) { super(p); }
     protected H5DS_iterate_t() { allocate(); }
     private native void allocate();
-    public native @Cast("herr_t") int call(@Cast("hid_t") int dset, @Cast("unsigned") int dim, @Cast("hid_t") int scale, Pointer visitor_data);
+    public native @Cast("herr_t") int call(@Cast("hid_t") long dset, @Cast("unsigned") int dim, @Cast("hid_t") long scale, Pointer visitor_data);
 }
 
 
 // #ifdef __cplusplus
 // #endif
 
-public static native @Cast("herr_t") int H5DSattach_scale( @Cast("hid_t") int did,
-                        @Cast("hid_t") int dsid,
+public static native @Cast("herr_t") int H5DSattach_scale( @Cast("hid_t") long did,
+                        @Cast("hid_t") long dsid,
                         @Cast("unsigned int") int idx);
 
-public static native @Cast("herr_t") int H5DSdetach_scale( @Cast("hid_t") int did,
-                        @Cast("hid_t") int dsid,
+public static native @Cast("herr_t") int H5DSdetach_scale( @Cast("hid_t") long did,
+                        @Cast("hid_t") long dsid,
                         @Cast("unsigned int") int idx);
 
-public static native @Cast("herr_t") int H5DSset_scale( @Cast("hid_t") int dsid,
+public static native @Cast("herr_t") int H5DSset_scale( @Cast("hid_t") long dsid,
                      @Cast("const char*") BytePointer dimname);
-public static native @Cast("herr_t") int H5DSset_scale( @Cast("hid_t") int dsid,
+public static native @Cast("herr_t") int H5DSset_scale( @Cast("hid_t") long dsid,
                      String dimname);
 
-public static native int H5DSget_num_scales( @Cast("hid_t") int did,
+public static native int H5DSget_num_scales( @Cast("hid_t") long did,
                        @Cast("unsigned int") int dim);
 
-public static native @Cast("herr_t") int H5DSset_label( @Cast("hid_t") int did,
+public static native @Cast("herr_t") int H5DSset_label( @Cast("hid_t") long did,
                      @Cast("unsigned int") int idx,
                      @Cast("const char*") BytePointer label);
-public static native @Cast("herr_t") int H5DSset_label( @Cast("hid_t") int did,
+public static native @Cast("herr_t") int H5DSset_label( @Cast("hid_t") long did,
                      @Cast("unsigned int") int idx,
                      String label);
 
-public static native @Cast("ssize_t") int H5DSget_label( @Cast("hid_t") int did,
+public static native @Cast("ssize_t") long H5DSget_label( @Cast("hid_t") long did,
                       @Cast("unsigned int") int idx,
                       @Cast("char*") BytePointer label,
                       @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5DSget_label( @Cast("hid_t") int did,
+public static native @Cast("ssize_t") long H5DSget_label( @Cast("hid_t") long did,
                       @Cast("unsigned int") int idx,
                       @Cast("char*") ByteBuffer label,
                       @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5DSget_label( @Cast("hid_t") int did,
+public static native @Cast("ssize_t") long H5DSget_label( @Cast("hid_t") long did,
                       @Cast("unsigned int") int idx,
                       @Cast("char*") byte[] label,
                       @Cast("size_t") long size);
 
-public static native @Cast("ssize_t") int H5DSget_scale_name( @Cast("hid_t") int did,
+public static native @Cast("ssize_t") long H5DSget_scale_name( @Cast("hid_t") long did,
                            @Cast("char*") BytePointer name,
                            @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5DSget_scale_name( @Cast("hid_t") int did,
+public static native @Cast("ssize_t") long H5DSget_scale_name( @Cast("hid_t") long did,
                            @Cast("char*") ByteBuffer name,
                            @Cast("size_t") long size);
-public static native @Cast("ssize_t") int H5DSget_scale_name( @Cast("hid_t") int did,
+public static native @Cast("ssize_t") long H5DSget_scale_name( @Cast("hid_t") long did,
                            @Cast("char*") byte[] name,
                            @Cast("size_t") long size);
 
-public static native @Cast("htri_t") int H5DSis_scale( @Cast("hid_t") int did);
+public static native @Cast("htri_t") int H5DSis_scale( @Cast("hid_t") long did);
 
-public static native @Cast("herr_t") int H5DSiterate_scales( @Cast("hid_t") int did,
+public static native @Cast("herr_t") int H5DSiterate_scales( @Cast("hid_t") long did,
                           @Cast("unsigned int") int dim,
                           IntPointer idx,
                           H5DS_iterate_t visitor,
                           Pointer visitor_data);
-public static native @Cast("herr_t") int H5DSiterate_scales( @Cast("hid_t") int did,
+public static native @Cast("herr_t") int H5DSiterate_scales( @Cast("hid_t") long did,
                           @Cast("unsigned int") int dim,
                           IntBuffer idx,
                           H5DS_iterate_t visitor,
                           Pointer visitor_data);
-public static native @Cast("herr_t") int H5DSiterate_scales( @Cast("hid_t") int did,
+public static native @Cast("herr_t") int H5DSiterate_scales( @Cast("hid_t") long did,
                           @Cast("unsigned int") int dim,
                           int[] idx,
                           H5DS_iterate_t visitor,
                           Pointer visitor_data);
 
-public static native @Cast("htri_t") int H5DSis_attached( @Cast("hid_t") int did,
-                       @Cast("hid_t") int dsid,
+public static native @Cast("htri_t") int H5DSis_attached( @Cast("hid_t") long did,
+                       @Cast("hid_t") long dsid,
                        @Cast("unsigned int") int idx);
 
 
@@ -7156,233 +7153,233 @@ public static final int
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
                          int rank,
                          @Cast("const hsize_t*") LongPointer dims,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          @Const Pointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") long loc_id,
                          String dset_name,
                          int rank,
                          @Cast("const hsize_t*") LongBuffer dims,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          @Const Pointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
                          int rank,
                          @Cast("const hsize_t*") long[] dims,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          @Const Pointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") long loc_id,
                          String dset_name,
                          int rank,
                          @Cast("const hsize_t*") LongPointer dims,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          @Const Pointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
                          int rank,
                          @Cast("const hsize_t*") LongBuffer dims,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          @Const Pointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset( @Cast("hid_t") long loc_id,
                          String dset_name,
                          int rank,
                          @Cast("const hsize_t*") long[] dims,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          @Const Pointer buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongPointer dims,
                               @Cast("const char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") long loc_id,
                               String dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongBuffer dims,
                               String buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               int rank,
                               @Cast("const hsize_t*") long[] dims,
                               @Cast("const char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") long loc_id,
                               String dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongPointer dims,
                               String buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongBuffer dims,
                               @Cast("const char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_char( @Cast("hid_t") long loc_id,
                               String dset_name,
                               int rank,
                               @Cast("const hsize_t*") long[] dims,
                               String buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongPointer dims,
                                @Const ShortPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") long loc_id,
                                String dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongBuffer dims,
                                @Const ShortBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                int rank,
                                @Cast("const hsize_t*") long[] dims,
                                @Const short[] buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") long loc_id,
                                String dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongPointer dims,
                                @Const ShortPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongBuffer dims,
                                @Const ShortBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_short( @Cast("hid_t") long loc_id,
                                String dset_name,
                                int rank,
                                @Cast("const hsize_t*") long[] dims,
                                @Const short[] buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              int rank,
                              @Cast("const hsize_t*") LongPointer dims,
                              @Const IntPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") long loc_id,
                              String dset_name,
                              int rank,
                              @Cast("const hsize_t*") LongBuffer dims,
                              @Const IntBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              int rank,
                              @Cast("const hsize_t*") long[] dims,
                              @Const int[] buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") long loc_id,
                              String dset_name,
                              int rank,
                              @Cast("const hsize_t*") LongPointer dims,
                              @Const IntPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              int rank,
                              @Cast("const hsize_t*") LongBuffer dims,
                              @Const IntBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_int( @Cast("hid_t") long loc_id,
                              String dset_name,
                              int rank,
                              @Cast("const hsize_t*") long[] dims,
                              @Const int[] buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongPointer dims,
                               @Const CLongPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") long loc_id,
                               String dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongBuffer dims,
                               @Const CLongPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               int rank,
                               @Cast("const hsize_t*") long[] dims,
                               @Const CLongPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") long loc_id,
                               String dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongPointer dims,
                               @Const CLongPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               int rank,
                               @Cast("const hsize_t*") LongBuffer dims,
                               @Const CLongPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_long( @Cast("hid_t") long loc_id,
                               String dset_name,
                               int rank,
                               @Cast("const hsize_t*") long[] dims,
                               @Const CLongPointer buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongPointer dims,
                                @Const FloatPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") long loc_id,
                                String dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongBuffer dims,
                                @Const FloatBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                int rank,
                                @Cast("const hsize_t*") long[] dims,
                                @Const float[] buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") long loc_id,
                                String dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongPointer dims,
                                @Const FloatPointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                int rank,
                                @Cast("const hsize_t*") LongBuffer dims,
                                @Const FloatBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_float( @Cast("hid_t") long loc_id,
                                String dset_name,
                                int rank,
                                @Cast("const hsize_t*") long[] dims,
                                @Const float[] buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 int rank,
                                 @Cast("const hsize_t*") LongPointer dims,
                                 @Const DoublePointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 int rank,
                                 @Cast("const hsize_t*") LongBuffer dims,
                                 @Const DoubleBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 int rank,
                                 @Cast("const hsize_t*") long[] dims,
                                 @Const double[] buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 int rank,
                                 @Cast("const hsize_t*") LongPointer dims,
                                 @Const DoublePointer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 int rank,
                                 @Cast("const hsize_t*") LongBuffer dims,
                                 @Const DoubleBuffer buffer );
-public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_double( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 int rank,
                                 @Cast("const hsize_t*") long[] dims,
                                 @Const double[] buffer );
 
-public static native @Cast("herr_t") int H5LTmake_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_string( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                @Cast("const char*") BytePointer buf );
-public static native @Cast("herr_t") int H5LTmake_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTmake_dataset_string( @Cast("hid_t") long loc_id,
                                String dset_name,
                                String buf );
 
@@ -7394,133 +7391,133 @@ public static native @Cast("herr_t") int H5LTmake_dataset_string( @Cast("hid_t")
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5LTread_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          Pointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset( @Cast("hid_t") long loc_id,
                          String dset_name,
-                         @Cast("hid_t") int type_id,
+                         @Cast("hid_t") long type_id,
                          Pointer buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") long loc_id,
                               String dset_name,
                               @Cast("char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("char*") byte[] buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") long loc_id,
                               String dset_name,
                               @Cast("char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_char( @Cast("hid_t") long loc_id,
                               String dset_name,
                               @Cast("char*") byte[] buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                ShortPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") long loc_id,
                                String dset_name,
                                ShortBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                short[] buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") long loc_id,
                                String dset_name,
                                ShortPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                ShortBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_short( @Cast("hid_t") long loc_id,
                                String dset_name,
                                short[] buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              IntPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") long loc_id,
                              String dset_name,
                              IntBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              int[] buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") long loc_id,
                              String dset_name,
                              IntPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              IntBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_int( @Cast("hid_t") long loc_id,
                              String dset_name,
                              int[] buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_long( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               CLongPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_long( @Cast("hid_t") long loc_id,
                               String dset_name,
                               CLongPointer buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                FloatPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") long loc_id,
                                String dset_name,
                                FloatBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                float[] buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") long loc_id,
                                String dset_name,
                                FloatPointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                FloatBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_float( @Cast("hid_t") long loc_id,
                                String dset_name,
                                float[] buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 DoublePointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 DoubleBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 double[] buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 DoublePointer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 DoubleBuffer buffer );
-public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_double( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 double[] buffer );
 
-public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 @Cast("char*") BytePointer buf );
-public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 @Cast("char*") ByteBuffer buf );
-public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 @Cast("char*") byte[] buf );
-public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 @Cast("char*") BytePointer buf );
-public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer dset_name,
                                 @Cast("char*") ByteBuffer buf );
-public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t") long loc_id,
                                 String dset_name,
                                 @Cast("char*") byte[] buf );
 
@@ -7532,58 +7529,58 @@ public static native @Cast("herr_t") int H5LTread_dataset_string( @Cast("hid_t")
  */
 
 
-public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              IntPointer rank );
-public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") long loc_id,
                              String dset_name,
                              IntBuffer rank );
-public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              int[] rank );
-public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") long loc_id,
                              String dset_name,
                              IntPointer rank );
-public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              IntBuffer rank );
-public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_ndims( @Cast("hid_t") long loc_id,
                              String dset_name,
                              int[] rank );
 
-public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("hsize_t*") LongPointer dims,
                              @Cast("H5T_class_t*") IntPointer type_class,
                              @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") long loc_id,
                              String dset_name,
                              @Cast("hsize_t*") LongBuffer dims,
                              @Cast("H5T_class_t*") IntBuffer type_class,
                              @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("hsize_t*") long[] dims,
                              @Cast("H5T_class_t*") int[] type_class,
                              @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") long loc_id,
                              String dset_name,
                              @Cast("hsize_t*") LongPointer dims,
                              @Cast("H5T_class_t*") IntPointer type_class,
                              @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("hsize_t*") LongBuffer dims,
                              @Cast("H5T_class_t*") IntBuffer type_class,
                              @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_dataset_info( @Cast("hid_t") long loc_id,
                              String dset_name,
                              @Cast("hsize_t*") long[] dims,
                              @Cast("H5T_class_t*") int[] type_class,
                              @Cast("size_t*") SizeTPointer type_size );
 
-public static native @Cast("herr_t") int H5LTfind_dataset( @Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name );
-public static native @Cast("herr_t") int H5LTfind_dataset( @Cast("hid_t") int loc_id, String name );
+public static native @Cast("herr_t") int H5LTfind_dataset( @Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name );
+public static native @Cast("herr_t") int H5LTfind_dataset( @Cast("hid_t") long loc_id, String name );
 
 
 
@@ -7595,291 +7592,291 @@ public static native @Cast("herr_t") int H5LTfind_dataset( @Cast("hid_t") int lo
  */
 
 
-public static native @Cast("herr_t") int H5LTset_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_string( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Cast("const char*") BytePointer attr_data );
-public static native @Cast("herr_t") int H5LTset_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_string( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  String attr_data );
 
-public static native @Cast("herr_t") int H5LTset_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_char( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("const char*") BytePointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_char( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                String buffer,
                                @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("const unsigned char*") BytePointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("const unsigned char*") ByteBuffer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("const unsigned char*") byte[] buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("const unsigned char*") BytePointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("const unsigned char*") ByteBuffer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uchar( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("const unsigned char*") byte[] buffer,
                                @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Const ShortPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Const ShortBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Const short[] buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Const ShortPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Const ShortBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_short( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Const short[] buffer,
                               @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("const unsigned short*") ShortPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("const unsigned short*") ShortBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("const unsigned short*") short[] buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("const unsigned short*") ShortPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("const unsigned short*") ShortBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ushort( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("const unsigned short*") short[] buffer,
                               @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Const IntPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Const IntBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Const int[] buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Const IntPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Const IntBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_int( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Const int[] buffer,
                               @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("const unsigned int*") IntPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("const unsigned int*") IntBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("const unsigned int*") int[] buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("const unsigned int*") IntPointer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("const unsigned int*") IntBuffer buffer,
                               @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_uint( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("const unsigned int*") int[] buffer,
                               @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Const CLongPointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Const CLongPointer buffer,
                                @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Const LongPointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Const LongBuffer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Const long[] buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Const LongPointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Const LongBuffer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_long_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Const long[] buffer,
                                @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_ulong( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ulong( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("const unsigned long*") CLongPointer buffer,
                                @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_ulong( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_ulong( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("const unsigned long*") CLongPointer buffer,
                                @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 @Const FloatPointer buffer,
                                 @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 @Const FloatBuffer buffer,
                                 @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 @Const float[] buffer,
                                 @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 @Const FloatPointer buffer,
                                 @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 @Const FloatBuffer buffer,
                                 @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_float( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 @Const float[] buffer,
                                 @Cast("size_t") long size );
 
-public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Const DoublePointer buffer,
                                  @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  @Const DoubleBuffer buffer,
                                  @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Const double[] buffer,
                                  @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  @Const DoublePointer buffer,
                                  @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Const DoubleBuffer buffer,
                                  @Cast("size_t") long size );
-public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  @Const double[] buffer,
@@ -7892,281 +7889,281 @@ public static native @Cast("herr_t") int H5LTset_attribute_double( @Cast("hid_t"
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5LTget_attribute( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer obj_name,
                           @Cast("const char*") BytePointer attr_name,
-                          @Cast("hid_t") int mem_type_id,
+                          @Cast("hid_t") long mem_type_id,
                           Pointer data );
-public static native @Cast("herr_t") int H5LTget_attribute( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute( @Cast("hid_t") long loc_id,
                           String obj_name,
                           String attr_name,
-                          @Cast("hid_t") int mem_type_id,
+                          @Cast("hid_t") long mem_type_id,
                           Pointer data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Cast("char*") BytePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  @Cast("char*") ByteBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Cast("char*") byte[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  @Cast("char*") BytePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  @Cast("char*") ByteBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_string( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  @Cast("char*") byte[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("char*") BytePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("char*") ByteBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("char*") byte[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("char*") BytePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("char*") ByteBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_char( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("char*") byte[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("unsigned char*") BytePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("unsigned char*") ByteBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("unsigned char*") byte[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("unsigned char*") BytePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("unsigned char*") ByteBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uchar( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("unsigned char*") byte[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 ShortPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 ShortBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 short[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 ShortPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 ShortBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_short( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 short[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 @Cast("unsigned short*") ShortPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 @Cast("unsigned short*") ShortBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 @Cast("unsigned short*") short[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 @Cast("unsigned short*") ShortPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 @Cast("unsigned short*") ShortBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ushort( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 @Cast("unsigned short*") short[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               IntPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               IntBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               int[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               IntPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               IntBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_int( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               int[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("unsigned int*") IntPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("unsigned int*") IntBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("unsigned int*") int[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("unsigned int*") IntPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer obj_name,
                               @Cast("const char*") BytePointer attr_name,
                               @Cast("unsigned int*") IntBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_uint( @Cast("hid_t") long loc_id,
                               String obj_name,
                               String attr_name,
                               @Cast("unsigned int*") int[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                CLongPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                CLongPointer data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                LongPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                LongBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                long[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                LongPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                LongBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_long_long( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                long[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_ulong( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ulong( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("unsigned long*") CLongPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_ulong( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ulong( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("unsigned long*") CLongPointer data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 FloatPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 FloatBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 float[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 FloatPointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 FloatBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_float( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 float[] data );
 
-public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  DoublePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  DoubleBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  double[] data );
-public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  DoublePointer data );
-public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") long loc_id,
                                  @Cast("const char*") BytePointer obj_name,
                                  @Cast("const char*") BytePointer attr_name,
                                  DoubleBuffer data );
-public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t") long loc_id,
                                  String obj_name,
                                  String attr_name,
                                  double[] data );
@@ -8180,62 +8177,62 @@ public static native @Cast("herr_t") int H5LTget_attribute_double( @Cast("hid_t"
  */
 
 
-public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 IntPointer rank );
-public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 IntBuffer rank );
-public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 int[] rank );
-public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 IntPointer rank );
-public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") long loc_id,
                                 @Cast("const char*") BytePointer obj_name,
                                 @Cast("const char*") BytePointer attr_name,
                                 IntBuffer rank );
-public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_ndims( @Cast("hid_t") long loc_id,
                                 String obj_name,
                                 String attr_name,
                                 int[] rank );
 
-public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("hsize_t*") LongPointer dims,
                                @Cast("H5T_class_t*") IntPointer type_class,
                                @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("hsize_t*") LongBuffer dims,
                                @Cast("H5T_class_t*") IntBuffer type_class,
                                @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("hsize_t*") long[] dims,
                                @Cast("H5T_class_t*") int[] type_class,
                                @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("hsize_t*") LongPointer dims,
                                @Cast("H5T_class_t*") IntPointer type_class,
                                @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer obj_name,
                                @Cast("const char*") BytePointer attr_name,
                                @Cast("hsize_t*") LongBuffer dims,
                                @Cast("H5T_class_t*") IntBuffer type_class,
                                @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") long loc_id,
                                String obj_name,
                                String attr_name,
                                @Cast("hsize_t*") long[] dims,
@@ -8253,11 +8250,11 @@ public static native @Cast("herr_t") int H5LTget_attribute_info( @Cast("hid_t") 
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("hid_t") int H5LTtext_to_dtype(@Cast("const char*") BytePointer text, @Cast("H5LT_lang_t") int lang_type);
-public static native @Cast("hid_t") int H5LTtext_to_dtype(String text, @Cast("H5LT_lang_t") int lang_type);
-public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") int dtype, @Cast("char*") BytePointer str, @Cast("H5LT_lang_t") int lang_type, @Cast("size_t*") SizeTPointer len);
-public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") int dtype, @Cast("char*") ByteBuffer str, @Cast("H5LT_lang_t") int lang_type, @Cast("size_t*") SizeTPointer len);
-public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") int dtype, @Cast("char*") byte[] str, @Cast("H5LT_lang_t") int lang_type, @Cast("size_t*") SizeTPointer len);
+public static native @Cast("hid_t") long H5LTtext_to_dtype(@Cast("const char*") BytePointer text, @Cast("H5LT_lang_t") int lang_type);
+public static native @Cast("hid_t") long H5LTtext_to_dtype(String text, @Cast("H5LT_lang_t") int lang_type);
+public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") long dtype, @Cast("char*") BytePointer str, @Cast("H5LT_lang_t") int lang_type, @Cast("size_t*") SizeTPointer len);
+public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") long dtype, @Cast("char*") ByteBuffer str, @Cast("H5LT_lang_t") int lang_type, @Cast("size_t*") SizeTPointer len);
+public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") long dtype, @Cast("char*") byte[] str, @Cast("H5LT_lang_t") int lang_type, @Cast("size_t*") SizeTPointer len);
 
 
 /*-------------------------------------------------------------------------
@@ -8267,11 +8264,11 @@ public static native @Cast("herr_t") int H5LTdtype_to_text(@Cast("hid_t") int dt
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5LTfind_attribute( @Cast("hid_t") int loc_id, @Cast("const char*") BytePointer name );
-public static native @Cast("herr_t") int H5LTfind_attribute( @Cast("hid_t") int loc_id, String name );
+public static native @Cast("herr_t") int H5LTfind_attribute( @Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name );
+public static native @Cast("herr_t") int H5LTfind_attribute( @Cast("hid_t") long loc_id, String name );
 
-public static native @Cast("htri_t") int H5LTpath_valid(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer path, @Cast("hbool_t") boolean check_object_valid);
-public static native @Cast("htri_t") int H5LTpath_valid(@Cast("hid_t") int loc_id, String path, @Cast("hbool_t") boolean check_object_valid);
+public static native @Cast("htri_t") int H5LTpath_valid(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer path, @Cast("hbool_t") boolean check_object_valid);
+public static native @Cast("htri_t") int H5LTpath_valid(@Cast("hid_t") long loc_id, String path, @Cast("hbool_t") boolean check_object_valid);
 
 /*-------------------------------------------------------------------------
  *
@@ -8280,7 +8277,7 @@ public static native @Cast("htri_t") int H5LTpath_valid(@Cast("hid_t") int loc_i
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("hid_t") int H5LTopen_file_image(Pointer buf_ptr, @Cast("size_t") long buf_size, @Cast("unsigned") int flags);
+public static native @Cast("hid_t") long H5LTopen_file_image(Pointer buf_ptr, @Cast("size_t") long buf_size, @Cast("unsigned") int flags);
 
 // #ifdef __cplusplus
 // #endif
@@ -8312,110 +8309,110 @@ public static native @Cast("hid_t") int H5LTopen_file_image(Pointer buf_ptr, @Ca
 // #endif
 
 
-public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") long loc_id,
                             @Cast("const char*") BytePointer dset_name,
                             @Cast("hsize_t") long width,
                             @Cast("hsize_t") long height,
                             @Cast("const unsigned char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") long loc_id,
                             String dset_name,
                             @Cast("hsize_t") long width,
                             @Cast("hsize_t") long height,
                             @Cast("const unsigned char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") long loc_id,
                             @Cast("const char*") BytePointer dset_name,
                             @Cast("hsize_t") long width,
                             @Cast("hsize_t") long height,
                             @Cast("const unsigned char*") byte[] buffer );
-public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") long loc_id,
                             String dset_name,
                             @Cast("hsize_t") long width,
                             @Cast("hsize_t") long height,
                             @Cast("const unsigned char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") long loc_id,
                             @Cast("const char*") BytePointer dset_name,
                             @Cast("hsize_t") long width,
                             @Cast("hsize_t") long height,
                             @Cast("const unsigned char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_8bit( @Cast("hid_t") long loc_id,
                             String dset_name,
                             @Cast("hsize_t") long width,
                             @Cast("hsize_t") long height,
                             @Cast("const unsigned char*") byte[] buffer );
 
-public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("hsize_t") long width,
                              @Cast("hsize_t") long height,
                              @Cast("const char*") BytePointer interlace,
                              @Cast("const unsigned char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") long loc_id,
                              String dset_name,
                              @Cast("hsize_t") long width,
                              @Cast("hsize_t") long height,
                              String interlace,
                              @Cast("const unsigned char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("hsize_t") long width,
                              @Cast("hsize_t") long height,
                              @Cast("const char*") BytePointer interlace,
                              @Cast("const unsigned char*") byte[] buffer );
-public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") long loc_id,
                              String dset_name,
                              @Cast("hsize_t") long width,
                              @Cast("hsize_t") long height,
                              String interlace,
                              @Cast("const unsigned char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("hsize_t") long width,
                              @Cast("hsize_t") long height,
                              @Cast("const char*") BytePointer interlace,
                              @Cast("const unsigned char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_image_24bit( @Cast("hid_t") long loc_id,
                              String dset_name,
                              @Cast("hsize_t") long width,
                              @Cast("hsize_t") long height,
                              String interlace,
                              @Cast("const unsigned char*") byte[] buffer );
 
-public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") long loc_id,
                      @Cast("const char*") BytePointer dset_name,
                      @Cast("hsize_t*") LongPointer width,
                      @Cast("hsize_t*") LongPointer height,
                      @Cast("hsize_t*") LongPointer planes,
                      @Cast("char*") BytePointer interlace,
                      @Cast("hssize_t*") LongPointer npals );
-public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") long loc_id,
                      String dset_name,
                      @Cast("hsize_t*") LongBuffer width,
                      @Cast("hsize_t*") LongBuffer height,
                      @Cast("hsize_t*") LongBuffer planes,
                      @Cast("char*") ByteBuffer interlace,
                      @Cast("hssize_t*") LongBuffer npals );
-public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") long loc_id,
                      @Cast("const char*") BytePointer dset_name,
                      @Cast("hsize_t*") long[] width,
                      @Cast("hsize_t*") long[] height,
                      @Cast("hsize_t*") long[] planes,
                      @Cast("char*") byte[] interlace,
                      @Cast("hssize_t*") long[] npals );
-public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") long loc_id,
                      String dset_name,
                      @Cast("hsize_t*") LongPointer width,
                      @Cast("hsize_t*") LongPointer height,
                      @Cast("hsize_t*") LongPointer planes,
                      @Cast("char*") BytePointer interlace,
                      @Cast("hssize_t*") LongPointer npals );
-public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") long loc_id,
                      @Cast("const char*") BytePointer dset_name,
                      @Cast("hsize_t*") LongBuffer width,
                      @Cast("hsize_t*") LongBuffer height,
                      @Cast("hsize_t*") LongBuffer planes,
                      @Cast("char*") ByteBuffer interlace,
                      @Cast("hssize_t*") LongBuffer npals );
-public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") long loc_id,
                      String dset_name,
                      @Cast("hsize_t*") long[] width,
                      @Cast("hsize_t*") long[] height,
@@ -8423,141 +8420,141 @@ public static native @Cast("herr_t") int H5IMget_image_info( @Cast("hid_t") int 
                      @Cast("char*") byte[] interlace,
                      @Cast("hssize_t*") long[] npals );
 
-public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("unsigned char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("unsigned char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("unsigned char*") byte[] buffer );
-public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("unsigned char*") BytePointer buffer );
-public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("unsigned char*") ByteBuffer buffer );
-public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMread_image( @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("unsigned char*") byte[] buffer );
 
-public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer pal_name,
                          @Cast("const hsize_t*") LongPointer pal_dims,
                          @Cast("const unsigned char*") BytePointer pal_data );
-public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") long loc_id,
                          String pal_name,
                          @Cast("const hsize_t*") LongBuffer pal_dims,
                          @Cast("const unsigned char*") ByteBuffer pal_data );
-public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer pal_name,
                          @Cast("const hsize_t*") long[] pal_dims,
                          @Cast("const unsigned char*") byte[] pal_data );
-public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") long loc_id,
                          String pal_name,
                          @Cast("const hsize_t*") LongPointer pal_dims,
                          @Cast("const unsigned char*") BytePointer pal_data );
-public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer pal_name,
                          @Cast("const hsize_t*") LongBuffer pal_dims,
                          @Cast("const unsigned char*") ByteBuffer pal_data );
-public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMmake_palette( @Cast("hid_t") long loc_id,
                          String pal_name,
                          @Cast("const hsize_t*") long[] pal_dims,
                          @Cast("const unsigned char*") byte[] pal_data );
 
-public static native @Cast("herr_t") int H5IMlink_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMlink_palette( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         @Cast("const char*") BytePointer pal_name );
-public static native @Cast("herr_t") int H5IMlink_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMlink_palette( @Cast("hid_t") long loc_id,
                         String image_name,
                         String pal_name );
 
-public static native @Cast("herr_t") int H5IMunlink_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMunlink_palette( @Cast("hid_t") long loc_id,
                            @Cast("const char*") BytePointer image_name,
                            @Cast("const char*") BytePointer pal_name );
-public static native @Cast("herr_t") int H5IMunlink_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMunlink_palette( @Cast("hid_t") long loc_id,
                            String image_name,
                            String pal_name );
 
-public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer image_name,
                           @Cast("hssize_t*") LongPointer npals );
-public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") long loc_id,
                           String image_name,
                           @Cast("hssize_t*") LongBuffer npals );
-public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer image_name,
                           @Cast("hssize_t*") long[] npals );
-public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") long loc_id,
                           String image_name,
                           @Cast("hssize_t*") LongPointer npals );
-public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer image_name,
                           @Cast("hssize_t*") LongBuffer npals );
-public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_npalettes( @Cast("hid_t") long loc_id,
                           String image_name,
                           @Cast("hssize_t*") long[] npals );
 
-public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         int pal_number,
                         @Cast("hsize_t*") LongPointer pal_dims );
-public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") long loc_id,
                         String image_name,
                         int pal_number,
                         @Cast("hsize_t*") LongBuffer pal_dims );
-public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         int pal_number,
                         @Cast("hsize_t*") long[] pal_dims );
-public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") long loc_id,
                         String image_name,
                         int pal_number,
                         @Cast("hsize_t*") LongPointer pal_dims );
-public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         int pal_number,
                         @Cast("hsize_t*") LongBuffer pal_dims );
-public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette_info( @Cast("hid_t") long loc_id,
                         String image_name,
                         int pal_number,
                         @Cast("hsize_t*") long[] pal_dims );
 
-public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         int pal_number,
                         @Cast("unsigned char*") BytePointer pal_data );
-public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") long loc_id,
                         String image_name,
                         int pal_number,
                         @Cast("unsigned char*") ByteBuffer pal_data );
-public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         int pal_number,
                         @Cast("unsigned char*") byte[] pal_data );
-public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") long loc_id,
                         String image_name,
                         int pal_number,
                         @Cast("unsigned char*") BytePointer pal_data );
-public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") long loc_id,
                         @Cast("const char*") BytePointer image_name,
                         int pal_number,
                         @Cast("unsigned char*") ByteBuffer pal_data );
-public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMget_palette( @Cast("hid_t") long loc_id,
                         String image_name,
                         int pal_number,
                         @Cast("unsigned char*") byte[] pal_data );
 
-public static native @Cast("herr_t") int H5IMis_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMis_image( @Cast("hid_t") long loc_id,
                      @Cast("const char*") BytePointer dset_name );
-public static native @Cast("herr_t") int H5IMis_image( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMis_image( @Cast("hid_t") long loc_id,
                      String dset_name );
 
-public static native @Cast("herr_t") int H5IMis_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMis_palette( @Cast("hid_t") long loc_id,
                      @Cast("const char*") BytePointer dset_name );
-public static native @Cast("herr_t") int H5IMis_palette( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5IMis_palette( @Cast("hid_t") long loc_id,
                      String dset_name );
 
 // #ifdef __cplusplus
@@ -8597,92 +8594,92 @@ public static native @Cast("herr_t") int H5IMis_palette( @Cast("hid_t") int loc_
  */
 
 public static native @Cast("herr_t") int H5TBmake_table( @Cast("const char*") BytePointer table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") PointerPointer field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") IntPointer field_types,
+                       @Cast("const hid_t*") LongPointer field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
                        @Const Pointer buf );
 public static native @Cast("herr_t") int H5TBmake_table( @Cast("const char*") BytePointer table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") @ByPtrPtr BytePointer field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") IntPointer field_types,
+                       @Cast("const hid_t*") LongPointer field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
                        @Const Pointer buf );
 public static native @Cast("herr_t") int H5TBmake_table( String table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") @ByPtrPtr ByteBuffer field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") IntBuffer field_types,
+                       @Cast("const hid_t*") LongBuffer field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
                        @Const Pointer buf );
 public static native @Cast("herr_t") int H5TBmake_table( @Cast("const char*") BytePointer table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") @ByPtrPtr byte[] field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") int[] field_types,
+                       @Cast("const hid_t*") long[] field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
                        @Const Pointer buf );
 public static native @Cast("herr_t") int H5TBmake_table( String table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") @ByPtrPtr BytePointer field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") IntPointer field_types,
+                       @Cast("const hid_t*") LongPointer field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
                        @Const Pointer buf );
 public static native @Cast("herr_t") int H5TBmake_table( @Cast("const char*") BytePointer table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") @ByPtrPtr ByteBuffer field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") IntBuffer field_types,
+                       @Cast("const hid_t*") LongBuffer field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
                        @Const Pointer buf );
 public static native @Cast("herr_t") int H5TBmake_table( String table_title,
-                       @Cast("hid_t") int loc_id,
+                       @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("hsize_t") long nfields,
                        @Cast("hsize_t") long nrecords,
                        @Cast("size_t") long type_size,
                        @Cast("const char**") @ByPtrPtr byte[] field_names,
                        @Cast("const size_t*") SizeTPointer field_offset,
-                       @Cast("const hid_t*") int[] field_types,
+                       @Cast("const hid_t*") long[] field_types,
                        @Cast("hsize_t") long chunk_size,
                        Pointer fill_data,
                        int compress,
@@ -8696,14 +8693,14 @@ public static native @Cast("herr_t") int H5TBmake_table( String table_title,
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5TBappend_records( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBappend_records( @Cast("hid_t") long loc_id,
                            @Cast("const char*") BytePointer dset_name,
                            @Cast("hsize_t") long nrecords,
                            @Cast("size_t") long type_size,
                            @Cast("const size_t*") SizeTPointer field_offset,
                            @Cast("const size_t*") SizeTPointer dst_sizes,
                            @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBappend_records( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBappend_records( @Cast("hid_t") long loc_id,
                            String dset_name,
                            @Cast("hsize_t") long nrecords,
                            @Cast("size_t") long type_size,
@@ -8711,7 +8708,7 @@ public static native @Cast("herr_t") int H5TBappend_records( @Cast("hid_t") int 
                            @Cast("const size_t*") SizeTPointer dst_sizes,
                            @Const Pointer buf );
 
-public static native @Cast("herr_t") int H5TBwrite_records( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_records( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer dset_name,
                           @Cast("hsize_t") long start,
                           @Cast("hsize_t") long nrecords,
@@ -8719,7 +8716,7 @@ public static native @Cast("herr_t") int H5TBwrite_records( @Cast("hid_t") int l
                           @Cast("const size_t*") SizeTPointer field_offset,
                           @Cast("const size_t*") SizeTPointer dst_sizes,
                           @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_records( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_records( @Cast("hid_t") long loc_id,
                           String dset_name,
                           @Cast("hsize_t") long start,
                           @Cast("hsize_t") long nrecords,
@@ -8729,7 +8726,7 @@ public static native @Cast("herr_t") int H5TBwrite_records( @Cast("hid_t") int l
                           @Const Pointer buf );
 
 
-public static native @Cast("herr_t") int H5TBwrite_fields_name( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_name( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("const char*") BytePointer field_names,
                               @Cast("hsize_t") long start,
@@ -8738,7 +8735,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_name( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer field_offset,
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_fields_name( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_name( @Cast("hid_t") long loc_id,
                               String dset_name,
                               String field_names,
                               @Cast("hsize_t") long start,
@@ -8748,7 +8745,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_name( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               @Const Pointer buf );
 
-public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                @Cast("hsize_t") long nfields,
                                @Const IntPointer field_index,
@@ -8758,7 +8755,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") 
                                @Cast("const size_t*") SizeTPointer field_offset,
                                @Cast("const size_t*") SizeTPointer dst_sizes,
                                @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") long loc_id,
                                String dset_name,
                                @Cast("hsize_t") long nfields,
                                @Const IntBuffer field_index,
@@ -8768,7 +8765,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") 
                                @Cast("const size_t*") SizeTPointer field_offset,
                                @Cast("const size_t*") SizeTPointer dst_sizes,
                                @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                @Cast("hsize_t") long nfields,
                                @Const int[] field_index,
@@ -8778,7 +8775,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") 
                                @Cast("const size_t*") SizeTPointer field_offset,
                                @Cast("const size_t*") SizeTPointer dst_sizes,
                                @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") long loc_id,
                                String dset_name,
                                @Cast("hsize_t") long nfields,
                                @Const IntPointer field_index,
@@ -8788,7 +8785,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") 
                                @Cast("const size_t*") SizeTPointer field_offset,
                                @Cast("const size_t*") SizeTPointer dst_sizes,
                                @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") long loc_id,
                                @Cast("const char*") BytePointer dset_name,
                                @Cast("hsize_t") long nfields,
                                @Const IntBuffer field_index,
@@ -8798,7 +8795,7 @@ public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") 
                                @Cast("const size_t*") SizeTPointer field_offset,
                                @Cast("const size_t*") SizeTPointer dst_sizes,
                                @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") long loc_id,
                                String dset_name,
                                @Cast("hsize_t") long nfields,
                                @Const int[] field_index,
@@ -8819,13 +8816,13 @@ public static native @Cast("herr_t") int H5TBwrite_fields_index( @Cast("hid_t") 
 
 
 
-public static native @Cast("herr_t") int H5TBread_table( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_table( @Cast("hid_t") long loc_id,
                        @Cast("const char*") BytePointer dset_name,
                        @Cast("size_t") long dst_size,
                        @Cast("const size_t*") SizeTPointer dst_offset,
                        @Cast("const size_t*") SizeTPointer dst_sizes,
                        Pointer dst_buf );
-public static native @Cast("herr_t") int H5TBread_table( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_table( @Cast("hid_t") long loc_id,
                        String dset_name,
                        @Cast("size_t") long dst_size,
                        @Cast("const size_t*") SizeTPointer dst_offset,
@@ -8833,7 +8830,7 @@ public static native @Cast("herr_t") int H5TBread_table( @Cast("hid_t") int loc_
                        Pointer dst_buf );
 
 
-public static native @Cast("herr_t") int H5TBread_fields_name( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_name( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name,
                              @Cast("const char*") BytePointer field_names,
                              @Cast("hsize_t") long start,
@@ -8842,7 +8839,7 @@ public static native @Cast("herr_t") int H5TBread_fields_name( @Cast("hid_t") in
                              @Cast("const size_t*") SizeTPointer field_offset,
                              @Cast("const size_t*") SizeTPointer dst_sizes,
                              Pointer buf );
-public static native @Cast("herr_t") int H5TBread_fields_name( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_name( @Cast("hid_t") long loc_id,
                              String dset_name,
                              String field_names,
                              @Cast("hsize_t") long start,
@@ -8852,7 +8849,7 @@ public static native @Cast("herr_t") int H5TBread_fields_name( @Cast("hid_t") in
                              @Cast("const size_t*") SizeTPointer dst_sizes,
                              Pointer buf );
 
-public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("hsize_t") long nfields,
                               @Const IntPointer field_index,
@@ -8862,7 +8859,7 @@ public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer field_offset,
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               Pointer buf );
-public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") long loc_id,
                               String dset_name,
                               @Cast("hsize_t") long nfields,
                               @Const IntBuffer field_index,
@@ -8872,7 +8869,7 @@ public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer field_offset,
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               Pointer buf );
-public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("hsize_t") long nfields,
                               @Const int[] field_index,
@@ -8882,7 +8879,7 @@ public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer field_offset,
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               Pointer buf );
-public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") long loc_id,
                               String dset_name,
                               @Cast("hsize_t") long nfields,
                               @Const IntPointer field_index,
@@ -8892,7 +8889,7 @@ public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer field_offset,
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               Pointer buf );
-public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") long loc_id,
                               @Cast("const char*") BytePointer dset_name,
                               @Cast("hsize_t") long nfields,
                               @Const IntBuffer field_index,
@@ -8902,7 +8899,7 @@ public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") i
                               @Cast("const size_t*") SizeTPointer field_offset,
                               @Cast("const size_t*") SizeTPointer dst_sizes,
                               Pointer buf );
-public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") long loc_id,
                               String dset_name,
                               @Cast("hsize_t") long nfields,
                               @Const int[] field_index,
@@ -8914,7 +8911,7 @@ public static native @Cast("herr_t") int H5TBread_fields_index( @Cast("hid_t") i
                               Pointer buf );
 
 
-public static native @Cast("herr_t") int H5TBread_records( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_records( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
                          @Cast("hsize_t") long start,
                          @Cast("hsize_t") long nrecords,
@@ -8922,7 +8919,7 @@ public static native @Cast("herr_t") int H5TBread_records( @Cast("hid_t") int lo
                          @Cast("const size_t*") SizeTPointer dst_offset,
                          @Cast("const size_t*") SizeTPointer dst_sizes,
                          Pointer buf );
-public static native @Cast("herr_t") int H5TBread_records( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBread_records( @Cast("hid_t") long loc_id,
                          String dset_name,
                          @Cast("hsize_t") long start,
                          @Cast("hsize_t") long nrecords,
@@ -8939,68 +8936,68 @@ public static native @Cast("herr_t") int H5TBread_records( @Cast("hid_t") int lo
  */
 
 
-public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") long loc_id,
                             @Cast("const char*") BytePointer dset_name,
                             @Cast("hsize_t*") LongPointer nfields,
                             @Cast("hsize_t*") LongPointer nrecords );
-public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") long loc_id,
                             String dset_name,
                             @Cast("hsize_t*") LongBuffer nfields,
                             @Cast("hsize_t*") LongBuffer nrecords );
-public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") long loc_id,
                             @Cast("const char*") BytePointer dset_name,
                             @Cast("hsize_t*") long[] nfields,
                             @Cast("hsize_t*") long[] nrecords );
-public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") long loc_id,
                             String dset_name,
                             @Cast("hsize_t*") LongPointer nfields,
                             @Cast("hsize_t*") LongPointer nrecords );
-public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") long loc_id,
                             @Cast("const char*") BytePointer dset_name,
                             @Cast("hsize_t*") LongBuffer nfields,
                             @Cast("hsize_t*") LongBuffer nrecords );
-public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_table_info( @Cast("hid_t") long loc_id,
                             String dset_name,
                             @Cast("hsize_t*") long[] nfields,
                             @Cast("hsize_t*") long[] nrecords );
 
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            @Cast("const char*") BytePointer dset_name,
                            @Cast("char**") PointerPointer field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
                            @Cast("size_t*") SizeTPointer field_offsets,
                            @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            @Cast("const char*") BytePointer dset_name,
                            @Cast("char**") @ByPtrPtr BytePointer field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
                            @Cast("size_t*") SizeTPointer field_offsets,
                            @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            String dset_name,
                            @Cast("char**") @ByPtrPtr ByteBuffer field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
                            @Cast("size_t*") SizeTPointer field_offsets,
                            @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            @Cast("const char*") BytePointer dset_name,
                            @Cast("char**") @ByPtrPtr byte[] field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
                            @Cast("size_t*") SizeTPointer field_offsets,
                            @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            String dset_name,
                            @Cast("char**") @ByPtrPtr BytePointer field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
                            @Cast("size_t*") SizeTPointer field_offsets,
                            @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            @Cast("const char*") BytePointer dset_name,
                            @Cast("char**") @ByPtrPtr ByteBuffer field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
                            @Cast("size_t*") SizeTPointer field_offsets,
                            @Cast("size_t*") SizeTPointer type_size );
-public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") long loc_id,
                            String dset_name,
                            @Cast("char**") @ByPtrPtr byte[] field_names,
                            @Cast("size_t*") SizeTPointer field_sizes,
@@ -9016,17 +9013,17 @@ public static native @Cast("herr_t") int H5TBget_field_info( @Cast("hid_t") int 
  */
 
 
-public static native @Cast("herr_t") int H5TBdelete_record( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBdelete_record( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer dset_name,
                           @Cast("hsize_t") long start,
                           @Cast("hsize_t") long nrecords );
-public static native @Cast("herr_t") int H5TBdelete_record( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBdelete_record( @Cast("hid_t") long loc_id,
                           String dset_name,
                           @Cast("hsize_t") long start,
                           @Cast("hsize_t") long nrecords );
 
 
-public static native @Cast("herr_t") int H5TBinsert_record( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBinsert_record( @Cast("hid_t") long loc_id,
                           @Cast("const char*") BytePointer dset_name,
                           @Cast("hsize_t") long start,
                           @Cast("hsize_t") long nrecords,
@@ -9034,7 +9031,7 @@ public static native @Cast("herr_t") int H5TBinsert_record( @Cast("hid_t") int l
                           @Cast("const size_t*") SizeTPointer dst_offset,
                           @Cast("const size_t*") SizeTPointer dst_sizes,
                           Pointer buf );
-public static native @Cast("herr_t") int H5TBinsert_record( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBinsert_record( @Cast("hid_t") long loc_id,
                           String dset_name,
                           @Cast("hsize_t") long start,
                           @Cast("hsize_t") long nrecords,
@@ -9043,49 +9040,49 @@ public static native @Cast("herr_t") int H5TBinsert_record( @Cast("hid_t") int l
                           @Cast("const size_t*") SizeTPointer dst_sizes,
                           Pointer buf );
 
-public static native @Cast("herr_t") int H5TBadd_records_from( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBadd_records_from( @Cast("hid_t") long loc_id,
                              @Cast("const char*") BytePointer dset_name1,
                              @Cast("hsize_t") long start1,
                              @Cast("hsize_t") long nrecords,
                              @Cast("const char*") BytePointer dset_name2,
                              @Cast("hsize_t") long start2 );
-public static native @Cast("herr_t") int H5TBadd_records_from( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBadd_records_from( @Cast("hid_t") long loc_id,
                              String dset_name1,
                              @Cast("hsize_t") long start1,
                              @Cast("hsize_t") long nrecords,
                              String dset_name2,
                              @Cast("hsize_t") long start2 );
 
-public static native @Cast("herr_t") int H5TBcombine_tables( @Cast("hid_t") int loc_id1,
+public static native @Cast("herr_t") int H5TBcombine_tables( @Cast("hid_t") long loc_id1,
                            @Cast("const char*") BytePointer dset_name1,
-                           @Cast("hid_t") int loc_id2,
+                           @Cast("hid_t") long loc_id2,
                            @Cast("const char*") BytePointer dset_name2,
                            @Cast("const char*") BytePointer dset_name3 );
-public static native @Cast("herr_t") int H5TBcombine_tables( @Cast("hid_t") int loc_id1,
+public static native @Cast("herr_t") int H5TBcombine_tables( @Cast("hid_t") long loc_id1,
                            String dset_name1,
-                           @Cast("hid_t") int loc_id2,
+                           @Cast("hid_t") long loc_id2,
                            String dset_name2,
                            String dset_name3 );
 
-public static native @Cast("herr_t") int H5TBinsert_field( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBinsert_field( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
                          @Cast("const char*") BytePointer field_name,
-                         @Cast("hid_t") int field_type,
+                         @Cast("hid_t") long field_type,
                          @Cast("hsize_t") long position,
                          @Const Pointer fill_data,
                          @Const Pointer buf );
-public static native @Cast("herr_t") int H5TBinsert_field( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBinsert_field( @Cast("hid_t") long loc_id,
                          String dset_name,
                          String field_name,
-                         @Cast("hid_t") int field_type,
+                         @Cast("hid_t") long field_type,
                          @Cast("hsize_t") long position,
                          @Const Pointer fill_data,
                          @Const Pointer buf );
 
-public static native @Cast("herr_t") int H5TBdelete_field( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBdelete_field( @Cast("hid_t") long loc_id,
                          @Cast("const char*") BytePointer dset_name,
                          @Cast("const char*") BytePointer field_name );
-public static native @Cast("herr_t") int H5TBdelete_field( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBdelete_field( @Cast("hid_t") long loc_id,
                          String dset_name,
                          String field_name );
 
@@ -9097,36 +9094,36 @@ public static native @Cast("herr_t") int H5TBdelete_field( @Cast("hid_t") int lo
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5TBAget_title( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBAget_title( @Cast("hid_t") long loc_id,
                        @Cast("char*") BytePointer table_title );
-public static native @Cast("herr_t") int H5TBAget_title( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBAget_title( @Cast("hid_t") long loc_id,
                        @Cast("char*") ByteBuffer table_title );
-public static native @Cast("herr_t") int H5TBAget_title( @Cast("hid_t") int loc_id,
+public static native @Cast("herr_t") int H5TBAget_title( @Cast("hid_t") long loc_id,
                        @Cast("char*") byte[] table_title );
 
-public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id,
+public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") long loc_id,
                       @Cast("const char*") BytePointer dset_name,
-                      @Cast("hid_t") int dset_id,
+                      @Cast("hid_t") long dset_id,
                       @Cast("unsigned char*") BytePointer dst_buf);
-public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id,
+public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") long loc_id,
                       String dset_name,
-                      @Cast("hid_t") int dset_id,
+                      @Cast("hid_t") long dset_id,
                       @Cast("unsigned char*") ByteBuffer dst_buf);
-public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id,
+public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") long loc_id,
                       @Cast("const char*") BytePointer dset_name,
-                      @Cast("hid_t") int dset_id,
+                      @Cast("hid_t") long dset_id,
                       @Cast("unsigned char*") byte[] dst_buf);
-public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id,
+public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") long loc_id,
                       String dset_name,
-                      @Cast("hid_t") int dset_id,
+                      @Cast("hid_t") long dset_id,
                       @Cast("unsigned char*") BytePointer dst_buf);
-public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id,
+public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") long loc_id,
                       @Cast("const char*") BytePointer dset_name,
-                      @Cast("hid_t") int dset_id,
+                      @Cast("hid_t") long dset_id,
                       @Cast("unsigned char*") ByteBuffer dst_buf);
-public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id,
+public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") long loc_id,
                       String dset_name,
-                      @Cast("hid_t") int dset_id,
+                      @Cast("hid_t") long dset_id,
                       @Cast("unsigned char*") byte[] dst_buf);
 
 // #ifdef __cplusplus
@@ -9165,49 +9162,49 @@ public static native @Cast("htri_t") int H5TBAget_fill(@Cast("hid_t") int loc_id
  */
 /* NOTE: H5PTcreate is replacing H5PTcreate_fl for better name due to the
    removal of H5PTcreate_vl.  H5PTcreate_fl may be retired in 1.8.19. */
-public static native @Cast("hid_t") int H5PTcreate(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer dset_name,
-			@Cast("hid_t") int dtype_id, @Cast("hsize_t") long chunk_size, @Cast("hid_t") int plist_id);
-public static native @Cast("hid_t") int H5PTcreate(@Cast("hid_t") int loc_id, String dset_name,
-			@Cast("hid_t") int dtype_id, @Cast("hsize_t") long chunk_size, @Cast("hid_t") int plist_id);
+public static native @Cast("hid_t") long H5PTcreate(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer dset_name,
+			@Cast("hid_t") long dtype_id, @Cast("hsize_t") long chunk_size, @Cast("hid_t") long plist_id);
+public static native @Cast("hid_t") long H5PTcreate(@Cast("hid_t") long loc_id, String dset_name,
+			@Cast("hid_t") long dtype_id, @Cast("hsize_t") long chunk_size, @Cast("hid_t") long plist_id);
 
-public static native @Cast("hid_t") int H5PTopen(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer dset_name);
-public static native @Cast("hid_t") int H5PTopen(@Cast("hid_t") int loc_id, String dset_name);
+public static native @Cast("hid_t") long H5PTopen(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer dset_name);
+public static native @Cast("hid_t") long H5PTopen(@Cast("hid_t") long loc_id, String dset_name);
 
-public static native @Cast("herr_t") int H5PTclose(@Cast("hid_t") int table_id);
+public static native @Cast("herr_t") int H5PTclose(@Cast("hid_t") long table_id);
 
 /* This function may be removed from the packet table in release 1.8.19. */
-public static native @Cast("hid_t") int H5PTcreate_fl(@Cast("hid_t") int loc_id, @Cast("const char*") BytePointer dset_name,
-			@Cast("hid_t") int dtype_id, @Cast("hsize_t") long chunk_size, int compression);
-public static native @Cast("hid_t") int H5PTcreate_fl(@Cast("hid_t") int loc_id, String dset_name,
-			@Cast("hid_t") int dtype_id, @Cast("hsize_t") long chunk_size, int compression);
+public static native @Cast("hid_t") long H5PTcreate_fl(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer dset_name,
+			@Cast("hid_t") long dtype_id, @Cast("hsize_t") long chunk_size, int compression);
+public static native @Cast("hid_t") long H5PTcreate_fl(@Cast("hid_t") long loc_id, String dset_name,
+			@Cast("hid_t") long dtype_id, @Cast("hsize_t") long chunk_size, int compression);
 
 
 /*-------------------------------------------------------------------------
  * Write functions
  *-------------------------------------------------------------------------
  */
-public static native @Cast("herr_t") int H5PTappend(@Cast("hid_t") int table_id, @Cast("size_t") long nrecords, @Const Pointer data);
+public static native @Cast("herr_t") int H5PTappend(@Cast("hid_t") long table_id, @Cast("size_t") long nrecords, @Const Pointer data);
 
 /*-------------------------------------------------------------------------
  * Read functions
  *-------------------------------------------------------------------------
  */
-public static native @Cast("herr_t") int H5PTget_next(@Cast("hid_t") int table_id, @Cast("size_t") long nrecords, Pointer data);
+public static native @Cast("herr_t") int H5PTget_next(@Cast("hid_t") long table_id, @Cast("size_t") long nrecords, Pointer data);
 
-public static native @Cast("herr_t") int H5PTread_packets(@Cast("hid_t") int table_id, @Cast("hsize_t") long start,
+public static native @Cast("herr_t") int H5PTread_packets(@Cast("hid_t") long table_id, @Cast("hsize_t") long start,
 			@Cast("size_t") long nrecords, Pointer data);
 
 /*-------------------------------------------------------------------------
  * Inquiry functions
  *-------------------------------------------------------------------------
  */
-public static native @Cast("herr_t") int H5PTget_num_packets(@Cast("hid_t") int table_id, @Cast("hsize_t*") LongPointer nrecords);
-public static native @Cast("herr_t") int H5PTget_num_packets(@Cast("hid_t") int table_id, @Cast("hsize_t*") LongBuffer nrecords);
-public static native @Cast("herr_t") int H5PTget_num_packets(@Cast("hid_t") int table_id, @Cast("hsize_t*") long[] nrecords);
+public static native @Cast("herr_t") int H5PTget_num_packets(@Cast("hid_t") long table_id, @Cast("hsize_t*") LongPointer nrecords);
+public static native @Cast("herr_t") int H5PTget_num_packets(@Cast("hid_t") long table_id, @Cast("hsize_t*") LongBuffer nrecords);
+public static native @Cast("herr_t") int H5PTget_num_packets(@Cast("hid_t") long table_id, @Cast("hsize_t*") long[] nrecords);
 
-public static native @Cast("herr_t") int H5PTis_valid(@Cast("hid_t") int table_id);
+public static native @Cast("herr_t") int H5PTis_valid(@Cast("hid_t") long table_id);
 
-public static native @Cast("herr_t") int H5PTis_varlen(@Cast("hid_t") int table_id);
+public static native @Cast("herr_t") int H5PTis_varlen(@Cast("hid_t") long table_id);
 
 /*-------------------------------------------------------------------------
  *
@@ -9216,9 +9213,9 @@ public static native @Cast("herr_t") int H5PTis_varlen(@Cast("hid_t") int table_
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("hid_t") int H5PTget_dataset(@Cast("hid_t") int table_id);
+public static native @Cast("hid_t") long H5PTget_dataset(@Cast("hid_t") long table_id);
 
-public static native @Cast("hid_t") int H5PTget_type(@Cast("hid_t") int table_id);
+public static native @Cast("hid_t") long H5PTget_type(@Cast("hid_t") long table_id);
 
 /*-------------------------------------------------------------------------
  *
@@ -9227,16 +9224,16 @@ public static native @Cast("hid_t") int H5PTget_type(@Cast("hid_t") int table_id
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5PTcreate_index( @Cast("hid_t") int table_id );
+public static native @Cast("herr_t") int H5PTcreate_index( @Cast("hid_t") long table_id );
 
-public static native @Cast("herr_t") int H5PTset_index( @Cast("hid_t") int table_id,
+public static native @Cast("herr_t") int H5PTset_index( @Cast("hid_t") long table_id,
                              @Cast("hsize_t") long pt_index );
 
-public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") int table_id,
+public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") long table_id,
                              @Cast("hsize_t*") LongPointer pt_index );
-public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") int table_id,
+public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") long table_id,
                              @Cast("hsize_t*") LongBuffer pt_index );
-public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") int table_id,
+public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") long table_id,
                              @Cast("hsize_t*") long[] pt_index );
 
 /*-------------------------------------------------------------------------
@@ -9246,7 +9243,7 @@ public static native @Cast("herr_t") int H5PTget_index( @Cast("hid_t") int table
  *-------------------------------------------------------------------------
  */
 
-public static native @Cast("herr_t") int H5PTfree_vlen_buff( @Cast("hid_t") int table_id,
+public static native @Cast("herr_t") int H5PTfree_vlen_buff( @Cast("hid_t") long table_id,
                                @Cast("size_t") long bufflen,
                                Pointer buff );
 
@@ -9278,22 +9275,22 @@ public static native @Cast("herr_t") int H5PTfree_vlen_buff( @Cast("hid_t") int 
 // #ifdef __cplusplus
 // #endif
 
-public static native @Cast("herr_t") int H5LDget_dset_dims(@Cast("hid_t") int did, @Cast("hsize_t*") LongPointer cur_dims);
-public static native @Cast("herr_t") int H5LDget_dset_dims(@Cast("hid_t") int did, @Cast("hsize_t*") LongBuffer cur_dims);
-public static native @Cast("herr_t") int H5LDget_dset_dims(@Cast("hid_t") int did, @Cast("hsize_t*") long[] cur_dims);
-public static native @Cast("size_t") long H5LDget_dset_type_size(@Cast("hid_t") int did, @Cast("const char*") BytePointer fields);
-public static native @Cast("size_t") long H5LDget_dset_type_size(@Cast("hid_t") int did, String fields);
-public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int did, @Cast("const hsize_t*") LongPointer prev_dims,
+public static native @Cast("herr_t") int H5LDget_dset_dims(@Cast("hid_t") long did, @Cast("hsize_t*") LongPointer cur_dims);
+public static native @Cast("herr_t") int H5LDget_dset_dims(@Cast("hid_t") long did, @Cast("hsize_t*") LongBuffer cur_dims);
+public static native @Cast("herr_t") int H5LDget_dset_dims(@Cast("hid_t") long did, @Cast("hsize_t*") long[] cur_dims);
+public static native @Cast("size_t") long H5LDget_dset_type_size(@Cast("hid_t") long did, @Cast("const char*") BytePointer fields);
+public static native @Cast("size_t") long H5LDget_dset_type_size(@Cast("hid_t") long did, String fields);
+public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") long did, @Cast("const hsize_t*") LongPointer prev_dims,
     @Cast("const hsize_t*") LongPointer cur_dims, @Cast("const char*") BytePointer fields, Pointer buf);
-public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int did, @Cast("const hsize_t*") LongBuffer prev_dims,
+public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") long did, @Cast("const hsize_t*") LongBuffer prev_dims,
     @Cast("const hsize_t*") LongBuffer cur_dims, String fields, Pointer buf);
-public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int did, @Cast("const hsize_t*") long[] prev_dims,
+public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") long did, @Cast("const hsize_t*") long[] prev_dims,
     @Cast("const hsize_t*") long[] cur_dims, @Cast("const char*") BytePointer fields, Pointer buf);
-public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int did, @Cast("const hsize_t*") LongPointer prev_dims,
+public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") long did, @Cast("const hsize_t*") LongPointer prev_dims,
     @Cast("const hsize_t*") LongPointer cur_dims, String fields, Pointer buf);
-public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int did, @Cast("const hsize_t*") LongBuffer prev_dims,
+public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") long did, @Cast("const hsize_t*") LongBuffer prev_dims,
     @Cast("const hsize_t*") LongBuffer cur_dims, @Cast("const char*") BytePointer fields, Pointer buf);
-public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int did, @Cast("const hsize_t*") long[] prev_dims,
+public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") long did, @Cast("const hsize_t*") long[] prev_dims,
     @Cast("const hsize_t*") long[] cur_dims, String fields, Pointer buf);
 
 // #ifdef __cplusplus
@@ -9356,16 +9353,16 @@ public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int d
      * Opens an existing packet table, which can contain either fixed-length or
      * variable-length packets.
      */
-    public PacketTable(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name);
-    public PacketTable(@Cast("hid_t") int fileID, String name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, String name);
+    public PacketTable(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name);
+    public PacketTable(@Cast("hid_t") long fileID, String name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, String name);
 
     /* "Open" Constructor - will be deprecated because of char* name */
-    public PacketTable(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name);
-    public PacketTable(@Cast("hid_t") int fileID, @Cast("char*") byte[] name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") byte[] name);
+    public PacketTable(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name);
+    public PacketTable(@Cast("hid_t") long fileID, @Cast("char*") byte[] name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") byte[] name);
 
     /* Destructor
      * Cleans up the packet table
@@ -9419,7 +9416,7 @@ public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int d
     /* GetTableId
      * Returns the identifier of the packet table.
      */
-    public native @Cast("hid_t") int GetTableId();
+    public native @Cast("hid_t") long GetTableId();
 
     /* GetDatatype
      * Returns the datatype identifier used by the packet table, on success,
@@ -9427,7 +9424,7 @@ public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int d
      * Note: it is best to avoid using this identifier in applications, unless
      * the desired functionality cannot be performed via the packet table ID.
      */
-    public native @Cast("hid_t") int GetDatatype();
+    public native @Cast("hid_t") long GetDatatype();
 
     /* GetDataset
      * Returns the dataset identifier associated with the packet table, on
@@ -9435,7 +9432,7 @@ public static native @Cast("herr_t") int H5LDget_dset_elmts(@Cast("hid_t") int d
      * Note: it is best to avoid using this identifier in applications, unless
      * the desired functionality cannot be performed via the packet table ID.
      */
-    public native @Cast("hid_t") int GetDataset();
+    public native @Cast("hid_t") long GetDataset();
 
     /* FreeBuff
      * Frees the buffers created when variable-length packets are read.
@@ -9457,14 +9454,14 @@ public static class FL_PacketTable extends PacketTable {
      * the property list to specify compression, the name of the packet table,
      * the ID of the datatype, and the size of a memory chunk used in chunking.
      */
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") int plistID/*=H5P_DEFAULT*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, plistID); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") int plistID/*=H5P_DEFAULT*/);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") int dtypeID) { super((Pointer)null); allocate(fileID, name, dtypeID); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") int dtypeID);
-    public FL_PacketTable(@Cast("hid_t") int fileID, String name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") int plistID/*=H5P_DEFAULT*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, plistID); }
-    private native void allocate(@Cast("hid_t") int fileID, String name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") int plistID/*=H5P_DEFAULT*/);
-    public FL_PacketTable(@Cast("hid_t") int fileID, String name, @Cast("hid_t") int dtypeID) { super((Pointer)null); allocate(fileID, name, dtypeID); }
-    private native void allocate(@Cast("hid_t") int fileID, String name, @Cast("hid_t") int dtypeID);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") long plistID/*=H5P_DEFAULT*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, plistID); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") long plistID/*=H5P_DEFAULT*/);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") long dtypeID) { super((Pointer)null); allocate(fileID, name, dtypeID); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name, @Cast("hid_t") long dtypeID);
+    public FL_PacketTable(@Cast("hid_t") long fileID, String name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") long plistID/*=H5P_DEFAULT*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, plistID); }
+    private native void allocate(@Cast("hid_t") long fileID, String name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize/*=0*/, @Cast("hid_t") long plistID/*=H5P_DEFAULT*/);
+    public FL_PacketTable(@Cast("hid_t") long fileID, String name, @Cast("hid_t") long dtypeID) { super((Pointer)null); allocate(fileID, name, dtypeID); }
+    private native void allocate(@Cast("hid_t") long fileID, String name, @Cast("hid_t") long dtypeID);
 
     /* Constructors - deprecated
      * Creates a packet table in which to store fixed length packets.
@@ -9475,35 +9472,37 @@ public static class FL_PacketTable extends PacketTable {
      * Note: these overloaded constructors will be deprecated in favor of the
      * constructor above.
      */
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, plist_id, name, dtypeID, chunkSize); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("hid_t") int plist_id, @Cast("const char*") BytePointer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("hid_t") int plist_id, String name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, plist_id, name, dtypeID, chunkSize); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("hid_t") int plist_id, String name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") BytePointer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") BytePointer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, compression); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") byte[] name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, compression); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") byte[] name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") byte[] name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") byte[] name, @Cast("hid_t") int dtypeID, @Cast("hsize_t") long chunkSize);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, plist_id, name, dtypeID, chunkSize); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("hid_t") long plist_id, @Cast("const char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("hid_t") long plist_id, String name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, plist_id, name, dtypeID, chunkSize); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("hid_t") long plist_id, String name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, compression); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") BytePointer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, compression); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") byte[] name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize, compression); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") byte[] name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize, int compression/*=0*/);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") byte[] name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize) { super((Pointer)null); allocate(fileID, name, dtypeID, chunkSize); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") byte[] name, @Cast("hid_t") long dtypeID, @Cast("hsize_t") long chunkSize);
 
     /* "Open" Constructor
      * Opens an existing fixed-length packet table.
      * Fails if the packet table specified is variable-length.
      */
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("const char*") BytePointer name);
-    public FL_PacketTable(@Cast("hid_t") int fileID, String name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, String name);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("const char*") BytePointer name);
+    public FL_PacketTable(@Cast("hid_t") long fileID, String name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, String name);
 
     /* "Open" Constructor - will be deprecated because of char* name */
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") ByteBuffer name);
-    public FL_PacketTable(@Cast("hid_t") int fileID, @Cast("char*") byte[] name) { super((Pointer)null); allocate(fileID, name); }
-    private native void allocate(@Cast("hid_t") int fileID, @Cast("char*") byte[] name);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") ByteBuffer name);
+    public FL_PacketTable(@Cast("hid_t") long fileID, @Cast("char*") byte[] name) { super((Pointer)null); allocate(fileID, name); }
+    private native void allocate(@Cast("hid_t") long fileID, @Cast("char*") byte[] name);
 
     /* Destructor
      * Cleans up the packet table
@@ -9709,11 +9708,11 @@ public static final int H5O_VERSION_2 =    2;
 
         // Returns a character string that describes the error specified by
         // a major error number.
-        public native @StdString BytePointer getMajorString(@Cast("hid_t") int err_major_id);
+        public native @StdString BytePointer getMajorString(@Cast("hid_t") long err_major_id);
 
         // Returns a character string that describes the error specified by
         // a minor error number.
-        public native @StdString BytePointer getMinorString(@Cast("hid_t") int err_minor_id);
+        public native @StdString BytePointer getMinorString(@Cast("hid_t") long err_minor_id);
 
         // Returns the detailed message set at the time the exception is thrown
         public native @StdString BytePointer getDetailMsg();
@@ -9742,7 +9741,7 @@ public static final int H5O_VERSION_2 =    2;
 
         // Prints the error stack in a default manner.
         public static native void printErrorStack(@Cast("FILE*") Pointer stream/*=stderr*/,
-                                            @Cast("hid_t") int err_stack/*=H5E_DEFAULT*/);
+                                            @Cast("hid_t") long err_stack/*=H5E_DEFAULT*/);
         public static native void printErrorStack();
         public native void printError(@Cast("FILE*") Pointer stream/*=NULL*/);
         public native void printError();
@@ -10072,19 +10071,19 @@ public static final int H5O_VERSION_2 =    2;
 
 
         // Increment reference counter.
-        public native void incRefCount(@Cast("const hid_t") int obj_id);
+        public native void incRefCount(@Cast("const hid_t") long obj_id);
         public native void incRefCount();
 
         // Decrement reference counter.
-        public native void decRefCount(@Cast("const hid_t") int obj_id);
+        public native void decRefCount(@Cast("const hid_t") long obj_id);
         public native void decRefCount();
 
         // Get the reference counter to this identifier.
-        public native int getCounter(@Cast("const hid_t") int obj_id);
+        public native int getCounter(@Cast("const hid_t") long obj_id);
         public native int getCounter();
 
         // Returns an HDF5 object type, given the object id.
-        public static native @Cast("H5I_type_t") int getHDFObjType(@Cast("const hid_t") int obj_id);
+        public static native @Cast("H5I_type_t") int getHDFObjType(@Cast("const hid_t") long obj_id);
 
         // Returns an HDF5 object type of this object.
         public native @Cast("H5I_type_t") int getHDFObjType();
@@ -10093,7 +10092,7 @@ public static final int H5O_VERSION_2 =    2;
         public static native @Cast("hsize_t") long getNumMembers(@Cast("H5I_type_t") int type);
 
         // Checks if the given ID is valid.
-        public static native @Cast("bool") boolean isValid(@Cast("hid_t") int an_id);
+        public static native @Cast("bool") boolean isValid(@Cast("hid_t") long an_id);
 
         // Determines if an type exists.
         public static native @Cast("bool") boolean typeExists(@Cast("H5I_type_t") int type);
@@ -10102,7 +10101,7 @@ public static final int H5O_VERSION_2 =    2;
         public native @ByRef @Name("operator =") IdComponent put(@Const @ByRef IdComponent rhs);
 
         // Sets the identifier of this object to a new value.
-        public native void setId(@Cast("const hid_t") int new_id);
+        public native void setId(@Cast("const hid_t") long new_id);
 
         // *** Deprecation warning ***
         // The following two constructors are no longer appropriate after the
@@ -10120,7 +10119,7 @@ public static final int H5O_VERSION_2 =    2;
         // IdComponent(const IdComponent& original); - removed from 1.8.15
 
         // Gets the identifier of this object.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Pure virtual function for there are various H5*close for the
         // subclasses.
@@ -10171,12 +10170,6 @@ public static final int H5O_VERSION_2 =    2;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataSpace(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DataSpace(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DataSpace position(long position) {
-        return (DataSpace)super.position(position);
-    }
 
         /**\brief Default DataSpace objects */
         @MemberGetter public static native @Const @ByRef DataSpace ALL();
@@ -10202,6 +10195,8 @@ public static final int H5O_VERSION_2 =    2;
         private native void allocate(int rank, @Cast("const hsize_t*") long[] dims);
 
         // Creates a DataSpace object using an existing dataspace id.
+        public DataSpace(@Cast("const hid_t") long space_id) { super((Pointer)null); allocate(space_id); }
+        private native void allocate(@Cast("const hid_t") long space_id);
 
         // Copy constructor: makes a copy of the original DataSpace object.
         public DataSpace(@Const @ByRef DataSpace original) { super((Pointer)null); allocate(original); }
@@ -10309,7 +10304,7 @@ public static final int H5O_VERSION_2 =    2;
         public native @StdString BytePointer fromClass();
 
         // Gets the dataspace id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Deletes the global constant
         public static native void deleteConstants();
@@ -10349,20 +10344,14 @@ public static final int H5O_VERSION_2 =    2;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PropList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PropList(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public PropList position(long position) {
-        return (PropList)super.position(position);
-    }
 
         /**\brief Default property list */
         @MemberGetter public static native @Const @ByRef PropList DEFAULT();
 
         // Creates a property list of a given type or creates a copy of an
         // existing property list giving the property list id.
-        public PropList(@Cast("const hid_t") int plist_id) { super((Pointer)null); allocate(plist_id); }
-        private native void allocate(@Cast("const hid_t") int plist_id);
+        public PropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
+        private native void allocate(@Cast("const hid_t") long plist_id);
 
         // Make a copy of the given property list using assignment statement
         public native @ByRef @Name("operator =") PropList put(@Const @ByRef PropList rhs);
@@ -10389,7 +10378,7 @@ public static final int H5O_VERSION_2 =    2;
 
         // Gets the class of this property list, i.e. H5P_FILE_CREATE,
         // H5P_FILE_ACCESS, ...
-        public native @Cast("hid_t") @Name("getClass") int _getClass();
+        public native @Cast("hid_t") @Name("getClass") long _getClass();
 
         // Return the name of a generic property list class.
         public native @StdString BytePointer getClassName();
@@ -10440,7 +10429,7 @@ public static final int H5O_VERSION_2 =    2;
         private native void allocate(@Const @ByRef PropList original);
 
         // Gets the property list id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Destructor: properly terminates access to this property list.
 
@@ -10558,12 +10547,6 @@ public static final int H5O_VERSION_2 =    2;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Attribute(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Attribute(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Attribute position(long position) {
-        return (Attribute)super.position(position);
-    }
     public H5Location asH5Location() { return asH5Location(this); }
     @Namespace public static native @Name("static_cast<H5::H5Location*>") H5Location asH5Location(Attribute pointer);
 
@@ -10577,23 +10560,23 @@ public static final int H5O_VERSION_2 =    2;
         private native void allocate();
 
         // Creates a copy of an existing attribute using the attribute id
-        public Attribute(@Cast("const hid_t") int attr_id) { super((Pointer)null); allocate(attr_id); }
-        private native void allocate(@Cast("const hid_t") int attr_id);
+        public Attribute(@Cast("const hid_t") long attr_id) { super((Pointer)null); allocate(attr_id); }
+        private native void allocate(@Cast("const hid_t") long attr_id);
 
         // Closes this attribute.
         public native @Name("close") void _close();
 
         // Gets the name of this attribute.
-        public native @Cast("ssize_t") int getName(@Cast("char*") BytePointer attr_name, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getName(@Cast("char*") BytePointer attr_name);
-        public native @Cast("ssize_t") int getName(@Cast("char*") ByteBuffer attr_name, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getName(@Cast("char*") ByteBuffer attr_name);
-        public native @Cast("ssize_t") int getName(@Cast("char*") byte[] attr_name, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getName(@Cast("char*") byte[] attr_name);
+        public native @Cast("ssize_t") long getName(@Cast("char*") BytePointer attr_name, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getName(@Cast("char*") BytePointer attr_name);
+        public native @Cast("ssize_t") long getName(@Cast("char*") ByteBuffer attr_name, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getName(@Cast("char*") ByteBuffer attr_name);
+        public native @Cast("ssize_t") long getName(@Cast("char*") byte[] attr_name, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getName(@Cast("char*") byte[] attr_name);
         public native @StdString BytePointer getName(@Cast("size_t") long len);
         public native @StdString BytePointer getName();
-        public native @Cast("ssize_t") int getName(@StdString String attr_name, @Cast("size_t") long len/*=0*/);
-        public native @Cast("ssize_t") int getName(@StdString String attr_name);
+        public native @Cast("ssize_t") long getName(@StdString String attr_name, @Cast("size_t") long len/*=0*/);
+        public native @Cast("ssize_t") long getName(@StdString String attr_name);
         // The overloaded function below is replaced by the one above and it
         // is kept for backward compatibility purpose.
         
@@ -10621,7 +10604,7 @@ public static final int H5O_VERSION_2 =    2;
         public native @StdString BytePointer fromClass();
 
         // Gets the attribute id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Destructor: properly terminates access to this attribute.
 
@@ -10659,12 +10642,6 @@ public static final int H5O_VERSION_2 =    2;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ObjCreatPropList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ObjCreatPropList(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ObjCreatPropList position(long position) {
-        return (ObjCreatPropList)super.position(position);
-    }
 
         /**\brief Default object creation property list. */
         @MemberGetter public static native @Const @ByRef ObjCreatPropList DEFAULT();
@@ -10698,8 +10675,8 @@ public static final int H5O_VERSION_2 =    2;
 
         // Creates a copy of an existing object creation property list
         // using the property list id.
-        public ObjCreatPropList(@Cast("const hid_t") int plist_id) { super((Pointer)null); allocate(plist_id); }
-        private native void allocate(@Cast("const hid_t") int plist_id);
+        public ObjCreatPropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
+        private native void allocate(@Cast("const hid_t") long plist_id);
 
         // Noop destructor
 
@@ -10744,12 +10721,6 @@ public static final int H5O_VERSION_2 =    2;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DSetCreatPropList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DSetCreatPropList(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DSetCreatPropList position(long position) {
-        return (DSetCreatPropList)super.position(position);
-    }
 
         /**\brief Default dataset creation property list. */
         @MemberGetter public static native @Const @ByRef DSetCreatPropList DEFAULT();
@@ -10868,8 +10839,8 @@ public static final int H5O_VERSION_2 =    2;
 
         // Creates a copy of an existing dataset creation property list
         // using the property list id.
-        public DSetCreatPropList(@Cast("const hid_t") int plist_id) { super((Pointer)null); allocate(plist_id); }
-        private native void allocate(@Cast("const hid_t") int plist_id);
+        public DSetCreatPropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
+        private native void allocate(@Cast("const hid_t") long plist_id);
 
         // Noop destructor.
 
@@ -10955,12 +10926,12 @@ public static final int H5O_VERSION_2 =    2;
         public native void setComment(String comment);
 
         // Retrieves comment for the HDF5 object specified by its name.
-        public native @Cast("ssize_t") int getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size, @Cast("char*") BytePointer comment);
-        public native @Cast("ssize_t") int getComment(String name, @Cast("size_t") long buf_size, @Cast("char*") ByteBuffer comment);
-        public native @Cast("ssize_t") int getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size, @Cast("char*") byte[] comment);
-        public native @Cast("ssize_t") int getComment(String name, @Cast("size_t") long buf_size, @Cast("char*") BytePointer comment);
-        public native @Cast("ssize_t") int getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size, @Cast("char*") ByteBuffer comment);
-        public native @Cast("ssize_t") int getComment(String name, @Cast("size_t") long buf_size, @Cast("char*") byte[] comment);
+        public native @Cast("ssize_t") long getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size, @Cast("char*") BytePointer comment);
+        public native @Cast("ssize_t") long getComment(String name, @Cast("size_t") long buf_size, @Cast("char*") ByteBuffer comment);
+        public native @Cast("ssize_t") long getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size, @Cast("char*") byte[] comment);
+        public native @Cast("ssize_t") long getComment(String name, @Cast("size_t") long buf_size, @Cast("char*") BytePointer comment);
+        public native @Cast("ssize_t") long getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size, @Cast("char*") ByteBuffer comment);
+        public native @Cast("ssize_t") long getComment(String name, @Cast("size_t") long buf_size, @Cast("char*") byte[] comment);
         public native @StdString BytePointer getComment(@Cast("const char*") BytePointer name, @Cast("size_t") long buf_size/*=0*/);
         public native @StdString BytePointer getComment(@Cast("const char*") BytePointer name);
         public native @StdString String getComment(String name, @Cast("size_t") long buf_size/*=0*/);
@@ -11031,10 +11002,10 @@ public static final int H5O_VERSION_2 =    2;
         // Retrieves the name of an object in this group, given the
         // object's index.
         public native @StdString BytePointer getObjnameByIdx(@Cast("hsize_t") long idx);
-        public native @Cast("ssize_t") int getObjnameByIdx(@Cast("hsize_t") long idx, @Cast("char*") BytePointer name, @Cast("size_t") long size);
-        public native @Cast("ssize_t") int getObjnameByIdx(@Cast("hsize_t") long idx, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
-        public native @Cast("ssize_t") int getObjnameByIdx(@Cast("hsize_t") long idx, @Cast("char*") byte[] name, @Cast("size_t") long size);
-        public native @Cast("ssize_t") int getObjnameByIdx(@Cast("hsize_t") long idx, @StdString String name, @Cast("size_t") long size);
+        public native @Cast("ssize_t") long getObjnameByIdx(@Cast("hsize_t") long idx, @Cast("char*") BytePointer name, @Cast("size_t") long size);
+        public native @Cast("ssize_t") long getObjnameByIdx(@Cast("hsize_t") long idx, @Cast("char*") ByteBuffer name, @Cast("size_t") long size);
+        public native @Cast("ssize_t") long getObjnameByIdx(@Cast("hsize_t") long idx, @Cast("char*") byte[] name, @Cast("size_t") long size);
+        public native @Cast("ssize_t") long getObjnameByIdx(@Cast("hsize_t") long idx, @StdString String name, @Cast("size_t") long size);
 
         // Retrieves the type of an object in this file or group, given the
         // object's name
@@ -11207,19 +11178,19 @@ public static class attr_operator_t extends FunctionPointer {
         public native void removeAttr(String name);
 
         // Returns an identifier.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
         // Gets the name of this HDF5 object, i.e., Group, DataSet, or
         // DataType.  These should have const but are retiring anyway.
-        public native @Cast("ssize_t") int getObjName(@Cast("char*") BytePointer obj_name, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getObjName(@Cast("char*") BytePointer obj_name);
-        public native @Cast("ssize_t") int getObjName(@Cast("char*") ByteBuffer obj_name, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getObjName(@Cast("char*") ByteBuffer obj_name);
-        public native @Cast("ssize_t") int getObjName(@Cast("char*") byte[] obj_name, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getObjName(@Cast("char*") byte[] obj_name);
-        public native @Cast("ssize_t") int getObjName(@StdString String obj_name, @Cast("size_t") long len/*=0*/);
-        public native @Cast("ssize_t") int getObjName(@StdString String obj_name);
+        public native @Cast("ssize_t") long getObjName(@Cast("char*") BytePointer obj_name, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getObjName(@Cast("char*") BytePointer obj_name);
+        public native @Cast("ssize_t") long getObjName(@Cast("char*") ByteBuffer obj_name, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getObjName(@Cast("char*") ByteBuffer obj_name);
+        public native @Cast("ssize_t") long getObjName(@Cast("char*") byte[] obj_name, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getObjName(@Cast("char*") byte[] obj_name);
+        public native @Cast("ssize_t") long getObjName(@StdString String obj_name, @Cast("size_t") long len/*=0*/);
+        public native @Cast("ssize_t") long getObjName(@StdString String obj_name);
         public native @StdString BytePointer getObjName();
 
 } // end of H5Object
@@ -11293,7 +11264,7 @@ public static class attr_operator_t extends FunctionPointer {
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
         /** For subclasses, H5File and Group, to return the correct
          *  object id, i.e. file or group id. */
-        public native @Cast("hid_t") int getLocId();
+        public native @Cast("hid_t") long getLocId();
 
 
         /** For subclasses, H5File and Group, to throw appropriate exception. */
@@ -11342,12 +11313,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DataType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DataType position(long position) {
-        return (DataType)super.position(position);
-    }
 
         // Creates a datatype given its class and size
         public DataType(@Cast("const H5T_class_t") int type_class, @Cast("size_t") long size) { super((Pointer)null); allocate(type_class, size); }
@@ -11456,15 +11421,15 @@ public static class attr_operator_t extends FunctionPointer {
 // End of From CommonFG then H5Location
 
         // Creates a copy of an existing DataType using its id
-        public DataType(@Cast("const hid_t") int type_id) { super((Pointer)null); allocate(type_id); }
-        private native void allocate(@Cast("const hid_t") int type_id);
+        public DataType(@Cast("const hid_t") long type_id) { super((Pointer)null); allocate(type_id); }
+        private native void allocate(@Cast("const hid_t") long type_id);
 
         // Default constructor
         public DataType() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         // Gets the datatype id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Destructor: properly terminates access to this datatype.
 
@@ -11502,12 +11467,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DSetMemXferPropList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DSetMemXferPropList(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DSetMemXferPropList position(long position) {
-        return (DSetMemXferPropList)super.position(position);
-    }
 
         /**\brief Default dataset memory and transfer property list. */
         @MemberGetter public static native @Const @ByRef DSetMemXferPropList DEFAULT();
@@ -11542,12 +11501,12 @@ public static class attr_operator_t extends FunctionPointer {
         public native void setDataTransform(String expression);
 
         // Gets data transform expression.
-        public native @Cast("ssize_t") int getDataTransform(@Cast("char*") BytePointer exp, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getDataTransform(@Cast("char*") BytePointer exp);
-        public native @Cast("ssize_t") int getDataTransform(@Cast("char*") ByteBuffer exp, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getDataTransform(@Cast("char*") ByteBuffer exp);
-        public native @Cast("ssize_t") int getDataTransform(@Cast("char*") byte[] exp, @Cast("size_t") long buf_size/*=0*/);
-        public native @Cast("ssize_t") int getDataTransform(@Cast("char*") byte[] exp);
+        public native @Cast("ssize_t") long getDataTransform(@Cast("char*") BytePointer exp, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getDataTransform(@Cast("char*") BytePointer exp);
+        public native @Cast("ssize_t") long getDataTransform(@Cast("char*") ByteBuffer exp, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getDataTransform(@Cast("char*") ByteBuffer exp);
+        public native @Cast("ssize_t") long getDataTransform(@Cast("char*") byte[] exp, @Cast("size_t") long buf_size/*=0*/);
+        public native @Cast("ssize_t") long getDataTransform(@Cast("char*") byte[] exp);
         public native @StdString BytePointer getDataTransform();
 
         // Sets the dataset transfer property list status to TRUE or FALSE.
@@ -11608,8 +11567,8 @@ public static class attr_operator_t extends FunctionPointer {
 
         // Creates a copy of an existing dataset memory and transfer
         // property list using the property list id.
-        public DSetMemXferPropList(@Cast("const hid_t") int plist_id) { super((Pointer)null); allocate(plist_id); }
-        private native void allocate(@Cast("const hid_t") int plist_id);
+        public DSetMemXferPropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
+        private native void allocate(@Cast("const hid_t") long plist_id);
 
         // Noop destructor
 
@@ -11652,12 +11611,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileAccPropList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FileAccPropList(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FileAccPropList position(long position) {
-        return (FileAccPropList)super.position(position);
-    }
 
         /**\brief Default file access property list. */
         @MemberGetter public static native @Const @ByRef FileAccPropList DEFAULT();
@@ -11670,10 +11623,10 @@ public static class attr_operator_t extends FunctionPointer {
         public native void setStdio();
 
         // Set file driver for this property list
-        public native void setDriver(@Cast("hid_t") int new_driver_id, @Const Pointer new_driver_info);
+        public native void setDriver(@Cast("hid_t") long new_driver_id, @Const Pointer new_driver_info);
 
         // Returns a low-level file driver identifier.
-        public native @Cast("hid_t") int getDriver();
+        public native @Cast("hid_t") long getDriver();
 
         // Sets offset for family driver.
         public native void setFamilyOffset(@Cast("hsize_t") long offset);
@@ -11794,8 +11747,8 @@ public static class attr_operator_t extends FunctionPointer {
 
         // Creates a copy of an existing file access property list
         // using the property list id.
-        public FileAccPropList(@Cast("const hid_t") int plist_id) { super((Pointer)null); allocate(plist_id); }
-        private native void allocate(@Cast("const hid_t") int plist_id);
+        public FileAccPropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
+        private native void allocate(@Cast("const hid_t") long plist_id);
 
         // Noop destructor
 
@@ -11838,12 +11791,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileCreatPropList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FileCreatPropList(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FileCreatPropList position(long position) {
-        return (FileCreatPropList)super.position(position);
-    }
 
         /**\brief Default file creation property list. */
         @MemberGetter public static native @Const @ByRef FileCreatPropList DEFAULT();
@@ -11913,8 +11860,8 @@ public static class attr_operator_t extends FunctionPointer {
 
         // Creates a copy of an existing file create property list
         // using the property list id.
-        public FileCreatPropList(@Cast("const hid_t") int plist_id) { super((Pointer)null); allocate(plist_id); }
-        private native void allocate(@Cast("const hid_t") int plist_id);
+        public FileCreatPropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
+        private native void allocate(@Cast("const hid_t") long plist_id);
 
         // Noop destructor
 
@@ -12334,8 +12281,6 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate();
 
         // Creates an enumeration datatype using an existing id
-        public EnumType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
 
         // Copy constructor: makes a copy of the original EnumType object.
         public EnumType(@Const @ByRef EnumType original) { super((Pointer)null); allocate(original); }
@@ -12375,12 +12320,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IntType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public IntType position(long position) {
-        return (IntType)super.position(position);
-    }
 
         // Creates an integer type using a predefined type
         public IntType(@Const @ByRef PredType pred_type) { super((Pointer)null); allocate(pred_type); }
@@ -12410,8 +12349,8 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate();
 
         // Creates a integer datatype using an existing id
-        public IntType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public IntType(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
         // Copy constructor: makes copy of IntType object
         public IntType(@Const @ByRef IntType original) { super((Pointer)null); allocate(original); }
@@ -12453,12 +12392,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FloatType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FloatType position(long position) {
-        return (FloatType)super.position(position);
-    }
 
         // Creates a floating-point type using a predefined type.
         public FloatType(@Const @ByRef PredType pred_type) { super((Pointer)null); allocate(pred_type); }
@@ -12508,8 +12441,8 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate();
 
         // Creates a floating-point datatype using an existing id.
-        public FloatType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public FloatType(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
         // Copy constructor: makes a copy of the original FloatType object.
         public FloatType(@Const @ByRef FloatType original) { super((Pointer)null); allocate(original); }
@@ -12551,12 +12484,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StrType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public StrType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public StrType position(long position) {
-        return (StrType)super.position(position);
-    }
 
         // Creates a string type using a predefined type
         public StrType(@Const @ByRef PredType pred_type) { super((Pointer)null); allocate(pred_type); }
@@ -12600,8 +12527,8 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate();
 
         // Creates a string datatype using an existing id
-        public StrType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public StrType(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
         // Copy constructor - makes a copy of the original object
         public StrType(@Const @ByRef StrType original) { super((Pointer)null); allocate(original); }
@@ -12649,12 +12576,10 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate();
 
         // Creates a compound datatype using an existing id
-        public CompType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public CompType(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
-        // Creates a new compound datatype, given the type's size
-        public CompType(@Cast("size_t") long size) { super((Pointer)null); allocate(size); }
-        private native void allocate(@Cast("size_t") long size); // H5Tcreate
+        // Creates a new compound datatype, given the type's size // H5Tcreate
 
         // Gets the compound datatype of the specified dataset
         public CompType(@Const @ByRef DataSet dataset) { super((Pointer)null); allocate(dataset); }
@@ -12769,12 +12694,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ArrayType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ArrayType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ArrayType position(long position) {
-        return (ArrayType)super.position(position);
-    }
 
         // Constructor that creates a new array data type based on the
         // specified base type.
@@ -12812,8 +12731,8 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate(@Const @ByRef ArrayType original);
 
         // Constructor that takes an existing id
-        public ArrayType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public ArrayType(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
         // Noop destructor
 
@@ -12855,12 +12774,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VarLenType(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public VarLenType(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public VarLenType position(long position) {
-        return (VarLenType)super.position(position);
-    }
 
         // Constructor that creates a variable-length datatype based
         // on the specified base type.
@@ -12875,8 +12788,8 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate(@Const @ByRef VarLenType original);
 
         // Constructor that takes an existing id
-        public VarLenType(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public VarLenType(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
         // Constructors that open a variable-length datatype, given a location.
         public VarLenType(@Const @ByRef H5Location loc, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(loc, name); }
@@ -12927,12 +12840,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataSet(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DataSet(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DataSet position(long position) {
-        return (DataSet)super.position(position);
-    }
     public AbstractDs asAbstractDs() { return asAbstractDs(this); }
     @Namespace public static native @Name("static_cast<H5::AbstractDs*>") AbstractDs asAbstractDs(DataSet pointer);
 
@@ -12957,7 +12864,7 @@ public static class attr_operator_t extends FunctionPointer {
         public native @ByVal DSetCreatPropList getCreatePlist();
 
         // Returns the address of this dataset in the file.
-        public native @Cast("haddr_t") int getOffset();
+        public native @Cast("haddr_t") long getOffset();
 
         // Gets the dataspace of this dataset.
         public native @ByVal DataSpace getSpace();
@@ -13028,11 +12935,11 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate(@Const @ByRef DataSet original);
 
         // Creates a copy of an existing DataSet using its id.
-        public DataSet(@Cast("const hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("const hid_t") int existing_id);
+        public DataSet(@Cast("const hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("const hid_t") long existing_id);
 
         // Gets the dataset id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Destructor: properly terminates access to this dataset.
 
@@ -13071,12 +12978,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Group(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Group(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Group position(long position) {
-        return (Group)super.position(position);
-    }
     public CommonFG asCommonFG() { return asCommonFG(this); }
     @Namespace public static native @Name("static_cast<H5::CommonFG*>") CommonFG asCommonFG(Group pointer);
 
@@ -13091,7 +12992,7 @@ public static class attr_operator_t extends FunctionPointer {
         public native void throwException(@StdString String func_name, @StdString String msg);
 
         // for CommonFG to get the file id.
-        public native @Cast("hid_t") int getLocId();
+        public native @Cast("hid_t") long getLocId();
 
         // Creates a group by way of dereference.
         public Group(@Const @ByRef H5Location loc, @Const Pointer ref, @Cast("H5R_type_t") int ref_type/*=H5R_OBJECT*/, @Const @ByRef(nullValue = "H5::PropList::DEFAULT") PropList plist) { super((Pointer)null); allocate(loc, ref, ref_type, plist); }
@@ -13102,13 +13003,13 @@ public static class attr_operator_t extends FunctionPointer {
 //        Group(const Attribute& attr, const void* ref, H5R_type_t ref_type = H5R_OBJECT, const PropList& plist = PropList::DEFAULT);
 
         // Opens an object within a group or a file, i.e., root group.
-        public native @Cast("hid_t") int getObjId(@Cast("const char*") BytePointer name, @Const @ByRef(nullValue = "H5::PropList::DEFAULT") PropList plist);
-        public native @Cast("hid_t") int getObjId(@Cast("const char*") BytePointer name);
-        public native @Cast("hid_t") int getObjId(String name, @Const @ByRef(nullValue = "H5::PropList::DEFAULT") PropList plist);
-        public native @Cast("hid_t") int getObjId(String name);
+        public native @Cast("hid_t") long getObjId(@Cast("const char*") BytePointer name, @Const @ByRef(nullValue = "H5::PropList::DEFAULT") PropList plist);
+        public native @Cast("hid_t") long getObjId(@Cast("const char*") BytePointer name);
+        public native @Cast("hid_t") long getObjId(String name, @Const @ByRef(nullValue = "H5::PropList::DEFAULT") PropList plist);
+        public native @Cast("hid_t") long getObjId(String name);
 
         // Closes an object opened by getObjId().
-        public native void closeObjId(@Cast("hid_t") int obj_id);
+        public native void closeObjId(@Cast("hid_t") long obj_id);
 
         // Returns the number of objects in this group.
         public native @Cast("hsize_t") long getNumObjs();
@@ -13122,13 +13023,13 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate(@Const @ByRef Group original);
 
         // Gets the group id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // Destructor
 
         // Creates a copy of an existing group using its id.
-        public Group(@Cast("const hid_t") int group_id) { super((Pointer)null); allocate(group_id); }
-        private native void allocate(@Cast("const hid_t") int group_id);
+        public Group(@Cast("const hid_t") long group_id) { super((Pointer)null); allocate(group_id); }
+        private native void allocate(@Cast("const hid_t") long group_id);
 
 } // end of Group
  // namespace H5
@@ -13164,12 +13065,6 @@ public static class attr_operator_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public H5File(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public H5File(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public H5File position(long position) {
-        return (H5File)super.position(position);
-    }
 
         // Creates or opens an HDF5 file.
         public H5File(@Cast("const char*") BytePointer name, @Cast("unsigned int") int flags,
@@ -13214,14 +13109,14 @@ public static class attr_operator_t extends FunctionPointer {
 
         // Returns the number of opened object IDs (files, datasets, groups
         // and datatypes) in the same file.
-        public native @Cast("ssize_t") int getObjCount(@Cast("unsigned") int types/*=H5F_OBJ_ALL*/);
-        public native @Cast("ssize_t") int getObjCount();
+        public native @Cast("ssize_t") long getObjCount(@Cast("unsigned") int types/*=H5F_OBJ_ALL*/);
+        public native @Cast("ssize_t") long getObjCount();
 
         // Retrieves a list of opened object IDs (files, datasets, groups
         // and datatypes) in the same file.
-        public native void getObjIDs(@Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") IntPointer oid_list);
-        public native void getObjIDs(@Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") IntBuffer oid_list);
-        public native void getObjIDs(@Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") int[] oid_list);
+        public native void getObjIDs(@Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") LongPointer oid_list);
+        public native void getObjIDs(@Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") LongBuffer oid_list);
+        public native void getObjIDs(@Cast("unsigned") int types, @Cast("size_t") long max_objs, @Cast("hid_t*") long[] oid_list);
 
         // Returns the pointer to the file handle of the low-level file driver.
         public native void getVFDHandle(@Cast("void**") PointerPointer file_handle);
@@ -13245,8 +13140,8 @@ public static class attr_operator_t extends FunctionPointer {
 
         // Creates an H5File using an existing file id.  Not recommended
         // in applications.
-        public H5File(@Cast("hid_t") int existing_id) { super((Pointer)null); allocate(existing_id); }
-        private native void allocate(@Cast("hid_t") int existing_id);
+        public H5File(@Cast("hid_t") long existing_id) { super((Pointer)null); allocate(existing_id); }
+        private native void allocate(@Cast("hid_t") long existing_id);
 
 // #endif // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -13258,7 +13153,7 @@ public static class attr_operator_t extends FunctionPointer {
         public native void throwException(@StdString String func_name, @StdString String msg);
 
         // For CommonFG to get the file id.
-        public native @Cast("hid_t") int getLocId();
+        public native @Cast("hid_t") long getLocId();
 
         // Default constructor
         public H5File() { super((Pointer)null); allocate(); }
@@ -13269,7 +13164,7 @@ public static class attr_operator_t extends FunctionPointer {
         private native void allocate(@Const @ByRef H5File original);
 
         // Gets the HDF5 file id.
-        public native @Cast("hid_t") int getId();
+        public native @Cast("hid_t") long getId();
 
         // H5File destructor.
 
