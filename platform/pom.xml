@@ -32,6 +32,7 @@
     <module>../fftw/platform</module>
     <module>../gsl/platform</module>
     <module>../llvm/platform</module>
+    <module>../libpostal/platform</module>
     <module>../leptonica/platform</module>
     <module>../tesseract/platform</module>
     <module>../caffe/platform</module>
@@ -134,6 +135,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>llvm-platform</artifactId>
       <version>5.0.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>libpostal-platform</artifactId>
+      <version>1.1-alpha-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

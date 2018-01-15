@@ -506,6 +506,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -995,6 +996,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1050,6 +1052,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1155,6 +1158,7 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>

@@ -72,6 +72,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "gsl"
       OS: windows-x86_64
+    - PROJ: "libpostal"
+      OS: windows-x86_64
     - PROJ: "leptonica,tesseract"
       OS: windows-x86_64
     - PROJ: "cuda"
@@ -88,7 +90,7 @@ environment:
 init:
 # uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      
+
 install:
     - 'echo install section'
 

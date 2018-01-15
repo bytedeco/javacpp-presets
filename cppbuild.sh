@@ -132,7 +132,7 @@ function download {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl openblas fftw gsl llvm leptonica tesseract caffe cuda mxnet tensorflow ale liquidfun skia systems)
+    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl openblas fftw gsl llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow ale liquidfun skia systems)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do
