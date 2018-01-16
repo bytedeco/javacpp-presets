@@ -29,7 +29,7 @@ Here is the full code of the example found in the [`example/`](example/) folder.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
     <artifactId>freenect2Example</artifactId>
-    <version>1.3.4-SNAPSHOT</version>
+    <version>1.4</version>
     <properties>
         <exec.mainClass>freenect2Example</exec.mainClass>
     </properties>
@@ -37,7 +37,7 @@ Here is the full code of the example found in the [`example/`](example/) folder.
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>libfreenect2-platform</artifactId>
-            <version>0.2.0-1.3.4-SNAPSHOT</version>
+            <version>0.2.0-1.4</version>
         </dependency>
     </dependencies>
 </project>

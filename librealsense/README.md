@@ -31,7 +31,7 @@ and connect to a camera.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.librealsense</groupId>
     <artifactId>TestConnection</artifactId>
-    <version>1.3.4-SNAPSHOT</version>
+    <version>1.4</version>
     <properties>
         <exec.mainClass>TestConnection</exec.mainClass>
     </properties>
@@ -39,7 +39,7 @@ and connect to a camera.
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>librealsense-platform</artifactId>
-            <version>1.12.1-1.3.4-SNAPSHOT</version>
+            <version>1.12.1-1.4</version>
         </dependency>
     </dependencies>
 </project>
