@@ -17,9 +17,8 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/librealsense/apidocs/
 
 
-Example
--------
-
+Sample Usage
+------------
 Here is a very simple example that check if you can load the library,
 and connect to a camera.
 

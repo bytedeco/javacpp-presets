@@ -17,9 +17,8 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/libfreenect2/apidocs/
 
 
-Example
--------
-
+Sample Usage
+------------
 Here is the full code of the example found in the [`example/`](example/) folder.
 
 ### The `pom.xml` file
