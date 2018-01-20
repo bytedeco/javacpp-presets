@@ -65,6 +65,7 @@ download https://github.com/google/snappy/releases/download/$SNAPPY/snappy-$SNAP
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
+download https://github.com/hujie-frank/SENet/archive/master.tar.gz SENet-master.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -99,6 +100,7 @@ tar --totals -xf ../snappy-$SNAPPY.tar.gz
 tar --totals -xf ../lmdb-LMDB_$LMDB.tar.gz
 tar --totals -xf ../boost_$BOOST.tar.gz
 tar --totals -xf ../caffe-$CAFFE_VERSION.tar.gz
+tar --totals -xf ../SENet-master.tar.gz
 
 export CFLAGS="-fPIC"
 export CXXFLAGS="-fPIC"
@@ -152,6 +154,10 @@ ln -sf libboost_thread.a lib/libboost_thread-mt.a
 export C_INCLUDE_PATH="$OPENBLAS_PATH/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/"
+
+# add Axpy layer to caffe
+cp SENet-master/include/caffe/layers/axpy_layer.hpp caffe-$CAFFE_VERSION/include/caffe/layers/
+cp SENet-master/src/caffe/layers/axpy_layer.* caffe-$CAFFE_VERSION/src/caffe/layers/
 
 cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch

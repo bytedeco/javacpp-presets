@@ -1,4 +1,6 @@
 
+ * Add `AxpyLayer` to presets for Caffe ([pull #508](https://github.com/bytedeco/javacpp-presets/pull/508))
+
 ### January 16, 2018 version 1.4
  * Fix some integer types in HDF5 being mistakenly mapped to smaller integer types
  * Remove the need for empty artifacts of unsupported platforms ([issue #434](https://github.com/bytedeco/javacpp-presets/issues/434))
