@@ -162,6 +162,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::vector<cv::Point>").pointerTypes("PointVector").define())
                .put(new Info("std::vector<cv::Point2f>").pointerTypes("Point2fVector").define())
                .put(new Info("std::vector<cv::Point2d>").pointerTypes("Point2dVector").define())
+               .put(new Info("std::vector<cv::Point3i>", "std::vector<cv::Vec3i>").cast().pointerTypes("Point3iVector").define())
                .put(new Info("std::vector<cv::Size>").pointerTypes("SizeVector").define())
                .put(new Info("std::vector<cv::Rect>").pointerTypes("RectVector").define())
                .put(new Info("std::vector<cv::KeyPoint>").pointerTypes("KeyPointVector").define())
