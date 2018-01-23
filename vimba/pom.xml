@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp-presets</artifactId>
+        <version>1.4.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.bytedeco.javacpp-presets</groupId>
+    <artifactId>vimba</artifactId>
+    <version>2.1.3-${project.parent.version}</version>
+    <packaging>jar</packaging>
+    <name>JavaCPP Presets for Vimba</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacpp</artifactId>
+
+                <!--<configuration>-->
+                    <!--<classPaths>-->
+                        <!--<classPath>${basedir}/../leptonica/target/classes/include/</classPath>-->
+                        <!--<classPath>${project.build.outputDirectory}</classPath>-->
+                    <!--</classPaths>-->
+                    <!--<includePaths>-->
+                        <!--<includePath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/include/</includePath>-->
+                        <!--<includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>-->
+                    <!--</includePaths>-->
+                    <!--<linkPaths>-->
+                        <!--<linkPath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/lib/</linkPath>-->
+                        <!--<linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>-->
+                    <!--</linkPaths>-->
+                    <!--<preloadPaths>-->
+                        <!--<preloadPath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/bin/</preloadPath>-->
+                        <!--<preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>-->
+                    <!--</preloadPaths>-->
+                <!--</configuration>-->
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

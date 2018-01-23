@@ -516,6 +516,7 @@
         <module>ale</module>
         <module>liquidfun</module>
         <module>skia</module>
+        <module>vimba</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1006,6 +1007,7 @@
         <module>ale</module>
         <module>liquidfun</module>
         <module>skia</module>
+        <module>vimba</module>
         <module>systems</module>
       </modules>
       <properties>
