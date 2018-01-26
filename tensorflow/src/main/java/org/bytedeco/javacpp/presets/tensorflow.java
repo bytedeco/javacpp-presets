@@ -54,6 +54,7 @@ import java.lang.annotation.Target;
                 include = {
                         "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",
+                        "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
                         "tensorflow/core/platform/init_main.h",
                         "tensorflow/core/platform/types.h",
@@ -165,6 +166,7 @@ import java.lang.annotation.Target;
                 include = {
                         "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",
+                        "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
                         "tensorflow/core/platform/init_main.h",
                         "tensorflow/core/platform/types.h",
@@ -242,9 +244,10 @@ import java.lang.annotation.Target;
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
-               .put(new Info("EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE",
-                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT", "TF_EXPORT", 
-                             "TF_ATTRIBUTE_ALWAYS_INLINE").cppTypes().annotations())
+               .put(new Info("B16_DEVICE_FUNC", "EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
+                             "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "TF_ATTRIBUTE_UNUSED",
+                             "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT",
+                             "TF_EXPORT", "TF_ATTRIBUTE_ALWAYS_INLINE").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("GOOGLE_PROTOBUF_DEPRECATED_ATTR", "PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
