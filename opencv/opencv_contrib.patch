@@ -1,7 +1,7 @@
-diff -ruN opencv_contrib-3.3.0/modules/dnn_modern/CMakeLists.txt opencv_contrib-3.3.0-patch/modules/dnn_modern/CMakeLists.txt
---- opencv_contrib-3.3.0/modules/dnn_modern/CMakeLists.txt	2017-07-31 23:58:38.000000000 +0900
-+++ opencv_contrib-3.3.0-patch/modules/dnn_modern/CMakeLists.txt	2017-10-20 19:35:17.542641684 +0900
-@@ -17,16 +17,16 @@
+diff -ruN opencv_contrib-3.4.0/modules/dnn_modern/CMakeLists.txt opencv_contrib-3.4.0-patch/modules/dnn_modern/CMakeLists.txt
+--- opencv_contrib-3.4.0/modules/dnn_modern/CMakeLists.txt	2017-12-23 01:15:17.000000000 +0900
++++ opencv_contrib-3.4.0-patch/modules/dnn_modern/CMakeLists.txt	2018-01-25 09:58:43.289152300 +0900
+@@ -15,16 +15,16 @@
  
  set(TINY_DNN_CPP_PATH "${OpenCV_BINARY_DIR}/3rdparty/tinydnn")
  set(TINY_DNN_CPP_ROOT "${TINY_DNN_CPP_PATH}/tiny-dnn-1.0.0a3")
@@ -28,3 +28,15 @@ diff -ruN opencv_contrib-3.3.0/modules/dnn_modern/CMakeLists.txt opencv_contrib-
  
  if(NOT TINY_DNN_DOWNLOAD_SUCCESS)
    message(STATUS "Failed to download tiny-dnn sources")
+diff -ruN opencv_contrib-3.4.0/modules/face/include/opencv2/face/facemarkLBF.hpp opencv_contrib-3.4.0-patch/modules/face/include/opencv2/face/facemarkLBF.hpp
+--- opencv_contrib-3.4.0/modules/face/include/opencv2/face/facemarkLBF.hpp	2017-12-23 01:15:17.000000000 +0900
++++ opencv_contrib-3.4.0-patch/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-01-25 09:59:12.206227300 +0900
+@@ -93,7 +93,7 @@
+ 
+     };
+ 
+-    class BBox {
++    class CV_EXPORTS BBox {
+     public:
+         BBox();
+         ~BBox();
