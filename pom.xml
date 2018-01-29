@@ -1185,6 +1185,70 @@
       </properties>
     </profile>
 
+    <profile>
+      <id>javacpp-platform-ios-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>ios-x86_64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>openblas</module>
+        <module>mkl</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>${javacpp.platform}</javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-ios-arm64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>ios-arm64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>openblas</module>
+        <module>mkl</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>${javacpp.platform}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
     <!-- If someone knows a better way to do this, please do let me know! -->
     <profile>
       <id>linux</id>
