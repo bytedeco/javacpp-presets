@@ -120,6 +120,16 @@ case $PLATFORM in
         export TARGET=HASWELL
         export NO_AVX2=1
         ;;
+    ios-x86_64)
+        export CC="clang++"
+        export FC="clang++"
+        export BINARY=64
+        ;;
+    ios-arm64)
+        export CC="clang++"
+        export FC="clang++"
+        export BINARY=64
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         return 0
