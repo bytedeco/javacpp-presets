@@ -213,18 +213,7 @@ echo "Running install for $PROJ"
 if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
    echo "container id is $DOCKER_CONTAINER_ID"
-   if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
-     echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
-     while true; do echo .; docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tail -10 $HOME/build/javacpp-presets/buildlogs/$PROJ.log"; sleep 300; done &
-     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
-       echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
-     else
-       echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -l $HOME/build/javacpp-presets/buildlogs/$PROJ.log -pl .,$PROJ"; export BUILD_STATUS=$?
-     fi
-   else
-     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
+    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
        echo "Not a pull request so attempting to deploy using docker"
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean deploy -B -U -Djavacpp.copyResources --settings ./ci/settings.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
        if [ $BUILD_STATUS -eq 0 ]; then
@@ -242,8 +231,8 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
      else
        echo "Pull request so install using docker"
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; /opt/rh/rh-maven33/root/usr/bin/mvn clean install -B -U --settings ./ci/settings.xml -Djavacpp.copyResources -Dmaven.test.skip=true -Dmaven.javadoc.skip=true \$BUILD_COMPILER \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
-     fi
-   fi
+    fi
+
    echo "Build status $BUILD_STATUS"
    if [ $BUILD_STATUS -ne 0 ]; then  
      echo "Build Failed"
@@ -251,19 +240,8 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
    fi
 
 else	
-  if [[ "$PROJ" =~ tensorflow ]] || [[ "$PROJ" =~ openblas ]]; then
-    echo "redirecting log output, tailing log every 5 mins to prevent timeout.."
-    while true; do echo .; tail -10 $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log; sleep 300; done &
-    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
-      echo "Not a pull request so attempting to deploy"
-      mvn clean deploy -B -U -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_ROOT -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
-    else
-      echo "Pull request so install only"
-      mvn clean install -B -U -Dmaven.javadoc.skip=true -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_ROOT -l $TRAVIS_BUILD_DIR/buildlogs/$PROJ.log -pl .,$PROJ; export BUILD_STATUS=$?
-    fi
-  else
-    echo "Building $PROJ, with additional build flags $BUILD_COMPILER $BUILD_ROOT"
-    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+   echo "Building $PROJ, with additional build flags $BUILD_COMPILER $BUILD_ROOT"
+   if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"
       mvn clean deploy -B -U --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.copyResources -Dmaven.javadoc.skip=true -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
       if [ $BUILD_STATUS -eq 0 ]; then
@@ -278,8 +256,8 @@ else
     else
       echo "Pull request so install only"
       mvn clean install -B -U -Dmaven.javadoc.skip=true -Djavacpp.copyResources --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
-    fi
-  fi
+   fi
+
    echo "Build status $BUILD_STATUS"
    if [ $BUILD_STATUS -ne 0 ]; then
      echo "Build Failed"
