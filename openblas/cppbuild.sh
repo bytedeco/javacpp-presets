@@ -120,15 +120,37 @@ case $PLATFORM in
         export TARGET=HASWELL
         export NO_AVX2=1
         ;;
-    ios-x86_64)
-        export CC="clang++"
-        export FC="clang++"
-        export BINARY=64
+    ios-arm)
+        export CC="clang -arch armv7"
+        export FC="clang -arch armv7"
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=32
+        export TARGET=ARMV7
         ;;
     ios-arm64)
-        export CC="clang++"
-        export FC="clang++"
+        export CC="clang -arch arm64"
+        export FC="clang -arch arm64"
+        export NO_LAPACK=1
+        export NOFORTRAN=1
         export BINARY=64
+        export TARGET=ARMV8
+        ;;
+    ios-x86)
+        export CC="clang -arch i686"
+        export FC="clang -arch i686"
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=32
+        export TARGET=ATOM
+        ;;
+    ios-x86_64)
+        export CC="clang -arch x86_64"
+        export FC="clang -arch x86_64"
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=64
+        export TARGET=ATOM
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
