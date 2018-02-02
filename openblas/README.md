@@ -18,6 +18,8 @@ Java API documentation is available here:
 
 &lowast; The JNI bindings actually link with [Intel MKL](https://software.intel.com/intel-mkl) instead if found on the "java.library.path", unless the "org.bytedeco.javacpp.openblas.nomkl" system property is set to "true".
 
+It also possible to make the bindings use another arbitrary library in "java.library.path" by specifying it with the "org.bytedeco.javacpp.openblas.load" system property. For example, to use the BLAS library from the [Accelerate framework](https://developer.apple.com/documentation/accelerate) on Mac OS X, we can pass options such as `-Djava.library.path=/usr/lib/ -Dorg.bytedeco.javacpp.openblas.load=blas`.
+
 
 Sample Usage
 ------------
@@ -36,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.openblas</groupId>
     <artifactId>openblas</artifactId>
-    <version>1.4</version>
+    <version>1.4.1-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleDGELSrowmajor</exec.mainClass>
     </properties>
@@ -44,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.2.20-1.4</version>
+            <version>0.2.20-1.4.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

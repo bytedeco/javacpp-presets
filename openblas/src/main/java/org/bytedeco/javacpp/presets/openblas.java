@@ -25,6 +25,7 @@ package org.bytedeco.javacpp.presets;
 import java.util.Iterator;
 import java.util.List;
 import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -40,9 +41,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               include = {"openblas_config.h", "cblas.h", "blas_extra.h", "lapacke_config.h", "lapacke_mangling.h", "lapacke.h", "lapacke_utils.h"},
               link    =  "openblas@.0", resource = {"include", "lib"},
               preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_core", "mkl_gnu_thread",
-                         "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "quadmath@.0", "gfortran@.3"}, compiler = "fastfpu",
+                         "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "quadmath@.0", "gfortran@.3"},
               preloadpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
-    @Platform(value = "android", include = {"openblas_config.h", "cblas.h", "blas_extra.h" /* no LAPACK */}, link = "openblas", preload = "", compiler = "fastfpu"),
+    @Platform(value = "android", include = {"openblas_config.h", "cblas.h", "blas_extra.h" /* no LAPACK */}, link = "openblas", preload = ""),
     @Platform(value = "macosx",  link = "openblas",
                                  preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_core", "mkl_gnu_thread",
                                             "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas", "gcc_s@.1", "quadmath@.0", "gfortran@.3"}),
@@ -61,6 +62,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class openblas implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {
+        // let users disable loading of MKL
         String s = System.getProperty("org.bytedeco.javacpp.openblas.nomkl", "false").toLowerCase();
         if (s.equals("true") || s.equals("t") || s.equals("")) {
             List<String> preloads = properties.get("platform.preload");
@@ -70,6 +72,19 @@ public class openblas implements LoadEnabled, InfoMapper {
                 if (p.contains("iomp5") || p.contains("mkl")) {
                     it.remove();
                 }
+            }
+        }
+        // let users enable loading of arbitrary library (for Accelerate, etc)
+        String lib = System.getProperty("org.bytedeco.javacpp.openblas.load", "").toLowerCase();
+        if (lib.length() > 0) {
+            String platform = Loader.getPlatform();
+            List<String> preloads = properties.get("platform.preload");
+            if (platform.startsWith("linux")) {
+                preloads.add(0, lib + "#openblas@.0");
+            } else if (platform.startsWith("macosx")) {
+                preloads.add(0, lib + "#openblas");
+            } else if (platform.startsWith("windows")) {
+                preloads.add(0, lib + "#libopenblas");
             }
         }
     }
