@@ -39,7 +39,7 @@ case $PLATFORM in
             export NOFORTRAN=1
         fi
         export BINARY=32
-        export TARGET=ARMV5
+        export TARGET=ARMV5 # to disable hard-float functions unsupported by Android
         export ARM_SOFTFP_ABI=1
         sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
         ;;
@@ -56,6 +56,44 @@ case $PLATFORM in
         fi
         export BINARY=32
         export TARGET=ATOM
+        ;;
+    ios-arm)
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=32
+        export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK
+        export NO_SHARED=1
+        ;;
+    ios-arm64)
+        # https://gmplib.org/list-archives/gmp-bugs/2014-September/003538.html
+        sed -i="" 's/add.sp, sp, #-(11 \* 16)/sub sp, sp, #(11 \* 16)/g' kernel/arm64/sgemm_kernel_4x4.S
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=64
+        export TARGET=ARMV8
+        export NO_SHARED=1
+        ;;
+    ios-x86)
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=32
+        export TARGET=ATOM
+        export NO_SHARED=1
+        ;;
+    ios-x86_64)
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=64
+        export TARGET=ATOM
+        export NO_SHARED=1
         ;;
     linux-x86)
         export CC="$OLDCC -m32"
