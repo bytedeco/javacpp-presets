@@ -8,13 +8,22 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 TESSERACT_VERSION=4.0.0
-git clone https://github.com/tesseract-ocr/tesseract.git tesseract-$TESSERACT_VERSION
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-echo "Decompressing archives..."
-cd tesseract-$TESSERACT_VERSION
+
+# As this comes to us uncompressed we skip the TAR step but have to put the file in $PLATFORM
+# Check if folder already exists, if so pull the latest changes
+if [ ! -d tesseract-$TESSERACT_VERSION ] ; then
+    git clone https://github.com/tesseract-ocr/tesseract.git tesseract-$TESSERACT_VERSION
+    cd tesseract-$TESSERACT_VERSION
+else
+    cd tesseract-$TESSERACT_VERSION
+    # pull from remote
+    git pull
+fi
+
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
