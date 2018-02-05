@@ -1502,12 +1502,14 @@ public static final int
  * appropriate changes to all the enums mirroring it (e.g. OCREngine in
  * cityblock/workflow/detection/detection_storage.proto). Such enums will
  * mention the connection to OcrEngineMode in the comments.
+ *
+ *
 */
 /** enum tesseract::OcrEngineMode */
 public static final int
   OEM_TESSERACT_ONLY = 0,           // Run Tesseract only - fastest
-  OEM_LSTM_ONLY = 1,                // Run just the LSTM line recognizer.
-  OEM_TESSERACT_LSTM_COMBINED = 2,  // Run the LSTM recognizer, but allow fallback
+  OEM_LSTM_ONLY = 4,                // Run just the LSTM line recognizer.
+  OEM_TESSERACT_LSTM_COMBINED = 5,  // Run the LSTM recognizer, but allow fallback
                                     // to Tesseract when things get difficult.
   OEM_DEFAULT = 3,                  // Specify this mode when calling init_*(),
                                     // to indicate that any of the above modes
@@ -1516,8 +1518,8 @@ public static final int
                                     // command-line configs, or if not specified
                                     // in any of the above should be set to the
                                     // default OEM_TESSERACT_ONLY.
-  OEM_CUBE_ONLY = 5,                // Run Cube only - better accuracy, but slower
-  OEM_TESSERACT_CUBE_COMBINED = 6;   // Run both and combine results - best accuracy
+  OEM_CUBE_ONLY = 1,                // Run Cube only - better accuracy, but slower
+  OEM_TESSERACT_CUBE_COMBINED = 2;   // Run both and combine results - best accuracy
 
 // namespace tesseract.
 
