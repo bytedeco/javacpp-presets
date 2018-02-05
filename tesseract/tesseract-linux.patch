@@ -1,6 +1,6 @@
-diff -ruN tesseract-3.05.00/ccmain/thresholder.cpp tesseract-3.05.00-linux/ccmain/thresholder.cpp
---- tesseract-3.05.00/ccmain/thresholder.cpp	2017-02-17 02:59:48.000000000 +0900
-+++ tesseract-3.05.00-linux/ccmain/thresholder.cpp	2017-04-12 07:51:30.014191009 +0900
+diff -ruN tesseract-4.0.0/ccmain/thresholder.cpp tesseract-4.0.0-linux/ccmain/thresholder.cpp
+--- tesseract-4.0.0/ccmain/thresholder.cpp	2017-02-17 02:59:48.000000000 +0900
++++ tesseract-4.0.0-linux/ccmain/thresholder.cpp	2017-04-12 07:51:30.014191009 +0900
 @@ -184,7 +184,7 @@
      // We have a binary image, but it still has to be copied, as this API
      // allows the caller to modify the output.
@@ -10,9 +10,9 @@ diff -ruN tesseract-3.05.00/ccmain/thresholder.cpp tesseract-3.05.00-linux/ccmai
      pixDestroy(&original);
    } else {
      OtsuThresholdRectToPix(pix_, pix);
-diff -ruN tesseract-3.05.00/training/stringrenderer.cpp tesseract-3.05.00-linux/training/stringrenderer.cpp
---- tesseract-3.05.00/training/stringrenderer.cpp	2017-02-17 02:59:48.000000000 +0900
-+++ tesseract-3.05.00-linux/training/stringrenderer.cpp	2017-04-12 07:51:41.142435264 +0900
+diff -ruN tesseract-4.0.0/training/stringrenderer.cpp tesseract-4.0.0-linux/training/stringrenderer.cpp
+--- tesseract-4.0.0/training/stringrenderer.cpp	2017-02-17 02:59:48.000000000 +0900
++++ tesseract-4.0.0-linux/training/stringrenderer.cpp	2017-04-12 07:51:41.142435264 +0900
 @@ -244,7 +244,7 @@
    int offset = 0;
    TRand rand;

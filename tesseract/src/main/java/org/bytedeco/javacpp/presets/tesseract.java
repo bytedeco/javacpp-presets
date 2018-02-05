@@ -36,9 +36,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
         "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
         "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"},
-        link="tesseract@.3", resource = {"include", "lib"}),
+        link="tesseract@.4", resource = {"include", "lib"}),
     @Platform(value="android", link="tesseract"),
-    @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
+    @Platform(value="windows", link="libtesseract", preload="libtesseract-4") })
 public class tesseract implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",

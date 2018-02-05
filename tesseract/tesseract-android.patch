@@ -1,6 +1,6 @@
-diff -ruN tesseract-3.05.01/api/Makefile.am tesseract-3.05.01-android/api/Makefile.am
---- tesseract-3.05.01/api/Makefile.am	2017-06-02 03:06:24.000000000 +0900
-+++ tesseract-3.05.01-android/api/Makefile.am	2017-07-02 21:50:58.478578965 +0900
+diff -ruN tesseract-4.0.0/api/Makefile.am tesseract-4.0.0-android/api/Makefile.am
+--- tesseract-4.0.0/api/Makefile.am	2017-06-02 03:06:24.000000000 +0900
++++ tesseract-4.0.0-android/api/Makefile.am	2017-07-02 21:50:58.478578965 +0900
 @@ -20,7 +20,7 @@
  noinst_LTLIBRARIES = libtesseract_api.la
  else

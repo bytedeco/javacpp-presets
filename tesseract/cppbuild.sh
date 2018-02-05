@@ -7,14 +7,13 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=3.05.01
-download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
+TESSERACT_VERSION=4.0.0
+git clone https://github.com/tesseract-ocr/tesseract.git tesseract-$TESSERACT_VERSION
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals -xzf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
