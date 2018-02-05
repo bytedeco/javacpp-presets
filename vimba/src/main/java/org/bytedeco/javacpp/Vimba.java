@@ -2,8 +2,12 @@
 
 package org.bytedeco.javacpp;
 
-import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
+
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 
 public class Vimba extends org.bytedeco.javacpp.presets.Vimba {
     static { Loader.load(); }
@@ -312,21 +316,18 @@ public class Vimba extends org.bytedeco.javacpp.presets.Vimba {
 // #elif defined (__GNUC__) && (__GNUC__ >= 4) && defined (__ELF__)
     // SO exports (requires compiler option -fvisibility=hidden)
 //     #ifdef AVT_VMBAPI_C_EXPORTS
-        public static native @MemberGetter String IMEXPORTC();
-        public static final String IMEXPORTC = IMEXPORTC();
+//         #define IMEXPORTC __attribute__((visibility("default")))
 //     #else
 //         #define IMEXPORTC
 //     #endif
     
 //     #ifdef __i386__
-        // Calling convention
-        public static native @MemberGetter int VMB_CALL();
-        public static final int VMB_CALL = VMB_CALL();
 //     #else
         // Calling convention
 //         #define VMB_CALL
 //     #endif
 // #elif defined (__APPLE__)
+//     #define IMEXPORTC __attribute__((visibility("default")))
     // Calling convention
 //     #define VMB_CALL
 // #else
@@ -634,7 +635,7 @@ public static class VmbFeaturePersistSettings_t extends Pointer {
 // Note:        Do not spend too much time in this thread; it will prevent the feature values
 //              from being updated from any other thread or the lower-level drivers.
 //
-@Convention("VMB_CALL") public static class VmbInvalidationCallback extends FunctionPointer {
+public static class VmbInvalidationCallback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    VmbInvalidationCallback(Pointer p) { super(p); }
@@ -654,7 +655,7 @@ public static class VmbFeaturePersistSettings_t extends Pointer {
 //  [in ]  const VmbHandle_t    cameraHandle    Handle of the camera
 //  [out]  VmbFrame_t*          pFrame          Frame completed
 //
-@Convention("VMB_CALL") public static class VmbFrameCallback extends FunctionPointer {
+public static class VmbFrameCallback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    VmbFrameCallback(Pointer p) { super(p); }
@@ -688,7 +689,7 @@ public static class VmbFeaturePersistSettings_t extends Pointer {
 // Details:     This function can be called at anytime, even before the API is
 //              initialized. All other version numbers may be queried via feature access.
 //
-public static native @Cast("const char*") BytePointer VmbVersionQuery( VmbVersionInfo_t pVersionInfo,
+public static native @Cast("VmbError_t") int VmbVersionQuery( VmbVersionInfo_t pVersionInfo,
                                                 @Cast("VmbUint32_t") int sizeofVersionInfo );
 
 
@@ -710,7 +711,7 @@ public static native @Cast("const char*") BytePointer VmbVersionQuery( VmbVersio
 //
 // Note:        This method must be called before any VimbaC function other than VmbVersionQuery() is run.
 //
-public static native @Cast("const char*") BytePointer VmbStartup( );
+public static native @Cast("VmbError_t") int VmbStartup( );
 
 //
 // Method:      VmbShutdown()
@@ -723,7 +724,7 @@ public static native @Cast("const char*") BytePointer VmbStartup( );
 //
 // Details:     This will free some resources and deallocate all physical resources if applicable.
 //
-public static native @Cast("const char*") BytePointer VmbShutdown( );
+public static native void VmbShutdown( );
 
 
 //----- Camera Enumeration & Information --------------------------------------
@@ -757,15 +758,15 @@ public static native @Cast("const char*") BytePointer VmbShutdown( );
 //              list length, and then again with an array of the correct length. If camera
 //              lists change between the calls, pNumFound may deviate from the query return.
 //
-public static native @Cast("const char*") BytePointer VmbCamerasList( VmbCameraInfo_t pCameraInfo,
+public static native @Cast("VmbError_t") int VmbCamerasList( VmbCameraInfo_t pCameraInfo,
                                                @Cast("VmbUint32_t") int listLength,
                                                @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                @Cast("VmbUint32_t") int sizeofCameraInfo );
-public static native String VmbCamerasList( VmbCameraInfo_t pCameraInfo,
+public static native @Cast("VmbError_t") int VmbCamerasList( VmbCameraInfo_t pCameraInfo,
                                                @Cast("VmbUint32_t") int listLength,
                                                @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                @Cast("VmbUint32_t") int sizeofCameraInfo );
-public static native @Cast("const char*") BytePointer VmbCamerasList( VmbCameraInfo_t pCameraInfo,
+public static native @Cast("VmbError_t") int VmbCamerasList( VmbCameraInfo_t pCameraInfo,
                                                @Cast("VmbUint32_t") int listLength,
                                                @Cast("VmbUint32_t*") int[] pNumFound,
                                                @Cast("VmbUint32_t") int sizeofCameraInfo );
@@ -796,10 +797,10 @@ public static native @Cast("const char*") BytePointer VmbCamerasList( VmbCameraI
 //              "000F314C4BE5" for a MAC address or 
 //              "DEV_1234567890" for an ID as reported by Vimba
 //
-public static native @Cast("const char*") BytePointer VmbCameraInfoQuery( @Cast("const char*") BytePointer idString,
+public static native @Cast("VmbError_t") int VmbCameraInfoQuery( @Cast("const char*") BytePointer idString,
                                                    VmbCameraInfo_t pInfo,
                                                    @Cast("VmbUint32_t") int sizeofCameraInfo );
-public static native String VmbCameraInfoQuery( String idString,
+public static native @Cast("VmbError_t") int VmbCameraInfoQuery( String idString,
                                                    VmbCameraInfo_t pInfo,
                                                    @Cast("VmbUint32_t") int sizeofCameraInfo );
 
@@ -831,10 +832,10 @@ public static native String VmbCameraInfoQuery( String idString,
 //              "000F314C4BE5" for a MAC address or 
 //              "DEV_1234567890" for an ID as reported by Vimba
 //
-public static native @Cast("const char*") BytePointer VmbCameraOpen( @Cast("const char*") BytePointer idString,
+public static native @Cast("VmbError_t") int VmbCameraOpen( @Cast("const char*") BytePointer idString,
                                               @Cast("VmbAccessMode_t") int accessMode,
                                               @ByPtrPtr VmbHandle_t pCameraHandle );
-public static native String VmbCameraOpen( String idString,
+public static native @Cast("VmbError_t") int VmbCameraOpen( String idString,
                                               @Cast("VmbAccessMode_t") int accessMode,
                                               @ByPtrPtr VmbHandle_t pCameraHandle );
 
@@ -856,7 +857,7 @@ public static native String VmbCameraOpen( String idString,
 // Details:     Depending on the access mode this camera was opened with, events are killed,
 //              callbacks are unregistered, and camera control is released.
 //
-public static native @Cast("const char*") BytePointer VmbCameraClose( VmbHandle_t cameraHandle );
+public static native @Cast("VmbError_t") int VmbCameraClose( VmbHandle_t cameraHandle );
 
 
 //----- Features ----------------------------------------------------------
@@ -890,17 +891,17 @@ public static native @Cast("const char*") BytePointer VmbCameraClose( VmbHandle_
 //              of the list, and then again with an list of the correct length.
 //              
 //
-public static native @Cast("const char*") BytePointer VmbFeaturesList( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeaturesList( VmbHandle_t handle,
                                                 VmbFeatureInfo_t pFeatureInfoList,
                                                 @Cast("VmbUint32_t") int listLength,
                                                 @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                 @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeaturesList( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeaturesList( VmbHandle_t handle,
                                                 VmbFeatureInfo_t pFeatureInfoList,
                                                 @Cast("VmbUint32_t") int listLength,
                                                 @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                 @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native @Cast("const char*") BytePointer VmbFeaturesList( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeaturesList( VmbHandle_t handle,
                                                 VmbFeatureInfo_t pFeatureInfoList,
                                                 @Cast("VmbUint32_t") int listLength,
                                                 @Cast("VmbUint32_t*") int[] pNumFound,
@@ -928,11 +929,11 @@ public static native @Cast("const char*") BytePointer VmbFeaturesList( VmbHandle
 //
 // Details:     Users provide a pointer to VmbFeatureInfo_t, which is then set to the internal representation.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureInfoQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureInfoQuery( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     VmbFeatureInfo_t pFeatureInfo,
                                                     @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureInfoQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureInfoQuery( VmbHandle_t handle,
                                                     String name,
                                                     VmbFeatureInfo_t pFeatureInfo,
                                                     @Cast("VmbUint32_t") int sizeofFeatureInfo );
@@ -967,37 +968,37 @@ public static native String VmbFeatureInfoQuery( VmbHandle_t handle,
 //              This function is usually called twice: once with an empty array to query the length
 //              of the list, and then again with an array of the correct length.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureListAffected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListAffected( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureListAffected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListAffected( VmbHandle_t handle,
                                                        String name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native @Cast("const char*") BytePointer VmbFeatureListAffected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListAffected( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") int[] pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureListAffected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListAffected( VmbHandle_t handle,
                                                        String name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native @Cast("const char*") BytePointer VmbFeatureListAffected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListAffected( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureListAffected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListAffected( VmbHandle_t handle,
                                                        String name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
@@ -1034,37 +1035,37 @@ public static native String VmbFeatureListAffected( VmbHandle_t handle,
 //              This function is usually called twice: once with an empty array to query the length
 //              of the list, and then again with an array of the correct length.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureListSelected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListSelected( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureListSelected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListSelected( VmbHandle_t handle,
                                                        String name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native @Cast("const char*") BytePointer VmbFeatureListSelected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListSelected( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") int[] pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureListSelected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListSelected( VmbHandle_t handle,
                                                        String name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native @Cast("const char*") BytePointer VmbFeatureListSelected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListSelected( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
                                                        @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                        @Cast("VmbUint32_t") int sizeofFeatureInfo );
-public static native String VmbFeatureListSelected( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureListSelected( VmbHandle_t handle,
                                                        String name,
                                                        VmbFeatureInfo_t pFeatureInfoList,
                                                        @Cast("VmbUint32_t") int listLength,
@@ -1095,11 +1096,11 @@ public static native String VmbFeatureListSelected( VmbHandle_t handle,
 // Details:     The access mode of a feature may change. For example, if "PacketSize"
 //              is locked while image data is streamed, it is only readable.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureAccessQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureAccessQuery( VmbHandle_t handle,
                                                       @Cast("const char*") BytePointer name,
                                                       @Cast("VmbBool_t*") BoolPointer pIsReadable,
                                                       @Cast("VmbBool_t*") BoolPointer pIsWriteable );
-public static native String VmbFeatureAccessQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureAccessQuery( VmbHandle_t handle,
                                                       String name,
                                                       @Cast("VmbBool_t*") boolean[] pIsReadable,
                                                       @Cast("VmbBool_t*") boolean[] pIsWriteable );
@@ -1128,22 +1129,22 @@ public static native String VmbFeatureAccessQuery( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //  - VmbErrorBadParameter:  If "name" or "pValue" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureIntGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntGet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("VmbInt64_t*") LongPointer pValue );
-public static native String VmbFeatureIntGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntGet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("VmbInt64_t*") LongBuffer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureIntGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntGet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("VmbInt64_t*") long[] pValue );
-public static native String VmbFeatureIntGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntGet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("VmbInt64_t*") LongPointer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureIntGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntGet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("VmbInt64_t*") LongBuffer pValue );
-public static native String VmbFeatureIntGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntGet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("VmbInt64_t*") long[] pValue );
 
@@ -1170,10 +1171,10 @@ public static native String VmbFeatureIntGet( VmbHandle_t handle,
 //  - VmbErrorNotFound:      If the feature was not found
 //  - VmbErrorInvalidCall:   If called from frame callback
 //
-public static native @Cast("const char*") BytePointer VmbFeatureIntSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntSet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("VmbInt64_t") long value );
-public static native String VmbFeatureIntSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntSet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("VmbInt64_t") long value );
 
@@ -1199,27 +1200,27 @@ public static native String VmbFeatureIntSet( VmbHandle_t handle,
 //  - VmbErrorWrongType:     The type of feature "name" is not Integer
 //  - VmbErrorNotFound:      If the feature was not found
 //
-public static native @Cast("const char*") BytePointer VmbFeatureIntRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntRangeQuery( VmbHandle_t handle,
                                                         @Cast("const char*") BytePointer name,
                                                         @Cast("VmbInt64_t*") LongPointer pMin,
                                                         @Cast("VmbInt64_t*") LongPointer pMax );
-public static native String VmbFeatureIntRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntRangeQuery( VmbHandle_t handle,
                                                         String name,
                                                         @Cast("VmbInt64_t*") LongBuffer pMin,
                                                         @Cast("VmbInt64_t*") LongBuffer pMax );
-public static native @Cast("const char*") BytePointer VmbFeatureIntRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntRangeQuery( VmbHandle_t handle,
                                                         @Cast("const char*") BytePointer name,
                                                         @Cast("VmbInt64_t*") long[] pMin,
                                                         @Cast("VmbInt64_t*") long[] pMax );
-public static native String VmbFeatureIntRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntRangeQuery( VmbHandle_t handle,
                                                         String name,
                                                         @Cast("VmbInt64_t*") LongPointer pMin,
                                                         @Cast("VmbInt64_t*") LongPointer pMax );
-public static native @Cast("const char*") BytePointer VmbFeatureIntRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntRangeQuery( VmbHandle_t handle,
                                                         @Cast("const char*") BytePointer name,
                                                         @Cast("VmbInt64_t*") LongBuffer pMin,
                                                         @Cast("VmbInt64_t*") LongBuffer pMax );
-public static native String VmbFeatureIntRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntRangeQuery( VmbHandle_t handle,
                                                         String name,
                                                         @Cast("VmbInt64_t*") long[] pMin,
                                                         @Cast("VmbInt64_t*") long[] pMax );
@@ -1245,22 +1246,22 @@ public static native String VmbFeatureIntRangeQuery( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //    VmbErrorBadParameter:  If "name" or "pValue" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureIntIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntIncrementQuery( VmbHandle_t handle,
                                                             @Cast("const char*") BytePointer name,
                                                             @Cast("VmbInt64_t*") LongPointer pValue );
-public static native String VmbFeatureIntIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntIncrementQuery( VmbHandle_t handle,
                                                             String name,
                                                             @Cast("VmbInt64_t*") LongBuffer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureIntIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntIncrementQuery( VmbHandle_t handle,
                                                             @Cast("const char*") BytePointer name,
                                                             @Cast("VmbInt64_t*") long[] pValue );
-public static native String VmbFeatureIntIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntIncrementQuery( VmbHandle_t handle,
                                                             String name,
                                                             @Cast("VmbInt64_t*") LongPointer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureIntIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntIncrementQuery( VmbHandle_t handle,
                                                             @Cast("const char*") BytePointer name,
                                                             @Cast("VmbInt64_t*") LongBuffer pValue );
-public static native String VmbFeatureIntIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureIntIncrementQuery( VmbHandle_t handle,
                                                             String name,
                                                             @Cast("VmbInt64_t*") long[] pValue );
 
@@ -1287,22 +1288,22 @@ public static native String VmbFeatureIntIncrementQuery( VmbHandle_t handle,
 //  - VmbErrorBadParameter:  If "name" or "pValue" is NULL
 //  - VmbErrorNotFound:      The feature was not found
 //
-public static native @Cast("const char*") BytePointer VmbFeatureFloatGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatGet( VmbHandle_t handle,
                                                    @Cast("const char*") BytePointer name,
                                                    DoublePointer pValue );
-public static native String VmbFeatureFloatGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatGet( VmbHandle_t handle,
                                                    String name,
                                                    DoubleBuffer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureFloatGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatGet( VmbHandle_t handle,
                                                    @Cast("const char*") BytePointer name,
                                                    double[] pValue );
-public static native String VmbFeatureFloatGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatGet( VmbHandle_t handle,
                                                    String name,
                                                    DoublePointer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureFloatGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatGet( VmbHandle_t handle,
                                                    @Cast("const char*") BytePointer name,
                                                    DoubleBuffer pValue );
-public static native String VmbFeatureFloatGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatGet( VmbHandle_t handle,
                                                    String name,
                                                    double[] pValue );
 
@@ -1329,10 +1330,10 @@ public static native String VmbFeatureFloatGet( VmbHandle_t handle,
 //  - VmbErrorBadParameter:  If "name" is NULL
 //  - VmbErrorInvalidCall:   If called from frame callback
 //
-public static native @Cast("const char*") BytePointer VmbFeatureFloatSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatSet( VmbHandle_t handle,
                                                    @Cast("const char*") BytePointer name,
                                                    double value );
-public static native String VmbFeatureFloatSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatSet( VmbHandle_t handle,
                                                    String name,
                                                    double value );
 
@@ -1361,27 +1362,27 @@ public static native String VmbFeatureFloatSet( VmbHandle_t handle,
 // Details:     Only one of the values may be queried if the other parameter is set to NULL,
 //              but if both parameters are NULL, an error is returned.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureFloatRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatRangeQuery( VmbHandle_t handle,
                                                           @Cast("const char*") BytePointer name,
                                                           DoublePointer pMin,
                                                           DoublePointer pMax );
-public static native String VmbFeatureFloatRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatRangeQuery( VmbHandle_t handle,
                                                           String name,
                                                           DoubleBuffer pMin,
                                                           DoubleBuffer pMax );
-public static native @Cast("const char*") BytePointer VmbFeatureFloatRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatRangeQuery( VmbHandle_t handle,
                                                           @Cast("const char*") BytePointer name,
                                                           double[] pMin,
                                                           double[] pMax );
-public static native String VmbFeatureFloatRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatRangeQuery( VmbHandle_t handle,
                                                           String name,
                                                           DoublePointer pMin,
                                                           DoublePointer pMax );
-public static native @Cast("const char*") BytePointer VmbFeatureFloatRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatRangeQuery( VmbHandle_t handle,
                                                           @Cast("const char*") BytePointer name,
                                                           DoubleBuffer pMin,
                                                           DoubleBuffer pMax );
-public static native String VmbFeatureFloatRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatRangeQuery( VmbHandle_t handle,
                                                           String name,
                                                           double[] pMin,
                                                           double[] pMax );
@@ -1407,27 +1408,27 @@ public static native String VmbFeatureFloatRangeQuery( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //    VmbErrorBadParameter:  If "name" or "pValue" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
                                                               @Cast("const char*") BytePointer name,
                                                               @Cast("VmbBool_t*") BoolPointer hasIncrement,
                                                               DoublePointer pValue );
-public static native String VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
                                                               String name,
                                                               @Cast("VmbBool_t*") boolean[] hasIncrement,
                                                               DoubleBuffer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
                                                               @Cast("const char*") BytePointer name,
                                                               @Cast("VmbBool_t*") BoolPointer hasIncrement,
                                                               double[] pValue );
-public static native String VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
                                                               String name,
                                                               @Cast("VmbBool_t*") boolean[] hasIncrement,
                                                               DoublePointer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
                                                               @Cast("const char*") BytePointer name,
                                                               @Cast("VmbBool_t*") BoolPointer hasIncrement,
                                                               DoubleBuffer pValue );
-public static native String VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
                                                               String name,
                                                               @Cast("VmbBool_t*") boolean[] hasIncrement,
                                                               double[] pValue );
@@ -1455,25 +1456,25 @@ public static native String VmbFeatureFloatIncrementQuery( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //  - VmbErrorBadParameter:  If "name" or "pValue" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("const char**") PointerPointer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("const char**") @ByPtrPtr BytePointer pValue );
-public static native String VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   String name,
                                                   @Cast("const char**") @ByPtrPtr ByteBuffer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("const char**") @ByPtrPtr byte[] pValue );
-public static native String VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   String name,
                                                   @Cast("const char**") @ByPtrPtr BytePointer pValue );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("const char**") @ByPtrPtr ByteBuffer pValue );
-public static native String VmbFeatureEnumGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumGet( VmbHandle_t handle,
                                                   String name,
                                                   @Cast("const char**") @ByPtrPtr byte[] pValue );
 
@@ -1501,10 +1502,10 @@ public static native String VmbFeatureEnumGet( VmbHandle_t handle,
 //  - VmbErrorBadParameter:  If "name" ore "value" is NULL
 //  - VmbErrorInvalidCall:   If called from frame callback
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumSet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("const char*") BytePointer value );
-public static native String VmbFeatureEnumSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumSet( VmbHandle_t handle,
                                                   String name,
                                                   String value );
 
@@ -1532,37 +1533,37 @@ public static native String VmbFeatureEnumSet( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //  - VmbErrorBadParameter:  If "name" is NULL or "pNameArray" and "pNumFilled" are NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("const char**") PointerPointer pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
                                                          @Cast("VmbUint32_t*") IntPointer pNumFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("const char**") @ByPtrPtr BytePointer pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
                                                          @Cast("VmbUint32_t*") IntPointer pNumFilled );
-public static native String VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          String name,
                                                          @Cast("const char**") @ByPtrPtr ByteBuffer pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
                                                          @Cast("VmbUint32_t*") IntBuffer pNumFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("const char**") @ByPtrPtr byte[] pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
                                                          @Cast("VmbUint32_t*") int[] pNumFilled );
-public static native String VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          String name,
                                                          @Cast("const char**") @ByPtrPtr BytePointer pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
                                                          @Cast("VmbUint32_t*") IntPointer pNumFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("const char**") @ByPtrPtr ByteBuffer pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
                                                          @Cast("VmbUint32_t*") IntBuffer pNumFilled );
-public static native String VmbFeatureEnumRangeQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumRangeQuery( VmbHandle_t handle,
                                                          String name,
                                                          @Cast("const char**") @ByPtrPtr byte[] pNameArray,
                                                          @Cast("VmbUint32_t") int arrayLength,
@@ -1590,11 +1591,11 @@ public static native String VmbFeatureEnumRangeQuery( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //  - VmbErrorBadParameter:  If "name" or "value" or "pIsAvailable" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumIsAvailable( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumIsAvailable( VmbHandle_t handle,
                                                           @Cast("const char*") BytePointer name,
                                                           @Cast("const char*") BytePointer value,
                                                           @Cast("VmbBool_t*") BoolPointer pIsAvailable );
-public static native String VmbFeatureEnumIsAvailable( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumIsAvailable( VmbHandle_t handle,
                                                           String name,
                                                           String value,
                                                           @Cast("VmbBool_t*") boolean[] pIsAvailable );
@@ -1623,27 +1624,27 @@ public static native String VmbFeatureEnumIsAvailable( VmbHandle_t handle,
 //
 // Details:     Converts a name of an enum member into an int value ("Mono12Packed" to 0x10C0006)
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsInt( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsInt( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("const char*") BytePointer value,
                                                     @Cast("VmbInt64_t*") LongPointer pIntVal );
-public static native String VmbFeatureEnumAsInt( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsInt( VmbHandle_t handle,
                                                     String name,
                                                     String value,
                                                     @Cast("VmbInt64_t*") LongBuffer pIntVal );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsInt( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsInt( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("const char*") BytePointer value,
                                                     @Cast("VmbInt64_t*") long[] pIntVal );
-public static native String VmbFeatureEnumAsInt( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsInt( VmbHandle_t handle,
                                                     String name,
                                                     String value,
                                                     @Cast("VmbInt64_t*") LongPointer pIntVal );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsInt( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsInt( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("const char*") BytePointer value,
                                                     @Cast("VmbInt64_t*") LongBuffer pIntVal );
-public static native String VmbFeatureEnumAsInt( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsInt( VmbHandle_t handle,
                                                     String name,
                                                     String value,
                                                     @Cast("VmbInt64_t*") long[] pIntVal );
@@ -1672,31 +1673,31 @@ public static native String VmbFeatureEnumAsInt( VmbHandle_t handle,
 //
 // Details:     Converts an int value to a name of an enum member (e.g. 0x10C0006 to "Mono12Packed")
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") PointerPointer pStringValue );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") @ByPtrPtr BytePointer pStringValue );
-public static native String VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        String name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") @ByPtrPtr ByteBuffer pStringValue );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") @ByPtrPtr byte[] pStringValue );
-public static native String VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        String name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") @ByPtrPtr BytePointer pStringValue );
-public static native @Cast("const char*") BytePointer VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") @ByPtrPtr ByteBuffer pStringValue );
-public static native String VmbFeatureEnumAsString( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumAsString( VmbHandle_t handle,
                                                        String name,
                                                        @Cast("VmbInt64_t") long intValue,
                                                        @Cast("const char**") @ByPtrPtr byte[] pStringValue );
@@ -1725,12 +1726,12 @@ public static native String VmbFeatureEnumAsString( VmbHandle_t handle,
 //  - VmbErrorNotFound:      The feature was not found
 //  - VmbErrorBadParameter:  If "featureName" or "entryName" or "pFeatureEnumEntry" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureEnumEntryGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumEntryGet( VmbHandle_t handle,
                                                        @Cast("const char*") BytePointer featureName,
                                                        @Cast("const char*") BytePointer entryName,
                                                        VmbFeatureEnumEntry_t pFeatureEnumEntry,
                                                        @Cast("VmbUint32_t") int sizeofFeatureEnumEntry );
-public static native String VmbFeatureEnumEntryGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureEnumEntryGet( VmbHandle_t handle,
                                                        String featureName,
                                                        String entryName,
                                                        VmbFeatureEnumEntry_t pFeatureEnumEntry,
@@ -1764,32 +1765,32 @@ public static native String VmbFeatureEnumEntryGet( VmbHandle_t handle,
 // Details:     This function is usually called twice: once with an empty buffer to query the length
 //              of the string, and then again with a buffer of the correct length.
 
-public static native @Cast("const char*") BytePointer VmbFeatureStringGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringGet( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("char*") BytePointer buffer,
                                                     @Cast("VmbUint32_t") int bufferSize,
                                                     @Cast("VmbUint32_t*") IntPointer pSizeFilled );
-public static native String VmbFeatureStringGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringGet( VmbHandle_t handle,
                                                     String name,
                                                     @Cast("char*") ByteBuffer buffer,
                                                     @Cast("VmbUint32_t") int bufferSize,
                                                     @Cast("VmbUint32_t*") IntBuffer pSizeFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureStringGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringGet( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("char*") byte[] buffer,
                                                     @Cast("VmbUint32_t") int bufferSize,
                                                     @Cast("VmbUint32_t*") int[] pSizeFilled );
-public static native String VmbFeatureStringGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringGet( VmbHandle_t handle,
                                                     String name,
                                                     @Cast("char*") BytePointer buffer,
                                                     @Cast("VmbUint32_t") int bufferSize,
                                                     @Cast("VmbUint32_t*") IntPointer pSizeFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureStringGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringGet( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("char*") ByteBuffer buffer,
                                                     @Cast("VmbUint32_t") int bufferSize,
                                                     @Cast("VmbUint32_t*") IntBuffer pSizeFilled );
-public static native String VmbFeatureStringGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringGet( VmbHandle_t handle,
                                                     String name,
                                                     @Cast("char*") byte[] buffer,
                                                     @Cast("VmbUint32_t") int bufferSize,
@@ -1818,10 +1819,10 @@ public static native String VmbFeatureStringGet( VmbHandle_t handle,
 //  - VmbErrorBadParameter:  If "name" or "value" is NULL
 //  - VmbErrorInvalidCall:   If called from frame callback
 //
-public static native @Cast("const char*") BytePointer VmbFeatureStringSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringSet( VmbHandle_t handle,
                                                     @Cast("const char*") BytePointer name,
                                                     @Cast("const char*") BytePointer value );
-public static native String VmbFeatureStringSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringSet( VmbHandle_t handle,
                                                     String name,
                                                     String value );
 
@@ -1845,22 +1846,22 @@ public static native String VmbFeatureStringSet( VmbHandle_t handle,
 //  - VmbErrorWrongType:     The type of feature "name" is not String
 //  - VmbErrorBadParameter:  If "name" or "pMaxLength" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
                                                                @Cast("const char*") BytePointer name,
                                                                @Cast("VmbUint32_t*") IntPointer pMaxLength );
-public static native String VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
                                                                String name,
                                                                @Cast("VmbUint32_t*") IntBuffer pMaxLength );
-public static native @Cast("const char*") BytePointer VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
                                                                @Cast("const char*") BytePointer name,
                                                                @Cast("VmbUint32_t*") int[] pMaxLength );
-public static native String VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
                                                                String name,
                                                                @Cast("VmbUint32_t*") IntPointer pMaxLength );
-public static native @Cast("const char*") BytePointer VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
                                                                @Cast("const char*") BytePointer name,
                                                                @Cast("VmbUint32_t*") IntBuffer pMaxLength );
-public static native String VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
                                                                String name,
                                                                @Cast("VmbUint32_t*") int[] pMaxLength );
 
@@ -1887,10 +1888,10 @@ public static native String VmbFeatureStringMaxlengthQuery( VmbHandle_t handle,
 //  - VmbErrorNotFound:      If feature is not found
 //  - VmbErrorBadParameter:  If "name" or "pValue" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureBoolGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureBoolGet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("VmbBool_t*") BoolPointer pValue );
-public static native String VmbFeatureBoolGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureBoolGet( VmbHandle_t handle,
                                                   String name,
                                                   @Cast("VmbBool_t*") boolean[] pValue );
 
@@ -1917,10 +1918,10 @@ public static native String VmbFeatureBoolGet( VmbHandle_t handle,
 //  - VmbErrorBadParameter:  If "name" is NULL
 //  - VmbErrorInvalidCall:   If called from frame callback
 //
-public static native @Cast("const char*") BytePointer VmbFeatureBoolSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureBoolSet( VmbHandle_t handle,
                                                   @Cast("const char*") BytePointer name,
                                                   @Cast("VmbBool_t") boolean value );
-public static native String VmbFeatureBoolSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureBoolSet( VmbHandle_t handle,
                                                   String name,
                                                   @Cast("VmbBool_t") boolean value );
 
@@ -1946,9 +1947,9 @@ public static native String VmbFeatureBoolSet( VmbHandle_t handle,
 //  - VmbErrorNotFound:      Feature was not found
 //  - VmbErrorBadParameter:  If "name" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureCommandRun( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureCommandRun( VmbHandle_t handle,
                                                      @Cast("const char*") BytePointer name );
-public static native String VmbFeatureCommandRun( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureCommandRun( VmbHandle_t handle,
                                                      String name );
 
 //
@@ -1972,10 +1973,10 @@ public static native String VmbFeatureCommandRun( VmbHandle_t handle,
 //  - VmbErrorNotFound:      Feature was not found
 //  - VmbErrorBadParameter:  If "name" or "pIsDone" is NULL
 //
-public static native @Cast("const char*") BytePointer VmbFeatureCommandIsDone( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureCommandIsDone( VmbHandle_t handle,
                                                         @Cast("const char*") BytePointer name,
                                                         @Cast("VmbBool_t*") BoolPointer pIsDone );
-public static native String VmbFeatureCommandIsDone( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureCommandIsDone( VmbHandle_t handle,
                                                         String name,
                                                         @Cast("VmbBool_t*") boolean[] pIsDone );
 
@@ -2008,32 +2009,32 @@ public static native String VmbFeatureCommandIsDone( VmbHandle_t handle,
 //              Data transfer is split up by the transport layer if the feature length is too large.
 //              You can get the size of the memory area addressed by the feature "name" by VmbFeatureRawLengthQuery().
 //
-public static native @Cast("const char*") BytePointer VmbFeatureRawGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawGet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("char*") BytePointer pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize,
                                                  @Cast("VmbUint32_t*") IntPointer pSizeFilled );
-public static native String VmbFeatureRawGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawGet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("char*") ByteBuffer pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize,
                                                  @Cast("VmbUint32_t*") IntBuffer pSizeFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureRawGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawGet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("char*") byte[] pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize,
                                                  @Cast("VmbUint32_t*") int[] pSizeFilled );
-public static native String VmbFeatureRawGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawGet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("char*") BytePointer pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize,
                                                  @Cast("VmbUint32_t*") IntPointer pSizeFilled );
-public static native @Cast("const char*") BytePointer VmbFeatureRawGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawGet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("char*") ByteBuffer pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize,
                                                  @Cast("VmbUint32_t*") IntBuffer pSizeFilled );
-public static native String VmbFeatureRawGet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawGet( VmbHandle_t handle,
                                                  String name,
                                                  @Cast("char*") byte[] pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize,
@@ -2066,11 +2067,11 @@ public static native String VmbFeatureRawGet( VmbHandle_t handle,
 //              Data transfer is split up by the transport layer if the feature length is too large.
 //              You can get the size of the memory area addressed by the feature "name" by VmbFeatureRawLengthQuery().
 //
-public static native @Cast("const char*") BytePointer VmbFeatureRawSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawSet( VmbHandle_t handle,
                                                  @Cast("const char*") BytePointer name,
                                                  @Cast("const char*") BytePointer pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize );
-public static native String VmbFeatureRawSet( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawSet( VmbHandle_t handle,
                                                  String name,
                                                  String pBuffer,
                                                  @Cast("VmbUint32_t") int bufferSize );
@@ -2098,22 +2099,22 @@ public static native String VmbFeatureRawSet( VmbHandle_t handle,
 //
 // Details:     This feature type corresponds to a first-level "Register" node in the XML file.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureRawLengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawLengthQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("VmbUint32_t*") IntPointer pLength );
-public static native String VmbFeatureRawLengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawLengthQuery( VmbHandle_t handle,
                                                          String name,
                                                          @Cast("VmbUint32_t*") IntBuffer pLength );
-public static native @Cast("const char*") BytePointer VmbFeatureRawLengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawLengthQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("VmbUint32_t*") int[] pLength );
-public static native String VmbFeatureRawLengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawLengthQuery( VmbHandle_t handle,
                                                          String name,
                                                          @Cast("VmbUint32_t*") IntPointer pLength );
-public static native @Cast("const char*") BytePointer VmbFeatureRawLengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawLengthQuery( VmbHandle_t handle,
                                                          @Cast("const char*") BytePointer name,
                                                          @Cast("VmbUint32_t*") IntBuffer pLength );
-public static native String VmbFeatureRawLengthQuery( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureRawLengthQuery( VmbHandle_t handle,
                                                          String name,
                                                          @Cast("VmbUint32_t*") int[] pLength );
 
@@ -2145,11 +2146,11 @@ public static native String VmbFeatureRawLengthQuery( VmbHandle_t handle,
 //              combination of handle, name, and callback is registered a second time, it overwrites
 //              the previous one.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureInvalidationRegister( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureInvalidationRegister( VmbHandle_t handle,
                                                                @Cast("const char*") BytePointer name,
                                                                VmbInvalidationCallback callback,
                                                                Pointer pUserContext );
-public static native String VmbFeatureInvalidationRegister( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureInvalidationRegister( VmbHandle_t handle,
                                                                String name,
                                                                VmbInvalidationCallback callback,
                                                                Pointer pUserContext );
@@ -2175,10 +2176,10 @@ public static native String VmbFeatureInvalidationRegister( VmbHandle_t handle,
 // Details:     Since multiple callbacks may be registered for a feature invalidation event,
 //              a combination of handle, name, and callback is needed for unregistering, too.
 //
-public static native @Cast("const char*") BytePointer VmbFeatureInvalidationUnregister( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureInvalidationUnregister( VmbHandle_t handle,
                                                                  @Cast("const char*") BytePointer name,
                                                                  VmbInvalidationCallback callback );
-public static native String VmbFeatureInvalidationUnregister( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbFeatureInvalidationUnregister( VmbHandle_t handle,
                                                                  String name,
                                                                  VmbInvalidationCallback callback );
 
@@ -2207,7 +2208,7 @@ public static native String VmbFeatureInvalidationUnregister( VmbHandle_t handle
 // Details:     Allows some preparation for frames like DMA preparation depending on the transport layer.
 //              The order in which the frames are announced is not taken into consideration by the API.
 //
-public static native @Cast("const char*") BytePointer VmbFrameAnnounce( VmbHandle_t cameraHandle,
+public static native @Cast("VmbError_t") int VmbFrameAnnounce( VmbHandle_t cameraHandle,
                                                  @Const VmbFrame_t pFrame,
                                                  @Cast("VmbUint32_t") int sizeofFrame );
 
@@ -2232,7 +2233,7 @@ public static native @Cast("const char*") BytePointer VmbFrameAnnounce( VmbHandl
 //
 // Details:    The referenced frame is removed from the pool of frames for capturing images.
 //
-public static native @Cast("const char*") BytePointer VmbFrameRevoke( VmbHandle_t cameraHandle,
+public static native @Cast("VmbError_t") int VmbFrameRevoke( VmbHandle_t cameraHandle,
                                                @Const VmbFrame_t pFrame );
 
 
@@ -2251,7 +2252,7 @@ public static native @Cast("const char*") BytePointer VmbFrameRevoke( VmbHandle_
 //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
 //  - VmbErrorBadHandle:     The given camera handle is not valid
 //
-public static native @Cast("const char*") BytePointer VmbFrameRevokeAll( VmbHandle_t cameraHandle );
+public static native @Cast("VmbError_t") int VmbFrameRevokeAll( VmbHandle_t cameraHandle );
 
 
 //
@@ -2271,7 +2272,7 @@ public static native @Cast("const char*") BytePointer VmbFrameRevokeAll( VmbHand
 //  - VmbErrorDeviceNotOpen: Camera was not opened for usage
 //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
 //
-public static native @Cast("const char*") BytePointer VmbCaptureStart( VmbHandle_t cameraHandle );
+public static native @Cast("VmbError_t") int VmbCaptureStart( VmbHandle_t cameraHandle );
 
 
 //
@@ -2292,7 +2293,7 @@ public static native @Cast("const char*") BytePointer VmbCaptureStart( VmbHandle
 // Details:     Consequences of VmbCaptureEnd():
 //                  - The frame callback will not be called anymore
 //
-public static native @Cast("const char*") BytePointer VmbCaptureEnd( VmbHandle_t cameraHandle );
+public static native @Cast("VmbError_t") int VmbCaptureEnd( VmbHandle_t cameraHandle );
 
 
 //
@@ -2319,7 +2320,7 @@ public static native @Cast("const char*") BytePointer VmbCaptureEnd( VmbHandle_t
 //              has to ensure that the frame is also revoked by calling VmbFrameRevoke() or
 //              VmbFrameRevokeAll() when cleaning up.
 //
-public static native @Cast("const char*") BytePointer VmbCaptureFrameQueue( VmbHandle_t cameraHandle,
+public static native @Cast("VmbError_t") int VmbCaptureFrameQueue( VmbHandle_t cameraHandle,
                                                      @Const VmbFrame_t pFrame,
                                                      VmbFrameCallback callback );
 
@@ -2342,7 +2343,7 @@ public static native @Cast("const char*") BytePointer VmbCaptureFrameQueue( VmbH
 //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
 //  - VmbErrorBadHandle:     The given handle is not valid
 //
-public static native @Cast("const char*") BytePointer VmbCaptureFrameWait( VmbHandle_t cameraHandle,
+public static native @Cast("VmbError_t") int VmbCaptureFrameWait( VmbHandle_t cameraHandle,
                                                     @Const VmbFrame_t pFrame,
                                                     @Cast("VmbUint32_t") int timeout);
 
@@ -2366,7 +2367,7 @@ public static native @Cast("const char*") BytePointer VmbCaptureFrameWait( VmbHa
 //              leaving no frames in the capture queue.
 //              After this call, no frame notification will occur until frames are queued again.
 //
-public static native @Cast("const char*") BytePointer VmbCaptureQueueFlush( VmbHandle_t cameraHandle );
+public static native @Cast("VmbError_t") int VmbCaptureQueueFlush( VmbHandle_t cameraHandle );
 
 
 //----- Interface Enumeration & Information --------------------------------------
@@ -2400,15 +2401,15 @@ public static native @Cast("const char*") BytePointer VmbCaptureQueueFlush( VmbH
 //              This function is usually called twice: once with an empty array to query the length
 //              of the list, and then again with an array of the correct length.
 //
-public static native @Cast("const char*") BytePointer VmbInterfacesList( VmbInterfaceInfo_t pInterfaceInfo,
+public static native @Cast("VmbError_t") int VmbInterfacesList( VmbInterfaceInfo_t pInterfaceInfo,
                                                   @Cast("VmbUint32_t") int listLength,
                                                   @Cast("VmbUint32_t*") IntPointer pNumFound,
                                                   @Cast("VmbUint32_t") int sizeofInterfaceInfo );
-public static native String VmbInterfacesList( VmbInterfaceInfo_t pInterfaceInfo,
+public static native @Cast("VmbError_t") int VmbInterfacesList( VmbInterfaceInfo_t pInterfaceInfo,
                                                   @Cast("VmbUint32_t") int listLength,
                                                   @Cast("VmbUint32_t*") IntBuffer pNumFound,
                                                   @Cast("VmbUint32_t") int sizeofInterfaceInfo );
-public static native @Cast("const char*") BytePointer VmbInterfacesList( VmbInterfaceInfo_t pInterfaceInfo,
+public static native @Cast("VmbError_t") int VmbInterfacesList( VmbInterfaceInfo_t pInterfaceInfo,
                                                   @Cast("VmbUint32_t") int listLength,
                                                   @Cast("VmbUint32_t*") int[] pNumFound,
                                                   @Cast("VmbUint32_t") int sizeofInterfaceInfo );
@@ -2435,9 +2436,9 @@ public static native @Cast("const char*") BytePointer VmbInterfacesList( VmbInte
 //              is required, e.g. the number of devices attached to a specific interface.
 //              Access is then possible via feature access methods.
 //
-public static native @Cast("const char*") BytePointer VmbInterfaceOpen( @Cast("const char*") BytePointer idString,
+public static native @Cast("VmbError_t") int VmbInterfaceOpen( @Cast("const char*") BytePointer idString,
                                                  @ByPtrPtr VmbHandle_t pInterfaceHandle );
-public static native String VmbInterfaceOpen( String idString,
+public static native @Cast("VmbError_t") int VmbInterfaceOpen( String idString,
                                                  @ByPtrPtr VmbHandle_t pInterfaceHandle );
 
 //
@@ -2457,7 +2458,7 @@ public static native String VmbInterfaceOpen( String idString,
 //
 // Details:     After configuration of the interface, close it by calling this function.
 //
-public static native @Cast("const char*") BytePointer VmbInterfaceClose( VmbHandle_t interfaceHandle );
+public static native @Cast("VmbError_t") int VmbInterfaceClose( VmbHandle_t interfaceHandle );
 
 
 //----- Ancillary data --------------------------------------------------------
@@ -2480,7 +2481,7 @@ public static native @Cast("const char*") BytePointer VmbInterfaceClose( VmbHand
 //
 // Details:     This function can only succeed if the given frame has been filled by the API.
 //
-public static native @Cast("const char*") BytePointer VmbAncillaryDataOpen( VmbFrame_t pFrame,
+public static native @Cast("VmbError_t") int VmbAncillaryDataOpen( VmbFrame_t pFrame,
                                                      @ByPtrPtr VmbHandle_t pAncillaryDataHandle );
 
 //
@@ -2501,7 +2502,7 @@ public static native @Cast("const char*") BytePointer VmbAncillaryDataOpen( VmbF
 // Details:     After reading the ancillary data and before re-queuing the frame, ancillary data
 //              must be closed.
 //
-public static native @Cast("const char*") BytePointer VmbAncillaryDataClose( VmbHandle_t ancillaryDataHandle );
+public static native @Cast("VmbError_t") int VmbAncillaryDataClose( VmbHandle_t ancillaryDataHandle );
 
 
 //----- Memory/Register access --------------------------------------------
@@ -2527,17 +2528,17 @@ public static native @Cast("const char*") BytePointer VmbAncillaryDataClose( Vmb
 //  - VmbErrorBadHandle:     The given handle is not valid
 //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
 //
-public static native @Cast("const char*") BytePointer VmbMemoryRead( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryRead( VmbHandle_t handle,
                                               @Cast("VmbUint64_t") int address,
                                               @Cast("VmbUint32_t") int bufferSize,
                                               @Cast("char*") BytePointer dataBuffer,
                                               @Cast("VmbUint32_t*") IntPointer pSizeComplete );
-public static native String VmbMemoryRead( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryRead( VmbHandle_t handle,
                                               @Cast("VmbUint64_t") int address,
                                               @Cast("VmbUint32_t") int bufferSize,
                                               @Cast("char*") ByteBuffer dataBuffer,
                                               @Cast("VmbUint32_t*") IntBuffer pSizeComplete );
-public static native @Cast("const char*") BytePointer VmbMemoryRead( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryRead( VmbHandle_t handle,
                                               @Cast("VmbUint64_t") int address,
                                               @Cast("VmbUint32_t") int bufferSize,
                                               @Cast("char*") byte[] dataBuffer,
@@ -2565,32 +2566,32 @@ public static native @Cast("const char*") BytePointer VmbMemoryRead( VmbHandle_t
 //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
 //  - VmbErrorMoreData:      Not all data were written; see pSizeComplete value for the number of bytes written
 //
-public static native @Cast("const char*") BytePointer VmbMemoryWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryWrite( VmbHandle_t handle,
                                                @Cast("VmbUint64_t") int address,
                                                @Cast("VmbUint32_t") int bufferSize,
                                                @Cast("const char*") BytePointer dataBuffer,
                                                @Cast("VmbUint32_t*") IntPointer pSizeComplete );
-public static native String VmbMemoryWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryWrite( VmbHandle_t handle,
                                                @Cast("VmbUint64_t") int address,
                                                @Cast("VmbUint32_t") int bufferSize,
                                                String dataBuffer,
                                                @Cast("VmbUint32_t*") IntBuffer pSizeComplete );
-public static native @Cast("const char*") BytePointer VmbMemoryWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryWrite( VmbHandle_t handle,
                                                @Cast("VmbUint64_t") int address,
                                                @Cast("VmbUint32_t") int bufferSize,
                                                @Cast("const char*") BytePointer dataBuffer,
                                                @Cast("VmbUint32_t*") int[] pSizeComplete );
-public static native String VmbMemoryWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryWrite( VmbHandle_t handle,
                                                @Cast("VmbUint64_t") int address,
                                                @Cast("VmbUint32_t") int bufferSize,
                                                String dataBuffer,
                                                @Cast("VmbUint32_t*") IntPointer pSizeComplete );
-public static native @Cast("const char*") BytePointer VmbMemoryWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryWrite( VmbHandle_t handle,
                                                @Cast("VmbUint64_t") int address,
                                                @Cast("VmbUint32_t") int bufferSize,
                                                @Cast("const char*") BytePointer dataBuffer,
                                                @Cast("VmbUint32_t*") IntBuffer pSizeComplete );
-public static native String VmbMemoryWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbMemoryWrite( VmbHandle_t handle,
                                                @Cast("VmbUint64_t") int address,
                                                @Cast("VmbUint32_t") int bufferSize,
                                                String dataBuffer,
@@ -2620,17 +2621,17 @@ public static native String VmbMemoryWrite( VmbHandle_t handle,
 //              for corresponding values to be read. The registers are read consecutively
 //              until an error occurs or all registers are written successfully.
 //
-public static native @Cast("const char*") BytePointer VmbRegistersRead( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbRegistersRead( VmbHandle_t handle,
                                                  @Cast("VmbUint32_t") int readCount,
                                                  @Cast("const VmbUint64_t*") IntPointer pAddressArray,
                                                  @Cast("VmbUint64_t*") IntPointer pDataArray,
                                                  @Cast("VmbUint32_t*") IntPointer pNumCompleteReads );
-public static native String VmbRegistersRead( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbRegistersRead( VmbHandle_t handle,
                                                  @Cast("VmbUint32_t") int readCount,
                                                  @Cast("const VmbUint64_t*") IntBuffer pAddressArray,
                                                  @Cast("VmbUint64_t*") IntBuffer pDataArray,
                                                  @Cast("VmbUint32_t*") IntBuffer pNumCompleteReads );
-public static native @Cast("const char*") BytePointer VmbRegistersRead( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbRegistersRead( VmbHandle_t handle,
                                                  @Cast("VmbUint32_t") int readCount,
                                                  @Cast("const VmbUint64_t*") int[] pAddressArray,
                                                  @Cast("VmbUint64_t*") int[] pDataArray,
@@ -2661,17 +2662,17 @@ public static native @Cast("const char*") BytePointer VmbRegistersRead( VmbHandl
 //              corresponding values to be written to these addresses. The registers are written
 //              consecutively until an error occurs or all registers are written successfully.
 //
-public static native @Cast("const char*") BytePointer VmbRegistersWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbRegistersWrite( VmbHandle_t handle,
                                                   @Cast("VmbUint32_t") int writeCount,
                                                   @Cast("const VmbUint64_t*") IntPointer pAddressArray,
                                                   @Cast("const VmbUint64_t*") IntPointer pDataArray,
                                                   @Cast("VmbUint32_t*") IntPointer pNumCompleteWrites );
-public static native String VmbRegistersWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbRegistersWrite( VmbHandle_t handle,
                                                   @Cast("VmbUint32_t") int writeCount,
                                                   @Cast("const VmbUint64_t*") IntBuffer pAddressArray,
                                                   @Cast("const VmbUint64_t*") IntBuffer pDataArray,
                                                   @Cast("VmbUint32_t*") IntBuffer pNumCompleteWrites );
-public static native @Cast("const char*") BytePointer VmbRegistersWrite( VmbHandle_t handle,
+public static native @Cast("VmbError_t") int VmbRegistersWrite( VmbHandle_t handle,
                                                   @Cast("VmbUint32_t") int writeCount,
                                                   @Cast("const VmbUint64_t*") int[] pAddressArray,
                                                   @Cast("const VmbUint64_t*") int[] pDataArray,
@@ -2701,11 +2702,11 @@ public static native @Cast("const char*") BytePointer VmbRegistersWrite( VmbHand
 //              With given filename parameter path and name of XML file can be determined.
 //              Additionally behaviour of function can be set with providing 'persistent struct'.
 //
-public static native @Cast("const char*") BytePointer VmbCameraSettingsSave( VmbHandle_t handle, 
+public static native @Cast("VmbError_t") int VmbCameraSettingsSave( VmbHandle_t handle, 
                                                       @Cast("const char*") BytePointer fileName, 
                                                       VmbFeaturePersistSettings_t pSettings, 
                                                       @Cast("VmbUint32_t") int sizeofSettings );
-public static native String VmbCameraSettingsSave( VmbHandle_t handle, 
+public static native @Cast("VmbError_t") int VmbCameraSettingsSave( VmbHandle_t handle, 
                                                       String fileName, 
                                                       VmbFeaturePersistSettings_t pSettings, 
                                                       @Cast("VmbUint32_t") int sizeofSettings );
@@ -2734,11 +2735,11 @@ public static native String VmbCameraSettingsSave( VmbHandle_t handle,
 //              With given filename parameter path and name of XML file can be determined.
 //              Additionally behaviour of function can be set with providing 'settings struct'.
 //
-public static native @Cast("const char*") BytePointer VmbCameraSettingsLoad( VmbHandle_t handle, 
+public static native @Cast("VmbError_t") int VmbCameraSettingsLoad( VmbHandle_t handle, 
                                                       @Cast("const char*") BytePointer fileName, 
                                                       VmbFeaturePersistSettings_t pSettings, 
                                                       @Cast("VmbUint32_t") int sizeofSettings );
-public static native String VmbCameraSettingsLoad( VmbHandle_t handle, 
+public static native @Cast("VmbError_t") int VmbCameraSettingsLoad( VmbHandle_t handle, 
                                                       String fileName, 
                                                       VmbFeaturePersistSettings_t pSettings, 
                                                       @Cast("VmbUint32_t") int sizeofSettings );
@@ -2799,6 +2800,12 @@ public static final int
     UpdateTriggerPluggedIn           = 0,           // A new camera was discovered by Vimba
     UpdateTriggerPluggedOut          = 1,           // A camera has disappeared from the bus
     UpdateTriggerOpenStateChanged    = 3;            // The possible opening mode of a camera has changed (e.g., because it was opened by another application)
+@Namespace("AVT::VmbAPI") @Opaque public static class EnumEntry extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EnumEntry() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumEntry(Pointer p) { super(p); }
+}
 
  // AVT::VmbAPI
 
@@ -2872,6 +2879,47 @@ public static final int
 // #define SP_DYN_CAST( sp, T )    std::dynamic_pointer_cast<T>(sp)
 
 // These are all uses of a SP_DECL shared_ptr declaration
+@Namespace("AVT::VmbAPI") @Opaque public static class Interface extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Interface() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Interface(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class Camera extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Camera() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Camera(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class Feature extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Feature() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Feature(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class FeatureContainer extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FeatureContainer() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FeatureContainer(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class IFeatureObserver extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IFeatureObserver() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IFeatureObserver(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class Frame extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Frame() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Frame(Pointer p) { super(p); }
+}
 
 @Namespace("AVT::VmbAPI") @Opaque public static class FrameHandler extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -2880,11 +2928,46 @@ public static final int
     public FrameHandler(Pointer p) { super(p); }
 }
 
+@Namespace("AVT::VmbAPI") @Opaque public static class IFrameObserver extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IFrameObserver() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IFrameObserver(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class AncillaryData extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AncillaryData() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AncillaryData(Pointer p) { super(p); }
+}
+
 @Namespace("AVT::VmbAPI") @Opaque public static class ConstAncillaryData extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public ConstAncillaryData() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstAncillaryData(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class ICameraFactory extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ICameraFactory() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ICameraFactory(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class ICameraListObserver extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ICameraListObserver() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ICameraListObserver(Pointer p) { super(p); }
+}
+
+@Namespace("AVT::VmbAPI") @Opaque public static class IInterfaceListObserver extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IInterfaceListObserver() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IInterfaceListObserver(Pointer p) { super(p); }
 }
 
  // Namespace AVT::VmbAPI
@@ -3007,10 +3090,10 @@ public static final int
 
     public BasicLockable() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public BasicLockable( @SharedPtr @ByVal Mutex pMutex ) { super((Pointer)null); allocate(pMutex); }
-    private native void allocate( @SharedPtr @ByVal Mutex pMutex );
+    public BasicLockable( @SharedPtr Mutex pMutex ) { super((Pointer)null); allocate(pMutex); }
+    private native void allocate( @SharedPtr Mutex pMutex );
 
-    public native @SharedPtr @ByVal Mutex GetMutex();
+    public native @SharedPtr Mutex GetMutex();
 
     public native void Lock();
     public native void Unlock();
@@ -3019,3182 +3102,5 @@ public static final int
  //namespace AVT::VmbAPI
 
 // #endif 
-
-// Parsed from <VimbaCPP/Include/AncillaryData.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        AncillaryData.h
-
-  Description: Definition of class AVT::VmbAPI::AncillaryData.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_ANCILLARYDATA_H
-// #define AVT_VMBAPI_ANCILLARYDATA_H
-
-// #include <VimbaC/Include/VmbCommonTypes.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/FeatureContainer.h>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class AncillaryData extends FeatureContainer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AncillaryData(Pointer p) { super(p); }
-
-    public AncillaryData( VmbFrame_t pFrame ) { super((Pointer)null); allocate(pFrame); }
-    private native void allocate( VmbFrame_t pFrame );
-
-    //
-    // Method:      Open()
-    //
-    // Purpose:     Opens the ancillary data to allow access to the elements of the ancillary data via feature access.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //
-    // Details:     This function can only succeed if the given frame has been filled by the API.
-    //    
-    public native @Cast("VmbErrorType") int Open();
-
-    //
-    // Method:      Close()
-    //
-    // Purpose:     Closes the ancillary data inside a frame.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given handle is not valid
-    //
-    // Details:     After reading the ancillary data and before re-queuing the frame, ancillary data
-    //              must be closed.
-    //
-    public native @Cast("VmbError_t") int Close();
-
-    //
-    // Method:      GetBuffer()
-    //
-    // Purpose:     Returns the underlying buffer
-    //
-    // Parameters:  [out]       VmbUchar_t*&        pBuffer     A pointer to the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("VmbUchar_t*&") @ByPtrRef BytePointer pBuffer );
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("VmbUchar_t*&") @ByPtrRef ByteBuffer pBuffer );
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("VmbUchar_t*&") @ByPtrRef byte[] pBuffer );
-
-    //
-    // Method:      GetBuffer()
-    //
-    // Purpose:     Returns the underlying buffer
-    //
-    // Parameters:  [out]       const VmbUchar_t*&  pBuffer     A pointer to the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("const VmbUchar_t*") byte pBuffer );
-
-    //
-    // Method:      GetSize()
-    //
-    // Purpose:     Returns the size of the underlying buffer
-    //
-    // Parameters:  [out]       VmbUint32_t&        size    The size of the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetSize( @Cast("VmbUint32_t*") @ByRef IntPointer size );
-    public native @Cast("VmbErrorType") int GetSize( @Cast("VmbUint32_t*") @ByRef IntBuffer size );
-    public native @Cast("VmbErrorType") int GetSize( @Cast("VmbUint32_t*") @ByRef int[] size );
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/ICameraFactory.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        ICameraFactory.h
-
-  Description: Definition of interface AVT::VmbAPI::ICameraFactory.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_ICAMERAFACTORY_H
-// #define AVT_VMBAPI_ICAMERAFACTORY_H
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Camera.h>
-
-@Namespace("AVT::VmbAPI") public static class ICameraFactory extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ICameraFactory(Pointer p) { super(p); }
-
-    //
-    // Method:      CreateCamera()
-    //
-    // Purpose:     Factory method to create a camera that extends the Camera class
-    //
-    // Parameters:
-    //
-    // [in ]    const char*         pCameraID                   The ID of the camera
-    // [in ]    const char*         pCameraName                 The name of the camera
-    // [in ]    const char*         pCameraModel                The model name of the camera
-    // [in ]    const char*         pCameraSerialNumber         The serial number of the camera
-    // [in ]    const char*         pInterfaceID                The ID of the interface the camera is connected to
-    // [in ]    VmbInterfaceType    interfaceType               The type of the interface the camera is connected to
-    // [in ]    const char*         pInterfaceName              The name of the interface
-    // [in ]    const char*         pInterfaceSerialNumber      The serial number of the interface
-    // [in ]    VmbAccessModeType   interfacePermittedAccess    The access privileges for the interface
-    //
-    // Details:   The ID of the camera may be, among others, one of the following: "169.254.12.13",
-    //            "000f31000001", a plain serial number: "1234567890", or the device ID 
-    //            of the underlying transport layer.
-    //
-    public native @SharedPtr @ByVal Camera CreateCamera(    @Cast("const char*") BytePointer pCameraID,
-                                                    @Cast("const char*") BytePointer pCameraName,
-                                                    @Cast("const char*") BytePointer pCameraModel,
-                                                    @Cast("const char*") BytePointer pCameraSerialNumber,
-                                                    @Cast("const char*") BytePointer pInterfaceID,
-                                                    @Cast("VmbInterfaceType") int interfaceType,
-                                                    @Cast("const char*") BytePointer pInterfaceName,
-                                                    @Cast("const char*") BytePointer pInterfaceSerialNumber,
-                                                    @Cast("VmbAccessModeType") int interfacePermittedAccess);
-    public native @SharedPtr @ByVal Camera CreateCamera(    String pCameraID,
-                                                    String pCameraName,
-                                                    String pCameraModel,
-                                                    String pCameraSerialNumber,
-                                                    String pInterfaceID,
-                                                    @Cast("VmbInterfaceType") int interfaceType,
-                                                    String pInterfaceName,
-                                                    String pInterfaceSerialNumber,
-                                                    @Cast("VmbAccessModeType") int interfacePermittedAccess);
-
-    //
-    // Method:      ICameraFactory destructor
-    //
-    // Purpose:     Destroys an instance of class Camera
-    //
-
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/IFrameObserver.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        IFrameObserver.h
-
-  Description: Definition of interface AVT::VmbAPI::IFrameObserver.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_IFRAMEOBSERVER_H
-// #define AVT_VMBAPI_IFRAMEOBSERVER_H
-
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Frame.h>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class IFrameObserver extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IFrameObserver(Pointer p) { super(p); }
-
-    //
-    // Method:      FrameReceived()
-    //
-    // Purpose:     The event handler function that gets called whenever
-    //              a new frame is received
-    //
-    // Parameters:
-    //
-    // [in]     const FramePtr      pFrame                  The frame that was received
-    //
-    public native void FrameReceived( @Const @SharedPtr @ByVal Frame pFrame );
-
-    //
-    // Method:      IFrameObserver destructor
-    //
-    // Purpose:     Destroys an instance of class IFrameObserver
-    //
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/EnumEntry.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        EnumEntry.h
-
-  Description:  Definition of class AVT::VmbAPI::EnumEntry.
-                An EnumEntry consists of
-                Name
-                DisplayName
-                Value
-                of one particular enumeration
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_ENUMENTRY_H
-// #define AVT_VMBAPI_ENUMENTRY_H
-
-// #include <string>
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class EnumEntry extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public EnumEntry(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public EnumEntry(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public EnumEntry position(long position) {
-        return (EnumEntry)super.position(position);
-    }
-
-    //
-    // Method:      EnumEntry constructor
-    //
-    // Purpose:     Creates an instance of class EnumEntry
-    //
-    // Parameters:
-    //
-    // [in ]    const char*             pName           The name of the enum
-    // [in ]    const char*             pDisplayName    The declarative name of the enum
-    // [in ]    const char*             pDescription    The description of the enum
-    // [in ]    const char*             pTooltip        A tooltip that can be used by a GUI
-    // [in ]    const char*             pSNFCNamespace  The SFNC namespace of the enum
-    // [in ]    VmbFeatureVisibility_t  visibility      The visibility of the enum
-    // [in ]    VmbInt64_t              value           The integer value of the enum
-    //
-    public EnumEntry(  @Cast("const char*") BytePointer pName,
-                    @Cast("const char*") BytePointer pDisplayName,
-                    @Cast("const char*") BytePointer pDescription,
-                    @Cast("const char*") BytePointer pTooltip,
-                    @Cast("const char*") BytePointer pSNFCNamespace,
-                    @Cast("VmbFeatureVisibility_t") int visibility,
-                    @Cast("VmbInt64_t") long value) { super((Pointer)null); allocate(pName, pDisplayName, pDescription, pTooltip, pSNFCNamespace, visibility, value); }
-    private native void allocate(  @Cast("const char*") BytePointer pName,
-                    @Cast("const char*") BytePointer pDisplayName,
-                    @Cast("const char*") BytePointer pDescription,
-                    @Cast("const char*") BytePointer pTooltip,
-                    @Cast("const char*") BytePointer pSNFCNamespace,
-                    @Cast("VmbFeatureVisibility_t") int visibility,
-                    @Cast("VmbInt64_t") long value);
-    public EnumEntry(  String pName,
-                    String pDisplayName,
-                    String pDescription,
-                    String pTooltip,
-                    String pSNFCNamespace,
-                    @Cast("VmbFeatureVisibility_t") int visibility,
-                    @Cast("VmbInt64_t") long value) { super((Pointer)null); allocate(pName, pDisplayName, pDescription, pTooltip, pSNFCNamespace, visibility, value); }
-    private native void allocate(  String pName,
-                    String pDisplayName,
-                    String pDescription,
-                    String pTooltip,
-                    String pSNFCNamespace,
-                    @Cast("VmbFeatureVisibility_t") int visibility,
-                    @Cast("VmbInt64_t") long value);
-
-    //
-    // Method:      EnumEntry constructor
-    //
-    // Purpose:     Creates an instance of class EnumEntry
-    //
-    public EnumEntry() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    //
-    // Method:      EnumEntry copy constructor
-    //
-    // Purpose:     Creates a copy of class EnumEntry
-    //
-    public EnumEntry( @Const @ByRef EnumEntry other) { super((Pointer)null); allocate(other); }
-    private native void allocate( @Const @ByRef EnumEntry other);
-    
-    //
-    // Method:      EnumEntry assignment operator
-    //
-    // Purpose:     assigns EnumEntry to existing instance
-    //
-    public native @ByRef @Name("operator =") EnumEntry put( @Const @ByRef EnumEntry o);
-
-    //
-    // Method:      EnumEntry destructor
-    //
-    // Purpose:     Destroys an instance of class EnumEntry
-    //
-
-    //
-    // Method:      GetName()
-    //
-    // Purpose:     Gets the name of an enumeration
-    //
-    // Parameters:
-    //
-    // [out]        std::string& name   The name of the enumeration
-    //
-    public native @Cast("VmbErrorType") int GetName( @StdString BytePointer name );
-    public native @Cast("VmbErrorType") int GetName( @StdString String name );
-
-    //
-    // Method:      GetDisplayName()
-    //
-    // Purpose:     Gets a more declarative name of an enumeration
-    //
-    // Parameters:
-    //
-    // [out]        std::string& displayName    The display name of the enumeration
-    //
-    public native @Cast("VmbErrorType") int GetDisplayName( @StdString BytePointer displayName );
-    public native @Cast("VmbErrorType") int GetDisplayName( @StdString String displayName );
-
-    //
-    // Method:      GetDescription()
-    //
-    // Purpose:     Gets the description of an enumeration
-    //
-    // Parameters:
-    //
-    // [out]        std::string& description    The description of the enumeration
-    //
-    public native @Cast("VmbErrorType") int GetDescription( @StdString BytePointer description );
-    public native @Cast("VmbErrorType") int GetDescription( @StdString String description );
-
-    //
-    // Method:      GetTooltip()
-    //
-    // Purpose:     Gets a tooltip that can be used as pop up help in a GUI
-    //
-    // Parameters:
-    //
-    // [out]        std::string& tooltip    The tooltip as string
-    //
-    public native @Cast("VmbErrorType") int GetTooltip( @StdString BytePointer tooltip );
-    public native @Cast("VmbErrorType") int GetTooltip( @StdString String tooltip );
-
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Gets the integer value of an enumeration
-    //
-    // Parameters:
-    //
-    // [out]        VmbInt64_t& value   The integer value of the enumeration
-    //
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbInt64_t*") @ByRef LongPointer value );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbInt64_t*") @ByRef LongBuffer value );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbInt64_t*") @ByRef long[] value );
-
-    //
-    // Method:      GetVisibility()
-    //
-    // Purpose:     Gets the visibility of an enumeration
-    //
-    // Parameters:
-    //
-    // [out]        VmbFeatureVisibilityType&   value   The visibility of the enumeration
-    //
-    public native @Cast("VmbErrorType") int GetVisibility( @Cast("VmbFeatureVisibilityType*") @ByRef IntPointer value );
-    public native @Cast("VmbErrorType") int GetVisibility( @Cast("VmbFeatureVisibilityType*") @ByRef IntBuffer value );
-    public native @Cast("VmbErrorType") int GetVisibility( @Cast("VmbFeatureVisibilityType*") @ByRef int[] value );
-
-    //
-    // Method:      GetSNFCNamespace()
-    //
-    // Purpose:     Gets the standard feature naming convention namespace of the enumeration
-    //
-    // Parameters:
-    //
-    // [out]        std::string& sFNCNamespace    The feature's SFNC namespace
-    //
-    public native @Cast("VmbErrorType") int GetSFNCNamespace( @StdString BytePointer sFNCNamespace );
-    public native @Cast("VmbErrorType") int GetSFNCNamespace( @StdString String sFNCNamespace );
-
-}
-
-// #include <VimbaCPP/Include/EnumEntry.hpp>
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/ICameraListObserver.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        ICameraListObserver.h
-
-  Description: Definition of interface AVT::VmbAPI::ICameraListObserver.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_ICAMERALISTOBSERVER_H
-// #define AVT_VMBAPI_ICAMERALISTOBSERVER_H
-
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Camera.h>
-// #include <vector>
-
-@Namespace("AVT::VmbAPI") public static class ICameraListObserver extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ICameraListObserver(Pointer p) { super(p); }
-
-    //
-    // Method:      CameraListChanged()
-    //
-    // Purpose:     The event handler function that gets called whenever
-    //              an ICameraListObserver is triggered. This occurs most
-    //              likely when a camera was plugged in or out.
-    //
-    // Parameters:
-    //
-    // [out]    CameraPtr           pCam                    The camera that triggered the event
-    // [out]    UpdateTriggerType   reason                  The reason why the callback routine was triggered
-    //                                                      (e.g., a new camera was plugged in)
-    //
-    public native void CameraListChanged( @SharedPtr @ByVal Camera pCam, @Cast("AVT::VmbAPI::UpdateTriggerType") int reason );
-
-    //
-    // Method:      ICameraListObserver destructor
-    //
-    // Purpose:     Destroys an instance of class ICameraListObserver
-    //
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/IInterfaceListObserver.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        IInterfaceListObserver.h
-
-  Description: Definition of interface AVT::VmbAPI::IInterfaceListObserver.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_IINTERFACELISTOBSERVER_H
-// #define AVT_VMBAPI_IINTERFACELISTOBSERVER_H
-
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Interface.h>
-// #include <vector>
-
-@Namespace("AVT::VmbAPI") public static class IInterfaceListObserver extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IInterfaceListObserver(Pointer p) { super(p); }
-
-    //
-    // Method:      InterfaceListChanged()
-    //
-    // Purpose:     The event handler function that gets called whenever
-    //              an IInterfaceListObserver is triggered.
-    //
-    // Parameters:
-    //
-    // [out]    InterfacePtr        pInterface              The interface that triggered the event
-    // [out]    UpdateTriggerType   reason                  The reason why the callback routine was triggered
-    //
-    public native void InterfaceListChanged( @SharedPtr @ByVal Interface pInterface, @Cast("AVT::VmbAPI::UpdateTriggerType") int reason );
-
-    //
-    // Method:      IInterfaceListObserver destructor
-    //
-    // Purpose:     Destroys an instance of class IInterfaceListObserver
-    //
-    
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/IFeatureObserver.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        IFeatureObserver.h
-
-  Description: Definition of interface AVT::VmbAPI::IFeatureObserver.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_IFEATUREOBSERVER_H
-// #define AVT_VMBAPI_IFEATUREOBSERVER_H
-
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Feature.h>
-// #include <vector>
-
-@Namespace("AVT::VmbAPI") public static class IFeatureObserver extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IFeatureObserver(Pointer p) { super(p); }
-
-    //
-    // Method:      FeatureChanged()
-    //
-    // Purpose:     The event handler function that gets called whenever
-    //              a feature has changed
-    //
-    // Parameters:
-    //
-    // [in]     const FeaturePtr&      pFeature          The frame that has changed
-    //
-    public native void FeatureChanged( @Const @SharedPtr @ByRef Feature pFeature );
-
-    //
-    // Method:      IFeatureObserver destructor
-    //
-    // Purpose:     Destroys an instance of class IFeatureObserver
-    //
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/Interface.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        Interface.h
-
-  Description: Definition of class AVT::VmbAPI::Interface.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_INTERFACE_H
-// #define AVT_VMBAPI_INTERFACE_H
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/FeatureContainer.h>
-// #include <vector>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class Interface extends FeatureContainer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Interface(Pointer p) { super(p); }
-
-
-    public Interface( @Const VmbInterfaceInfo_t pInterfaceInfo ) { super((Pointer)null); allocate(pInterfaceInfo); }
-    private native void allocate( @Const VmbInterfaceInfo_t pInterfaceInfo );
-
-    //
-    // Method:      Open()
-    //
-    // Purpose:     Open an interface handle for feature access.
-    //
-    // Parameters:  none
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorNotFound:      The designated interface cannot be found   
-    //
-    // Details:   An interface can be opened if interface-specific control is required, such as I/O pins
-    //            on a frame grabber card. Control is then possible via feature access methods.
-    //
-    public native @Cast("VmbErrorType") int Open();
-
-    //
-    // Method:      Close()
-    //
-    // Purpose:     Close an interface.
-    //
-    // Parameters:  none    
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The handle is not valid
-    //
-    public native @Cast("VmbErrorType") int Close();
-
-    //
-    // Method:      GetID()
-    //
-    // Purpose:     Gets the ID of an interface.
-    //
-    // Parameters:  [out]   std::string&        interfaceID          The ID of the interface
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    // Details:    This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetID( @StdString BytePointer interfaceID );
-    public native @Cast("VmbErrorType") int GetID( @StdString String interfaceID );
-
-    //
-    // Method:      GetType()
-    //
-    // Purpose:     Gets the type, e.g. FireWire, GigE or USB of an interface.
-    //
-    // Parameters:  [out]   VmbInterfaceType&   type        The type of the interface
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //  Details:    This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetType( @Cast("VmbInterfaceType*") @ByRef IntPointer type );
-    public native @Cast("VmbErrorType") int GetType( @Cast("VmbInterfaceType*") @ByRef IntBuffer type );
-    public native @Cast("VmbErrorType") int GetType( @Cast("VmbInterfaceType*") @ByRef int[] type );
-
-    //
-    // Method:      GetName()
-    //
-    // Purpose:     Gets the name of an interface.
-    //
-    // Parameters:  [out]   std::string&        name        The name of the interface
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetName( @StdString BytePointer name );
-    public native @Cast("VmbErrorType") int GetName( @StdString String name );
-
-    //
-    // Method:      GetSerialNumber()
-    //
-    // Purpose:     Gets the serial number of an interface.
-    //
-    // Parameters:  [out]   std::string&    serialNumber    The serial number of the interface
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetSerialNumber( @StdString BytePointer serialNumber );
-    public native @Cast("VmbErrorType") int GetSerialNumber( @StdString String serialNumber );
-
-    //
-    // Method:      GetPermittedAccess()
-    //
-    // Purpose:     Gets the access mode of an interface.
-    //
-    // Parameters:  [out]   VmbAccessModeType&  accessMode  The possible access mode of the interface
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    public native @Cast("VmbErrorType") int GetPermittedAccess( @Cast("VmbAccessModeType*") @ByRef IntPointer accessMode );
-    public native @Cast("VmbErrorType") int GetPermittedAccess( @Cast("VmbAccessModeType*") @ByRef IntBuffer accessMode );
-    public native @Cast("VmbErrorType") int GetPermittedAccess( @Cast("VmbAccessModeType*") @ByRef int[] accessMode );
-}
-
-// #include <VimbaCPP/Include/Interface.hpp>
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/Frame.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        Frame.h
-
-  Description: Definition of class AVT::VmbAPI::Frame.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_FRAME_H
-// #define AVT_VMBAPI_FRAME_H
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/IFrameObserver.h>
-// #include <VimbaCPP/Include/AncillaryData.h>
-// #include <vector> // forward declaration of camera class for befriending
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class Frame extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Frame(Pointer p) { super(p); }
-
-    //
-    // Method:      Frame constructor
-    //
-    // Purpose:     Creates an instance of class Frame of a certain size
-    //
-    // Parameters:  [in ]   VmbInt64_t      bufferSize  The size of the underlying buffer
-    //
-    public Frame( @Cast("VmbInt64_t") long bufferSize ) { super((Pointer)null); allocate(bufferSize); }
-    private native void allocate( @Cast("VmbInt64_t") long bufferSize );
-
-    //
-    // Method:      Frame constructor
-    //
-    // Purpose:     Creates an instance of class Frame with the given user buffer of the given size
-    //
-    // Parameters:  [in ]   VmbUchar_t*     pBuffer     A pointer to an allocated buffer
-    // Parameters:  [in ]   VmbInt64_t      bufferSize  The size of the underlying buffer
-    //
-    public Frame( @Cast("VmbUchar_t*") BytePointer pBuffer, @Cast("VmbInt64_t") long bufferSize ) { super((Pointer)null); allocate(pBuffer, bufferSize); }
-    private native void allocate( @Cast("VmbUchar_t*") BytePointer pBuffer, @Cast("VmbInt64_t") long bufferSize );
-    public Frame( @Cast("VmbUchar_t*") ByteBuffer pBuffer, @Cast("VmbInt64_t") long bufferSize ) { super((Pointer)null); allocate(pBuffer, bufferSize); }
-    private native void allocate( @Cast("VmbUchar_t*") ByteBuffer pBuffer, @Cast("VmbInt64_t") long bufferSize );
-    public Frame( @Cast("VmbUchar_t*") byte[] pBuffer, @Cast("VmbInt64_t") long bufferSize ) { super((Pointer)null); allocate(pBuffer, bufferSize); }
-    private native void allocate( @Cast("VmbUchar_t*") byte[] pBuffer, @Cast("VmbInt64_t") long bufferSize );
-
-    //
-    // Method:      Frame destructor
-    //
-    // Purpose:     Destroys an instance of class Frame
-    //
-
-    //
-    // Method:      RegisterObserver()
-    //
-    // Purpose:     Registers an observer that will be called whenever a new frame arrives
-    //
-    // Parameters:  [in ]   const IFrameObserverPtr&   pObserver   An object that implements the IObserver interface
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorBadParameter: "pObserver" is NULL.
-    //  - VmbErrorResources:    The observer was in use
-    //
-    // Details:     As new frames arrive, the observer's FrameReceived method will be called.
-    //              Only one observer can be registered.
-    //
-    public native @Cast("VmbErrorType") int RegisterObserver( @Const @SharedPtr @ByRef IFrameObserver pObserver );
-
-    //
-    // Method:      UnregisterObserver()
-    //
-    // Purpose:     Unregisters the observer that was called whenever a new frame arrived
-    //
-    public native @Cast("VmbErrorType") int UnregisterObserver();
-
-    //
-    // Method:      GetAncillaryData()
-    //
-    // Purpose:     Returns the part of a frame that describes the chunk data as an object
-    //
-    // Parameters:  [out]   AncillaryDataPtr&        pAncillaryData      The wrapped chunk data
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorNotFound:     No chunk data present
-    //
-    public native @Cast("VmbErrorType") int GetAncillaryData( @SharedPtr @ByRef AncillaryData pAncillaryData );
-
-    //
-    // Method:      GetAncillaryData()
-    //
-    // Purpose:     Returns the part of a frame that describes the chunk data as an object
-    //
-    // Parameters:  [out]   ConstAncillaryDataPtr&    pAncillaryData     The wrapped chunk data
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorNotFound:     No chunk data present
-    //
-    public native @Cast("VmbErrorType") int GetAncillaryData( @SharedPtr @ByRef ConstAncillaryData pAncillaryData );
-
-    //
-    // Method:      GetBuffer()
-    //
-    // Purpose:     Returns the complete buffer including image and chunk data
-    //
-    // Parameters:  [out]   VmbUchar_t*      pBuffer        A pointer to the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("VmbUchar_t*&") @ByPtrRef BytePointer pBuffer );
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("VmbUchar_t*&") @ByPtrRef ByteBuffer pBuffer );
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("VmbUchar_t*&") @ByPtrRef byte[] pBuffer );
-
-    //
-    // Method:      GetBuffer()
-    //
-    // Purpose:     Returns the complete buffer including image and chunk data
-    //
-    // Parameters:  [out]   const VmbUchar_t*      pBuffer  A pointer to the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetBuffer( @Cast("const VmbUchar_t*") byte pBuffer );
-
-    //
-    // Method:      GetImage()
-    //
-    // Purpose:     Returns only the image data
-    //
-    // Parameters:  [out]   VmbUchar_t*         pBuffer     A pointer to the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetImage( @Cast("VmbUchar_t*&") @ByPtrRef BytePointer pBuffer );
-    public native @Cast("VmbErrorType") int GetImage( @Cast("VmbUchar_t*&") @ByPtrRef ByteBuffer pBuffer );
-    public native @Cast("VmbErrorType") int GetImage( @Cast("VmbUchar_t*&") @ByPtrRef byte[] pBuffer );
-
-    //
-    // Method:      GetImage()
-    //
-    // Purpose:     Returns only the image data
-    //
-    // Parameters:  [out]   const VmbUchar_t*    pBuffer    A pointer to the buffer
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetImage( @Cast("const VmbUchar_t*") byte pBuffer );
-
-    //
-    // Method:      GetReceiveStatus()
-    //
-    // Purpose:     Returns the receive status of a frame
-    //
-    // Parameters:  [out]   VmbFrameStatusType&   status    The receive status
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetReceiveStatus( @Cast("VmbFrameStatusType*") @ByRef IntPointer status );
-    public native @Cast("VmbErrorType") int GetReceiveStatus( @Cast("VmbFrameStatusType*") @ByRef IntBuffer status );
-    public native @Cast("VmbErrorType") int GetReceiveStatus( @Cast("VmbFrameStatusType*") @ByRef int[] status );
-    
-    //
-    // Method:      GetImageSize()
-    //
-    // Purpose:     Returns the memory size of the image
-    //
-    // Parameters:  [out]   VmbUint32_t&    imageSize       The size in bytes
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetImageSize( @Cast("VmbUint32_t*") @ByRef IntPointer imageSize );
-    public native @Cast("VmbErrorType") int GetImageSize( @Cast("VmbUint32_t*") @ByRef IntBuffer imageSize );
-    public native @Cast("VmbErrorType") int GetImageSize( @Cast("VmbUint32_t*") @ByRef int[] imageSize );
-    
-    //
-    // Method:      GetAncillarySize()
-    //
-    // Purpose:     Returns memory size of the chunk data
-    //
-    // Parameters:  [out]   VmbUint32_t&    ancillarySize   The size in bytes
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetAncillarySize( @Cast("VmbUint32_t*") @ByRef IntPointer ancillarySize );
-    public native @Cast("VmbErrorType") int GetAncillarySize( @Cast("VmbUint32_t*") @ByRef IntBuffer ancillarySize );
-    public native @Cast("VmbErrorType") int GetAncillarySize( @Cast("VmbUint32_t*") @ByRef int[] ancillarySize );
-    
-    //
-    // Method:      GetBufferSize()
-    //
-    // Purpose:     Returns the memory size of the frame buffer holding 
-    //              both the image data and the ancillary data
-    //
-    // Parameters:  [out]   VmbUint32_t&    bufferSize      The size in bytes
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetBufferSize( @Cast("VmbUint32_t*") @ByRef IntPointer bufferSize );
-    public native @Cast("VmbErrorType") int GetBufferSize( @Cast("VmbUint32_t*") @ByRef IntBuffer bufferSize );
-    public native @Cast("VmbErrorType") int GetBufferSize( @Cast("VmbUint32_t*") @ByRef int[] bufferSize );
-
-    //
-    // Method:      GetPixelFormat()
-    //
-    // Purpose:     Returns the GenICam pixel format
-    //
-    // Parameters:  [out]   VmbPixelFormatType&      pixelFormat    The GenICam pixel format
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetPixelFormat( @Cast("VmbPixelFormatType*") @ByRef IntPointer pixelFormat );
-    public native @Cast("VmbErrorType") int GetPixelFormat( @Cast("VmbPixelFormatType*") @ByRef IntBuffer pixelFormat );
-    public native @Cast("VmbErrorType") int GetPixelFormat( @Cast("VmbPixelFormatType*") @ByRef int[] pixelFormat );
-
-    //
-    // Method:      GetWidth()
-    //
-    // Purpose:     Returns the width of the image
-    //
-    // Parameters:  [out]   VmbUint32_t&    width       The width in pixels
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetWidth( @Cast("VmbUint32_t*") @ByRef IntPointer width );
-    public native @Cast("VmbErrorType") int GetWidth( @Cast("VmbUint32_t*") @ByRef IntBuffer width );
-    public native @Cast("VmbErrorType") int GetWidth( @Cast("VmbUint32_t*") @ByRef int[] width );
-
-    //
-    // Method:      GetHeight()
-    //
-    // Purpose:     Returns the height of the image
-    //
-    // Parameters:  [out]   VmbUint32_t&    height       The height in pixels
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetHeight( @Cast("VmbUint32_t*") @ByRef IntPointer height );
-    public native @Cast("VmbErrorType") int GetHeight( @Cast("VmbUint32_t*") @ByRef IntBuffer height );
-    public native @Cast("VmbErrorType") int GetHeight( @Cast("VmbUint32_t*") @ByRef int[] height );
-
-    //
-    // Method:      GetOffsetX()
-    //
-    // Purpose:     Returns the x offset of the image
-    //
-    // Parameters:  [out]   VmbUint32_t&    offsetX     The x offset in pixels
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetOffsetX( @Cast("VmbUint32_t*") @ByRef IntPointer offsetX );
-    public native @Cast("VmbErrorType") int GetOffsetX( @Cast("VmbUint32_t*") @ByRef IntBuffer offsetX );
-    public native @Cast("VmbErrorType") int GetOffsetX( @Cast("VmbUint32_t*") @ByRef int[] offsetX );
-
-    //
-    // Method:      GetOffsetY()
-    //
-    // Purpose:     Returns the y offset of the image
-    //
-    // Parameters:  [out]   VmbUint32_t&    offsetY     The y offset in pixels
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetOffsetY( @Cast("VmbUint32_t*") @ByRef IntPointer offsetY );
-    public native @Cast("VmbErrorType") int GetOffsetY( @Cast("VmbUint32_t*") @ByRef IntBuffer offsetY );
-    public native @Cast("VmbErrorType") int GetOffsetY( @Cast("VmbUint32_t*") @ByRef int[] offsetY );
-
-    //
-    // Method:      GetFrameID()
-    //
-    // Purpose:     Returns the frame ID
-    //
-    // Parameters:  [out]   VmbUint64_t&     frameID    The frame ID
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetFrameID( @Cast("VmbUint64_t*") @ByRef IntPointer frameID );
-    public native @Cast("VmbErrorType") int GetFrameID( @Cast("VmbUint64_t*") @ByRef IntBuffer frameID );
-    public native @Cast("VmbErrorType") int GetFrameID( @Cast("VmbUint64_t*") @ByRef int[] frameID );
-
-    //
-    // Method:      GetTimeStamp()
-    //
-    // Purpose:     Returns the time stamp
-    //
-    // Parameters:  [out]   VmbUint64_t&     timestamp  The time stamp
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int GetTimestamp( @Cast("VmbUint64_t*") @ByRef IntPointer timestamp );
-    public native @Cast("VmbErrorType") int GetTimestamp( @Cast("VmbUint64_t*") @ByRef IntBuffer timestamp );
-    public native @Cast("VmbErrorType") int GetTimestamp( @Cast("VmbUint64_t*") @ByRef int[] timestamp );
-
-    public native @Cast("bool") boolean GetObserver( @SharedPtr @ByRef IFrameObserver observer );
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/IRegisterDevice.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        IRegisterDevice.h
-
-  Description: Definition of interface AVT::VmbAPI::IRegisterDevice.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_IREGISTERDEVICE_H
-// #define AVT_VMBAPI_IREGISTERDEVICE_H
-
-// #include <VimbaC/Include/VmbCommonTypes.h>
-// #include <vector>
-
-@Namespace("AVT::VmbAPI") public static class IRegisterDevice extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IRegisterDevice(Pointer p) { super(p); }
-
-
-    //
-    // Method:      ReadRegisters()
-    //
-    // Purpose:     Reads one or more registers consecutively. The number of registers to be read is determined by the number of provided addresses.
-    //
-    // Parameters:  [in ]   const Uint64Vector&   addresses     A list of register addresses
-    //              [out]   Uint64Vector&         buffer        The returned data as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been read
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been read. See overload ReadRegisters( const Uint64Vector&, Uint64Vector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer );
-
-    //
-    // Method:      ReadRegisters()
-    //
-    // Purpose:     Same as ReadRegisters( const Uint64Vector&, Uint64Vector& ), but returns the number of successful read operations in case of an error.
-    //
-    // Parameters:  [in ]   const Uint64Vector&   addresses         A list of register addresses
-    //              [out]   Uint64Vector&         buffer            The returned data as vector
-    //              [out]   VmbUint32_t&          completedReads    The number of successfully read registers
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been read
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been read.
-    //
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer completedReads );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer completedReads );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer, @Cast("VmbUint32_t*") @ByRef int[] completedReads );
-    
-    //
-    // Method:      WriteRegisters()
-    //
-    // Purpose:     Writes one or more registers consecutively. The number of registers to be written is determined by the number of provided addresses.
-    //
-    // Parameters:  [in ]    const Uint64Vector&   addresses    A list of register addresses
-    //              [in ]    const Uint64Vector&   buffer       The data to write as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been written
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been written. See overload WriteRegisters( const Uint64Vector&, const Uint64Vector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer );
-
-    //
-    // Method:      WriteRegisters()
-    //
-    // Purpose:     Same as WriteRegisters( const Uint64Vector&, const Uint64Vector& ), but returns the number of successful write operations in case of an error VmbErrorIncomplete.
-    //
-    // Parameters:  [in ]   const Uint64Vector&   addresses         A list of register addresses
-    //              [in ]   const Uint64Vector&   buffer            The data to write as vector
-    //              [out]   VmbUint32_t&          completedWrites   The number of successfully read registers
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been written
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been written.
-    //
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer completedWrites );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer completedWrites );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer, @Cast("VmbUint32_t*") @ByRef int[] completedWrites );
-    
-    //
-    // Method:      ReadMemory()
-    //
-    // Purpose:     Reads a block of memory. The number of bytes to read is determined by the size of the provided buffer.
-    //
-    // Parameters:  [in ]   const VmbUint64_t&   address    The address to read from
-    //              [out]   UcharVector&         buffer     The returned data as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been read
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been read. See overload ReadMemory( const VmbUint64_t&, UcharVector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer );
-
-    //
-    // Method:      ReadMemory()
-    //
-    // Purpose:     Same as ReadMemory( const Uint64Vector&, UcharVector& ), but returns the number of bytes successfully read in case of an error VmbErrorIncomplete.
-    //
-    // Parameters:  [in ]   const VmbUint64_t&   address        The address to read from
-    //              [out]   UcharVector&         buffer         The returned data as vector
-    //              [out]   VmbUint32_t&         sizeComplete   The number of successfully read bytes
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been read
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been read.
-    //
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer sizeComplete );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer sizeComplete );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer, @Cast("VmbUint32_t*") @ByRef int[] sizeComplete );
-    
-    //
-    // Method:      WriteMemory()
-    //
-    // Purpose:     Writes a block of memory. The number of bytes to write is determined by the size of the provided buffer.
-    //
-    // Parameters:  [in]    const VmbUint64_t&   address    The address to write to
-    //              [in]    const UcharVector&   buffer     The data to write as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been written
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been written. See overload WriteMemory( const VmbUint64_t&, const UcharVector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer );
-
-    //
-    // Method:      WriteMemory()
-    //
-    // Purpose:     Same as WriteMemory( const Uint64Vector&, const UcharVector& ), but returns the number of bytes successfully written in case of an error VmbErrorIncomplete.
-    //
-    // Parameters:  [in]    const VmbUint64_t&   address        The address to write to
-    //              [in]    const UcharVector&   buffer         The data to write as vector
-    //              [out]   VmbUint32_t&         sizeComplete   The number of successfully written bytes
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been written
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been written.
-    //
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer sizeComplete );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer sizeComplete );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer, @Cast("VmbUint32_t*") @ByRef int[] sizeComplete );
-}
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/Camera.h>
-
-/*=============================================================================
-  Copyright (C) 2012 - 2016 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        Camera.h
-
-  Description: Definition of class AVT::VmbAPI::Camera.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_CAMERA_H
-// #define AVT_VMBAPI_CAMERA_H
-
-// #include <vector>
-// #include <string>
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/IRegisterDevice.h>
-// #include <VimbaCPP/Include/FeatureContainer.h>
-// #include <VimbaCPP/Include/Frame.h>
-// #include <VimbaCPP/Include/IFrameObserver.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class Camera extends FeatureContainer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Camera(Pointer p) { super(p); }
-    public IRegisterDevice asIRegisterDevice() { return asIRegisterDevice(this); }
-    @Namespace public static native @Name("static_cast<AVT::VmbAPI::IRegisterDevice*>") IRegisterDevice asIRegisterDevice(Camera pointer);
-
-    //
-    // Method:      Camera constructor
-    //
-    // Purpose:     Creates an instance of class Camera
-    //
-    // Parameters:
-    //
-    // [in ]    const char*      pID            The ID of the camera    
-    // [in ]    const char*      pName          The name of the camera
-    // [in ]    const char*      pModel         The model name of the camera
-    // [in ]    const char*      pSerialNumber  The serial number of the camera
-    // [in ]    const char*      pInterfaceID   The ID of the interface the camera is connected to
-    // [in ]    VmbInterfaceType interfaceType  The type of the interface the camera is connected to
-    //
-    // Details:   The ID of the camera may be, among others, one of the following: "169.254.12.13",
-    //            "000f31000001", a plain serial number: "1234567890", or the device ID 
-    //            of the underlying transport layer.
-    //
-    public Camera(    @Cast("const char*") BytePointer pID,
-                            @Cast("const char*") BytePointer pName,
-                            @Cast("const char*") BytePointer pModel,
-                            @Cast("const char*") BytePointer pSerialNumber,
-                            @Cast("const char*") BytePointer pInterfaceID,
-                            @Cast("VmbInterfaceType") int interfaceType ) { super((Pointer)null); allocate(pID, pName, pModel, pSerialNumber, pInterfaceID, interfaceType); }
-    private native void allocate(    @Cast("const char*") BytePointer pID,
-                            @Cast("const char*") BytePointer pName,
-                            @Cast("const char*") BytePointer pModel,
-                            @Cast("const char*") BytePointer pSerialNumber,
-                            @Cast("const char*") BytePointer pInterfaceID,
-                            @Cast("VmbInterfaceType") int interfaceType );
-    public Camera(    String pID,
-                            String pName,
-                            String pModel,
-                            String pSerialNumber,
-                            String pInterfaceID,
-                            @Cast("VmbInterfaceType") int interfaceType ) { super((Pointer)null); allocate(pID, pName, pModel, pSerialNumber, pInterfaceID, interfaceType); }
-    private native void allocate(    String pID,
-                            String pName,
-                            String pModel,
-                            String pSerialNumber,
-                            String pInterfaceID,
-                            @Cast("VmbInterfaceType") int interfaceType );
-
-    //
-    // Method:      Camera destructor
-    //
-    // Purpose:     Destroys an instance of class Camera
-    //
-    // Details:     Destroying a camera implicitly closes it beforehand.
-    //
-
-    //
-    // Method:      Open()
-    //
-    // Purpose:     Opens the specified camera.
-    //
-    // Parameters:
-    //
-    //  [in ]  VmbAccessMode_t  accessMode      Access mode determines the level of control you have on the camera
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorNotFound:      The designated camera cannot be found
-    //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
-    //
-    // Details:   A camera may be opened in a specific access mode. This mode determines
-    //            the level of control you have on a camera.
-    //  
-    public native @Cast("VmbErrorType") int Open( @Cast("VmbAccessModeType") int accessMode );
-
-    //
-    // Method:      Close()
-    //
-    // Purpose:     Closes the specified camera.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //
-    // Details:     Depending on the access mode this camera was opened in, events are killed,
-    //              callbacks are unregistered, the frame queue is cleared, and camera control is released.
-    //
-    public native @Cast("VmbErrorType") int Close();
-
-    //
-    // Method:      GetID()
-    //
-    // Purpose:     Gets the ID of a camera.
-    //
-    // Parameters:  [out]   std::string&     cameraID         The ID of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetID( @StdString BytePointer cameraID );
-    public native @Cast("VmbErrorType") int GetID( @StdString String cameraID );
-
-    //
-    // Method:      GetName()
-    //
-    // Purpose:     Gets the name of a camera.
-    //
-    // Parameters:  [out]   std::string&     name         The name of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetName( @StdString BytePointer name );
-    public native @Cast("VmbErrorType") int GetName( @StdString String name );
-    
-    //
-    // Method:      GetModel()
-    //
-    // Purpose:     Gets the model name of a camera.
-    //
-    // Parameters:  [out]   std::string&     model         The model name of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetModel( @StdString BytePointer model );
-    public native @Cast("VmbErrorType") int GetModel( @StdString String model );
-
-    //
-    // Method:      GetSerialNumber()
-    //
-    // Purpose:     Gets the serial number of a camera.
-    //
-    // Parameters:  [out]   std::string&     serialNumber         The serial number of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetSerialNumber( @StdString BytePointer serialNumber );
-    public native @Cast("VmbErrorType") int GetSerialNumber( @StdString String serialNumber );
-
-    //
-    // Method:      GetInterfaceID()
-    //
-    // Purpose:     Gets the interface ID of a camera.
-    //
-    // Parameters:  [out]   std::string&     interfaceID         The interface ID of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    //              This information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetInterfaceID( @StdString BytePointer interfaceID );
-    public native @Cast("VmbErrorType") int GetInterfaceID( @StdString String interfaceID );
-
-    //
-    // Method:      GetInterfaceType()
-    //
-    // Purpose:     Gets the type of the interface the camera is connected to. And therefore the type of the camera itself.
-    //
-    // Parameters:  [out]   VmbInterfaceType&    interfaceType The interface type of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    public native @Cast("VmbErrorType") int GetInterfaceType( @Cast("VmbInterfaceType*") @ByRef IntPointer interfaceType );
-    public native @Cast("VmbErrorType") int GetInterfaceType( @Cast("VmbInterfaceType*") @ByRef IntBuffer interfaceType );
-    public native @Cast("VmbErrorType") int GetInterfaceType( @Cast("VmbInterfaceType*") @ByRef int[] interfaceType );
-
-    //
-    // Method:      GetPermittedAccess()
-    //
-    // Purpose:     Gets the access modes of a camera.
-    //
-    // Parameters:  [out]   VmbAccessModeType&   permittedAccess The possible access modes of the camera
-    //
-    // Returns:
-    //  - VmbErrorSuccess:       If no error
-    //
-    public native @Cast("VmbErrorType") int GetPermittedAccess( @Cast("VmbAccessModeType*") @ByRef IntPointer permittedAccess );
-    public native @Cast("VmbErrorType") int GetPermittedAccess( @Cast("VmbAccessModeType*") @ByRef IntBuffer permittedAccess );
-    public native @Cast("VmbErrorType") int GetPermittedAccess( @Cast("VmbAccessModeType*") @ByRef int[] permittedAccess );
-
-    //
-    // Method:      ReadRegisters()
-    //
-    // Purpose:     Reads one or more registers consecutively. The number of registers to read is determined by the number of provided addresses.
-    //
-    // Parameters:  [in ]   const Uint64Vector&   addresses  A list of register addresses
-    //              [out]   Uint64Vector&         buffer     The returned data as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been read
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been read. See overload ReadRegisters( const Uint64Vector&, Uint64Vector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer );
-    
-    //
-    // Method:      ReadRegisters()
-    //
-    // Purpose:     Same as ReadRegisters( const Uint64Vector&, Uint64Vector& ), but returns the number of successful read operations in case of an error.
-    //
-    // Parameters:  [in ]   const Uint64Vector&   addresses       A list of register addresses
-    //              [out]   Uint64Vector&         buffer          The returned data as vector
-    //              [out]   VmbUint32_t&          completedReads  The number of successfully read registers
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been read
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been read.
-    //
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer completedReads );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer completedReads );
-    public native @Cast("VmbErrorType") int ReadRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer, @Cast("VmbUint32_t*") @ByRef int[] completedReads );
-    
-    //
-    // Method:      WriteRegisters()
-    //
-    // Purpose:     Writes one or more registers consecutively. The number of registers to write is determined by the number of provided addresses.
-    //
-    // Parameters:  [in]    const Uint64Vector&     addresses  A list of register addresses
-    //              [in]    const Uint64Vector&     buffer     The data to write as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been written
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been written. See overload WriteRegisters( const Uint64Vector&, const Uint64Vector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer );
-
-    //
-    // Method:      WriteRegisters()
-    //
-    // Purpose:     Same as WriteRegisters( const Uint64Vector&, const Uint64Vector& ), but returns the number of successful write operations in case of an error.
-    //
-    // Parameters:  [in ]   const Uint64Vector&   addresses        A list of register addresses
-    //              [in ]   const Uint64Vector&   buffer           The data to write as vector
-    //              [out]   VmbUint32_t&          completedWrites  The number of successfully read registers
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested registers have been written
-    //  - VmbErrorBadParameter: Vectors "addresses" and/or "buffer" are empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all registers have been written.
-    //
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntPointer addresses, @Cast("VmbUint64_t*") @StdVector IntPointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer completedWrites );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector IntBuffer addresses, @Cast("VmbUint64_t*") @StdVector IntBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer completedWrites );
-    public native @Cast("VmbErrorType") int WriteRegisters( @Cast("VmbUint64_t*") @StdVector int[] addresses, @Cast("VmbUint64_t*") @StdVector int[] buffer, @Cast("VmbUint32_t*") @ByRef int[] completedWrites );
-
-    //
-    // Method:      ReadMemory()
-    //
-    // Purpose:     Reads a block of memory. The number of bytes to read is determined by the size of the provided buffer.
-    //
-    // Parameters:  [in ]   const VmbUint64_t&   address    The address to read from
-    //              [out]   UcharVector&         buffer     The returned data as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been read
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been read. See overload ReadMemory( const VmbUint64_t&, UcharVector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer );
-
-    //
-    // Method:      ReadMemory()
-    //
-    // Purpose:     Same as ReadMemory( const Uint64Vector&, UcharVector& ), but returns the number of bytes successfully read in case of an error VmbErrorIncomplete.
-    //
-    // Parameters:  [in]    const VmbUint64_t&   address        The address to read from
-    //              [out]   UcharVector&         buffer         The returned data as vector
-    //              [out]   VmbUint32_t&         completeReads  The number of successfully read bytes
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been read
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been read.
-    //
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer completeReads );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer completeReads );
-    public native @Cast("VmbErrorType") int ReadMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer, @Cast("VmbUint32_t*") @ByRef int[] completeReads );
-
-    //
-    // Method:      WriteMemory()
-    //
-    // Purpose:     Writes a block of memory. The number of bytes to write is determined by the size of the provided buffer.
-    //
-    // Parameters:  [in]    const VmbUint64_t&   address    The address to write to
-    //              [in]    const UcharVector&   buffer     The data to write as vector
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been written
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been written. See overload WriteMemory( const VmbUint64_t&, const UcharVector&, VmbUint32_t& ).
-    //
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer );
-
-    //
-    // Method:      WriteMemory()
-    //
-    // Purpose:     Same as WriteMemory( const Uint64Vector&, const UcharVector& ), but returns the number of bytes successfully written in case of an error VmbErrorIncomplete.
-    //
-    // Parameters:  [in]    const VmbUint64_t&   address        The address to write to
-    //              [in]    const UcharVector&   buffer         The data to write as vector
-    //              [out]   VmbUint32_t&         sizeComplete   The number of successfully written bytes
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If all requested bytes have been written
-    //  - VmbErrorBadParameter: Vector "buffer" is empty.
-    //  - VmbErrorIncomplete:   If at least one, but not all bytes have been written.
-    //
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector BytePointer buffer, @Cast("VmbUint32_t*") @ByRef IntPointer sizeComplete );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector ByteBuffer buffer, @Cast("VmbUint32_t*") @ByRef IntBuffer sizeComplete );
-    public native @Cast("VmbErrorType") int WriteMemory( @Cast("const VmbUint64_t") int address, @Cast("VmbUchar_t*") @StdVector byte[] buffer, @Cast("VmbUint32_t*") @ByRef int[] sizeComplete );
-
-    //
-    // Method:      AcquireSingleImage()
-    //
-    // Purpose:     Gets one image synchronously.
-    //
-    // Parameters:  [out]   FramePtr&       pFrame          The frame that gets filled
-    //              [in ]   VmbUint32_t     timeout         The time to wait until the frame got filled
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorBadParameter: "pFrame" is NULL.
-    //  - VmbErrorTimeout:      Call timed out
-    //
-    public native @Cast("VmbErrorType") int AcquireSingleImage( @SharedPtr @ByRef Frame pFrame, @Cast("VmbUint32_t") int timeout );
-
-    //
-    // Method:      AcquireMultipleImages()
-    //
-    // Purpose:     Gets a certain number of images synchronously.
-    //
-    // Parameters:  [out]   FramePtrVector& frames          The frames that get filled
-    //              [in ]   VmbUint32_t     timeout         The time to wait until one frame got filled
-    //
-    // Details:     The size of the frame vector determines the number of frames to use.
-    //
-    // Returns:
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorInternalFault:    Filling all the frames was not successful.
-    //  - VmbErrorBadParameter:     Vector "frames" is empty.
-    //
-    public native @Cast("VmbErrorType") int AcquireMultipleImages( @SharedPtr @StdVector Frame frames, @Cast("VmbUint32_t") int timeout );
-
-    //
-    // Method:      AcquireMultipleImages()
-    //
-    // Purpose:     Same as AcquireMultipleImages(FramePtrVector&, VmbUint32_t), but returns the number of frames that were filled completely.
-    //
-    // Parameters:  [out]   FramePtrVector& frames              The frames that get filled
-    //              [in ]   VmbUint32_t     timeout             The time to wait until one frame got filled
-    //              [out]   VmbUint32_t&    numFramesCompleted  The number of frames that were filled completely
-    //
-    // Details:     The size of the frame vector determines the number of frames to use.
-    //              On return, "numFramesCompleted" holds the number of frames actually filled.
-    //
-    // Returns:
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorBadParameter: Vector "frames" is empty.
-    //
-    public native @Cast("VmbErrorType") int AcquireMultipleImages( @SharedPtr @StdVector Frame frames, @Cast("VmbUint32_t") int timeout, @Cast("VmbUint32_t*") @ByRef IntPointer numFramesCompleted );
-    public native @Cast("VmbErrorType") int AcquireMultipleImages( @SharedPtr @StdVector Frame frames, @Cast("VmbUint32_t") int timeout, @Cast("VmbUint32_t*") @ByRef IntBuffer numFramesCompleted );
-    public native @Cast("VmbErrorType") int AcquireMultipleImages( @SharedPtr @StdVector Frame frames, @Cast("VmbUint32_t") int timeout, @Cast("VmbUint32_t*") @ByRef int[] numFramesCompleted );
-
-    //
-    // Method:      StartContinuousImageAcquisition()
-    //
-    // Purpose:     Starts streaming and allocates the needed frames
-    //
-    // Parameters:  [in ]   int                         bufferCount    The number of frames to use
-    //              [out]   const IFrameObserverPtr&    pObserver      The observer to use on arrival of new frames
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:        If no error
-    //  - VmbErrorDeviceNotOpen:  The camera has not been opened before
-    //  - VmbErrorApiNotStarted:  VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:      The given handle is not valid
-    //  - VmbErrorInvalidAccess:  Operation is invalid with the current access mode
-    //
-    public native @Cast("VmbErrorType") int StartContinuousImageAcquisition( int bufferCount, @Const @SharedPtr @ByRef IFrameObserver pObserver );
-
-    //
-    // Method:      StopContinuousImageAcquisition()
-    //
-    // Purpose:     Stops streaming and deallocates the needed frames
-    //
-    public native @Cast("VmbErrorType") int StopContinuousImageAcquisition();
-
-    //
-    // Method:      AnnounceFrame()
-    //
-    // Purpose:     Announces a frame to the API that may be queued for frame capturing later.
-    //
-    // Parameters:
-    //
-    //  [in ]  const FramePtr&    pFrame         Shared pointer to a frame to announce
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given handle is not valid
-    //  - VmbErrorBadParameter:  "pFrame" is NULL.
-    //  - VmbErrorStructSize:    The given struct size is not valid for this version of the API
-    //
-    // Details:     Allows some preparation for frames like DMA preparation depending on the transport layer.
-    //              The order in which the frames are announced is not taken in consideration by the API.
-    //
-    public native @Cast("VmbErrorType") int AnnounceFrame( @Const @SharedPtr @ByRef Frame pFrame );
-    
-    //
-    // Method:      RevokeFrame()
-    //
-    // Purpose:     Revoke a frame from the API.
-    //
-    // Parameters:
-    //
-    //  [in ]  const FramePtr&    pFrame         Shared pointer to a frame that is to be removed from the list of announced frames
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given frame pointer is not valid
-    //  - VmbErrorBadParameter:  "pFrame" is NULL.
-    //  - VmbErrorStructSize:    The given struct size is not valid for this version of the API
-    //
-    // Details:    The referenced frame is removed from the pool of frames for capturing images.
-    //
-    public native @Cast("VmbErrorType") int RevokeFrame( @Const @SharedPtr @ByRef Frame pFrame );
-
-    //
-    // Method:      RevokeAllFrames()
-    //
-    // Purpose:     Revoke all frames assigned to this certain camera.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given handle is not valid
-    //
-    public native @Cast("VmbErrorType") int RevokeAllFrames();
-    
-    //
-    // Method:      QueueFrame()
-    //
-    // Purpose:     Queues a frame that may be filled during frame capturing.
-    //
-    // Parameters:
-    //
-    //  [in ]  const FramePtr&    pFrame    A shared pointer to a frame
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given frame is not valid
-    //  - VmbErrorBadParameter:  "pFrame" is NULL.
-    //  - VmbErrorStructSize:    The given struct size is not valid for this version of the API
-    //  - VmbErrorInvalidCall:   StopContinuousImageAcquisition is currently running in another thread
-    //
-    // Details:     The given frame is put into a queue that will be filled sequentially.
-    //              The order in which the frames are filled is determined by the order in which they are queued.
-    //              If the frame was announced with AnnounceFrame() before, the application
-    //              has to ensure that the frame is also revoked by calling RevokeFrame() or RevokeAll()
-    //              when cleaning up.
-    //
-    public native @Cast("VmbErrorType") int QueueFrame( @Const @SharedPtr @ByRef Frame pFrame );
-
-    //
-    // Method:      FlushQueue()
-    //
-    // Purpose:     Flushes the capture queue.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given handle is not valid
-    //
-    // Details:     All the currently queued frames will be returned to the user, leaving no frames in the input queue.
-    //              After this call, no frame notification will occur until frames are queued again.
-    //
-    public native @Cast("VmbErrorType") int FlushQueue();
-    
-    //
-    // Method:      StartCapture()
-    //
-    // Purpose:     Prepare the API for incoming frames from this camera.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given handle is not valid
-    //  - VmbErrorDeviceNotOpen: Camera was not opened for usage
-    //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
-    //
-    public native @Cast("VmbErrorType") int StartCapture();
-
-    //
-    // Method:      EndCapture()
-    //
-    // Purpose:     Stop the API from being able to receive frames from this camera.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:     The given handle is not valid
-    //
-    // Details:     Consequences of VmbCaptureEnd():
-    //                  - The frame queue is flushed
-    //                  - The frame callback will not be called any more
-    //
-    public native @Cast("VmbErrorType") int EndCapture();
-
-    //
-    // Method:      SaveCameraSettings()
-    //
-    // Purpose:     Saves the current camera setup to an XML file
-    //
-    // Parameters:
-    //
-    //  [in ]   std::string                     pStrFileName    xml file name
-    //  [in ]   VmbFeaturePersistSettings_t*    pSettings       pointer to settings struct
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorApiNotStarted:    VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:        The given handle is not valid
-    //  - VmbErrorInternalFault:    When something unexpected happens in VimbaC function
-    //  - VmbErrorOther:            Every other failure in load/save settings implementation class
-    //
-    public native @Cast("VmbErrorType") int SaveCameraSettings( @StdString BytePointer fileName, VmbFeaturePersistSettings_t pSettings/*=0*/ );
-    public native @Cast("VmbErrorType") int SaveCameraSettings( @StdString BytePointer fileName );
-    public native @Cast("VmbErrorType") int SaveCameraSettings( @StdString String fileName, VmbFeaturePersistSettings_t pSettings/*=0*/ );
-    public native @Cast("VmbErrorType") int SaveCameraSettings( @StdString String fileName );
-
-    //
-    // Method:      LoadCameraSettings()
-    //
-    // Purpose:     Loads the current camera setup from an XML file into the camera
-    //
-    // Parameters:
-    //
-    //  [in] std::string                    pStrFileName    xml file name
-    //  [in] VmbFeaturePersistSettings_t*   pSettings       pointer to settings struct
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorApiNotStarted:    VmbStartup() was not called before the current command
-    //  - VmbErrorBadHandle:        The given handle is not valid
-    //  - VmbErrorInternalFault:    When something unexpected happens in VimbaC function
-    //  - VmbErrorOther:            Every other failure in load/save settings implementation class
-    //
-    public native @Cast("VmbErrorType") int LoadCameraSettings( @StdString BytePointer fileName, VmbFeaturePersistSettings_t pSettings/*=0*/ );
-    public native @Cast("VmbErrorType") int LoadCameraSettings( @StdString BytePointer fileName );
-    public native @Cast("VmbErrorType") int LoadCameraSettings( @StdString String fileName, VmbFeaturePersistSettings_t pSettings/*=0*/ );
-    public native @Cast("VmbErrorType") int LoadCameraSettings( @StdString String fileName );
-
-    //
-    // Method:      LoadSaveSettingsSetup()
-    //
-    // Purpose:     Sets Load/Save settings behaviour (alternative to settings struct)
-    //
-    // Parameters:
-    //
-    //  [in] VmbFeaturePersist_t  persistType    determines which feature shall be considered during load/save settings
-    //  [in] VmbUint32_t          maxIterations  determines how many 'tries' during loading feature values shall be performed
-    //  [in] VmbUint32_t          loggingLevel   determines level of detail for load/save settings logging
-    //
-    public native void LoadSaveSettingsSetup( @Cast("VmbFeaturePersist_t") int persistType, @Cast("VmbUint32_t") int maxIterations, @Cast("VmbUint32_t") int loggingLevel );
-}
-
-// #include <VimbaCPP/Include/Camera.hpp>
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/Feature.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        Feature.h
-
-  Description:  Definition of base class AVT::VmbAPI::Feature.
-                This class wraps every call to BaseFeature resp. its concrete
-                subclass. That way  polymorphism is hidden away from the user.
-                
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_FEATURE_H
-// #define AVT_VMBAPI_FEATURE_H
-
-// #include <vector>
-// #include <map>
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/IFeatureObserver.h>
-// #include <VimbaCPP/Include/EnumEntry.h>
-
-@Namespace("AVT::VmbAPI") @Opaque public static class BaseFeature extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public BaseFeature() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BaseFeature(Pointer p) { super(p); }
-}
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class Feature extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Feature(Pointer p) { super(p); }
-
-    public Feature( @Const VmbFeatureInfo_t pFeatureInfo, FeatureContainer pFeatureContainer ) { super((Pointer)null); allocate(pFeatureInfo, pFeatureContainer); }
-    private native void allocate( @Const VmbFeatureInfo_t pFeatureInfo, FeatureContainer pFeatureContainer );
-
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Queries the value of a feature of type VmbInt64
-    //
-    // Parameters:
-    //
-    // [out]    VmbInt64_t&     value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbInt64_t*") @ByRef LongPointer value );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbInt64_t*") @ByRef LongBuffer value );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbInt64_t*") @ByRef long[] value );
-    
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Queries the value of a feature of type double
-    //
-    // Parameters:
-    //
-    // [out]    double&     value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int GetValue( @ByRef DoublePointer value );
-    public native @Cast("VmbErrorType") int GetValue( @ByRef DoubleBuffer value );
-    public native @Cast("VmbErrorType") int GetValue( @ByRef double[] value );
-
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Queries the value of a feature of type string
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    value       The feature's value
-    //
-    // Details:     When an empty string is returned, its size
-    //              indicates the maximum length
-    public native @Cast("VmbErrorType") int GetValue( @StdString BytePointer value );
-    public native @Cast("VmbErrorType") int GetValue( @StdString String value );
-
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Queries the value of a feature of type bool
-    //
-    // Parameters:
-    //
-    // [out]    bool&       value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int GetValue( @Cast("bool*") @ByRef BoolPointer value );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("bool*") @ByRef boolean[] value );
-
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Queries the value of a feature of type UcharVector
-    //
-    // Parameters:
-    //
-    // [out]    UcharVector&    value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbUchar_t*") @StdVector ByteBuffer value );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbUchar_t*") @StdVector byte[] value );
-
-    //
-    // Method:      GetValue()
-    //
-    // Purpose:     Queries the value of a feature of type const UcharVector
-    //
-    // Parameters:
-    //
-    // [out]    UcharVector&      value       The feature's value
-    // [out]    VmbUint32_t&            sizeFilled  The number of actually received values
-    //
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbUchar_t*") @StdVector BytePointer value, @Cast("VmbUint32_t*") @ByRef IntPointer sizeFilled );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbUchar_t*") @StdVector ByteBuffer value, @Cast("VmbUint32_t*") @ByRef IntBuffer sizeFilled );
-    public native @Cast("VmbErrorType") int GetValue( @Cast("VmbUchar_t*") @StdVector byte[] value, @Cast("VmbUint32_t*") @ByRef int[] sizeFilled );
-
-    //
-    // Method:      GetValues()
-    //
-    // Purpose:     Queries the values of a feature of type Int64Vector
-    //
-    // Parameters:
-    //
-    // [out]    Int64Vector&    values       The feature's values
-    //
-    public native @Cast("VmbErrorType") int GetValues( @Cast("VmbInt64_t*") @StdVector LongPointer values );
-    public native @Cast("VmbErrorType") int GetValues( @Cast("VmbInt64_t*") @StdVector LongBuffer values );
-    public native @Cast("VmbErrorType") int GetValues( @Cast("VmbInt64_t*") @StdVector long[] values );
-
-    //
-    // Method:      GetValues()
-    //
-    // Purpose:     Queries the values of a feature of type StringVector
-    //
-    // Parameters:
-    //
-    // [out]    StringVector&    values       The feature's values
-    //
-    public native @Cast("VmbErrorType") int GetValues( @StdString @StdVector BytePointer values );
-    public native @Cast("VmbErrorType") int GetValues( @StdString @StdVector String values );
-
-    //
-    // Method:      GetEntry()
-    //
-    // Purpose:     Queries a single enum entry of a feature of type Enumeration
-    //
-    // Parameters:
-    //
-    // [out]    EnumEntry&    entry       An enum feature's enum entry
-    // [in ]    const char*   pEntryName  The name of the enum entry
-    //
-    public native @Cast("VmbErrorType") int GetEntry( @ByRef EnumEntry entry, @Cast("const char*") BytePointer pEntryName );
-    public native @Cast("VmbErrorType") int GetEntry( @ByRef EnumEntry entry, String pEntryName );
-
-    //
-    // Method:      GetEntries()
-    //
-    // Purpose:     Queries all enum entries of a feature of type Enumeration
-    //
-    // Parameters:
-    //
-    // [out]    EnumEntryVector&   entries       An enum feature's enum entries
-    //
-    public native @Cast("VmbErrorType") int GetEntries( @StdVector EnumEntry entries );
-
-    //
-    // Method:      GetRange()
-    //
-    // Purpose:     Queries the range of a feature of type double
-    //
-    // Parameters:
-    //
-    // [out]    double&    minimum   The feature's min value
-    // [out]    double&    maximum   The feature's max value
-    //
-    public native @Cast("VmbErrorType") int GetRange( @ByRef DoublePointer minimum, @ByRef DoublePointer maximum );
-    public native @Cast("VmbErrorType") int GetRange( @ByRef DoubleBuffer minimum, @ByRef DoubleBuffer maximum );
-    public native @Cast("VmbErrorType") int GetRange( @ByRef double[] minimum, @ByRef double[] maximum );
-
-    //
-    // Method:      GetRange()
-    //
-    // Purpose:     Queries the range of a feature of type VmbInt64
-    //
-    // Parameters:
-    //
-    // [out]    VmbInt64_t&    minimum   The feature's min value
-    // [out]    VmbInt64_t&    maximum   The feature's max value
-    //
-    public native @Cast("VmbErrorType") int GetRange( @Cast("VmbInt64_t*") @ByRef LongPointer minimum, @Cast("VmbInt64_t*") @ByRef LongPointer maximum );
-    public native @Cast("VmbErrorType") int GetRange( @Cast("VmbInt64_t*") @ByRef LongBuffer minimum, @Cast("VmbInt64_t*") @ByRef LongBuffer maximum );
-    public native @Cast("VmbErrorType") int GetRange( @Cast("VmbInt64_t*") @ByRef long[] minimum, @Cast("VmbInt64_t*") @ByRef long[] maximum );
-
-    //
-    // Method:      SetValue()
-    //
-    // Purpose:     Sets the value of a feature of type VmbInt32
-    //
-    // Parameters:
-    //
-    // [in ]    const VmbInt32_t&    value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int SetValue( @Cast("const VmbInt32_t") int value );
-
-    //
-    // Method:      SetValue()
-    //
-    // Purpose:     Sets the value of a feature of type VmbInt64
-    //
-    // Parameters:
-    //
-    // [in ]    const VmbInt64_t&   value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int SetValue( @Cast("const VmbInt64_t") long value );
-
-    //
-    // Method:      SetValue()
-    //
-    // Purpose:     Sets the value of a feature of type double
-    //
-    // Parameters:
-    //
-    // [in ]    const double&    value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int SetValue( double value );
-
-    //
-    // Method:      SetValue()
-    //
-    // Purpose:     Sets the value of a feature of type char*
-    //
-    // Parameters:
-    //
-    // [in ]    const char*    pValue       The feature's value
-    //
-    public native @Cast("VmbErrorType") int SetValue( @Cast("const char*") BytePointer pValue );
-    public native @Cast("VmbErrorType") int SetValue( String pValue );
-
-    //
-    // Method:      SetValue()
-    //
-    // Purpose:     Sets the value of a feature of type bool
-    //
-    // Parameters:
-    //
-    // [in ]    bool    value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int SetValue( @Cast("bool") boolean value );
-
-    //
-    // Method:      SetValue()
-    //
-    // Purpose:     Sets the value of a feature of type UcharVector
-    //
-    // Parameters:
-    //
-    // [in ]    const UcharVector&    value       The feature's value
-    //
-    public native @Cast("VmbErrorType") int SetValue( @Cast("VmbUchar_t*") @StdVector ByteBuffer value );
-    public native @Cast("VmbErrorType") int SetValue( @Cast("VmbUchar_t*") @StdVector byte[] value );
-
-    // Method:      HasIncrement()
-    //
-    // Purpose:     Gets the support state increment of a feature
-    //
-    // Parameters:
-    //
-    // [out]    VmbBool_t&    incrementsupported       The feature's increment support state
-    //
-    public native @Cast("VmbErrorType") int HasIncrement( @Cast("VmbBool_t*") @ByRef BoolPointer incrementSupported );
-    public native @Cast("VmbErrorType") int HasIncrement( @Cast("VmbBool_t*") @ByRef boolean[] incrementSupported );
-
-
-    //
-    // Method:      GetIncrement()
-    //
-    // Purpose:     Gets the increment of a feature of type VmbInt64
-    //
-    // Parameters:
-    //
-    // [out]    VmbInt64_t&    increment       The feature's increment
-    //
-    public native @Cast("VmbErrorType") int GetIncrement( @Cast("VmbInt64_t*") @ByRef LongPointer increment );
-    public native @Cast("VmbErrorType") int GetIncrement( @Cast("VmbInt64_t*") @ByRef LongBuffer increment );
-    public native @Cast("VmbErrorType") int GetIncrement( @Cast("VmbInt64_t*") @ByRef long[] increment );
-
-    // Method:      GetIncrement()
-    //
-    // Purpose:     Gets the increment of a feature of type double
-    //
-    // Parameters:
-    //
-    // [out]    double&    increment       The feature's increment
-    //
-    public native @Cast("VmbErrorType") int GetIncrement( @ByRef DoublePointer increment );
-    public native @Cast("VmbErrorType") int GetIncrement( @ByRef DoubleBuffer increment );
-    public native @Cast("VmbErrorType") int GetIncrement( @ByRef double[] increment );
-
-    //
-    // Method:      IsValueAvailable()
-    //
-    // Purpose:     Indicates whether an existing enumeration value is currently available.
-    //              An enumeration value might not be selectable due to the camera's
-    //              current configuration.
-    //
-    // Parameters:
-    //
-    // [in ]        const char*     pValue      The enumeration value as string
-    // [out]        bool&           available   True when the given value is available
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorInvalidValue:  If the given value is not a valid enumeration value for this enum
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
-    //  - VmbErrorWrongType:     The feature is not an enumeration
-    //
-    public native @Cast("VmbErrorType") int IsValueAvailable( @Cast("const char*") BytePointer pValue, @Cast("bool*") @ByRef BoolPointer available );
-    public native @Cast("VmbErrorType") int IsValueAvailable( String pValue, @Cast("bool*") @ByRef boolean[] available );
-
-    //
-    // Method:      IsValueAvailable()
-    //
-    // Purpose:     Indicates whether an existing enumeration value is currently available.
-    //              An enumeration value might not be selectable due to the camera's
-    //              current configuration.
-    //
-    // Parameters:
-    //
-    // [in ]        const VmbInt64_t    value       The enumeration value as int
-    // [out]        bool&               available   True when the given value is available
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorInvalidValue:  If the given value is not a valid enumeration value for this enum
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorInvalidAccess: Operation is invalid with the current access mode
-    //  - VmbErrorWrongType:     The feature is not an enumeration
-    //
-    public native @Cast("VmbErrorType") int IsValueAvailable( @Cast("const VmbInt64_t") long value, @Cast("bool*") @ByRef BoolPointer available );
-    public native @Cast("VmbErrorType") int IsValueAvailable( @Cast("const VmbInt64_t") long value, @Cast("bool*") @ByRef boolean[] available );
-
-    //
-    // Method:      RunCommand()
-    //
-    // Purpose:     Executes a feature of type Command
-    //
-    public native @Cast("VmbErrorType") int RunCommand();
-
-    //
-    // Method:      IsCommandDone()
-    //
-    // Purpose:     Indicates whether the execution of a feature of type Command has finished
-    //
-    // Parameters:
-    //
-    // [out]    bool&    isDone     True when execution has finished
-    //
-    public native @Cast("VmbErrorType") int IsCommandDone( @Cast("bool*") @ByRef BoolPointer isDone );
-    public native @Cast("VmbErrorType") int IsCommandDone( @Cast("bool*") @ByRef boolean[] isDone );
-
-    //
-    // Method:      GetName()
-    //
-    // Purpose:     Queries a feature's name
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    name    The feature's name
-    //
-    public native @Cast("VmbErrorType") int GetName( @StdString BytePointer name );
-    public native @Cast("VmbErrorType") int GetName( @StdString String name );
-
-    //
-    // Method:      GetDisplayName()
-    //
-    // Purpose:     Queries a feature's display name
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    displayName    The feature's display name
-    //
-    public native @Cast("VmbErrorType") int GetDisplayName( @StdString BytePointer displayName );
-    public native @Cast("VmbErrorType") int GetDisplayName( @StdString String displayName );
-
-    //
-    // Method:      GetDataType()
-    //
-    // Purpose:     Queries a feature's type
-    //
-    // Parameters:
-    //
-    // [out]    VmbFeatureDataType&    dataType    The feature's type
-    //
-    public native @Cast("VmbErrorType") int GetDataType( @Cast("VmbFeatureDataType*") @ByRef IntPointer dataType );
-    public native @Cast("VmbErrorType") int GetDataType( @Cast("VmbFeatureDataType*") @ByRef IntBuffer dataType );
-    public native @Cast("VmbErrorType") int GetDataType( @Cast("VmbFeatureDataType*") @ByRef int[] dataType );
-
-    //
-    // Method:      GetFlags()
-    //
-    // Purpose:     Queries a feature's access status
-    //
-    // Parameters:
-    //
-    // [out]    VmbFeatureFlagsType&    flags    The feature's access status
-    //    
-    public native @Cast("VmbErrorType") int GetFlags( @Cast("VmbFeatureFlagsType*") @ByRef IntPointer flags );
-    public native @Cast("VmbErrorType") int GetFlags( @Cast("VmbFeatureFlagsType*") @ByRef IntBuffer flags );
-    public native @Cast("VmbErrorType") int GetFlags( @Cast("VmbFeatureFlagsType*") @ByRef int[] flags );
-
-    //
-    // Method:      GetCategory()
-    //
-    // Purpose:     Queries a feature's category in the feature tress
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    category    The feature's position in the feature tree
-    //    
-    public native @Cast("VmbErrorType") int GetCategory( @StdString BytePointer category );
-    public native @Cast("VmbErrorType") int GetCategory( @StdString String category );
-
-    //
-    // Method:      GetPollingTime()
-    //
-    // Purpose:     Queries a feature's polling time
-    //
-    // Parameters:
-    //
-    // [out]    VmbUint32_t&    pollingTime    The interval to poll the feature
-    //    
-    public native @Cast("VmbErrorType") int GetPollingTime( @Cast("VmbUint32_t*") @ByRef IntPointer pollingTime );
-    public native @Cast("VmbErrorType") int GetPollingTime( @Cast("VmbUint32_t*") @ByRef IntBuffer pollingTime );
-    public native @Cast("VmbErrorType") int GetPollingTime( @Cast("VmbUint32_t*") @ByRef int[] pollingTime );
-
-    //
-    // Method:      GetUnit()
-    //
-    // Purpose:     Queries a feature's unit
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    unit    The feature's unit
-    //
-    public native @Cast("VmbErrorType") int GetUnit( @StdString BytePointer unit );
-    public native @Cast("VmbErrorType") int GetUnit( @StdString String unit );
-
-    //
-    // Method:      GetRepresentation()
-    //
-    // Purpose:     Queries a feature's representation
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    representation    The feature's representation
-    //
-    public native @Cast("VmbErrorType") int GetRepresentation( @StdString BytePointer representation );
-    public native @Cast("VmbErrorType") int GetRepresentation( @StdString String representation );
-
-    //
-    // Method:      GetVisibility()
-    //
-    // Purpose:     Queries a feature's visibility
-    //
-    // Parameters:
-    //
-    // [out]    VmbFeatureVisibilityType&    visibility    The feature's visibility
-    //
-    public native @Cast("VmbErrorType") int GetVisibility( @Cast("VmbFeatureVisibilityType*") @ByRef IntPointer visibility );
-    public native @Cast("VmbErrorType") int GetVisibility( @Cast("VmbFeatureVisibilityType*") @ByRef IntBuffer visibility );
-    public native @Cast("VmbErrorType") int GetVisibility( @Cast("VmbFeatureVisibilityType*") @ByRef int[] visibility );
-
-    //
-    // Method:      GetToolTip()
-    //
-    // Purpose:     Queries a feature's tool tip to display in the GUI
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    toolTip    The feature's tool tip
-    //
-    public native @Cast("VmbErrorType") int GetToolTip( @StdString BytePointer toolTip );
-    public native @Cast("VmbErrorType") int GetToolTip( @StdString String toolTip );
-
-    //
-    // Method:      GetDescription()
-    //
-    // Purpose:     Queries a feature's description
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    description    The feature'sdescription
-    //
-    public native @Cast("VmbErrorType") int GetDescription( @StdString BytePointer description );
-    public native @Cast("VmbErrorType") int GetDescription( @StdString String description );
-
-    //
-    // Method:      GetSFNCNamespace()
-    //
-    // Purpose:     Queries a feature's Standard Feature Naming Convention namespace
-    //
-    // Parameters:
-    //
-    // [out]    std::string&    sFNCNamespace    The feature's SFNC namespace
-    //
-    public native @Cast("VmbErrorType") int GetSFNCNamespace( @StdString BytePointer sFNCNamespace );
-    public native @Cast("VmbErrorType") int GetSFNCNamespace( @StdString String sFNCNamespace );
-
-    //
-    // Method:      GetAffectedFeatures()
-    //
-    // Purpose:     Queries the feature's that are dependent from the current feature
-    //
-    // Parameters:
-    //
-    // [out]    FeaturePtrVector&    affectedFeatures    The features that get invalidated through the current feature
-    //
-    public native @Cast("VmbErrorType") int GetAffectedFeatures( @SharedPtr @StdVector Feature affectedFeatures );
-
-    //
-    // Method:      GetSelectedFeatures()
-    //
-    // Purpose:     Gets the features that get selected by the current feature
-    //
-    // Parameters:
-    //
-    // [out]    FeaturePtrVector&    selectedFeatures    The selected features
-    //
-    public native @Cast("VmbErrorType") int GetSelectedFeatures( @SharedPtr @StdVector Feature selectedFeatures );
-
-    //
-    // Method:      IsReadable()
-    //
-    // Purpose:     Queries the read access status of a feature
-    //
-    // Parameters:
-    //
-    // [out]    bool&    isReadable    True when feature can be read
-    //
-    public native @Cast("VmbErrorType") int IsReadable( @Cast("bool*") @ByRef BoolPointer isReadable );
-    public native @Cast("VmbErrorType") int IsReadable( @Cast("bool*") @ByRef boolean[] isReadable );
-
-    //
-    // Method:      IsWritable()
-    //
-    // Purpose:     Queries the write access status of a feature
-    //
-    // Parameters:
-    //
-    // [out]    bool&    isWritable    True when feature can be written
-    //
-    public native @Cast("VmbErrorType") int IsWritable( @Cast("bool*") @ByRef BoolPointer isWritable );
-    public native @Cast("VmbErrorType") int IsWritable( @Cast("bool*") @ByRef boolean[] isWritable );
-
-    //
-    // Method:      IsStreamable()
-    //
-    // Purpose:     Queries whether a feature's value can be transferred as a stream
-    //
-    // Parameters:
-    //
-    // [out]    bool&    isStreamable    True when streamable
-    //
-    public native @Cast("VmbErrorType") int IsStreamable( @Cast("bool*") @ByRef BoolPointer isStreamable );
-    public native @Cast("VmbErrorType") int IsStreamable( @Cast("bool*") @ByRef boolean[] isStreamable );
-
-    //
-    // Method:      RegisterObserver()
-    //
-    // Purpose:     Registers an observer that notifies the application whenever a features value changes
-    //
-    // Parameters:
-    //
-    // [out]    const IFeatureObserverPtr&    pObserver    The observer to be registered
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorBadParameter:  "pObserver" is NULL.
-    //
-    public native @Cast("VmbErrorType") int RegisterObserver( @Const @SharedPtr @ByRef IFeatureObserver pObserver );
-
-    //
-    // Method:      UnregisterObserver()
-    //
-    // Purpose:     Unregisters an observer
-    //
-    // Parameters:
-    //
-    // [out]    const IFeatureObserverPtr&    pObserver    The observer to be unregistered
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorBadParameter:  "pObserver" is NULL.
-    //
-    public native @Cast("VmbErrorType") int UnregisterObserver( @Const @SharedPtr @ByRef IFeatureObserver pObserver );
-
-    public native void ResetFeatureContainer();
-}
-
-// #include <VimbaCPP/Include/Feature.hpp>
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/FeatureContainer.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
-
-  File:        FeatureContainer.h
-
-  Description: Definition of class AVT::VmbAPI::FeatureContainer.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_FEATURECONTAINER_H
-// #define AVT_VMBAPI_FEATURECONTAINER_H
-
-// #include <VimbaC/Include/VmbCommonTypes.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/BasicLockable.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Feature.h>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class FeatureContainer extends BasicLockable {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FeatureContainer(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FeatureContainer(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FeatureContainer position(long position) {
-        return (FeatureContainer)super.position(position);
-    }
-
-
-    //
-    // Method:      FeatureContainer constructor
-    //
-    // Purpose:     Creates an instance of class FeatureContainer
-    //
-    public FeatureContainer() { super((Pointer)null); allocate(); }
-    private native void allocate();
-
-    //
-    // Method:      FeatureContainer destructor
-    //
-    // Purpose:     Destroys an instance of class FeatureContainer
-    //
-
-    //
-    // Method:      GetFeatureByName()
-    //
-    // Purpose:     Gets one particular feature of a feature container (e.g. a camera)
-    //
-    // Parameters:
-    //
-    // [in ]    const char*         name                The name of the feature to get
-    // [out]    FeaturePtr&         pFeature            The queried feature
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorDeviceNotOpen:    Base feature class (e.g. Camera) was not opened.
-    //  - VmbErrorBadParameter:     "name" is NULL.
-    //
-    public native @Cast("VmbErrorType") int GetFeatureByName( @Cast("const char*") BytePointer pName, @SharedPtr @ByRef Feature pFeature );
-    public native @Cast("VmbErrorType") int GetFeatureByName( String pName, @SharedPtr @ByRef Feature pFeature );
-    
-    //
-    // Method:      GetFeatures()
-    //
-    // Purpose:     Gets all features of a feature container (e.g. a camera)
-    //
-    // Parameters:
-    //
-    // [out]    FeaturePtrVector&   features        The container for all queried features
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorBadParameter:  "features" is empty.
-    //
-    // Details:   Once queried, this information remains static throughout the object's lifetime
-    //
-    public native @Cast("VmbErrorType") int GetFeatures( @SharedPtr @StdVector Feature features );
-
-    public native VmbHandle_t GetHandle();
-}
-
-// #include <VimbaCPP/Include/FeatureContainer.hpp>
-
- // namespace AVT::VmbAPI
-
-// #endif
-
-
-// Parsed from <VimbaCPP/Include/VimbaSystem.h>
-
-/*=============================================================================
-  Copyright (C) 2012 Allied Vision Technologies.  All Rights Reserved.
-
-  Redistribution of this file, in original or modified form, without
-  prior written consent of Allied Vision Technologies is prohibited.
-
--------------------------------------------------------------------------------
- 
-  File:        VimbaSystem.h
-
-  Description: Definition of class AVT::VmbAPI::VimbaSystem.
-
--------------------------------------------------------------------------------
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF TITLE,
-  NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR  PURPOSE ARE
-  DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=============================================================================*/
-
-// #ifndef AVT_VMBAPI_SYSTEM_H
-// #define AVT_VMBAPI_SYSTEM_H
-
-// #include <vector>
-
-// #include <VimbaC/Include/VimbaC.h>
-// #include <VimbaCPP/Include/VimbaCPPCommon.h>
-// #include <VimbaCPP/Include/LoggerDefines.h>
-// #include <VimbaCPP/Include/SharedPointerDefines.h>
-// #include <VimbaCPP/Include/Interface.h>
-// #include <VimbaCPP/Include/Camera.h>
-// #include <VimbaCPP/Include/ICameraFactory.h>
-// #include <VimbaCPP/Include/ICameraListObserver.h>
-// #include <VimbaCPP/Include/IInterfaceListObserver.h>
-
-@Namespace("AVT::VmbAPI") @NoOffset public static class VimbaSystem extends FeatureContainer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public VimbaSystem(Pointer p) { super(p); }
-
-    //
-    // Method:      GetInstance()
-    //
-    // Purpose:     Returns a reference to the System singleton.
-    //
-    // Parameters:  none
-    //
-    // Returns:
-    //
-    //  - VimbaSystem&
-    //
-    public static native @ByRef VimbaSystem GetInstance();
-
-    //
-    // Method:    QueryVersion()
-    //
-    // Purpose:   Retrieve the version number of VmbAPI.
-    //
-    // Parameters:
-    //
-    //  [out]  VmbVersionInfo_t&   version      Reference to the struct where version information
-    //                                          is copied
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       always returned
-    //
-    // Details:    This function can be called at any time, even before the API is
-    //             initialized. All other version numbers may be queried via feature access
-    //
-    public native @Cast("VmbErrorType") int QueryVersion( @ByRef VmbVersionInfo_t version );
-    
-    //
-    // Method:      Startup()
-    //
-    // Purpose:     Initialize the VmbAPI module.
-    //
-    // Parameters:  none
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorInternalFault: An internal fault occurred
-    //
-    // Details:   On successful return, the API is initialized; this is a necessary call.
-    //            This method must be called before any other VmbAPI function is run.
-    //
-    public native @Cast("VmbErrorType") int Startup();
-
-    //
-    // Method:    Shutdown()
-    //
-    // Purpose:   Perform a shutdown on the API module.
-    //
-    // Parameters: none
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       always returned
-    //
-    // Details:   This will free some resources and deallocate all physical resources if applicable.
-    //
-    public native @Cast("VmbErrorType") int Shutdown();
-
-    //
-    // Method:    GetInterfaces()
-    //
-    // Purpose:   List all the interfaces currently visible to VmbAPI.
-    //
-    // Parameters:
-    //
-    //  [out]  InterfacePtrVector& interfaces            Vector of shared pointer to Interface object
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorStructSize:    The given struct size is not valid for this API version
-    //  - VmbErrorMoreData:      More data were returned than space was provided
-    //  - VmbErrorInternalFault: An internal fault occurred
-    //
-    // Details:     All the interfaces known via a GenTL are listed by this command and filled into the vector provided.
-    //              If the vector is not empty, new elements will be appended.
-    //              Interfaces can be adapter cards or frame grabber cards, for instance.
-    //
-    public native @Cast("VmbErrorType") int GetInterfaces( @SharedPtr @StdVector Interface interfaces );
-
-    //
-    // Method:    GetInterfaceByID()
-    //
-    // Purpose:   Gets a specific interface identified by an ID.
-    //
-    // Parameters:
-    //
-    //  [in ]  const char*          pID                 The ID of the interface to get (returned by GetInterfaces())
-    //  [out]  InterfacePtr&        pInterface          Shared pointer to Interface object
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorApiNotStarted:    VmbStartup() was not called before the current command
-    //  - VmbErrorBadParameter:     "pID" is NULL.
-    //  - VmbErrorStructSize:       The given struct size is not valid for this API version
-    //  - VmbErrorMoreData:         More data were returned than space was provided
-    //
-    // Details:     An interface known via a GenTL is listed by this command and filled into the pointer provided.
-    //              Interface can be an adapter card or a frame grabber card, for instance.
-    //
-    public native @Cast("VmbErrorType") int GetInterfaceByID( @Cast("const char*") BytePointer pID, @SharedPtr @ByRef Interface pInterface );
-    public native @Cast("VmbErrorType") int GetInterfaceByID( String pID, @SharedPtr @ByRef Interface pInterface );
-
-    //
-    // Method:      OpenInterfaceByID()
-    //
-    // Purpose:     Open an interface for feature access.
-    //
-    // Parameters:
-    //
-    //  [in ]  const char*      pID                 The ID of the interface to open (returned by GetInterfaces())
-    //  [out]  InterfacePtr&    pInterface          A shared pointer to the interface
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorNotFound:      The designated interface cannot be found
-    //  - VmbErrorBadParameter:  "pID" is NULL.
-    //
-    //
-    // Details:     An interface can be opened if interface-specific control is required, such as I/O pins
-    //              on a frame grabber card. Control is then possible via feature access methods.
-    //
-    public native @Cast("VmbErrorType") int OpenInterfaceByID( @Cast("const char*") BytePointer pID, @SharedPtr @ByRef Interface pInterface );
-    public native @Cast("VmbErrorType") int OpenInterfaceByID( String pID, @SharedPtr @ByRef Interface pInterface );
-
-    //
-    // Method:    GetCameras()
-    //
-    // Purpose:   Retrieve a list of all cameras.
-    //
-    // Parameters:
-    //
-    //  [out]  CameraPtrVector& cameras            Vector of shared pointer to Camera object
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:       If no error
-    //  - VmbErrorApiNotStarted: VmbStartup() was not called before the current command
-    //  - VmbErrorStructSize:    The given struct size is not valid for this API version
-    //  - VmbErrorMoreData:      More data were returned than space was provided
-    //
-    // Details:     A camera known via a GenTL is listed by this command and filled into the pointer provided.
-    //
-    public native @Cast("VmbErrorType") int GetCameras( @SharedPtr @StdVector Camera cameras );
-
-    //
-    // Method:    GetCameraByID()
-    //
-    // Purpose:   Gets a specific camera identified by an ID. The returned camera is still closed.
-    //
-    // Parameters:
-    //
-    //  [in ]  const char*          pID                 The ID of the camera to get
-    //  [out]  CameraPtr&           pCamera             Shared pointer to camera object
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorApiNotStarted:    VmbStartup() was not called before the current command
-    //  - VmbErrorBadParameter:     "pID" is NULL.
-    //  - VmbErrorStructSize:       The given struct size is not valid for this API version
-    //  - VmbErrorMoreData:         More data were returned than space was provided
-    //
-    // Details:     A camera known via a GenTL is listed by this command and filled into the pointer provided.
-    //              Only static properties of the camera can be fetched until the camera has been opened.
-    //              "pID" might be one of the following: 
-    //              "169.254.12.13" for an IP address,
-    //              "000F314C4BE5" for a MAC address or 
-    //              "DEV_1234567890" for an ID as reported by Vimba
-    //
-    public native @Cast("VmbErrorType") int GetCameraByID( @Cast("const char*") BytePointer pID, @SharedPtr @ByRef Camera pCamera );
-    public native @Cast("VmbErrorType") int GetCameraByID( String pID, @SharedPtr @ByRef Camera pCamera );
-    
-    //
-    // Method:      OpenCameraByID()
-    //
-    // Purpose:     Gets a specific camera identified by an ID. The returned camera is already open.
-    //
-    // Parameters:
-    //
-    //  [in ]   const char*         pID                 The unique ID of the camera to get
-    //  [in ]   VmbAccessModeType   eAccessMode         The requested access mode
-    //  [out]   CameraPtr&          pCamera             A shared pointer to the camera
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:          If no error
-    //  - VmbErrorApiNotStarted:    VmbStartup() was not called before the current command
-    //  - VmbErrorNotFound:         The designated interface cannot be found
-    //  - VmbErrorBadParameter:     "pID" is NULL.
-    //
-    // Details:     A camera can be opened if camera-specific control is required, such as I/O pins
-    //              on a frame grabber card. Control is then possible via feature access methods.
-    //              "pID" might be one of the following: 
-    //              "169.254.12.13" for an IP address,
-    //              "000F314C4BE5" for a MAC address or 
-    //              "DEV_1234567890" for an ID as reported by Vimba
-    //
-    public native @Cast("VmbErrorType") int OpenCameraByID( @Cast("const char*") BytePointer pID, @Cast("VmbAccessModeType") int eAccessMode, @SharedPtr @ByRef Camera pCamera );
-    public native @Cast("VmbErrorType") int OpenCameraByID( String pID, @Cast("VmbAccessModeType") int eAccessMode, @SharedPtr @ByRef Camera pCamera );
-
-    //
-    // Method:      RegisterCameraListObserver()
-    //
-    // Purpose:     Registers an instance of camera observer whose CameraListChanged() method gets called
-    //              as soon as a camera is plugged in, plugged out, or changes its access status
-    //
-    // Parameters:
-    //
-    //  [in ]       const ICameraListObserverPtr&   pObserver   A shared pointer to an object derived from ICameraListObserver
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorBadParameter: "pObserver" is NULL.
-    //  - VmbErrorInvalidCall:  If the very same observer is already registered
-    //
-    public native @Cast("VmbErrorType") int RegisterCameraListObserver( @Const @SharedPtr @ByRef ICameraListObserver pObserver );
-
-    //
-    // Method:      UnregisterCameraListObserver()
-    //
-    // Purpose:     Unregisters a camera observer
-    //
-    // Parameters:
-    //
-    //  [in ]       const ICameraListObserverPtr&   pObserver   A shared pointer to an object derived from ICameraListObserver
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorNotFound:     If the observer is not registered
-    //  - VmbErrorBadParameter: "pObserver" is NULL.
-    //
-    public native @Cast("VmbErrorType") int UnregisterCameraListObserver( @Const @SharedPtr @ByRef ICameraListObserver pObserver );
-
-    //
-    // Method:      RegisterInterfaceListObserver()
-    //
-    // Purpose:     Registers an instance of interface observer whose InterfaceListChanged() method gets called
-    //              as soon as an interface is plugged in, plugged out, or changes its access status
-    //
-    // Parameters:
-    //
-    //  [in ]       const IInterfaceListObserverPtr&    pObserver   A shared pointer to an object derived from IInterfaceListObserver
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorBadParameter: "pObserver" is NULL.
-    //  - VmbErrorInvalidCall:  If the very same observer is already registered
-    //
-    public native @Cast("VmbErrorType") int RegisterInterfaceListObserver( @Const @SharedPtr @ByRef IInterfaceListObserver pObserver );
-
-    //
-    // Method:      UnregisterInterfaceListObserver()
-    //
-    // Purpose:     Unregisters an interface observer
-    //
-    // Parameters:
-    //
-    //  [in ]       const IInterfaceListObserverPtr&    pObserver   A shared pointer to an object derived from IInterfaceListObserver
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorNotFound:     If the observer is not registered
-    //  - VmbErrorBadParameter: "pObserver" is NULL.
-    //
-    public native @Cast("VmbErrorType") int UnregisterInterfaceListObserver( @Const @SharedPtr @ByRef IInterfaceListObserver pObserver );
-
-    //
-    // Method:      RegisterCameraFactory()
-    //
-    // Purpose:     Registers an instance of camera factory. When a custom camera factory is registered, all instances of type camera
-    //              will be set up accordingly.
-    //
-    // Parameters:
-    //
-    //  [in ]       const ICameraFactoryPtr&        pCameraFactory  A shared pointer to an object derived from ICameraFactory
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //  - VmbErrorBadParameter: "pCameraFactory" is NULL.
-    //
-    public native @Cast("VmbErrorType") int RegisterCameraFactory( @Const @SharedPtr @ByRef ICameraFactory pCameraFactory );
-
-    //
-    // Method:      UnregisterCameraFactory()
-    //
-    // Purpose:     Unregisters the camera factory. After unregistering the default camera class is used.
-    //
-    // Returns:
-    //
-    //  - VmbErrorSuccess:      If no error
-    //
-    public native @Cast("VmbErrorType") int UnregisterCameraFactory();
-
-    // Mapping of handle to CameraPtr
-    public native @SharedPtr @ByVal Camera GetCameraPtrByHandle( VmbHandle_t handle );
-}
-
-// #include <VimbaCPP/Include/VimbaSystem.hpp>
-
- // namespace AVT::VmbAPI
-// #endif
-
 
 }

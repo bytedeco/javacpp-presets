@@ -35,6 +35,8 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import static org.bytedeco.javacpp.presets.Vimba.USE_C_API;
+
 /**
  * Wrapper for Allied Vision Vimba library (the C++ API).
  *
@@ -42,6 +44,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target = "org.bytedeco.javacpp.Vimba", value = {
                 @Platform(value = { "linux-x86_64" },
+                                compiler = { USE_C_API ? "" : "cpp11" },
+                                define = { "USER_SHARED_POINTER", "SHARED_PTR_NAMESPACE std" },
                                 include = {
                                                 "<VimbaC/Include/VmbCommonTypes.h>",
                                                 "<VimbaC/Include/VimbaC.h>",
@@ -54,55 +58,59 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 "<VimbaCPP/Include/Mutex.h>",
                                                 "<VimbaCPP/Include/BasicLockable.h>",
 
-                                                "<VimbaCPP/Include/AncillaryData.h>",
-                                                "<VimbaCPP/Include/ICameraFactory.h>",
-                                                "<VimbaCPP/Include/IFrameObserver.h>",
-                                                "<VimbaCPP/Include/EnumEntry.h>",
-                                                "<VimbaCPP/Include/ICameraListObserver.h>",
-                                                "<VimbaCPP/Include/IInterfaceListObserver.h>",
-                                                "<VimbaCPP/Include/IFeatureObserver.h>",
-                                                "<VimbaCPP/Include/Interface.h>",
-
-                                                //"<VimbaCPP/Include/FileLogger.h>",
-                                                //"<VimbaCPP/Include/LoggerDefines.h>",
-                                                //"<VimbaCPP/Include/UserLoggerDefines.h>",
-                                                "<VimbaCPP/Include/Frame.h>",
-                                                "<VimbaCPP/Include/IRegisterDevice.h>",
-                                                "<VimbaCPP/Include/Camera.h>",
-                                                "<VimbaCPP/Include/Feature.h>",
-                                                "<VimbaCPP/Include/FeatureContainer.h>",
-
-                                                "<VimbaCPP/Include/VimbaSystem.h>",
-                                                //"<VimbaCPP/Include/VimbaCPP.h>",
+//                                                "<VimbaCPP/Include/AncillaryData.h>",
+//                                                "<VimbaCPP/Include/ICameraFactory.h>",
+//                                                "<VimbaCPP/Include/IFrameObserver.h>",
+//                                                "<VimbaCPP/Include/EnumEntry.h>",
+//                                                "<VimbaCPP/Include/ICameraListObserver.h>",
+//                                                "<VimbaCPP/Include/IInterfaceListObserver.h>",
+//                                                "<VimbaCPP/Include/IFeatureObserver.h>",
+//                                                "<VimbaCPP/Include/Interface.h>",
+//
+//                                                //"<VimbaCPP/Include/FileLogger.h>",
+//                                                //"<VimbaCPP/Include/LoggerDefines.h>",
+//                                                //"<VimbaCPP/Include/UserLoggerDefines.h>",
+//                                                "<VimbaCPP/Include/Frame.h>",
+//                                                "<VimbaCPP/Include/IRegisterDevice.h>",
+//                                                "<VimbaCPP/Include/Camera.h>",
+//                                                "<VimbaCPP/Include/Feature.h>",
+//                                                "<VimbaCPP/Include/FeatureContainer.h>",
+//
+//                                                "<VimbaCPP/Include/VimbaSystem.h>",
+//                                                //"<VimbaCPP/Include/VimbaCPP.h>",
                                 },
-                                link = { "VimbaCPP" }
+                                link = { USE_C_API ? "VimbaC" : "VimbaCPP" }
                 )
 })
 public class Vimba implements InfoMapper
 {
+    public static final boolean USE_C_API = false;
+
     public void map(InfoMap infoMap)
     {
-        //        infoMap.put(new Info("IMEXPORT").cppTypes().annotations());
+        infoMap.put(new Info("IMEXPORT").cppTypes().annotations());
+        infoMap.put(new Info("IMEXPORTC").cppTypes().annotations());
 
         infoMap.put(new Info("defined (_WIN32)").define(false));
         infoMap.put(new Info("__cplusplus").define());
+        infoMap.put(new Info("__i386__").define(false));
 
         infoMap.put(new Info("Logger").skip());
 
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Interface>").annotations("@SharedPtr").pointerTypes("Interface"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Camera>").annotations("@SharedPtr").pointerTypes("Camera"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Feature>").annotations("@SharedPtr").pointerTypes("Feature"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::FeatureContainer>").annotations("@SharedPtr").pointerTypes("FeatureContainer"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::IFeatureObserver>").annotations("@SharedPtr").pointerTypes("IFeatureObserver"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Frame>").annotations("@SharedPtr").pointerTypes("Frame"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::FrameHandler>").annotations("@SharedPtr").pointerTypes("FrameHandler"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::IFrameObserver>").annotations("@SharedPtr").pointerTypes("IFrameObserver"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::AncillaryData>").annotations("@SharedPtr").pointerTypes("AncillaryData"));
-        infoMap.put(new Info("std::shared_ptr<const AVT::VmbAPI::AncillaryData>").annotations("@SharedPtr").pointerTypes("ConstAncillaryData"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::ICameraFactory>").annotations("@SharedPtr").pointerTypes("ICameraFactory"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::ICameraListObserver>").annotations("@SharedPtr").pointerTypes("ICameraListObserver"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::IInterfaceListObserver>").annotations("@SharedPtr").pointerTypes("IInterfaceListObserver"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Mutex>").annotations("@SharedPtr").pointerTypes("Mutex"));
-        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::BasicLockable>").annotations("@SharedPtr").pointerTypes("BasicLockable"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Interface>").annotations("@SharedPtr").pointerTypes("Interface"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Camera>").annotations("@SharedPtr").pointerTypes("Camera"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Feature>").annotations("@SharedPtr").pointerTypes("Feature"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::FeatureContainer>").annotations("@SharedPtr").pointerTypes("FeatureContainer"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::IFeatureObserver>").annotations("@SharedPtr").pointerTypes("IFeatureObserver"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Frame>").annotations("@SharedPtr").pointerTypes("Frame"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::FrameHandler>").annotations("@SharedPtr").pointerTypes("FrameHandler"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::IFrameObserver>").annotations("@SharedPtr").pointerTypes("IFrameObserver"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::AncillaryData>").annotations("@SharedPtr").pointerTypes("AncillaryData"));
+//        infoMap.put(new Info("std::shared_ptr<const AVT::VmbAPI::AncillaryData>").annotations("@SharedPtr").pointerTypes("ConstAncillaryData"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::ICameraFactory>").annotations("@SharedPtr").pointerTypes("ICameraFactory"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::ICameraListObserver>").annotations("@SharedPtr").pointerTypes("ICameraListObserver"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::IInterfaceListObserver>").annotations("@SharedPtr").pointerTypes("IInterfaceListObserver"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::Mutex>").annotations("@SharedPtr").pointerTypes("Mutex"));
+//        infoMap.put(new Info("std::shared_ptr<AVT::VmbAPI::BasicLockable>").annotations("@SharedPtr").pointerTypes("BasicLockable"));
     }
 }
