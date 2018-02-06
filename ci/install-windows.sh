@@ -1,4 +1,25 @@
 #!/bin/bash
+
+echo Reducing PATH size by removing duplicates to satisfy MKL, etc
+PREVIFS="$IFS"
+NEWPATH="${PATH%%:*}"
+IFS=":"
+for P in $PATH; do
+    FOUND=0
+    for P2 in $NEWPATH; do
+        if [[ "$P" == "$P2" ]]; then
+            FOUND=1
+        fi
+    done
+    if [[ "$FOUND" == "0" ]]; then
+        NEWPATH=$NEWPATH:$P
+    fi
+done
+IFS="$PREVIFS"
+echo ${#PATH}
+echo ${#NEWPATH}
+export PATH=$NEWPATH
+
 set -vx
 
 export PROJ=$1
