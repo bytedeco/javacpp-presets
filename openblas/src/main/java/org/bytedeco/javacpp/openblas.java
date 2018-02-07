@@ -865,21 +865,13 @@ public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Ca
 
 /*** BLAS extensions ***/
 
-public static native void cblas_saxpby(@Cast("const blasint") int n, float alpha, @Const FloatPointer x, @Cast("const blasint") int incx,float beta, FloatPointer y, @Cast("const blasint") int incy);
-public static native void cblas_saxpby(@Cast("const blasint") int n, float alpha, @Const FloatBuffer x, @Cast("const blasint") int incx,float beta, FloatBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_saxpby(@Cast("const blasint") int n, float alpha, @Const float[] x, @Cast("const blasint") int incx,float beta, float[] y, @Cast("const blasint") int incy);
 
-public static native void cblas_daxpby(@Cast("const blasint") int n, double alpha, @Const DoublePointer x, @Cast("const blasint") int incx,double beta, DoublePointer y, @Cast("const blasint") int incy);
-public static native void cblas_daxpby(@Cast("const blasint") int n, double alpha, @Const DoubleBuffer x, @Cast("const blasint") int incx,double beta, DoubleBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_daxpby(@Cast("const blasint") int n, double alpha, @Const double[] x, @Cast("const blasint") int incx,double beta, double[] y, @Cast("const blasint") int incy);
 
-public static native void cblas_caxpby(@Cast("const blasint") int n, @Const FloatPointer alpha, @Const FloatPointer x, @Cast("const blasint") int incx,@Const FloatPointer beta, FloatPointer y, @Cast("const blasint") int incy);
-public static native void cblas_caxpby(@Cast("const blasint") int n, @Const FloatBuffer alpha, @Const FloatBuffer x, @Cast("const blasint") int incx,@Const FloatBuffer beta, FloatBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_caxpby(@Cast("const blasint") int n, @Const float[] alpha, @Const float[] x, @Cast("const blasint") int incx,@Const float[] beta, float[] y, @Cast("const blasint") int incy);
 
-public static native void cblas_zaxpby(@Cast("const blasint") int n, @Const DoublePointer alpha, @Const DoublePointer x, @Cast("const blasint") int incx,@Const DoublePointer beta, DoublePointer y, @Cast("const blasint") int incy);
-public static native void cblas_zaxpby(@Cast("const blasint") int n, @Const DoubleBuffer alpha, @Const DoubleBuffer x, @Cast("const blasint") int incx,@Const DoubleBuffer beta, DoubleBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_zaxpby(@Cast("const blasint") int n, @Const double[] alpha, @Const double[] x, @Cast("const blasint") int incx,@Const double[] beta, double[] y, @Cast("const blasint") int incy);
+
+
+
+
 
  
  

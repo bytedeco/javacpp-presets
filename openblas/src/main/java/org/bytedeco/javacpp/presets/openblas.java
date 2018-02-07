@@ -108,6 +108,8 @@ public class openblas implements LoadEnabled, InfoMapper {
                .put(new Info("openblas_complex_double", "lapack_complex_double").cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
 
         String[] functions = {
+            // not available in Accelerate
+            "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
             // not exported by OpenBLAS
             "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla",
             // not implemented by MKL

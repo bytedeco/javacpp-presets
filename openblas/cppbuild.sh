@@ -58,7 +58,7 @@ case $PLATFORM in
         export TARGET=ATOM
         ;;
     ios-arm)
-        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7"
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7 -miphoneos-version-min=5.0"
         export FC=
         export NO_LAPACK=1
         export NOFORTRAN=1
@@ -69,7 +69,9 @@ case $PLATFORM in
     ios-arm64)
         # https://gmplib.org/list-archives/gmp-bugs/2014-September/003538.html
         sed -i="" 's/add.sp, sp, #-(11 \* 16)/sub sp, sp, #(11 \* 16)/g' kernel/arm64/sgemm_kernel_4x4.S
-        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64"
+        # but still results in a linking error, so disable the assembler entirely
+        sed -i="" 's/sgemm_kernel_4x4.S/..\/generic\/gemmkernel_2x2.c/g' kernel/arm64/KERNEL.ARMV8
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64 -miphoneos-version-min=5.0"
         export FC=
         export NO_LAPACK=1
         export NOFORTRAN=1
@@ -78,7 +80,7 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-x86)
-        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686"
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686 -mios-simulator-version-min=5.0"
         export FC=
         export NO_LAPACK=1
         export NOFORTRAN=1
@@ -87,7 +89,7 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-x86_64)
-        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64"
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64 -mios-simulator-version-min=5.0"
         export FC=
         export NO_LAPACK=1
         export NOFORTRAN=1
