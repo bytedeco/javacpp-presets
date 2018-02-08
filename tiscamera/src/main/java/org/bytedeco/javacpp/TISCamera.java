@@ -2,9 +2,9 @@
 
 package org.bytedeco.javacpp;
 
+import java.nio.*;
+import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
-
-import java.nio.ByteBuffer;
 
 public class TISCamera extends org.bytedeco.javacpp.presets.TISCamera {
     static { Loader.load(); }
@@ -200,6 +200,97 @@ public class TISCamera extends org.bytedeco.javacpp.presets.TISCamera {
         return this;
     }
 }
+
+// Parsed from algorithms/debayer.h
+
+/*
+ * Copyright 2016 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_ALGORITHM_DEBAYER_H
+// #define TCAM_ALGORITHM_DEBAYER_H
+
+
+/** enum tcam::algorithm:: */
+public static final int
+    WB_MODE_MANUAL = 0,
+    WB_MODE_AUTO = 1,
+    WB_MODE_ONE_PUSH = 2;
+
+
+@Namespace("tcam::algorithm") public static class _debayer_data extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _debayer_data() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _debayer_data(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _debayer_data(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _debayer_data position(long position) {
+        return (_debayer_data)super.position(position);
+    }
+
+    public native int use_ccm(); public native _debayer_data use_ccm(int use_ccm);
+    public native int use_rbgain(); public native _debayer_data use_rbgain(int use_rbgain);
+
+    public native int wb_auto_mode(); public native _debayer_data wb_auto_mode(int wb_auto_mode);
+
+    // Color Correction Matrix
+    public native int ccm(int i, int j); public native _debayer_data ccm(int i, int j, int ccm);
+    @MemberGetter public native @Cast("int(* /*[3]*/ )[3]") IntPointer ccm();
+
+    // red / blue gain
+    public native int rgain(); public native _debayer_data rgain(int rgain);
+    public native int bgain(); public native _debayer_data bgain(int bgain);
+}
+
+@Namespace("tcam::algorithm") @Opaque public static class debayer_data_t extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public debayer_data_t() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public debayer_data_t(Pointer p) { super(p); }
+}
+
+
+@Namespace("tcam::algorithm") public static native void debayer(@Cast("const unsigned char*") BytePointer input_buffer,
+              @Cast("unsigned int") int input_pitch,
+              @Cast("const unsigned int") int fourcc_in,
+              @Cast("unsigned char*") BytePointer output_buffer,
+              @Cast("unsigned int") int output_pitch,
+              @Cast("const unsigned int") int fourcc_out);
+@Namespace("tcam::algorithm") public static native void debayer(@Cast("const unsigned char*") ByteBuffer input_buffer,
+              @Cast("unsigned int") int input_pitch,
+              @Cast("const unsigned int") int fourcc_in,
+              @Cast("unsigned char*") ByteBuffer output_buffer,
+              @Cast("unsigned int") int output_pitch,
+              @Cast("const unsigned int") int fourcc_out);
+@Namespace("tcam::algorithm") public static native void debayer(@Cast("const unsigned char*") byte[] input_buffer,
+              @Cast("unsigned int") int input_pitch,
+              @Cast("const unsigned int") int fourcc_in,
+              @Cast("unsigned char*") byte[] output_buffer,
+              @Cast("unsigned int") int output_pitch,
+              @Cast("const unsigned int") int fourcc_out);
+
+ /* namespace algorithm */
+
+ /* namespace tcam */
+
+// #endif /* TCAM_ALGORITHM_DEBAYER_H */
+
 
 // Parsed from property_identifications.h
 
@@ -906,6 +997,85 @@ public static final int
 // #endif /* TCAM_BASE_TYPES_H */
 
 
+// Parsed from public_utils.h
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_PUBLIC_UTILS_H
+// #define TCAM_PUBLIC_UTILS_H
+
+// #include <stdint.h>
+
+// #include <stddef.h> /* size_t */
+
+// #include "base_types.h"
+// #include <vector>
+// #include <string>
+
+@Namespace("tcam") public static native @Cast("const char*") BytePointer fourcc_to_description(@Cast("uint32_t") int fourcc);
+
+
+@Namespace("tcam") public static native @Cast("uint32_t") int description_to_fourcc(@Cast("const char*") BytePointer description);
+@Namespace("tcam") public static native @Cast("uint32_t") int description_to_fourcc(String description);
+
+
+@Namespace("tcam") public static native @StdString BytePointer category2string(@Cast("TCAM_PROPERTY_CATEGORY") int arg0);
+
+@Namespace("tcam") public static native @StdString BytePointer property_id_to_string(@Cast("TCAM_PROPERTY_ID") int arg0);
+
+@Namespace("tcam") public static native @StdString BytePointer property_type_to_string(@Cast("TCAM_PROPERTY_TYPE") int arg0);
+
+@Namespace("tcam") public static native @Cast("uint64_t") long get_image_size(@Cast("uint32_t") int fourcc,
+                         @Cast("unsigned int") int width,
+                         @Cast("unsigned int") int height);
+
+/**
+ * @param format - format description that shall be used
+ * @param n_buffers - number of buffers that shall be allocated
+ * @return pointer to the first image buffer
+ */
+@Namespace("tcam") public static native tcam_image_buffer allocate_image_buffers(@Const tcam_video_format format,
+                                                  @Cast("size_t") long n_buffers);
+
+/**
+ * @param ptr - pointer to the first buffer that shall be freed
+ * @param n_buffers - number of buffers that shall be freed
+ */
+@Namespace("tcam") public static native void free_image_buffers(tcam_image_buffer ptr, @Cast("size_t") long n_buffer);
+
+
+/**
+ * Check if buffer has correct length
+ * @param buffer that shall be checked
+ * @return true if buffer has correct length or is large enough for the image
+ */
+@Namespace("tcam") public static native @Cast("bool") boolean is_image_buffer_complete(@Const tcam_image_buffer buffer);
+
+/**
+ *
+ */
+@Namespace("tcam") public static native @StdVector tcam_image_size get_standard_resolutions(@Const @ByRef tcam_image_size min,
+                                                              @Const @ByRef tcam_image_size max);
+
+ /* namespace tcam */
+
+// #endif /* TCAM_PUBLIC_UTILS_H */
+
+
 // Parsed from PropertyImpl.h
 
 /*
@@ -1228,6 +1398,60 @@ public static final int
 /** \} */
 
 // #endif /* TCAM_DEVICEINFO_H */
+
+
+// Parsed from BackendLoader.h
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_BACKEND_LOADER_H
+// #define TCAM_BACKEND_LOADER_H
+
+
+// #include <vector>
+// #include <string>
+// #include <memory>
+// #include <functional>
+
+// #include "base_types.h"
+
+// #include "DeviceInterface.h"
+
+@Namespace("tcam") @NoOffset public static class BackendLoader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BackendLoader(Pointer p) { super(p); }
+
+
+    public static native @ByRef BackendLoader getInstance();
+
+    public native @SharedPtr DeviceInterface open_device(@Const @ByRef DeviceInfo arg0);
+
+    public native @StdVector DeviceInfo get_device_list_all_backends();
+
+    public native @StdVector DeviceInfo get_device_list(@Cast("TCAM_DEVICE_TYPE") int arg0);
+
+} /* class BackendLoader*/
+
+
+ /* namespace tcam */
+
+// #endif /* TCAM_BACKEND_LOADER_H */
+
 
 
 // Parsed from VideoFormat.h
@@ -1612,7 +1836,7 @@ public static final int
 
     public native @ByVal SharedMemoryBufferVector get_buffer_collection();
 
-    public native void set_source(@ByVal @Cast("std::weak_ptr<tcam::SinkInterface>*") SinkInterface arg0);
+    
 
 }
 
@@ -1771,60 +1995,6 @@ public static final int
 // #include <memory>
 
 
-
-
-
-// Parsed from BackendLoader.h
-
-/*
- * Copyright 2014 The Imaging Source Europe GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// #ifndef TCAM_BACKEND_LOADER_H
-// #define TCAM_BACKEND_LOADER_H
-
-
-// #include <vector>
-// #include <string>
-// #include <memory>
-// #include <functional>
-
-// #include "base_types.h"
-
-// #include "DeviceInterface.h"
-
-@Namespace("tcam") @NoOffset public static class BackendLoader extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BackendLoader(Pointer p) { super(p); }
-
-
-    public static native @ByRef BackendLoader getInstance();
-
-    public native @SharedPtr DeviceInterface open_device(@Const @ByRef DeviceInfo arg0);
-
-    public native @StdVector DeviceInfo get_device_list_all_backends();
-
-    public native @StdVector DeviceInfo get_device_list(@Cast("TCAM_DEVICE_TYPE") int arg0);
-
-} /* class BackendLoader*/
-
-
- /* namespace tcam */
-
-// #endif /* TCAM_BACKEND_LOADER_H */
 
 
 
@@ -2089,6 +2259,8 @@ public static final int
  * \{
  * Main header
  */
+
+//typedef void (*shared_callback)(std::shared_ptr<tcam::MemoryBuffer>, void*);
 public static class sink_callback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -2097,14 +2269,7 @@ public static class sink_callback extends FunctionPointer {
     private native void allocate();
     public native void call(MemoryBuffer arg0, Pointer arg1);
 }
-public static class c_callback extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    c_callback(Pointer p) { super(p); }
-    protected c_callback() { allocate(); }
-    private native void allocate();
-    public native void call(@Const tcam_image_buffer arg0, Pointer arg1);
-}
+//typedef void (*c_callback)(const struct tcam_image_buffer*, void*);
 
 @Namespace("tcam") @NoOffset public static class ImageSink extends SinkInterface {
     static { Loader.load(); }
@@ -2127,8 +2292,10 @@ public static class c_callback extends FunctionPointer {
     public native @Cast("bool") boolean setVideoFormat(@Const @ByRef VideoFormat arg0);
 
     public native @ByVal VideoFormat getVideoFormat();
+
+//    bool registerCallback (shared_callback, void*);
     public native @Cast("bool") boolean registerCallback(sink_callback arg0, Pointer arg1);
-    public native @Cast("bool") boolean registerCallback(c_callback arg0, Pointer arg1);
+//    bool registerCallback (c_callback, void*);
 
     public native void push_image(@SharedPtr @ByVal MemoryBuffer arg0);
 
@@ -2146,7 +2313,7 @@ public static class c_callback extends FunctionPointer {
      * used to set the pipelinemanager instance that is called
      * for things like requeue_buffer
      */
-    public native void set_source(@ByVal @Cast("std::weak_ptr<tcam::SinkInterface>*") SinkInterface arg0);
+    
 
 }
 

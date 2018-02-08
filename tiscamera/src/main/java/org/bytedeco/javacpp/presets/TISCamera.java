@@ -48,7 +48,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 //                                                "algorithms/bayer.h",
 
                                                 //                                                "algorithms/auto_focus.h",
-                                                //                                                "algorithms/debayer.h",
+                                                "algorithms/debayer.h",
                                                 //                                                "algorithms/image_sampling.h",
                                                 //                                                "algorithms/image_transform_base.h",
                                                 //                                                "algorithms/tcam-algorithm.h",
@@ -74,7 +74,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 //                                                "image_transform_base.h",
                                                 //                                                //"internal.h",
                                                 //                                                "logging.h",
-                                                //                                                "public_utils.h",
+                                                "public_utils.h",
                                                 //                                                //                                                "serialization.h",
                                                 //                                                "standard_properties.h",
                                                 //                                                //"tcam.h",
@@ -85,7 +85,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 "PropertyImpl.h",
                                                 "Property.h",
                                                 "DeviceInfo.h",
-                                                //                                                "BackendLoader.h",
+                                                "BackendLoader.h",
                                                 "VideoFormat.h",
                                                 "VideoFormatDescription.h",
                                                 "MemoryBuffer.h",
@@ -106,7 +106,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 //                                                "PropertyGeneration.h",
                                                 //                                                "PropertyHandler.h",
                                 },
-                                link = { "tcam", /*"tcamprop", "tcamgstbase",*/ /*"gsttcamautoexposure", "gsttcamautofocus", "gsttcamwhitebalance", "gsttcamsrc", "gsttcambin", "tcam-v4l2",*/ /*"tcam-libusb"*/ }
+                                link = { "tcam", "tcamprop", "tcamgstbase", /*"gsttcamautoexposure", "gsttcamautofocus", "gsttcamwhitebalance", "gsttcamsrc", "gsttcambin", "tcam-v4l2",*/ /*"tcam-libusb"*/ }
                 )
 }
                 //,helper = "org.bytedeco.javacpp.helper.GObject"
@@ -117,18 +117,50 @@ public class TISCamera implements InfoMapper
     {
         infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define());
         infoMap.put(new Info("std::vector<tcam::Property*>").pointerTypes("PropertyVector").define());
+
         infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
+        //infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").pointerTypes("SharedMemoryBuffer").define());
         infoMap.put(new Info("std::vector<std::shared_ptr<tcam::MemoryBuffer> >").pointerTypes("SharedMemoryBufferVector").define());
 
         infoMap.put(new Info("std::shared_ptr<tcam::Property>").annotations("@SharedPtr").pointerTypes("Property"));
         infoMap.put(new Info("std::vector<std::shared_ptr<tcam::Property> >").pointerTypes("SharedPropertyVector").define());
 
         //note: we need that cast
-        infoMap.put(new Info("std::weak_ptr<tcam::SinkInterface>").cast().pointerTypes("SinkInterface"));
+        //infoMap.put(new Info("std::weak_ptr<tcam::SinkInterface>").cast().pointerTypes("SinkInterface"));
+        infoMap.put(new Info("tcam::SinkInterface::set_source").skip());
+        infoMap.put(new Info("tcam::ImageSink::set_source").skip());
 
+        //std::shared_ptr<tcam::MemoryBuffer>
+
+        //.annotations("@Cast({\"std::shared_ptr<tcam::MemoryBuffer>\", \"\"}) @SharedPtr")
         //this one seems to be a difficult one to parse...
-        infoMap.put(new Info("shared_callback").skip());
-        infoMap.put(new Info("tcam::ImageSink::shared_callback").skip());
+//        infoMap.put(new Info("shared_callback").skip());
+//        infoMap.put(new Info("tcam::ImageSink::shared_callback").skip());
+
+//        infoMap.put(new Info("sink_callback").skip());
+//        infoMap.put(new Info("tcam::ImageSink::sink_callback").skip());
+//        infoMap.put(new Info("sink_callback").javaText("public static class sink_callback extends FunctionPointer {\n" +
+//                                                       "    static { Loader.load(); }\n" +
+//                                                       "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
+//                                                       "    public    sink_callback(Pointer p) { super(p); }\n" +
+//                                                       "    protected sink_callback() { allocate(); }\n" +
+//                                                       "    private native void allocate();\n" +
+//                                                       "    public native void call( MemoryBuffer arg0, Pointer arg1);\n" +
+//                                                       "}"));
+//        infoMap.put(new Info("sink_callback").javaText("public static class sink_callback extends FunctionPointer {\n" +
+//                                                       "    static { Loader.load(); }\n" +
+//                                                       "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
+//                                                       "    public    sink_callback(Pointer p) { super(p); }\n" +
+//                                                       "    protected sink_callback() { allocate(); }\n" +
+//                                                       "    private native void allocate();\n" +
+//                                                       "    public native void call(MemoryBuffer arg0, Pointer arg1);\n" +
+//                                                       "}").define());
+//
+        //public native @Cast("bool") boolean registerCallback(sink_callback arg0, Pointer arg1);
+//        infoMap.put(new Info("tcam::ImageSink::sink_callback").javaText("public native @Cast(\"bool\") boolean registerCallback(sink_callback arg0, Pointer arg1);"));
+
+//        infoMap.put(new Info("c_callback").skip());
+//        infoMap.put(new Info("tcam::ImageSink::c_callback").skip());
 
         //        infoMap.put(new Info("tcam::ImageSink::sink_callback").skip());
         //        infoMap.put(new Info("tcam::ImageSink::c_callback").skip());
