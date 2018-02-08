@@ -42,8 +42,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target = "org.bytedeco.javacpp.TISCamera", value = {
                 @Platform(value = { "linux-x86_64" },
-                                compiler = { "cpp11" },
-                                define = { "USER_SHARED_POINTER", "SHARED_PTR_NAMESPACE std" },
+                                compiler = "cpp11",
+                                define = { "SHARED_PTR_NAMESPACE std" },
                                 include = {
                                                 //                                                "algorithms/bayer.h",
 
@@ -67,7 +67,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 "base_types.h",
                                                 //                                                "base.h",
                                                 //                                                "compiler_defines.h",
-                                                ////                                                "devicelibrary.h",
+                                                //"devicelibrary.h",
                                                 //                                                "format.h",
                                                 //                                                "image_base_defines.h",
                                                 //                                                "image_fourcc.h",
@@ -82,9 +82,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 //                                                "utils.h",
                                                 //                                                "version.h",
 
-//                                                "</usr/include/glib-2.0/glib-object.h>",
-//                                                "gobject/tcamprop.h",
-
                                                 "PropertyImpl.h",
                                                 "Property.h",
                                                 "DeviceInfo.h",
@@ -92,21 +89,24 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 "VideoFormat.h",
                                                 "VideoFormatDescription.h",
                                                 "MemoryBuffer.h",
-//                                                "SinkInterface.h",
+                                                "SinkInterface.h",
+                                                "DeviceInterface.h",
+                                                "DeviceInterface.cpp",
+                                                "BackendLoader.h",
+                                                "BackendLoader.cpp",
                                                 "CaptureDevice.h",
+                                                "ImageSink.h",
+                                                //"ImageSource.h",
                                                 //                                                "CaptureDeviceImpl.h",
                                                 //                                                "DeviceIndex.h",
-                                                //                                                "DeviceInterface.h",
                                                 //                                                "FilterBase.h",
                                                 "FormatHandlerInterface.h",
-                                                //                                                "ImageSink.h",
-                                                //                                                "ImageSource.h",
-                                                //                                                "PipelineManager.h",
+                                                //"PipelineManager.h",
                                                 //                                                "Properties.h",
                                                 //                                                "PropertyGeneration.h",
                                                 //                                                "PropertyHandler.h",
                                 },
-                                link = { "tcam" }
+                                link = { "tcam", /*"tcamprop", "tcamgstbase",*/ /*"gsttcamautoexposure", "gsttcamautofocus", "gsttcamwhitebalance", "gsttcamsrc", "gsttcambin", "tcam-v4l2",*/ /*"tcam-libusb"*/ }
                 )
 }
                 //,helper = "org.bytedeco.javacpp.helper.GObject"
@@ -115,66 +115,68 @@ public class TISCamera implements InfoMapper
 {
     public void map(InfoMap infoMap)
     {
-//        infoMap.put(new Info().javaText("public static class GSList extends Pointer {\n" +
-//                                        "    static { Loader.load(); }\n" +
-//                                        "    /** Default native constructor. */\n" +
-//                                        "    public GSList() { super((Pointer)null); allocate(); }\n" +
-//                                        "    /** Native array allocator. Access with {@link Pointer#position(long)}. */\n" +
-//                                        "    public GSList(long size) { super((Pointer)null); allocateArray(size); }\n" +
-//                                        "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
-//                                        "    public GSList(Pointer p) { super(p); }\n" +
-//                                        "    private native void allocate();\n" +
-//                                        "    private native void allocateArray(long size);\n" +
-//                                        "    @Override public GSList position(long position) {\n" +
-//                                        "        return (GSList)super.position(position);\n" +
-//                                        "    }\n" +
-//                                        "\n" +
-//                                        "  public native Pointer data(); public native GSList data(Pointer data);\n" +
-//                                        "  public native GSList next(); public native GSList next(GSList next);\n" +
-//                                        "}"));
-
-        infoMap.put(new Info("G_TYPE_FUNDAMENTAL_MAX").skip());
-        infoMap.put(new Info("G_DECLARE_INTERFACE").define(false));
-
-        infoMap.put(new Info("TcamProp").cast().pointerTypes("Pointer"));
-
-        infoMap.put(new Info("gdouble").cast().valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
-        infoMap.put(new Info("gboolean").cast().valueTypes("boolean").pointerTypes("BooleanPointer", "BooleanBuffer", "boolean[]"));
-        infoMap.put(new Info("gint", "guint").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));
-        infoMap.put(new Info("guint16").cast().valueTypes("int").pointerTypes("ShortPointer", "ShortBuffer", "short[]"));
-        infoMap.put(new Info("gpointer", "gconstpointer").cppTypes().valueTypes("void").pointerTypes("Pointer"));
-        infoMap.put(new Info("gchar").cast().valueTypes("char").pointerTypes("CharPointer", "CharBuffer", "char[]"));
-        infoMap.put(new Info("gsize").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"));
-
-        infoMap.put(new Info("GQuark",
-                             //"GSList",
-                             "GType",
-                             "GTypeInterface",
-                             "GValue").cast().pointerTypes("Pointer"));
-
-        infoMap.put(new Info("GLIB_DEPRECATED_IN_2_36",
-                             "GLIB_AVAILABLE_IN_ALL",
-                             "GLIB_AVAILABLE_IN_2_38",
-                             "GLIB_AVAILABLE_IN_2_34",
-                             "GLIB_AVAILABLE_IN_2_36",
-                             "GLIB_AVAILABLE_IN_2_44",
-                             "GLIB_AVAILABLE_IN_2_42").cppTypes().annotations());
-
-        infoMap.put(new Info("G_TYPE_FLAG_RESERVED_ID_BIT").skip());
-
-        //infoMap.put(new Info("std::vector<std::vector<cv::Vec2i> >").pointerTypes("PointVectorVector").cast());
-//        infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
-//        infoMap.put(new Info("SinkInterface").cppTypes("set_source").skip());
-        //infoMap.put(new Info("std::vector<std::shared_ptr<MemoryBuffer>>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
-
-        infoMap.put(new Info("tcam::CaptureDevice::start_stream").skip());
         infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define());
-//        //infoMap.put(new Info("Property*").cast().pointerTypes("Property").define());
-//        infoMap.put(new Info("std::vector<tcam::Property>").pointerTypes("PropertyVector").cast());
-        //infoMap.put(new Info("std::vector<Property*>").annotations("@StdVector").pointerTypes("Property"));
-        infoMap.put(new Info("std::vector<tcam::Property*>").cast().pointerTypes("PropertyVector").define());
-//        infoMap.put(new Info("std::vector<tensorflow::Edge*>", "std::vector<const tensorflow::Edge*>").cast().pointerTypes("EdgeVector").define())
-//        //infoMap.put(new Info("std::vector<Property*>").pointerTypes("Property"));
-//        //infoMap.put(new Info("tcam::CaptureDevice::get_available_properties").skip());
+        infoMap.put(new Info("std::vector<tcam::Property*>").pointerTypes("PropertyVector").define());
+        infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
+        infoMap.put(new Info("std::vector<std::shared_ptr<tcam::MemoryBuffer> >").pointerTypes("SharedMemoryBufferVector").define());
+
+        infoMap.put(new Info("std::shared_ptr<tcam::Property>").annotations("@SharedPtr").pointerTypes("Property"));
+        infoMap.put(new Info("std::vector<std::shared_ptr<tcam::Property> >").pointerTypes("SharedPropertyVector").define());
+
+        //note: we need that cast
+        infoMap.put(new Info("std::weak_ptr<tcam::SinkInterface>").cast().pointerTypes("SinkInterface"));
+
+        //this one seems to be a difficult one to parse...
+        infoMap.put(new Info("shared_callback").skip());
+        infoMap.put(new Info("tcam::ImageSink::shared_callback").skip());
+
+        //        infoMap.put(new Info("tcam::ImageSink::sink_callback").skip());
+        //        infoMap.put(new Info("tcam::ImageSink::c_callback").skip());
+
+        //infoMap.put(new Info("tcam::ImageSink::shared_callback").pointerTypes("my_shared_callback").cppTypes("void*").translate());
+        //infoMap.put(new Info("sink_callback::sink_callback").pointerTypes("SinkCallbackFunction"));
+        //infoMap.put(new Info("sink_callback::sink_callback").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
+
+//        infoMap.put(new Info("tcam::ImageSource")
+//                                    .javaText("@Namespace(\"tcam\") @NoOffset public static class ImageSource extends SinkInterface {\n" +
+//                                              "    static { Loader.load(); }\n" +
+//                                              "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
+//                                              "    public ImageSource(Pointer p) { super(p); }\n" +
+//                                              "    /** Native array allocator. Access with {@link Pointer#position(long)}. */\n" +
+//                                              "    public ImageSource(long size) { super((Pointer)null); allocateArray(size); }\n" +
+//                                              "    private native void allocateArray(long size);\n" +
+//                                              "    @Override public ImageSource position(long position) {\n" +
+//                                              "        return (ImageSource)super.position(position);\n" +
+//                                              "    }\n" +
+//                                              "    \n" +
+//                                              "    public ImageSource() { super((Pointer)null); allocate(); }\n" +
+//                                              "    private native void allocate();\n" +
+//                                              "\n" +
+//                                              "    public native @Cast(\"bool\") boolean set_status(@Cast(\"TCAM_PIPELINE_STATUS\") int arg0);\n" +
+//                                              "\n" +
+//                                              "    public native @Cast(\"TCAM_PIPELINE_STATUS\") int get_status();\n" +
+//                                              "\n" +
+//                                              "    public native @Cast(\"bool\") boolean setDevice(@SharedPtr DeviceInterface arg0);\n" +
+//                                              "\n" +
+//                                              "    public native @Cast(\"bool\") boolean setVideoFormat(@Const @ByRef VideoFormat arg0);\n" +
+//                                              "\n" +
+//                                              "    public native @ByVal VideoFormat getVideoFormat();\n" +
+//                                              "\n" +
+//                                              "    public native void push_image(@SharedPtr @ByVal MemoryBuffer arg0);\n" +
+//                                              "\n" +
+//                                              "    public native void requeue_buffer(@SharedPtr @ByVal MemoryBuffer arg0);\n" +
+//                                              "\n" +
+//                                              "    public native @Cast(\"bool\") boolean setSink(@SharedPtr SinkInterface arg0);\n" +
+//                                              "\n" +
+//                                              "    public native @Cast(\"bool\") boolean set_buffer_collection(@ByVal SharedMemoryBufferVector new_buffers);\n" +
+//                                              "\n" +
+//                                              "    public native @ByVal SharedMemoryBufferVector get_buffer_collection();\n" +
+//                                              "\n" +
+//                                              "}"));
+        //        infoMap.put(new Info("std::enable_shared_from_this<ImageSource>()").javaText("").skip());
+        //        infoMap.put(new Info("asstd::enable_shared_from_this<ImageSource>").javaText("").skip());
+        //        infoMap.put(new Info("asstd::enable_shared_from_this<ImageSource>()").javaText("").skip());
+
+//                infoMap.put(new Info("tcam::openDeviceInterface").skip());
     }
 }

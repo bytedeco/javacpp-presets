@@ -25,7 +25,7 @@ if [ $PLATFORM == linux-x86* ]
 then
 
     cd "$TIS_PATH"
-    mkdir build
+    mkdir -p build
     cd build
 
     # With ARAVIS:
@@ -38,6 +38,7 @@ then
     rm -rf $INCLUDE_PATH
     mkdir -p $INCLUDE_PATH
     cp $TIS_PATH/src/*.h "$INCLUDE_PATH/"
+    cp $TIS_PATH/src/*.cpp "$INCLUDE_PATH/"
 
     mkdir -p $INCLUDE_PATH/algorithms
     cp -r $TIS_PATH/src/algorithms/*.h "$INCLUDE_PATH/algorithms/"
@@ -47,12 +48,12 @@ then
 
     mkdir -p $INCLUDE_PATH/gobject
     cp -r $TIS_PATH/src/gobject/*.h "$INCLUDE_PATH/gobject/"
-#    cp -r /usr/include/glib-2.0/glib-object.h "$INCLUDE_PATH/gobject/"
-#    cp -r /usr/include/glib-2.0/glib-object.h "$INCLUDE_PATH/gobject/"
 
     rm -rf $LIB_PATH
-    mkdir -p $LIB_PATH/gobject
-    cp $TIS_PATH/build/src/gobject/libtcamprop.so.* "$LIB_PATH/gobject/"
+    mkdir -p $LIB_PATH/
+    # TODO why doesn't this work???
+    #cp $TIS_PATH/build/src/libtcam.so* "$LIB_PATH/"
+    #cp $TIS_PATH/build/src/gobject/libtcamprop.so* "$LIB_PATH/"
 
 else
     echo "Error: Platform \"$PLATFORM\" is not supported"

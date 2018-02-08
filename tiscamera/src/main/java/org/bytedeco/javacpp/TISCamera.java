@@ -91,6 +91,116 @@ public class TISCamera extends org.bytedeco.javacpp.presets.TISCamera {
     }
 }
 
+@Name("std::vector<std::shared_ptr<tcam::MemoryBuffer> >") public static class SharedMemoryBufferVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SharedMemoryBufferVector(Pointer p) { super(p); }
+    public SharedMemoryBufferVector(MemoryBuffer value) { this(1); put(0, value); }
+    public SharedMemoryBufferVector(MemoryBuffer ... array) { this(array.length); put(array); }
+    public SharedMemoryBufferVector()       { allocate();  }
+    public SharedMemoryBufferVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef SharedMemoryBufferVector put(@ByRef SharedMemoryBufferVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @SharedPtr MemoryBuffer get(@Cast("size_t") long i);
+    public native SharedMemoryBufferVector put(@Cast("size_t") long i, MemoryBuffer value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr MemoryBuffer get();
+    }
+
+    public MemoryBuffer pop_back() {
+        long size = size();
+        MemoryBuffer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public SharedMemoryBufferVector push_back(MemoryBuffer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public SharedMemoryBufferVector put(MemoryBuffer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public SharedMemoryBufferVector put(MemoryBuffer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<std::shared_ptr<tcam::Property> >") public static class SharedPropertyVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SharedPropertyVector(Pointer p) { super(p); }
+    public SharedPropertyVector(Property value) { this(1); put(0, value); }
+    public SharedPropertyVector(Property ... array) { this(array.length); put(array); }
+    public SharedPropertyVector()       { allocate();  }
+    public SharedPropertyVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef SharedPropertyVector put(@ByRef SharedPropertyVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @SharedPtr Property get(@Cast("size_t") long i);
+    public native SharedPropertyVector put(@Cast("size_t") long i, Property value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr Property get();
+    }
+
+    public Property pop_back() {
+        long size = size();
+        Property value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public SharedPropertyVector push_back(Property value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public SharedPropertyVector put(Property value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public SharedPropertyVector put(Property ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 // Parsed from property_identifications.h
 
 /*
@@ -1454,6 +1564,324 @@ public static final int
 // #endif /* TCAM_MEMORYBUFFER_H */
 
 
+// Parsed from SinkInterface.h
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_SINKINTERFACE_H
+// #define TCAM_SINKINTERFACE_H
+
+// #include "MemoryBuffer.h"
+
+// #include "VideoFormat.h"
+
+// #include <memory>
+// #include <vector>
+
+@Namespace("tcam") public static class SinkInterface extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SinkInterface(Pointer p) { super(p); }
+
+
+    public native @Cast("bool") boolean set_status(@Cast("TCAM_PIPELINE_STATUS") int arg0);
+
+    public native @Cast("TCAM_PIPELINE_STATUS") int get_status();
+
+    public native @Cast("bool") boolean setVideoFormat(@Const @ByRef VideoFormat arg0);
+
+    public native @ByVal VideoFormat getVideoFormat();
+
+    public native void push_image(@SharedPtr @ByVal MemoryBuffer arg0);
+
+    public native void requeue_buffer(@SharedPtr @ByVal MemoryBuffer arg0);
+
+    public native @ByVal SharedMemoryBufferVector get_buffer_collection();
+
+    public native void set_source(@ByVal @Cast("std::weak_ptr<tcam::SinkInterface>*") SinkInterface arg0);
+
+}
+
+ /* namespace tcam */
+
+// #endif /* TCAM_SINKINTERFACE_H */
+
+
+// Parsed from DeviceInterface.h
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_CAPTUREINTERFACE_H
+// #define TCAM_CAPTUREINTERFACE_H
+
+// #include "DeviceInfo.h"
+// #include "Properties.h"
+// #include "PropertyImpl.h"
+
+// #include "VideoFormat.h"
+// #include "VideoFormatDescription.h"
+
+// #include "MemoryBuffer.h"
+// #include "SinkInterface.h"
+
+// #include <vector>
+// #include <memory>
+
+// #include "compiler_defines.h"
+
+@Namespace("tcam") @NoOffset public static class DeviceInterface extends PropertyImpl {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceInterface(Pointer p) { super(p); }
+
+
+    /**
+     * @return the DeviceInfo describing the device
+     */
+    public native @ByVal DeviceInfo get_device_description();
+
+    /**
+     * \brief Returns all device properties
+     */
+    public native @ByVal SharedPropertyVector getProperties();
+
+    public native @Cast("bool") boolean set_property(@Const @ByRef Property arg0);
+
+    public native @Cast("bool") boolean get_property(@ByRef Property arg0);
+
+    /**
+     * \brief Set Format in he actual device
+     * @return True on success; False on error or invalid format
+     */
+    public native @Cast("bool") boolean set_video_format(@Const @ByRef VideoFormat arg0);
+
+    /**
+     * @return The current VideoFormat that is set in the device
+     */
+    public native @ByVal VideoFormat get_active_video_format();
+
+    /**
+     * Retrieve all formats the device supports
+     * @return vector containing all supported formats; empty on error
+     */
+    public native @StdVector VideoFormatDescription get_available_video_formats();
+
+    /**
+     * Set the ImageSource to which new images shall be delivered
+     * This overwrites previously defined Sinks
+     * @return true on successful registration; else false
+     */
+    public native @Cast("bool") boolean set_sink(@SharedPtr SinkInterface arg0);
+
+    /**
+     * @return true on successfull allocation/registration; else false
+     */
+    public native @Cast("bool") boolean initialize_buffers(@ByVal SharedMemoryBufferVector arg0);
+
+    /**
+     * \brief Delete all internal references to used memorybuffers
+     */
+    public native @Cast("bool") boolean release_buffers();
+
+    public native void requeue_buffer(@SharedPtr @ByVal MemoryBuffer arg0);
+
+    /**
+     * Start image retrieval and wait for new images
+     * A SinkInterface has to be given via \set_sink
+     * @return true on success; else false
+     */
+    public native @Cast("bool") boolean start_stream();
+
+    /**
+     * Stop image retrieval
+     * @return true on success; else false
+     */
+    public native @Cast("bool") boolean stop_stream();
+
+    public native @Cast("bool") boolean register_device_lost_callback(tcam_device_lost_callback callback, Pointer user_data);
+
+} /* class Camera_Interface */
+
+
+/**
+ * \brief open the device for the given DeviceInfo
+ * @param device - device description for which an interface shall be created
+ * @return shared_ptr containing the device; nullptr on error
+ */
+@Namespace("tcam") public static native @SharedPtr DeviceInterface openDeviceInterface(@Const @ByRef DeviceInfo device);
+
+ /* namespace tcam */
+
+// #endif /* TCAM_CAPTUREINTERFACE_H */
+
+
+
+// Parsed from DeviceInterface.cpp
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #include "DeviceInterface.h"
+// #include "logging.h"
+
+// #include "BackendLoader.h"
+
+// #include <algorithm>
+// #include <memory>
+
+
+
+
+
+// Parsed from BackendLoader.h
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_BACKEND_LOADER_H
+// #define TCAM_BACKEND_LOADER_H
+
+
+// #include <vector>
+// #include <string>
+// #include <memory>
+// #include <functional>
+
+// #include "base_types.h"
+
+// #include "DeviceInterface.h"
+
+@Namespace("tcam") @NoOffset public static class BackendLoader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BackendLoader(Pointer p) { super(p); }
+
+
+    public static native @ByRef BackendLoader getInstance();
+
+    public native @SharedPtr DeviceInterface open_device(@Const @ByRef DeviceInfo arg0);
+
+    public native @StdVector DeviceInfo get_device_list_all_backends();
+
+    public native @StdVector DeviceInfo get_device_list(@Cast("TCAM_DEVICE_TYPE") int arg0);
+
+} /* class BackendLoader*/
+
+
+ /* namespace tcam */
+
+// #endif /* TCAM_BACKEND_LOADER_H */
+
+
+
+// Parsed from BackendLoader.cpp
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #include "BackendLoader.h"
+
+// #include <dlfcn.h>
+
+// #include <string>
+
+// #include "internal.h"
+// #include "devicelibrary.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Parsed from CaptureDevice.h
 
 /*
@@ -1560,7 +1988,7 @@ public static final int
     /**
      * @return vector containing all available properties
      */
-    public native @ByVal @Cast("std::vector<tcam::Property*>*") PropertyVector get_available_properties();
+    public native @ByVal PropertyVector get_available_properties();
 
 
     public native Property get_property(@Cast("TCAM_PROPERTY_ID") int id);
@@ -1608,7 +2036,7 @@ public static final int
      * @param sink - SinkInterface that shall be called for new images
      * @return true if stream could successfully be initialized
      */
-    
+    public native @Cast("bool") boolean start_stream(@SharedPtr SinkInterface sink);
 
 
     /**
@@ -1627,6 +2055,106 @@ public static final int
 /** \} */
 
 // #endif /* TCAM_CAPTUREDEVICE_H */
+
+
+// Parsed from ImageSink.h
+
+/*
+ * Copyright 2014 The Imaging Source Europe GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef TCAM_IMAGESINK_H
+// #define TCAM_IMAGESINK_H
+
+// #include "base_types.h"
+// #include "SinkInterface.h"
+
+// #include <memory>
+// #include <vector>
+
+/**
+ * \addtogroup API
+ * \{
+ * Main header
+ */
+public static class sink_callback extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    sink_callback(Pointer p) { super(p); }
+    protected sink_callback() { allocate(); }
+    private native void allocate();
+    public native void call(MemoryBuffer arg0, Pointer arg1);
+}
+public static class c_callback extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    c_callback(Pointer p) { super(p); }
+    protected c_callback() { allocate(); }
+    private native void allocate();
+    public native void call(@Const tcam_image_buffer arg0, Pointer arg1);
+}
+
+@Namespace("tcam") @NoOffset public static class ImageSink extends SinkInterface {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ImageSink(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ImageSink(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ImageSink position(long position) {
+        return (ImageSink)super.position(position);
+    }
+
+
+    public ImageSink() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native @Cast("bool") boolean set_status(@Cast("TCAM_PIPELINE_STATUS") int arg0);
+    public native @Cast("TCAM_PIPELINE_STATUS") int get_status();
+
+    public native @Cast("bool") boolean setVideoFormat(@Const @ByRef VideoFormat arg0);
+
+    public native @ByVal VideoFormat getVideoFormat();
+    public native @Cast("bool") boolean registerCallback(sink_callback arg0, Pointer arg1);
+    public native @Cast("bool") boolean registerCallback(c_callback arg0, Pointer arg1);
+
+    public native void push_image(@SharedPtr @ByVal MemoryBuffer arg0);
+
+    public native void requeue_buffer(@SharedPtr @ByVal MemoryBuffer arg0);
+
+    public native @Cast("bool") boolean set_buffer_number(@Cast("size_t") long arg0);
+
+    public native @Cast("bool") boolean set_buffer_collection(@ByVal SharedMemoryBufferVector new_buffers);
+
+    public native @ByVal SharedMemoryBufferVector get_buffer_collection();
+
+    public native @Cast("bool") boolean delete_buffer_collection();
+
+    /**
+     * used to set the pipelinemanager instance that is called
+     * for things like requeue_buffer
+     */
+    public native void set_source(@ByVal @Cast("std::weak_ptr<tcam::SinkInterface>*") SinkInterface arg0);
+
+}
+
+ /* namespace tcam */
+
+/** \} */
+
+// #endif /* TCAM_IMAGESINK_H */
 
 
 // Parsed from FormatHandlerInterface.h
