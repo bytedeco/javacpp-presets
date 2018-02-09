@@ -237,7 +237,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
-                link = "tensorflow_cc"),
+                link = {"tensorflow_framework", "tensorflow_cc"}),
         },
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
@@ -327,18 +327,24 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::TensorSliceProtoDefaultTypeInternal", "tensorflow::TensorSliceProto_ExtentDefaultTypeInternal", "tensorflow::ApiDefDefaultTypeInternal",
                              "tensorflow::ApiDef_ArgDefaultTypeInternal", "tensorflow::ApiDef_AttrDefaultTypeInternal", "tensorflow::ApiDef_EndpointDefaultTypeInternal",
                              "tensorflow::ApiDefsDefaultTypeInternal", "tensorflow::DebuggedSourceFileDefaultTypeInternal", "tensorflow::DebuggedSourceFilesDefaultTypeInternal",
-                             "tensorflow::AllocationRecordDefaultTypeInternal").skip())
+                             "tensorflow::AllocationRecordDefaultTypeInternal","tensorflow::GPUOptions_ExperimentalDefaultTypeInternal", "tensorflow::GPUOptions_Experimental_VirtualDevicesDefaultTypeInternal",
+                             "tensorflow::JobDef_TasksEntry_DoNotUseDefaultTypeInternal", "tensorflow::ConfigProto_DeviceCountEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::NameAttrList_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::NodeDef_AttrEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::FunctionDef_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::FunctionDef_RetEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::MetaGraphDef_CollectionDefEntry_DoNotUseDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
                .put(new Info("tensorflow::protobuf::Message", "tensorflow::protobuf::MessageLite").cast().pointerTypes("MessageLite"))
                .put(new Info("tensorflow::Allocator::is_simple<bfloat16>").skip())
 
-               .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector", "google::protobuf::Map"))
+               .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector", "google::protobuf::Map", "tensorflow::gtl::FlatMap"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::int64,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
                .put(new Info("tensorflow::DataTypeSlice").cast().pointerTypes("DataTypeVector"))
+               .put(new Info("tensorflow::NumberTypes", "tensorflow::QuantizedTypes", "tensorflow::RealAndQuantizedTypes").skip())
 
                .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
                .put(new Info("tensorflow::Session").base("AbstractSession"))
@@ -388,7 +394,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>").pointerTypes("NodeIterRange").define())
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>()").skip())
 
-               .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").define())
+//               .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").define())
+               .put(new Info("tensorflow::gtl::FlatMap<tensorflow::StringPiece,std::pair<int,int>,tensorflow::hash<tensorflow::StringPiece> >").pointerTypes("NameRangeMap").define())
 
                 // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
                .put(new Info("tensorflow::CompositeOpScopes").skip())

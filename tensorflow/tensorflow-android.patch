@@ -1,14 +1,18 @@
-diff -ruN tensorflow-1.5.0-rc0/tensorflow/BUILD tensorflow-1.5.0-rc0-android/tensorflow/BUILD
---- tensorflow-1.5.0-rc0/tensorflow/BUILD	2018-01-03 09:00:43.000000000 +0900
-+++ tensorflow-1.5.0-rc0-android/tensorflow/BUILD	2018-01-09 16:17:58.682739731 +0900
-@@ -744,31 +744,29 @@
-     ],
- )
+diff -ruN tensorflow-1.6.0-rc0/tensorflow/BUILD tensorflow-1.6.0-rc0-android/tensorflow/BUILD
+--- tensorflow-1.6.0-rc0/tensorflow/BUILD	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/tensorflow/BUILD	2018-02-09 23:53:44.112141839 +0900
+@@ -14,7 +14,7 @@
+     "leakr_badfiles.dic",
+ ])
  
--tf_cc_shared_object(
-+load("//tensorflow:tensorflow.bzl", "tf_copts")
-+
-+cc_binary(
+-load("//tensorflow:tensorflow.bzl", "tf_cc_shared_object")
++load("//tensorflow:tensorflow.bzl", "tf_cc_shared_object", "tf_copts")
+ load(
+     "//tensorflow/core:platform/default/build_config.bzl",
+     "tf_additional_binary_deps",
+@@ -796,30 +796,25 @@
+ 
+ tf_cc_shared_object(
      name = "libtensorflow_cc.so",
 -    linkopts = select({
 -        "//tensorflow:darwin": [
@@ -39,7 +43,7 @@ diff -ruN tensorflow-1.5.0-rc0/tensorflow/BUILD tensorflow-1.5.0-rc0-android/ten
 +        "manual",
 +        "notap",
 +    ],
-+    linkshared = 1,
++#    linkshared = 1,
 +    linkstatic = 1,
      deps = [
 -        "//tensorflow:tf_exported_symbols.lds",
@@ -49,15 +53,16 @@ diff -ruN tensorflow-1.5.0-rc0/tensorflow/BUILD tensorflow-1.5.0-rc0-android/ten
 -        "//tensorflow/cc:cc_ops",
 -        "//tensorflow/cc:client_session",
 -        "//tensorflow/cc:scope",
+-        "//tensorflow/cc/profiler",
 -        "//tensorflow/core:tensorflow",
 +        "//tensorflow/core:android_tensorflow_lib",
      ],
  )
  
-diff -ruN tensorflow-1.5.0-rc0/tensorflow/c/BUILD tensorflow-1.5.0-rc0-android/tensorflow/c/BUILD
---- tensorflow-1.5.0-rc0/tensorflow/c/BUILD	2018-01-03 09:00:43.000000000 +0900
-+++ tensorflow-1.5.0-rc0-android/tensorflow/c/BUILD	2018-01-09 16:17:58.683739729 +0900
-@@ -88,6 +88,19 @@
+diff -ruN tensorflow-1.6.0-rc0/tensorflow/c/BUILD tensorflow-1.6.0-rc0-android/tensorflow/c/BUILD
+--- tensorflow-1.6.0-rc0/tensorflow/c/BUILD	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/tensorflow/c/BUILD	2018-02-09 20:51:49.203002437 +0900
+@@ -102,6 +102,19 @@
      visibility = ["//visibility:public"],
  )
  
@@ -77,10 +82,10 @@ diff -ruN tensorflow-1.5.0-rc0/tensorflow/c/BUILD tensorflow-1.5.0-rc0-android/t
  tf_cuda_library(
      name = "tf_status_helper",
      srcs = ["tf_status_helper.cc"],
-diff -ruN tensorflow-1.5.0-rc0/tensorflow/core/BUILD tensorflow-1.5.0-rc0-android/tensorflow/core/BUILD
---- tensorflow-1.5.0-rc0/tensorflow/core/BUILD	2018-01-03 09:00:43.000000000 +0900
-+++ tensorflow-1.5.0-rc0-android/tensorflow/core/BUILD	2018-01-09 16:17:58.684739726 +0900
-@@ -1079,7 +1079,10 @@
+diff -ruN tensorflow-1.6.0-rc0/tensorflow/core/BUILD tensorflow-1.6.0-rc0-android/tensorflow/core/BUILD
+--- tensorflow-1.6.0-rc0/tensorflow/core/BUILD	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/tensorflow/core/BUILD	2018-02-09 23:47:53.694044537 +0900
+@@ -1119,7 +1119,10 @@
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
@@ -92,10 +97,40 @@ diff -ruN tensorflow-1.5.0-rc0/tensorflow/core/BUILD tensorflow-1.5.0-rc0-androi
      copts = tf_copts(),
      tags = [
          "manual",
-diff -ruN tensorflow-1.5.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.5.0-rc0-android/tensorflow/core/kernels/BUILD
---- tensorflow-1.5.0-rc0/tensorflow/core/kernels/BUILD	2018-01-03 09:00:43.000000000 +0900
-+++ tensorflow-1.5.0-rc0-android/tensorflow/core/kernels/BUILD	2018-01-09 16:17:58.685739724 +0900
-@@ -4661,6 +4661,7 @@
+@@ -1496,7 +1499,7 @@
+         "//tensorflow:windows_msvc": [],
+         "//conditions:default": [
+             "-ldl",
+-            "-lpthread",
++#            "-lpthread",
+         ],
+     }),
+     deps = tf_additional_lib_deps() + [
+diff -ruN tensorflow-1.6.0-rc0/tensorflow/core/common_runtime/gpu/gpu_debug_allocator.cc tensorflow-1.6.0-rc0-android/tensorflow/core/common_runtime/gpu/gpu_debug_allocator.cc
+--- tensorflow-1.6.0-rc0/tensorflow/core/common_runtime/gpu/gpu_debug_allocator.cc	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/tensorflow/core/common_runtime/gpu/gpu_debug_allocator.cc	2018-02-09 21:27:48.466753560 +0900
+@@ -169,7 +169,7 @@
+ 
+   // Initialize the buffer to Nans
+   size_t req_size = base_allocator_->RequestedSize(allocated_ptr);
+-  std::vector<float> nans(req_size / sizeof(float), std::nanf(""));
++  std::vector<float> nans(req_size / sizeof(float), nanf(""));
+   gpu::DeviceMemory<float> nan_ptr{
+       gpu::DeviceMemoryBase{static_cast<float*>(allocated_ptr), req_size}};
+ 
+@@ -182,7 +182,7 @@
+ void GPUNanResetAllocator::DeallocateRaw(void* ptr) {
+   // Reset the buffer to Nans
+   size_t req_size = base_allocator_->RequestedSize(ptr);
+-  std::vector<float> nans(req_size / sizeof(float), std::nanf(""));
++  std::vector<float> nans(req_size / sizeof(float), nanf(""));
+   gpu::DeviceMemory<float> nan_ptr{
+       gpu::DeviceMemoryBase{static_cast<float*>(ptr), req_size}};
+   if (!stream_exec_->SynchronousMemcpy(&nan_ptr, &nans[0], req_size)) {
+diff -ruN tensorflow-1.6.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.6.0-rc0-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.6.0-rc0/tensorflow/core/kernels/BUILD	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/tensorflow/core/kernels/BUILD	2018-02-09 20:51:49.204002435 +0900
+@@ -4772,6 +4772,7 @@
          "warn_about_ints.h",
          "where_op.h",
          "xent_op.h",
@@ -103,10 +138,10 @@ diff -ruN tensorflow-1.5.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.5.0-rc
      ],
  )
  
-diff -ruN tensorflow-1.5.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.5.0-rc0-android/tensorflow/tensorflow.bzl
---- tensorflow-1.5.0-rc0/tensorflow/tensorflow.bzl	2018-01-03 09:00:43.000000000 +0900
-+++ tensorflow-1.5.0-rc0-android/tensorflow/tensorflow.bzl	2018-01-09 16:23:03.776006167 +0900
-@@ -172,7 +172,6 @@
+diff -ruN tensorflow-1.6.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.6.0-rc0-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.6.0-rc0/tensorflow/tensorflow.bzl	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/tensorflow/tensorflow.bzl	2018-02-09 20:51:49.205002433 +0900
+@@ -187,7 +187,6 @@
    # to be used, pass android_optimization_level_override=None
    android_copts = [
        "-std=c++11",
@@ -114,9 +149,9 @@ diff -ruN tensorflow-1.5.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.5.0-rc0-an
        "-Wno-narrowing",
        "-fomit-frame-pointer",
    ]
-diff -ruN tensorflow-1.5.0-rc0/WORKSPACE tensorflow-1.5.0-rc0-android/WORKSPACE
---- tensorflow-1.5.0-rc0/WORKSPACE	2018-01-03 09:00:43.000000000 +0900
-+++ tensorflow-1.5.0-rc0-android/WORKSPACE	2018-01-09 16:17:58.686739722 +0900
+diff -ruN tensorflow-1.6.0-rc0/WORKSPACE tensorflow-1.6.0-rc0-android/WORKSPACE
+--- tensorflow-1.6.0-rc0/WORKSPACE	2018-02-05 05:28:47.000000000 +0900
++++ tensorflow-1.6.0-rc0-android/WORKSPACE	2018-02-09 20:51:49.205002433 +0900
 @@ -27,15 +27,15 @@
  #    path = "<PATH_TO_SDK>",
  #)
