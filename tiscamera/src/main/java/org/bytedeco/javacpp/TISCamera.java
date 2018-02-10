@@ -9,6 +9,14 @@ import org.bytedeco.javacpp.annotation.*;
 public class TISCamera extends org.bytedeco.javacpp.presets.TISCamera {
     static { Loader.load(); }
 
+public static class sink_callback extends FunctionPointer {
+    static { Loader.load(); }
+    public    sink_callback(Pointer p) { super(p); }
+    protected sink_callback() { allocate(); }
+    private native void allocate();
+    public native void call(@ByVal @Cast("tcam::MemoryBuffer*") MemoryBuffer arg0, Pointer arg1);
+}
+
 @Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -200,97 +208,6 @@ public class TISCamera extends org.bytedeco.javacpp.presets.TISCamera {
         return this;
     }
 }
-
-// Parsed from algorithms/debayer.h
-
-/*
- * Copyright 2016 The Imaging Source Europe GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// #ifndef TCAM_ALGORITHM_DEBAYER_H
-// #define TCAM_ALGORITHM_DEBAYER_H
-
-
-/** enum tcam::algorithm:: */
-public static final int
-    WB_MODE_MANUAL = 0,
-    WB_MODE_AUTO = 1,
-    WB_MODE_ONE_PUSH = 2;
-
-
-@Namespace("tcam::algorithm") public static class _debayer_data extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public _debayer_data() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public _debayer_data(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public _debayer_data(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public _debayer_data position(long position) {
-        return (_debayer_data)super.position(position);
-    }
-
-    public native int use_ccm(); public native _debayer_data use_ccm(int use_ccm);
-    public native int use_rbgain(); public native _debayer_data use_rbgain(int use_rbgain);
-
-    public native int wb_auto_mode(); public native _debayer_data wb_auto_mode(int wb_auto_mode);
-
-    // Color Correction Matrix
-    public native int ccm(int i, int j); public native _debayer_data ccm(int i, int j, int ccm);
-    @MemberGetter public native @Cast("int(* /*[3]*/ )[3]") IntPointer ccm();
-
-    // red / blue gain
-    public native int rgain(); public native _debayer_data rgain(int rgain);
-    public native int bgain(); public native _debayer_data bgain(int bgain);
-}
-
-@Namespace("tcam::algorithm") @Opaque public static class debayer_data_t extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public debayer_data_t() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public debayer_data_t(Pointer p) { super(p); }
-}
-
-
-@Namespace("tcam::algorithm") public static native void debayer(@Cast("const unsigned char*") BytePointer input_buffer,
-              @Cast("unsigned int") int input_pitch,
-              @Cast("const unsigned int") int fourcc_in,
-              @Cast("unsigned char*") BytePointer output_buffer,
-              @Cast("unsigned int") int output_pitch,
-              @Cast("const unsigned int") int fourcc_out);
-@Namespace("tcam::algorithm") public static native void debayer(@Cast("const unsigned char*") ByteBuffer input_buffer,
-              @Cast("unsigned int") int input_pitch,
-              @Cast("const unsigned int") int fourcc_in,
-              @Cast("unsigned char*") ByteBuffer output_buffer,
-              @Cast("unsigned int") int output_pitch,
-              @Cast("const unsigned int") int fourcc_out);
-@Namespace("tcam::algorithm") public static native void debayer(@Cast("const unsigned char*") byte[] input_buffer,
-              @Cast("unsigned int") int input_pitch,
-              @Cast("const unsigned int") int fourcc_in,
-              @Cast("unsigned char*") byte[] output_buffer,
-              @Cast("unsigned int") int output_pitch,
-              @Cast("const unsigned int") int fourcc_out);
-
- /* namespace algorithm */
-
- /* namespace tcam */
-
-// #endif /* TCAM_ALGORITHM_DEBAYER_H */
-
 
 // Parsed from property_identifications.h
 
@@ -2261,14 +2178,6 @@ public static final int
  */
 
 //typedef void (*shared_callback)(std::shared_ptr<tcam::MemoryBuffer>, void*);
-public static class sink_callback extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    sink_callback(Pointer p) { super(p); }
-    protected sink_callback() { allocate(); }
-    private native void allocate();
-    public native void call(MemoryBuffer arg0, Pointer arg1);
-}
 //typedef void (*c_callback)(const struct tcam_image_buffer*, void*);
 
 @Namespace("tcam") @NoOffset public static class ImageSink extends SinkInterface {
@@ -2294,7 +2203,7 @@ public static class sink_callback extends FunctionPointer {
     public native @ByVal VideoFormat getVideoFormat();
 
 //    bool registerCallback (shared_callback, void*);
-    public native @Cast("bool") boolean registerCallback(sink_callback arg0, Pointer arg1);
+    public native @Cast("bool") boolean registerCallback(@Cast("sink_callback") sink_callback arg0, Pointer arg1);
 //    bool registerCallback (c_callback, void*);
 
     public native void push_image(@SharedPtr @ByVal MemoryBuffer arg0);

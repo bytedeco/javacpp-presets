@@ -48,7 +48,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 //                                                "algorithms/bayer.h",
 
                                                 //                                                "algorithms/auto_focus.h",
-                                                "algorithms/debayer.h",
+                                                //                                                "algorithms/debayer.h",
                                                 //                                                "algorithms/image_sampling.h",
                                                 //                                                "algorithms/image_transform_base.h",
                                                 //                                                "algorithms/tcam-algorithm.h",
@@ -129,6 +129,21 @@ public class TISCamera implements InfoMapper
         //infoMap.put(new Info("std::weak_ptr<tcam::SinkInterface>").cast().pointerTypes("SinkInterface"));
         infoMap.put(new Info("tcam::SinkInterface::set_source").skip());
         infoMap.put(new Info("tcam::ImageSink::set_source").skip());
+
+        infoMap.put(new Info().javaText("\n" +
+                                        "public static class sink_callback extends FunctionPointer {\n" +
+                                        "    static { Loader.load(); }\n" +
+                                        "    public    sink_callback(Pointer p) { super(p); }\n" +
+                                        "    protected sink_callback() { allocate(); }\n" +
+                                        "    private native void allocate();\n" +
+                                        "    public native void call(@ByVal @Cast(\"tcam::MemoryBuffer*\") MemoryBuffer arg0, Pointer arg1);\n" +
+                                        "}").define());
+        infoMap.put(new Info("ImageSink.h").linePatterns(".*typedef void \\(\\*sink_callback\\)\\(tcam::MemoryBuffer\\*, void\\*\\).*").skip());
+
+        infoMap.put(new Info("tcam::ImageSink::registerCallback")
+                                    .javaText("public native @Cast(\"bool\") boolean registerCallback(@Cast(\"sink_callback\") sink_callback arg0, Pointer arg1);"));
+                infoMap.put(new Info("tcam::ImageSink::registerCallback").skip());
+
 
         //std::shared_ptr<tcam::MemoryBuffer>
 
@@ -211,4 +226,14 @@ public class TISCamera implements InfoMapper
 
 //                infoMap.put(new Info("tcam::openDeviceInterface").skip());
     }
+
+//    public static class sink_callback extends FunctionPointer
+//    {
+//        static { Loader.load(); }
+//        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+//        public    sink_callback(Pointer p) { super(p); }
+//        protected sink_callback() { allocate(); }
+//        private native void allocate();
+//        public native void call(@ByVal @Cast("tcam::MemoryBuffer*") Pointer arg0, Pointer arg1);
+//    }
 }
