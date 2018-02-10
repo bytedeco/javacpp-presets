@@ -43,7 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target = "org.bytedeco.javacpp.TISCamera", value = {
                 @Platform(value = { "linux-x86_64" },
                                 compiler = "cpp11",
-                                define = { "SHARED_PTR_NAMESPACE std" },
+                                define = { "SHARED_PTR_NAMESPACE std", "NO_JNI_DETACH_THREAD" },
                                 include = {
                                                 //                                                "algorithms/bayer.h",
 
