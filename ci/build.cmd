@@ -22,8 +22,8 @@ IF "%OS%"=="windows-x86" (
 )
 echo on
 
-C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
-C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
+rem C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
+rem C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip autoconf automake libtool make patch"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL"
 
