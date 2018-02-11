@@ -43,7 +43,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target = "org.bytedeco.javacpp.TISCamera", value = {
                 @Platform(value = { "linux-x86_64" },
                                 compiler = "cpp11",
-                                define = { "SHARED_PTR_NAMESPACE std", "NO_JNI_DETACH_THREAD" },
+                                define = { "SHARED_PTR_NAMESPACE std",
+                                           //"NO_JNI_DETACH_THREAD"
+                                },
                                 include = {
                                                 //                                                "algorithms/bayer.h",
 
@@ -156,7 +158,8 @@ public class TISCamera implements InfoMapper
                                         "    public    sink_callback(Pointer p) { super(p); }\n" +
                                         "    protected sink_callback() { allocate(); }\n" +
                                         "    private native void allocate();\n" +
-                                        "    public native void call(@ByPtr @Cast(\"tcam::MemoryBuffer*\") MemoryBuffer arg0, Pointer arg1);\n" +
+                                        //see the ImageSink C++ code, the callback is called with a pointer ref: this->callback(&*buffer, user_data);
+                                        "    public native void call(@ByRef @Cast(\"tcam::MemoryBuffer*\") MemoryBuffer arg0, Pointer arg1);\n" +
                                         "}").define());
 
         infoMap.put(new Info("tcam::ImageSink::registerCallback(sink_callback, void*)")

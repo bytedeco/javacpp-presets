@@ -1,3 +1,4 @@
+Binary files tiscamera/.git/index and tiscamera_edit/.git/index differ
 diff -ruN tiscamera/src/DeviceInterface.h tiscamera_edit/src/DeviceInterface.h
 --- tiscamera/src/DeviceInterface.h	2018-02-11 21:03:03.344273735 +0100
 +++ tiscamera_edit/src/DeviceInterface.h	2018-02-11 21:12:05.680044133 +0100
@@ -9,6 +10,22 @@ diff -ruN tiscamera/src/DeviceInterface.h tiscamera_edit/src/DeviceInterface.h
  
      /**
       * Start image retrieval and wait for new images
+diff -ruN tiscamera/src/ImageSink.cpp tiscamera_edit/src/ImageSink.cpp
+--- tiscamera/src/ImageSink.cpp	2018-02-11 21:03:03.344273735 +0100
++++ tiscamera_edit/src/ImageSink.cpp	2018-02-11 22:52:25.695047779 +0100
+@@ -114,10 +114,12 @@
+ void ImageSink::push_image (std::shared_ptr<MemoryBuffer> buffer)
+ {
+     last_image_buffer = buffer->getImageBuffer();
++    /* This seems to be active at random in some situations...
+     if (sh_callback)
+     {
+         this->sh_callback(buffer, user_data);
+     }
++    */
+     if (callback != nullptr)
+     {
+         this->callback(&*buffer, user_data);
 diff -ruN tiscamera/src/libusb/AFU050Device.cpp tiscamera_edit/src/libusb/AFU050Device.cpp
 --- tiscamera/src/libusb/AFU050Device.cpp	2018-02-11 21:03:03.356273728 +0100
 +++ tiscamera_edit/src/libusb/AFU050Device.cpp	2018-02-11 21:08:10.496133813 +0100

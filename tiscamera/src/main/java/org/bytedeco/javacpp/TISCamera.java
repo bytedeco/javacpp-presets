@@ -14,7 +14,7 @@ public static class sink_callback extends FunctionPointer {
     public    sink_callback(Pointer p) { super(p); }
     protected sink_callback() { allocate(); }
     private native void allocate();
-    public native void call(@ByPtr @Cast("tcam::MemoryBuffer*") MemoryBuffer arg0, Pointer arg1);
+    public native void call(@ByRef @Cast("tcam::MemoryBuffer*") MemoryBuffer arg0, Pointer arg1);
 }
 
 @Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
