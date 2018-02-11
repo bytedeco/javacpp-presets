@@ -105,8 +105,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                 //                                                "Properties.h",
                                                 //                                                "PropertyGeneration.h",
                                                 //                                                "PropertyHandler.h",
+
+                                //#include "UsbSession.h"
+                                //#include "LibusbDevice.h"
+
+//                                                "libusb/AFU420Device.h",
+//                                                "libusb/AFU420Device.cpp",
                                 },
-                                link = { "tcam", "tcamprop", "tcamgstbase", /*"gsttcamautoexposure", "gsttcamautofocus", "gsttcamwhitebalance", "gsttcamsrc", "gsttcambin", "tcam-v4l2",*/ /*"tcam-libusb"*/ }
+                                link = { "tcam", "tcam-libusb", "tcamprop", "tcamgstbase", /*"gsttcamautoexposure", "gsttcamautofocus", "gsttcamwhitebalance", "gsttcamsrc", "gsttcambin", "tcam-v4l2",*/ /*"tcam-libusb"*/ }
                 )
 }
                 //,helper = "org.bytedeco.javacpp.helper.GObject"
@@ -118,9 +124,9 @@ public class TISCamera implements InfoMapper
         infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define());
         infoMap.put(new Info("std::vector<tcam::Property*>").pointerTypes("PropertyVector").define());
 
-        infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
+        //infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
         //infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").pointerTypes("SharedMemoryBuffer").define());
-        infoMap.put(new Info("std::vector<std::shared_ptr<tcam::MemoryBuffer> >").pointerTypes("SharedMemoryBufferVector").define());
+        //infoMap.put(new Info("std::vector<std::shared_ptr<tcam::MemoryBuffer> >").pointerTypes("SharedMemoryBufferVector").define());
 
         infoMap.put(new Info("std::shared_ptr<tcam::Property>").annotations("@SharedPtr").pointerTypes("Property"));
         infoMap.put(new Info("std::vector<std::shared_ptr<tcam::Property> >").pointerTypes("SharedPropertyVector").define());
@@ -130,13 +136,24 @@ public class TISCamera implements InfoMapper
         infoMap.put(new Info("tcam::SinkInterface::set_source").skip());
         infoMap.put(new Info("tcam::ImageSink::set_source").skip());
 
+        //infoMap.put(new Info("tcam::SinkInterface::get_buffer_collection").skip());
+        infoMap.put(new Info("SinkInterface.h").linePatterns(".*get_buffer_collection.*").skip());
+        //infoMap.put(new Info("tcam::SinkInterface::set_buffer_collection").skip());
+        infoMap.put(new Info("SinkInterface.h").linePatterns(".*set_buffer_collection.*").skip());
+        infoMap.put(new Info("tcam::ImageSink::get_buffer_collection").skip());
+        infoMap.put(new Info("tcam::ImageSink::set_buffer_collection").skip());
+        infoMap.put(new Info("DeviceInterface.h").linePatterns(".*initialize_buffers .*").skip());
+        infoMap.put(new Info("std::vector<tcam::MemoryBuffer*>").pointerTypes("MemoryBufferVector").define());
+
+        //infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer_ptr").javaText("public native void requeue_buffer_ptr(@ByRef MemoryBuffer arg0);"));
+
         infoMap.put(new Info().javaText("\n" +
                                         "public static class sink_callback extends FunctionPointer {\n" +
                                         "    static { Loader.load(); }\n" +
                                         "    public    sink_callback(Pointer p) { super(p); }\n" +
                                         "    protected sink_callback() { allocate(); }\n" +
                                         "    private native void allocate();\n" +
-                                        "    public native void call(@ByVal @Cast(\"tcam::MemoryBuffer*\") MemoryBuffer arg0, Pointer arg1);\n" +
+                                        "    public native void call(@ByPtr @Cast(\"tcam::MemoryBuffer*\") MemoryBuffer arg0, Pointer arg1);\n" +
                                         "}").define());
         infoMap.put(new Info("ImageSink.h").linePatterns(".*typedef void \\(\\*sink_callback\\)\\(tcam::MemoryBuffer\\*, void\\*\\).*").skip());
 
@@ -224,7 +241,10 @@ public class TISCamera implements InfoMapper
         //        infoMap.put(new Info("asstd::enable_shared_from_this<ImageSource>").javaText("").skip());
         //        infoMap.put(new Info("asstd::enable_shared_from_this<ImageSource>()").javaText("").skip());
 
-//                infoMap.put(new Info("tcam::openDeviceInterface").skip());
+        //                infoMap.put(new Info("tcam::openDeviceInterface").skip());
+
+//        infoMap.put(new Info("tcam::AFU420Device::set_framerate").skip());
+        //        infoMap.put(new Info("tcam::AFU420Device::get_framerate").skip());
     }
 
 //    public static class sink_callback extends FunctionPointer

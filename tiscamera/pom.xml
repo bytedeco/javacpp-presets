@@ -47,9 +47,10 @@
                         <includePath>/usr/lib/x86_64-linux-gnu/glib-2.0/include/</includePath>
                         <includePath>/usr/include/glib-2.0/</includePath>
                     </includePaths>
-                    <!--<linkPaths>-->
+                    <linkPaths>
                         <!--<linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/</linkPath>-->
-                    <!--</linkPaths>-->
+                        <linkPath>/usr/lib/tcam-0</linkPath>
+                    </linkPaths>
                 </configuration>
             </plugin>
             <plugin>
