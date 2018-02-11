@@ -1,0 +1,84 @@
+diff -ruN tiscamera/src/DeviceInterface.h tiscamera_edit/src/DeviceInterface.h
+--- tiscamera/src/DeviceInterface.h	2018-02-11 21:03:03.344273735 +0100
++++ tiscamera_edit/src/DeviceInterface.h	2018-02-11 21:12:05.680044133 +0100
+@@ -93,6 +93,7 @@
+     virtual bool release_buffers () = 0;
+ 
+     virtual void requeue_buffer (std::shared_ptr<MemoryBuffer>) = 0;
++    virtual void requeue_buffer_ptr (MemoryBuffer*) = 0;
+ 
+     /**
+      * Start image retrieval and wait for new images
+diff -ruN tiscamera/src/libusb/AFU050Device.cpp tiscamera_edit/src/libusb/AFU050Device.cpp
+--- tiscamera/src/libusb/AFU050Device.cpp	2018-02-11 21:03:03.356273728 +0100
++++ tiscamera_edit/src/libusb/AFU050Device.cpp	2018-02-11 21:08:10.496133813 +0100
+@@ -289,6 +289,17 @@
+     }
+ }
+ 
++void tcam::AFU050Device::requeue_buffer_ptr (MemoryBuffer* buf)
++{
++    for (auto& b : buffers)
++    {
++        if (b.buffer->get_data() == buf->get_data())
++        {
++            b.is_queued = true;
++        }
++    }
++}
++
+ 
+ void tcam::AFU050Device::transfer_callback (struct libusb_transfer* transfer)
+ {
+diff -ruN tiscamera/src/libusb/AFU050Device.h tiscamera_edit/src/libusb/AFU050Device.h
+--- tiscamera/src/libusb/AFU050Device.h	2018-02-11 21:03:03.356273728 +0100
++++ tiscamera_edit/src/libusb/AFU050Device.h	2018-02-11 21:07:33.208149178 +0100
+@@ -119,6 +119,7 @@
+     bool release_buffers ();
+ 
+     void requeue_buffer (std::shared_ptr<MemoryBuffer>);
++    void requeue_buffer_ptr (MemoryBuffer*);
+ 
+     bool start_stream ();
+ 
+diff -ruN tiscamera/src/libusb/AFU420Device.cpp tiscamera_edit/src/libusb/AFU420Device.cpp
+--- tiscamera/src/libusb/AFU420Device.cpp	2018-02-11 21:03:03.356273728 +0100
++++ tiscamera_edit/src/libusb/AFU420Device.cpp	2018-02-11 21:09:36.028099867 +0100
+@@ -708,7 +708,6 @@
+     buffers.clear();
+ }
+ 
+-
+ void AFU420Device::requeue_buffer (std::shared_ptr<MemoryBuffer> buffer)
+ {
+     for (auto& b : buffers)
+@@ -722,6 +721,18 @@
+ 
+ }
+ 
++void AFU420Device::requeue_buffer_ptr (MemoryBuffer* buf)
++{
++    for (auto& b : buffers)
++    {
++        if (b.buffer->get_data() == buf->get_data())
++        {
++            b.is_queued = true;
++            break;
++        }
++    }
++}
++
+ 
+ void AFU420Device::push_buffer ()
+ {
+diff -ruN tiscamera/src/libusb/AFU420Device.h tiscamera_edit/src/libusb/AFU420Device.h
+--- tiscamera/src/libusb/AFU420Device.h	2018-02-11 21:03:03.356273728 +0100
++++ tiscamera_edit/src/libusb/AFU420Device.h	2018-02-11 21:08:31.624125265 +0100
+@@ -120,6 +120,7 @@
+     bool release_buffers ();
+ 
+     void requeue_buffer (std::shared_ptr<MemoryBuffer>);
++    void requeue_buffer_ptr (MemoryBuffer*);
+ 
+     bool start_stream ();
+ 
