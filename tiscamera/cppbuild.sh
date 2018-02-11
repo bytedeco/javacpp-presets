@@ -15,6 +15,9 @@ if ! [ -d "$TIS_PATH" ]; then
 rm -rf "$TIS_PATH"
 git clone --recursive https://github.com/TheImagingSource/tiscamera.git "$TIS_PATH"
 
+# Apply patch
+patch -s -p0 < ../tiscamera.patch
+
 INSTALL_PATH="$(pwd)/$PLATFORM$EXTENSION"
 INCLUDE_PATH="$INSTALL_PATH/include"
 LIB_PATH="$INSTALL_PATH/lib"

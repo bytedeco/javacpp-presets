@@ -124,15 +124,12 @@ public class TISCamera implements InfoMapper
         infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define());
         infoMap.put(new Info("std::vector<tcam::Property*>").pointerTypes("PropertyVector").define());
 
-        //infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
-        //infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").pointerTypes("SharedMemoryBuffer").define());
-        //infoMap.put(new Info("std::vector<std::shared_ptr<tcam::MemoryBuffer> >").pointerTypes("SharedMemoryBufferVector").define());
+        infoMap.put(new Info("std::shared_ptr<tcam::MemoryBuffer>").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
+        infoMap.put(new Info("std::vector<std::shared_ptr<tcam::MemoryBuffer> >").pointerTypes("SharedMemoryBufferVector").define());
 
         infoMap.put(new Info("std::shared_ptr<tcam::Property>").annotations("@SharedPtr").pointerTypes("Property"));
         infoMap.put(new Info("std::vector<std::shared_ptr<tcam::Property> >").pointerTypes("SharedPropertyVector").define());
 
-        //note: we need that cast
-        //infoMap.put(new Info("std::weak_ptr<tcam::SinkInterface>").cast().pointerTypes("SinkInterface"));
         infoMap.put(new Info("tcam::SinkInterface::set_source").skip());
         infoMap.put(new Info("tcam::ImageSink::set_source").skip());
 
@@ -142,10 +139,16 @@ public class TISCamera implements InfoMapper
         infoMap.put(new Info("SinkInterface.h").linePatterns(".*set_buffer_collection.*").skip());
         infoMap.put(new Info("tcam::ImageSink::get_buffer_collection").skip());
         infoMap.put(new Info("tcam::ImageSink::set_buffer_collection").skip());
-        infoMap.put(new Info("DeviceInterface.h").linePatterns(".*initialize_buffers .*").skip());
-        infoMap.put(new Info("std::vector<tcam::MemoryBuffer*>").pointerTypes("MemoryBufferVector").define());
 
-        //infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer_ptr").javaText("public native void requeue_buffer_ptr(@ByRef MemoryBuffer arg0);"));
+        infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer_ptr").javaText("public native void requeue_buffer_ptr(@ByPtr MemoryBuffer arg0);"));
+        infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer").javaText("public native void requeue_buffer(@SharedPtr @ByPtr MemoryBuffer arg0);"));
+
+        //we'll define our own callbacks, see below
+        infoMap.put(new Info("ImageSink.h").linePatterns(
+                        ".*typedef void \\(\\*shared_callback\\).*",
+                        ".*typedef void \\(\\*sink_callback\\).*",
+                        ".*typedef void \\(\\*c_callback\\).*")
+                                           .skip());
 
         infoMap.put(new Info().javaText("\n" +
                                         "public static class sink_callback extends FunctionPointer {\n" +
@@ -155,105 +158,10 @@ public class TISCamera implements InfoMapper
                                         "    private native void allocate();\n" +
                                         "    public native void call(@ByPtr @Cast(\"tcam::MemoryBuffer*\") MemoryBuffer arg0, Pointer arg1);\n" +
                                         "}").define());
-        infoMap.put(new Info("ImageSink.h").linePatterns(".*typedef void \\(\\*sink_callback\\)\\(tcam::MemoryBuffer\\*, void\\*\\).*").skip());
 
-        infoMap.put(new Info("tcam::ImageSink::registerCallback")
+        infoMap.put(new Info("tcam::ImageSink::registerCallback(sink_callback, void*)")
                                     .javaText("public native @Cast(\"bool\") boolean registerCallback(@Cast(\"sink_callback\") sink_callback arg0, Pointer arg1);"));
-                infoMap.put(new Info("tcam::ImageSink::registerCallback").skip());
-
-
-        //std::shared_ptr<tcam::MemoryBuffer>
-
-        //.annotations("@Cast({\"std::shared_ptr<tcam::MemoryBuffer>\", \"\"}) @SharedPtr")
-        //this one seems to be a difficult one to parse...
-//        infoMap.put(new Info("shared_callback").skip());
-//        infoMap.put(new Info("tcam::ImageSink::shared_callback").skip());
-
-//        infoMap.put(new Info("sink_callback").skip());
-//        infoMap.put(new Info("tcam::ImageSink::sink_callback").skip());
-//        infoMap.put(new Info("sink_callback").javaText("public static class sink_callback extends FunctionPointer {\n" +
-//                                                       "    static { Loader.load(); }\n" +
-//                                                       "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
-//                                                       "    public    sink_callback(Pointer p) { super(p); }\n" +
-//                                                       "    protected sink_callback() { allocate(); }\n" +
-//                                                       "    private native void allocate();\n" +
-//                                                       "    public native void call( MemoryBuffer arg0, Pointer arg1);\n" +
-//                                                       "}"));
-//        infoMap.put(new Info("sink_callback").javaText("public static class sink_callback extends FunctionPointer {\n" +
-//                                                       "    static { Loader.load(); }\n" +
-//                                                       "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
-//                                                       "    public    sink_callback(Pointer p) { super(p); }\n" +
-//                                                       "    protected sink_callback() { allocate(); }\n" +
-//                                                       "    private native void allocate();\n" +
-//                                                       "    public native void call(MemoryBuffer arg0, Pointer arg1);\n" +
-//                                                       "}").define());
-//
-        //public native @Cast("bool") boolean registerCallback(sink_callback arg0, Pointer arg1);
-//        infoMap.put(new Info("tcam::ImageSink::sink_callback").javaText("public native @Cast(\"bool\") boolean registerCallback(sink_callback arg0, Pointer arg1);"));
-
-//        infoMap.put(new Info("c_callback").skip());
-//        infoMap.put(new Info("tcam::ImageSink::c_callback").skip());
-
-        //        infoMap.put(new Info("tcam::ImageSink::sink_callback").skip());
-        //        infoMap.put(new Info("tcam::ImageSink::c_callback").skip());
-
-        //infoMap.put(new Info("tcam::ImageSink::shared_callback").pointerTypes("my_shared_callback").cppTypes("void*").translate());
-        //infoMap.put(new Info("sink_callback::sink_callback").pointerTypes("SinkCallbackFunction"));
-        //infoMap.put(new Info("sink_callback::sink_callback").annotations("@SharedPtr").pointerTypes("MemoryBuffer"));
-
-//        infoMap.put(new Info("tcam::ImageSource")
-//                                    .javaText("@Namespace(\"tcam\") @NoOffset public static class ImageSource extends SinkInterface {\n" +
-//                                              "    static { Loader.load(); }\n" +
-//                                              "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n" +
-//                                              "    public ImageSource(Pointer p) { super(p); }\n" +
-//                                              "    /** Native array allocator. Access with {@link Pointer#position(long)}. */\n" +
-//                                              "    public ImageSource(long size) { super((Pointer)null); allocateArray(size); }\n" +
-//                                              "    private native void allocateArray(long size);\n" +
-//                                              "    @Override public ImageSource position(long position) {\n" +
-//                                              "        return (ImageSource)super.position(position);\n" +
-//                                              "    }\n" +
-//                                              "    \n" +
-//                                              "    public ImageSource() { super((Pointer)null); allocate(); }\n" +
-//                                              "    private native void allocate();\n" +
-//                                              "\n" +
-//                                              "    public native @Cast(\"bool\") boolean set_status(@Cast(\"TCAM_PIPELINE_STATUS\") int arg0);\n" +
-//                                              "\n" +
-//                                              "    public native @Cast(\"TCAM_PIPELINE_STATUS\") int get_status();\n" +
-//                                              "\n" +
-//                                              "    public native @Cast(\"bool\") boolean setDevice(@SharedPtr DeviceInterface arg0);\n" +
-//                                              "\n" +
-//                                              "    public native @Cast(\"bool\") boolean setVideoFormat(@Const @ByRef VideoFormat arg0);\n" +
-//                                              "\n" +
-//                                              "    public native @ByVal VideoFormat getVideoFormat();\n" +
-//                                              "\n" +
-//                                              "    public native void push_image(@SharedPtr @ByVal MemoryBuffer arg0);\n" +
-//                                              "\n" +
-//                                              "    public native void requeue_buffer(@SharedPtr @ByVal MemoryBuffer arg0);\n" +
-//                                              "\n" +
-//                                              "    public native @Cast(\"bool\") boolean setSink(@SharedPtr SinkInterface arg0);\n" +
-//                                              "\n" +
-//                                              "    public native @Cast(\"bool\") boolean set_buffer_collection(@ByVal SharedMemoryBufferVector new_buffers);\n" +
-//                                              "\n" +
-//                                              "    public native @ByVal SharedMemoryBufferVector get_buffer_collection();\n" +
-//                                              "\n" +
-//                                              "}"));
-        //        infoMap.put(new Info("std::enable_shared_from_this<ImageSource>()").javaText("").skip());
-        //        infoMap.put(new Info("asstd::enable_shared_from_this<ImageSource>").javaText("").skip());
-        //        infoMap.put(new Info("asstd::enable_shared_from_this<ImageSource>()").javaText("").skip());
-
-        //                infoMap.put(new Info("tcam::openDeviceInterface").skip());
-
-//        infoMap.put(new Info("tcam::AFU420Device::set_framerate").skip());
-        //        infoMap.put(new Info("tcam::AFU420Device::get_framerate").skip());
+        infoMap.put(new Info("tcam::ImageSink::registerCallback(shared_callback, void*)").skip());
+        infoMap.put(new Info("tcam::ImageSink::registerCallback(c_callback, void*)").skip());
     }
-
-//    public static class sink_callback extends FunctionPointer
-//    {
-//        static { Loader.load(); }
-//        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-//        public    sink_callback(Pointer p) { super(p); }
-//        protected sink_callback() { allocate(); }
-//        private native void allocate();
-//        public native void call(@ByVal @Cast("tcam::MemoryBuffer*") Pointer arg0, Pointer arg1);
-//    }
 }
