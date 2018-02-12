@@ -1851,7 +1851,7 @@ public static final int
      */
     public native @Cast("bool") boolean release_buffers();
 
-    public native void requeue_buffer(@SharedPtr @ByPtr MemoryBuffer arg0);
+    public native void requeue_buffer(@SharedPtr @ByVal MemoryBuffer arg0);
     public native void requeue_buffer_ptr(@ByPtr MemoryBuffer arg0);
 
     /**

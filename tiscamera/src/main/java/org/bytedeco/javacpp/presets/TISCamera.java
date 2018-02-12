@@ -142,8 +142,8 @@ public class TISCamera implements InfoMapper
         infoMap.put(new Info("tcam::ImageSink::get_buffer_collection").skip());
         infoMap.put(new Info("tcam::ImageSink::set_buffer_collection").skip());
 
+        infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer()").skip());
         infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer_ptr").javaText("public native void requeue_buffer_ptr(@ByPtr MemoryBuffer arg0);"));
-        infoMap.put(new Info("tcam::DeviceInterface::requeue_buffer").javaText("public native void requeue_buffer(@SharedPtr @ByPtr MemoryBuffer arg0);"));
 
         //we'll define our own callbacks, see below
         infoMap.put(new Info("ImageSink.h").linePatterns(
