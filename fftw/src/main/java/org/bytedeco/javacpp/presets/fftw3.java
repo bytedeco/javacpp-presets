@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -32,10 +33,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.fftw3", value={
-    @Platform(include="<fftw3.h>", link={"fftw3@.3", "fftw3f@.3"}),
-    @Platform(value="android", link={"fftw3", "fftw3f"}),
-    @Platform(value="windows", preload={"libfftw3-3", "libfftw3f-3"}) })
+@Properties(target = "org.bytedeco.javacpp.fftw3", value = {
+    @Platform(include = "<fftw3.h>", link = {"fftw3@.3", "fftw3f@.3"}),
+    @Platform(value = "android", link = {"fftw3", "fftw3f"}),
+    @Platform(value = "windows", preload = {"libfftw3-3", "libfftw3f-3"}) })
+@NoException
 public class fftw3 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!defined(FFTW_NO_Complex) && defined(_Complex_I) && defined(complex) && defined(I)").define(false))

@@ -29,6 +29,7 @@ import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -62,6 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/", "/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
     @Platform(value = "linux-ppc64",    preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
     @Platform(value = "ios", include = {"openblas_config.h", "cblas.h" /* no LAPACK */}, preload = "libopenblas") })
+@NoException
 public class openblas implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {

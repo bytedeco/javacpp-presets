@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -37,6 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<npps_conversion_functions.h>", "<npps_arithmetic_and_logical_operations.h>",
             "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.9.1")},
         target = "org.bytedeco.javacpp.npps")
+@NoException
 public class npps implements InfoMapper {
     public void map(InfoMap infoMap) {
     }

@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = {cublas.class, cusparse.class}, value = {
     @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverRf.h>", "cusolverSp.h"}, link = "cusolver@.9.1")},
         target = "org.bytedeco.javacpp.cusolver")
+@NoException
 public class cusolver implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDENSEAPI", "CRFWINAPI", "CUSOLVERAPI").cppTypes().annotations().cppText(""))

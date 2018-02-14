@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -32,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.gsl", value={
-    @Platform(include={"gsl/gsl_types.h", "gsl/gsl_errno.h", "gsl/gsl_ieee_utils.h", "gsl/gsl_inline.h", "gsl/gsl_message.h", "gsl/gsl_complex.h",
+@Properties(target = "org.bytedeco.javacpp.gsl", value = {
+    @Platform(include = {"gsl/gsl_types.h", "gsl/gsl_errno.h", "gsl/gsl_ieee_utils.h", "gsl/gsl_inline.h", "gsl/gsl_message.h", "gsl/gsl_complex.h",
         "gsl/gsl_complex_math.h", "gsl/gsl_check_range.h", "gsl/gsl_sys.h", "gsl/gsl_machine.h", "gsl/gsl_precision.h", "gsl/gsl_nan.h", "gsl/gsl_pow_int.h",
         "gsl/gsl_math.h", "gsl/gsl_min.h", "gsl/gsl_minmax.h", "gsl/gsl_mode.h", "gsl/gsl_test.h", "gsl/gsl_version.h",
 
@@ -96,9 +97,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"}, 
-                               link={"gslcblas@.0", "gsl@.23"}),
-    @Platform(value="android", link={"gslcblas",    "gsl"}),
-    @Platform(value="windows", preload={"libgslcblas-0", "libgsl-23"}) })
+                                 link = {"gslcblas@.0", "gsl@.23"}),
+    @Platform(value = "android", link = {"gslcblas",    "gsl"}),
+    @Platform(value = "windows", preload = {"libgslcblas-0", "libgsl-23"}) })
+@NoException
 public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())

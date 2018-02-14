@@ -1,4 +1,5 @@
 
+ * Append `@NoException` annotation to presets for libdc1394, libfreenect, MKL, OpenBLAS, FFTW, GSL, Leptonica, CUDA, and system APIs to reduce unneeded C++ overhead
  * Fix mapping of `fftwf_iodim` and `fftwf_iodim64` for FFTW ([issue #523](https://github.com/bytedeco/javacpp-presets/issues/523))
  * Add support for iOS and Accelerate to presets for OpenBLAS ([pull #515](https://github.com/bytedeco/javacpp-presets/pull/515))
  * Add "org.bytedeco.javacpp.openblas.load" system property to use libraries from Accelerate, etc ([pull #444](https://github.com/bytedeco/javacpp-presets/pull/444))

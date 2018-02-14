@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cuda.class, value = {
     @Platform(include = {"<npp.h>", "<nppversion.h>", "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.9.1")},
         target = "org.bytedeco.javacpp.nppc")
+@NoException
 public class nppc implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NPP_MAX_64U").translate(false));

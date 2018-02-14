@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cuda.class, value = {
     @Platform(include = "<cusparse.h>", link = "cusparse@.9.1")},
         target = "org.bytedeco.javacpp.cusparse")
+@NoException
 public class cusparse implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUSPARSEAPI").cppTypes().annotations().cppText(""))

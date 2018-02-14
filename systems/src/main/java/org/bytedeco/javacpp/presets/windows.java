@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.BuildEnabled;
@@ -49,6 +50,7 @@ import org.bytedeco.javacpp.tools.Logger;
     includepath = {"C:/Program Files (x86)/Windows Kits/8.1/Include/shared/",
                    "C:/Program Files (x86)/Windows Kits/8.1/Include/um/"},
     link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi"})}, target = "org.bytedeco.javacpp.windows")
+@NoException
 public class windows implements BuildEnabled, InfoMapper {
 
     private Logger logger;
