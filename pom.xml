@@ -824,6 +824,7 @@
       </activation>
       <modules>
         <module>openblas</module>
+        <module>skia</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -886,6 +887,7 @@
       </activation>
       <modules>
         <module>openblas</module>
+        <module>skia</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

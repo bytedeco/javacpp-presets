@@ -109,6 +109,16 @@ matrix:
         env: PROJ=openblas OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=skia OS=ios-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=skia OS=ios-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 
       - os: linux
         env: PROJ=opencv,flandmark OS=linux-armhf
