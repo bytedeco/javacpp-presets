@@ -20,6 +20,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>openblas</artifactId>
+      <version>0.2.20-${project.parent.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
@@ -39,6 +44,19 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>openblas</artifactId>
+            <version>0.2.20-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>openblas</artifactId>
+            <version>0.2.20-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+        </dependencies>
         <configuration>
           <encoding>ISO-8859-1</encoding>
           <propertyKeysAndValues>
@@ -51,7 +69,40 @@
               <value>${javacpp.platform.oldcompiler}</value>
             </property>
           </propertyKeysAndValues>
+          <classPaths>
+            <classPath>${basedir}/../openblas/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+          <includePaths>
+            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          </preloadPaths>
+          <linkResource>/${javacpp.platform.library.path}/</linkResource>
         </configuration>
+        <executions>
+          <execution>
+            <id>javacpp.parser</id>
+            <configuration>
+              <classOrPackageName>org.bytedeco.javacpp.presets.gsl</classOrPackageName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp.compiler</id>
+            <configuration>
+              <classOrPackageName>org.bytedeco.javacpp.gsl</classOrPackageName>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
