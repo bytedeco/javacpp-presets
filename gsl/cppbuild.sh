@@ -74,6 +74,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-armhf)
+        export LDFLAGS="-Wl,-rpath-link,$(dirname $(dirname $(which arm-linux-gnueabihf-gcc)))/arm-linux-gnueabihf/lib/"
         ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install-strip
