@@ -35,6 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<opencv2/photo/photo_c.h>", "<opencv2/photo.hpp>", "<opencv2/photo/cuda.hpp>"},
               link = "opencv_photo@.3.4",
               preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4", "opencv_cudaimgproc@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_photo"),
     @Platform(value = "windows", link = "opencv_photo340",
               preload = {"opencv_cuda340", "opencv_cudaarithm340", "opencv_cudafilters340", "opencv_cudaimgproc340"})},
         target = "org.bytedeco.javacpp.opencv_photo")

@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_video.class, opencv_videoio.class}, value = {
-    @Platform(include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.3.4",
+    @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.3.4",
               preload = {"opencv_cuda@.3.4", "opencv_cudacodec@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
                          "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4",
                          "opencv_cudaoptflow@.3.4", "opencv_cudawarping@.3.4"}),

@@ -41,6 +41,18 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+      <classifier>${javacpp.platform.ios-arm64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.ios-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86}</classifier>
     </dependency>
     <dependency>

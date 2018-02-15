@@ -40,6 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
               link = "opencv_stitching@.3.4", preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
               "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4", "opencv_cudawarping@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_stitching"),
     @Platform(value = "windows", link = "opencv_stitching340", preload = {"opencv_cuda340", "opencv_cudaarithm340", "opencv_cudafilters340",
               "opencv_cudaimgproc340", "opencv_cudafeatures2d340", "opencv_cudalegacy340", "opencv_cudawarping340"})},
         target = "org.bytedeco.javacpp.opencv_stitching")

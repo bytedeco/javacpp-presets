@@ -1889,6 +1889,8 @@ public static final int
 // #define OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP
 
 // #if defined(NO)
+// #undef NO
+
 // #  warning Detected Apple 'NO' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
 // #endif
 

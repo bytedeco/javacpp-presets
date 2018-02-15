@@ -29,7 +29,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @StdVector IntPointer get(@Cast("size_t") long i);
+    @Index(function = "at") public native @StdVector IntPointer get(@Cast("size_t") long i);
     public native MatShapeVector put(@Cast("size_t") long i, IntPointer value);
 
     public native @ByVal Iterator begin();
@@ -84,7 +84,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef MatShapeVector get(@Cast("size_t") long i);
+    @Index(function = "at") public native @ByRef MatShapeVector get(@Cast("size_t") long i);
     public native MatShapeVectorVector put(@Cast("size_t") long i, MatShapeVector value);
 
     public native @ByVal Iterator begin();
@@ -138,11 +138,11 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
     public boolean empty(@Cast("size_t") long i) { return size(i) == 0; }
-    public native @Index long size(@Cast("size_t") long i);
+    public native @Index(function = "at") long size(@Cast("size_t") long i);
     public void clear(@Cast("size_t") long i) { resize(i, 0); }
-    public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
+    public native @Index(function = "at") void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef Range get(@Cast("size_t") long i, @Cast("size_t") long j);
+    @Index(function = "at") public native @ByRef Range get(@Cast("size_t") long i, @Cast("size_t") long j);
     public native RangeVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Range value);
 
     public RangeVectorVector put(Range[] ... array) {
@@ -174,7 +174,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native Mat get(@Cast("size_t") long i);
+    @Index(function = "at") public native Mat get(@Cast("size_t") long i);
     public native MatPointerVector put(@Cast("size_t") long i, Mat value);
 
     public native @ByVal Iterator begin();

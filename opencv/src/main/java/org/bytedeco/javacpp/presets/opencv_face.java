@@ -37,6 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<opencv2/face/facemark.hpp>", "<opencv2/face/facemarkLBF.hpp>", "<opencv2/face/facemarkAAM.hpp>",
                          "<opencv2/face/face_alignment.hpp>"},
               link = "opencv_face@.3.4", preload = {"opencv_plot@.3.4", "opencv_tracking@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_face"),
     @Platform(value = "windows", link = "opencv_face340", preload = {"opencv_plot340", "opencv_tracking340"})},
         target = "org.bytedeco.javacpp.opencv_face")
 public class opencv_face implements InfoMapper {

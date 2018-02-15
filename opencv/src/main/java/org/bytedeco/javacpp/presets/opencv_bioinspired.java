@@ -34,6 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = {opencv_core.class, opencv_highgui.class}, value = {
         @Platform(include = {"<opencv2/bioinspired.hpp>", "opencv2/bioinspired/bioinspired.hpp", "opencv2/bioinspired/retina.hpp",
                 "opencv2/bioinspired/retinafasttonemapping.hpp", "opencv2/bioinspired/transientareassegmentationmodule.hpp"}, link = "opencv_bioinspired@.3.4"),
+        @Platform(value = "ios", preload = "libopencv_bioinspired"),
         @Platform(value = "windows", link = "opencv_bioinspired340")},
         target = "org.bytedeco.javacpp.opencv_bioinspired")
 public class opencv_bioinspired implements InfoMapper {

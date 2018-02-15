@@ -37,6 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "opencv2/ximgproc/sparse_match_interpolator.hpp", "opencv2/ximgproc/structured_edge_detection.hpp", "opencv2/ximgproc/seeds.hpp",
         "opencv2/ximgproc/segmentation.hpp", "opencv2/ximgproc/fast_hough_transform.hpp", "opencv2/ximgproc/estimated_covariance.hpp",
         "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.4"),
+    @Platform(value = "ios", preload = "libopencv_ximgproc"),
     @Platform(value = "windows", link = "opencv_ximgproc340")},
         target = "org.bytedeco.javacpp.opencv_ximgproc")
 public class opencv_ximgproc implements InfoMapper {

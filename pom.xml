@@ -793,7 +793,9 @@
         </property>
       </activation>
       <modules>
+        <module>opencv</module>
         <module>openblas</module>
+        <module>skia</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -824,6 +826,7 @@
         </property>
       </activation>
       <modules>
+        <module>opencv</module>
         <module>openblas</module>
         <module>skia</module>
       </modules>
@@ -856,7 +859,9 @@
         </property>
       </activation>
       <modules>
+        <module>opencv</module>
         <module>openblas</module>
+        <module>skia</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -887,6 +892,7 @@
         </property>
       </activation>
       <modules>
+        <module>opencv</module>
         <module>openblas</module>
         <module>skia</module>
       </modules>

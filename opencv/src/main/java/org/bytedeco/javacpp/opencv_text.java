@@ -36,7 +36,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native int get(@Cast("size_t") long i);
+    @Index(function = "at") public native int get(@Cast("size_t") long i);
     public native IntDeque put(@Cast("size_t") long i, int value);
 
     public native @ByVal Iterator begin();
@@ -76,7 +76,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef ERStat get(@Cast("size_t") long i);
+    @Index(function = "at") public native @ByRef ERStat get(@Cast("size_t") long i);
     public native ERStatVector put(@Cast("size_t") long i, ERStat value);
 
     public native @ByVal Iterator begin();
@@ -131,7 +131,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef ERStatVector get(@Cast("size_t") long i);
+    @Index(function = "at") public native @ByRef ERStatVector get(@Cast("size_t") long i);
     public native ERStatVectorVector put(@Cast("size_t") long i, ERStatVector value);
 
     public native @ByVal Iterator begin();
@@ -186,7 +186,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native double get(@Cast("size_t") long i);
+    @Index(function = "at") public native double get(@Cast("size_t") long i);
     public native DoubleVector put(@Cast("size_t") long i, double value);
 
     public native @ByVal Iterator begin();
@@ -243,9 +243,9 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @StdString BytePointer get(@Cast("size_t") long i);
+    @Index(function = "at") public native @StdString BytePointer get(@Cast("size_t") long i);
     public native StdStringVector put(@Cast("size_t") long i, BytePointer value);
-    @ValueSetter @Index public native StdStringVector put(@Cast("size_t") long i, @StdString String value);
+    @ValueSetter @Index(function = "at") public native StdStringVector put(@Cast("size_t") long i, @StdString String value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
