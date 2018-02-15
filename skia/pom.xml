@@ -42,6 +42,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/include/c/</includePath>
           </includePaths>
           <linkPaths>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/out/Static/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/out/Shared/</linkPath>
           </linkPaths>
         </configuration>

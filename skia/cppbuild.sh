@@ -10,18 +10,6 @@ fi
 export TARGET_CPU=
 export EXTRA_ARGS=
 case $PLATFORM in
-    linux-x86)
-        export CC="gcc -m32"
-        export CXX="g++ -m32"
-        export TARGET_CPU="x86"
-        ;;
-    linux-x86_64)
-        export CC="gcc -m64"
-        export CXX="g++ -m64"
-        export TARGET_CPU="x64"
-        ;;
-    macosx-*)
-        ;;
     ios-arm64)
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64"
         export CXX="$(xcrun --sdk iphoneos --find clang++) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64"
@@ -33,6 +21,18 @@ case $PLATFORM in
         export CXX="$(xcrun --sdk iphonesimulator --find clang++) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64"
         export EXTRA_ARGS='target_os="ios"'
         export TARGET_CPU="x64"
+        ;;
+    linux-x86)
+        export CC="gcc -m32"
+        export CXX="g++ -m32"
+        export TARGET_CPU="x86"
+        ;;
+    linux-x86_64)
+        export CC="gcc -m64"
+        export CXX="g++ -m64"
+        export TARGET_CPU="x64"
+        ;;
+    macosx-*)
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -69,7 +69,14 @@ patch -Np1 < ../../../skia.patch || true
 python tools/git-sync-deps
 cp third_party/libjpeg-turbo/* third_party/externals/libjpeg-turbo/
 
-bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-DSKIA_C_DLL\"] $EXTRA_ARGS"
-ninja -C out/Shared
+if [[ $PLATFORM == ios* ]]; then
+    sed -i="" s/thread_local//g tools/ok.cpp
+    sed -i="" /SRC_SK_XFERMODE_MODE/d tests/CTest.cpp
+    bin/gn gen out/Static --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false $EXTRA_ARGS"
+    ninja -C out/Static
+else
+    bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-DSKIA_C_DLL\"] $EXTRA_ARGS"
+    ninja -C out/Shared
+fi
 
 cd ../..
