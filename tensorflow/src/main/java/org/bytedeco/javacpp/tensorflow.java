@@ -9,6 +9,96 @@ import org.bytedeco.javacpp.annotation.*;
 public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
 
+@Name("tensorflow::gtl::InlinedVector<tensorflow::AllocatorAttributes,4>") public static class AllocatorAttributesVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AllocatorAttributesVector(Pointer p) { super(p); }
+    public AllocatorAttributesVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef AllocatorAttributesVector put(@ByRef AllocatorAttributesVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef AllocatorAttributes get(@Cast("size_t") long i);
+    public native AllocatorAttributesVector put(@Cast("size_t") long i, AllocatorAttributes value);
+}
+
+@Name("tensorflow::gtl::InlinedVector<tensorflow::AllocRecord,4>") public static class AllocRecordVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AllocRecordVector(Pointer p) { super(p); }
+    public AllocRecordVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef AllocRecordVector put(@ByRef AllocRecordVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef AllocRecord get(@Cast("size_t") long i);
+    public native AllocRecordVector put(@Cast("size_t") long i, AllocRecord value);
+}
+
+@Name("tensorflow::gtl::InlinedVector<tensorflow::DeviceContext*,4>") public static class DeviceContextInlinedVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceContextInlinedVector(Pointer p) { super(p); }
+    public DeviceContextInlinedVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef DeviceContextInlinedVector put(@ByRef DeviceContextInlinedVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native DeviceContext get(@Cast("size_t") long i);
+    public native DeviceContextInlinedVector put(@Cast("size_t") long i, DeviceContext value);
+}
+
+@Name("tensorflow::gtl::InlinedVector<tensorflow::DeviceType,4>") public static class DeviceTypeVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceTypeVector(Pointer p) { super(p); }
+    public DeviceTypeVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef DeviceTypeVector put(@ByRef DeviceTypeVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef DeviceType get(@Cast("size_t") long i);
+    public native DeviceTypeVector put(@Cast("size_t") long i, DeviceType value);
+}
+
+@Name("tensorflow::gtl::InlinedVector<tensorflow::TensorValue,4>") public static class TensorValueVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorValueVector(Pointer p) { super(p); }
+    public TensorValueVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef TensorValueVector put(@ByRef TensorValueVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef TensorValue get(@Cast("size_t") long i);
+    public native TensorValueVector put(@Cast("size_t") long i, TensorValue value);
+}
+
+@Name("tensorflow::gtl::InlinedVector<tensorflow::OpKernelContext::WrappedAllocator,4>") public static class WrappedAllocatorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WrappedAllocatorVector(Pointer p) { super(p); }
+    public WrappedAllocatorVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef WrappedAllocatorVector put(@ByRef WrappedAllocatorVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef WrappedAllocator get(@Cast("size_t") long i);
+    public native WrappedAllocatorVector put(@Cast("size_t") long i, WrappedAllocator value);
+}
+
 @Name("tensorflow::gtl::InlinedVector<tensorflow::int64,4>") public static class LongVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -292,6 +382,116 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
             first(i, firstValue[i]);
             second(i, secondValue[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<tensorflow::Device*>") public static class DeviceVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceVector(Pointer p) { super(p); }
+    public DeviceVector(Device value) { this(1); put(0, value); }
+    public DeviceVector(Device ... array) { this(array.length); put(array); }
+    public DeviceVector()       { allocate();  }
+    public DeviceVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef DeviceVector put(@ByRef DeviceVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native Device get(@Cast("size_t") long i);
+    public native DeviceVector put(@Cast("size_t") long i, Device value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") Device get();
+    }
+
+    public Device pop_back() {
+        long size = size();
+        Device value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DeviceVector push_back(Device value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public DeviceVector put(Device value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public DeviceVector put(Device ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<tensorflow::DeviceContext*>") public static class DeviceContextVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceContextVector(Pointer p) { super(p); }
+    public DeviceContextVector(DeviceContext value) { this(1); put(0, value); }
+    public DeviceContextVector(DeviceContext ... array) { this(array.length); put(array); }
+    public DeviceContextVector()       { allocate();  }
+    public DeviceContextVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef DeviceContextVector put(@ByRef DeviceContextVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native DeviceContext get(@Cast("size_t") long i);
+    public native DeviceContextVector put(@Cast("size_t") long i, DeviceContext value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") DeviceContext get();
+    }
+
+    public DeviceContext pop_back() {
+        long size = size();
+        DeviceContext value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public DeviceContextVector push_back(DeviceContext value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public DeviceContextVector put(DeviceContext value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public DeviceContextVector put(DeviceContext ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
         }
         return this;
     }
@@ -841,6 +1041,26 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@NoOffset @Name("std::pair<tensorflow::Allocator*,tensorflow::TrackingAllocator*>") public static class WrappedAllocator extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WrappedAllocator(Pointer p) { super(p); }
+    public WrappedAllocator(Allocator firstValue, TrackingAllocator secondValue) { this(); put(firstValue, secondValue); }
+    public WrappedAllocator()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef WrappedAllocator put(@ByRef WrappedAllocator x);
+
+
+    @MemberGetter public native Allocator first(); public native WrappedAllocator first(Allocator first);
+    @MemberGetter public native TrackingAllocator second();  public native WrappedAllocator second(TrackingAllocator second);
+
+    public WrappedAllocator put(Allocator firstValue, TrackingAllocator secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+}
+
 @NoOffset @Name("std::pair<tensorflow::shape_inference::ShapeHandle,tensorflow::shape_inference::ShapeHandle>") public static class ShapeHandlePair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -977,6 +1197,32 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>") public static class StringSliceInfoMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringSliceInfoMap(Pointer p) { super(p); }
+    public StringSliceInfoMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringSliceInfoMap put(@ByRef StringSliceInfoMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef TensorSliceSet.SliceInfo get(@StdString BytePointer i);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef TensorSliceSet.SliceInfo second();
+    }
+}
+
 @Name("std::unordered_map<std::string,tensorflow::TensorShape>") public static class VarToShapeMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1055,33 +1301,6 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
         public native @Name("operator*().second") @MemberGetter TensorSliceSet second();
-    }
-}
-
-@Name("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>") public static class StringSliceInfoMap extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StringSliceInfoMap(Pointer p) { super(p); }
-    public StringSliceInfoMap()       { allocate();  }
-    private native void allocate();
-    public native @Name("operator=") @ByRef StringSliceInfoMap put(@ByRef StringSliceInfoMap x);
-
-    public boolean empty() { return size() == 0; }
-    public native long size();
-
-    @Index(function = "at") public native @ByRef TensorSliceSet.SliceInfo get(@StdString BytePointer i);
-    public native StringSliceInfoMap put(@StdString BytePointer i, TensorSliceSet.SliceInfo value);
-
-    public native @ByVal Iterator begin();
-    public native @ByVal Iterator end();
-    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
-        public Iterator(Pointer p) { super(p); }
-        public Iterator() { }
-
-        public native @Name("operator++") @ByRef Iterator increment();
-        public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef TensorSliceSet.SliceInfo second();
     }
 }
 
@@ -1664,7 +1883,6 @@ limitations under the License.
 // #define TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
 
 // #include <complex>
-
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // Disable clang-format to prevent 'FixedPoint' header from being included
 // before 'Tensor' header on which it depends.
@@ -1680,13 +1898,39 @@ limitations under the License.
 // We use Eigen's QInt implementations for our quantized int types.
 
   // namespace tensorflow
-// TOOD(xpan): We probably need to overwrite more methods to have correct eigen
-// behavior. E.g. loest(), is_integer, etc. See NumTraits.h in eigen.
-@Name("Eigen::NumTraits<tensorflow::bfloat16>") @Opaque public static class bfloat16NumTraits extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public bfloat16NumTraits() { super((Pointer)null); }
+
+
+
+
+public static native @ByVal bfloat16 FloatToBFloat16(float float_val);
+// TODO(xpan): We probably need to overwrite more methods to have correct eigen
+// behavior. E.g. epsilon(), dummy_precision, etc. See NumTraits.h in eigen.
+@Name("Eigen::NumTraits<tensorflow::bfloat16>") public static class bfloat16NumTraits extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public bfloat16NumTraits() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public bfloat16NumTraits(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bfloat16NumTraits(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public bfloat16NumTraits position(long position) {
+        return (bfloat16NumTraits)super.position(position);
+    }
+
+  /** enum Eigen::NumTraits<tensorflow::bfloat16>:: */
+  public static final int
+    IsInteger = 0,
+    IsSigned = 1,
+    RequireInitialization = 0;
+  public static native @ByVal bfloat16 highest();
+
+  public static native @ByVal bfloat16 lowest();
+
+  public static native @ByVal bfloat16 infinity();
+
+  public static native @ByVal bfloat16 quiet_NaN();
 }
 
 @Namespace("Eigen::numext") public static native @ByVal bfloat16 log(
@@ -2641,10 +2885,14 @@ limitations under the License.
   public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long... file_size);
 
   /** \brief Overwrites the target if it exists. */
-  
-  ///
   public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
   public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
+
+  /** \brief Copy the src to target. */
+  
+  ///
+  public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer target);
+  public native @ByVal Status CopyFile(@StdString String src, @StdString String target);
 
   /** \brief Translate an URI to a filename for the FileSystem implementation.
    * 
@@ -2788,8 +3036,8 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileSystemRegistry(Pointer p) { super(p); }
 
-  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
-  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
+  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
   public native FileSystem Lookup(@StdString BytePointer scheme);
   public native FileSystem Lookup(@StdString String scheme);
   public native @ByVal Status GetRegisteredFileSystemSchemes(
@@ -2924,9 +3172,9 @@ limitations under the License.
 
   /** \brief Register a file system for a scheme. */
   public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
-                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
   public native @ByVal Status RegisterFileSystem(@StdString String scheme,
-                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
 
   /** \brief Flush filesystem caches for all registered filesystems. */
   
@@ -3124,6 +3372,10 @@ limitations under the License.
   public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
   public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
 
+  /** \brief Copy the src to target. */
+  public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer target);
+  public native @ByVal Status CopyFile(@StdString String src, @StdString String target);
+
   /** \brief Returns the absolute path of the current executable. It resolves
    *  symlinks if there is any. */
   public native @StdString BytePointer GetExecutablePath();
@@ -3239,9 +3491,9 @@ limitations under the License.
   public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
 
   public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
-                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
   public native @ByVal Status RegisterFileSystem(@StdString String scheme,
-                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
 
   public native @Cast("bool") boolean MatchPath(@StdString BytePointer path, @StdString BytePointer pattern);
   public native @Cast("bool") boolean MatchPath(@StdString String path, @StdString String pattern);
@@ -3310,6 +3562,13 @@ limitations under the License.
   /** Guard area size to use near thread stacks to use (in bytes) */
   public native @Cast("size_t") long guard_size(); public native ThreadOptions guard_size(long guard_size);  // 0: use system default value
 }
+
+/** A utility routine: copy contents of {@code src} in file system {@code src_fs}
+ *  to {@code target} in file system {@code target_fs}. */
+@Namespace("tensorflow") public static native @ByVal Status FileSystemCopyFile(FileSystem src_fs, @StdString BytePointer src,
+                          FileSystem target_fs, @StdString BytePointer target);
+@Namespace("tensorflow") public static native @ByVal Status FileSystemCopyFile(FileSystem src_fs, @StdString String src,
+                          FileSystem target_fs, @StdString String target);
 
 /** A utility routine: reads contents of named file into {@code *data} */
 @Namespace("tensorflow") public static native @ByVal Status ReadFileToString(Env env, @StdString BytePointer fname, @StdString @Cast({"char*", "std::string*"}) BytePointer data);
@@ -4757,6 +5016,13 @@ public static final int
   public static final int kDependencyOptimizationFieldNumber = kDependencyOptimizationFieldNumber();
   public native @Cast("tensorflow::RewriterConfig_Toggle") int dependency_optimization();
   public native void set_dependency_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
+
+  // .tensorflow.RewriterConfig.Toggle loop_optimization = 9;
+  public native void clear_loop_optimization();
+  @MemberGetter public static native int kLoopOptimizationFieldNumber();
+  public static final int kLoopOptimizationFieldNumber = kLoopOptimizationFieldNumber();
+  public native @Cast("tensorflow::RewriterConfig_Toggle") int loop_optimization();
+  public native void set_loop_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
 }
 // ===================================================================
 
@@ -4799,6 +5065,11 @@ public static final int
 
 
 // .tensorflow.RewriterConfig.Toggle dependency_optimization = 8;
+
+
+
+
+// .tensorflow.RewriterConfig.Toggle loop_optimization = 9;
 
 
 
@@ -9319,7 +9590,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("size_t") long RequestedSize(Pointer ptr);
+  public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
 
   // Returns the allocated size of the buffer at 'ptr' if known,
   // otherwise returns RequestedSize(ptr). AllocatedSize(ptr) is
@@ -9329,7 +9600,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("size_t") long AllocatedSize(Pointer ptr);
+  public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
 
   // Returns either 0 or an identifier assigned to the buffer at 'ptr'
   // when the buffer was returned by AllocateRaw. If non-zero, the
@@ -9340,7 +9611,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
+  public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
 
   // Returns the allocated size of the buffer at 'ptr' if known,
   // otherwise returns 0. This method can be called when
@@ -9348,7 +9619,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("size_t") long AllocatedSizeSlow(Pointer ptr);
+  public native @Cast("size_t") long AllocatedSizeSlow(@Const Pointer ptr);
 
   // Fills in 'stats' with statistics collected by this allocator.
   public native void GetStats(AllocatorStats stats);
@@ -9399,13 +9670,13 @@ limitations under the License.
 
   public native @Cast("bool") boolean ShouldAllocateEmptyTensors();
 
-  public native @Cast("size_t") long RequestedSize(Pointer ptr);
+  public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
 
-  public native @Cast("size_t") long AllocatedSize(Pointer ptr);
+  public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
 
-  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
+  public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
 
-  public native @Cast("size_t") long AllocatedSizeSlow(Pointer ptr);
+  public native @Cast("size_t") long AllocatedSizeSlow(@Const Pointer ptr);
 }
 
 // A tensorflow Op may need access to different kinds of memory that
@@ -11628,12 +11899,6 @@ limitations under the License.
 
 // Forward declarations.  In particular, we forward declare protos so that their
 // symbols can be removed from .so exports.
-@Namespace("tensorflow") @Opaque public static class OpKernelContext extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public OpKernelContext() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OpKernelContext(Pointer p) { super(p); }
-}
 @Namespace("tensorflow") @Opaque public static class TensorCApi extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TensorCApi() { super((Pointer)null); }
@@ -14896,6 +15161,2230 @@ limitations under the License.
 // #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fgraph_2eproto_INCLUDED
 
 
+// Parsed from tensorflow/core/framework/session_state.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_SESSION_STATE_H_
+// #define TENSORFLOW_FRAMEWORK_SESSION_STATE_H_
+
+// #include <string>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/platform/mutex.h"
+
+// The session state remembers the tensors we choose to keep across
+// multiple run calls.
+@Namespace("tensorflow") public static class SessionState extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public SessionState() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SessionState(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SessionState(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public SessionState position(long position) {
+        return (SessionState)super.position(position);
+    }
+
+  // Get a tensor from the session state.
+  public native @ByVal Status GetTensor(@StdString BytePointer handle, Tensor tensor);
+  public native @ByVal Status GetTensor(@StdString String handle, Tensor tensor);
+
+  // Store a tensor in the session state.
+  public native @ByVal Status AddTensor(@StdString BytePointer handle, @Const @ByRef Tensor tensor);
+  public native @ByVal Status AddTensor(@StdString String handle, @Const @ByRef Tensor tensor);
+
+  // Delete a tensdor from the session state.
+  public native @ByVal Status DeleteTensor(@StdString BytePointer handle);
+  public native @ByVal Status DeleteTensor(@StdString String handle);
+
+  public native @Cast("tensorflow::int64") long GetNewId();
+
+  @MemberGetter public static native @Cast("const char*") BytePointer kTensorHandleResourceTypeName();
+}
+
+// The tensor store remembers the tensors we choose to keep for the
+// current run call. It is available to every op kernel.
+@Namespace("tensorflow") public static class TensorStore extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public TensorStore() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorStore(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorStore(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public TensorStore position(long position) {
+        return (TensorStore)super.position(position);
+    }
+
+  public static class TensorAndKey extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public TensorAndKey() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public TensorAndKey(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public TensorAndKey(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public TensorAndKey position(long position) {
+          return (TensorAndKey)super.position(position);
+      }
+  
+    public native @ByRef Tensor tensor(); public native TensorAndKey tensor(Tensor tensor);
+    public native @Cast("tensorflow::int64") long id(); public native TensorAndKey id(long id);
+    public native @StdString BytePointer device_name(); public native TensorAndKey device_name(BytePointer device_name);
+
+    public native @StdString BytePointer GetHandle(@StdString BytePointer tensor_name);
+    public native @StdString String GetHandle(@StdString String tensor_name);
+  }
+
+  // Add the named tensor to the tensor store for this run.
+  public native @ByVal Status AddTensor(@StdString BytePointer name, @Const @ByRef TensorAndKey tk);
+  public native @ByVal Status AddTensor(@StdString String name, @Const @ByRef TensorAndKey tk);
+
+  // Save the tensors in the tensor store of this run to the session.
+  public native @ByVal Status SaveTensors(@Const @ByRef StringVector output_names,
+                       SessionState session_state);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_SESSION_STATE_H_
+
+
+// Parsed from tensorflow/core/framework/types.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_TYPES_H_
+// #define TENSORFLOW_FRAMEWORK_TYPES_H_
+
+// #include <map>
+// #include <set>
+// #include <string>
+
+// #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
+// Disable clang-format to prevent 'FixedPoint' header from being included
+// before 'Tensor' header on which it depends.
+// clang-format off
+// #include "third_party/eigen3/unsupported/Eigen/CXX11/FixedPoint"
+// clang-format on
+// #include "tensorflow/core/framework/bfloat16.h"
+// #include "tensorflow/core/framework/numeric_types.h"
+// #include "tensorflow/core/framework/resource_handle.h"
+// #include "tensorflow/core/framework/types.pb.h"
+// #include "tensorflow/core/framework/variant.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/types.h"
+
+// MemoryType is used to describe whether input or output Tensors of
+// an OpKernel should reside in "Host memory" (e.g., CPU memory) or
+// "Device" Memory (CPU memory for CPU devices, GPU memory for GPU
+// devices).
+/** enum tensorflow::MemoryType */
+public static final int
+  DEVICE_MEMORY = 0,
+  HOST_MEMORY = 1;
+
+// A DeviceType is just a string, but we wrap it up in a class to give
+// some type checking as we're passing these around
+@Namespace("tensorflow") @NoOffset public static class DeviceType extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceType(Pointer p) { super(p); }
+
+  public DeviceType(@Cast("const char*") BytePointer type) { super((Pointer)null); allocate(type); }
+  private native void allocate(@Cast("const char*") BytePointer type);
+  public DeviceType(String type) { super((Pointer)null); allocate(type); }
+  private native void allocate(String type);
+
+  public native @Cast("const char*") BytePointer type();
+  public native @StdString BytePointer type_string();
+
+  public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef DeviceType other);
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef DeviceType other);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef DeviceType other);
+}
+@Namespace("tensorflow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef DeviceType d);
+
+// Convenient constants that can be passed to a DeviceType constructor
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer DEVICE_CPU();   // "CPU"
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer DEVICE_GPU();   // "GPU"
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer DEVICE_SYCL();  // "SYCL"
+
+@Name("tensorflow::DeviceName<Eigen::ThreadPoolDevice>") public static class DeviceName extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public DeviceName() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DeviceName(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceName(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public DeviceName position(long position) {
+        return (DeviceName)super.position(position);
+    }
+
+  @MemberGetter public static native @StdString BytePointer value();
+}
+
+// #if GOOGLE_CUDA
+// #endif  // GOOGLE_CUDA
+
+// #ifdef TENSORFLOW_USE_SYCL
+// #endif  // TENSORFLOW_USE_SYCL
+
+// Convert the enums to strings for errors:
+@Namespace("tensorflow") public static native @StdString BytePointer DataTypeString(@Cast("tensorflow::DataType") int dtype);
+@Namespace("tensorflow") public static native @StdString BytePointer DeviceTypeString(@Const @ByRef DeviceType device_type);
+@Namespace("tensorflow") public static native @StdString BytePointer DataTypeSliceString(@ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector dtypes);
+@Namespace("tensorflow") public static native @StdString BytePointer DataTypeVectorString(@Const @ByRef DataTypeVector dtypes);
+
+// DataTypeSet represents a set of DataType values as a simple and efficient
+// bit mask.  Note that DataTypeSet cannot represent all DataType values; it
+// cannot represent any of the DT_*_REF values.
+@Namespace("tensorflow") @NoOffset public static class DataTypeSet extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DataTypeSet(Pointer p) { super(p); }
+
+  public DataTypeSet(@Const @ByRef DataTypeSet other) { super((Pointer)null); allocate(other); }
+  private native void allocate(@Const @ByRef DataTypeSet other);
+  public DataTypeSet(int mask) { super((Pointer)null); allocate(mask); }
+  private native void allocate(int mask);
+
+  public native @Cast("const bool") boolean Contains(@Cast("tensorflow::DataType") int dt);
+
+  @NoOffset public static class Iterator extends Pointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Iterator(Pointer p) { super(p); }
+  
+    public Iterator(@Const @ByRef DataTypeSet set, int pos) { super((Pointer)null); allocate(set, pos); }
+    private native void allocate(@Const @ByRef DataTypeSet set, int pos);
+    public native @Cast("tensorflow::DataType") @Name("operator *") int multiply();
+    public native @ByRef @Name("operator ++") Iterator increment();
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Iterator other);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Iterator other);
+    public native @Cast("size_t") @Name("operator -") long subtract(@Const @ByRef Iterator other);
+  }
+
+  public static native int ctz_uint32(int x);
+
+  public static native int clz_uint32(int x);
+
+  public native @ByVal Iterator begin();
+
+  public native @ByVal Iterator end();
+
+  public native @Cast("size_t") long size();
+
+  public native @Const @ByVal @Name("operator |") DataTypeSet or(@Const @ByRef DataTypeSet other);
+}
+
+// If "sp" names a valid type, store it in "*dt" and return true.  Otherwise,
+// return false.
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@StringPiece BytePointer sp, @Cast("tensorflow::DataType*") IntPointer dt);
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@StringPiece String sp, @Cast("tensorflow::DataType*") IntPointer dt);
+
+@Namespace("tensorflow") public static native @Const @ByVal DataTypeSet ToSet(@Cast("tensorflow::DataType") int dt);
+
+// DT_FLOAT + kDataTypeRefOffset == DT_FLOAT_REF, etc.
+/** enum tensorflow:: */
+public static final int kDataTypeRefOffset = 100;
+@Namespace("tensorflow") public static native @Cast("bool") boolean IsRefType(@Cast("tensorflow::DataType") int dtype);
+@Namespace("tensorflow") public static native @Cast("tensorflow::DataType") int MakeRefType(@Cast("tensorflow::DataType") int dtype);
+@Namespace("tensorflow") public static native @Cast("tensorflow::DataType") int RemoveRefType(@Cast("tensorflow::DataType") int dtype);
+@Namespace("tensorflow") public static native @Cast("tensorflow::DataType") int BaseType(@Cast("tensorflow::DataType") int dtype);
+
+// Returns true if the actual type is the same as or ref of the expected type.
+@Namespace("tensorflow") public static native @Cast("bool") boolean TypesCompatible(@Cast("tensorflow::DataType") int expected, @Cast("tensorflow::DataType") int actual);
+
+// Does not include _ref types.
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kAllTypes();
+@Namespace("tensorflow") public static native @Const @ByRef DataTypeSet AllTypes();
+
+// #if !defined(IS_MOBILE_PLATFORM) || defined(SUPPORT_SELECTIVE_REGISTRATION)
+
+// Types that support '<' and '>'.
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kRealNumberTypes();
+@Namespace("tensorflow") public static native @Const @ByVal DataTypeSet RealNumberTypes();
+
+// Return the list of all numeric types.
+// Includes complex and quantized types.
+// NOTE: On Android, we only include the float and int32 types for now.
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kNumberTypes();
+
+
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kQuantizedTypes();
+
+
+// Types that support '<' and '>', including quantized types.
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kRealAndQuantizedTypes();
+
+
+// #elif defined(__ANDROID_TYPES_FULL__)
+
+
+
+
+// #else  // defined(IS_MOBILE_PLATFORM) && !defined(__ANDROID_TYPES_FULL__)
+
+
+
+
+// #endif  // defined(IS_MOBILE_PLATFORM)
+
+// Validates type T for whether it is a supported DataType.
+
+// DataTypeToEnum<T>::v() and DataTypeToEnum<T>::value are the DataType
+// constants for T, e.g. DataTypeToEnum<float>::v() is DT_FLOAT.  // Specializations below
+
+// EnumToDataType<VALUE>::Type is the type for DataType constant VALUE, e.g.
+// EnumToDataType<DT_FLOAT>::Type is float.  // Specializations below
+
+// Template specialization for both DataTypeToEnum and EnumToDataType.
+// #define MATCH_TYPE_AND_ENUM(TYPE, ENUM)
+//   template <>
+//   struct DataTypeToEnum<TYPE> {
+//     static DataType v() { return ENUM; }
+//     static DataType ref() { return MakeRefType(ENUM); }
+//     static constexpr DataType value = ENUM;
+//   };
+//   template <>
+//   struct IsValidDataType<TYPE> {
+//     static constexpr bool value = true;
+//   };
+//   template <>
+//   struct EnumToDataType<ENUM> {
+//     typedef TYPE Type;
+//   }
+
+@Name("tensorflow::DataTypeToEnum<float>") public static class DataTypeToEnum extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public DataTypeToEnum() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DataTypeToEnum(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DataTypeToEnum(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public DataTypeToEnum position(long position) {
+        return (DataTypeToEnum)super.position(position);
+    }
+
+    public static native @Cast("tensorflow::DataType") int v();
+    public static native @Cast("tensorflow::DataType") int ref();
+    @MemberGetter public static native @Cast("const tensorflow::DataType") int value();
+    public static final int value = value();
+  }
+  @Name("tensorflow::IsValidDataType<float>") public static class IsValidDataType extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public IsValidDataType() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public IsValidDataType(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public IsValidDataType(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public IsValidDataType position(long position) {
+          return (IsValidDataType)super.position(position);
+      }
+  
+    @MemberGetter public static native @Cast("const bool") boolean value();
+    public static final boolean value = value();
+  }
+  @Name("tensorflow::EnumToDataType<tensorflow::DT_FLOAT>") public static class EnumToDataType extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public EnumToDataType() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public EnumToDataType(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public EnumToDataType(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public EnumToDataType position(long position) {
+          return (EnumToDataType)super.position(position);
+      }
+  
+  }
+
+// #undef MATCH_TYPE_AND_ENUM
+
+// All types not specialized are marked invalid.
+
+// Extra validity checking; not part of public API.
+
+
+
+// TODO(jeff): Maybe unify this with Tensor::CanUseDMA, or the underlying
+// is_simple<T> in tensor.cc (and possible choose a more general name?)
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypesCanUseMemcpy();
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeCanUseMemcpy(@Cast("tensorflow::DataType") int dt);
+
+// Returns true iff 'dt' is a real, non-quantized floating point type.
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsFloating();
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsFloating(@Cast("tensorflow::DataType") int dt);
+
+// Returns true iff 'dt' is a complex type.
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsComplex();
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsComplex(@Cast("tensorflow::DataType") int dt);
+
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsQuantized(@Cast("tensorflow::DataType") int dt);
+
+// Is the dtype nonquantized integral?
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsInteger();
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsInteger(@Cast("tensorflow::DataType") int dt);
+
+// Is the dtype a signed integral type?
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsSigned();
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsSigned(@Cast("tensorflow::DataType") int dt);
+
+// Is the dtype an unsigned integral type?
+@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsUnsigned();
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsUnsigned(@Cast("tensorflow::DataType") int dt);
+
+// Returns a 0 on failure
+@Namespace("tensorflow") public static native int DataTypeSize(@Cast("tensorflow::DataType") int dt);
+
+// Types that always sit on host: DT_STRING, DT_STRING_REF, DT_RESOURCE.
+// For DT_RESOURCE, the handle always sits on host (even if the underlying
+// object has device-allocated resources).
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeAlwaysOnHost(@Cast("tensorflow::DataType") int dt);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_TYPES_H_
+
+
+// Parsed from tensorflow/core/framework/control_flow.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
+// #define TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
+
+// #include "tensorflow/core/lib/hash/hash.h"
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/types.h"
+
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::uint64") long kIllegalFrameId();
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::int64") long kIllegalIterId();
+
+// For the purpose of control flow, every tensor produced by TensorFlow is
+// conceptually tagged by a 'FrameAndIter'. FrameAndIter consists of a
+// 'frame_id' and an 'iter_id'. The tensor value it represents is produced
+// in the frame with frame_id at the iteration of iter_id.
+@Namespace("tensorflow") @NoOffset public static class FrameAndIter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FrameAndIter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FrameAndIter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FrameAndIter position(long position) {
+        return (FrameAndIter)super.position(position);
+    }
+
+  public native @Cast("tensorflow::uint64") long frame_id(); public native FrameAndIter frame_id(long frame_id);
+  public native @Cast("tensorflow::int64") long iter_id(); public native FrameAndIter iter_id(long iter_id);
+
+  public FrameAndIter() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public FrameAndIter(@Cast("tensorflow::uint64") long frame, @Cast("tensorflow::int64") long iter) { super((Pointer)null); allocate(frame, iter); }
+  private native void allocate(@Cast("tensorflow::uint64") long frame, @Cast("tensorflow::int64") long iter);
+
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FrameAndIter other);
+}
+
+@Namespace("tensorflow") public static class FrameAndIterHash extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public FrameAndIterHash() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FrameAndIterHash(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FrameAndIterHash(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public FrameAndIterHash position(long position) {
+        return (FrameAndIterHash)super.position(position);
+    }
+
+  public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef FrameAndIter key);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
+
+
+// Parsed from tensorflow/core/framework/kernel_def_builder.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_KERNEL_DEF_BUILDER_H_
+// #define TENSORFLOW_FRAMEWORK_KERNEL_DEF_BUILDER_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/types.h"
+
+// Forward declare proto so that kernels don't need to depend on it
+@Namespace("tensorflow") @Opaque public static class KernelDef extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public KernelDef() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelDef(Pointer p) { super(p); }
+}
+
+// Builder class passed to the REGISTER_KERNEL_BUILDER() macro.
+@Namespace("tensorflow") @NoOffset public static class KernelDefBuilder extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelDefBuilder(Pointer p) { super(p); }
+
+  // Starts with just the name field set.
+  // Caller MUST call Build() and take ownership of the result.
+  public KernelDefBuilder(@Cast("const char*") BytePointer op_name) { super((Pointer)null); allocate(op_name); }
+  private native void allocate(@Cast("const char*") BytePointer op_name);
+  public KernelDefBuilder(String op_name) { super((Pointer)null); allocate(op_name); }
+  private native void allocate(String op_name);
+
+  // Required: specify the type of device this kernel supports.
+  // Returns *this.
+  public native @ByRef KernelDefBuilder Device(@Cast("const char*") BytePointer device_type);
+  public native @ByRef KernelDefBuilder Device(String device_type);
+  //  KernelDefBuilder& Device(DeviceType device_type);
+
+  // Specify that this kernel supports a limited set of values for a
+  // particular type or list(type) attr (a further restriction than
+  // what the Op allows).
+  // Returns *this.
+  public native @ByRef KernelDefBuilder TypeConstraint(@Cast("const char*") BytePointer attr_name,
+                                     @Cast("tensorflow::DataType*") @ArraySlice IntPointer allowed);
+  public native @ByRef KernelDefBuilder TypeConstraint(String attr_name,
+                                     @Cast("tensorflow::DataType*") @ArraySlice IntPointer allowed);
+
+  // Like TypeConstraint but supports just a single type.
+  public native @ByRef KernelDefBuilder TypeConstraint(@Cast("const char*") BytePointer attr_name, @Cast("tensorflow::DataType") int allowed);
+  public native @ByRef KernelDefBuilder TypeConstraint(String attr_name, @Cast("tensorflow::DataType") int allowed);
+
+  // Like TypeConstraint, but (a) gets the type from a template parameter
+  // and (b) only supports a constraint to a single type.
+  // TODO(josh11b): Support other types of attr constraints as needed.
+
+  // Specify that this kernel requires/provides an input/output arg
+  // in host memory (instead of the default, device memory).
+  // Returns *this.
+  public native @ByRef KernelDefBuilder HostMemory(@Cast("const char*") BytePointer arg_name);
+  public native @ByRef KernelDefBuilder HostMemory(String arg_name);
+
+  // Specify that this kernel requires a particular value for the
+  // "_kernel" attr.  May only be specified once.  Returns *this.
+  public native @ByRef KernelDefBuilder Label(@Cast("const char*") BytePointer label);
+  public native @ByRef KernelDefBuilder Label(String label);
+
+  // Returns a pointer to a KernelDef with fields set based on the
+  // above calls to this instance.
+  // Caller takes ownership of the result.
+  public native @Const KernelDef Build();
+}
+
+// IMPLEMENTATION
+
+
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_KERNEL_DEF_BUILDER_H_
+
+
+// Parsed from tensorflow/core/framework/tracking_allocator.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_TRACKING_ALLOCATOR_H_
+// #define TENSORFLOW_FRAMEWORK_TRACKING_ALLOCATOR_H_
+
+// #include <unordered_map>
+// #include "tensorflow/core/framework/allocator.h"
+// #include "tensorflow/core/framework/step_stats.pb.h"
+// #include "tensorflow/core/lib/core/refcount.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/platform/types.h"
+
+// TrackingAllocator is a wrapper for an Allocator. It keeps a running
+// count of the number of bytes allocated through the wrapper. It is
+// used by the Executor to "charge" allocations to particular Op
+// executions. Each Op gets a separate TrackingAllocator wrapper
+// around the underlying allocator.
+//
+// The implementation assumes the invariant that all calls to
+// AllocateRaw by an Op (or work items spawned by the Op) will occur
+// before the Op's Compute method returns. Thus the high watermark is
+// established once Compute returns.
+//
+// DeallocateRaw can be called long after the Op has finished,
+// e.g. when an output tensor is deallocated, and the wrapper cannot
+// be deleted until the last of these calls has occurred.  The
+// TrackingAllocator keeps track of outstanding calls using a
+// reference count, and deletes itself once the last call has been
+// received and the high watermark has been retrieved.
+@Namespace("tensorflow") @NoOffset public static class AllocRecord extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AllocRecord(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AllocRecord(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AllocRecord position(long position) {
+        return (AllocRecord)super.position(position);
+    }
+
+  public AllocRecord(@Cast("tensorflow::int64") long a_btyes, @Cast("tensorflow::int64") long a_micros) { super((Pointer)null); allocate(a_btyes, a_micros); }
+  private native void allocate(@Cast("tensorflow::int64") long a_btyes, @Cast("tensorflow::int64") long a_micros);
+  public AllocRecord() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @Cast("tensorflow::int64") long alloc_bytes(); public native AllocRecord alloc_bytes(long alloc_bytes);
+  public native @Cast("tensorflow::int64") long alloc_micros(); public native AllocRecord alloc_micros(long alloc_micros);
+}
+
+@Namespace("tensorflow") @NoOffset public static class TrackingAllocator extends Allocator {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TrackingAllocator(Pointer p) { super(p); }
+
+  public native @StdString BytePointer Name();
+  public native Pointer AllocateRaw(@Cast("size_t") long alignment, @Cast("size_t") long num_bytes);
+  public native Pointer AllocateRaw(@Cast("size_t") long alignment, @Cast("size_t") long num_bytes,
+                      @Const @ByRef AllocationAttributes allocation_attr);
+  public native void DeallocateRaw(Pointer ptr);
+  public native @Cast("bool") boolean TracksAllocationSizes();
+  public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
+  public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
+  public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
+  public native void GetStats(AllocatorStats stats);
+  public native void ClearStats();
+
+  // If the underlying allocator tracks allocation sizes, this returns
+  // a tuple where the first value is the total number of bytes
+  // allocated through this wrapper, the second value is the high
+  // watermark of bytes allocated through this wrapper and the third value is
+  // the allocated bytes through this wrapper that are still alive. If the
+  // underlying allocator does not track allocation sizes the first
+  // value is the total number of bytes requested through this wrapper
+  // and the second and the third are 0.
+  //
+  public native @ByVal @Cast("std::tuple<size_t,size_t,size_t>*") SizeTPointer GetSizes();
+  // After GetRecordsAndUnRef is called, the only further calls allowed
+  // on this wrapper are calls to DeallocateRaw with pointers that
+  // were allocated by this wrapper and have not yet been
+  // deallocated. After this call completes and all allocated pointers
+  // have been deallocated the wrapper will delete itself.
+  public native @ByVal AllocRecordVector GetRecordsAndUnRef();
+  // Returns a copy of allocation records collected so far.
+  public native @ByVal AllocRecordVector GetCurrentRecords();
+}
+
+  // end namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_TRACKING_ALLOCATOR_H_
+
+
+// Parsed from tensorflow/core/framework/op_kernel.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_OP_KERNEL_H_
+// #define TENSORFLOW_FRAMEWORK_OP_KERNEL_H_
+
+// #include <functional>
+
+// #include <utility>
+// #include <vector>
+// #include "tensorflow/core/framework/allocator.h"
+// #include "tensorflow/core/framework/cancellation.h"
+// #include "tensorflow/core/framework/control_flow.h"
+// #include "tensorflow/core/framework/device_base.h"
+// #include "tensorflow/core/framework/kernel_def_builder.h"
+// #include "tensorflow/core/framework/node_def_util.h"
+// #include "tensorflow/core/framework/op.h"  // TODO(b/62899350): Remove
+// #include "tensorflow/core/framework/rendezvous.h"
+// #include "tensorflow/core/framework/selective_registration.h"
+// #include "tensorflow/core/framework/session_state.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_shape.pb.h"  // TODO(b/62899350): Remove
+// #include "tensorflow/core/framework/tracking_allocator.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/framework/types.pb.h"
+// #include "tensorflow/core/framework/unique_tensor_references.h"
+// #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/lib/gtl/manual_constructor.h"
+// #include "tensorflow/core/platform/env.h"
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/platform/types.h"
+@Namespace("Eigen") @Opaque public static class ThreadPoolDevice extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ThreadPoolDevice() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ThreadPoolDevice(Pointer p) { super(p); }
+}
+@Namespace("Eigen") @Opaque public static class GpuDevice extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public GpuDevice() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GpuDevice(Pointer p) { super(p); }
+}
+@Namespace("Eigen") @Opaque public static class SyclDevice extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SyclDevice() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SyclDevice(Pointer p) { super(p); }
+}
+  // end namespace Eigen
+@Namespace("tensorflow::checkpoint") @Opaque public static class TensorSliceReaderCacheWrapper extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TensorSliceReaderCacheWrapper() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorSliceReaderCacheWrapper(Pointer p) { super(p); }
+}
+  // namespace checkpoint  // declared below       // declared below
+@Namespace("tensorflow") @Opaque public static class ResourceMgr extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ResourceMgr() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ResourceMgr(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class ScopedStepContainer extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ScopedStepContainer() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ScopedStepContainer(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class StepStatsCollector extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public StepStatsCollector() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StepStatsCollector(Pointer p) { super(p); }
+}
+
+@Namespace("tensorflow") @NoOffset public static class OpKernel extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpKernel(Pointer p) { super(p); }
+
+  // OpKernel won't be instantiated by the scheduler, so you may perform
+  // expensive initialization in the descendant's constructor.
+
+  // Specialized constructor that enables the descendant to provide a different
+  // `NodeDef` value. For example, this constructor can be used to provide a
+  // stripped-down `NodeDef` that does not contain the full set of attrs (such
+  // as tensor values) if the descendant stores them in a different form.
+
+  // An OpKernel's computation can be either synchronous or
+  // asynchronous. All OpKernel Compute() methods must be thread-safe as they
+  // may be called concurrently (e.g. by multiple executions of the same graph
+  // concurrently).
+  //
+  // Most OpKernels should compute synchronously.  They should
+  // subclass OpKernel and override the Compute() method and have it
+  // return after completing the supplied work.
+  //
+  // A few special kernels might need to be asynchronous to bound the
+  // number of threads (e.g., network receive operations). These
+  // kernels must subclass AsyncOpKernel and override
+  // AsyncOpKernel::ComputeAsync().
+  //
+  // In both cases, implementations of Compute() and ComputeAsync()
+  // get inputs and write outputs through the given OpKernelContext
+  // and returns a status via context->SetStatus(). They must be
+  // thread-safe.
+
+  // Synchronous compute.
+  //
+  // "context" is guaranteed to be alive until Compute() returns.
+  public native void Compute(OpKernelContext context);
+
+  // Returns nullptr iff this op kernel is synchronous.
+  public native AsyncOpKernel AsAsync();
+
+  // Returns true iff this op kernel is considered "expensive". The
+  // runtime may use this flag to optimize graph execution for example
+  // to "inline" inexpensive kernels.
+  public native @Cast("bool") boolean IsExpensive();
+
+  // Accessors.
+  public native @Const @ByRef NodeDef def();
+  public native @StdString BytePointer name();              // Same as def().name()
+  public native @StdString BytePointer type_string();       // Same as def().op()
+  public native @StdString BytePointer requested_device();  // Same as def().device()
+  public native @Cast("bool") boolean is_internal();
+
+  public native int num_inputs();
+  public native @Cast("tensorflow::DataType") int input_type(int i);
+  public native @Const @ByRef DataTypeVector input_types();
+  public native @Cast("const tensorflow::MemoryTypeVector*") @ByRef AllocatorAttributesVector input_memory_types();
+  public native @StdString BytePointer requested_input(int i);  // Same as def().input(i)
+
+  public native int num_outputs();
+  public native @Cast("tensorflow::DataType") int output_type(int o);
+  public native @Const @ByRef DataTypeVector output_types();
+  public native @Cast("const tensorflow::MemoryTypeVector*") @ByRef AllocatorAttributesVector output_memory_types();
+
+  public native @ByVal Status InputRange(@StringPiece BytePointer input_name, IntPointer start, IntPointer stop);
+  public native @ByVal Status InputRange(@StringPiece String input_name, IntBuffer start, IntBuffer stop);
+  public native @ByVal Status InputRange(@StringPiece BytePointer input_name, int[] start, int... stop);
+  public native @ByVal Status InputRange(@StringPiece String input_name, IntPointer start, IntPointer stop);
+  public native @ByVal Status InputRange(@StringPiece BytePointer input_name, IntBuffer start, IntBuffer stop);
+  public native @ByVal Status InputRange(@StringPiece String input_name, int[] start, int... stop);
+  public native @ByVal Status OutputRange(@StringPiece BytePointer output_name, IntPointer start, IntPointer stop);
+  public native @ByVal Status OutputRange(@StringPiece String output_name, IntBuffer start, IntBuffer stop);
+  public native @ByVal Status OutputRange(@StringPiece BytePointer output_name, int[] start, int... stop);
+  public native @ByVal Status OutputRange(@StringPiece String output_name, IntPointer start, IntPointer stop);
+  public native @ByVal Status OutputRange(@StringPiece BytePointer output_name, IntBuffer start, IntBuffer stop);
+  public native @ByVal Status OutputRange(@StringPiece String output_name, int[] start, int... stop);
+
+  // We allow legacy scalars within Google up until GraphDef version 6.
+  // TODO(irving): Remove when we can drop support for GraphDef version 5.
+  public native @Cast("bool") boolean allow_legacy_scalars();
+
+  // Allow either scalars or (if allowing legacy scalars) shape (1,).
+  public native @Cast("bool") boolean IsLegacyScalar(@Const @ByRef TensorShape shape);
+
+  // Allow rank 1 or (if allowing legacy scalars) rank 0.
+  public native @Cast("bool") boolean IsLegacyVector(@Const @ByRef TensorShape shape);
+
+  // Turn a shape Tensor into a TensorShape
+  // TODO(irving): Move to TensorShapeUtils once !allow_legacy_scalars
+  public native @ByVal Status MakeShape(@Const @ByRef Tensor shape, TensorShape out);
+}
+
+@Namespace("tensorflow") public static class AsyncOpKernel extends OpKernel {
+    static { Loader.load(); }
+
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public AsyncOpKernel(Pointer p) { super(p); }  // Lift OpKernel constructors.
+
+  // Asynchronous compute.
+  //
+  // Implementations of ComputeAsync() must run "done" to signal the
+  // completion of the computation. "context" is guaranteed to be
+  // alive until the "done" callback starts.
+  public native void ComputeAsync(OpKernelContext context, @ByVal @Cast("tensorflow::AsyncOpKernel::DoneCallback*") Fn done);
+
+  public native AsyncOpKernel AsAsync();
+
+  public native void Compute(OpKernelContext context);
+
+  public native @Cast("bool") boolean IsExpensive();
+}
+
+// Wraps a tensor that is held by an Op across calls to Compute(). For
+// memory safety when using asynchronous devices like GPUs, the system
+// must be notified when a Tensor is used inside an Op execution. The
+// wrapper ensures that all uses of the Tensor are tracked, because in
+// order to retrieve the Tensor the caller must use AccessTensor which
+// notifies the context.
+@Namespace("tensorflow") @NoOffset public static class PersistentTensor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PersistentTensor(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PersistentTensor(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PersistentTensor position(long position) {
+        return (PersistentTensor)super.position(position);
+    }
+
+  public PersistentTensor() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public PersistentTensor(@Const @ByRef Tensor tensor) { super((Pointer)null); allocate(tensor); }
+  private native void allocate(@Const @ByRef Tensor tensor);
+
+  // Caller does not own the returned Tensor*.
+  public native Tensor AccessTensor(OpKernelConstruction context);
+  // Caller does not own the returned Tensor*.
+  public native Tensor AccessTensor(OpKernelContext context);
+
+  // The check for initialization does not need to access the
+  // underlying tensor buffer.
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("tensorflow::int64") long NumElements();
+
+  public native @Cast("tensorflow::int64") long AllocatedBytes();
+}
+
+@Namespace("tensorflow") @NoOffset public static class OpKernelConstruction extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpKernelConstruction(Pointer p) { super(p); }
+
+  public OpKernelConstruction(@ByVal DeviceType device_type, DeviceBase device,
+                         Allocator allocator, @Const NodeDef node_def,
+                         @Const OpDef op_def, FunctionLibraryRuntime flib,
+                         @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector input_types,
+                         @Cast("const tensorflow::MemoryTypeSlice*") @ByRef StringAttrPairVector input_memory_types,
+                         @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector output_types,
+                         @Cast("const tensorflow::MemoryTypeSlice*") @ByRef StringAttrPairVector output_memory_types,
+                         int graph_def_version, Status status) { super((Pointer)null); allocate(device_type, device, allocator, node_def, op_def, flib, input_types, input_memory_types, output_types, output_memory_types, graph_def_version, status); }
+  private native void allocate(@ByVal DeviceType device_type, DeviceBase device,
+                         Allocator allocator, @Const NodeDef node_def,
+                         @Const OpDef op_def, FunctionLibraryRuntime flib,
+                         @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector input_types,
+                         @Cast("const tensorflow::MemoryTypeSlice*") @ByRef StringAttrPairVector input_memory_types,
+                         @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector output_types,
+                         @Cast("const tensorflow::MemoryTypeSlice*") @ByRef StringAttrPairVector output_memory_types,
+                         int graph_def_version, Status status);
+
+  public native Env env();
+
+  // Allocation of tensors during kernel construction:
+  //
+  // It is legal to temporarily allocate scratch tensor storage during
+  // Op kernel construction. Scratch tensors should be allocated using
+  // allocate_temp below. Some kernels need to keep tensors in between
+  // invocations. If such a Tensor is allocated during kernel
+  // construction this must be done using allocate_persistent, and the
+  // Op may only store the returned PersistentTensor object. When the
+  // Tensor is needed in a subsequent invocation, it can be retrieved
+  // from the PersistentTensor using the AccessTensor method. This
+  // ensures that the system is made aware of any use of the tensor's
+  // allocated memory, which is needed for correctness on asynchronous
+  // devices such as GPUs.
+
+  // Allocates a temporary Tensor of the specified type and shape. The
+  // Tensor must not be used after kernel construction is
+  // complete. See comment above.
+  public native @ByVal Status allocate_temp(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                         Tensor out_temp);
+
+  // Allocates a Tensor of the specified type and shape which the Op
+  // plans to maintain as persistent state. out_persistent holds the
+  // PersistentTensor which is the object the caller should store. For
+  // convenience, if out_tensor is non-null then it will be filled in
+  // with a Tensor* pointing to the newly-allocated tensor which the
+  // caller can use instead of calling
+  // out_persistent->AccessTensor. The caller does not own out_tensor
+  // and should not keep a copy of it. See comment above.
+  public native @ByVal Status allocate_persistent(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                               PersistentTensor out_persistent,
+                               @Cast("tensorflow::Tensor**") PointerPointer out_tensor);
+  public native @ByVal Status allocate_persistent(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                               PersistentTensor out_persistent,
+                               @ByPtrPtr Tensor out_tensor);
+
+  // User-supplied configuration of this operation.
+  public native @Const @ByRef NodeDef def();
+
+  // For inspecting the inputs to this operation.
+  public native int num_inputs();
+  public native @Cast("tensorflow::DataType") int input_type(int i);
+  public native @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector input_types();
+  public native @Cast("const tensorflow::MemoryTypeSlice*") @ByRef StringAttrPairVector input_memory_types();
+
+  // For inspecting the outputs expected from this operation.
+  public native int num_outputs();
+  public native @Cast("tensorflow::DataType") int output_type(int i);
+  public native @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector output_types();
+  public native @Cast("const tensorflow::MemoryTypeSlice*") @ByRef StringAttrPairVector output_memory_types();
+
+  // If expected_inputs == inputs() and expected_outputs == output_types(),
+  // returns OK, else returns INVALID_ARGUMENT with an error message.
+  // Recommended for Ops with dynamic signatures.
+  public native @ByVal Status MatchSignature(@ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector expected_inputs,
+                          @ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector expected_outputs);
+
+  // For recording configuration errors during construction.
+  public native void SetStatus(@Const @ByRef Status status);
+  public native @Const @ByRef Status status();
+
+  // Look up the attr with name attr_name and set *value to its value.  If no
+  // attr with attr_name is found in def(), or the attr does not have
+  // a matching type, a non-ok status will be returned.
+
+  // Return true if the attr_name is defined in def().
+  public native @Cast("bool") boolean HasAttr(@StringPiece BytePointer attr_name);
+  public native @Cast("bool") boolean HasAttr(@StringPiece String attr_name);
+
+  // Return the device type.
+  public native @Const @ByRef DeviceType device_type();
+
+  // If not nullptr, the kernel can instantiate functions defined in
+  // the library. E.g.,
+  // CHECK_NOTNULL(function_library())->Instantiate("Foo", ...).
+  public native FunctionLibraryRuntime function_library();
+
+  // The GraphDef version whose behavior we should follow.
+  public native int graph_def_version();
+
+  // Helper routines for the OP_REQUIRES macros
+  public native void CtxFailure(@Const @ByRef Status s);
+  public native void CtxFailureWithWarning(@Const @ByRef Status s);
+  public native void CtxFailure(@Cast("const char*") BytePointer file, int line, @Const @ByRef Status s);
+  public native void CtxFailure(String file, int line, @Const @ByRef Status s);
+  public native void CtxFailureWithWarning(@Cast("const char*") BytePointer file, int line, @Const @ByRef Status s);
+  public native void CtxFailureWithWarning(String file, int line, @Const @ByRef Status s);
+
+  // Unrecommended functions: these are functions that have some
+  // current uses but are not recommended for use, and may go away at
+  // some future major version release.
+
+  // May be used, e.g., to get GPU handles, etc.
+  //
+  // Currently only used to call MakeTensorFromProto() for
+  // implementing ConstantOp for every device.  See comments
+  // on Device::MakeTensorFromProto for longer-term replacement
+  // ideas.
+  public native DeviceBase device();
+}
+
+// TODO(mrry): Consider converting to a random_access_iterator, and upgrading
+// tensorflow::gtl::iterator_range to make the below container classes
+// unnecessary.
+@Name("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>") @NoOffset public static class MutableTensorOpArgIterator extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MutableTensorOpArgIterator(Pointer p) { super(p); }
+
+  public MutableTensorOpArgIterator(@Const OpMutableInputList list, int i) { super((Pointer)null); allocate(list, i); }
+  private native void allocate(@Const OpMutableInputList list, int i);
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>::ME*") @ByRef MutableTensorOpArgIterator rhs);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>::ME*") @ByRef MutableTensorOpArgIterator rhs);
+  public native @Name("operator ++") void increment();
+  
+}
+@Name("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>") @NoOffset public static class TensorOpArgIterator extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorOpArgIterator(Pointer p) { super(p); }
+
+  public TensorOpArgIterator(@Const OpOutputList list, int i) { super((Pointer)null); allocate(list, i); }
+  private native void allocate(@Const OpOutputList list, int i);
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>::ME*") @ByRef TensorOpArgIterator rhs);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>::ME*") @ByRef TensorOpArgIterator rhs);
+  public native @Name("operator ++") void increment();
+  
+}
+
+// Utility class for representing a list of immutable input tensors
+// that are passed to the op as a single named argument.
+@Namespace("tensorflow") @NoOffset public static class OpInputList extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpInputList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpInputList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpInputList position(long position) {
+        return (OpInputList)super.position(position);
+    }
+
+  public OpInputList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public OpInputList(OpKernelContext ctx, int start, int stop) { super((Pointer)null); allocate(ctx, start, stop); }
+  private native void allocate(OpKernelContext ctx, int start, int stop);
+  public native @ByRef @Name("operator =") OpInputList put(@Const @ByRef OpInputList other);
+  public native @Const @ByRef @Name("operator []") Tensor get(int i);
+  public native int size();
+  public native @ByVal @Cast("tensorflow::OpInputList::Iterator*") MutableTensorOpArgIterator begin();
+  public native @ByVal @Cast("tensorflow::OpInputList::Iterator*") MutableTensorOpArgIterator end();
+}
+
+// Utility class for representing a list of mutable ("ref") input tensors
+// that are passed to the op as a single named argument.
+@Namespace("tensorflow") @NoOffset public static class OpMutableInputList extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpMutableInputList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpMutableInputList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpMutableInputList position(long position) {
+        return (OpMutableInputList)super.position(position);
+    }
+
+  public OpMutableInputList(OpKernelContext ctx, int start, int stop) { super((Pointer)null); allocate(ctx, start, stop); }
+  private native void allocate(OpKernelContext ctx, int start, int stop);
+  public OpMutableInputList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public native @ByRef @Name("operator =") OpMutableInputList put(@Const @ByRef OpMutableInputList other);
+  public native @ByVal Tensor at(int i, @Cast("bool") boolean lock_held);
+  public native @Cast("tensorflow::mutex*") Pointer ref_mutex(int i);
+  public native int size();
+  public native @ByVal @Cast("tensorflow::OpMutableInputList::Iterator*") MutableTensorOpArgIterator begin();
+  public native @ByVal @Cast("tensorflow::OpMutableInputList::Iterator*") MutableTensorOpArgIterator end();
+}
+
+// Utility class for representing a list of output tensors that are
+// grouped as a single named output.
+@Namespace("tensorflow") @NoOffset public static class OpOutputList extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpOutputList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpOutputList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpOutputList position(long position) {
+        return (OpOutputList)super.position(position);
+    }
+
+  public OpOutputList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public OpOutputList(OpKernelContext ctx, int start, int stop) { super((Pointer)null); allocate(ctx, start, stop); }
+  private native void allocate(OpKernelContext ctx, int start, int stop);
+  public native @ByRef @Name("operator =") OpOutputList put(@Const @ByRef OpOutputList other);
+  public native @Name("operator []") Tensor get(int i);
+  public native @Cast("bool") boolean required(int i);
+  public native @Cast("tensorflow::DataType") int expected_output_dtype(int i);
+  public native @ByVal @Name("allocate") Status _allocate(int i, @Const @ByRef TensorShape shape, @Cast("tensorflow::Tensor**") PointerPointer output);
+  public native @ByVal @Name("allocate") Status _allocate(int i, @Const @ByRef TensorShape shape, @ByPtrPtr Tensor output);
+  public native void set(int i, @Const @ByRef Tensor tensor);
+  public native void set_ref(int i, @Cast("tensorflow::mutex*") Pointer mu, Tensor tensor_for_ref);
+  public native int size();
+  public native @ByVal @Cast("tensorflow::OpOutputList::Iterator*") TensorOpArgIterator begin();
+  public native @ByVal @Cast("tensorflow::OpOutputList::Iterator*") TensorOpArgIterator end();
+}
+
+// Holds a tensor or tensor reference. For tensor references, we need
+// a mutex to prevent concurrent access to the tensor.
+@Namespace("tensorflow") @NoOffset public static class TensorValue extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorValue(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorValue(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorValue position(long position) {
+        return (TensorValue)super.position(position);
+    }
+
+  public TensorValue() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public TensorValue(Tensor t) { super((Pointer)null); allocate(t); }
+  private native void allocate(Tensor t);
+  public TensorValue(@Cast("tensorflow::mutex*") Pointer mu, Tensor t) { super((Pointer)null); allocate(mu, t); }
+  private native void allocate(@Cast("tensorflow::mutex*") Pointer mu, Tensor t);
+  public native @Name("operator ->") Tensor access();
+  public native @Cast("bool") boolean is_ref();
+
+  public native @Cast("tensorflow::mutex*") Pointer mutex_if_ref(); public native TensorValue mutex_if_ref(Pointer mutex_if_ref);  // nullptr if not a ref, != nullptr if a ref
+  public native Tensor tensor(); public native TensorValue tensor(Tensor tensor);
+}
+
+@Namespace("tensorflow") @NoOffset public static class OpKernelContext extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpKernelContext(Pointer p) { super(p); }
+
+  // The first element of a WrappedAllocator is a "base" Allocator and
+  // the second element is that Allocator wrapped by a
+  // TrackingAllocator
+
+  // TODO(zhifengc): Do some cleanup of Params.
+  // The Params struct is passed in to initialize an OpKernelContext,
+  // and must outlive the OpKernelContext.
+  public static class Params extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Params() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Params(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Params(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Params position(long position) {
+          return (Params)super.position(position);
+      }
+  
+
+    // The step being executed.
+    public native @Cast("tensorflow::int64") long step_id(); public native Params step_id(long step_id);
+
+    // The op kernel being computed.
+    public native OpKernel op_kernel(); public native Params op_kernel(OpKernel op_kernel);
+
+    // The device on which the kernel is running.
+    public native DeviceBase device(); public native Params device(DeviceBase device);
+
+    // The Eigen GPU device wrapper, which may include a per-op
+    // wrapped allocator. The concrete type of this object depends on
+    // the type of this->device, so eigen_gpu_device can't be an
+    // inline member and must be heap allocated. However, we don't
+    // want to allocate a new eigen_gpu_device for every Op that is
+    // executed. Instead this member is allocated on first use using
+    // ensure_eigen_gpu_device, and then if the Params structure is
+    // re-used for subsequent Ops, the eigen_gpu_device is
+    // ReInitialized in the OpKernelContext constructor. Unlike the
+    // other pointers in Params, this one is owned by Params.
+    public native PerOpGpuDevice eigen_gpu_device(); public native Params eigen_gpu_device(PerOpGpuDevice eigen_gpu_device);
+
+    public native void ensure_eigen_gpu_device();
+
+    public native @Cast("bool") boolean track_allocations(); public native Params track_allocations(boolean track_allocations);
+    public native @Cast("bool") boolean log_memory(); public native Params log_memory(boolean log_memory);
+    public native @Cast("bool") boolean record_tensor_accesses(); public native Params record_tensor_accesses(boolean record_tensor_accesses);
+
+    // Array indexed by output number for this node
+    @MemberGetter public native @Const AllocatorAttributes output_attr_array();
+
+    // Shared resources accessible by this op kernel invocation.
+    public native ResourceMgr resource_manager(); public native Params resource_manager(ResourceMgr resource_manager);
+
+    // Per-step resources accessible by this op kernel invocation should be
+    // stored in this container..
+    public native ScopedStepContainer step_container(); public native Params step_container(ScopedStepContainer step_container);
+
+    // Mechanism used by this op kernel invocation to communicate with
+    // computations running on other devices.
+    public native Rendezvous rendezvous(); public native Params rendezvous(Rendezvous rendezvous);
+
+    // The session state for this op.
+    public native SessionState session_state(); public native Params session_state(SessionState session_state);
+
+    // The tensor store for this op.
+    public native TensorStore tensor_store(); public native Params tensor_store(TensorStore tensor_store);
+
+    // Mechanism used by this op kernel invocation to register a callback
+    // for its cancellation.
+    public native CancellationManager cancellation_manager(); public native Params cancellation_manager(CancellationManager cancellation_manager);
+
+    // Inputs to this op kernel.
+    @MemberGetter public native @Const TensorValueVector inputs();
+    public native @Cast("bool") boolean is_input_dead(); public native Params is_input_dead(boolean is_input_dead);
+
+    @MemberGetter public native @Const AllocatorAttributesVector input_alloc_attrs();
+
+    // Device contexts.
+    @MemberGetter public native @Const DeviceContextInlinedVector input_device_contexts();
+    public native DeviceContext op_device_context(); public native Params op_device_context(DeviceContext op_device_context);
+
+    // Control-flow op supports.
+    public native @ByRef FrameAndIter frame_iter(); public native Params frame_iter(FrameAndIter frame_iter);
+
+    // Function call supports.
+    public native CallFrameInterface call_frame(); public native Params call_frame(CallFrameInterface call_frame);
+    public native FunctionLibraryRuntime function_library(); public native Params function_library(FunctionLibraryRuntime function_library);
+    public native @Cast("std::function<void(std::function<void()>)>*") Pointer runner(); public native Params runner(Pointer runner);
+    public native StepStatsCollector stats_collector(); public native Params stats_collector(StepStatsCollector stats_collector);
+
+    // TensorSliceReaderCache support.
+    public native TensorSliceReaderCacheWrapper slice_reader_cache(); public native Params slice_reader_cache(TensorSliceReaderCacheWrapper slice_reader_cache);
+  }
+
+  // params must outlive the OpKernelContext.
+  public OpKernelContext(Params params) { super((Pointer)null); allocate(params); }
+  private native void allocate(Params params);
+  public OpKernelContext(Params params, int noutputs) { super((Pointer)null); allocate(params, noutputs); }
+  private native void allocate(Params params, int noutputs);
+
+  public native Env env();
+
+  public native @Cast("tensorflow::int64") long step_id();
+
+  public native @Const @ByRef OpKernel op_kernel();
+
+  // Input/output signature.
+
+  public native int num_inputs();
+  public native @Cast("tensorflow::DataType") int input_dtype(int index);
+  public native @ByVal Status input_dtype(@StringPiece BytePointer name, @Cast("tensorflow::DataType*") IntPointer dtype);
+  public native @ByVal Status input_dtype(@StringPiece String name, @Cast("tensorflow::DataType*") IntPointer dtype);
+  public native @Cast("tensorflow::MemoryType") int input_memory_type(int index);
+
+  public native int num_outputs();
+  public native @Cast("tensorflow::DataType") int expected_output_dtype(int index);
+  public native @Cast("tensorflow::MemoryType") int output_memory_type(int index);
+
+  // Input
+
+  // Returns an immutable input tensor. May only be used for non-Ref
+  // inputs. For Ref inputs use mutable_input below.
+  // REQUIRES: !IsRefType(input_dtype(index))
+  // TODO(mrry): Convert this to return Status.
+  public native @Const @ByRef Tensor input(int index);
+
+  // Returns the named immutable input tensor in "tensor", as defined
+  // in the OpDef. May only be used for non-Ref inputs. For Ref inputs
+  // use mutable_input below.
+  // REQUIRES: !IsRefType(input_dtype(index))
+  // REQUIRES: the named input must not be a list.
+  public native @ByVal Status input(@StringPiece BytePointer name, @Cast("const tensorflow::Tensor**") PointerPointer tensor);
+  public native @ByVal Status input(@StringPiece BytePointer name, @Const @ByPtrPtr Tensor tensor);
+  public native @ByVal Status input(@StringPiece String name, @Const @ByPtrPtr Tensor tensor);
+
+  // Returns the named list-valued immutable input in "list", as
+  // defined in the OpDef.  If the named output is not list-valued,
+  // returns a one-element list. May only be used for non-Ref
+  // inputs. For Ref inputs use mutable_input below.
+  // REQUIRES: !IsRefType(input_dtype(index))
+  public native @ByVal Status input_list(@StringPiece BytePointer name, OpInputList list);
+  public native @ByVal Status input_list(@StringPiece String name, OpInputList list);
+
+  // For mutable inputs, use the following together to make sure there
+  // is no concurrent access to mutable_input(), e.g.:
+  // {
+  //   Tensor& t = context->mutable_input(index);
+  //   mutex_lock lock(*context->input_ref_mutex(index));
+  //   // modify the values in t
+  // }
+  // REQUIRES: IsRefType(input_dtype(index))
+  public native @ByVal Status input_ref_mutex(@StringPiece BytePointer name, @Cast("tensorflow::mutex**") PointerPointer out_mutex);
+  public native @ByVal Status input_ref_mutex(@StringPiece BytePointer name, @Cast("tensorflow::mutex**") @ByPtrPtr Pointer out_mutex);
+  public native @ByVal Status input_ref_mutex(@StringPiece String name, @Cast("tensorflow::mutex**") @ByPtrPtr Pointer out_mutex);
+
+  // Returns a mutable input tensor. Must be used to access Ref
+  // inputs.  REQUIRES: IsRefType(input_dtype(index)). The caller may
+  // modify the values stored in the Tensor buffer, and modifications
+  // will be visible to other Ops reading the same ref tensor. If
+  // !lock_held the input mutex will be acquired before returning the
+  // Tensor.
+  // TODO(mrry): Convert this to return Status.
+  public native @ByVal Tensor mutable_input(int index, @Cast("bool") boolean lock_held);
+
+  // Returns the named mutable input tensor in "tensor", as defined in
+  // the OpDef. Must be used to access Ref inputs. The values stored
+  // in the Tensor buffer may be modified, and modifications will be
+  // visible to other Ops reading the same ref tensor. If !lock_held
+  // the input mutex will be acquired before returning the Tensor.
+  // REQUIRES: the named input must not be a list.
+  // REQUIRES: the named input must be a ref tensor.
+  public native @ByVal Status mutable_input(@StringPiece BytePointer name, Tensor tensor, @Cast("bool") boolean lock_held);
+  public native @ByVal Status mutable_input(@StringPiece String name, Tensor tensor, @Cast("bool") boolean lock_held);
+
+  // Returns the named list-valued mutable input in "list", as defined
+  // in the OpDef.  If the named input is not list-valued, returns a
+  // one-element list. Must be used to access Ref inputs. The values
+  // stored in the Tensor buffer may be modified, and modifications
+  // will be visible to other Ops reading the same ref tensor.
+  // REQUIRES: the named input must be a ref tensor.
+  public native @ByVal Status mutable_input_list(@StringPiece BytePointer name, OpMutableInputList list);
+  public native @ByVal Status mutable_input_list(@StringPiece String name, OpMutableInputList list);
+
+  // Replace the corresponding Ref Input to use the storage buffer
+  // used by tensor. If !lock_held the input mutex will be acquired
+  // before returning the Tensor.
+  // REQUIRES: IsRefType(input_dtype(index)).
+  public native void replace_ref_input(int index, @Const @ByRef Tensor tensor, @Cast("bool") boolean lock_held);
+
+  // Replace the corresponding named Ref Input to use the storage
+  // buffer used by tensor. If !lock_held the input mutex will be
+  // acquired before returning the Tensor.
+  // REQUIRES: IsRefType(input_dtype(index)).
+  public native @ByVal Status replace_ref_input(@StringPiece BytePointer name, @Const @ByRef Tensor tensor,
+                             @Cast("bool") boolean lock_held);
+  public native @ByVal Status replace_ref_input(@StringPiece String name, @Const @ByRef Tensor tensor,
+                             @Cast("bool") boolean lock_held);
+
+  // Deletes the Tensor object used as the Ref Input at
+  // input_index. This is not usually necessary and should be used
+  // with caution. If !lock_held the input mutex will be acquired
+  // before returning the Tensor.
+  // REQUIRES: IsRefType(input_dtype(input_index)).
+  public native void delete_ref_input(int input_index, @Cast("bool") boolean lock_held);
+
+  // Return true if there is input at the given index. An operator has no
+  // input at index if its tensor is null. This is primarily used by the
+  // merge operator.
+  // TODO(mrry): Convert this to return Status.
+  public native @Cast("bool") boolean has_input(int index);
+
+  // Returns true if all inputs are the same shape, otherwise sets the
+  // status to a non-OK value and returns false.
+  // Usage: if (!context->ValidateInputsAreSameShape(this)) return;
+  public native @Cast("bool") boolean ValidateInputsAreSameShape(OpKernel op);
+
+  // Input to output forwarding.
+
+  // Set the output Ref Tensor at output_index to be an alias of the
+  // input Ref Tensor at input_index.
+  // REQUIRES: IsRefType(input_dtype(input_index)).
+  // REQUIRES: IsRefType(output_dtype(output_index)).
+  public native void forward_ref_input_to_ref_output(int input_index, int output_index);
+
+  // Returns true when an alias to input[input_index], reshaped to output_shape,
+  // which is safe to use for in-place computation was written to *output.
+  // Returns false if input[input_index] has a refcount greater than one, or if
+  // its type does not match the expected output type of output[output_index],
+  // or the number of elements in input[input_index] does not equal the number
+  // of elements in output_shape.
+  public native @Cast("bool") boolean forward_input_to_output_with_shape(int input_index, int output_index,
+                                            @Const @ByRef TensorShape output_shape,
+                                            @Cast("tensorflow::Tensor**") PointerPointer output);
+  public native @Cast("bool") boolean forward_input_to_output_with_shape(int input_index, int output_index,
+                                            @Const @ByRef TensorShape output_shape,
+                                            @ByPtrPtr Tensor output);
+  public native @ByVal Status forward_input_to_output_with_shape(@StringPiece BytePointer input_name,
+                                              @StringPiece BytePointer output_name,
+                                              @Const @ByRef TensorShape output_shape,
+                                              @Cast("tensorflow::Tensor**") PointerPointer output);
+  public native @ByVal Status forward_input_to_output_with_shape(@StringPiece BytePointer input_name,
+                                              @StringPiece BytePointer output_name,
+                                              @Const @ByRef TensorShape output_shape,
+                                              @ByPtrPtr Tensor output);
+  public native @ByVal Status forward_input_to_output_with_shape(@StringPiece String input_name,
+                                              @StringPiece String output_name,
+                                              @Const @ByRef TensorShape output_shape,
+                                              @ByPtrPtr Tensor output);
+
+  // Returns a pointer to a Tensor aliasing the underlying buffer backing
+  // input[input_index] iff
+  //   * input[input_index] is not a ref,
+  //   * the data type, shape, memory type, and allocator attributes of
+  //     input[input_index] are compatible with those given in dtype, shape,
+  //     memory_type, and attr,
+  //   * refcount on the underlying buffer is one.
+  // Otherwise returns nullptr.
+  // NOTE: For Cuda kernels that read inputs using the __ldg() intrinsic,
+  // forwarding is only safe if there are no reads via __ldg() after writes
+  // to the same address.
+  public native @UniquePtr Tensor forward_input(
+        int input_index, @Cast("tensorflow::DataType") int dtype, @Const @ByRef TensorShape shape,
+        @Cast("tensorflow::MemoryType") int memory_type,
+        @Const @ByRef AllocatorAttributes attr);
+
+  // Tries to forward one of the inputs given in input_indices to
+  // output[output_index]. If none of the given inputs can be forwarded, calls
+  // allocate_output() to allocate a new output buffer.
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ArraySlice IntPointer candidate_input_indices, int output_index,
+        @Const @ByRef TensorShape output_shape, @Cast("tensorflow::Tensor**") PointerPointer output);
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ArraySlice IntPointer candidate_input_indices, int output_index,
+        @Const @ByRef TensorShape output_shape, @ByPtrPtr Tensor output);
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ArraySlice IntBuffer candidate_input_indices, int output_index,
+        @Const @ByRef TensorShape output_shape, @ByPtrPtr Tensor output);
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ArraySlice int[] candidate_input_indices, int output_index,
+        @Const @ByRef TensorShape output_shape, @ByPtrPtr Tensor output);
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::StringPiece>*") StringPieceVector candidate_input_names,
+        @StringPiece BytePointer output_name, @Const @ByRef TensorShape output_shape,
+        @Cast("tensorflow::Tensor**") PointerPointer output);
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::StringPiece>*") StringPieceVector candidate_input_names,
+        @StringPiece BytePointer output_name, @Const @ByRef TensorShape output_shape,
+        @ByPtrPtr Tensor output);
+  public native @ByVal Status forward_input_or_allocate_output(
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::StringPiece>*") StringPieceVector candidate_input_names,
+        @StringPiece String output_name, @Const @ByRef TensorShape output_shape,
+        @ByPtrPtr Tensor output);
+
+  // Tries to reuse one of the inputs given in input_indices as a temporary.
+  // If none of the given inputs can be forwarded, calls
+  // allocate_temp() to allocate a new temporary buffer.
+  public native @ByVal Status forward_input_or_allocate_temp(
+        @ArraySlice IntPointer candidate_input_indices, @Cast("tensorflow::DataType") int type,
+        @Const @ByRef TensorShape shape, @Const @ByRef AllocatorAttributes allocator_attr,
+        Tensor out_temp);
+  public native @ByVal Status forward_input_or_allocate_temp(
+        @ArraySlice IntBuffer candidate_input_indices, @Cast("tensorflow::DataType") int type,
+        @Const @ByRef TensorShape shape, @Const @ByRef AllocatorAttributes allocator_attr,
+        Tensor out_temp);
+  public native @ByVal Status forward_input_or_allocate_temp(
+        @ArraySlice int[] candidate_input_indices, @Cast("tensorflow::DataType") int type,
+        @Const @ByRef TensorShape shape, @Const @ByRef AllocatorAttributes allocator_attr,
+        Tensor out_temp);
+
+  public native @ByVal Status forward_input_or_allocate_temp(
+        @ArraySlice IntPointer candidate_input_indices, @Cast("tensorflow::DataType") int type,
+        @Const @ByRef TensorShape shape, Tensor out_temp);
+  public native @ByVal Status forward_input_or_allocate_temp(
+        @ArraySlice IntBuffer candidate_input_indices, @Cast("tensorflow::DataType") int type,
+        @Const @ByRef TensorShape shape, Tensor out_temp);
+  public native @ByVal Status forward_input_or_allocate_temp(
+        @ArraySlice int[] candidate_input_indices, @Cast("tensorflow::DataType") int type,
+        @Const @ByRef TensorShape shape, Tensor out_temp);
+
+  // Output
+
+  // Returns the named list-valued output in "list", as defined in the OpDef.
+  // If the named output is not list-valued, returns a one-element list.
+  public native @ByVal Status output_list(@StringPiece BytePointer name, OpOutputList list);
+  public native @ByVal Status output_list(@StringPiece String name, OpOutputList list);
+
+  // If output_required(index) returns true, the OpKernel's Compute() method
+  // should call allocate_output(index, ...), set_output(index, ...),
+  // set_output_ref(index, ...), or set the status to a non-ok value.
+  // If it returns false, it may output, but is not required to do so.
+  // TODO(mrry): Convert this to return Status, and implement a string
+  // name version.
+  public native @Cast("bool") boolean output_required(int index);
+
+  // Allocation of tensors during kernel execution inside the Compute
+  // method:
+  //
+  // There are three methods to allocate Tensors when an Op kernel
+  // executes.
+  //
+  // 1) allocate_persistent. This is only needed for Tensors that will
+  // be stored by the Op between invocations, and it *must* be used
+  // for those Tensors. The call returns a PersistentTensor, and that
+  // is the only object the Op is allowed to hold on to between
+  // invocations. When the Tensor is needed in a subsequent
+  // invocation, it can be retrieved from the PersistentTensor using
+  // the AccessTensor method. This ensures that the system is made
+  // aware of any use of the tensor's allocated memory, which is
+  // needed for correctness on asynchronous devices such as GPUs.
+  //
+  // 2) allocate_output. This should be used to allocate any tensor
+  // that is going to be used as an output from the Op at the end of
+  // the current execution. The caller indicates which output the
+  // Tensor will be assigned to, and the call returns the
+  // newly-allocated Tensor. The Tensor can subsequently be assigned
+  // to during kernel execution, and will be used as the designated
+  // output when the kernel execution completes.
+  //
+  // 3) allocate_temp. This should be used to allocate any scratch
+  // storage that is needed while the kernel is executing, and will
+  // not be retained by the Op.
+  //
+  // In some cases a Tensor needs to be used as an output even though
+  // it was previously allocated elsewhere. The Tensor may have been
+  // passed as an input, or stored in a PersistentTensor during a
+  // previous kernel execution, or allocated earlier in the kernel
+  // execution at a time when it was not known which output it would
+  // be assigned to. In this case the kernel can use set_output or
+  // set_output_ref to indicate that the tensor should be used as the
+  // designated output. It is legal to use any previously-allocated
+  // Tensor as an argument to set_output or set_output_ref, including
+  // Tensors allocated via allocate_temp. There may be a performance
+  // penalty to using a Tensor that was not allocated using
+  // allocate_output. This is because allocate_output uses the
+  // AllocatorAttributes stored in output_attr_array for the
+  // designated output. In some cases, using the wrong attributes may
+  // cause an extra copy of the Tensor's buffer.
+
+  // Allocates output for the specified output index with shape.
+  // OpKernelContext retains ownership of the returned pointer. See
+  // comment above.
+  //
+  // If memory allocation fails, returns an error status.
+  //
+  // REQUIRES: !IsRefType(expected_output_dtype(index))
+  public native @ByVal Status allocate_output(int index, @Const @ByRef TensorShape shape,
+                           @Cast("tensorflow::Tensor**") PointerPointer tensor);
+  public native @ByVal Status allocate_output(int index, @Const @ByRef TensorShape shape,
+                           @ByPtrPtr Tensor tensor);
+  public native @ByVal Status allocate_output(@StringPiece BytePointer name, @Const @ByRef TensorShape shape,
+                           @Cast("tensorflow::Tensor**") PointerPointer tensor);
+  public native @ByVal Status allocate_output(@StringPiece BytePointer name, @Const @ByRef TensorShape shape,
+                           @ByPtrPtr Tensor tensor);
+  public native @ByVal Status allocate_output(@StringPiece String name, @Const @ByRef TensorShape shape,
+                           @ByPtrPtr Tensor tensor);
+  // The following methods use the supplied attributes instead of
+  // those in output_attr_array. The caller is responsible for
+  // ensuring that the attributes are "compatible" with the
+  // output_attr_array, e.g. the tensor is allocated on the correct
+  // device. See comment above.
+  public native @ByVal Status allocate_output(int index, @Const @ByRef TensorShape shape, @Cast("tensorflow::Tensor**") PointerPointer tensor,
+                           @ByVal AllocatorAttributes attr);
+  public native @ByVal Status allocate_output(int index, @Const @ByRef TensorShape shape, @ByPtrPtr Tensor tensor,
+                           @ByVal AllocatorAttributes attr);
+  public native @ByVal Status allocate_output(@StringPiece BytePointer name, @Const @ByRef TensorShape shape,
+                           @Cast("tensorflow::Tensor**") PointerPointer tensor,
+                           @ByVal AllocatorAttributes attr);
+  public native @ByVal Status allocate_output(@StringPiece BytePointer name, @Const @ByRef TensorShape shape,
+                           @ByPtrPtr Tensor tensor,
+                           @ByVal AllocatorAttributes attr);
+  public native @ByVal Status allocate_output(@StringPiece String name, @Const @ByRef TensorShape shape,
+                           @ByPtrPtr Tensor tensor,
+                           @ByVal AllocatorAttributes attr);
+
+  // Allocates a temporary Tensor of the specified type and
+  // shape. Devices such as GPUs that enqueue Ops for lazy execution
+  // may retain references to the temporary tensors after the Op's
+  // Compute method has run. See comment above.
+  public native @ByVal Status allocate_temp(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                         Tensor out_temp, @ByVal AllocatorAttributes allocator_attr,
+                         @Const @ByRef AllocationAttributes allocation_attr);
+  public native @ByVal Status allocate_temp(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                         Tensor out_temp, @ByVal AllocatorAttributes allocator_attr);
+  public native @ByVal Status allocate_temp(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                         Tensor out_temp);
+
+  // Allocates a Tensor of the specified type and shape which the Op
+  // plans to maintain as persistent state. out_persistent holds the
+  // PersistentTensor which is the object the caller should store. For
+  // convenience, if out_tensor is non-null then it will be filled in
+  // with a Tensor* pointing to the newly-allocated tensor which the
+  // caller can use instead of calling
+  // out_persistent->AccessTensor. The caller does not own out_tensor
+  // and should not keep a copy of it. See comment above.
+  public native @ByVal Status allocate_persistent(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                               PersistentTensor out_persistent,
+                               @Cast("tensorflow::Tensor**") PointerPointer out_tensor, @ByVal AllocatorAttributes attr);
+  public native @ByVal Status allocate_persistent(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                               PersistentTensor out_persistent,
+                               @ByPtrPtr Tensor out_tensor, @ByVal AllocatorAttributes attr);
+  public native @ByVal Status allocate_persistent(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                               PersistentTensor out_persistent,
+                               @Cast("tensorflow::Tensor**") PointerPointer out_tensor);
+  public native @ByVal Status allocate_persistent(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+                               PersistentTensor out_persistent,
+                               @ByPtrPtr Tensor out_tensor);
+
+  // Copies a tensor (allocated by the caller) to the specified output
+  // index.  REQUIRES: !IsRefType(expected_output_dtype(index))
+  // REQUIRES: 'tensor' must have the same MemoryType as
+  // output_memory_types[index]. See comment above.
+  public native @ByVal Status set_output(@StringPiece BytePointer name, @Const @ByRef Tensor tensor);
+  public native @ByVal Status set_output(@StringPiece String name, @Const @ByRef Tensor tensor);
+
+  // To output a reference.  Caller retains ownership of mu and tensor_for_ref,
+  // and they must outlive all uses within the step. See comment above.
+  // REQUIRES: IsRefType(expected_output_dtype(index))
+  public native @ByVal Status set_output_ref(@StringPiece BytePointer name, @Cast("tensorflow::mutex*") Pointer mu, Tensor tensor_for_ref);
+  public native @ByVal Status set_output_ref(@StringPiece String name, @Cast("tensorflow::mutex*") Pointer mu, Tensor tensor_for_ref);
+
+  // Returns nullptr if allocate_output() or set_output() have not been called.
+  public native @ByVal Status mutable_output(@StringPiece BytePointer name, @Cast("tensorflow::Tensor**") PointerPointer tensor);
+  public native @ByVal Status mutable_output(@StringPiece BytePointer name, @ByPtrPtr Tensor tensor);
+  public native @ByVal Status mutable_output(@StringPiece String name, @ByPtrPtr Tensor tensor);
+
+  // Transfers ownership of an output tensor to the caller.
+  // NOTE: For non-reference outputs, the caller takes responsibility
+  // for deletion. For reference outputs, the caller does NOT take
+  // responsibility for deletion.
+  public native @ByVal Status release_output(@StringPiece BytePointer name, TensorValue value);
+  public native @ByVal Status release_output(@StringPiece String name, TensorValue value);
+
+  // Records device specific state about how the input tensors were
+  // computed.
+  //
+  // If using the templated function, the type must be a subclass
+  // of DeviceContext.
+  //
+  // Get the DeviceContext used for the index input.  Returns nullptr
+  // if no DeviceContext was provided.
+  public native DeviceContext input_device_context(int index);
+
+  // Return the DeviceContext that should be used for this Op.
+  //
+  // If using the templated function, the type must be a subclass
+  // of DeviceContext.
+  //
+  // Returns nullptr if the device did not provide one.
+  public native DeviceContext op_device_context();
+
+  public native @ByVal AllocatorAttributes input_alloc_attr(int index);
+
+  public native @ByVal AllocatorAttributes output_alloc_attr(int index);
+
+  public native @ByVal WrappedAllocatorVector wrapped_allocators();
+
+  // Communication.
+  //
+  // An op kernel communicates with outside environment through
+  // Rendezvous Send() and Recv().
+  public native Rendezvous rendezvous();
+
+  // An op kernel can access the session state it belongs to.
+  public native SessionState session_state();
+
+  // An op kernel can access the tensor store of the run it belongs to.
+  public native TensorStore tensor_store();
+
+  // Function call support.
+  //
+  // If this kernel invocation is within a function execution,
+  // call_frame() returns the call frame for the function call.
+  public native CallFrameInterface call_frame();
+
+  // If not nullptr, the kernel invoke functions defined in the
+  // library. E.g., CHECK_NOTNULL(function_library())->Run("Foo", ...).
+  public native FunctionLibraryRuntime function_library();
+
+  public native @Cast("std::function<void(std::function<void()>)>*") Pointer runner();
+  public native StepStatsCollector stats_collector();
+
+  // Shared resources accessible to this kernel.
+  public native ResourceMgr resource_manager();
+
+  public native TensorSliceReaderCacheWrapper slice_reader_cache();
+
+  // Execution.
+  //
+  // OpKernels can use these eigen devices to carry out their
+  // numerical computation.
+  public native @Const @ByRef ThreadPoolDevice eigen_cpu_device();
+  public native @Const @ByRef GpuDevice eigen_gpu_device();
+// #ifdef TENSORFLOW_USE_SYCL
+// #endif
+
+  // Error handling.
+
+  // If expected_inputs == inputs() and expected_outputs == output_types(),
+  // returns OK, else returns INVALID_ARGUMENT with an error message.
+  // Recommended for Ops with dynamic signatures, where validation can only
+  // be performed at runtime.
+  public native @ByVal Status MatchSignature(@ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector expected_inputs,
+                          @ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector expected_outputs);
+
+  // An OpKernel should call SetStatus() if Compute() encounters an
+  // error.
+  public native void SetStatus(@Const @ByRef Status status);
+  public native @Const @ByRef Status status();
+
+  // Cancellation.
+  //
+  // EXPERIMENTAL. See the implementation in tensorflow::TensorQueue for an
+  // example of how to use this API.
+  public native CancellationManager cancellation_manager();
+
+  // Other accessors.
+
+  // For control flow.
+  public native @ByVal FrameAndIter frame_iter();
+  public native @Cast("bool") boolean is_input_dead();
+  public native @Cast("bool*") BoolPointer is_output_dead();
+
+  // May be used, e.g., to get GPU handles, etc.
+  // TODO(tucker): Add example usage.
+  public native DeviceBase device();
+
+  // Retrieve list of referenced tensors in out_vector. Once this is
+  // called, it is not legal to reference any more tensors.  Should
+  // not be called from Op kernels.
+  public native void retrieve_accessed_tensors(@Cast("tensorflow::TensorReferenceVector*") AllocatorAttributesVector out_vector);
+
+  // Per-step container for use by white-listed internal ops.
+  public native ScopedStepContainer step_container();
+
+  // Helper routines for the OP_REQUIRES macros
+  public native void CtxFailure(@Const @ByRef Status s);
+  public native void CtxFailureWithWarning(@Const @ByRef Status s);
+  public native void CtxFailure(@Cast("const char*") BytePointer file, int line, @Const @ByRef Status s);
+  public native void CtxFailure(String file, int line, @Const @ByRef Status s);
+  public native void CtxFailureWithWarning(@Cast("const char*") BytePointer file, int line, @Const @ByRef Status s);
+  public native void CtxFailureWithWarning(String file, int line, @Const @ByRef Status s);
+
+  // Unrecommended functions: these are functions that have some
+  // current uses but are not recommended for use, and may go away at
+  // some future major version release.
+  //
+  // The following functions all have versions that return Status
+  // to capture error conditions, and are strongly preferred.
+  public native Tensor mutable_output(int index);
+  public native void set_output(int index, @Const @ByRef Tensor tensor);
+  public native @Cast("tensorflow::mutex*") Pointer input_ref_mutex(int index);
+  public native void set_output_ref(int index, @Cast("tensorflow::mutex*") Pointer mu, Tensor tensor_for_ref);
+  public native @ByVal TensorValue release_output(int index);
+
+  public native @Cast("bool") boolean track_allocations();
+
+  // Records temp memory allocation. Tensor object is recorded to identify the
+  // case where temp memory is used as output memory.
+  public native void record_temp_memory_allocation(@Cast("tensorflow::int64") long size, @Const @ByRef Tensor t);
+
+  // Returns recorded size of temporary memory;
+  public native @Cast("tensorflow::int64") long temp_memory_allocated();
+
+  // Records persistent memory allocation, size can be negative indicating
+  // deallocation.
+  public native void record_persistent_memory_allocation(@Cast("tensorflow::int64") long size, @Cast("tensorflow::int64") long alloc_id/*=-1*/);
+  public native void record_persistent_memory_allocation(@Cast("tensorflow::int64") long size);
+
+  // Returns recorded size and ids of persistent memory.
+  public native @Cast("tensorflow::int64") long persistent_memory_allocated();
+
+  public native @Cast("tensorflow::int64*") @StdVector LongPointer persistent_alloc_ids();
+
+  // Resets counters for temp and persistent memory and recorded ids.
+  public native void clear_recorded_memory();
+
+  public native @Cast("bool") boolean input_is_ref(int index);
+}
+
+// Register your OpKernel by specifying the Op's name, the device the
+// kernel runs on, any type attr constraints for this kernel, any
+// host-memory args, and the class to instantiate.  Examples:
+//
+//  // A kernel that supports all types.
+//  REGISTER_KERNEL_BUILDER(Name("Save").Device(DEVICE_CPU), SaveOp);
+//
+//  // The following are equivalent ways of specifying that the kernel only
+//  // works if the "T" type attr is set to DT_FLOAT.
+//  REGISTER_KERNEL_BUILDER(
+//      Name("Sub").Device(DEVICE_CPU).TypeConstraint<float>("T"),
+//      SubOp<float>);
+//  // (You would then repeat this for every type supported by "Sub".)
+//
+//  // This form allows you to specify a list of types as the constraint.
+//  REGISTER_KERNEL_BUILDER(Name("Sub")
+//                              .Device(DEVICE_CPU)
+//                              .TypeConstraint("T", {DT_FLOAT}),
+//                          SubOp<float>);
+//
+//  // A kernel that expects one of the input tensors in host memory.
+//  REGISTER_KERNEL_BUILDER(
+//      Name("Reshape").Device(DEVICE_GPU).HostMemory("shape"), ReshapeOp);
+//
+// See kernel_def_builder for details.
+
+// Instantiate an OpKernel that has been registered.  Returns nullptr
+// if no operation for that type of device / input signature combination
+// (and a NOT_FOUND *status), or there is an error in construction (and
+// an INVALID_ARGUMENT *status).  Otherwise, the caller takes ownership
+// of the returned pointer.
+// EXPECTED USAGE: unique_ptr<OpKernel> op = CreateOpKernel(...);
+// REQUIRES: def has all attrs specified (e.g. using AddDefaultsToNodeDef()).
+@Namespace("tensorflow") public static native @UniquePtr OpKernel CreateOpKernel(@ByVal DeviceType device_type,
+                                         DeviceBase device,
+                                         Allocator allocator,
+                                         @Const @ByRef NodeDef def,
+                                         int graph_def_version, Status status);
+@Namespace("tensorflow") public static native @ByVal Status CreateOpKernel(@ByVal DeviceType device_type, DeviceBase device,
+                      Allocator allocator, FunctionLibraryRuntime flib,
+                      @Const @ByRef NodeDef def, int graph_def_version,
+                      @Cast("tensorflow::OpKernel**") PointerPointer kernel);
+@Namespace("tensorflow") public static native @ByVal Status CreateOpKernel(@ByVal DeviceType device_type, DeviceBase device,
+                      Allocator allocator, FunctionLibraryRuntime flib,
+                      @Const @ByRef NodeDef def, int graph_def_version,
+                      @ByPtrPtr OpKernel kernel);
+
+// Returns into 'device_types' the subset of prioritized_types that this
+// binary has registered for the given NodeDef.
+//
+// REQUIRES: * 'device_types' is not nullptr.
+//           * def has all attrs specified (e.g. using AddDefaultsToNodeDef()).
+@Namespace("tensorflow") public static native @ByVal Status SupportedDeviceTypesForNode(
+    @StdVector DeviceType prioritized_types, @Const @ByRef NodeDef def,
+    DeviceTypeVector device_types);
+
+// Returns a message with a description of the kernels registered for op
+// `op_name`.
+@Namespace("tensorflow") public static native @StdString BytePointer KernelsRegisteredForOp(@StringPiece BytePointer op_name);
+@Namespace("tensorflow") public static native @StdString String KernelsRegisteredForOp(@StringPiece String op_name);
+
+// Call once after Op registration has completed.
+@Namespace("tensorflow") public static native @ByVal Status ValidateKernelRegistrations(@Const @ByRef OpRegistryInterface op_registry);
+
+// -----------------------------------------------------------------------------
+// OpKernel registration implementation follows, please ignore.
+
+// Allow the REGISTER_KERNEL_BUILDER(Name("op_name").Device(...)...) syntax.
+
+@Name("tensorflow::register_kernel::Name") public static class RegisterKernelName extends KernelDefBuilder {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RegisterKernelName(Pointer p) { super(p); }
+
+  // With selective registration, kernels whose implementation class is not used
+  // by any kernel are disabled with the SHOULD_REGISTER_OP_KERNEL call in
+  // REGISTER_KERNEL_BUILDER_UNIQ. However, an unused kernel that shares an
+  // implementation class with a used kernel would get through that mechanism.
+  //
+  // This mechanism stops that registration by changing the name of the kernel
+  // for the unused op to one that is ignored by
+  // OpKernelRegistrar::InitInternal.  Note that this method alone is
+  // not sufficient - the compiler can't evaluate the entire KernelDefBuilder at
+  // compilation time, so this method doesn't actually reduce code size.
+  public RegisterKernelName(@Cast("const char*") BytePointer op) { super((Pointer)null); allocate(op); }
+  private native void allocate(@Cast("const char*") BytePointer op);
+  public RegisterKernelName(String op) { super((Pointer)null); allocate(op); }
+  private native void allocate(String op);
+}
+
+@Name("tensorflow::register_kernel::system::Name") public static class RegisterKernelSystemName extends KernelDefBuilder {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RegisterKernelSystemName(Pointer p) { super(p); }
+
+  // For system kernels, we ignore selective registration and
+  // unconditionally register the kernel.
+  public RegisterKernelSystemName(@Cast("const char*") BytePointer op) { super((Pointer)null); allocate(op); }
+  private native void allocate(@Cast("const char*") BytePointer op);
+  public RegisterKernelSystemName(String op) { super((Pointer)null); allocate(op); }
+  private native void allocate(String op);
+}
+
+  // namespace system
+
+  // namespace register_kernel
+
+// #define REGISTER_KERNEL_BUILDER(kernel_builder, ...)
+//   REGISTER_KERNEL_BUILDER_UNIQ_HELPER(__COUNTER__, kernel_builder, __VA_ARGS__)
+
+// #define REGISTER_KERNEL_BUILDER_UNIQ_HELPER(ctr, kernel_builder, ...)
+//   REGISTER_KERNEL_BUILDER_UNIQ(ctr, kernel_builder, __VA_ARGS__)
+
+// #define REGISTER_KERNEL_BUILDER_UNIQ(ctr, kernel_builder, ...)
+//   constexpr bool should_register_##ctr##__flag =
+//       SHOULD_REGISTER_OP_KERNEL(#__VA_ARGS__);
+//   static ::tensorflow::kernel_factory::OpKernelRegistrar
+//       registrar__body__##ctr##__object(
+//           should_register_##ctr##__flag
+//               ? ::tensorflow::register_kernel::kernel_builder.Bid()
+//               : nullptr,
+//           #__VA_ARGS__,
+//           [](::tensorflow::OpKernelConstruction* context)
+//               -> ::tensorflow::OpKernel* {
+//             return new __VA_ARGS__(context);
+//           });
+
+// The `REGISTER_SYSTEM_KERNEL_BUILDER()` macro acts as
+// `REGISTER_KERNEL_BUILDER()` except that the kernel is registered
+// unconditionally even when selective registration is used.
+// #define REGISTER_SYSTEM_KERNEL_BUILDER(kernel_builder, ...)
+//   REGISTER_SYSTEM_KERNEL_BUILDER_UNIQ_HELPER(__COUNTER__, kernel_builder,
+//                                              __VA_ARGS__)
+
+// #define REGISTER_SYSTEM_KERNEL_BUILDER_UNIQ_HELPER(ctr, kernel_builder, ...)
+//   REGISTER_SYSTEM_KERNEL_BUILDER_UNIQ(ctr, kernel_builder, __VA_ARGS__)
+
+// #define REGISTER_SYSTEM_KERNEL_BUILDER_UNIQ(ctr, kernel_builder, ...)
+//   static ::tensorflow::kernel_factory::OpKernelRegistrar
+//       registrar__body__##ctr##__object(
+//           ::tensorflow::register_kernel::system::kernel_builder.Bid(),
+//           #__VA_ARGS__,
+//           [](::tensorflow::OpKernelConstruction* context)
+//               -> ::tensorflow::OpKernel* {
+//             return new __VA_ARGS__(context);
+//           });
+
+@Namespace("tensorflow") public static native Pointer GlobalKernelRegistry();
+
+// If node_def has a corresponding kernel registered on device_type,
+// returns OK and fill in the kernel def and kernel_class_name. <def> and
+// <kernel_class_name> may be null.
+@Namespace("tensorflow") public static native @ByVal Status FindKernelDef(@Const @ByRef DeviceType device_type, @Const @ByRef NodeDef node_def,
+                     @Cast("const tensorflow::KernelDef**") PointerPointer def, @StdString @Cast({"char*", "std::string*"}) BytePointer kernel_class_name);
+@Namespace("tensorflow") public static native @ByVal Status FindKernelDef(@Const @ByRef DeviceType device_type, @Const @ByRef NodeDef node_def,
+                     @Const @ByPtrPtr KernelDef def, @StdString @Cast({"char*", "std::string*"}) BytePointer kernel_class_name);
+
+// Writes a list of all registered kernels to LOG(INFO), to help users debug
+// missing kernel errors.
+@Namespace("tensorflow") public static native void LogAllRegisteredKernels();
+
+@Namespace("tensorflow::kernel_factory") public static class OpKernelRegistrar extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpKernelRegistrar(Pointer p) { super(p); }
+
+  public static class Factory extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Factory(Pointer p) { super(p); }
+      protected Factory() { allocate(); }
+      private native void allocate();
+      public native OpKernel call(OpKernelConstruction arg0);
+  }
+
+  public OpKernelRegistrar(@Const KernelDef kernel_def, @StringPiece BytePointer kernel_class_name,
+                      Factory factory) { super((Pointer)null); allocate(kernel_def, kernel_class_name, factory); }
+  private native void allocate(@Const KernelDef kernel_def, @StringPiece BytePointer kernel_class_name,
+                      Factory factory);
+  public OpKernelRegistrar(@Const KernelDef kernel_def, @StringPiece String kernel_class_name,
+                      Factory factory) { super((Pointer)null); allocate(kernel_def, kernel_class_name, factory); }
+  private native void allocate(@Const KernelDef kernel_def, @StringPiece String kernel_class_name,
+                      Factory factory);
+}
+
+  // namespace kernel_factory
+
+// -----------------------------------------------------------------------------
+// Template and inline method implementations, please ignore
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// no input if tensor == nullptr.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Convenience macros for asserting and handling exceptional conditions.
+// Analogous to the CHECK* macros provided by logging.h.
+//
+// Example use:
+// void Compute(OperationContext* context) {
+//   OP_REQUIRES(context, context->num_inputs() == 2,
+//               errors::InvalidArgument("FooOp requires 2 arguments"));
+//   ...
+//   Status status = SomeUncertainMethod();
+//   OP_REQUIRES_OK(context, status);
+//   ...
+// }
+
+// #define OP_REQUIRES(CTX, EXP, STATUS)
+//   do {
+//     if (!TF_PREDICT_TRUE(EXP)) {
+//       (CTX)->CtxFailure(__FILE__, __LINE__, (STATUS));
+//       return;
+//     }
+//   } while (0)
+
+// #define OP_REQUIRES_OK(CTX, ...)
+//   do {
+//     ::tensorflow::Status _s(__VA_ARGS__);
+//     if (!TF_PREDICT_TRUE(_s.ok())) {
+//       (CTX)->CtxFailureWithWarning(__FILE__, __LINE__, _s);
+//       return;
+//     }
+//   } while (0)
+
+// #define OP_REQUIRES_ASYNC(CTX, EXP, STATUS, CALLBACK)
+//   do {
+//     if (!TF_PREDICT_TRUE(EXP)) {
+//       (CTX)->CtxFailure(__FILE__, __LINE__, (STATUS));
+//       (CALLBACK)();
+//       return;
+//     }
+//   } while (0)
+
+// #define OP_REQUIRES_OK_ASYNC(CTX, STATUS, CALLBACK)
+//   do {
+//     ::tensorflow::Status _s(STATUS);
+//     if (!TF_PREDICT_TRUE(_s.ok())) {
+//       (CTX)->CtxFailureWithWarning(__FILE__, __LINE__, _s);
+//       (CALLBACK)();
+//       return;
+//     }
+//   } while (0)
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_OP_KERNEL_H_
+
+
+// Parsed from tensorflow/core/framework/op_segment.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_OP_SEGMENT_H_
+// #define TENSORFLOW_FRAMEWORK_OP_SEGMENT_H_
+
+// #include <string>
+// #include <unordered_map>
+
+// #include "tensorflow/core/framework/op_kernel.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/platform/types.h"
+
+// OpSegment keeps track of OpKernels registered for sessions running
+// on a device.
+//
+// The implementation maintains a two-level map. The 1st level maps
+// session handle to the map of registered OpKernels. The 2nd level
+// map maps node names to instantiated OpKernel objects.
+//
+// Each 2-nd level map is reference-counted and the caller can call
+// AddHold to obtain a reference on all kernels of a session and
+// ensure these kernels are alive until a corresponding RemoveHold is
+// called on the same session.
+@Namespace("tensorflow") @NoOffset public static class OpSegment extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpSegment(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpSegment(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpSegment position(long position) {
+        return (OpSegment)super.position(position);
+    }
+
+  public OpSegment() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  // A hold can be placed on a session, preventing all its kernels
+  // from being deleted.
+  public native void AddHold(@StdString BytePointer session_handle);
+  public native void AddHold(@StdString String session_handle);
+  public native void RemoveHold(@StdString BytePointer session_handle);
+  public native void RemoveHold(@StdString String session_handle);
+
+  // If the kernel for "node_name" has been created in the
+  // "session_handle", returns the existing op kernel in "*kernel".
+  // Otherwise, creates the kernel by calling create_fn(), cache it,
+  // and returns it in "*kernel". If create_fn() fails, returns the
+  // error.
+  //
+  // OpSegment keeps the ownership of the returned "*kernel".
+  public native @ByVal Status FindOrCreate(@StdString BytePointer session_handle, @StdString BytePointer node_name,
+                        @Cast("tensorflow::OpKernel**") PointerPointer kernel, @ByVal @Cast("tensorflow::OpSegment::CreateKernelFn*") Pointer create_fn);
+  public native @ByVal Status FindOrCreate(@StdString BytePointer session_handle, @StdString BytePointer node_name,
+                        @ByPtrPtr OpKernel kernel, @ByVal @Cast("tensorflow::OpSegment::CreateKernelFn*") Pointer create_fn);
+  public native @ByVal Status FindOrCreate(@StdString String session_handle, @StdString String node_name,
+                        @ByPtrPtr OpKernel kernel, @ByVal @Cast("tensorflow::OpSegment::CreateKernelFn*") Pointer create_fn);
+}
+
+  // end namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_OP_SEGMENT_H_
+
+
 // Parsed from tensorflow/core/framework/shape_inference.h
 
 /* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
@@ -15519,6 +18008,10 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
+@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsInterconnectLinkImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsInterconnectLink();
+@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsLocalLinksImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsLocalLinks();
 @Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceLocalityImpl();
 @Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceLocality();
 @Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceAttributesImpl();
@@ -15527,10 +18020,187 @@ limitations under the License.
   // namespace tensorflow
 
 
+
+
   // namespace protobuf
   // namespace google
 
 // ===================================================================
+
+@Namespace("tensorflow") @NoOffset public static class InterconnectLink extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InterconnectLink(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public InterconnectLink(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public InterconnectLink position(long position) {
+        return (InterconnectLink)super.position(position);
+    }
+
+  public InterconnectLink() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public InterconnectLink(@Const @ByRef InterconnectLink from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef InterconnectLink from);
+
+  public native @ByRef @Name("operator =") InterconnectLink put(@Const @ByRef InterconnectLink from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef InterconnectLink default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const InterconnectLink internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(InterconnectLink other);
+  public native void Swap(InterconnectLink other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native InterconnectLink New();
+
+  public native InterconnectLink New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef InterconnectLink from);
+  public native void MergeFrom(@Const @ByRef InterconnectLink from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string type = 2;
+  public native void clear_type();
+  @MemberGetter public static native int kTypeFieldNumber();
+  public static final int kTypeFieldNumber = kTypeFieldNumber();
+  public native @StdString BytePointer type();
+  public native void set_type(@StdString BytePointer value);
+  public native void set_type(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_type(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
+  public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type();
+  public native void unsafe_arena_set_allocated_type(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer type);
+
+  // int32 device_id = 1;
+  public native void clear_device_id();
+  @MemberGetter public static native int kDeviceIdFieldNumber();
+  public static final int kDeviceIdFieldNumber = kDeviceIdFieldNumber();
+  public native @Cast("google::protobuf::int32") int device_id();
+  public native void set_device_id(@Cast("google::protobuf::int32") int value);
+
+  // int32 strength = 3;
+  public native void clear_strength();
+  @MemberGetter public static native int kStrengthFieldNumber();
+  public static final int kStrengthFieldNumber = kStrengthFieldNumber();
+  public native @Cast("google::protobuf::int32") int strength();
+  public native void set_strength(@Cast("google::protobuf::int32") int value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class LocalLinks extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LocalLinks(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LocalLinks(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public LocalLinks position(long position) {
+        return (LocalLinks)super.position(position);
+    }
+
+  public LocalLinks() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public LocalLinks(@Const @ByRef LocalLinks from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef LocalLinks from);
+
+  public native @ByRef @Name("operator =") LocalLinks put(@Const @ByRef LocalLinks from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef LocalLinks default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const LocalLinks internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(LocalLinks other);
+  public native void Swap(LocalLinks other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native LocalLinks New();
+
+  public native LocalLinks New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef LocalLinks from);
+  public native void MergeFrom(@Const @ByRef LocalLinks from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.InterconnectLink link = 1;
+  public native int link_size();
+  public native void clear_link();
+  @MemberGetter public static native int kLinkFieldNumber();
+  public static final int kLinkFieldNumber = kLinkFieldNumber();
+  public native InterconnectLink mutable_link(int index);
+  public native @Const @ByRef InterconnectLink link(int index);
+  public native InterconnectLink add_link();
+}
+// -------------------------------------------------------------------
 
 @Namespace("tensorflow") @NoOffset public static class DeviceLocality extends MessageLite {
     static { Loader.load(); }
@@ -15597,12 +18267,32 @@ limitations under the License.
 
   // accessors -------------------------------------------------------
 
+  // .tensorflow.LocalLinks links = 3;
+  public native @Cast("bool") boolean has_links();
+  public native void clear_links();
+  @MemberGetter public static native int kLinksFieldNumber();
+  public static final int kLinksFieldNumber = kLinksFieldNumber();
+  public native @Const @ByRef LocalLinks links();
+  public native LocalLinks release_links();
+  public native LocalLinks mutable_links();
+  public native void set_allocated_links(LocalLinks links);
+  public native void unsafe_arena_set_allocated_links(
+        LocalLinks links);
+  public native LocalLinks unsafe_arena_release_links();
+
   // int32 bus_id = 1;
   public native void clear_bus_id();
   @MemberGetter public static native int kBusIdFieldNumber();
   public static final int kBusIdFieldNumber = kBusIdFieldNumber();
   public native @Cast("google::protobuf::int32") int bus_id();
   public native void set_bus_id(@Cast("google::protobuf::int32") int value);
+
+  // int32 numa_node = 2;
+  public native void clear_numa_node();
+  @MemberGetter public static native int kNumaNodeFieldNumber();
+  public static final int kNumaNodeFieldNumber = kNumaNodeFieldNumber();
+  public native @Cast("google::protobuf::int32") int numa_node();
+  public native void set_numa_node(@Cast("google::protobuf::int32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -15761,9 +18451,65 @@ limitations under the License.
 //   #pragma GCC diagnostic push
 //   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 // #endif  // __GNUC__
+// InterconnectLink
+
+// int32 device_id = 1;
+
+
+
+
+// string type = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int32 strength = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// LocalLinks
+
+// repeated .tensorflow.InterconnectLink link = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
 // DeviceLocality
 
 // int32 bus_id = 1;
+
+
+
+
+// int32 numa_node = 2;
+
+
+
+
+// .tensorflow.LocalLinks links = 3;
+
+
+
+
 
 
 
@@ -15841,6 +18587,10 @@ limitations under the License.
 // #endif  // __GNUC__
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -15881,25 +18631,6 @@ limitations under the License.
 // #include "tensorflow/core/platform/env.h"
 // #include "tensorflow/core/protobuf/config.pb.h"
 // #include "tensorflow/core/public/session_options.h"
-
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-@Namespace("tensorflow") @Opaque public static class DeviceMgr extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public DeviceMgr() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DeviceMgr(Pointer p) { super(p); }
-}
 
 /** \brief A Session instance lets a caller drive a TensorFlow graph
  *  computation.
@@ -16665,7 +19396,7 @@ limitations under the License.
       }
   
     public native @ByRef TensorSlice slice(); public native SliceInfo slice(TensorSlice slice);
-    public native @StdString BytePointer tag(); public native SliceInfo tag(BytePointer tag);
+    @MemberGetter public native @StdString BytePointer tag();
     @MemberGetter public native @Const FloatPointer data();
     public native @Cast("tensorflow::int64") long num_floats(); public native SliceInfo num_floats(long num_floats);
   }
@@ -16841,17 +19572,17 @@ limitations under the License.
   private native void allocate(@StdString BytePointer filepattern);
   public TensorSliceReader(@StdString String filepattern) { super((Pointer)null); allocate(filepattern); }
   private native void allocate(@StdString String filepattern);
-  public TensorSliceReader(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function) { super((Pointer)null); allocate(filepattern, open_function); }
-  private native void allocate(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function);
-  public TensorSliceReader(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function) { super((Pointer)null); allocate(filepattern, open_function); }
-  private native void allocate(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function);
-  public TensorSliceReader(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+  public TensorSliceReader(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function) { super((Pointer)null); allocate(filepattern, open_function); }
+  private native void allocate(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function);
+  public TensorSliceReader(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function) { super((Pointer)null); allocate(filepattern, open_function); }
+  private native void allocate(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function);
+  public TensorSliceReader(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function,
                       int preferred_shard) { super((Pointer)null); allocate(filepattern, open_function, preferred_shard); }
-  private native void allocate(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+  private native void allocate(@StdString BytePointer filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function,
                       int preferred_shard);
-  public TensorSliceReader(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+  public TensorSliceReader(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function,
                       int preferred_shard) { super((Pointer)null); allocate(filepattern, open_function, preferred_shard); }
-  private native void allocate(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Fn open_function,
+  private native void allocate(@StdString String filepattern, @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::OpenTableFunction*") Pointer open_function,
                       int preferred_shard);
 
   // Get the filename this reader is attached to.
@@ -17595,6 +20326,10 @@ public static native @ByVal TF_Buffer TF_GetBuffer(TF_Buffer buffer);
 //      (*deallocator)(data, len, deallocator_arg)
 // Clients must provide a custom deallocator function so they can pass in
 // memory managed by something like numpy.
+//
+// May return NULL (and invoke the deallocator) if the provided data buffer
+// (data, len) is inconsistent with a tensor of the given TF_DataType
+// and the shape specified by (dima, num_dims).
 public static class Deallocator_Pointer_long_Pointer extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -19874,12 +22609,12 @@ limitations under the License.
   private native void allocate();
   public OpRegistrationData(@Const @ByRef OpDef def) { super((Pointer)null); allocate(def); }
   private native void allocate(@Const @ByRef OpDef def);
-  public OpRegistrationData(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Fn fn,
+  public OpRegistrationData(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Pointer fn,
                        @Cast("bool") boolean is_function/*=false*/) { super((Pointer)null); allocate(def, fn, is_function); }
-  private native void allocate(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Fn fn,
+  private native void allocate(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Pointer fn,
                        @Cast("bool") boolean is_function/*=false*/);
-  public OpRegistrationData(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Fn fn) { super((Pointer)null); allocate(def, fn); }
-  private native void allocate(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Fn fn);
+  public OpRegistrationData(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Pointer fn) { super((Pointer)null); allocate(def, fn); }
+  private native void allocate(@Const @ByRef OpDef def, @Cast("const tensorflow::OpShapeInferenceFn*") @ByRef Pointer fn);
 
   public native @ByRef OpDef op_def(); public native OpRegistrationData op_def(OpDef op_def);
   @MemberSetter public native OpRegistrationData shape_inference_fn(@ByVal ShapeInferenceFn shape_inference_fn);
@@ -20099,7 +22834,7 @@ limitations under the License.
 @Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long AttrDefHash(@Cast("const tensorflow::OpDef::AttrDef*") @ByRef OpDef_AttrDef a);
 
 // Returns true if all AttrDefs in `a1` equal corresponding AttrDefs in
-// `a2`. Corrspondence is established by name.
+// `a2`. Correspondence is established by name.
 
 // Returns hash of `a` that is consistent with RepeatedAttrDefEqual
 
@@ -20202,7 +22937,7 @@ limitations under the License.
   public OpRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native void Register(@Cast("const tensorflow::OpRegistry::OpRegistrationDataFactory*") @ByRef Fn op_data_factory);
+  public native void Register(@Cast("const tensorflow::OpRegistry::OpRegistrationDataFactory*") @ByRef Pointer op_data_factory);
 
   public native @ByVal Status LookUp(@StdString BytePointer op_type_name,
                   @Cast("const tensorflow::OpRegistrationData**") PointerPointer op_reg_data);
@@ -20243,7 +22978,7 @@ limitations under the License.
   // SetWatcher(nullptr);
   // Returns a non-OK status if a non-null watcher is over-written by another
   // non-null watcher.
-  public native @ByVal Status SetWatcher(@Cast("const tensorflow::OpRegistry::Watcher*") @ByRef Fn watcher);
+  public native @ByVal Status SetWatcher(@Cast("const tensorflow::OpRegistry::Watcher*") @ByRef Pointer watcher);
 
   // Process the current list of deferred registrations. Note that calls to
   // Export, LookUp and DebugString would also implicitly process the deferred
@@ -20421,331 +23156,6 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_FRAMEWORK_OP_H_
-
-
-// Parsed from tensorflow/core/framework/types.h
-
-/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-
-// #ifndef TENSORFLOW_FRAMEWORK_TYPES_H_
-// #define TENSORFLOW_FRAMEWORK_TYPES_H_
-
-// #include <map>
-// #include <set>
-// #include <string>
-
-// #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
-// Disable clang-format to prevent 'FixedPoint' header from being included
-// before 'Tensor' header on which it depends.
-// clang-format off
-// #include "third_party/eigen3/unsupported/Eigen/CXX11/FixedPoint"
-// clang-format on
-// #include "tensorflow/core/framework/bfloat16.h"
-// #include "tensorflow/core/framework/numeric_types.h"
-// #include "tensorflow/core/framework/resource_handle.h"
-// #include "tensorflow/core/framework/types.pb.h"
-// #include "tensorflow/core/framework/variant.h"
-// #include "tensorflow/core/lib/core/stringpiece.h"
-// #include "tensorflow/core/lib/gtl/array_slice.h"
-// #include "tensorflow/core/lib/gtl/inlined_vector.h"
-// #include "tensorflow/core/platform/logging.h"
-// #include "tensorflow/core/platform/types.h"
-
-// MemoryType is used to describe whether input or output Tensors of
-// an OpKernel should reside in "Host memory" (e.g., CPU memory) or
-// "Device" Memory (CPU memory for CPU devices, GPU memory for GPU
-// devices).
-/** enum tensorflow::MemoryType */
-public static final int
-  DEVICE_MEMORY = 0,
-  HOST_MEMORY = 1;
-
-// A DeviceType is just a string, but we wrap it up in a class to give
-// some type checking as we're passing these around
-@Namespace("tensorflow") @NoOffset public static class DeviceType extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DeviceType(Pointer p) { super(p); }
-
-  public DeviceType(@Cast("const char*") BytePointer type) { super((Pointer)null); allocate(type); }
-  private native void allocate(@Cast("const char*") BytePointer type);
-  public DeviceType(String type) { super((Pointer)null); allocate(type); }
-  private native void allocate(String type);
-
-  public native @Cast("const char*") BytePointer type();
-  public native @StdString BytePointer type_string();
-
-  public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef DeviceType other);
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef DeviceType other);
-  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef DeviceType other);
-}
-@Namespace("tensorflow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef DeviceType d);
-
-// Convenient constants that can be passed to a DeviceType constructor
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer DEVICE_CPU();   // "CPU"
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer DEVICE_GPU();   // "GPU"
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer DEVICE_SYCL();  // "SYCL"
-
-@Name("tensorflow::DeviceName<Eigen::ThreadPoolDevice>") public static class DeviceName extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public DeviceName() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DeviceName(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DeviceName(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public DeviceName position(long position) {
-        return (DeviceName)super.position(position);
-    }
-
-  @MemberGetter public static native @StdString BytePointer value();
-}
-
-// #if GOOGLE_CUDA
-// #endif  // GOOGLE_CUDA
-
-// #ifdef TENSORFLOW_USE_SYCL
-// #endif  // TENSORFLOW_USE_SYCL
-
-// Convert the enums to strings for errors:
-@Namespace("tensorflow") public static native @StdString BytePointer DataTypeString(@Cast("tensorflow::DataType") int dtype);
-@Namespace("tensorflow") public static native @StdString BytePointer DeviceTypeString(@Const @ByRef DeviceType device_type);
-@Namespace("tensorflow") public static native @StdString BytePointer DataTypeSliceString(@ByVal @Cast("const tensorflow::DataTypeSlice*") DataTypeVector dtypes);
-@Namespace("tensorflow") public static native @StdString BytePointer DataTypeVectorString(@Const @ByRef DataTypeVector dtypes);
-
-// DataTypeSet represents a set of DataType values as a simple and efficient
-// bit mask.  Note that DataTypeSet cannot represent all DataType values; it
-// cannot represent any of the DT_*_REF values.
-@Namespace("tensorflow") @NoOffset public static class DataTypeSet extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DataTypeSet(Pointer p) { super(p); }
-
-  public DataTypeSet(@Const @ByRef DataTypeSet other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@Const @ByRef DataTypeSet other);
-  public DataTypeSet(int mask) { super((Pointer)null); allocate(mask); }
-  private native void allocate(int mask);
-
-  public native @Cast("const bool") boolean Contains(@Cast("tensorflow::DataType") int dt);
-
-  @NoOffset public static class Iterator extends Pointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public Iterator(Pointer p) { super(p); }
-  
-    public Iterator(@Const @ByRef DataTypeSet set, int pos) { super((Pointer)null); allocate(set, pos); }
-    private native void allocate(@Const @ByRef DataTypeSet set, int pos);
-    public native @Cast("tensorflow::DataType") @Name("operator *") int multiply();
-    public native @ByRef @Name("operator ++") Iterator increment();
-    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Iterator other);
-    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Iterator other);
-    public native @Cast("size_t") @Name("operator -") long subtract(@Const @ByRef Iterator other);
-  }
-
-  public static native int ctz_uint32(int x);
-
-  public static native int clz_uint32(int x);
-
-  public native @ByVal Iterator begin();
-
-  public native @ByVal Iterator end();
-
-  public native @Cast("size_t") long size();
-
-  public native @Const @ByVal @Name("operator |") DataTypeSet or(@Const @ByRef DataTypeSet other);
-}
-
-// If "sp" names a valid type, store it in "*dt" and return true.  Otherwise,
-// return false.
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@StringPiece BytePointer sp, @Cast("tensorflow::DataType*") IntPointer dt);
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@StringPiece String sp, @Cast("tensorflow::DataType*") IntPointer dt);
-
-@Namespace("tensorflow") public static native @Const @ByVal DataTypeSet ToSet(@Cast("tensorflow::DataType") int dt);
-
-// DT_FLOAT + kDataTypeRefOffset == DT_FLOAT_REF, etc.
-/** enum tensorflow:: */
-public static final int kDataTypeRefOffset = 100;
-@Namespace("tensorflow") public static native @Cast("bool") boolean IsRefType(@Cast("tensorflow::DataType") int dtype);
-@Namespace("tensorflow") public static native @Cast("tensorflow::DataType") int MakeRefType(@Cast("tensorflow::DataType") int dtype);
-@Namespace("tensorflow") public static native @Cast("tensorflow::DataType") int RemoveRefType(@Cast("tensorflow::DataType") int dtype);
-@Namespace("tensorflow") public static native @Cast("tensorflow::DataType") int BaseType(@Cast("tensorflow::DataType") int dtype);
-
-// Returns true if the actual type is the same as or ref of the expected type.
-@Namespace("tensorflow") public static native @Cast("bool") boolean TypesCompatible(@Cast("tensorflow::DataType") int expected, @Cast("tensorflow::DataType") int actual);
-
-// Does not include _ref types.
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kAllTypes();
-@Namespace("tensorflow") public static native @Const @ByRef DataTypeSet AllTypes();
-
-// #if !defined(IS_MOBILE_PLATFORM) || defined(SUPPORT_SELECTIVE_REGISTRATION)
-
-// Types that support '<' and '>'.
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kRealNumberTypes();
-@Namespace("tensorflow") public static native @Const @ByVal DataTypeSet RealNumberTypes();
-
-// Return the list of all numeric types.
-// Includes complex and quantized types.
-// NOTE: On Android, we only include the float and int32 types for now.
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kNumberTypes();
-
-
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kQuantizedTypes();
-
-
-// Types that support '<' and '>', including quantized types.
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kRealAndQuantizedTypes();
-
-
-// #elif defined(__ANDROID_TYPES_FULL__)
-
-
-
-
-// #else  // defined(IS_MOBILE_PLATFORM) && !defined(__ANDROID_TYPES_FULL__)
-
-
-
-
-// #endif  // defined(IS_MOBILE_PLATFORM)
-
-// Validates type T for whether it is a supported DataType.
-
-// DataTypeToEnum<T>::v() and DataTypeToEnum<T>::value are the DataType
-// constants for T, e.g. DataTypeToEnum<float>::v() is DT_FLOAT.  // Specializations below
-
-// EnumToDataType<VALUE>::Type is the type for DataType constant VALUE, e.g.
-// EnumToDataType<DT_FLOAT>::Type is float.  // Specializations below
-
-// Template specialization for both DataTypeToEnum and EnumToDataType.
-// #define MATCH_TYPE_AND_ENUM(TYPE, ENUM)
-//   template <>
-//   struct DataTypeToEnum<TYPE> {
-//     static DataType v() { return ENUM; }
-//     static DataType ref() { return MakeRefType(ENUM); }
-//     static constexpr DataType value = ENUM;
-//   };
-//   template <>
-//   struct IsValidDataType<TYPE> {
-//     static constexpr bool value = true;
-//   };
-//   template <>
-//   struct EnumToDataType<ENUM> {
-//     typedef TYPE Type;
-//   }
-
-@Name("tensorflow::DataTypeToEnum<float>") public static class DataTypeToEnum extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public DataTypeToEnum() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DataTypeToEnum(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DataTypeToEnum(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public DataTypeToEnum position(long position) {
-        return (DataTypeToEnum)super.position(position);
-    }
-
-    public static native @Cast("tensorflow::DataType") int v();
-    public static native @Cast("tensorflow::DataType") int ref();
-    @MemberGetter public static native @Cast("const tensorflow::DataType") int value();
-    public static final int value = value();
-  }
-  @Name("tensorflow::IsValidDataType<float>") public static class IsValidDataType extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public IsValidDataType() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public IsValidDataType(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public IsValidDataType(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public IsValidDataType position(long position) {
-          return (IsValidDataType)super.position(position);
-      }
-  
-    @MemberGetter public static native @Cast("const bool") boolean value();
-    public static final boolean value = value();
-  }
-  @Name("tensorflow::EnumToDataType<tensorflow::DT_FLOAT>") public static class EnumToDataType extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public EnumToDataType() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public EnumToDataType(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public EnumToDataType(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public EnumToDataType position(long position) {
-          return (EnumToDataType)super.position(position);
-      }
-  
-  }
-
-// #undef MATCH_TYPE_AND_ENUM
-
-// All types not specialized are marked invalid.
-
-// Extra validity checking; not part of public API.
-
-
-
-// TODO(jeff): Maybe unify this with Tensor::CanUseDMA, or the underlying
-// is_simple<T> in tensor.cc (and possible choose a more general name?)
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypesCanUseMemcpy();
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeCanUseMemcpy(@Cast("tensorflow::DataType") int dt);
-
-// Returns true iff 'dt' is a real, non-quantized floating point type.
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsFloating();
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsFloating(@Cast("tensorflow::DataType") int dt);
-
-// Returns true iff 'dt' is a complex type.
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsComplex();
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsComplex(@Cast("tensorflow::DataType") int dt);
-
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsQuantized(@Cast("tensorflow::DataType") int dt);
-
-// Is the dtype nonquantized integral?
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsInteger();
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsInteger(@Cast("tensorflow::DataType") int dt);
-
-// Is the dtype a signed integral type?
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsSigned();
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsSigned(@Cast("tensorflow::DataType") int dt);
-
-// Is the dtype an unsigned integral type?
-@Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypeIsUnsigned();
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeIsUnsigned(@Cast("tensorflow::DataType") int dt);
-
-// Returns a 0 on failure
-@Namespace("tensorflow") public static native int DataTypeSize(@Cast("tensorflow::DataType") int dt);
-
-// Types that always sit on host: DT_STRING, DT_STRING_REF, DT_RESOURCE.
-// For DT_RESOURCE, the handle always sits on host (even if the underlying
-// object has device-allocated resources).
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeAlwaysOnHost(@Cast("tensorflow::DataType") int dt);
-
-  // namespace tensorflow
-
-// #endif  // TENSORFLOW_FRAMEWORK_TYPES_H_
 
 
 // Parsed from tensorflow/core/graph/edgeset.h
@@ -20978,35 +23388,11 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CancellationManager(Pointer p) { super(p); }
 }
-@Namespace("tensorflow") @Opaque public static class OpKernel extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public OpKernel() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OpKernel(Pointer p) { super(p); }
-}
-@Namespace("tensorflow") @Opaque public static class ResourceMgr extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ResourceMgr() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ResourceMgr(Pointer p) { super(p); }
-}
 @Namespace("tensorflow") @Opaque public static class Rendezvous extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public Rendezvous() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Rendezvous(Pointer p) { super(p); }
-}
-@Namespace("tensorflow") @Opaque public static class ScopedStepContainer extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ScopedStepContainer() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ScopedStepContainer(Pointer p) { super(p); }
-}
-@Namespace("tensorflow") @Opaque public static class StepStatsCollector extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public StepStatsCollector() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StepStatsCollector(Pointer p) { super(p); }
 }
 
 // FunctionDefHelper::Create is a convenient helper to construct a
@@ -21192,7 +23578,7 @@ limitations under the License.
   public native @StdVector NodeDef nodes(); public native InstantiationResult nodes(NodeDef nodes);
 }
 @Namespace("tensorflow") public static native @ByVal Status InstantiateFunction(@Const @ByRef FunctionDef fdef, @ByVal AttrSlice attr_values,
-                           @ByVal @Cast("tensorflow::GetFunctionSignature*") Fn get_function,
+                           @ByVal @Cast("tensorflow::GetFunctionSignature*") Pointer get_function,
                            InstantiationResult result);
 
 // Returns a debug string for a function definition.
@@ -21296,6 +23682,16 @@ limitations under the License.
   // This operation is atomic.
   public native @ByVal Status AddGradientDef(@Const @ByRef GradientDef grad);
 
+  // Remove function `func` from the library. Returns non-OK Status unless
+  // `func` is in the library.
+  public native @ByVal Status RemoveFunction(@StdString BytePointer func);
+  public native @ByVal Status RemoveFunction(@StdString String func);
+
+  // Remove gradient of function `func` from the library. Returns non-OK Status
+  // unless `func` has a gradient.
+  public native @ByVal Status RemoveGradient(@StdString BytePointer func);
+  public native @ByVal Status RemoveGradient(@StdString String func);
+
   // Adds the functions and gradients in 'other' to this function library.
   // Duplicate functions and gradients are ignored.
   // This operation is atomic.
@@ -21353,12 +23749,6 @@ limitations under the License.
 }
 
 // Forward declare. Defined in common_runtime/device.h
-@Namespace("tensorflow") @Opaque public static class Device extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public Device() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Device(Pointer p) { super(p); }
-}
 
 @Namespace("tensorflow") public static class FunctionLibraryRuntime extends Pointer {
     static { Loader.load(); }
@@ -21485,6 +23875,8 @@ limitations under the License.
     public native ScopedStepContainer step_container(); public native Options step_container(ScopedStepContainer step_container);
     public native StepStatsCollector stats_collector(); public native Options stats_collector(StepStatsCollector stats_collector);
 
+    public native @Cast("std::function<void(std::function<void()>)>*") Pointer runner(); public native Options runner(Pointer runner);
+
     // Parameters for remote function execution.
     public native @Cast("bool") boolean remote_execution(); public native Options remote_execution(boolean remote_execution);
     public native @StdString BytePointer source_device(); public native Options source_device(BytePointer source_device);  // Fully specified device name.
@@ -21501,9 +23893,9 @@ limitations under the License.
   }
   public native void Run(@Const @ByRef Options opts, @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle,
                      @ByVal TensorVector args, TensorVector rets,
-                     @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Fn done);
+                     @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Pointer done);
   public native void Run(@Const @ByRef Options opts, @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle,
-                     CallFrameInterface call_frame, @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Fn done);
+                     CallFrameInterface call_frame, @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Pointer done);
 
   // Creates a "kernel" for the given node def "ndef".
   //
@@ -21537,6 +23929,13 @@ limitations under the License.
 
   // Returns the graph version number.
   public native int graph_def_version();
+
+  public native @ByVal Status Clone(@UniquePtr FunctionLibraryDefinition out_lib_def,
+                         @UniquePtr ProcessFunctionLibraryRuntime out_pflr,
+                         @Cast("tensorflow::FunctionLibraryRuntime**") PointerPointer out_flr);
+  public native @ByVal Status Clone(@UniquePtr FunctionLibraryDefinition out_lib_def,
+                         @UniquePtr ProcessFunctionLibraryRuntime out_pflr,
+                         @ByPtrPtr FunctionLibraryRuntime out_flr);
 }
 
 // Returns a canonicalized string for the instantiation of the
@@ -21599,7 +23998,7 @@ limitations under the License.
   public native void Run(@Const @ByRef FunctionLibraryRuntime.Options opts,
                      @Cast("tensorflow::FunctionLibraryRuntime::LocalHandle") long handle,
                      @ByVal TensorVector args, TensorVector rets,
-                     @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Fn done);
+                     @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Pointer done);
 }
 
 // Extracts the actual type from "attr_values" based on its definition
@@ -21678,13 +24077,13 @@ limitations under the License.
 //   static bool unused_grad_##ctr = SHOULD_REGISTER_OP_GRADIENT &&
 //                                   ::tensorflow::gradient::RegisterOp(name, fn)
 // Register a gradient creator for the "op".
-@Namespace("tensorflow::gradient") public static native @Cast("bool") boolean RegisterOp(@StdString BytePointer op, @ByVal @Cast("tensorflow::gradient::Creator*") Fn func);
-@Namespace("tensorflow::gradient") public static native @Cast("bool") boolean RegisterOp(@StdString String op, @ByVal @Cast("tensorflow::gradient::Creator*") Fn func);
+@Namespace("tensorflow::gradient") public static native @Cast("bool") boolean RegisterOp(@StdString BytePointer op, @ByVal @Cast("tensorflow::gradient::Creator*") Pointer func);
+@Namespace("tensorflow::gradient") public static native @Cast("bool") boolean RegisterOp(@StdString String op, @ByVal @Cast("tensorflow::gradient::Creator*") Pointer func);
 
 // Returns OK the gradient creator for the "op" is found (may be
 // nullptr if REGISTER_OP_NO_GRADIENT is used.
-@Namespace("tensorflow::gradient") public static native @ByVal Status GetOpGradientCreator(@StdString BytePointer op, @Cast("tensorflow::gradient::Creator*") Fn creator);
-@Namespace("tensorflow::gradient") public static native @ByVal Status GetOpGradientCreator(@StdString String op, @Cast("tensorflow::gradient::Creator*") Fn creator);
+@Namespace("tensorflow::gradient") public static native @ByVal Status GetOpGradientCreator(@StdString BytePointer op, @Cast("tensorflow::gradient::Creator*") Pointer creator);
+@Namespace("tensorflow::gradient") public static native @ByVal Status GetOpGradientCreator(@StdString String op, @Cast("tensorflow::gradient::Creator*") Pointer creator);
   // namespace gradient
 
 // Declare explicit instantiations of GetAttr
@@ -21702,6 +24101,834 @@ limitations under the License.
   // end namespace tensorflow
 
 // #endif  // TENSORFLOW_FRAMEWORK_FUNCTION_H_
+
+
+// Parsed from tensorflow/core/util/device_name_utils.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_UTIL_DEVICE_NAME_UTILS_H_
+// #define TENSORFLOW_UTIL_DEVICE_NAME_UTILS_H_
+
+// #include <string>
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+
+// In TensorFlow a device name is a string of the following form:
+//   /job:<name>/replica:<replica>/task:<task>/device:<type>:<device_num>
+//
+// <name> is a short identifier conforming to the regexp
+//     [a-zA-Z][_a-zA-Z]*
+// <type> is a supported device type (e.g. 'cpu' or 'gpu')
+// <replica>, <task>, <device_num> are small non-negative integers and are
+// densely allocated (except in tests).
+//
+// For some purposes, we also allow device patterns, which can specify
+// some or none of the specific fields above, with missing components,
+// or "<component>:*" indicating "any value allowed for that component.
+//
+// For example:
+//   "/job:param_server"   - Consider any devices in the "param_server" job
+//   "/device:cpu:*"       - Consider any cpu devices in any job/task/replica
+//   "/job:*/replica:*/task:*/device:cpu:*"  - Consider any cpu devices in any
+//                                             job/task/replica
+//   "/job:w/replica:0/task:0/device:gpu:*"  - Consider any gpu devices in
+//                                             replica 0, task 0, of job "w"
+@Namespace("tensorflow") public static class DeviceNameUtils extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public DeviceNameUtils() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DeviceNameUtils(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceNameUtils(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public DeviceNameUtils position(long position) {
+        return (DeviceNameUtils)super.position(position);
+    }
+
+  // Returns a fully qualified device name given the parameters.
+  public static native @StdString BytePointer FullName(@StdString BytePointer job, int replica, int task,
+                           @StdString BytePointer type, int id);
+  public static native @StdString String FullName(@StdString String job, int replica, int task,
+                           @StdString String type, int id);
+
+  public static class ParsedName extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public ParsedName() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public ParsedName(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ParsedName(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public ParsedName position(long position) {
+          return (ParsedName)super.position(position);
+      }
+  
+    public native void Clear();
+
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ParsedName other);
+
+    public native @Cast("bool") boolean has_job(); public native ParsedName has_job(boolean has_job);
+    public native @StdString BytePointer job(); public native ParsedName job(BytePointer job);
+    public native @Cast("bool") boolean has_replica(); public native ParsedName has_replica(boolean has_replica);
+    public native int replica(); public native ParsedName replica(int replica);
+    public native @Cast("bool") boolean has_task(); public native ParsedName has_task(boolean has_task);
+    public native int task(); public native ParsedName task(int task);
+    public native @Cast("bool") boolean has_type(); public native ParsedName has_type(boolean has_type);
+    public native @StdString BytePointer type(); public native ParsedName type(BytePointer type);
+    public native @Cast("bool") boolean has_id(); public native ParsedName has_id(boolean has_id);
+    public native int id(); public native ParsedName id(int id);
+  }
+  // Parses "fullname" into "*parsed". Returns true iff succeeds.
+  public static native @Cast("bool") boolean ParseFullName(@StringPiece BytePointer fullname, ParsedName parsed);
+  public static native @Cast("bool") boolean ParseFullName(@StringPiece String fullname, ParsedName parsed);
+
+  // Canonicalizes "fullname". Accepts both legacy, newer and local versions of
+  // the device spec. Returns the newer version of the device spec. If we were
+  // unable to interpret / parse "fullname" returns "".
+  public static native @StdString BytePointer CanonicalizeDeviceName(@StringPiece BytePointer fullname);
+  public static native @StdString String CanonicalizeDeviceName(@StringPiece String fullname);
+
+  // Returns true if "name" specifies any non-trivial constraint on the device.
+  public static native @Cast("bool") boolean HasSomeDetails(@Const @ByRef ParsedName name);
+
+  // Returns true if more_specific is a specification of
+  // less_specific, i.e. everywhere that less-specific has a
+  // non-wildcard component value, more_specific has the same value
+  // for that component.
+  public static native @Cast("bool") boolean IsSpecification(@Const @ByRef ParsedName less_specific,
+                                @Const @ByRef ParsedName more_specific);
+
+  // Like IsSpecification, but the second argument "name" must have a
+  // non-wildcard value for all of its components.
+  public static native @Cast("bool") boolean IsCompleteSpecification(@Const @ByRef ParsedName pattern,
+                                        @Const @ByRef ParsedName name);
+
+  // True iff there exists any possible complete device name that is
+  // a specification of both "a" and "b".
+  public static native @Cast("bool") boolean AreCompatibleDevNames(@Const @ByRef ParsedName a,
+                                             @Const @ByRef ParsedName b);
+
+  // Merges the device specifications in "*target" and "other", and
+  // stores the result in "*target". Returns OK if "*target" and
+  // "other" are compatible, otherwise returns an error.
+  public static native @ByVal Status MergeDevNames(ParsedName target, @Const @ByRef ParsedName other);
+  public static native @ByVal Status MergeDevNames(ParsedName target, @Const @ByRef ParsedName other,
+                                @Cast("bool") boolean allow_soft_placement);
+
+  // Returns true iff devices identified by 'src' and 'dst' are in the
+  // same address space.
+  public static native @Cast("bool") boolean IsSameAddressSpace(@StringPiece BytePointer src, @StringPiece BytePointer dst);
+  public static native @Cast("bool") boolean IsSameAddressSpace(@StringPiece String src, @StringPiece String dst);
+  public static native @Cast("bool") boolean IsSameAddressSpace(@Const @ByRef ParsedName src, @Const @ByRef ParsedName dst);
+
+  // Returns the local device given its "type" and "id".
+  public static native @StdString BytePointer LocalName(@StringPiece BytePointer type, int id);
+  public static native @StdString String LocalName(@StringPiece String type, int id);
+
+  // Returns a short local device name (cpu:0, gpu:1, etc) based on
+  // the given fullname.
+  public static native @StdString BytePointer LocalName(@StringPiece BytePointer fullname);
+  public static native @StdString String LocalName(@StringPiece String fullname);
+
+  // If "name" is a valid local device name (cpu:0, gpu:1, etc.),
+  // fills in parsed.type and parsed.id accordingly. Returns true iff
+  // succeeds.
+  public static native @Cast("bool") boolean ParseLocalName(@StringPiece BytePointer name, ParsedName parsed);
+  public static native @Cast("bool") boolean ParseLocalName(@StringPiece String name, ParsedName parsed);
+
+  // Splits a fully-qualified device name into a task identifier and a
+  // relative device identifier. It first parses "name" using
+  // ParseFullName(), then assigns *task with everything except for
+  // the local device component, and assigns the relative device
+  // component into *device.  This function will still return true if
+  // the task component is empty, but it requires the relative device
+  // component to be fully specified.
+  public static native @Cast("bool") boolean SplitDeviceName(@StringPiece BytePointer name, @StdString @Cast({"char*", "std::string*"}) BytePointer task, @StdString @Cast({"char*", "std::string*"}) BytePointer device);
+  public static native @Cast("bool") boolean SplitDeviceName(@StringPiece String name, @StdString @Cast({"char*", "std::string*"}) BytePointer task, @StdString @Cast({"char*", "std::string*"}) BytePointer device);
+
+  public static native @StdString BytePointer ParsedNameToString(@Const @ByRef ParsedName pn);
+
+  // Returns canonical and legacy full names for the given parsed
+  // device name 'pn'. The returned string names are often useful to
+  // look up devices from a mapping.
+  public static native @ByVal StringVector GetNamesForDeviceMappings(@Const @ByRef ParsedName pn);
+
+  // Returns canonical and legacy local names for the given parsed device name
+  // 'pn'. The returned string names are often useful to look up devices from a
+  // mapping.
+  public static native @ByVal StringVector GetLocalNamesForDeviceMappings(
+        @Const @ByRef ParsedName pn);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_UTIL_DEVICE_NAME_UTILS_H_
+
+
+// Parsed from tensorflow/core/framework/device_base.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_DEVICE_BASE_H_
+// #define TENSORFLOW_FRAMEWORK_DEVICE_BASE_H_
+
+// #include <memory>
+// #include <string>
+// #include <unordered_map>
+
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/lib/core/refcount.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/platform/logging.h"
+// #ifdef TENSORFLOW_USE_SYCL
+// #endif
+  // end namespace Eigen
+@Namespace("perftools::gputools") @Opaque public static class Stream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Stream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Stream(Pointer p) { super(p); }
+}
+  // namespace gputools
+  // namespace perftools
+@Namespace("tensorflow") @Opaque public static class EventMgr extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EventMgr() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EventMgr(Pointer p) { super(p); }
+}
+
+
+// A wrapper for an Eigen Gpu Device that includes per-op state. The
+// class is defined even for non-GPU devices since the
+// OpKernelContext::Params structure wants to fill it in.
+@Namespace("tensorflow") public static class PerOpGpuDevice extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PerOpGpuDevice(Pointer p) { super(p); }
+
+  public native @Const @ByRef GpuDevice device();
+}
+
+// A class that devices can subclass to pass around
+// Device-specific context to OpKernels.
+@Namespace("tensorflow") public static class DeviceContext extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public DeviceContext() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DeviceContext(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceContext(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public DeviceContext position(long position) {
+        return (DeviceContext)super.position(position);
+    }
+
+  public native Stream stream();
+  public native void MaintainLifetimeOnStream(
+        @Const Tensor t, Stream stream);
+
+  // "cpu_tensor" is a tensor on a CPU. Copies "cpu_tensor" into
+  // "device_tensor" which is on a GPU device "device". "device_tensor"
+  // must be allocated to be of the same size as "cpu_tensor".
+  public native void CopyCPUTensorToDevice(@Const Tensor cpu_tensor, Device device,
+                                       Tensor device_tensor,
+                                       @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
+
+  // "device_tensor" is a tensor on a non-CPU device.  Copies
+  // device_tensor into "cpu_tensor".  "cpu_tensor" must be allocated
+  // to be of the same size as "device_tensor".
+  public native void CopyDeviceTensorToCPU(@Const Tensor device_tensor,
+                                       @StringPiece BytePointer tensor_name, Device device,
+                                       Tensor cpu_tensor, @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
+  public native void CopyDeviceTensorToCPU(@Const Tensor device_tensor,
+                                       @StringPiece String tensor_name, Device device,
+                                       Tensor cpu_tensor, @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
+}
+
+// map[i] is the DeviceContext* for the node with id i, if i < map.size().
+
+@Namespace("tensorflow") @NoOffset public static class DeviceBase extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceBase(Pointer p) { super(p); }
+
+  public DeviceBase(Env env) { super((Pointer)null); allocate(env); }
+  private native void allocate(Env env);
+
+  public native Env env();
+
+  // Override this to return true for devices that require an Op's
+  // compute method to save references to the temporary tensors it
+  // allocates until the Op execution completes
+  public native @Cast("bool") boolean RequiresRecordingAccessedTensors();
+
+  public static class CpuWorkerThreads extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public CpuWorkerThreads() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public CpuWorkerThreads(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public CpuWorkerThreads(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public CpuWorkerThreads position(long position) {
+          return (CpuWorkerThreads)super.position(position);
+      }
+  
+    public native int num_threads(); public native CpuWorkerThreads num_threads(int num_threads);
+    public native ThreadPool workers(); public native CpuWorkerThreads workers(ThreadPool workers);
+  }
+
+  // Does not take ownership.
+  public native void set_tensorflow_cpu_worker_threads(CpuWorkerThreads t);
+
+  public native @Const CpuWorkerThreads tensorflow_cpu_worker_threads();
+
+  // "stream" is used in special circumstances (such as the
+  // constructors of Ops) where there is no available OpKernelContext.
+  // "default_context" is used by OpKernelContext whenever a device does not
+  // supply a DeviceContext for an op in FillContextMap (e.g. when only
+  // using a single stream.)
+  // "event_mgr" is used to delay deallocation of temporary GPU buffers.
+  // TODO(pbar) Work out how to move this out of DeviceBase.
+  public static class GpuDeviceInfo extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public GpuDeviceInfo() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public GpuDeviceInfo(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public GpuDeviceInfo(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public GpuDeviceInfo position(long position) {
+          return (GpuDeviceInfo)super.position(position);
+      }
+  
+    // Make sure all the defaults are NULL, so we can spot missing assignments.
+    public native Stream stream(); public native GpuDeviceInfo stream(Stream stream);
+    public native DeviceContext default_context(); public native GpuDeviceInfo default_context(DeviceContext default_context);
+    public native EventMgr event_mgr(); public native GpuDeviceInfo event_mgr(EventMgr event_mgr);
+    public native int gpu_id(); public native GpuDeviceInfo gpu_id(int gpu_id);
+  }
+
+  // Does not take ownership.
+  public native void set_tensorflow_gpu_device_info(GpuDeviceInfo g);
+
+  public native @Const GpuDeviceInfo tensorflow_gpu_device_info();
+
+  // The preferred thread pool for this device. If it is nullptr, the system
+  // automatically assigns a thread pool for execution.
+  public native ThreadPool tensorflow_device_thread_pool();
+
+  // Does not take ownership.
+  public native void set_eigen_cpu_device(ThreadPoolDevice d);
+
+// #ifdef TENSORFLOW_USE_SYCL
+// #endif
+
+  // Return the Allocator implementation to use based on the allocator
+  // attributes requested.  See allocator.h for more details.
+  public native Allocator GetAllocator(@ByVal AllocatorAttributes arg0);
+
+  // Return the Allocator implementation to use based on the allocator
+  // attributes requested and the supplied resource manager. By
+  // default this ignores the resource manager and calls the base
+  // implementation but devices can override if they want to consult
+  // the resource manager when choosing the allocator.
+  public native Allocator GetStepAllocator(@ByVal AllocatorAttributes attr,
+                                        ResourceMgr arg1);
+
+  public native @Const ThreadPoolDevice eigen_cpu_device();
+
+// #ifdef TENSORFLOW_USE_SYCL
+// #endif
+
+  // Caller owns the return value. The OpKernelContext calls this even
+  // for devices that do not implement an eigen_gpu_device. Overridden
+  // by GPU devices to return a derived type.
+  public native PerOpGpuDevice MakeGpuDevice();
+
+  public native DeviceBase UnderlyingDevice();
+
+  // This is overridden by GPU devices to reinitialize the derived
+  // type returned by MakeGpuDevice.
+  public native void ReinitializeGpuDevice(OpKernelContext arg0,
+                                       PerOpGpuDevice arg1,
+                                       DeviceContext arg2,
+                                       Allocator arg3);
+
+  // Unimplemented by default
+  public native @Const @ByRef DeviceAttributes attributes();
+  public native @StdString BytePointer name();
+
+  // Materializes the given TensorProto into 'tensor' stored in Device
+  // memory.  Most devices will want to override this.
+  //
+  // TODO(vrv): We should be able to put this function into
+  // OpKernelContext and handle the copies from device memory via send
+  // and receive nodes, instead of requiring that each device handle
+  // the copies here as well as in copy ops.
+  public native @ByVal Status MakeTensorFromProto(@Const @ByRef TensorProto tensor_proto,
+                                       @Const @ByVal AllocatorAttributes alloc_attrs,
+                                       Tensor tensor);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_DEVICE_BASE_H_
+
+
+// Parsed from tensorflow/core/common_runtime/device.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// A Device is a something that can perform computations as part of a
+// model.  Devices can be local (runs computation on this machine), or
+// remote (contacts a device local to another machine using an RPC to
+// do the work).  Devices are registered in a DeviceSet, which is also
+// responsible for the Device <-> id mapping.
+//
+// Device names
+// * Every Device should have a unique name with the format:
+//     /job:___/replica:___/task:___/(gpu|cpu):___
+//   An example name would be "/job:train/replica:0/task:3/device:GPU:2".
+// * Task numbers are within the specified replica, so there are as
+//   many "task zeros" as replicas.
+
+// #ifndef TENSORFLOW_COMMON_RUNTIME_DEVICE_H_
+// #define TENSORFLOW_COMMON_RUNTIME_DEVICE_H_
+
+// #include <memory>
+// #include <string>
+
+// #include "tensorflow/core/framework/allocator.h"
+// #include "tensorflow/core/framework/control_flow.h"
+// #include "tensorflow/core/framework/device_attributes.pb_text.h"
+// #include "tensorflow/core/framework/device_attributes.pb.h"
+// #include "tensorflow/core/framework/device_base.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/framework/op_kernel.h"
+// #include "tensorflow/core/framework/op_segment.h"
+// #include "tensorflow/core/framework/resource_mgr.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph.h"
+// #include "tensorflow/core/graph/types.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/types.h"
+// #include "tensorflow/core/util/device_name_utils.h"
+
+@Namespace("tensorflow") @NoOffset public static class Device extends DeviceBase {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Device(Pointer p) { super(p); }
+
+
+  // Full name of this device (see top comment).
+  public native @StdString BytePointer name();
+
+  // Parsed name of this device
+  public native @Const @ByRef DeviceNameUtils.ParsedName parsed_name();
+
+  // Describes what kind of device this is.  This is intended to be
+  // human-readable and not computer-parsed, except that two devices
+  // with the same device_type() are expected to perform similarly
+  // (both from a computation and communication perspective).
+  public native @StdString BytePointer device_type();
+
+  // Returns an aggregation of device attributes.
+  public native @Const @ByRef DeviceAttributes attributes();
+
+  // Performs the actual compute function.
+  //
+  // Subclasses may override this function if they wish to perform
+  // some initialization before each compute.
+  public native void Compute(OpKernel op_kernel, OpKernelContext context);
+
+  // Asynchronous kernel's compute.
+  public native void ComputeAsync(AsyncOpKernel op_kernel, OpKernelContext context,
+                              @ByVal @Cast("tensorflow::AsyncOpKernel::DoneCallback*") Fn done);
+
+  // Takes ownership of the references in tensors. If necessary, a
+  // device may override this method to keep a reference to the
+  // accessed tensors until the async computation has completed.
+  public native void ConsumeListOfAccessedTensors(
+        DeviceContext context, @Cast("const tensorflow::TensorReferenceVector*") @ByRef AllocatorAttributesVector tensors);
+
+  // Blocks until all operations queued on the device at the time of
+  // the call have completed.  Returns any error pending on the device
+  // at completion.
+  public native @ByVal Status Sync();
+
+  // Optionally modify the device's GraphDef before execution.
+  //
+  // This method should be considered experimental and is supplied to enable
+  // prototyping of TensorFlow device implementations that need to modify
+  // the GraphDef before execution.
+  //
+  // 'graph' supplies the partition of the graph assigned to this
+  // device.
+  public native @ByVal Status MaybeRewriteGraph(@UniquePtr Graph arg0);
+
+  // Fill in the context map for the graph. Default behavior is to do
+  // nothing.
+  //
+  // The caller takes ownership over the DeviceContext objects given
+  // by the device.
+  public native @ByVal Status FillContextMap(@Const Graph graph,
+                                  @Cast("tensorflow::DeviceContextMap*") DeviceContextVector device_context_map);
+
+  // Returns the op segment of this device.  The caller can reuse op
+  // kernels registered for the same session running on this device.
+  public native OpSegment op_segment();
+
+  // Returns the resource manager associated w/ this device.
+  public native ResourceMgr resource_manager();
+
+  // Summarizes the status of this Device, for debugging.
+  public native @StdString BytePointer DebugString();
+
+  // Assembles the parameter components into a complete DeviceAttributes value.
+  public static native @ByVal DeviceAttributes BuildDeviceAttributes(
+        @StdString BytePointer name, @ByVal DeviceType device, @Cast("tensorflow::Bytes") long memory_limit,
+        @Const @ByRef DeviceLocality locality, @StdString BytePointer physical_device_desc);
+  public static native @ByVal DeviceAttributes BuildDeviceAttributes(
+        @StdString String name, @ByVal DeviceType device, @Cast("tensorflow::Bytes") long memory_limit,
+        @Const @ByRef DeviceLocality locality, @StdString String physical_device_desc);
+
+  public static native @ByVal DeviceAttributes BuildDeviceAttributes(
+        @StdString BytePointer name, @ByVal DeviceType device, @Cast("tensorflow::Bytes") long memory_limit,
+        @Const @ByRef DeviceLocality locality);
+  public static native @ByVal DeviceAttributes BuildDeviceAttributes(
+        @StdString String name, @ByVal DeviceType device, @Cast("tensorflow::Bytes") long memory_limit,
+        @Const @ByRef DeviceLocality locality);
+
+  // Clears the resource manager associated with this device.
+  public native void ClearResourceMgr();
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_COMMON_RUNTIME_DEVICE_H_
+
+
+// Parsed from tensorflow/core/common_runtime/device_mgr.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_COMMON_RUNTIME_DEVICE_MGR_H_
+// #define TENSORFLOW_COMMON_RUNTIME_DEVICE_MGR_H_
+
+// #include <string>
+// #include <unordered_map>
+// #include <unordered_set>
+// #include <vector>
+
+// #include "tensorflow/core/common_runtime/device.h"
+// #include "tensorflow/core/lib/core/arena.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/platform/macros.h"
+
+@Namespace("tensorflow") @NoOffset public static class DeviceMgr extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeviceMgr(Pointer p) { super(p); }
+
+  // Takes ownership of each device in 'devices'.
+  // TODO(zhifengc): Other initialization information.
+  // TODO(b/37437134): Use std::unique_ptr's to track ownership.
+  public DeviceMgr(@Const @ByRef DeviceVector devices) { super((Pointer)null); allocate(devices); }
+  private native void allocate(@Const @ByRef DeviceVector devices);
+
+  // Returns attributes of all devices.
+  public native void ListDeviceAttributes(@StdVector DeviceAttributes devices);
+
+  public native @ByVal DeviceVector ListDevices();
+
+  // Returns a string listing all devices.
+  public native @StdString BytePointer DebugString();
+
+  // Returns a string of all the device mapping.
+  public native @StdString BytePointer DeviceMappingString();
+
+  // Assigns *device with pointer to Device of the given name.
+  // Accepts either a full device name, or just the replica-local suffix.
+  public native @ByVal Status LookupDevice(@StringPiece BytePointer name, @Cast("tensorflow::Device**") PointerPointer device);
+  public native @ByVal Status LookupDevice(@StringPiece BytePointer name, @ByPtrPtr Device device);
+  public native @ByVal Status LookupDevice(@StringPiece String name, @ByPtrPtr Device device);
+
+  // Clears given containers of all devices if 'container' is
+  // non-empty. Otherwise, clears default containers of all devices.
+  public native void ClearContainers(@ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector containers);
+
+  public native int NumDeviceType(@StdString BytePointer type);
+  public native int NumDeviceType(@StdString String type);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_COMMON_RUNTIME_DEVICE_MGR_H_
+
+
+// Parsed from tensorflow/core/common_runtime/process_function_library_runtime.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_CORE_COMMON_RUNTIME_PROCESS_FUNCTION_LIBRARY_RUNTIME_H_
+// #define TENSORFLOW_CORE_COMMON_RUNTIME_PROCESS_FUNCTION_LIBRARY_RUNTIME_H_
+
+// #include <unordered_map>
+
+// #include "tensorflow/core/common_runtime/device_mgr.h"
+// #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/protobuf/config.pb.h"
+
+// A class that stores all the FunctionLibraryRuntime objects, one per device.
+@Namespace("tensorflow") @NoOffset public static class ProcessFunctionLibraryRuntime extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ProcessFunctionLibraryRuntime(Pointer p) { super(p); }
+
+  // Creates FunctionLibraryRuntime objects for each device in the provided
+  // DeviceMgr. Caller needs to make sure that device_mgr, lib_def and parent
+  // (if provided) outlive this object.
+  public ProcessFunctionLibraryRuntime(
+        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
+        @Const FunctionLibraryDefinition lib_def,
+        @Const @ByRef OptimizerOptions optimizer_options,
+        DistributedFunctionLibraryRuntime parent/*=nullptr*/) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, parent); }
+  private native void allocate(
+        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
+        @Const FunctionLibraryDefinition lib_def,
+        @Const @ByRef OptimizerOptions optimizer_options,
+        DistributedFunctionLibraryRuntime parent/*=nullptr*/);
+  public ProcessFunctionLibraryRuntime(
+        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
+        @Const FunctionLibraryDefinition lib_def,
+        @Const @ByRef OptimizerOptions optimizer_options) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options); }
+  private native void allocate(
+        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
+        @Const FunctionLibraryDefinition lib_def,
+        @Const @ByRef OptimizerOptions optimizer_options);
+
+  // With `custom_kernel_creator`.
+  public ProcessFunctionLibraryRuntime(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options,
+                                  @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator,
+                                  DistributedFunctionLibraryRuntime parent) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, custom_kernel_creator, parent); }
+  private native void allocate(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options,
+                                  @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator,
+                                  DistributedFunctionLibraryRuntime parent);
+
+  // Sends `tensors_to_send` from `source_device` to `target_device` using
+  // `rendezvous`. `key_prefix` is used as a prefix for the keys sent to the
+  // Rendezvous. `device_context` should be the DeviceContext of the device
+  // doing the sending. `alloc_attrs` should either be empty or be the size of
+  // `tensors_to_send` and indicates how the input tensors are allocated. Method
+  // takes references on each of the `tensors_to_send`. Method doesn't block.
+  public static native @ByVal Status SendTensors(@StdString BytePointer source_device,
+                              @StdString BytePointer target_device,
+                              @StdString BytePointer key_prefix, @Cast("tensorflow::int64") long src_incarnation,
+                              @ByVal TensorVector tensors_to_send,
+                              DeviceContext device_context,
+                              @StdVector AllocatorAttributes alloc_attrs,
+                              Rendezvous rendezvous);
+  public static native @ByVal Status SendTensors(@StdString String source_device,
+                              @StdString String target_device,
+                              @StdString String key_prefix, @Cast("tensorflow::int64") long src_incarnation,
+                              @ByVal TensorVector tensors_to_send,
+                              DeviceContext device_context,
+                              @StdVector AllocatorAttributes alloc_attrs,
+                              Rendezvous rendezvous);
+
+  // Receives `received_tensors` from `target_device` (originally sent from
+  // `source_device`) using `rendezvous`. Uses `key_prefix` to construct the
+  // keys to be retrieved. `device_context` should be for the device receiving
+  // the tensors. `alloc_attrs` indicates how to allocate the received
+  // tensors and should either be empty or `num_tensors` in size. Method doesn't
+  // block and calls `done` when `num_tensors` are fetched.
+  public static native void ReceiveTensorsAsync(
+        @StdString BytePointer source_device, @StdString BytePointer target_device,
+        @StdString BytePointer key_prefix, @Cast("tensorflow::int64") long src_incarnation, @Cast("tensorflow::int64") long num_tensors,
+        DeviceContext device_context,
+        @StdVector AllocatorAttributes alloc_attrs,
+        Rendezvous rendezvous, TensorVector received_tensors,
+        @Cast("const tensorflow::StatusCallback*") @ByRef Pointer done);
+  public static native void ReceiveTensorsAsync(
+        @StdString String source_device, @StdString String target_device,
+        @StdString String key_prefix, @Cast("tensorflow::int64") long src_incarnation, @Cast("tensorflow::int64") long num_tensors,
+        DeviceContext device_context,
+        @StdVector AllocatorAttributes alloc_attrs,
+        Rendezvous rendezvous, TensorVector received_tensors,
+        @Cast("const tensorflow::StatusCallback*") @ByRef Pointer done);
+
+  @MemberGetter public static native byte kDefaultFLRDevice(int i);
+  @MemberGetter public static native @Cast("const char*") BytePointer kDefaultFLRDevice();
+  // Returns the FunctionLibraryRuntime for the corresponding device_name.
+  public native FunctionLibraryRuntime GetFLR(@StdString BytePointer device_name);
+  public native FunctionLibraryRuntime GetFLR(@StdString String device_name);
+
+  // Returns the device incarnation for the given device_name.
+  public native @ByVal Status GetDeviceIncarnation(@StdString BytePointer device_name, @Cast("tensorflow::int64*") LongPointer incarnation);
+  public native @ByVal Status GetDeviceIncarnation(@StdString String device_name, @Cast("tensorflow::int64*") LongBuffer incarnation);
+  public native @ByVal Status GetDeviceIncarnation(@StdString BytePointer device_name, @Cast("tensorflow::int64*") long... incarnation);
+  public native @ByVal Status GetDeviceIncarnation(@StdString String device_name, @Cast("tensorflow::int64*") LongPointer incarnation);
+  public native @ByVal Status GetDeviceIncarnation(@StdString BytePointer device_name, @Cast("tensorflow::int64*") LongBuffer incarnation);
+  public native @ByVal Status GetDeviceIncarnation(@StdString String device_name, @Cast("tensorflow::int64*") long... incarnation);
+
+  // For a given canonicalized key signature of the function instantiated
+  // on device `device_name` and a `local_handle`, creates a handle and returns
+  // that value. Uses core/common_runtime/framework/function.h::Canonicalize
+  // to canonicalize the function signature.
+  public native @Cast("tensorflow::FunctionLibraryRuntime::Handle") long AddHandle(
+        @StdString BytePointer function_key, @StdString BytePointer device_name,
+        @Cast("tensorflow::FunctionLibraryRuntime::LocalHandle") long local_handle);
+  public native @Cast("tensorflow::FunctionLibraryRuntime::Handle") long AddHandle(
+        @StdString String function_key, @StdString String device_name,
+        @Cast("tensorflow::FunctionLibraryRuntime::LocalHandle") long local_handle);
+
+  // Returns a handle if found for the given key, else returns kInvalidHandle.
+  public native @Cast("tensorflow::FunctionLibraryRuntime::Handle") long GetHandle(@StdString BytePointer function_key);
+  public native @Cast("tensorflow::FunctionLibraryRuntime::Handle") long GetHandle(@StdString String function_key);
+
+  // For the given handle instantiated on device `device_name` returns the local
+  // index of instantiation of that function. If the function was not
+  // instantiated on `device_name` returns kInvalidLocalHandle.
+  public native @Cast("tensorflow::FunctionLibraryRuntime::LocalHandle") long GetHandleOnDevice(
+        @StdString BytePointer device_name, @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle);
+  public native @Cast("tensorflow::FunctionLibraryRuntime::LocalHandle") long GetHandleOnDevice(
+        @StdString String device_name, @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle);
+
+  // Returns true if function with handle `handle` was instantiated on device
+  // `device_name`.
+  public native @Cast("bool") boolean IsInstantiatedOnDevice(@StdString BytePointer device_name,
+                                @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle);
+  public native @Cast("bool") boolean IsInstantiatedOnDevice(@StdString String device_name,
+                                @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle);
+
+  // Instantiates the function. See framework/function.h for more details.
+  // Allows for function_name to be instantiated on different devices
+  // as specified in attrs.
+  public native @ByVal Status Instantiate(@StdString BytePointer function_name, @ByVal AttrSlice attrs,
+                       @Const @ByRef FunctionLibraryRuntime.InstantiateOptions options,
+                       @Cast("tensorflow::FunctionLibraryRuntime::Handle*") LongPointer handle);
+  public native @ByVal Status Instantiate(@StdString String function_name, @ByVal AttrSlice attrs,
+                       @Const @ByRef FunctionLibraryRuntime.InstantiateOptions options,
+                       @Cast("tensorflow::FunctionLibraryRuntime::Handle*") LongBuffer handle);
+  public native @ByVal Status Instantiate(@StdString BytePointer function_name, @ByVal AttrSlice attrs,
+                       @Const @ByRef FunctionLibraryRuntime.InstantiateOptions options,
+                       @Cast("tensorflow::FunctionLibraryRuntime::Handle*") long... handle);
+  public native @ByVal Status Instantiate(@StdString String function_name, @ByVal AttrSlice attrs,
+                       @Const @ByRef FunctionLibraryRuntime.InstantiateOptions options,
+                       @Cast("tensorflow::FunctionLibraryRuntime::Handle*") LongPointer handle);
+  public native @ByVal Status Instantiate(@StdString BytePointer function_name, @ByVal AttrSlice attrs,
+                       @Const @ByRef FunctionLibraryRuntime.InstantiateOptions options,
+                       @Cast("tensorflow::FunctionLibraryRuntime::Handle*") LongBuffer handle);
+  public native @ByVal Status Instantiate(@StdString String function_name, @ByVal AttrSlice attrs,
+                       @Const @ByRef FunctionLibraryRuntime.InstantiateOptions options,
+                       @Cast("tensorflow::FunctionLibraryRuntime::Handle*") long... handle);
+
+  // Delegates to the local FLR that owns state corresponding to `handle` and
+  // tells it to release it. If the `handle` isnt' needed at all, the local FLR
+  // might call RemoveHandle on this to get rid of the state owned by the Proc
+  // FLR.
+  public native @ByVal Status ReleaseHandle(@Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle);
+
+  // Runs the function with given `handle`. Function could have been
+  // instantiated on any device. More details in framework/function.h
+  public native void Run(@Const @ByRef FunctionLibraryRuntime.Options opts,
+             @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle, @ByVal TensorVector args,
+             TensorVector rets,
+             @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Pointer done);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_COMMON_RUNTIME_PROCESS_FUNCTION_LIBRARY_RUNTIME_H_
 
 
 // Parsed from tensorflow/core/graph/graph.h
@@ -22104,6 +25331,13 @@ limitations under the License.
   // Serialize to a GraphDef.
   public native void ToGraphDef(GraphDef graph_def);
 
+  // This version can be called from debugger to inspect the graph content.
+  // Use the previous version outside debug context for efficiency reasons.
+  //
+  // Note: We do not expose a DebugString() API, since GraphDef.DebugString() is
+  // not defined in some TensorFlow builds.
+  public native @ByVal GraphDef ToGraphDefDebug();
+
   // Generate new node name with the specified prefix that is unique
   // across this graph.
   public native @StdString BytePointer NewName(@StringPiece BytePointer prefix);
@@ -22482,7 +25716,7 @@ limitations under the License.
   // For inputs that take a list of tensors.
 
   // To create inputs in tests, see fake_input.h.
-  public native @ByRef NodeDefBuilder Input(@ByVal @Cast("tensorflow::FakeInputFunctor*") Fn fake_input);
+  public native @ByRef NodeDefBuilder Input(@ByVal @Cast("tensorflow::FakeInputFunctor*") Pointer fake_input);
 
   // Specify that this node must only run after src_node.
   public native @ByRef NodeDefBuilder ControlInput(@StringPiece BytePointer src_node);
@@ -23418,14 +26652,6 @@ limitations under the License.
   // Once all the nodes have been added, call this to get whether it was
   // successful, and if so fill *graph_def.
   public native @ByVal Status ToGraphDef(GraphDef graph_def);
-
-  // Like ToGraphDef(), but converts to a Graph (using the default
-  // GraphConstructorOptions).
-  // TODO(josh11b): Make this faster; right now it converts
-  // Graph->GraphDef->Graph.  This cleans up the graph (e.g. adds
-  // edges from the source and to the sink node, resolves back edges
-  // by name), and makes sure the resulting graph is valid.
-  public native @ByVal Status ToGraph(Graph graph);
 
   // Adds the function and gradient definitions in `fdef_lib` to this graph's op
   // registry. Ignores duplicate functions, and returns a bad status if an
@@ -39792,6 +43018,11 @@ limitations under the License.
  * 
  *  Input images can be of different types but output images are always float.
  * 
+ *  The range of pixel values for the output image might be slightly different
+ *  from the range for the input image because of limited numerical precision.
+ *  To guarantee an output range, for example {@code [0.0, 1.0]}, apply
+ *  {@code tf.clip_by_value} to the output.
+ * 
  *  Each output pixel is computed by first transforming the pixel's footprint into
  *  the input tensor and then averaging the pixels that intersect the footprint. An
  *  input pixel's contribution to the average is weighted by the fraction of its
@@ -46188,7 +49419,7 @@ limitations under the License.
 
 /** Computes the maximum along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -46227,7 +49458,7 @@ limitations under the License.
 
 /** Computes the mean along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -46267,7 +49498,7 @@ limitations under the License.
 
 /** Computes the minimum along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -46306,7 +49537,7 @@ limitations under the License.
 
 /** Computes the product along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -46345,7 +49576,7 @@ limitations under the License.
 
 /** Computes the sum along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -46612,7 +49843,7 @@ limitations under the License.
 
 /** Computes the mean along sparse segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Like {@code SegmentMean}, but {@code segment_ids} can have rank less than {@code data}'s first
@@ -46675,7 +49906,7 @@ limitations under the License.
  *  Like {@code SparseSegmentMean}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Arguments:
@@ -46709,7 +49940,7 @@ limitations under the License.
  * 
  *  N is the size of the segment being reduced.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Arguments:
@@ -46771,7 +50002,7 @@ limitations under the License.
  *  Like {@code SparseSegmentSqrtN}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Arguments:
@@ -46803,7 +50034,7 @@ limitations under the License.
 
 /** Computes the sum along sparse segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Like {@code SegmentSum}, but {@code segment_ids} can have rank less than {@code data}'s first
@@ -46861,7 +50092,7 @@ limitations under the License.
  *  Like {@code SparseSegmentSum}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  For example:
@@ -47189,20 +50420,21 @@ limitations under the License.
   public native @ByRef Output z(); public native TruncateMod z(Output z);
 }
 
-/** Computes the Max along segments of a tensor.
+/** Computes the maximum along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
- *  This operator is similar to the [unsorted segment sum operator](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
- *  Instead of computing the sum over segments, it computes the maximum
- *  such that:
+ *  This operator is similar to the unsorted segment sum operator found
+ *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
+ *  Instead of computing the sum over segments, it computes the maximum such that:
  * 
  *  \\(output_i = \max_j data_j\\) where max is over {@code j} such
  *  that {@code segment_ids[j] == i}.
  * 
- *  If the maximum is empty for a given segment ID {@code i}, it outputs the smallest possible value for specific numeric type,
- *   {@code output[i] = numeric_limits<T>::min()}.
+ *  If the maximum is empty for a given segment ID {@code i}, it outputs the smallest
+ *  possible value for the specific numeric type,
+ *  {@code output[i] = numeric_limits<T>::lowest()}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentMax.png" alt>
@@ -47232,9 +50464,88 @@ limitations under the License.
   public native @ByRef Output output(); public native UnsortedSegmentMax output(Output output);
 }
 
-/** Computes the sum along segments of a tensor.
+/** Computes the minimum along segments of a tensor.
  * 
  *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  segments.
+ * 
+ *  This operator is similar to the unsorted segment sum operator found
+ *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
+ *  Instead of computing the sum over segments, it computes the minimum such that:
+ * 
+ *  \\(output_i = \min_j data_j\\) where min is over {@code j} such
+ *  that {@code segment_ids[j] == i}.
+ * 
+ *  If the minimum is empty for a given segment ID {@code i}, it outputs the largest
+ *  possible value for the specific numeric type,
+ *  {@code output[i] = numeric_limits<T>::max()}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * segment_ids: A 1-D tensor whose rank is equal to the rank of {@code data}'s
+ *  first dimension.
+ * 
+ *  Returns:
+ *  * {@code Output}: Has same shape as data, except for dimension 0 which
+ *  has size {@code num_segments}. */
+@Namespace("tensorflow::ops") @NoOffset public static class UnsortedSegmentMin extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnsortedSegmentMin(Pointer p) { super(p); }
+
+  public UnsortedSegmentMin(@Const @ByRef Scope scope, @ByVal Input data,
+                     @ByVal Input segment_ids, @ByVal Input num_segments) { super((Pointer)null); allocate(scope, data, segment_ids, num_segments); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+                     @ByVal Input segment_ids, @ByVal Input num_segments);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native UnsortedSegmentMin output(Output output);
+}
+
+/** Computes the product along segments of a tensor.
+ * 
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
+ *  segments.
+ * 
+ *  This operator is similar to the unsorted segment sum operator found
+ *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
+ *  Instead of computing the sum over segments, it computes the product of all
+ *  entries belonging to a segment such that:
+ * 
+ *  \\(output_i = \prod_j data_j\\) where the product is over {@code j} such
+ *  that {@code segment_ids[j] == i}.
+ * 
+ *  If there is no entry for a given segment ID {@code i}, it outputs 1.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * segment_ids: A 1-D tensor whose rank is equal to the rank of {@code data}'s
+ *  first dimension.
+ * 
+ *  Returns:
+ *  * {@code Output}: Has same shape as data, except for dimension 0 which
+ *  has size {@code num_segments}. */
+@Namespace("tensorflow::ops") @NoOffset public static class UnsortedSegmentProd extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnsortedSegmentProd(Pointer p) { super(p); }
+
+  public UnsortedSegmentProd(@Const @ByRef Scope scope, @ByVal Input data,
+                      @ByVal Input segment_ids, @ByVal Input num_segments) { super((Pointer)null); allocate(scope, data, segment_ids, num_segments); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
+                      @ByVal Input segment_ids, @ByVal Input num_segments);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native UnsortedSegmentProd output(Output output);
+}
+
+/** Computes the sum along segments of a tensor.
+ * 
+ *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that

@@ -561,3 +561,8 @@ matrix:
         env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh

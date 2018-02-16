@@ -5,7 +5,7 @@
  * Fix mapping of `fftwf_iodim` and `fftwf_iodim64` for FFTW ([issue #523](https://github.com/bytedeco/javacpp-presets/issues/523))
  * Add support for iOS and Accelerate to presets for OpenBLAS ([pull #515](https://github.com/bytedeco/javacpp-presets/pull/515))
  * Add "org.bytedeco.javacpp.openblas.load" system property to use libraries from Accelerate, etc ([pull #444](https://github.com/bytedeco/javacpp-presets/pull/444))
- * Upgrade presets for TensorFlow 1.6.0-rc0
+ * Upgrade presets for TensorFlow 1.6.0-rc1
  * Include `facemark.hpp`, `facemarkLBF.hpp`, `facemarkAAM.hpp`, `face_alignment.hpp` from the `opencv_face` module
  * Add `AxpyLayer` to presets for Caffe ([pull #508](https://github.com/bytedeco/javacpp-presets/pull/508))
 

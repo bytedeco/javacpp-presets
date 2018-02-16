@@ -33,7 +33,7 @@ export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.6.0-rc0
+TENSORFLOW_VERSION=1.6.0-rc1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -48,9 +48,6 @@ cd tensorflow-$TENSORFLOW_VERSION
 
 # Stop the script from annoying us with Android stuff
 sed -i="" "s/return has_any_rule/return True/g" configure.py
-
-# Allow using std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>
-sed -i="" "s/const string tag/string tag/g" tensorflow/core/util/tensor_slice_set.h
 
 # https://github.com/tensorflow/tensorflow/issues/15389
 sed -i="" "s/c2947c341c68/034b6c3e1017/g" tensorflow/workspace.bzl
