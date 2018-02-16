@@ -20,8 +20,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native @ByRef OpSchema.Attribute get(@StdString BytePointer i);
-    public native StringAttributeMap put(@StdString BytePointer i, OpSchema.Attribute value);
+    @Index(function = "at") public native @ByRef OpSchema.Attribute get(@StdString BytePointer i);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -59,6 +58,31 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@Name("std::vector<onnx::OpSchema::TypeConstraintParam>") public static class TypeConstraintParamVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TypeConstraintParamVector(Pointer p) { super(p); }
+    public TypeConstraintParamVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef TypeConstraintParamVector put(@ByRef TypeConstraintParamVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef OpSchema.TypeConstraintParam get(@Cast("size_t") long i);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef OpSchema.TypeConstraintParam get();
+    }
+}
+
 @Name("std::vector<std::string>") public static class StringVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -78,9 +102,9 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @StdString BytePointer get(@Cast("size_t") long i);
+    @Index(function = "at") public native @StdString BytePointer get(@Cast("size_t") long i);
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
-    @ValueSetter @Index public native StringVector put(@Cast("size_t") long i, @StdString String value);
+    @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @StdString String value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -151,7 +175,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef OpSchema.FormalParameter get(@Cast("size_t") long i);
+    @Index(function = "at") public native @ByRef OpSchema.FormalParameter get(@Cast("size_t") long i);
     public native FormalParameterVector put(@Cast("size_t") long i, OpSchema.FormalParameter value);
 
     public native @ByVal Iterator begin();
@@ -189,25 +213,25 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
-@Name("std::vector<onnx::OpSchema::TypeConstraintParam>") public static class TypeConstraintParamVector extends Pointer {
+@Name("std::vector<onnx::OpSchema>") public static class OpSchemaVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TypeConstraintParamVector(Pointer p) { super(p); }
-    public TypeConstraintParamVector(OpSchema.TypeConstraintParam value) { this(1); put(0, value); }
-    public TypeConstraintParamVector(OpSchema.TypeConstraintParam ... array) { this(array.length); put(array); }
-    public TypeConstraintParamVector()       { allocate();  }
-    public TypeConstraintParamVector(long n) { allocate(n); }
+    public OpSchemaVector(Pointer p) { super(p); }
+    public OpSchemaVector(OpSchema value) { this(1); put(0, value); }
+    public OpSchemaVector(OpSchema ... array) { this(array.length); put(array); }
+    public OpSchemaVector()       { allocate();  }
+    public OpSchemaVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef TypeConstraintParamVector put(@ByRef TypeConstraintParamVector x);
+    public native @Name("operator=") @ByRef OpSchemaVector put(@ByRef OpSchemaVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef OpSchema.TypeConstraintParam get(@Cast("size_t") long i);
-    public native TypeConstraintParamVector put(@Cast("size_t") long i, OpSchema.TypeConstraintParam value);
+    @Index(function = "at") public native @ByRef OpSchema get(@Cast("size_t") long i);
+    public native OpSchemaVector put(@Cast("size_t") long i, OpSchema value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -217,25 +241,25 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef OpSchema.TypeConstraintParam get();
+        public native @Name("operator*") @ByRef OpSchema get();
     }
 
-    public OpSchema.TypeConstraintParam pop_back() {
+    public OpSchema pop_back() {
         long size = size();
-        OpSchema.TypeConstraintParam value = get(size - 1);
+        OpSchema value = get(size - 1);
         resize(size - 1);
         return value;
     }
-    public TypeConstraintParamVector push_back(OpSchema.TypeConstraintParam value) {
+    public OpSchemaVector push_back(OpSchema value) {
         long size = size();
         resize(size + 1);
         return put(size, value);
     }
-    public TypeConstraintParamVector put(OpSchema.TypeConstraintParam value) {
+    public OpSchemaVector put(OpSchema value) {
         if (size() != 1) { resize(1); }
         return put(0, value);
     }
-    public TypeConstraintParamVector put(OpSchema.TypeConstraintParam ... array) {
+    public OpSchemaVector put(OpSchema ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -275,8 +299,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native int first(@StdString BytePointer i); public native StringIntIntPairMap first(@StdString BytePointer i, int first);
-    @Index public native int second(@StdString BytePointer i);  public native StringIntIntPairMap second(@StdString BytePointer i, int second);
+    @Index(function = "at") public native int first(@StdString BytePointer i); public native StringIntIntPairMap first(@StdString BytePointer i, int first);
+    @Index(function = "at") public native int second(@StdString BytePointer i);  public native StringIntIntPairMap second(@StdString BytePointer i, int second);
 }
 
 @Name("std::unordered_map<int,int>") public static class IntIntMap extends Pointer {
@@ -290,7 +314,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native int get(int i);
+    @Index(function = "at") public native int get(int i);
     public native IntIntMap put(int i, int value);
 
     public native @ByVal Iterator begin();
@@ -680,48 +704,30 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Attribute(Pointer p) { super(p); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public Attribute(long size) { super((Pointer)null); allocateArray(size); }
-      private native void allocateArray(long size);
-      @Override public Attribute position(long position) {
-          return (Attribute)super.position(position);
-      }
   
-    public Attribute() { super((Pointer)null); allocate(); }
-    private native void allocate(); 
     public Attribute(
-            @Cast("char*") BytePointer name_,
-            @Cast("char*") BytePointer description_,
+            @Cast("const char*") BytePointer name_,
+            @Cast("const char*") BytePointer description_,
             @Cast("onnx::OpSchema::AttrType") int type_,
             @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
     private native void allocate(
-            @Cast("char*") BytePointer name_,
-            @Cast("char*") BytePointer description_,
+            @Cast("const char*") BytePointer name_,
+            @Cast("const char*") BytePointer description_,
             @Cast("onnx::OpSchema::AttrType") int type_,
             @Cast("bool") boolean required_);
     public Attribute(
-            @Cast("char*") ByteBuffer name_,
-            @Cast("char*") ByteBuffer description_,
+            String name_,
+            String description_,
             @Cast("onnx::OpSchema::AttrType") int type_,
             @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
     private native void allocate(
-            @Cast("char*") ByteBuffer name_,
-            @Cast("char*") ByteBuffer description_,
-            @Cast("onnx::OpSchema::AttrType") int type_,
-            @Cast("bool") boolean required_);
-    public Attribute(
-            @Cast("char*") byte[] name_,
-            @Cast("char*") byte[] description_,
-            @Cast("onnx::OpSchema::AttrType") int type_,
-            @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
-    private native void allocate(
-            @Cast("char*") byte[] name_,
-            @Cast("char*") byte[] description_,
+            String name_,
+            String description_,
             @Cast("onnx::OpSchema::AttrType") int type_,
             @Cast("bool") boolean required_);
 
-    public native @StdString BytePointer name(); public native Attribute name(BytePointer name);
-    public native @StdString BytePointer description(); public native Attribute description(BytePointer description);
+    @MemberGetter public native @StdString BytePointer name();
+    @MemberGetter public native @StdString BytePointer description();
     public native @Cast("onnx::OpSchema::AttrType") int type(); public native Attribute type(int type);
     public native @Cast("bool") boolean required(); public native Attribute required(boolean required);
   }
@@ -752,15 +758,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public TypeConstraintParam(Pointer p) { super(p); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public TypeConstraintParam(long size) { super((Pointer)null); allocateArray(size); }
-      private native void allocateArray(long size);
-      @Override public TypeConstraintParam position(long position) {
-          return (TypeConstraintParam)super.position(position);
-      }
   
-    public TypeConstraintParam() { super((Pointer)null); allocate(); }
-    private native void allocate();
     public TypeConstraintParam(
             @StdString BytePointer type_param_str_,
             @Const @ByRef StringVector allowed_type_strs_,
@@ -878,7 +876,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   // Get output formal parameters.
   public native @Const @ByRef FormalParameterVector outputs();
 
-  public native @Const @ByRef TypeConstraintParamVector typeConstraintParams();
+  public native @StdVector TypeConstraintParam typeConstraintParams();
 
   public native @StdString BytePointer Name();
 
@@ -983,9 +981,9 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
    * fiasco.
    */
   public static native @Cast("onnx::OpName_Domain_Version_Schema_Map*") @ByRef StringIntIntPairMap map();
-  public static native @StdVector OpSchema get_all_schemas_with_history();
+  public static native @Const @ByVal OpSchemaVector get_all_schemas_with_history();
 
-  public static native @StdVector OpSchema get_all_schemas();
+  public static native @Const @ByVal OpSchemaVector get_all_schemas();
 }
 
 // #define OPERATOR_SCHEMA(name)

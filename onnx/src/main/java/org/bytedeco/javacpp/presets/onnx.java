@@ -56,13 +56,13 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip()) 
           
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
-         
+               .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
                .put(new Info("onnx::OpSchema::FormalParameter").pointerTypes("OpSchema.FormalParameter"))
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))
        
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
-
-               .put(new Info("std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
+               .put(new Info("const std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
+//               .put(new Info("std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
 
                .put(new Info("std::function<bool(int)>").pointerTypes("BoolIntFn"))
                .put(new Info("std::function<bool(int,int)>").pointerTypes("BoolIntIntFn"))
@@ -76,10 +76,10 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
 //               .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())   
                .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
-               .put(new Info("std::function<std::pair<bool,int>(int)*>").pointerTypes("PairBoolIntIntFn"))
+               .put(new Info("std::function<std::pair<bool,int>(int)>").pointerTypes("PairBoolIntIntFn"))
                .put(new Info("onnx::DataType").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::unordered_set<onnx::DataType>").pointerTypes("DataTypeSet").define())
-               .put(new Info("std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define());
+               .put(new Info("const std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define());
     }
     public static class BoolIntFn extends FunctionPointer {
         static { Loader.load(); }
@@ -124,7 +124,7 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
         public    PairBoolIntIntFn(Pointer p) { super(p); }
         protected PairBoolIntIntFn() { allocate(); }
         private native void allocate();
-        public native @Cast("std::pair<bool,int>*") Pointer call(int a);
+        public @ByVal native @Cast("std::pair<bool,int>*") Pointer call(int a);
     }
 
 //    @Documented @Retention(RetentionPolicy.RUNTIME)
