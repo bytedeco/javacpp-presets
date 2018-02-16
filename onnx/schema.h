@@ -242,11 +242,11 @@ class OpSchema {
   OpSchema& SameNumberOfOutput();
 
   // Sets the rule to allow optional in-place operation.
-  OpSchema& AllowConsumed(std::function<std::pair<bool, int>*(int)> inplace);
+  OpSchema& AllowConsumed(std::function<std::pair<bool, int>(int)> inplace);
   OpSchema& AllowConsumed(std::unordered_map<int, int> inplace);
   OpSchema& AllowOneToOneConsumed();
   // Sets the rule to enforce in-place opeartion.
-  OpSchema& EnforceConsumed(std::function<std::pair<bool, int>*(int)> inplace);
+  OpSchema& EnforceConsumed(std::function<std::pair<bool, int>(int)> inplace);
   OpSchema& EnforceConsumed(std::unordered_map<int, int> inplace);
   OpSchema& EnforceOneToOneConsumed();
 
@@ -285,10 +285,9 @@ class OpSchema {
   };
 
   struct Attribute {
-    Attribute():name("defaultName"), description("defaultDescription"), required(false)  {} 
     Attribute(
-        char* name_,
-        char* description_,
+        const char* name_,
+        const char* description_,
         AttrType type_,
         bool required_)
         : name(name_),
@@ -296,8 +295,8 @@ class OpSchema {
           type(type_),
           required(required_) {}
 
-    std::string name;
-    std::string description;
+    const std::string name;
+    const std::string description;
     AttrType type;
     bool required;
   };
@@ -312,7 +311,6 @@ class OpSchema {
 
   // Type constraint.
   struct TypeConstraintParam {
-    TypeConstraintParam(): description("default description")  {}
     TypeConstraintParam(
         const std::string& type_param_str_,
         const std::vector<std::string>& allowed_type_strs_,
@@ -452,7 +450,7 @@ class OpSchema {
   // Default domain value ("") means it's ONNX domain.
   std::string domain_ = "";
 
-  std::map<std::string, Attribute> attributes_;
+  std::map<std::string, Attribute> attributes_{};
   bool allows_unchecked_attributes_ = false;
 
   std::vector<FormalParameter> inputs_;
