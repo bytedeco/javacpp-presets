@@ -67,7 +67,7 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                .put(new Info("std::function<bool(int)>").pointerTypes("BoolIntFn"))
                .put(new Info("std::function<bool(int,int)>").pointerTypes("BoolIntIntFn"))
                .put(new Info("std::function<int(int)>").pointerTypes("IntIntFn"))
-//               .put(new Info("std::function<void(OpSchema&)>").pointerTypes("VoidOpSchemaFn"))
+               .put(new Info("std::function<void(OpSchema&)>").pointerTypes("VoidOpSchemaFn"))
                .put(new Info("onnx::OpSchema::UseType").valueTypes("int")) 
 //               .put(new Info("onnx::OpSchema::UseType::DEFAULT").pointerTypes("DEFAULTUseType").define())
 //               .put(new Info("onnx::OpSchema::UseType::CONSUME_ALLOWED").pointerTypes("CONSUME_ALLOWEDUseType").define())
@@ -107,16 +107,16 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
         private native void allocate();
         public native int call(int a);
     }
-/*
+
     public static class VoidOpSchemaFn extends FunctionPointer {
         static { Loader.load(); }
- 
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    VoidOpSchemaFn(Pointer p) { super(p); }
         protected VoidOpSchemaFn() { allocate(); }
         private native void allocate();
-        public native void call(@Cast("onnx::OpSchema") Pointer a);
+        public native void call(@ByRef @Cast("onnx::OpSchema*") Pointer a);
     }
-*/
+
 
     public static class PairBoolIntIntFn extends FunctionPointer {
         static { Loader.load(); }

@@ -854,7 +854,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
   // Calls the passed function with `this` as an argument. Useful for
   // adding docs for temlated/macro ops.
-//  OpSchema& FillUsing(std::function<void(OpSchema&)> populator);
+  public native @ByRef OpSchema FillUsing(@ByVal VoidOpSchemaFn populator);
 
   /**
    * \brief A function to allow one to get the number of outputs based on the

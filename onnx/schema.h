@@ -372,7 +372,7 @@ class OpSchema {
 
   // Calls the passed function with `this` as an argument. Useful for
   // adding docs for temlated/macro ops.
-//  OpSchema& FillUsing(std::function<void(OpSchema&)> populator);
+  OpSchema& FillUsing(std::function<void(OpSchema&)> populator);
 
   /**
    * @brief A function to allow one to get the number of outputs based on the
