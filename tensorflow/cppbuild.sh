@@ -49,6 +49,9 @@ cd tensorflow-$TENSORFLOW_VERSION
 # Stop the script from annoying us with Android stuff
 sed -i="" "s/return has_any_rule/return True/g" configure.py
 
+# Allow using std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>
+sed -i="" "s/const string tag/string tag/g" tensorflow/core/util/tensor_slice_set.h
+
 # https://github.com/tensorflow/tensorflow/issues/15389
 sed -i="" "s/c2947c341c68/034b6c3e1017/g" tensorflow/workspace.bzl
 sed -i="" "s/f21f8ab8a8dbcb91cd0deeade19a043f47708d0da7a4000164cdf203b4a71e34/0a8ac1e83ef9c26c0e362bd7968650b710ce54e2d883f0df84e5e45a3abe842a/g" tensorflow/workspace.bzl
