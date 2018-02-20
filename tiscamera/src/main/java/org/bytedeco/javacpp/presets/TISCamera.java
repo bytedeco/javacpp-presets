@@ -48,7 +48,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 },
                                 include = {
                                                 //                                                "algorithms/bayer.h",
-
                                                 //                                                "algorithms/auto_focus.h",
                                                 //                                                "algorithms/debayer.h",
                                                 //                                                "algorithms/image_sampling.h",

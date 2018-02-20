@@ -12,20 +12,46 @@ diff -ruN tiscamera/src/DeviceInterface.h tiscamera_edit/src/DeviceInterface.h
       * Start image retrieval and wait for new images
 diff -ruN tiscamera/src/ImageSink.cpp tiscamera_edit/src/ImageSink.cpp
 --- tiscamera/src/ImageSink.cpp	2018-02-11 21:03:03.344273735 +0100
-+++ tiscamera_edit/src/ImageSink.cpp	2018-02-11 22:52:25.695047779 +0100
-@@ -114,10 +114,12 @@
++++ tiscamera_edit/src/ImageSink.cpp	2018-02-20 12:17:03.033967604 +0100
+@@ -26,7 +26,7 @@
+ ImageSink::ImageSink ()
+     : status(TCAM_PIPELINE_UNDEFINED), callback(nullptr), c_back(nullptr),
+       user_data(nullptr), last_image_buffer(), external_buffer(false),
+-      buffer_number(10), buffers()
++      buffer_number(10), buffers(), sh_callback_registered(false)
+ {}
+ 
+ 
+@@ -88,6 +88,7 @@
+ {
+     this->sh_callback = sc;
+     this->user_data = ud;
++    this->sh_callback_registered = true;
+ 
+     return true;
+ }
+@@ -114,7 +115,9 @@
  void ImageSink::push_image (std::shared_ptr<MemoryBuffer> buffer)
  {
      last_image_buffer = buffer->getImageBuffer();
-+    /* This seems to be active at random in some situations...
-     if (sh_callback)
+-    if (sh_callback)
++    //this seemed to be active randomly, switched to flag instead
++    //if (sh_callback)
++    if (this->sh_callback_registered)
      {
          this->sh_callback(buffer, user_data);
      }
-+    */
-     if (callback != nullptr)
-     {
-         this->callback(&*buffer, user_data);
+diff -ruN tiscamera/src/ImageSink.h tiscamera_edit/src/ImageSink.h
+--- tiscamera/src/ImageSink.h	2018-02-11 21:03:03.348273733 +0100
++++ tiscamera_edit/src/ImageSink.h	2018-02-20 12:14:41.858248558 +0100
+@@ -81,6 +81,7 @@
+     VideoFormat format;
+ 
+     shared_callback sh_callback;
++    bool sh_callback_registered;
+     sink_callback callback;
+     c_callback c_back;
+     void* user_data;
 diff -ruN tiscamera/src/libusb/AFU050Device.cpp tiscamera_edit/src/libusb/AFU050Device.cpp
 --- tiscamera/src/libusb/AFU050Device.cpp	2018-02-11 21:03:03.356273728 +0100
 +++ tiscamera_edit/src/libusb/AFU050Device.cpp	2018-02-11 21:08:10.496133813 +0100

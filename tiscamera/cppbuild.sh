@@ -16,6 +16,7 @@ rm -rf "$TIS_PATH"
 git clone --recursive https://github.com/TheImagingSource/tiscamera.git "$TIS_PATH"
 
 # Apply patch
+echo "Patching TIS source code with ../tiscamera.patch"
 patch -s -p0 < ../tiscamera.patch
 
 INSTALL_PATH="$(pwd)/$PLATFORM$EXTENSION"
