@@ -41,6 +41,8 @@ environment:
       OS: windows-x86
     - PROJ: "systems"
       OS: windows-x86
+    - PROJ: "llvm"
+      OS: windows-x86
 
     - PROJ: "opencv,flandmark"
       OS: windows-x86_64
@@ -81,6 +83,8 @@ environment:
     - PROJ: "ale"
       OS: windows-x86_64
     - PROJ: "systems"
+      OS: windows-x86_64
+    - PROJ: "llvm"
       OS: windows-x86_64
 
     - PROJ: "opencv"
