@@ -27,6 +27,8 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
+OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
+
 echo "Decompressing archives..."
 tar --totals -xzf ../gsl-$GSL_VERSION.tar.gz
 cd gsl-$GSL_VERSION
@@ -97,11 +99,13 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
+        patch -Np1 < ../../../gsl-$GSL_VERSION-windows.patch
         ./configure --prefix=$INSTALL_PATH CC="gcc -m32 -static-libgcc"
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
+        patch -Np1 < ../../../gsl-$GSL_VERSION-windows.patch
         ./configure --prefix=$INSTALL_PATH CC="gcc -m64 -static-libgcc"
         make -j $MAKEJ
         make install-strip

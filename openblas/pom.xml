@@ -60,10 +60,7 @@
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/*mkl*</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/*omp*</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*openblas*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*openblasp*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*openblas.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*openblas*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*openblas*.dylib*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*openblas*</exclude>
                 <exclude>${javacpp.platform.library.path}/lib/*openblas*</exclude>
               </excludes>
             </configuration>
