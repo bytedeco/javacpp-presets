@@ -1245,6 +1245,7 @@
         <module>tesseract</module>
         <module>ale</module>
         <module>systems</module>
+        <module>llvm</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1297,6 +1298,7 @@
         <module>cuda</module>
         <module>ale</module>
         <module>systems</module>
+        <module>llvm</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
