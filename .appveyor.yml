@@ -31,6 +31,8 @@ environment:
       OS: windows-x86
     - PROJ: "openblas"
       OS: windows-x86
+    - PROJ: "arpack-ng"
+      OS: windows-x86
     - PROJ: "fftw"
       OS: windows-x86
     - PROJ: "gsl"
@@ -67,6 +69,8 @@ environment:
     - PROJ: "mkl"
       OS: windows-x86_64
     - PROJ: "openblas"
+      OS: windows-x86_64
+    - PROJ: "arpack-ng"
       OS: windows-x86_64
     - PROJ: "fftw"
       OS: windows-x86_64

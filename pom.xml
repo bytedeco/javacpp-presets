@@ -504,6 +504,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -934,6 +935,7 @@
         <module>chilitags</module>
         <module>flandmark</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -978,6 +980,7 @@
         <module>chilitags</module>
         <module>flandmark</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -1022,6 +1025,7 @@
         <module>flandmark</module>
         <module>hdf5</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -1071,6 +1075,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1126,6 +1131,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1182,6 +1188,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1239,6 +1246,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -1289,6 +1297,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>libpostal</module>

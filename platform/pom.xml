@@ -29,6 +29,7 @@
     <module>../hdf5/platform</module>
     <module>../mkl/platform</module>
     <module>../openblas/platform</module>
+    <module>../arpack-ng/platform</module>
     <module>../fftw/platform</module>
     <module>../gsl/platform</module>
     <module>../llvm/platform</module>
@@ -121,6 +122,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas-platform</artifactId>
       <version>0.2.20-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>arpack-ng-platform</artifactId>
+      <version>20171109-1d912ad-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

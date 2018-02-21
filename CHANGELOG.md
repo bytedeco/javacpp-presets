@@ -1,4 +1,5 @@
 
+ * Add presets for ARPACK-NG
  * Add iOS builds for OpenCV, OpenBLAS, and Skia ([pull #525](https://github.com/bytedeco/javacpp-presets/pull/525))
  * Let GSL link with OpenBLAS, MKL, Accelerate, etc automatically instead of GSL CBLAS ([issue #18](https://github.com/bytedeco/javacpp-presets/issues/18))
  * Append `@NoException` annotation to presets for libdc1394, libfreenect, MKL, OpenBLAS, FFTW, GSL, Leptonica, CUDA, and system APIs to reduce unneeded C++ overhead
