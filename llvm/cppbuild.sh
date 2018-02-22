@@ -49,13 +49,13 @@ case $PLATFORM in
         make install > /dev/null
         ;;
     windows-x86)
-        $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLIBXML2_LIBRARIES= ..
+        $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //m
         cd Release/lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
         cd ../..
-        $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLIBXML2_LIBRARIES= ..
+        $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //m
         cd ../../lib
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
