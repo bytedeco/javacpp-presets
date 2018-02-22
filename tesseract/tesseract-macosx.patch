@@ -1,6 +1,6 @@
-diff -ruN tesseract-3.05.00/configure tesseract-3.05.00-macosx/configure
---- tesseract-3.05.00/configure	2017-04-09 17:09:34.615281537 +0900
-+++ tesseract-3.05.00-macosx/configure	2017-04-09 17:17:16.950453951 +0900
+diff -ruN tesseract-4.0.0/configure tesseract-4.0.0-macosx/configure
+--- tesseract-4.0.0/configure	2017-04-09 17:09:34.615281537 +0900
++++ tesseract-4.0.0-macosx/configure	2017-04-09 17:17:16.950453951 +0900
 @@ -10970,9 +10970,9 @@
    esac
    if test yes = "$_lt_dar_can_shared"; then
