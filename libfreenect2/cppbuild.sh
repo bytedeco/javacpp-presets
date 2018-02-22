@@ -8,10 +8,10 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 GLFW_VERSION=3.2.1
-LIBJPEG=libjpeg-turbo-1.5.2
+LIBJPEG=libjpeg-turbo-1.5.3
 LIBFREENECT2_VERSION=0.2.0
 download https://github.com/glfw/glfw/archive/$GLFW_VERSION.tar.gz glfw-$GLFW_VERSION.tar.gz
-download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download https://github.com/OpenKinect/libfreenect2/archive/v$LIBFREENECT2_VERSION.tar.gz libfreenect2-$LIBFREENECT2_VERSION.tar.gz
 
 mkdir -p $PLATFORM

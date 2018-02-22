@@ -9,15 +9,15 @@ fi
 
 ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
-LIBJPEG=libjpeg-turbo-1.5.2
-LIBPNG=libpng-1.6.32
+LIBJPEG=libjpeg-turbo-1.5.3
+LIBPNG=libpng-1.6.34
 LIBTIFF=tiff-4.0.9
 LIBWEBP=libwebp-0.6.1
-LEPTONICA_VERSION=1.74.4
+LEPTONICA_VERSION=1.75.3
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
-download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.32/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.34/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
