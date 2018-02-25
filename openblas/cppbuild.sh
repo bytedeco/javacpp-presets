@@ -29,7 +29,7 @@ export NO_AFFINITY=1
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-android.patch
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
         export CROSS_SUFFIX="$ANDROID_BIN-"
@@ -43,9 +43,23 @@ case $PLATFORM in
         export ARM_SOFTFP_ABI=1
         sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
         ;;
+    android-arm64)
+        patch -Np1 < ../../../OpenBLAS-android.patch
+        export CFLAGS="$ANDROID_FLAGS"
+        export CC="$ANDROID_BIN-gcc $CFLAGS"
+        export FC="$ANDROID_BIN-gfortran $CFLAGS"
+        export CROSS_SUFFIX="$ANDROID_BIN-"
+        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
+        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+            export NO_LAPACK=1
+            export NOFORTRAN=1
+        fi
+        export BINARY=64
+        export TARGET=ARMV8
+        ;;
     android-x86)
         patch -Np1 < ../../../OpenBLAS-android.patch
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
         export CROSS_SUFFIX="$ANDROID_BIN-"
@@ -55,6 +69,20 @@ case $PLATFORM in
             export NOFORTRAN=1
         fi
         export BINARY=32
+        export TARGET=ATOM
+        ;;
+    android-x86_64)
+        patch -Np1 < ../../../OpenBLAS-android.patch
+        export CFLAGS="$ANDROID_FLAGS"
+        export CC="$ANDROID_BIN-gcc $CFLAGS"
+        export FC="$ANDROID_BIN-gfortran $CFLAGS"
+        export CROSS_SUFFIX="$ANDROID_BIN-"
+        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
+        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+            export NO_LAPACK=1
+            export NOFORTRAN=1
+        fi
+        export BINARY=64
         export TARGET=ATOM
         ;;
     ios-arm)

@@ -18637,19 +18637,19 @@ including std::sort().
     the end of each row, if any. If the parameter is missing (set to AUTO_STEP ), no padding is assumed
     and the actual step is calculated as cols*elemSize(). See Mat::elemSize.
     */
-    public Mat(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.data = data; }
+    public Mat(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.pointer = data; }
     private native void allocate(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
-    private Pointer data; // a reference to prevent deallocation
+    private Pointer pointer; // a reference to prevent deallocation
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
-    public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }
-    public Mat(Point points) { this(1, Math.max(1, points.limit - points.position), CV_32SC2, points); this.data = points; }
-    public Mat(Point2f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC2, points); this.data = points; }
-    public Mat(Point2d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC2, points); this.data = points; }
-    public Mat(Point3i points) { this(1, Math.max(1, points.limit - points.position), CV_32SC3, points); this.data = points; }
-    public Mat(Point3f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC3, points); this.data = points; }
-    public Mat(Point3d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC3, points); this.data = points; }
-    public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_64FC4, scalar); this.data = scalar; }
-    public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_32SC4, scalar); this.data = scalar; }
+    public Mat(CvArr arr) { super(cvarrToMat(arr)); this.pointer = arr; }
+    public Mat(Point points) { this(1, Math.max(1, points.limit - points.position), CV_32SC2, points); this.pointer = points; }
+    public Mat(Point2f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC2, points); this.pointer = points; }
+    public Mat(Point2d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC2, points); this.pointer = points; }
+    public Mat(Point3i points) { this(1, Math.max(1, points.limit - points.position), CV_32SC3, points); this.pointer = points; }
+    public Mat(Point3f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC3, points); this.pointer = points; }
+    public Mat(Point3d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC3, points); this.pointer = points; }
+    public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_64FC4, scalar); this.pointer = scalar; }
+    public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_32SC4, scalar); this.pointer = scalar; }
     public Mat(byte ... b) { this(b, false); }
     public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }
     public Mat(short ... s) { this(s, true); }

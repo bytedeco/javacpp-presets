@@ -1,4 +1,6 @@
 
+ * Add builds for `android-arm64` and `android-x86_64` platforms ([issue #52](https://github.com/bytedeco/javacpp-presets/issues/52))
+ * Fix x265 encoding with FFmpeg on Android ([issue bytedeco/javacv#866](https://github.com/bytedeco/javacv/issues/866))
  * Add presets for ARPACK-NG
  * Add iOS builds for OpenCV, OpenBLAS, and Skia ([pull #525](https://github.com/bytedeco/javacpp-presets/pull/525))
  * Let GSL link with OpenBLAS, MKL, Accelerate, etc automatically instead of GSL CBLAS ([issue #18](https://github.com/bytedeco/javacpp-presets/issues/18))

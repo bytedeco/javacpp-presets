@@ -37,7 +37,7 @@ diff -ruN tensorflow-1.6.0-rc0/tensorflow/BUILD tensorflow-1.6.0-rc0-android/ten
 +        "-z defs",
 +        "-s",
 +        "-ldl",
-+        "-Wl,--icf=all",  # Identical Code Folding
++#        "-Wl,--icf=all",  # Identical Code Folding
 +    ],
 +    tags = [
 +        "manual",
@@ -173,7 +173,7 @@ diff -ruN tensorflow-1.6.0-rc0/WORKSPACE tensorflow-1.6.0-rc0-android/WORKSPACE
 +    # archtectures or the Android NDK will automatically select biggest
 +    # API level that it supports without notice.
 +    # Note that the NDK version is not the API level.
-+    api_level=14)
++    api_level=21)
  
  # Please add all new TensorFlow dependencies in workspace.bzl.
  tf_workspace()

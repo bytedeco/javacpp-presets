@@ -65,19 +65,36 @@ fi
 case $PLATFORM in
     # Clang is incapable of compiling TensorFlow for Android, while in $ANDROID_NDK/source.properties,
     # the value of Pkg.Revision needs to start with "12" for Bazel to accept GCC
+    # Also, the last version of the NDK supported by TensorFlow is android-ndk-r15c
     android-arm)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        sed -i "s/api_level=21/api_level=14/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11"
+        ;;
+    android-arm64)
+        export CC="/usr/bin/gcc"
+        export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-android.patch
+        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11"
         ;;
     android-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        sed -i "s/api_level=21/api_level=14/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11"
+        ;;
+    android-x86_64)
+        export CC="/usr/bin/gcc"
+        export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-android.patch
+        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11"
         ;;
     linux-x86)
         export CC="/usr/bin/gcc"

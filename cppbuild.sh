@@ -91,13 +91,25 @@ fi
 export ANDROID_NDK
 export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/4.9/"
 case $PLATFORM in
+    android-arm)
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/$KERNEL-$ARCH/bin/arm-linux-androideabi"
+        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-14/arch-arm/"
+        export ANDROID_FLAGS="--sysroot=$ANDROID_ROOT -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/arm-linux-androideabi/ -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/include/backward/ -isystem $ANDROID_CPP/libs/armeabi-v7a/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=14 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wno-attributes -Wl,--fix-cortex-a8 -L$ANDROID_CPP/libs/armeabi-v7a/ -L$ANDROID_ROOT/usr/lib/ -Wl,--no-undefined"
+        ;;
+    android-arm64)
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/aarch64-linux-android-4.9/prebuilt/$KERNEL-$ARCH/bin/aarch64-linux-android"
+        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-21/arch-arm64/"
+        export ANDROID_FLAGS="--sysroot=$ANDROID_ROOT -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/aarch64-linux-android/ -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/include/backward/ -isystem $ANDROID_CPP/libs/arm64-v8a/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=21 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv8-a -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wno-attributes -L$ANDROID_CPP/libs/arm64-v8a/ -L$ANDROID_ROOT/usr/lib/ -Wl,--no-undefined"
+        ;;
     android-x86)
         export ANDROID_BIN="$ANDROID_NDK/toolchains/x86-4.9/prebuilt/$KERNEL-$ARCH/bin/i686-linux-android"
         export ANDROID_ROOT="$ANDROID_NDK/platforms/android-14/arch-x86/"
+        export ANDROID_FLAGS="--sysroot=$ANDROID_ROOT -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/i686-linux-android/ -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/include/backward/ -isystem $ANDROID_CPP/libs/x86/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=14 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=i686 -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wno-attributes -L$ANDROID_CPP/libs/x86/ -L$ANDROID_ROOT/usr/lib/ -Wl,--no-undefined"
         ;;
-    *)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/$KERNEL-$ARCH/bin/arm-linux-androideabi"
-        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-14/arch-arm/"
+    android-x86_64)
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/x86_64-4.9/prebuilt/$KERNEL-$ARCH/bin/x86_64-linux-android"
+        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-21/arch-x86_64/"
+        export ANDROID_FLAGS="--sysroot=$ANDROID_ROOT -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/x86_64-linux-android/ -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/include/backward/ -isystem $ANDROID_CPP/libs/x86_64/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=21 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=x86-64 -mtune=atom -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wno-attributes -L$ANDROID_CPP/libs/x86_64/ -L$ANDROID_ROOT/usr/lib64/ -Wl,--no-undefined"
         ;;
 esac
 

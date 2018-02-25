@@ -16,6 +16,7 @@ INSTALL_PATH=`pwd`
 mkdir -p include lib bin
 unzip -o ../flandmark-$FLANDMARK_VERSION.zip
 cd flandmark-$FLANDMARK_VERSION
+patch --binary -Np1 < ../../../flandmark.patch || true
 
 OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
@@ -32,13 +33,25 @@ fi
 
 case $PLATFORM in
     android-arm)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=$INSTALL_PATH/../../android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/
+        make -j4 flandmark_static
+        cp libflandmark/*.h ../include
+        cp libflandmark/*.a ../lib
+        ;;
+    android-arm64)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-arm64-v8a/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
     android-x86)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=$INSTALL_PATH/../../android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/ 
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/ 
+        make -j4 flandmark_static
+        cp libflandmark/*.h ../include
+        cp libflandmark/*.a ../lib
+        ;;
+    android-x86_64)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86_64/ 
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib

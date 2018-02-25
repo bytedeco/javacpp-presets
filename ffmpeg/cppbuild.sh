@@ -14,7 +14,7 @@ ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable
 # DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
 # ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
-NASM_VERSION=2.13.02
+NASM_VERSION=2.13.03
 ZLIB=zlib-1.2.11
 LAME=lame-3.100
 SPEEX=speex-1.2.0
@@ -78,16 +78,18 @@ patch -p0 < ../../lame.patch
 
 case $PLATFORM in
     android-arm)
+#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
+#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
         export AR="$ANDROID_BIN-ar"
         export CPP="$ANDROID_BIN-cpp"
         export CC="$ANDROID_BIN-gcc"
         export CXX="$ANDROID_BIN-g++"
         export RANLIB="$ANDROID_BIN-ranlib"
         export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
-        export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
-        export CXXFLAGS="$CFLAGS"
-        export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
+        export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
+        export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
+        export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
+        export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
@@ -117,11 +119,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android-armeabi $CFLAGS no-shared
-        ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
+        ./Configure --prefix=$INSTALL_PATH android-armeabi "$CFLAGS" no-shared
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
+        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
         make -j $MAKEJ
@@ -132,6 +134,7 @@ case $PLATFORM in
         make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
+        patch -Np1 < ../../../libvpx-android.patch
         LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ
         make install
@@ -141,22 +144,95 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
 
-     android-x86)
+    android-arm64)
         export AR="$ANDROID_BIN-ar"
         export CPP="$ANDROID_BIN-cpp"
         export CC="$ANDROID_BIN-gcc"
         export CXX="$ANDROID_BIN-g++"
         export RANLIB="$ANDROID_BIN-ranlib"
         export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
-        export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
-        export CXXFLAGS="$CFLAGS"
-        export LDFLAGS="-nostdlib -z text"
+        export CPPFLAGS="$ANDROID_FLAGS"
+        export CFLAGS="$ANDROID_FLAGS"
+        export CXXFLAGS="$ANDROID_FLAGS"
+        export LDFLAGS="-z text"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$LAME
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        cd libspeex
+        make -j $MAKEJ
+        make install
+        cd ../include
+        make install
+        cd ../../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure --prefix=$INSTALL_PATH android64-aarch64 "$CFLAGS" no-shared
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
+        make install_sw
+        cd ../openh264-$OPENH264_VERSION
+        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=aarch64-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        make -j $MAKEJ
+        make install
+        cd ../x265-$X265
+        patch -Np1 < ../../../x265-android.patch || true
+        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ x265-static
+        make install
+        cd ../libvpx-$VPX_VERSION
+        patch -Np1 < ../../../libvpx-android.patch
+        CFLAGS="$CFLAGS -D__uint128_t=__u64" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        make -j $MAKEJ
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-android.patch
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=aarch64 --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/arm64-v8a/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        make -j $MAKEJ
+        make install
+        ;;
+
+     android-x86)
+#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
+#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
+        export AR="$ANDROID_BIN-ar"
+        export CPP="$ANDROID_BIN-cpp"
+        export CC="$ANDROID_BIN-gcc"
+        export CXX="$ANDROID_BIN-g++"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export STRIP="$ANDROID_BIN-strip"
+        export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
+        export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
+        export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
+        export LDFLAGS="-z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
@@ -186,11 +262,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android-x86 $CFLAGS no-shared
-        ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
+        ./Configure --prefix=$INSTALL_PATH android-x86 "$CFLAGS" no-shared
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
+        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
         make -j $MAKEJ
@@ -201,7 +277,8 @@ case $PLATFORM in
         make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
-        ASFLAGS="-D__ANDROID__" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=x86-android-gcc
+        patch -Np1 < ../../../libvpx-android.patch
+        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --disable-runtime-cpu-detect
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -210,7 +287,78 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        make -j $MAKEJ
+        make install
+        ;;
+
+     android-x86_64)
+        export AR="$ANDROID_BIN-ar"
+        export CPP="$ANDROID_BIN-cpp"
+        export CC="$ANDROID_BIN-gcc"
+        export CXX="$ANDROID_BIN-g++"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export STRIP="$ANDROID_BIN-strip"
+        export CPPFLAGS="$ANDROID_FLAGS"
+        export CFLAGS="$ANDROID_FLAGS"
+        export CXXFLAGS="$ANDROID_FLAGS"
+        export LDFLAGS="-z text"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$LAME
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        cd libspeex
+        make -j $MAKEJ
+        make install
+        cd ../include
+        make install
+        cd ../../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure --prefix=$INSTALL_PATH android64 "$CFLAGS" no-shared
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
+        make install_sw
+        cd ../openh264-$OPENH264_VERSION
+        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=x86_64-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        make -j $MAKEJ
+        make install
+        cd ../x265-$X265
+        patch -Np1 < ../../../x265-android.patch || true
+        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ x265-static
+        make install
+        cd ../libvpx-$VPX_VERSION
+        patch -Np1 < ../../../libvpx-android.patch
+        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --disable-runtime-cpu-detect
+        make -j $MAKEJ
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-android.patch
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86_64/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -245,7 +393,7 @@ case $PLATFORM in
         make # fails with -j > 1
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No libraries install-static
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
         make -j $MAKEJ
@@ -307,7 +455,7 @@ case $PLATFORM in
         make # fails with -j > 1
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No libraries install-static
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
         make -j $MAKEJ
@@ -389,7 +537,7 @@ case $PLATFORM in
         make # fails with -j > 1
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf USE_ASM=No libraries install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf USE_ASM=No install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
         cd ../$X264
         if [ $CROSSCOMPILE -eq 1 ]
         then
@@ -498,9 +646,9 @@ case $PLATFORM in
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=ppc64le USE_ASM=No libraries install-static
+          make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=ppc64le USE_ASM=No install-static
         else
-          make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=powerpc64le-linux-gnu-ar ARCH=ppc64le USE_ASM=No libraries install-static CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++
+          make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=powerpc64le-linux-gnu-ar ARCH=ppc64le USE_ASM=No install-static CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++
         fi
         cd ../$X264
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -576,7 +724,7 @@ case $PLATFORM in
         make # fails with -j > 1
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar USE_ASM=No libraries install-static
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
         make -j $MAKEJ
@@ -628,7 +776,7 @@ case $PLATFORM in
         make # fails with -j > 1
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No libraries install-static
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ
@@ -685,7 +833,7 @@ case $PLATFORM in
         make # fails with -j > 1
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No libraries install-static
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
         make -j $MAKEJ

@@ -53,6 +53,43 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
+        env: PROJ=opencv,flandmark OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=artoolkitplus OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=chilitags OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=fftw OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=gsl OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tensorflow OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+
+      - os: linux
         env: PROJ=opencv,flandmark OS=android-x86
         install: true
         script: ./ci/install-travis.sh
@@ -86,6 +123,43 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=tensorflow OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+
+      - os: linux
+        env: PROJ=opencv,flandmark OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=artoolkitplus OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=chilitags OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=fftw OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=gsl OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tensorflow OS=android-x86_64
         install: true
         script: ./ci/install-travis.sh
 
