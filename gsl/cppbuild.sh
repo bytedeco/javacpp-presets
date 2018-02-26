@@ -47,7 +47,7 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
         ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     android-arm64)
@@ -62,7 +62,7 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
         ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
      android-x86)
@@ -77,7 +77,7 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
         ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
      android-x86_64)
@@ -92,23 +92,23 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
         ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     linux-x86)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     linux-x86_64)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     linux-armhf)
         export LDFLAGS="-Wl,-rpath-link,$(dirname $(dirname $(which arm-linux-gnueabihf-gcc)))/arm-linux-gnueabihf/lib/"
         ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     linux-ppc64le)
@@ -119,25 +119,25 @@ case $PLATFORM in
         else
           ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=ppc64le-linux CC="powerpc64le-linux-gnu-gcc -m64"
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     macosx-*)
         patch -Np1 < ../../../gsl-$GSL_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     windows-x86)
         patch -Np1 < ../../../gsl-$GSL_VERSION-windows.patch
         ./configure --prefix=$INSTALL_PATH CC="gcc -m32 -static-libgcc"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     windows-x86_64)
         patch -Np1 < ../../../gsl-$GSL_VERSION-windows.patch
         ./configure --prefix=$INSTALL_PATH CC="gcc -m64 -static-libgcc"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install-strip
         ;;
     *)
