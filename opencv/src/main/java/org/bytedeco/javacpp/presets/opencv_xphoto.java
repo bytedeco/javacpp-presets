@@ -33,7 +33,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Bram Biesbrouck
  */
 @Properties(inherit = { opencv_core.class }, value = {
-                @Platform(include = { "<opencv2/xphoto.hpp>" },
+                // #include "xphoto/inpainting.hpp"
+                // #include "xphoto/white_balance.hpp"
+                // #include "xphoto/dct_image_denoising.hpp"
+                // #include "xphoto/bm3d_image_denoising.hpp"
+                @Platform(include = { "<opencv2/xphoto.hpp>",
+                                      "<opencv2/xphoto/inpainting.hpp>",
+                                      "<opencv2/xphoto/white_balance.hpp>",
+                                      "<opencv2/xphoto/dct_image_denoising.hpp>",
+                                      "<opencv2/xphoto/bm3d_image_denoising.hpp>"
+                },
                                 link = "opencv_xphoto@.3.4"),
                 @Platform(value = "windows", link = "opencv_xphoto340") },
                 target = "org.bytedeco.javacpp.opencv_xphoto")
