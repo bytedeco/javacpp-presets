@@ -70,7 +70,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<Box2D/Dynamics/Joints/b2WheelJoint.h>",
                          "<Box2D/Particle/b2Particle.h>",
                          "<Box2D/Particle/b2ParticleGroup.h>",
-                         "<Box2D/Particle/b2ParticleSystem.h>"
+                         "<Box2D/Particle/b2ParticleSystem.h>",
+                         "liquidfun_adapters.h"
                          },
               link = "liquidfun@.2.3.0")
 })
@@ -103,6 +104,8 @@ public class liquidfun implements InfoMapper {
         .put(new Info("b2QueryCallback", "b2RayCastCallback").virtualize())
         .put(new Info("b2ContactListener", "b2ContactFilter", "b2DestructionListener").virtualize())
         .put(new Info("b2Draw").virtualize())
+        .put(new Info("b2DynamicTreeQueryCallback").virtualize())
+        .put(new Info("b2DynamicTree::Query<b2DynamicTreeQueryCallback>").javaNames("Query").define())
         ;
     }
 }
