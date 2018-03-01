@@ -1016,7 +1016,7 @@ This program demonstrates usage of the Cascade classifier class
 
    /** scale(size) of the bounding box */
    public native double scale(); public native DetectionROI scale(double scale);
-   /** set of requrested locations to be evaluated */
+   /** set of requested locations to be evaluated */
    public native @ByRef PointVector locations(); public native DetectionROI locations(PointVector locations);
    /** vector that will contain confidence values for each location */
    public native @StdVector DoublePointer confidences(); public native DetectionROI confidences(DoublePointer confidences);
@@ -1234,11 +1234,11 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param foundLocations Vector of point where each point contains left-top corner point of detected object boundaries.
     @param weights Vector that will contain confidence values for each detected object.
     @param hitThreshold Threshold for the distance between features and SVM classifying plane.
-    Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient).
+    Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
     @param winStride Window stride. It must be a multiple of block stride.
     @param padding Padding
-    @param searchLocations Vector of Point includes set of requrested locations to be evaluated.
+    @param searchLocations Vector of Point includes set of requested locations to be evaluated.
     */
     public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
                             @StdVector DoublePointer weights,
@@ -1266,7 +1266,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param img Matrix of the type CV_8U or CV_8UC3 containing an image where objects are detected.
     @param foundLocations Vector of point where each point contains left-top corner point of detected object boundaries.
     @param hitThreshold Threshold for the distance between features and SVM classifying plane.
-    Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient).
+    Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
     @param winStride Window stride. It must be a multiple of block stride.
     @param padding Padding
@@ -1284,7 +1284,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param foundLocations Vector of rectangles where each rectangle contains the detected object.
     @param foundWeights Vector that will contain confidence values for each detected object.
     @param hitThreshold Threshold for the distance between features and SVM classifying plane.
-    Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient).
+    Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
     @param winStride Window stride. It must be a multiple of block stride.
     @param padding Padding
@@ -1352,7 +1352,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param img Matrix of the type CV_8U or CV_8UC3 containing an image where objects are detected.
     @param foundLocations Vector of rectangles where each rectangle contains the detected object.
     @param hitThreshold Threshold for the distance between features and SVM classifying plane.
-    Usually it is 0 and should be specfied in the detector coefficients (as the last free coefficient).
+    Usually it is 0 and should be specified in the detector coefficients (as the last free coefficient).
     But if the free coefficient is omitted (which is allowed), you can specify it manually here.
     @param winStride Window stride. It must be a multiple of block stride.
     @param padding Padding
@@ -1448,7 +1448,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param foundLocations Vector of Point where each Point is detected object's top-left point.
     @param confidences confidences
     @param hitThreshold Threshold for the distance between features and SVM classifying plane. Usually
-    it is 0 and should be specfied in the detector coefficients (as the last free coefficient). But if
+    it is 0 and should be specified in the detector coefficients (as the last free coefficient). But if
     the free coefficient is omitted (which is allowed), you can specify it manually here
     @param winStride winStride
     @param padding padding
@@ -1476,7 +1476,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param img Matrix of the type CV_8U or CV_8UC3 containing an image where objects are detected.
     @param foundLocations Vector of rectangles where each rectangle contains the detected object.
     @param locations Vector of DetectionROI
-    @param hitThreshold Threshold for the distance between features and SVM classifying plane. Usually it is 0 and should be specfied
+    @param hitThreshold Threshold for the distance between features and SVM classifying plane. Usually it is 0 and should be specified
     in the detector coefficients (as the last free coefficient). But if the free coefficient is omitted (which is allowed), you can specify it manually here.
     @param groupThreshold Minimum possible number of rectangles minus 1. The threshold is used in a group of rectangles to retain it.
     */

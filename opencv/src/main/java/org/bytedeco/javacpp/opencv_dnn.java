@@ -40,7 +40,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @StdVector IntPointer get();
+        public native @Name("operator*") @StdVector @Const IntPointer get();
     }
 
     public IntPointer pop_back() {
@@ -95,7 +95,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef MatShapeVector get();
+        public native @Name("operator*") @ByRef @Const MatShapeVector get();
     }
 
     public MatShapeVector pop_back() {
@@ -185,7 +185,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") Mat get();
+        public native @Name("operator*") @Const Mat get();
     }
 
     public Mat pop_back() {
@@ -269,7 +269,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         - API for new layers creation, layers are building bricks of neural networks;
         - set of built-in most-useful Layers;
         - API to constuct and modify comprehensive neural networks from layers;
-        - functionality for loading serialized networks models from differnet frameworks.
+        - functionality for loading serialized networks models from different frameworks.
     <p>
     Functionality of this module is designed only for forward pass computations (i. e. network testing).
     A network training is in principle not supported.
@@ -524,12 +524,12 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native void setOutShape();
 
         /** @deprecated Use flag {@code produce_cell_output} in LayerParams.
-          * \brief Specifies either interpet first dimension of input blob as timestamp dimenion either as sample.
+          * \brief Specifies either interpret first dimension of input blob as timestamp dimenion either as sample.
           *
-          * If flag is set to true then shape of input blob will be interpeted as [{@code T}, {@code N}, {@code [data dims]}] where {@code T} specifies number of timpestamps, {@code N} is number of independent streams.
+          * If flag is set to true then shape of input blob will be interpreted as [{@code T}, {@code N}, {@code [data dims]}] where {@code T} specifies number of timestamps, {@code N} is number of independent streams.
           * In this case each forward() call will iterate through {@code T} timestamps and update layer's state {@code T} times.
           *
-          * If flag is set to false then shape of input blob will be interpeted as [{@code N}, {@code [data dims]}].
+          * If flag is set to false then shape of input blob will be interpreted as [{@code N}, {@code [data dims]}].
           * In this case each forward() call will make one iteration and produce one timestamp with shape [{@code N}, {@code [out dims]}].
           */
         public native void setUseTimstampsDim(@Cast("bool") boolean use/*=true*/);
@@ -547,7 +547,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * @param output contains computed outputs: @f$h_t@f$ (and @f$c_t@f$ if setProduceCellOutput() flag was set to true).
          *
          * If setUseTimstampsDim() is set to true then @p input[0] should has at least two dimensions with the following shape: [`T`, `N`, `[data dims]`],
-         * where `T` specifies number of timpestamps, `N` is number of independent streams (i.e. @f$ x_{t_0 + t}^{stream} @f$ is stored inside @p input[0][t, stream, ...]).
+         * where `T` specifies number of timestamps, `N` is number of independent streams (i.e. @f$ x_{t_0 + t}^{stream} @f$ is stored inside @p input[0][t, stream, ...]).
          *
          * If setUseTimstampsDim() is set to fase then @p input[0] should contain single timestamp, its shape should has form [`N`, `[data dims]`] with at least one dimension.
          * (i.e. @f$ x_{t}^{stream} @f$ is stored inside @p input[0][stream, ...]).
@@ -663,6 +663,10 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("bool") boolean computeMaxIdx(); public native PoolingLayer computeMaxIdx(boolean computeMaxIdx);
         public native @Str BytePointer padMode(); public native PoolingLayer padMode(BytePointer padMode);
         public native @Cast("bool") boolean ceilMode(); public native PoolingLayer ceilMode(boolean ceilMode);
+        // If true for average pooling with padding, divide an every output region
+        // by a whole kernel area. Otherwise exclude zero padded values and divide
+        // by number of real values.
+        public native @Cast("bool") boolean avePoolPaddedArea(); public native PoolingLayer avePoolPaddedArea(boolean avePoolPaddedArea);
         // ROIPooling parameters.
         public native @ByRef Size pooledSize(); public native PoolingLayer pooledSize(Size pooledSize);
         public native float spatialScale(); public native PoolingLayer spatialScale(float spatialScale);
@@ -768,7 +772,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      * @param begin Vector of start indices
      * @param size Vector of sizes
      *
-     * More convinient numpy-like slice. One and only output blob
+     * More convenient numpy-like slice. One and only output blob
      * is a slice {@code input[begin[0]:begin[0]+size[0], begin[1]:begin[1]+size[1], ...]}
      *
      * 3. Torch mode
@@ -853,11 +857,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public static native @Ptr ReLULayer create(@Const @ByRef LayerParams params);
     }
 
-    @Namespace("cv::dnn") public static class ReLU6Layer extends ActivationLayer {
+    @Namespace("cv::dnn") @NoOffset public static class ReLU6Layer extends ActivationLayer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ReLU6Layer(Pointer p) { super(p); }
     
+        public native float minValue(); public native ReLU6Layer minValue(float minValue);
+        public native float maxValue(); public native ReLU6Layer maxValue(float maxValue);
+
         public static native @Ptr ReLU6Layer create(@Const @ByRef LayerParams params);
     }
 
@@ -951,7 +958,6 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("bool") boolean hasBias(); public native BatchNormLayer hasBias(boolean hasBias);
         public native float epsilon(); public native BatchNormLayer epsilon(float epsilon);
 
-        public native void getScaleShift(@ByRef Mat scale, @ByRef Mat shift);
         public static native @Ptr BatchNormLayer create(@Const @ByRef LayerParams params);
     }
 
@@ -973,6 +979,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public ScaleLayer(Pointer p) { super(p); }
     
         public native @Cast("bool") boolean hasBias(); public native ScaleLayer hasBias(boolean hasBias);
+        public native int axis(); public native ScaleLayer axis(int axis);
 
         public static native @Ptr ScaleLayer create(@Const @ByRef LayerParams params);
     }
@@ -1132,7 +1139,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #include <opencv2/core.hpp>
 
 // #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_EXPERIMENTAL_NS
-// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v3 {
+// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v4 {
 // #define CV__DNN_EXPERIMENTAL_NS_END }
  
 // #else
@@ -1150,7 +1157,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     /** enum cv::dnn::Backend */
     public static final int
         DNN_BACKEND_DEFAULT = 0,
-        DNN_BACKEND_HALIDE = 1;
+        DNN_BACKEND_HALIDE = 1,
+        DNN_BACKEND_INFERENCE_ENGINE = 2;
 
     /**
      * \brief Enum of target devices for computations.
@@ -1374,20 +1382,26 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Cast("bool") boolean setActivation(@Ptr ActivationLayer layer);
 
         /**
-         * \brief Tries to attach to the layer the subsequent batch normalization layer, i.e. do the layer fusion in a partial case.
-         * @param [in] layer The subsequent batch normalization layer.
-         *
-         * Returns true if the batch normalization layer has been attached successfully.
+         * \brief Try to fuse current layer with a next one
+         * @param [in] top Next layer to be fused.
+         * @return True if fusion was performed.
          */
-        public native @Cast("bool") boolean setBatchNorm(@Ptr BatchNormLayer layer);
+        public native @Cast("bool") boolean tryFuse(@Ptr Layer top);
 
         /**
-         * \brief Tries to attach to the layer the subsequent scaling layer, i.e. do the layer fusion in a partial case.
-         * @param [in] layer The subsequent scaling layer.
+         * \brief Returns parameters of layers with channel-wise multiplication and addition.
+         * @param [out] scale Channel-wise multipliers. Total number of values should
+         *                   be equal to number of channels.
+         * @param [out] shift Channel-wise offsets. Total number of values should
+         *                   be equal to number of channels.
          *
-         * Returns true if the scaling layer has been attached successfully.
+         * Some layers can fuse their transformations with further layers.
+         * In example, convolution + batch normalization. This way base layer
+         * use weights from layer after it. Fused layer is skipped.
+         * By default, \p scale and \p shift are empty that means layer has no
+         * element-wise multiplications or additions.
          */
-        public native @Cast("bool") boolean setScale(@Ptr ScaleLayer layer);
+        public native void getScaleShift(@ByRef Mat scale, @ByRef Mat shift);
 
         /**
          * \brief "Deattaches" all the layers, attached to particular layer.
@@ -1873,7 +1887,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *  @param swapRB flag which indicates that swap first and last channels
      *  in 3-channel image is necessary.
      *  @param crop flag which indicates whether image will be cropped after resize or not
-     *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponing
+     *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponding
      *  dimension in \p size and another one is equal or larger. Then, crop from the center is performed.
      *  If \p crop is false, direct resize without cropping and preserving aspect ratio is performed.
      *  @return 4-dimansional Mat with NCHW dimensions order.
@@ -1887,6 +1901,25 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal GpuMat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
                                        @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal GpuMat image);
+
+    /** \brief Creates 4-dimensional blob from image.
+     *  \details This is an overloaded member function, provided for convenience.
+     *           It differs from the above function only in what argument(s) it accepts.
+     */
+    @Namespace("cv::dnn") public static native void blobFromImage(@ByVal Mat image, @ByVal Mat blob, double scalefactor/*=1.0*/,
+                                      @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
+                                      @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImage(@ByVal Mat image, @ByVal Mat blob);
+    @Namespace("cv::dnn") public static native void blobFromImage(@ByVal UMat image, @ByVal UMat blob, double scalefactor/*=1.0*/,
+                                      @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
+                                      @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImage(@ByVal UMat image, @ByVal UMat blob);
+    @Namespace("cv::dnn") public static native void blobFromImage(@ByVal GpuMat image, @ByVal GpuMat blob, double scalefactor/*=1.0*/,
+                                      @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
+                                      @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImage(@ByVal GpuMat image, @ByVal GpuMat blob);
+
+
     /** \brief Creates 4-dimensional blob from series of images. Optionally resizes and
      *  crops \p images from center, subtract \p mean values, scales values by \p scalefactor,
      *  swap Blue and Red channels.
@@ -1898,14 +1931,73 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *  @param swapRB flag which indicates that swap first and last channels
      *  in 3-channel image is necessary.
      *  @param crop flag which indicates whether image will be cropped after resize or not
-     *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponing
+     *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponding
      *  dimension in \p size and another one is equal or larger. Then, crop from the center is performed.
      *  If \p crop is false, direct resize without cropping and preserving aspect ratio is performed.
      *  @return 4-dimansional Mat with NCHW dimensions order.
      */
-    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@Const @ByRef MatVector images, double scalefactor/*=1.0*/,
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal MatVector images, double scalefactor/*=1.0*/,
                                         @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
-    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@Const @ByRef MatVector images);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal MatVector images);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal UMatVector images, double scalefactor/*=1.0*/,
+                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal UMatVector images);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal GpuMatVector images, double scalefactor/*=1.0*/,
+                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal GpuMatVector images);
+
+    /** \brief Creates 4-dimensional blob from series of images.
+     *  \details This is an overloaded member function, provided for convenience.
+     *           It differs from the above function only in what argument(s) it accepts.
+     */
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal Mat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal Mat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal Mat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal Mat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal Mat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal Mat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal UMat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal UMat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal UMat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal UMat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal UMat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal UMat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal GpuMat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal GpuMat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal GpuMat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal GpuMat blob);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal GpuMat blob,
+                                       double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
+    @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal GpuMat blob);
+
+    /** \brief Parse a 4D blob and output the images it contains as 2D arrays through a simpler data structure
+     *  (std::vector<cv::Mat>).
+     *  @param [in] blob_ 4 dimensional array (images, channels, height, width) in floating point precision (CV_32F) from
+     *  which you would like to extract the images.
+     *  @param [out] images_ array of 2D Mat containing the images extracted from the blob in floating point precision
+     *  (CV_32F). They are non normalized neither mean added. The number of returned images equals the first dimension
+     *  of the blob (batch size). Every image has a number of channels equals to the second dimension of the blob (depth).
+     */
+    @Namespace("cv::dnn") public static native void imagesFromBlob(@Const @ByRef Mat blob_, @ByVal MatVector images_);
+    @Namespace("cv::dnn") public static native void imagesFromBlob(@Const @ByRef Mat blob_, @ByVal UMatVector images_);
+    @Namespace("cv::dnn") public static native void imagesFromBlob(@Const @ByRef Mat blob_, @ByVal GpuMatVector images_);
 
     /** \brief Convert all weights of Caffe network to half precision floating point.
      * @param src Path to origin model from Caffe framework contains single

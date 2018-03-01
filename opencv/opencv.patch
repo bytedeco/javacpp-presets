@@ -1,6 +1,6 @@
-diff -ruN opencv-3.4.0/3rdparty/libpng/pngpriv.h opencv-3.4.0-patch/3rdparty/libpng/pngpriv.h
---- opencv-3.4.0/3rdparty/libpng/pngpriv.h	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/3rdparty/libpng/pngpriv.h	2018-01-07 10:36:49.601495521 +0900
+diff -ruN opencv-3.4.1/3rdparty/libpng/pngpriv.h opencv-3.4.1-patch/3rdparty/libpng/pngpriv.h
+--- opencv-3.4.1/3rdparty/libpng/pngpriv.h	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/3rdparty/libpng/pngpriv.h	2018-03-01 19:52:25.535142165 +0900
 @@ -192,13 +192,13 @@
  #  endif
  #endif
@@ -22,9 +22,9 @@ diff -ruN opencv-3.4.0/3rdparty/libpng/pngpriv.h opencv-3.4.0-patch/3rdparty/lib
  
  #ifndef PNG_INTEL_SSE_OPT
  #   ifdef PNG_INTEL_SSE
-diff -ruN opencv-3.4.0/CMakeLists.txt opencv-3.4.0-patch/CMakeLists.txt
---- opencv-3.4.0/CMakeLists.txt	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/CMakeLists.txt	2018-01-06 23:14:33.232720359 +0900
+diff -ruN opencv-3.4.1/CMakeLists.txt opencv-3.4.1-patch/CMakeLists.txt
+--- opencv-3.4.1/CMakeLists.txt	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/CMakeLists.txt	2018-03-01 19:52:25.535142165 +0900
 @@ -7,12 +7,12 @@
  # ----------------------------------------------------------------------------
  
@@ -44,10 +44,10 @@ diff -ruN opencv-3.4.0/CMakeLists.txt opencv-3.4.0-patch/CMakeLists.txt
  
  
  include(cmake/OpenCVMinDepVersions.cmake)
-diff -ruN opencv-3.4.0/modules/core/include/opencv2/core/cv_cpu_dispatch.h opencv-3.4.0-patch/modules/core/include/opencv2/core/cv_cpu_dispatch.h
---- opencv-3.4.0/modules/core/include/opencv2/core/cv_cpu_dispatch.h	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/core/include/opencv2/core/cv_cpu_dispatch.h	2018-01-06 23:14:33.233720356 +0900
-@@ -99,13 +99,13 @@
+diff -ruN opencv-3.4.1/modules/core/include/opencv2/core/cv_cpu_dispatch.h opencv-3.4.1-patch/modules/core/include/opencv2/core/cv_cpu_dispatch.h
+--- opencv-3.4.1/modules/core/include/opencv2/core/cv_cpu_dispatch.h	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/core/include/opencv2/core/cv_cpu_dispatch.h	2018-03-01 19:52:25.536142163 +0900
+@@ -107,13 +107,13 @@
  #  include <arm_neon.h>
  #endif
  
@@ -68,7 +68,7 @@ diff -ruN opencv-3.4.0/modules/core/include/opencv2/core/cv_cpu_dispatch.h openc
  
  #endif // CV_ENABLE_INTRINSICS && !CV_DISABLE_OPTIMIZATION && !__CUDACC__
  
-@@ -143,12 +143,12 @@
+@@ -151,12 +151,12 @@
  #elif defined(__ARM_NEON__) || (defined (__ARM_NEON) && defined(__aarch64__))
  #  include <arm_neon.h>
  #  define CV_NEON 1
@@ -87,10 +87,10 @@ diff -ruN opencv-3.4.0/modules/core/include/opencv2/core/cv_cpu_dispatch.h openc
  #endif
  
  #endif // !__OPENCV_BUILD && !__CUDACC (Compatibility code)
-diff -ruN opencv-3.4.0/modules/core/include/opencv2/core/utility.hpp opencv-3.4.0-patch/modules/core/include/opencv2/core/utility.hpp
---- opencv-3.4.0/modules/core/include/opencv2/core/utility.hpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/core/include/opencv2/core/utility.hpp	2018-01-06 23:14:33.234720353 +0900
-@@ -1199,7 +1199,7 @@
+diff -ruN opencv-3.4.1/modules/core/include/opencv2/core/utility.hpp opencv-3.4.1-patch/modules/core/include/opencv2/core/utility.hpp
+--- opencv-3.4.1/modules/core/include/opencv2/core/utility.hpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/core/include/opencv2/core/utility.hpp	2018-03-01 19:52:25.536142163 +0900
+@@ -1200,7 +1200,7 @@
      double getTotalMs()   const { return ((double)m_ticksTotal / cv::getTickFrequency()) * 1000; }
      double getMeanMs()    const { return (((double)m_ticksTotal/m_counter) / cv::getTickFrequency()) * 1000; }
  };
@@ -99,10 +99,10 @@ diff -ruN opencv-3.4.0/modules/core/include/opencv2/core/utility.hpp opencv-3.4.
  
  typedef Node<NodeData> InstrNode;
  
-diff -ruN opencv-3.4.0/modules/core/src/system.cpp opencv-3.4.0-patch/modules/core/src/system.cpp
---- opencv-3.4.0/modules/core/src/system.cpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/core/src/system.cpp	2018-01-06 23:14:33.234720353 +0900
-@@ -1814,7 +1814,7 @@
+diff -ruN opencv-3.4.1/modules/core/src/system.cpp opencv-3.4.1-patch/modules/core/src/system.cpp
+--- opencv-3.4.1/modules/core/src/system.cpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/core/src/system.cpp	2018-03-01 19:52:25.537142162 +0900
+@@ -1764,7 +1764,7 @@
  NodeData::~NodeData()
  {
  }
@@ -111,10 +111,10 @@ diff -ruN opencv-3.4.0/modules/core/src/system.cpp opencv-3.4.0-patch/modules/co
  {
      if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName)
      {
-diff -ruN opencv-3.4.0/modules/dnn/include/opencv2/dnn/all_layers.hpp opencv-3.4.0-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp
---- opencv-3.4.0/modules/dnn/include/opencv2/dnn/all_layers.hpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp	2018-01-06 23:14:33.234720353 +0900
-@@ -549,7 +549,7 @@
+diff -ruN opencv-3.4.1/modules/dnn/include/opencv2/dnn/all_layers.hpp opencv-3.4.1-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp
+--- opencv-3.4.1/modules/dnn/include/opencv2/dnn/all_layers.hpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/dnn/include/opencv2/dnn/all_layers.hpp	2018-03-01 19:52:25.537142162 +0900
+@@ -555,7 +555,7 @@
       * An every sample in the batch is normalized separately. Optionally,
       * output is scaled by the trained parameters.
       */
@@ -123,10 +123,10 @@ diff -ruN opencv-3.4.0/modules/dnn/include/opencv2/dnn/all_layers.hpp opencv-3.4
      {
      public:
          float pnorm, epsilon;
-diff -ruN opencv-3.4.0/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-3.4.0-patch/modules/dnn/include/opencv2/dnn/dnn.hpp
---- opencv-3.4.0/modules/dnn/include/opencv2/dnn/dnn.hpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/dnn/include/opencv2/dnn/dnn.hpp	2018-01-06 23:14:33.235720350 +0900
-@@ -100,7 +100,7 @@
+diff -ruN opencv-3.4.1/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-3.4.1-patch/modules/dnn/include/opencv2/dnn/dnn.hpp
+--- opencv-3.4.1/modules/dnn/include/opencv2/dnn/dnn.hpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/dnn/include/opencv2/dnn/dnn.hpp	2018-03-01 19:53:20.633052461 +0900
+@@ -101,7 +101,7 @@
     /**
      * @brief Derivatives of this class encapsulates functions of certain backends.
      */
@@ -135,7 +135,7 @@ diff -ruN opencv-3.4.0/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-3.4.0-patc
      {
      public:
          BackendNode(int backendId);
-@@ -253,7 +253,7 @@
+@@ -256,7 +256,7 @@
          * Layer don't use own Halide::Func members because we can have applied
          * layers fusing. In this way the fused function should be scheduled.
          */
@@ -144,10 +144,19 @@ diff -ruN opencv-3.4.0/modules/dnn/include/opencv2/dnn/dnn.hpp opencv-3.4.0-patc
                                            const std::vector<Mat*> &inputs,
                                            const std::vector<Mat> &outputs,
                                            int targetId) const;
-diff -ruN opencv-3.4.0/modules/dnn/src/dnn.cpp opencv-3.4.0-patch/modules/dnn/src/dnn.cpp
---- opencv-3.4.0/modules/dnn/src/dnn.cpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/dnn/src/dnn.cpp	2018-01-06 23:14:33.235720350 +0900
-@@ -2331,7 +2331,7 @@
+@@ -285,7 +285,7 @@
+          * @param[in] top Next layer to be fused.
+          * @returns True if fusion was performed.
+          */
+-        virtual bool tryFuse(Ptr<Layer>& top);
++        virtual bool tryFuse(const Ptr<Layer>& top);
+ 
+         /**
+          * @brief Returns parameters of layers with channel-wise multiplication and addition.
+diff -ruN opencv-3.4.1/modules/dnn/src/dnn.cpp opencv-3.4.1-patch/modules/dnn/src/dnn.cpp
+--- opencv-3.4.1/modules/dnn/src/dnn.cpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/dnn/src/dnn.cpp	2018-03-01 19:53:32.077033829 +0900
+@@ -2537,7 +2537,7 @@
      return Ptr<BackendNode>();
  }
  
@@ -156,9 +165,42 @@ diff -ruN opencv-3.4.0/modules/dnn/src/dnn.cpp opencv-3.4.0-patch/modules/dnn/sr
                                   const std::vector<Mat> &outputs, int targetId) const
  {
  #ifdef  HAVE_HALIDE
-diff -ruN opencv-3.4.0/modules/flann/include/opencv2/flann/miniflann.hpp opencv-3.4.0-patch/modules/flann/include/opencv2/flann/miniflann.hpp
---- opencv-3.4.0/modules/flann/include/opencv2/flann/miniflann.hpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/flann/include/opencv2/flann/miniflann.hpp	2018-01-06 23:14:33.235720350 +0900
+@@ -2612,7 +2612,7 @@
+ }
+ 
+ bool Layer::setActivation(const Ptr<ActivationLayer>&) { return false; }
+-bool Layer::tryFuse(Ptr<Layer>&) { return false; }
++bool Layer::tryFuse(const Ptr<Layer>&) { return false; }
+ void Layer::getScaleShift(Mat& scale, Mat& shift) const
+ {
+     scale = Mat();
+diff -ruN opencv-3.4.1/modules/dnn/src/layers/convolution_layer.cpp opencv-3.4.1-patch/modules/dnn/src/layers/convolution_layer.cpp
+--- opencv-3.4.1/modules/dnn/src/layers/convolution_layer.cpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/dnn/src/layers/convolution_layer.cpp	2018-03-01 19:53:49.171005998 +0900
+@@ -309,7 +309,7 @@
+         return !activ.empty();
+     }
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top)
++    virtual bool tryFuse(const Ptr<Layer>& top)
+     {
+         Mat w, b;
+         top->getScaleShift(w, b);
+diff -ruN opencv-3.4.1/modules/dnn/src/layers/mvn_layer.cpp opencv-3.4.1-patch/modules/dnn/src/layers/mvn_layer.cpp
+--- opencv-3.4.1/modules/dnn/src/layers/mvn_layer.cpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/dnn/src/layers/mvn_layer.cpp	2018-03-01 19:53:55.031996456 +0900
+@@ -68,7 +68,7 @@
+     Mat scale, shift;
+     bool fuse_batch_norm;
+ 
+-    virtual bool tryFuse(Ptr<Layer>& top)
++    virtual bool tryFuse(const Ptr<Layer>& top)
+     {
+         if (preferableTarget == DNN_TARGET_OPENCL && !fuse_batch_norm)
+         {
+diff -ruN opencv-3.4.1/modules/flann/include/opencv2/flann/miniflann.hpp opencv-3.4.1-patch/modules/flann/include/opencv2/flann/miniflann.hpp
+--- opencv-3.4.1/modules/flann/include/opencv2/flann/miniflann.hpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/flann/include/opencv2/flann/miniflann.hpp	2018-03-01 19:52:25.538142160 +0900
 @@ -74,10 +74,6 @@
                  std::vector<double>& numValues) const;
  
@@ -170,11 +212,11 @@ diff -ruN opencv-3.4.0/modules/flann/include/opencv2/flann/miniflann.hpp opencv-
  };
  
  struct CV_EXPORTS KDTreeIndexParams : public IndexParams
-diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch/modules/imgproc/src/fixedpoint.inl.hpp
---- opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/imgproc/src/fixedpoint.inl.hpp	2018-01-06 23:23:07.966171219 +0900
-@@ -78,8 +78,8 @@
-     //    }
+diff -ruN opencv-3.4.1/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.1-patch/modules/imgproc/src/fixedpoint.inl.hpp
+--- opencv-3.4.1/modules/imgproc/src/fixedpoint.inl.hpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/imgproc/src/fixedpoint.inl.hpp	2018-03-01 19:52:25.538142160 +0900
+@@ -80,8 +80,8 @@
+     CV_ALWAYS_INLINE fixedpoint64 operator << (int n) const { return fixedpoint64(val << n); }
      template <typename ET>
      CV_ALWAYS_INLINE operator ET() const { return cv::saturate_cast<ET>((int64_t)fixedround((uint64_t)val) >> fixedShift); }
 -    CV_ALWAYS_INLINE operator double() const { return (double)val / (1LL << fixedShift); }
@@ -184,8 +226,8 @@ diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch
      CV_ALWAYS_INLINE bool isZero() { return val == 0; }
      static CV_ALWAYS_INLINE fixedpoint64 zero() { return fixedpoint64(); }
      static CV_ALWAYS_INLINE fixedpoint64 one() { return fixedpoint64((int64_t)(1LL << fixedShift)); }
-@@ -131,8 +131,8 @@
-     //    }
+@@ -135,8 +135,8 @@
+     CV_ALWAYS_INLINE ufixedpoint64 operator << (int n) const { return ufixedpoint64(val << n); }
      template <typename ET>
      CV_ALWAYS_INLINE operator ET() const { return cv::saturate_cast<ET>(fixedround(val) >> fixedShift); }
 -    CV_ALWAYS_INLINE operator double() const { return (double)val / (1LL << fixedShift); }
@@ -195,8 +237,8 @@ diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch
      CV_ALWAYS_INLINE bool isZero() { return val == 0; }
      static CV_ALWAYS_INLINE ufixedpoint64 zero() { return ufixedpoint64(); }
      static CV_ALWAYS_INLINE ufixedpoint64 one() { return ufixedpoint64((uint64_t)(1ULL << fixedShift)); }
-@@ -172,8 +172,8 @@
-     //    }
+@@ -178,8 +178,8 @@
+     CV_ALWAYS_INLINE fixedpoint32 operator << (int n) const { return fixedpoint32(val << n); }
      template <typename ET>
      CV_ALWAYS_INLINE operator ET() const { return cv::saturate_cast<ET>((int32_t)fixedround((uint32_t)val) >> fixedShift); }
 -    CV_ALWAYS_INLINE operator double() const { return (double)val / (1 << fixedShift); }
@@ -206,8 +248,8 @@ diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch
      CV_ALWAYS_INLINE bool isZero() { return val == 0; }
      static CV_ALWAYS_INLINE fixedpoint32 zero() { return fixedpoint32(); }
      static CV_ALWAYS_INLINE fixedpoint32 one() { return fixedpoint32((1 << fixedShift)); }
-@@ -211,8 +211,8 @@
-     //    }
+@@ -219,8 +219,8 @@
+     CV_ALWAYS_INLINE ufixedpoint32 operator << (int n) const { return ufixedpoint32(val << n); }
      template <typename ET>
      CV_ALWAYS_INLINE operator ET() const { return cv::saturate_cast<ET>(fixedround(val) >> fixedShift); }
 -    CV_ALWAYS_INLINE operator double() const { return (double)val / (1 << fixedShift); }
@@ -217,8 +259,8 @@ diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch
      CV_ALWAYS_INLINE bool isZero() { return val == 0; }
      static CV_ALWAYS_INLINE ufixedpoint32 zero() { return ufixedpoint32(); }
      static CV_ALWAYS_INLINE ufixedpoint32 one() { return ufixedpoint32((1U << fixedShift)); }
-@@ -243,8 +243,8 @@
-     CV_ALWAYS_INLINE fixedpoint16 operator - (const fixedpoint16& val2) const { return fixedpoint16((int16_t)(val - val2.val)); }
+@@ -253,8 +253,8 @@
+     CV_ALWAYS_INLINE fixedpoint16 operator << (int n) const { return fixedpoint16((int16_t)(val << n)); }
      template <typename ET>
      CV_ALWAYS_INLINE operator ET() const { return cv::saturate_cast<ET>((int16_t)fixedround((uint16_t)val) >> fixedShift); }
 -    CV_ALWAYS_INLINE operator double() const { return (double)val / (1 << fixedShift); }
@@ -228,8 +270,8 @@ diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch
      CV_ALWAYS_INLINE bool isZero() { return val == 0; }
      static CV_ALWAYS_INLINE fixedpoint16 zero() { return fixedpoint16(); }
      static CV_ALWAYS_INLINE fixedpoint16 one() { return fixedpoint16((int16_t)(1 << fixedShift)); }
-@@ -279,8 +279,8 @@
-     //    }
+@@ -285,8 +285,8 @@
+     CV_ALWAYS_INLINE ufixedpoint16 operator << (int n) const { return ufixedpoint16((uint16_t)(val << n)); }
      template <typename ET>
      CV_ALWAYS_INLINE operator ET() const { return cv::saturate_cast<ET>(fixedround(val) >> fixedShift); }
 -    CV_ALWAYS_INLINE operator double() const { return (double)val / (1 << fixedShift); }
@@ -239,16 +281,16 @@ diff -ruN opencv-3.4.0/modules/imgproc/src/fixedpoint.inl.hpp opencv-3.4.0-patch
      CV_ALWAYS_INLINE bool isZero() { return val == 0; }
      static CV_ALWAYS_INLINE ufixedpoint16 zero() { return ufixedpoint16(); }
      static CV_ALWAYS_INLINE ufixedpoint16 one() { return ufixedpoint16((uint16_t)(1 << fixedShift)); }
-@@ -288,4 +288,4 @@
+@@ -294,4 +294,4 @@
  
  }
  
 -#endif
 \ No newline at end of file
 +#endif
-diff -ruN opencv-3.4.0/modules/imgproc/src/resize.cpp opencv-3.4.0-patch/modules/imgproc/src/resize.cpp
---- opencv-3.4.0/modules/imgproc/src/resize.cpp	2017-12-23 04:46:21.000000000 +0900
-+++ opencv-3.4.0-patch/modules/imgproc/src/resize.cpp	2018-01-06 23:17:18.547222829 +0900
+diff -ruN opencv-3.4.1/modules/imgproc/src/resize.cpp opencv-3.4.1-patch/modules/imgproc/src/resize.cpp
+--- opencv-3.4.1/modules/imgproc/src/resize.cpp	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-patch/modules/imgproc/src/resize.cpp	2018-03-01 19:52:25.539142158 +0900
 @@ -743,11 +743,11 @@
      void(*hResize)(ET* src, int cn, int *ofst, fixedpoint* m, fixedpoint* dst, int dst_min, int dst_max, int dst_width);
      switch (cn)

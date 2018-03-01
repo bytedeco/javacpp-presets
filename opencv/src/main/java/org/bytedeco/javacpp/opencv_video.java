@@ -1368,9 +1368,9 @@ speed a bit, so if you do not need this feature, set the parameter to false.
                                    @Cast("bool") boolean detectShadows/*=true*/);
 @Namespace("cv") public static native @Ptr BackgroundSubtractorMOG2 createBackgroundSubtractorMOG2();
 
-/** \brief K-nearest neigbours - based Background/Foreground Segmentation Algorithm.
+/** \brief K-nearest neighbours - based Background/Foreground Segmentation Algorithm.
 <p>
-The class implements the K-nearest neigbours background subtraction described in \cite Zivkovic2006 .
+The class implements the K-nearest neighbours background subtraction described in \cite Zivkovic2006 .
 Very efficient if number of foreground pixels is low.
  */
 @Namespace("cv") public static class BackgroundSubtractorKNN extends BackgroundSubtractor {
@@ -1410,7 +1410,7 @@ Very efficient if number of foreground pixels is low.
     pixel is matching the kNN background model.
      */
     public native int getkNNSamples();
-    /** \brief Sets the k in the kNN. How many nearest neigbours need to match.
+    /** \brief Sets the k in the kNN. How many nearest neighbours need to match.
     */
     public native void setkNNSamples(int _nkNN);
 

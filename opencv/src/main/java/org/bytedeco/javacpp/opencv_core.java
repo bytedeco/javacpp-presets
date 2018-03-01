@@ -209,7 +209,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Point get();
+        public native @Name("operator*") @ByRef @Const Point get();
     }
 
     public Point pop_back() {
@@ -264,7 +264,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Point2f get();
+        public native @Name("operator*") @ByRef @Const Point2f get();
     }
 
     public Point2f pop_back() {
@@ -319,7 +319,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Point2d get();
+        public native @Name("operator*") @ByRef @Const Point2d get();
     }
 
     public Point2d pop_back() {
@@ -374,7 +374,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Point3i get();
+        public native @Name("operator*") @ByRef @Const Point3i get();
     }
 
     public Point3i pop_back() {
@@ -429,7 +429,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Size get();
+        public native @Name("operator*") @ByRef @Const Size get();
     }
 
     public Size pop_back() {
@@ -484,7 +484,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Rect get();
+        public native @Name("operator*") @ByRef @Const Rect get();
     }
 
     public Rect pop_back() {
@@ -539,7 +539,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef KeyPoint get();
+        public native @Name("operator*") @ByRef @Const KeyPoint get();
     }
 
     public KeyPoint pop_back() {
@@ -594,7 +594,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef DMatch get();
+        public native @Name("operator*") @ByRef @Const DMatch get();
     }
 
     public DMatch pop_back() {
@@ -649,7 +649,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef PointVector get();
+        public native @Name("operator*") @ByRef @Const PointVector get();
     }
 
     public PointVector pop_back() {
@@ -704,7 +704,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Point2fVector get();
+        public native @Name("operator*") @ByRef @Const Point2fVector get();
     }
 
     public Point2fVector pop_back() {
@@ -759,7 +759,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Point2dVector get();
+        public native @Name("operator*") @ByRef @Const Point2dVector get();
     }
 
     public Point2dVector pop_back() {
@@ -814,7 +814,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef RectVector get();
+        public native @Name("operator*") @ByRef @Const RectVector get();
     }
 
     public RectVector pop_back() {
@@ -869,7 +869,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef KeyPointVector get();
+        public native @Name("operator*") @ByRef @Const KeyPointVector get();
     }
 
     public KeyPointVector pop_back() {
@@ -924,7 +924,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef DMatchVector get();
+        public native @Name("operator*") @ByRef @Const DMatchVector get();
     }
 
     public DMatchVector pop_back() {
@@ -979,7 +979,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Mat get();
+        public native @Name("operator*") @ByRef @Const Mat get();
     }
 
     public Mat pop_back() {
@@ -1034,7 +1034,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef UMat get();
+        public native @Name("operator*") @ByRef @Const UMat get();
     }
 
     public UMat pop_back() {
@@ -1089,7 +1089,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef GpuMat get();
+        public native @Name("operator*") @ByRef @Const GpuMat get();
     }
 
     public GpuMat pop_back() {
@@ -1256,7 +1256,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") NodeDataTls get();
+        public native @Name("operator*") @Const NodeDataTls get();
     }
 
     public NodeDataTls pop_back() {
@@ -1619,7 +1619,8 @@ public static final int CV_CPU_AVX_512BW =        14;
 public static final int CV_CPU_AVX_512CD =        15;
 public static final int CV_CPU_AVX_512DQ =        16;
 public static final int CV_CPU_AVX_512ER =        17;
-public static final int CV_CPU_AVX_512IFMA512 =   18;
+public static final int CV_CPU_AVX_512IFMA512 =   18; // deprecated
+public static final int CV_CPU_AVX_512IFMA =      18;
 public static final int CV_CPU_AVX_512PF =        19;
 public static final int CV_CPU_AVX_512VBMI =      20;
 public static final int CV_CPU_AVX_512VL =        21;
@@ -1628,8 +1629,11 @@ public static final int CV_CPU_NEON =   100;
 
 public static final int CV_CPU_VSX = 200;
 
+// CPU features groups
+public static final int CV_CPU_AVX512_SKX =       256;
+
 // when adding to this list remember to update the following enum
-public static final int CV_HARDWARE_MAX_FEATURE = 255;
+public static final int CV_HARDWARE_MAX_FEATURE = 512;
 
 /** \brief Available CPU features.
 */
@@ -1653,14 +1657,20 @@ public static final int
     CPU_AVX_512CD       = 15,
     CPU_AVX_512DQ       = 16,
     CPU_AVX_512ER       = 17,
-    CPU_AVX_512IFMA512  = 18,
+    CPU_AVX_512IFMA512  = 18, // deprecated
+    CPU_AVX_512IFMA     = 18,
     CPU_AVX_512PF       = 19,
     CPU_AVX_512VBMI     = 20,
     CPU_AVX_512VL       = 21,
 
     CPU_NEON            = 100,
 
-    CPU_VSX             = 200;
+    CPU_VSX             = 200,
+
+    /** Skylake-X with AVX-512F/CD/BW/DQ/VL */
+    CPU_AVX512_SKX      = 256,
+
+    CPU_MAX_FEATURE     = 512;  // see CV_HARDWARE_MAX_FEATURE
 
 
 // #include "cv_cpu_dispatch.h"
@@ -1906,7 +1916,7 @@ public static final int CV_CXX_MOVE_SEMANTICS = 1;
 \****************************************************************************************/
 
 // #ifndef CV_CXX_STD_ARRAY
-// #  if __cplusplus >= 201103L
+// #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900/*MSVS 2015*/)
 public static final int CV_CXX_STD_ARRAY = 1;
 // #    include <array>
 // #  endif
@@ -1915,6 +1925,23 @@ public static final int CV_CXX_STD_ARRAY = 1;
 // #    undef CV_CXX_STD_ARRAY
 // #  endif
 // #endif
+
+
+// Integer types portatibility
+// #ifdef OPENCV_STDINT_HEADER
+// #include OPENCV_STDINT_HEADER
+// #else
+// #if defined(_MSC_VER) && _MSC_VER < 1600 /* MSVS 2010 */
+
+// #elif defined(_MSC_VER) || __cplusplus >= 201103L
+// #include <cstdint>
+
+// #else
+// #include <stdint.h>
+
+// #endif
+// #endif
+
 
 /** \} */
 
@@ -2784,61 +2811,16 @@ public static native int cvIsInf( float value );
 
 // Parsed from <opencv2/core/version.hpp>
 
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                        Intel License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright( C) 2000-2015, Intel Corporation, all rights reserved.
-// Copyright (C) 2011-2013, NVIDIA Corporation, all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Copyright (C) 2015, Itseez Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of Intel Corporation may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-//(including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort(including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-/*
-  definition of the current version of OpenCV
-  Usefull to test in user programs
-*/
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
 // #ifndef OPENCV_VERSION_HPP
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    3;
 public static final int CV_VERSION_MINOR =    4;
-public static final int CV_VERSION_REVISION = 0;
+public static final int CV_VERSION_REVISION = 1;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -2855,7 +2837,7 @@ public static final int CV_MAJOR_VERSION =    CV_VERSION_MAJOR;
 public static final int CV_MINOR_VERSION =    CV_VERSION_MINOR;
 public static final int CV_SUBMINOR_VERSION = CV_VERSION_REVISION;
 
-// #endif
+// #endif // OPENCV_VERSION_HPP
 
 
 // Parsed from <opencv2/core/base.hpp>
@@ -3198,7 +3180,7 @@ public static final int
     BORDER_WRAP        = 3,
     /** {@code gfedcb|abcdefgh|gfedcba} */
     BORDER_REFLECT_101 = 4,
-    /** {@code uvwxyz|absdefgh|ijklmno} */
+    /** {@code uvwxyz|abcdefgh|ijklmno} */
     BORDER_TRANSPARENT = 5,
 
     /** same as BORDER_REFLECT_101 */
@@ -3334,17 +3316,16 @@ for example:
 */
 // #define CV_Error_( code, args ) cv::error( code, cv::format args, CV_Func, __FILE__, __LINE__ )
 
-/** \brief Checks a condition at runtime and throws exception if it fails
-<p>
-The macros CV_Assert (and CV_DbgAssert(expr)) evaluate the specified expression. If it is 0, the macros
-raise an error (see cv::error). The macro CV_Assert checks the condition in both Debug and Release
-configurations while CV_DbgAssert is only retained in the Debug configuration.
-*/
+/** same as CV_Error(code,msg), but does not return */
+// #define CV_ErrorNoReturn( code, msg ) cv::errorNoReturn( code, msg, CV_Func, __FILE__, __LINE__ )
 
-// #define CV_VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)    N
-// #define CV_VA_NUM_ARGS(...)      CV_VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+/** same as CV_Error_(code,args), but does not return */
+// #define CV_ErrorNoReturn_( code, args ) cv::errorNoReturn( code, cv::format args, CV_Func, __FILE__, __LINE__ )
 
 // #define CV_Assert_1( expr ) if(!!(expr)) ; else cv::error( cv::Error::StsAssert, #expr, CV_Func, __FILE__, __LINE__ )
+
+// #endif // CV_STATIC_ANALYSIS
+
 // #define CV_Assert_2( expr1, expr2 ) CV_Assert_1(expr1); CV_Assert_1(expr2)
 // #define CV_Assert_3( expr1, expr2, expr3 ) CV_Assert_2(expr1, expr2); CV_Assert_1(expr3)
 // #define CV_Assert_4( expr1, expr2, expr3, expr4 ) CV_Assert_3(expr1, expr2, expr3); CV_Assert_1(expr4)
@@ -3355,15 +3336,16 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 // #define CV_Assert_9( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9 ) CV_Assert_8(expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8 ); CV_Assert_1(expr9)
 // #define CV_Assert_10( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9, expr10 ) CV_Assert_9(expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9 ); CV_Assert_1(expr10)
 
-// #define CV_Assert(...)               CVAUX_CONCAT(CV_Assert_, CV_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__)
+// #define CV_VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...) N
+// #define CV_VA_NUM_ARGS(...) CV_VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
-/** same as CV_Error(code,msg), but does not return */
-// #define CV_ErrorNoReturn( code, msg ) cv::errorNoReturn( code, msg, CV_Func, __FILE__, __LINE__ )
-
-/** same as CV_Error_(code,args), but does not return */
-// #define CV_ErrorNoReturn_( code, args ) cv::errorNoReturn( code, cv::format args, CV_Func, __FILE__, __LINE__ )
-
-// #endif // CV_STATIC_ANALYSIS
+/** \brief Checks a condition at runtime and throws exception if it fails
+<p>
+The macros CV_Assert (and CV_DbgAssert(expr)) evaluate the specified expression. If it is 0, the macros
+raise an error (see cv::error). The macro CV_Assert checks the condition in both Debug and Release
+configurations while CV_DbgAssert is only retained in the Debug configuration.
+*/
+// #define CV_Assert(...) do { CVAUX_CONCAT(CV_Assert_, CV_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__); } while(0)
 
 /** replaced with CV_Assert(expr) in Debug configuration */
 // #ifdef _DEBUG
@@ -4012,14 +3994,6 @@ public static class ErrorCallback extends FunctionPointer {
 @Namespace("cv") public static native ErrorCallback redirectError( ErrorCallback errCallback);
 @Namespace("cv") public static native ErrorCallback redirectError( ErrorCallback errCallback, Pointer userdata/*=0*/, @Cast("void**") @ByPtrPtr Pointer prevUserdata/*=0*/);
 
-/** \brief Returns a text string formatted using the printf-like expression.
-<p>
-The function acts like sprintf but forms and returns an STL string. It can be used to form an error
-message in the Exception constructor.
-@param fmt printf-compatible formatting specifiers.
- */
-@Namespace("cv") public static native @Str BytePointer format( @Cast("const char*") BytePointer fmt );
-@Namespace("cv") public static native @Str String format( String fmt );
 @Namespace("cv") public static native @Str BytePointer tempfile( @Cast("const char*") BytePointer suffix/*=0*/);
 @Namespace("cv") public static native @Str BytePointer tempfile();
 @Namespace("cv") public static native @Str String tempfile( String suffix/*=0*/);
@@ -4068,6 +4042,8 @@ The exact meaning of return value depends on the threading framework used by Ope
 
 /** \brief Returns the index of the currently executed thread within the current parallel region. Always
 returns 0 if called outside of parallel region.
+<p>
+@deprecated Current implementation doesn't corresponding to this documentation.
 <p>
 The exact meaning of the return value depends on the threading framework used by OpenCV library:
 - {@code TBB} - Unsupported with current 4.1 TBB release. Maybe will be supported in future.
@@ -4228,6 +4204,12 @@ in OpenCV.
 @param feature The feature of interest, one of cv::CpuFeatures
  */
 @Namespace("cv") public static native @Cast("bool") boolean checkHardwareSupport(int feature);
+
+/** \brief Returns feature name by ID
+<p>
+Returns empty string if feature is not defined
+*/
+@Namespace("cv") public static native @Str BytePointer getHardwareFeatureName(int feature);
 
 /** \brief Returns the number of logical CPUs available for the process.
  */
@@ -6313,7 +6295,7 @@ public static final String CV_TYPE_NAME_GRAPH = "opencv-graph";
 
 /** \} */
 
-/*********************************** Chain/Countour *************************************/
+/*********************************** Chain/Contour *************************************/
 
 public static class CvChain extends CvSeq {
     static { Loader.load(); }
@@ -9011,7 +8993,7 @@ public static native int cvGraphRemoveVtx( CvGraph graph, int index );
 public static native int cvGraphRemoveVtxByPtr( CvGraph graph, CvGraphVtx vtx );
 
 
-/** Link two vertices specifed by indices or pointers if they
+/** Link two vertices specified by indices or pointers if they
    are not connected or return pointer to already existing edge
    connecting the vertices.
    Functions return 1 if a new edge was created, 0 otherwise */
@@ -10042,7 +10024,7 @@ public static final int CV_ErrModeLeaf =     0;   /* Print error and exit progra
 public static final int CV_ErrModeParent =   1;   /* Print error and continue */
 public static final int CV_ErrModeSilent =   2;   /* Don't print and continue */
 
-/** Retrives current error processing mode */
+/** Retrieves current error processing mode */
 public static native int cvGetErrMode( );
 
 /** Sets error processing mode, returns previously used mode */
@@ -10157,7 +10139,7 @@ public static final String cvFuncName = "";
 /**
  CV_CALL macro calls CV (or IPL) function, checks error status and
  signals a error if the function failed. Useful in "parent node"
- error procesing mode
+ error processing mode
  */
 // #define CV_CALL( Func )
 // {
@@ -10480,7 +10462,7 @@ public static final String cvFuncName = "";
     }
 
 
-    /** constructors */
+    /** default constructor */
     public Complexf() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Complexf( float _re, float _im/*=0*/ ) { super((Pointer)null); allocate(_re, _im); }
@@ -10507,7 +10489,7 @@ public static final String cvFuncName = "";
     }
 
 
-    /** constructors */
+    /** default constructor */
     public Complexd() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Complexd( double _re, double _im/*=0*/ ) { super((Pointer)null); allocate(_re, _im); }
@@ -10574,7 +10556,7 @@ Example:
     }
 
 
-    // various constructors
+    /** default constructor */
     public Point() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Point(int _x, int _y) { super((Pointer)null); allocate(_x, _y); }
@@ -10597,9 +10579,10 @@ Example:
     public native double cross(@Const @ByRef Point pt);
     /** checks whether the point is inside the specified rectangle */
     public native @Cast("bool") boolean inside(@Const @ByRef Rect r);
-
+    /** x coordinate of the point */
     public native int x(); public native Point x(int x);
-    public native int y(); public native Point y(int y); //< the point coordinates
+    /** y coordinate of the point */
+    public native int y(); public native Point y(int y);
 }
 @Name("cv::Point_<float>") @NoOffset public static class Point2f extends FloatPointer {
     static { Loader.load(); }
@@ -10613,7 +10596,7 @@ Example:
     }
 
 
-    // various constructors
+    /** default constructor */
     public Point2f() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Point2f(float _x, float _y) { super((Pointer)null); allocate(_x, _y); }
@@ -10636,9 +10619,10 @@ Example:
     public native double cross(@Const @ByRef Point2f pt);
     /** checks whether the point is inside the specified rectangle */
     public native @Cast("bool") boolean inside(@Const @ByRef Rectf r);
-
+    /** x coordinate of the point */
     public native float x(); public native Point2f x(float x);
-    public native float y(); public native Point2f y(float y); //< the point coordinates
+    /** y coordinate of the point */
+    public native float y(); public native Point2f y(float y);
 }
 @Name("cv::Point_<double>") @NoOffset public static class Point2d extends DoublePointer {
     static { Loader.load(); }
@@ -10652,7 +10636,7 @@ Example:
     }
 
 
-    // various constructors
+    /** default constructor */
     public Point2d() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Point2d(double _x, double _y) { super((Pointer)null); allocate(_x, _y); }
@@ -10675,9 +10659,10 @@ Example:
     public native double cross(@Const @ByRef Point2d pt);
     /** checks whether the point is inside the specified rectangle */
     public native @Cast("bool") boolean inside(@Const @ByRef Rectd r);
-
+    /** x coordinate of the point */
     public native double x(); public native Point2d x(double x);
-    public native double y(); public native Point2d y(double y); //< the point coordinates
+    /** y coordinate of the point */
+    public native double y(); public native Point2d y(double y);
 }
  // namespace
 
@@ -10710,7 +10695,7 @@ The following Point3_\<\> aliases are available:
     }
 
 
-    // various constructors
+    /** default constructor */
     public Point3i() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Point3i(int _x, int _y, int _z) { super((Pointer)null); allocate(_x, _y, _z); }
@@ -10733,10 +10718,12 @@ The following Point3_\<\> aliases are available:
     public native double ddot(@Const @ByRef Point3i pt);
     /** cross product of the 2 3D points */
     public native @ByVal Point3i cross(@Const @ByRef Point3i pt);
-
+    /** x coordinate of the 3D point */
     public native int x(); public native Point3i x(int x);
+    /** y coordinate of the 3D point */
     public native int y(); public native Point3i y(int y);
-    public native int z(); public native Point3i z(int z); //< the point coordinates
+    /** z coordinate of the 3D point */
+    public native int z(); public native Point3i z(int z);
 }
 @Name("cv::Point3_<float>") @NoOffset public static class Point3f extends FloatPointer {
     static { Loader.load(); }
@@ -10750,7 +10737,7 @@ The following Point3_\<\> aliases are available:
     }
 
 
-    // various constructors
+    /** default constructor */
     public Point3f() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Point3f(float _x, float _y, float _z) { super((Pointer)null); allocate(_x, _y, _z); }
@@ -10773,10 +10760,12 @@ The following Point3_\<\> aliases are available:
     public native double ddot(@Const @ByRef Point3f pt);
     /** cross product of the 2 3D points */
     public native @ByVal Point3f cross(@Const @ByRef Point3f pt);
-
+    /** x coordinate of the 3D point */
     public native float x(); public native Point3f x(float x);
+    /** y coordinate of the 3D point */
     public native float y(); public native Point3f y(float y);
-    public native float z(); public native Point3f z(float z); //< the point coordinates
+    /** z coordinate of the 3D point */
+    public native float z(); public native Point3f z(float z);
 }
 @Name("cv::Point3_<double>") @NoOffset public static class Point3d extends DoublePointer {
     static { Loader.load(); }
@@ -10790,7 +10779,7 @@ The following Point3_\<\> aliases are available:
     }
 
 
-    // various constructors
+    /** default constructor */
     public Point3d() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Point3d(double _x, double _y, double _z) { super((Pointer)null); allocate(_x, _y, _z); }
@@ -10813,10 +10802,12 @@ The following Point3_\<\> aliases are available:
     public native double ddot(@Const @ByRef Point3d pt);
     /** cross product of the 2 3D points */
     public native @ByVal Point3d cross(@Const @ByRef Point3d pt);
-
+    /** x coordinate of the 3D point */
     public native double x(); public native Point3d x(double x);
+    /** y coordinate of the 3D point */
     public native double y(); public native Point3d y(double y);
-    public native double z(); public native Point3d z(double z); //< the point coordinates
+    /** z coordinate of the 3D point */
+    public native double z(); public native Point3d z(double z);
 }
  // namespace
 
@@ -10847,7 +10838,7 @@ OpenCV defines the following Size_\<\> aliases:
     }
 
 
-    /** various constructors */
+    /** default constructor */
     public Size() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Size(int _width, int _height) { super((Pointer)null); allocate(_width, _height); }
@@ -10865,8 +10856,10 @@ OpenCV defines the following Size_\<\> aliases:
 
     /** conversion of another data type. */
 
+    /** the width */
     public native int width(); public native Size width(int width);
-    public native int height(); public native Size height(int height); // the width and the height
+    /** the height */
+    public native int height(); public native Size height(int height);
 }
 @Name("cv::Size_<float>") @NoOffset public static class Size2f extends FloatPointer {
     static { Loader.load(); }
@@ -10880,7 +10873,7 @@ OpenCV defines the following Size_\<\> aliases:
     }
 
 
-    /** various constructors */
+    /** default constructor */
     public Size2f() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Size2f(float _width, float _height) { super((Pointer)null); allocate(_width, _height); }
@@ -10898,8 +10891,10 @@ OpenCV defines the following Size_\<\> aliases:
 
     /** conversion of another data type. */
 
+    /** the width */
     public native float width(); public native Size2f width(float width);
-    public native float height(); public native Size2f height(float height); // the width and the height
+    /** the height */
+    public native float height(); public native Size2f height(float height);
 }
 @Name("cv::Size_<double>") @NoOffset public static class Size2d extends DoublePointer {
     static { Loader.load(); }
@@ -10913,7 +10908,7 @@ OpenCV defines the following Size_\<\> aliases:
     }
 
 
-    /** various constructors */
+    /** default constructor */
     public Size2d() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Size2d(double _width, double _height) { super((Pointer)null); allocate(_width, _height); }
@@ -10931,8 +10926,10 @@ OpenCV defines the following Size_\<\> aliases:
 
     /** conversion of another data type. */
 
+    /** the width */
     public native double width(); public native Size2d width(double width);
-    public native double height(); public native Size2d height(double height); // the width and the height
+    /** the height */
+    public native double height(); public native Size2d height(double height);
 }
  // namespace
 
@@ -10993,7 +10990,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     }
 
 
-    /** various constructors */
+    /** default constructor */
     public Rect() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Rect(int _x, int _y, int _width, int _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
@@ -11023,10 +11020,14 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** checks whether the rectangle contains the point */
     public native @Cast("bool") boolean contains(@Const @ByRef Point pt);
 
+    /** x coordinate of the top-left corner */
     public native int x(); public native Rect x(int x);
+    /** y coordinate of the top-left corner */
     public native int y(); public native Rect y(int y);
+    /** width of the rectangle */
     public native int width(); public native Rect width(int width);
-    public native int height(); public native Rect height(int height); //< the top-left corner, as well as width and height of the rectangle
+    /** height of the rectangle */
+    public native int height(); public native Rect height(int height);
 }
 @Name("cv::Rect_<float>") @NoOffset public static class Rectf extends FloatPointer {
     static { Loader.load(); }
@@ -11040,7 +11041,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     }
 
 
-    /** various constructors */
+    /** default constructor */
     public Rectf() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Rectf(float _x, float _y, float _width, float _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
@@ -11070,10 +11071,14 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** checks whether the rectangle contains the point */
     public native @Cast("bool") boolean contains(@Const @ByRef Point2f pt);
 
+    /** x coordinate of the top-left corner */
     public native float x(); public native Rectf x(float x);
+    /** y coordinate of the top-left corner */
     public native float y(); public native Rectf y(float y);
+    /** width of the rectangle */
     public native float width(); public native Rectf width(float width);
-    public native float height(); public native Rectf height(float height); //< the top-left corner, as well as width and height of the rectangle
+    /** height of the rectangle */
+    public native float height(); public native Rectf height(float height);
 }
 @Name("cv::Rect_<double>") @NoOffset public static class Rectd extends DoublePointer {
     static { Loader.load(); }
@@ -11087,7 +11092,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     }
 
 
-    /** various constructors */
+    /** default constructor */
     public Rectd() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Rectd(double _x, double _y, double _width, double _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
@@ -11117,10 +11122,14 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** checks whether the rectangle contains the point */
     public native @Cast("bool") boolean contains(@Const @ByRef Point2d pt);
 
+    /** x coordinate of the top-left corner */
     public native double x(); public native Rectd x(double x);
+    /** y coordinate of the top-left corner */
     public native double y(); public native Rectd y(double y);
+    /** width of the rectangle */
     public native double width(); public native Rectd width(double width);
-    public native double height(); public native Rectd height(double height); //< the top-left corner, as well as width and height of the rectangle
+    /** height of the rectangle */
+    public native double height(); public native Rectd height(double height);
 }
  // namespace
 
@@ -11129,24 +11138,10 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
 /** \brief The class represents rotated (i.e. not up-right) rectangles on a plane.
 <p>
 Each rectangle is specified by the center point (mass center), length of each side (represented by
-cv::Size2f structure) and the rotation angle in degrees.
+#Size2f structure) and the rotation angle in degrees.
 <p>
 The sample below demonstrates how to use RotatedRect:
-<pre>{@code
-    Mat image(200, 200, CV_8UC3, Scalar(0));
-    RotatedRect rRect = RotatedRect(Point2f(100,100), Size2f(100,50), 30);
-
-    Point2f vertices[4];
-    rRect.points(vertices);
-    for (int i = 0; i < 4; i++)
-        line(image, vertices[i], vertices[(i+1)%4], Scalar(0,255,0));
-
-    Rect brect = rRect.boundingRect();
-    rectangle(image, brect, Scalar(255,0,0));
-
-    imshow("rectangles", image);
-    waitKey(0);
-}</pre>
+\snippet snippets/core_various.cpp RotatedRect_demo
 ![image](pics/rotatedrect.png)
 <p>
 \sa CamShift, fitEllipse, minAreaRect, CvBox2D
@@ -11162,10 +11157,10 @@ The sample below demonstrates how to use RotatedRect:
         return (RotatedRect)super.position(position);
     }
 
-    /** various constructors */
+    /** default constructor */
     public RotatedRect() { super((Pointer)null); allocate(); }
     private native void allocate();
-    /**
+    /** full constructor
     @param center The rectangle mass center.
     @param size Width and height of the rectangle.
     @param angle The rotation angle in a clockwise direction. When the angle is 0, 90, 180, 270 etc.,
@@ -11188,10 +11183,12 @@ The sample below demonstrates how to use RotatedRect:
     public native @ByVal Rect boundingRect();
     /** returns the minimal (exact) floating point rectangle containing the rotated rectangle, not intended for use with images */
     public native @ByVal Rectf boundingRect2f();
-
-    public native @ByRef Point2f center(); public native RotatedRect center(Point2f center); //< the rectangle mass center
-    public native @ByRef Size2f size(); public native RotatedRect size(Size2f size);    //< width and height of the rectangle
-    public native float angle(); public native RotatedRect angle(float angle);    //< the rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.
+    /** returns the rectangle mass center */
+    public native @ByRef Point2f center(); public native RotatedRect center(Point2f center);
+    /** returns width and height of the rectangle */
+    public native @ByRef Size2f size(); public native RotatedRect size(Size2f size);
+    /** returns the rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle. */
+    public native float angle(); public native RotatedRect angle(float angle);
 }
  // namespace
 
@@ -11265,7 +11262,7 @@ OpenCV to pass pixel values.
         return (Scalar)super.position(position);
     }
 
-    /** various constructors */
+    /** default constructor */
     public Scalar() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Scalar(double v0, double v1, double v2/*=0*/, double v3/*=0*/) { super((Pointer)null); allocate(v0, v1, v2, v3); }
@@ -11284,10 +11281,10 @@ OpenCV to pass pixel values.
     public native @ByVal Scalar mul(@Const @ByRef Scalar a, double scale/*=1*/ );
     public native @ByVal Scalar mul(@Const @ByRef Scalar a );
 
-    // returns (v0, -v1, -v2, -v3)
+    /** returns (v0, -v1, -v2, -v3) */
     public native @ByVal Scalar conj();
 
-    // returns true iff v1 == v2 == v3 == 0
+    /** returns true iff v1 == v2 == v3 == 0 */
     public native @Cast("bool") boolean isReal();
 }
 @Name("cv::Scalar_<int>") public static class Scalar4i extends IntPointer {
@@ -11301,7 +11298,7 @@ OpenCV to pass pixel values.
         return (Scalar4i)super.position(position);
     }
 
-    /** various constructors */
+    /** default constructor */
     public Scalar4i() { super((Pointer)null); allocate(); }
     private native void allocate();
     public Scalar4i(int v0, int v1, int v2/*=0*/, int v3/*=0*/) { super((Pointer)null); allocate(v0, v1, v2, v3); }
@@ -11320,10 +11317,10 @@ OpenCV to pass pixel values.
     public native @ByVal Scalar4i mul(@Const @ByRef Scalar4i a, double scale/*=1*/ );
     public native @ByVal Scalar4i mul(@Const @ByRef Scalar4i a );
 
-    // returns (v0, -v1, -v2, -v3)
+    /** returns (v0, -v1, -v2, -v3) */
     public native @ByVal Scalar4i conj();
 
-    // returns true iff v1 == v2 == v3 == 0
+    /** returns true iff v1 == v2 == v3 == 0 */
     public native @Cast("bool") boolean isReal();
 }
  // namespace
@@ -11334,14 +11331,13 @@ OpenCV to pass pixel values.
 /** \brief Data structure for salient point detectors.
 <p>
 The class instance stores a keypoint, i.e. a point feature found by one of many available keypoint
-detectors, such as Harris corner detector, cv::FAST, cv::StarDetector, cv::SURF, cv::SIFT,
-cv::LDetector etc.
+detectors, such as Harris corner detector, #FAST, %StarDetector, %SURF, %SIFT etc.
 <p>
 The keypoint is characterized by the 2D position, scale (proportional to the diameter of the
 neighborhood that needs to be taken into account), orientation and some other parameters. The
 keypoint neighborhood is then analyzed by another algorithm that builds a descriptor (usually
 represented as a feature vector). The keypoints representing the same object in different images
-can then be matched using cv::KDTree or another method.
+can then be matched using %KDTree or another method.
 */
 @Namespace("cv") @NoOffset public static class KeyPoint extends Pointer {
     static { Loader.load(); }
@@ -11473,9 +11469,12 @@ descriptors.
     public DMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance) { super((Pointer)null); allocate(_queryIdx, _trainIdx, _imgIdx, _distance); }
     private native void allocate(int _queryIdx, int _trainIdx, int _imgIdx, float _distance);
 
-    public native int queryIdx(); public native DMatch queryIdx(int queryIdx); // query descriptor index
-    public native int trainIdx(); public native DMatch trainIdx(int trainIdx); // train descriptor index
-    public native int imgIdx(); public native DMatch imgIdx(int imgIdx);   // train image index
+    /** query descriptor index */
+    public native int queryIdx(); public native DMatch queryIdx(int queryIdx);
+    /** train descriptor index */
+    public native int trainIdx(); public native DMatch trainIdx(int trainIdx);
+    /** train image index */
+    public native int imgIdx(); public native DMatch imgIdx(int imgIdx);
 
     public native float distance(); public native DMatch distance(float distance);
 
@@ -11530,8 +11529,10 @@ be fully initialized using the advanced variant of the constructor.
 
     /** the type of termination criteria: COUNT, EPS or COUNT + EPS */
     public native int type(); public native TermCriteria type(int type);
-    public native int maxCount(); public native TermCriteria maxCount(int maxCount); // the maximum number of iterations/elements
-    public native double epsilon(); public native TermCriteria epsilon(double epsilon); // the desired accuracy
+    /** the maximum number of iterations/elements */
+    public native int maxCount(); public native TermCriteria maxCount(int maxCount);
+    /** the desired accuracy */
+    public native double epsilon(); public native TermCriteria epsilon(double epsilon);
 }
 
 
@@ -11980,7 +11981,7 @@ usually constructed and thrown implicitly via CV_Error and CV_Error_ macros.
 <p>
 By default the function prints information about the error to stderr,
 then it either stops if cv::setBreakOnError() had been called before or raises the exception.
-It is possible to alternate error processing by using cv::redirectError().
+It is possible to alternate error processing by using #redirectError().
 @param exc the exception raisen.
 @deprecated drop this version
  */
@@ -12019,7 +12020,7 @@ public static final int
     /**The output covariance matrix is calculated as:
         \f[\texttt{scale}   \cdot  [  \texttt{vects}  [0]-  \texttt{mean}  , \texttt{vects}  [1]-  \texttt{mean}  ,...]  \cdot  [ \texttt{vects}  [0]- \texttt{mean}  , \texttt{vects}  [1]- \texttt{mean}  ,...]^T,\f]
         covar will be a square matrix of the same size as the total number of elements in each input
-        vector. One and only one of COVAR_SCRAMBLED and COVAR_NORMAL must be specified.*/
+        vector. One and only one of #COVAR_SCRAMBLED and #COVAR_NORMAL must be specified.*/
     COVAR_NORMAL    = 1,
     /** If the flag is specified, the function does not calculate mean from
         the input vectors but, instead, uses the passed mean vector. This is useful if mean has been
@@ -12125,8 +12126,8 @@ Normally, the function is not called directly. It is used inside filtering funct
 copyMakeBorder.
 @param p 0-based coordinate of the extrapolated pixel along one of the axes, likely \<0 or \>= len
 @param len Length of the array along the corresponding axis.
-@param borderType Border type, one of the cv::BorderTypes, except for cv::BORDER_TRANSPARENT and
-cv::BORDER_ISOLATED . When borderType==cv::BORDER_CONSTANT , the function always returns -1, regardless
+@param borderType Border type, one of the #BorderTypes, except for #BORDER_TRANSPARENT and
+#BORDER_ISOLATED . When borderType==#BORDER_CONSTANT , the function always returns -1, regardless
 of p and len.
 <p>
 \sa copyMakeBorder
@@ -12163,7 +12164,7 @@ function does not copy src itself but simply constructs the border, for example:
 }</pre>
 \note When the source image is a part (ROI) of a bigger image, the function will try to use the
 pixels outside of the ROI to form a border. To disable this feature and always do extrapolation, as
-if src was not a ROI, use borderType | BORDER_ISOLATED.
+if src was not a ROI, use borderType | #BORDER_ISOLATED.
 <p>
 @param src Source image.
 @param dst Destination image of the same type as src and the size Size(src.cols+left+right,
@@ -12598,7 +12599,7 @@ Scalar_ 's.
 
 /** \brief Calculates the  absolute norm of an array.
 <p>
-This version of cv::norm calculates the absolute norm of src1. The type of norm to calculate is specified using cv::NormTypes.
+This version of #norm calculates the absolute norm of src1. The type of norm to calculate is specified using #NormTypes.
 <p>
 As example for one array consider the function \f$r(x)= \begin{pmatrix} x \\ 1-x \end{pmatrix}, x \in [-1;1]\f$.
 The \f$ L_{1}, L_{2} \f$ and \f$ L_{\infty} \f$ norm for the sample value \f$r(-1) = \begin{pmatrix} -1 \\ 2 \end{pmatrix}\f$
@@ -12620,7 +12621,7 @@ It is notable that the \f$ L_{1} \f$ norm forms the upper and the \f$ L_{\infty}
 <p>
 When the mask parameter is specified and it is not empty, the norm is
 <p>
-If normType is not specified, NORM_L2 is used.
+If normType is not specified, #NORM_L2 is used.
 calculated only over the region specified by the mask.
 <p>
 Multi-channel input arrays are treated as single-channel arrays, that is,
@@ -12629,7 +12630,7 @@ the results for all channels are combined.
 Hamming norms can only be calculated with CV_8U depth arrays.
 <p>
 @param src1 first input array.
-@param normType type of the norm (see cv::NormTypes).
+@param normType type of the norm (see #NormTypes).
 @param mask optional operation mask; it must have the same size as src1 and CV_8UC1 type.
 */
 @Namespace("cv") public static native double norm(@ByVal Mat src1, int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
@@ -12643,11 +12644,11 @@ Hamming norms can only be calculated with CV_8U depth arrays.
 <p>
 This version of cv::norm calculates the absolute difference norm
 or the relative difference norm of arrays src1 and src2.
-The type of norm to calculate is specified using cv::NormTypes.
+The type of norm to calculate is specified using #NormTypes.
 <p>
 @param src1 first input array.
 @param src2 second input array of the same size and the same type as src1.
-@param normType type of the norm (cv::NormTypes).
+@param normType type of the norm (see #NormTypes).
 @param mask optional operation mask; it must have the same size as src1 and CV_8UC1 type.
 */
 @Namespace("cv") public static native double norm(@ByVal Mat src1, @ByVal Mat src2,
@@ -12661,7 +12662,7 @@ The type of norm to calculate is specified using cv::NormTypes.
 @Namespace("cv") public static native double norm(@ByVal GpuMat src1, @ByVal GpuMat src2);
 /** \overload
 @param src first input array.
-@param normType type of the norm (see cv::NormTypes).
+@param normType type of the norm (see #NormTypes).
 */
 @Namespace("cv") public static native double norm( @Const @ByRef SparseMat src, int normType );
 
@@ -12920,11 +12921,11 @@ in each dimension are stored there sequentially.
 
 /** \brief Reduces a matrix to a vector.
 <p>
-The function cv::reduce reduces the matrix to a vector by treating the matrix rows/columns as a set of
+The function #reduce reduces the matrix to a vector by treating the matrix rows/columns as a set of
 1D vectors and performing the specified operation on the vectors until a single row/column is
 obtained. For example, the function can be used to compute horizontal and vertical projections of a
-raster image. In case of REDUCE_MAX and REDUCE_MIN , the output image should have the same type as the source one.
-In case of REDUCE_SUM and REDUCE_AVG , the output may have a larger element bit-depth to preserve accuracy.
+raster image. In case of #REDUCE_MAX and #REDUCE_MIN , the output image should have the same type as the source one.
+In case of #REDUCE_SUM and #REDUCE_AVG , the output may have a larger element bit-depth to preserve accuracy.
 And multi-channel arrays are also supported in these two reduction modes.
 <p>
 The following code demonstrates its usage for a single channel matrix.
@@ -12937,7 +12938,7 @@ And the following code demonstrates its usage for a two-channel matrix.
 @param dst output vector. Its size and type is defined by dim and dtype parameters.
 @param dim dimension index along which the matrix is reduced. 0 means that the matrix is reduced to
 a single row. 1 means that the matrix is reduced to a single column.
-@param rtype reduction operation that could be one of cv::ReduceTypes
+@param rtype reduction operation that could be one of #ReduceTypes
 @param dtype when negative, the output vector will have the same type as the input matrix,
 otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
 \sa repeat
@@ -13990,25 +13991,26 @@ element is a 2D/3D vector to be transformed.
 @Namespace("cv") public static native void perspectiveTransform(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat m );
 @Namespace("cv") public static native void perspectiveTransform(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat m );
 
-/** \brief Copies the lower or the upper half of a square matrix to another half.
+/** \brief Copies the lower or the upper half of a square matrix to its another half.
 <p>
-The function cv::completeSymm copies the lower half of a square matrix to
+The function cv::completeSymm copies the lower or the upper half of a square matrix to
 its another half. The matrix diagonal remains unchanged:
-*   \f$\texttt{mtx}_{ij}=\texttt{mtx}_{ji}\f$ for \f$i > j\f$ if
+ - \f$\texttt{m}_{ij}=\texttt{m}_{ji}\f$ for \f$i > j\f$ if
     lowerToUpper=false
-*   \f$\texttt{mtx}_{ij}=\texttt{mtx}_{ji}\f$ for \f$i < j\f$ if
+ - \f$\texttt{m}_{ij}=\texttt{m}_{ji}\f$ for \f$i < j\f$ if
     lowerToUpper=true
-@param mtx input-output floating-point square matrix.
+<p>
+@param m input-output floating-point square matrix.
 @param lowerToUpper operation flag; if true, the lower half is copied to
 the upper half. Otherwise, the upper half is copied to the lower half.
 \sa flip, transpose
 */
-@Namespace("cv") public static native void completeSymm(@ByVal Mat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
-@Namespace("cv") public static native void completeSymm(@ByVal Mat mtx);
-@Namespace("cv") public static native void completeSymm(@ByVal UMat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
-@Namespace("cv") public static native void completeSymm(@ByVal UMat mtx);
-@Namespace("cv") public static native void completeSymm(@ByVal GpuMat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
-@Namespace("cv") public static native void completeSymm(@ByVal GpuMat mtx);
+@Namespace("cv") public static native void completeSymm(@ByVal Mat m, @Cast("bool") boolean lowerToUpper/*=false*/);
+@Namespace("cv") public static native void completeSymm(@ByVal Mat m);
+@Namespace("cv") public static native void completeSymm(@ByVal UMat m, @Cast("bool") boolean lowerToUpper/*=false*/);
+@Namespace("cv") public static native void completeSymm(@ByVal UMat m);
+@Namespace("cv") public static native void completeSymm(@ByVal GpuMat m, @Cast("bool") boolean lowerToUpper/*=false*/);
+@Namespace("cv") public static native void completeSymm(@ByVal GpuMat m);
 
 /** \brief Initializes a scaled identity matrix.
 <p>
@@ -14067,15 +14069,15 @@ The function cv::invert inverts the matrix src and stores the result in dst
 the pseudo-inverse matrix (the dst matrix) so that norm(src\*dst - I) is
 minimal, where I is an identity matrix.
 <p>
-In case of the DECOMP_LU method, the function returns non-zero value if
+In case of the #DECOMP_LU method, the function returns non-zero value if
 the inverse has been successfully calculated and 0 if src is singular.
 <p>
-In case of the DECOMP_SVD method, the function returns the inverse
+In case of the #DECOMP_SVD method, the function returns the inverse
 condition number of src (the ratio of the smallest singular value to the
 largest singular value) and 0 if src is singular. The SVD method
 calculates a pseudo-inverse matrix if src is singular.
 <p>
-Similarly to DECOMP_LU, the method DECOMP_CHOLESKY works only with
+Similarly to #DECOMP_LU, the method #DECOMP_CHOLESKY works only with
 non-singular square matrices that should also be symmetrical and
 positively defined. In this case, the function stores the inverted
 matrix in dst and returns non-zero. Otherwise, it returns 0.
@@ -14096,10 +14098,10 @@ matrix in dst and returns non-zero. Otherwise, it returns 0.
 <p>
 The function cv::solve solves a linear system or least-squares problem (the
 latter is possible with SVD or QR methods, or by specifying the flag
-DECOMP_NORMAL ):
+#DECOMP_NORMAL ):
 \f[\texttt{dst} =  \arg \min _X \| \texttt{src1} \cdot \texttt{X} -  \texttt{src2} \|\f]
 <p>
-If DECOMP_LU or DECOMP_CHOLESKY method is used, the function returns 1
+If #DECOMP_LU or #DECOMP_CHOLESKY method is used, the function returns 1
 if src1 (or \f$\texttt{src1}^T\texttt{src1}\f$ ) is non-singular. Otherwise,
 it returns 0. In the latter case, dst is not valid. Other methods find a
 pseudo-solution in case of a singular left-hand side part.
@@ -14111,7 +14113,7 @@ will not do the work. Use SVD::solveZ instead.
 @param src1 input matrix on the left-hand side of the system.
 @param src2 input matrix on the right-hand side of the system.
 @param dst output solution.
-@param flags solution (matrix inversion) method (cv::DecompTypes)
+@param flags solution (matrix inversion) method (#DecompTypes)
 \sa invert, SVD, eigen
 */
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal Mat src1, @ByVal Mat src2,
@@ -14137,7 +14139,7 @@ proper comparison predicate.
 <p>
 @param src input single-channel array.
 @param dst output array of the same size and type as src.
-@param flags operation flags, a combination of cv::SortFlags
+@param flags operation flags, a combination of #SortFlags
 \sa sortIdx, randShuffle
 */
 @Namespace("cv") public static native void sort(@ByVal Mat src, @ByVal Mat dst, int flags);
@@ -14177,6 +14179,7 @@ The function solveCubic finds the real roots of a cubic equation:
 The roots are stored in the roots array.
 @param coeffs equation coefficients, an array of 3 or 4 elements.
 @param roots output array of real roots that has 1 or 3 elements.
+@return number of real roots. It can be 0, 1 or 2.
 */
 @Namespace("cv") public static native int solveCubic(@ByVal Mat coeffs, @ByVal Mat roots);
 @Namespace("cv") public static native int solveCubic(@ByVal UMat coeffs, @ByVal UMat roots);
@@ -14255,7 +14258,7 @@ the set of input vectors.
 @param nsamples number of samples
 @param covar output covariance matrix of the type ctype and square size.
 @param mean input or output (depending on the flags) array as the average value of the input vectors.
-@param flags operation flags as a combination of cv::CovarFlags
+@param flags operation flags as a combination of #CovarFlags
 @param ctype type of the matrixl; it equals 'CV_64F' by default.
 \sa PCA, mulTransposed, Mahalanobis
 \todo InputArrayOfArrays
@@ -14266,11 +14269,11 @@ the set of input vectors.
                                  int flags);
 
 /** \overload
-\note use cv::COVAR_ROWS or cv::COVAR_COLS flag
+\note use #COVAR_ROWS or #COVAR_COLS flag
 @param samples samples stored as rows/columns of a single matrix.
 @param covar output covariance matrix of the type ctype and square size.
 @param mean input or output (depending on the flags) array as the average value of the input vectors.
-@param flags operation flags as a combination of cv::CovarFlags
+@param flags operation flags as a combination of #CovarFlags
 @param ctype type of the matrixl; it equals 'CV_64F' by default.
 */
 @Namespace("cv") public static native void calcCovarMatrix( @ByVal Mat samples, @ByVal Mat covar,
@@ -14344,8 +14347,8 @@ the set of input vectors.
 <p>
 The function cv::Mahalanobis calculates and returns the weighted distance between two vectors:
 \f[d( \texttt{vec1} , \texttt{vec2} )= \sqrt{\sum_{i,j}{\texttt{icovar(i,j)}\cdot(\texttt{vec1}(I)-\texttt{vec2}(I))\cdot(\texttt{vec1(j)}-\texttt{vec2(j)})} }\f]
-The covariance matrix may be calculated using the cv::calcCovarMatrix function and then inverted using
-the invert function (preferably using the cv::DECOMP_SVD method, as the most accurate).
+The covariance matrix may be calculated using the #calcCovarMatrix function and then inverted using
+the invert function (preferably using the #DECOMP_SVD method, as the most accurate).
 @param v1 first 1D input vector.
 @param v2 second 1D input vector.
 @param icovar inverse covariance matrix.
@@ -14377,28 +14380,28 @@ is how 2D *CCS* spectrum looks:
 In case of 1D transform of a real vector, the output looks like the first row of the matrix above.
 <p>
 So, the function chooses an operation mode depending on the flags and size of the input array:
--   If DFT_ROWS is set or the input array has a single row or single column, the function
-    performs a 1D forward or inverse transform of each row of a matrix when DFT_ROWS is set.
+-   If #DFT_ROWS is set or the input array has a single row or single column, the function
+    performs a 1D forward or inverse transform of each row of a matrix when #DFT_ROWS is set.
     Otherwise, it performs a 2D transform.
--   If the input array is real and DFT_INVERSE is not set, the function performs a forward 1D or
+-   If the input array is real and #DFT_INVERSE is not set, the function performs a forward 1D or
     2D transform:
-    -   When DFT_COMPLEX_OUTPUT is set, the output is a complex matrix of the same size as
+    -   When #DFT_COMPLEX_OUTPUT is set, the output is a complex matrix of the same size as
         input.
-    -   When DFT_COMPLEX_OUTPUT is not set, the output is a real matrix of the same size as
+    -   When #DFT_COMPLEX_OUTPUT is not set, the output is a real matrix of the same size as
         input. In case of 2D transform, it uses the packed format as shown above. In case of a
         single 1D transform, it looks like the first row of the matrix above. In case of
-        multiple 1D transforms (when using the DFT_ROWS flag), each row of the output matrix
+        multiple 1D transforms (when using the #DFT_ROWS flag), each row of the output matrix
         looks like the first row of the matrix above.
--   If the input array is complex and either DFT_INVERSE or DFT_REAL_OUTPUT are not set, the
+-   If the input array is complex and either #DFT_INVERSE or #DFT_REAL_OUTPUT are not set, the
     output is a complex array of the same size as input. The function performs a forward or
     inverse 1D or 2D transform of the whole input array or each row of the input array
     independently, depending on the flags DFT_INVERSE and DFT_ROWS.
--   When DFT_INVERSE is set and the input array is real, or it is complex but DFT_REAL_OUTPUT
+-   When #DFT_INVERSE is set and the input array is real, or it is complex but #DFT_REAL_OUTPUT
     is set, the output is a real array of the same size as input. The function performs a 1D or 2D
     inverse transformation of the whole input array or each individual row, depending on the flags
-    DFT_INVERSE and DFT_ROWS.
+    #DFT_INVERSE and #DFT_ROWS.
 <p>
-If DFT_SCALE is set, the scaling is done after the transformation.
+If #DFT_SCALE is set, the scaling is done after the transformation.
 <p>
 Unlike dct , the function supports arrays of arbitrary size. But only those arrays are processed
 efficiently, whose sizes can be factorized in a product of small prime numbers (2, 3, and 5 in the
@@ -14464,7 +14467,7 @@ To optimize this sample, consider the following approaches:
 -   If different tiles in C can be calculated in parallel and, thus, the convolution is done by
     parts, the loop can be threaded.
 <p>
-All of the above improvements have been implemented in matchTemplate and filter2D . Therefore, by
+All of the above improvements have been implemented in #matchTemplate and #filter2D . Therefore, by
 using them, you can get the performance even better than with the above theoretically optimal
 implementation. Though, those two functions actually calculate cross-correlation, not convolution,
 so you need to "flip" the second convolution operand B vertically and horizontally using flip .
@@ -14477,10 +14480,10 @@ so you need to "flip" the second convolution operand B vertically and horizontal
     opencv_source/samples/python/dft.py
 @param src input array that could be real or complex.
 @param dst output array whose size and type depends on the flags .
-@param flags transformation flags, representing a combination of the cv::DftFlags
+@param flags transformation flags, representing a combination of the #DftFlags
 @param nonzeroRows when the parameter is not zero, the function assumes that only the first
-nonzeroRows rows of the input array (DFT_INVERSE is not set) or only the first nonzeroRows of the
-output array (DFT_INVERSE is set) contain non-zeros, thus, the function can handle the rest of the
+nonzeroRows rows of the input array (#DFT_INVERSE is not set) or only the first nonzeroRows of the
+output array (#DFT_INVERSE is set) contain non-zeros, thus, the function can handle the rest of the
 rows more efficiently and save some time; this technique is very useful for calculating array
 cross-correlation or convolution using DFT.
 \sa dct , getOptimalDFTSize , mulSpectrums, filter2D , matchTemplate , flip , cartToPolar ,
@@ -14495,13 +14498,13 @@ magnitude , phase
 
 /** \brief Calculates the inverse Discrete Fourier Transform of a 1D or 2D array.
 <p>
-idft(src, dst, flags) is equivalent to dft(src, dst, flags | DFT_INVERSE) .
-\note None of dft and idft scales the result by default. So, you should pass DFT_SCALE to one of
+idft(src, dst, flags) is equivalent to dft(src, dst, flags | #DFT_INVERSE) .
+\note None of dft and idft scales the result by default. So, you should pass #DFT_SCALE to one of
 dft or idft explicitly to make these transforms mutually inverse.
 \sa dft, dct, idct, mulSpectrums, getOptimalDFTSize
 @param src input floating-point real or complex array.
 @param dst output array whose size and type depend on the flags.
-@param flags operation flags (see dft and cv::DftFlags).
+@param flags operation flags (see dft and #DftFlags).
 @param nonzeroRows number of dst rows to process; the rest of the rows have undefined content (see
 the convolution sample in dft description.
 */
@@ -14531,9 +14534,9 @@ floating-point array:
     \f[X =  \left (C^{(N)} \right )^T  \cdot X  \cdot C^{(N)}\f]
 <p>
 The function chooses the mode of operation by looking at the flags and size of the input array:
--   If (flags & DCT_INVERSE) == 0 , the function does a forward 1D or 2D transform. Otherwise, it
+-   If (flags & #DCT_INVERSE) == 0 , the function does a forward 1D or 2D transform. Otherwise, it
     is an inverse 1D or 2D transform.
--   If (flags & DCT_ROWS) != 0 , the function performs a 1D transform of each row.
+-   If (flags & #DCT_ROWS) != 0 , the function performs a 1D transform of each row.
 -   If the array is a single column or a single row, the function performs a 1D transform.
 -   If none of the above is true, the function performs a 2D transform.
 <p>
@@ -15126,7 +15129,7 @@ and vt must be computed, which is not necessary most of the time.
 
     /** \overload
     initializes an empty SVD structure and then calls SVD::operator()
-    @param src decomposed matrix.
+    @param src decomposed matrix. The depth has to be CV_32F or CV_64F.
     @param flags operation flags (SVD::Flags)
       */
     public SVD( @ByVal Mat src, int flags/*=0*/ ) { super((Pointer)null); allocate(src, flags); }
@@ -15150,7 +15153,7 @@ and vt must be computed, which is not necessary most of the time.
     different matrices. Each time, if needed, the previous u,{@code vt} , and w
     are reclaimed and the new matrices are created, which is all handled by
     Mat::create.
-    @param src decomposed matrix.
+    @param src decomposed matrix. The depth has to be CV_32F or CV_64F.
     @param flags operation flags (SVD::Flags)
       */
     public native @ByRef @Name("operator ()") SVD apply( @ByVal Mat src, int flags/*=0*/ );
@@ -15171,11 +15174,11 @@ and vt must be computed, which is not necessary most of the time.
     SVD::compute(A, w, u, vt);
     }</pre>
     <p>
-    @param src decomposed matrix
+    @param src decomposed matrix. The depth has to be CV_32F or CV_64F.
     @param w calculated singular values
     @param u calculated left singular vectors
-    @param vt transposed matrix of right singular values
-    @param flags operation flags - see SVD::SVD.
+    @param vt transposed matrix of right singular vectors
+    @param flags operation flags - see SVD::Flags.
       */
     public static native void compute( @ByVal Mat src, @ByVal Mat w,
                              @ByVal Mat u, @ByVal Mat vt, int flags/*=0*/ );
@@ -15192,7 +15195,7 @@ and vt must be computed, which is not necessary most of the time.
 
     /** \overload
     computes singular values of a matrix
-    @param src decomposed matrix
+    @param src decomposed matrix. The depth has to be CV_32F or CV_64F.
     @param w calculated singular values
     @param flags operation flags - see SVD::Flags.
       */
@@ -15249,7 +15252,7 @@ and vt must be computed, which is not necessary most of the time.
     if you need to solve many linear systems with the same left-hand side
     (for example, src ). If all you need is to solve a single system
     (possibly with multiple rhs immediately available), simply call solve
-    add pass DECOMP_SVD there. It does absolutely the same thing.
+    add pass #DECOMP_SVD there. It does absolutely the same thing.
       */
     public native void backSubst( @ByVal Mat rhs, @ByVal Mat dst );
     public native void backSubst( @ByVal UMat rhs, @ByVal UMat dst );
@@ -15526,7 +15529,7 @@ function parameter).
 after every attempt. The best (minimum) value is chosen and the corresponding labels and the
 compactness value are returned by the function. Basically, you can use only the core of the
 function, set the number of attempts to 1, initialize labels each time using a custom algorithm,
-pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose the best
+pass them with the ( flags = #KMEANS_USE_INITIAL_LABELS ) flag, and then choose the best
 (most-compact) clustering.
 */
 @Namespace("cv") public static native double kmeans( @ByVal Mat data, int K, @ByVal Mat bestLabels,
@@ -15610,31 +15613,8 @@ matching, graph-cut etc.), background subtraction (which can be done using mixtu
 models, codebook-based algorithm etc.), optical flow (block matching, Lucas-Kanade, Horn-Schunck
 etc.).
 <p>
-Here is example of SIFT use in your application via Algorithm interface:
-<pre>{@code
-    #include "opencv2/opencv.hpp"
-    #include "opencv2/xfeatures2d.hpp"
-    using namespace cv::xfeatures2d;
-
-    Ptr<Feature2D> sift = SIFT::create();
-    FileStorage fs("sift_params.xml", FileStorage::READ);
-    if( fs.isOpened() ) // if we have file with parameters, read them
-    {
-        sift->read(fs["sift_params"]);
-        fs.release();
-    }
-    else // else modify the parameters and store them; user can later edit the file to use different parameters
-    {
-        sift->setContrastThreshold(0.01f); // lower the contrast threshold, compared to the default value
-        {
-            WriteStructContext ws(fs, "sift_params", CV_NODE_MAP);
-            sift->write(fs);
-        }
-    }
-    Mat image = imread("myimage.png", 0), descriptors;
-    vector<KeyPoint> keypoints;
-    sift->detectAndCompute(image, noArray(), keypoints, descriptors);
-}</pre>
+Here is example of SimpleBlobDetector use in your application via Algorithm interface:
+\snippet snippets/core_various.cpp Algorithm
  */
 @Namespace("cv") public static class Algorithm extends Pointer {
     static { Loader.load(); }
@@ -15809,7 +15789,7 @@ Here is example of SIFT use in your application via Algorithm interface:
   \{
     \defgroup cudacore Core part
     \{
-      \defgroup cudacore_init Initalization and Information
+      \defgroup cudacore_init Initialization and Information
       \defgroup cudacore_struct Data Structures
     \}
   \}
@@ -16155,12 +16135,121 @@ The function does not reallocate memory if the matrix has proper attributes alre
 @Namespace("cv::cuda") public static native void ensureSizeIsEnough(int rows, int cols, int type, @ByVal GpuMat arr);
 
 /** \brief BufferPool for use with CUDA streams
- <p>
- * BufferPool utilizes cuda::Stream's allocator to create new buffers. It is
- * particularly useful when BufferPoolUsage is set to true, or a custom
- * allocator is specified for the cuda::Stream, and you want to implement your
- * own stream based functions utilizing the same underlying GPU memory
- * management.
+<p>
+BufferPool utilizes Stream's allocator to create new buffers for GpuMat's. It is
+only useful when enabled with #setBufferPoolUsage.
+<p>
+<pre>{@code
+    setBufferPoolUsage(true);
+}</pre>
+<p>
+\note #setBufferPoolUsage must be called \em before any Stream declaration.
+<p>
+Users may specify custom allocator for Stream and may implement their own stream based
+functions utilizing the same underlying GPU memory management.
+<p>
+If custom allocator is not specified, BufferPool utilizes StackAllocator by
+default. StackAllocator allocates a chunk of GPU device memory beforehand,
+and when GpuMat is declared later on, it is given the pre-allocated memory.
+This kind of strategy reduces the number of calls for memory allocating APIs
+such as cudaMalloc or cudaMallocPitch.
+<p>
+Below is an example that utilizes BufferPool with StackAllocator:
+<p>
+<pre>{@code
+    #include <opencv2/opencv.hpp>
+
+    using namespace cv;
+    using namespace cv::cuda
+
+    int main()
+    {
+        setBufferPoolUsage(true);                               // Tell OpenCV that we are going to utilize BufferPool
+        setBufferPoolConfig(getDevice(), 1024 * 1024 * 64, 2);  // Allocate 64 MB, 2 stacks (default is 10 MB, 5 stacks)
+
+        Stream stream1, stream2;                                // Each stream uses 1 stack
+        BufferPool pool1(stream1), pool2(stream2);
+
+        GpuMat d_src1 = pool1.getBuffer(4096, 4096, CV_8UC1);   // 16MB
+        GpuMat d_dst1 = pool1.getBuffer(4096, 4096, CV_8UC3);   // 48MB, pool1 is now full
+
+        GpuMat d_src2 = pool2.getBuffer(1024, 1024, CV_8UC1);   // 1MB
+        GpuMat d_dst2 = pool2.getBuffer(1024, 1024, CV_8UC3);   // 3MB
+
+        cvtColor(d_src1, d_dst1, CV_GRAY2BGR, 0, stream1);
+        cvtColor(d_src2, d_dst2, CV_GRAY2BGR, 0, stream2);
+    }
+}</pre>
+<p>
+If we allocate another GpuMat on pool1 in the above example, it will be carried out by
+the DefaultAllocator since the stack for pool1 is full.
+<p>
+<pre>{@code
+    GpuMat d_add1 = pool1.getBuffer(1024, 1024, CV_8UC1);   // Stack for pool1 is full, memory is allocated with DefaultAllocator
+}</pre>
+<p>
+If a third stream is declared in the above example, allocating with #getBuffer
+within that stream will also be carried out by the DefaultAllocator because we've run out of
+stacks.
+<p>
+<pre>{@code
+    Stream stream3;                                         // Only 2 stacks were allocated, we've run out of stacks
+    BufferPool pool3(stream3);
+    GpuMat d_src3 = pool3.getBuffer(1024, 1024, CV_8UC1);   // Memory is allocated with DefaultAllocator
+}</pre>
+<p>
+\warning When utilizing StackAllocator, deallocation order is important.
+<p>
+Just like a stack, deallocation must be done in LIFO order. Below is an example of
+erroneous usage that violates LIFO rule. If OpenCV is compiled in Debug mode, this
+sample code will emit CV_Assert error.
+<p>
+<pre>{@code
+    int main()
+    {
+        setBufferPoolUsage(true);                               // Tell OpenCV that we are going to utilize BufferPool
+        Stream stream;                                          // A default size (10 MB) stack is allocated to this stream
+        BufferPool pool(stream);
+
+        GpuMat mat1 = pool.getBuffer(1024, 1024, CV_8UC1);      // Allocate mat1 (1MB)
+        GpuMat mat2 = pool.getBuffer(1024, 1024, CV_8UC1);      // Allocate mat2 (1MB)
+
+        mat1.release();                                         // erroneous usage : mat2 must be deallocated before mat1
+    }
+}</pre>
+<p>
+Since C++ local variables are destroyed in the reverse order of construction,
+the code sample below satisfies the LIFO rule. Local GpuMat's are deallocated
+and the corresponding memory is automatically returned to the pool for later usage.
+<p>
+<pre>{@code
+    int main()
+    {
+        setBufferPoolUsage(true);                               // Tell OpenCV that we are going to utilize BufferPool
+        setBufferPoolConfig(getDevice(), 1024 * 1024 * 64, 2);  // Allocate 64 MB, 2 stacks (default is 10 MB, 5 stacks)
+
+        Stream stream1, stream2;                                // Each stream uses 1 stack
+        BufferPool pool1(stream1), pool2(stream2);
+
+        for (int i = 0; i < 10; i++)
+        {
+            GpuMat d_src1 = pool1.getBuffer(4096, 4096, CV_8UC1);   // 16MB
+            GpuMat d_dst1 = pool1.getBuffer(4096, 4096, CV_8UC3);   // 48MB, pool1 is now full
+
+            GpuMat d_src2 = pool2.getBuffer(1024, 1024, CV_8UC1);   // 1MB
+            GpuMat d_dst2 = pool2.getBuffer(1024, 1024, CV_8UC3);   // 3MB
+
+            d_src1.setTo(Scalar(i), stream1);
+            d_src2.setTo(Scalar(i), stream2);
+
+            cvtColor(d_src1, d_dst1, CV_GRAY2BGR, 0, stream1);
+            cvtColor(d_src2, d_dst2, CV_GRAY2BGR, 0, stream2);
+                                                                    // The order of destruction of the local variables is:
+                                                                    //   d_dst2 => d_src2 => d_dst1 => d_src1
+                                                                    // LIFO rule is satisfied, this code runs without error
+        }
+    }
+}</pre>
  */
 @Namespace("cv::cuda") @NoOffset public static class BufferPool extends Pointer {
     static { Loader.load(); }
@@ -17800,26 +17889,26 @@ public static final int
 //     template<typename _Tp> CV_MAT_AUG_OPERATOR1(op, cvop, A, B)
 //     template<typename _Tp> CV_MAT_AUG_OPERATOR1(op, cvop, const A, B)
 
-@Namespace("cv") public static native @ByRef @Name("operator +=") Mat addPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator +=") Mat addPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator +=") Mat addPut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator +=") Mat addPut(  @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator -=") Mat subtractPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator -=") Mat subtractPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator -=") Mat subtractPut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator -=") Mat subtractPut(  @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator *=") Mat multiplyPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator *=") Mat multiplyPut( @ByRef Mat a, double b);
+@Namespace("cv") public static native @ByRef @Name("operator *=") Mat multiplyPut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator *=") Mat multiplyPut(  @ByRef Mat a, double b);
 
-@Namespace("cv") public static native @ByRef @Name("operator /=") Mat dividePut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator /=") Mat dividePut( @ByRef Mat a, double b);
+@Namespace("cv") public static native @ByRef @Name("operator /=") Mat dividePut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator /=") Mat dividePut(  @ByRef Mat a, double b);
 
-@Namespace("cv") public static native @ByRef @Name("operator &=") Mat andPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator &=") Mat andPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator &=") Mat andPut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator &=") Mat andPut(  @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator |=") Mat orPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator |=") Mat orPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator |=") Mat orPut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator |=") Mat orPut(  @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator ^=") Mat xorPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator ^=") Mat xorPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator ^=") Mat xorPut(  @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator ^=") Mat xorPut(  @ByRef Mat a, @Const @ByRef Scalar b);
 
 // #undef CV_MAT_AUG_OPERATOR_T
 // #undef CV_MAT_AUG_OPERATOR
@@ -17872,6 +17961,15 @@ public static final int
 @Namespace("cv") public static native @Name("randu<double>") double doubleRand();
 
 ///////////////////////////////// Formatted string generation /////////////////////////////////
+
+/** \brief Returns a text string formatted using the printf-like expression.
+<p>
+The function acts like sprintf but forms and returns an STL string. It can be used to form an error
+message in the Exception constructor.
+@param fmt printf-compatible formatting specifiers.
+ */
+@Namespace("cv") public static native @Str BytePointer format( @Cast("const char*") BytePointer fmt );
+@Namespace("cv") public static native @Str String format( String fmt );
 
 ///////////////////////////////// Formatted output of cv::Mat /////////////////////////////////
 
@@ -18247,17 +18345,6 @@ public static final int
     public native int allocatorFlags_(); public native UMatData allocatorFlags_(int allocatorFlags_);
     public native int mapcount(); public native UMatData mapcount(int mapcount);
     public native UMatData originalUMatData(); public native UMatData originalUMatData(UMatData originalUMatData);
-}
-
-
-@Namespace("cv") @NoOffset public static class UMatDataAutoLock extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UMatDataAutoLock(Pointer p) { super(p); }
-
-    public UMatDataAutoLock(UMatData u) { super((Pointer)null); allocate(u); }
-    private native void allocate(UMatData u);
-    public native UMatData u(); public native UMatDataAutoLock u(UMatData u);
 }
 
 
@@ -19611,7 +19698,27 @@ including std::sort().
     public native @Cast("size_t") long total(int startDim, int endDim/*=INT_MAX*/);
     public native @Cast("size_t") long total(int startDim);
 
-    /** returns N if the matrix is 1-channel (N x ptdim) or ptdim-channel (1 x N) or (N x 1); negative number otherwise */
+    /**
+     * @param elemChannels Number of channels or number of columns the matrix should have.
+     *                     For a 2-D matrix, when the matrix has only 1 column, then it should have
+     *                     elemChannels channels; When the matrix has only 1 channel,
+     *                     then it should have elemChannels columns.
+     *                     For a 3-D matrix, it should have only one channel. Furthermore,
+     *                     if the number of planes is not one, then the number of rows
+     *                     within every plane has to be 1; if the number of rows within
+     *                     every plane is not 1, then the number of planes has to be 1.
+     * @param depth The depth the matrix should have. Set it to -1 when any depth is fine.
+     * @param requireContinuous Set it to true to require the matrix to be continuous
+     * @return -1 if the requirement is not satisfied.
+     *         Otherwise, it returns the number of elements in the matrix. Note
+     *         that an element may have multiple channels.
+     *
+     * The following code demonstrates its usage for a 2-d matrix:
+     * \snippet snippets/core_mat_checkVector.cpp example-2d
+     *
+     * The following code demonstrates its usage for a 3-d matrix:
+     * \snippet snippets/core_mat_checkVector.cpp example-3d
+     */
     public native int checkVector(int elemChannels, int depth/*=-1*/, @Cast("bool") boolean requireContinuous/*=true*/);
     public native int checkVector(int elemChannels);
 
@@ -22419,7 +22526,7 @@ without any constraints.
     always sensible) will be used.
     <p>
     @param x The initial point, that will become a centroid of an initial simplex. After the algorithm
-    will terminate, it will be setted to the point where the algorithm stops, the point of possible
+    will terminate, it will be set to the point where the algorithm stops, the point of possible
     minimum.
     @return The value of a function at the point found.
      */
@@ -22613,7 +22720,7 @@ Bland's rule <http://en.wikipedia.org/wiki/Bland%27s_rule> is used to prevent cy
 contain 32- or 64-bit floating point numbers. As a convenience, column-vector may be also submitted,
 in the latter case it is understood to correspond to \f$c^T\f$.
 @param Constr {@code m}-by-{@code n+1} matrix, whose rightmost column corresponds to \f$b\f$ in formulation above
-and the remaining to \f$A\f$. It should containt 32- or 64-bit floating point numbers.
+and the remaining to \f$A\f$. It should contain 32- or 64-bit floating point numbers.
 @param z The solution will be returned here as a column-vector - it corresponds to \f$c\f$ in the
 formulation above. It will contain 64-bit floating point numbers.
 @return One of cv::SolveLPResult

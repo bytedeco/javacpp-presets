@@ -87,7 +87,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef ERStat get();
+        public native @Name("operator*") @ByRef @Const ERStat get();
     }
 
     public ERStat pop_back() {
@@ -142,7 +142,7 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef ERStatVector get();
+        public native @Name("operator*") @ByRef @Const ERStatVector get();
     }
 
     public ERStatVector pop_back() {

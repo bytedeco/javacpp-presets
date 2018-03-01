@@ -1648,7 +1648,7 @@ rotations in respect to the first camera, for instance. :
 
 /** \brief Affine transformation based estimator.
 <p>
-This estimator uses pairwise tranformations estimated by matcher to estimate
+This estimator uses pairwise transformations estimated by matcher to estimate
 final transformation for each camera.
 <p>
 \sa cv::detail::HomographyBasedEstimator
@@ -3214,6 +3214,8 @@ familiar with the theory is recommended.
 
 @Namespace("cv") public static native @Ptr Stitcher createStitcher(@Cast("bool") boolean try_use_gpu/*=false*/);
 @Namespace("cv") public static native @Ptr Stitcher createStitcher();
+@Namespace("cv") public static native @Ptr Stitcher createStitcherScans(@Cast("bool") boolean try_use_gpu/*=false*/);
+@Namespace("cv") public static native @Ptr Stitcher createStitcherScans();
 
 /** \} stitching */
 

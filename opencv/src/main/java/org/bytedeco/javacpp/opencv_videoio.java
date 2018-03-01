@@ -209,7 +209,7 @@ public static final int
     CV_CAP_PROP_MONOCHROME    = 19,
     CV_CAP_PROP_SHARPNESS     = 20,
     CV_CAP_PROP_AUTO_EXPOSURE = 21, // exposure control done by camera,
-                                   // user can adjust refernce level
+                                   // user can adjust reference level
                                    // using this feature
     CV_CAP_PROP_GAMMA         = 22,
     CV_CAP_PROP_TEMPERATURE   = 23,
@@ -352,7 +352,7 @@ public static final int
     CV_CAP_PROP_XI_COLOR_FILTER_ARRAY                           = 475, // Returns color filter array type of RAW data.
     CV_CAP_PROP_XI_GAMMAY                                       = 476, // Luminosity gamma
     CV_CAP_PROP_XI_GAMMAC                                       = 477, // Chromaticity gamma
-    CV_CAP_PROP_XI_SHARPNESS                                    = 478, // Sharpness Strenght
+    CV_CAP_PROP_XI_SHARPNESS                                    = 478, // Sharpness Strength
     CV_CAP_PROP_XI_CC_MATRIX_00                                 = 479, // Color Correction Matrix element [0][0]
     CV_CAP_PROP_XI_CC_MATRIX_01                                 = 480, // Color Correction Matrix element [0][1]
     CV_CAP_PROP_XI_CC_MATRIX_02                                 = 481, // Color Correction Matrix element [0][2]
@@ -838,7 +838,14 @@ public static final int
        /** Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. The property value is ignored) */
        CAP_PROP_SETTINGS      = 37,
        CAP_PROP_BUFFERSIZE    = 38,
-       CAP_PROP_AUTOFOCUS     = 39;
+       CAP_PROP_AUTOFOCUS     = 39,
+       /** Sample aspect ratio: num/den (num) */
+       CAP_PROP_SAR_NUM       = 40,
+       /** Sample aspect ratio: num/den (den) */
+       CAP_PROP_SAR_DEN       = 41,
+// #ifndef CV_DOXYGEN
+       CV__CAP_PROP_LATEST = 42;
+// #endif
 
 
 /** \brief Generic camera output modes identifier.
@@ -1694,7 +1701,7 @@ Here is how the class can be used:
     `VideoCapture -> API Backend -> Operating System -> Device Driver -> Device Hardware`
     }</pre>
     The returned value might be different from what really used by the device or it could be encoded
-    using device dependant rules (eg. steps or percentage). Effective behaviour depends from device
+    using device dependent rules (eg. steps or percentage). Effective behaviour depends from device
     driver and API Backend
     <p>
     */

@@ -2531,7 +2531,7 @@ processing the left-most pixels in each row, you need pixels to the left of them
 of the image. You can let these pixels be the same as the left-most image pixels ("replicated
 border" extrapolation method), or assume that all the non-existing pixels are zeros ("constant
 border" extrapolation method), and so on. OpenCV enables you to specify the extrapolation method.
-For details, see cv::BorderTypes
+For details, see #BorderTypes
 <p>
 \anchor filter_depths
 ### Depth combinations
@@ -2566,7 +2566,7 @@ the simplest and the fastest resize, need to solve two main problems with the ab
 previous section, for some \f$(x,y)\f$, either one of \f$f_x(x,y)\f$, or \f$f_y(x,y)\f$, or both
 of them may fall outside of the image. In this case, an extrapolation method needs to be used.
 OpenCV provides the same selection of extrapolation methods as in the filtering functions. In
-addition, it provides the method BORDER_TRANSPARENT. This means that the corresponding pixels in
+addition, it provides the method #BORDER_TRANSPARENT. This means that the corresponding pixels in
 the destination image will not be modified at all.
 <p>
 - Interpolation of pixel values. Usually \f$f_x(x,y)\f$ and \f$f_y(x,y)\f$ are floating-point
@@ -2658,7 +2658,7 @@ int main(int argc, const char *argv[])
 }
 }</pre>
 <p>
-@see cv::ColormapTypes
+@see #ColormapTypes
     <p>
     \defgroup imgproc_subdiv2d Planar Subdivision
 <p>
@@ -2697,9 +2697,9 @@ location of points on the plane, building special graphs (such as NNG,RNG), and 
 /** type of morphological operation */
 /** enum cv::MorphTypes */
 public static final int
-    /** see cv::erode */
+    /** see #erode */
     MORPH_ERODE    = 0,
-    /** see cv::dilate */
+    /** see #dilate */
     MORPH_DILATE   = 1,
     /** an opening operation
  *  \f[\texttt{dst} = \mathrm{open} ( \texttt{src} , \texttt{element} )= \mathrm{dilate} ( \mathrm{erode} ( \texttt{src} , \texttt{element} ))\f] */
@@ -2761,7 +2761,7 @@ public static final int
     WARP_FILL_OUTLIERS   = 8,
     /** flag, inverse transformation
     <p>
-    For example, \ref cv::linearPolar or \ref cv::logPolar transforms:
+    For example, #linearPolar or #logPolar transforms:
     - flag is __not__ set: \f$dst( \rho , \phi ) = src(x,y)\f$
     - flag is set: \f$dst(x,y) = src( \rho , \phi )\f$
     */
@@ -2780,7 +2780,7 @@ public static final int
  *  \{
  <p>
  *  Distance types for Distance Transform and M-estimators
- *  @see cv::distanceTransform, cv::fitLine */
+ *  @see distanceTransform, fitLine */
 /** enum cv::DistanceTypes */
 public static final int
     /** User defined distance */
@@ -2831,7 +2831,7 @@ public static final int
     THRESH_TRIANGLE   = 16;
 
 /** adaptive threshold algorithm
- *  see cv::adaptiveThreshold */
+ *  @see adaptiveThreshold */
 /** enum cv::AdaptiveThresholdTypes */
 public static final int
     /** the threshold value \f$T(x,y)\f$ is a mean of the \f$\texttt{blockSize} \times
@@ -2840,7 +2840,7 @@ public static final int
     /** the threshold value \f$T(x, y)\f$ is a weighted sum (cross-correlation with a Gaussian
     window) of the \f$\texttt{blockSize} \times \texttt{blockSize}\f$ neighborhood of \f$(x, y)\f$
     minus C . The default sigma (standard deviation) is used for the specified blockSize . See
-    cv::getGaussianKernel*/
+    #getGaussianKernel*/
     ADAPTIVE_THRESH_GAUSSIAN_C = 1;
 
 /** cv::undistort mode */
@@ -3468,20 +3468,39 @@ public static final int
     public native int getPosThresh();
 }
 
-
+/** \brief Base class for Contrast Limited Adaptive Histogram Equalization. :
+ */
 @Namespace("cv") public static class CLAHE extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CLAHE(Pointer p) { super(p); }
 
+    /** \brief Equalizes the histogram of a grayscale image using Contrast Limited Adaptive Histogram Equalization.
+    <p>
+    @param src Source image with CV_8UC1 type.
+    @param dst Destination image.
+     */
     public native void apply(@ByVal Mat src, @ByVal Mat dst);
     public native void apply(@ByVal UMat src, @ByVal UMat dst);
     public native void apply(@ByVal GpuMat src, @ByVal GpuMat dst);
 
+    /** \brief Sets threshold for contrast limiting.
+    <p>
+    @param clipLimit threshold value.
+    */
     public native void setClipLimit(double clipLimit);
+
+    /** Returns threshold value for contrast limiting. */
     public native double getClipLimit();
 
+    /** \brief Sets size of grid for histogram equalization. Input image will be divided into
+    equally sized rectangular tiles.
+    <p>
+    @param tileGridSize defines the number of tiles in row and column.
+    */
     public native void setTilesGridSize(@ByVal Size tileGridSize);
+
+    /**\brief Returns Size defines the number of tiles in row and column. */
     public native @ByVal Size getTilesGridSize();
 
     public native void collectGarbage();
@@ -3527,7 +3546,7 @@ public static final int
            PREV_AROUND_RIGHT =  0x02;
 
     /** creates an empty Subdiv2D object.
-    To create a new empty Delaunay subdivision you need to use the initDelaunay() function.
+    To create a new empty Delaunay subdivision you need to use the #initDelaunay function.
      */
     public Subdiv2D() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -3581,15 +3600,15 @@ public static final int
     or vertices.
     <p>
     @return an integer which specify one of the following five cases for point location:
-    -  The point falls into some facet. The function returns PTLOC_INSIDE and edge will contain one of
+    -  The point falls into some facet. The function returns #PTLOC_INSIDE and edge will contain one of
        edges of the facet.
-    -  The point falls onto the edge. The function returns PTLOC_ON_EDGE and edge will contain this edge.
-    -  The point coincides with one of the subdivision vertices. The function returns PTLOC_VERTEX and
+    -  The point falls onto the edge. The function returns #PTLOC_ON_EDGE and edge will contain this edge.
+    -  The point coincides with one of the subdivision vertices. The function returns #PTLOC_VERTEX and
        vertex will contain a pointer to the vertex.
-    -  The point is outside the subdivision reference rectangle. The function returns PTLOC_OUTSIDE_RECT
+    -  The point is outside the subdivision reference rectangle. The function returns #PTLOC_OUTSIDE_RECT
        and no pointers are filled.
     -  One of input arguments is invalid. A runtime error is raised or, if silent or "parent" error
-       processing mode is selected, CV_PTLOC_ERROR is returned.
+       processing mode is selected, #PTLOC_ERROR is returned.
      */
     public native int locate(@ByVal Point2f pt, @ByRef IntPointer edge, @ByRef IntPointer vertex);
     public native int locate(@ByVal Point2f pt, @ByRef IntBuffer edge, @ByRef IntBuffer vertex);
@@ -3767,7 +3786,7 @@ following the algorithm described at \cite Rafael12 .
     - -1 corresponds to 10 mean false alarms
     - 0 corresponds to 1 mean false alarm
     - 1 corresponds to 0.1 mean false alarms
-    This vector will be calculated only when the objects type is LSD_REFINE_ADV.
+    This vector will be calculated only when the objects type is #LSD_REFINE_ADV.
     */
     public native void detect(@ByVal Mat _image, @ByVal Mat _lines,
                             @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat width, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat prec,
@@ -3812,7 +3831,7 @@ following the algorithm described at \cite Rafael12 .
 The LineSegmentDetector algorithm is defined using the standard values. Only advanced users may want
 to edit those, as to tailor it for their own application.
 <p>
-@param _refine The way found lines will be refined, see cv::LineSegmentDetectorModes
+@param _refine The way found lines will be refined, see #LineSegmentDetectorModes
 @param _scale The scale of the image that will be used to find the lines. Range (0..1].
 @param _sigma_scale Sigma for Gaussian filter. It is computed as sigma = _sigma_scale/_scale.
 @param _quant Bound to the quantization error on the gradient norm.
@@ -3857,8 +3876,8 @@ You may also use the higher-level GaussianBlur.
 /** \brief Returns filter coefficients for computing spatial image derivatives.
 <p>
 The function computes and returns the filter coefficients for spatial image derivatives. When
-{@code ksize=CV_SCHARR}, the Scharr \f$3 \times 3\f$ kernels are generated (see cv::Scharr). Otherwise, Sobel
-kernels are generated (see cv::Sobel). The filters are normally passed to sepFilter2D or to
+{@code ksize=CV_SCHARR}, the Scharr \f$3 \times 3\f$ kernels are generated (see #Scharr). Otherwise, Sobel
+kernels are generated (see #Sobel). The filters are normally passed to #sepFilter2D or to
 <p>
 @param kx Output matrix of row filter coefficients. It has the type ktype .
 @param ky Output matrix of column filter coefficients. It has the type ktype .
@@ -3911,11 +3930,11 @@ Filter](http://en.wikipedia.org/wiki/Gabor_filter).
 
 /** \brief Returns a structuring element of the specified size and shape for morphological operations.
 <p>
-The function constructs and returns the structuring element that can be further passed to cv::erode,
-cv::dilate or cv::morphologyEx. But you can also construct an arbitrary binary mask yourself and use it as
+The function constructs and returns the structuring element that can be further passed to #erode,
+#dilate or #morphologyEx. But you can also construct an arbitrary binary mask yourself and use it as
 the structuring element.
 <p>
-@param shape Element shape that could be one of cv::MorphShapes
+@param shape Element shape that could be one of #MorphShapes
 @param ksize Size of the structuring element.
 @param anchor Anchor position within the element. The default value \f$(-1, -1)\f$ means that the
 anchor is at the center. Note that only the shape of a cross-shaped element depends on the anchor
@@ -3936,7 +3955,7 @@ The function smoothes an image using the median filter with the \f$\texttt{ksize
 \texttt{ksize}\f$ aperture. Each channel of a multi-channel image is processed independently.
 In-place operation is supported.
 <p>
-\note The median filter uses BORDER_REPLICATE internally to cope with border pixels, see cv::BorderTypes
+\note The median filter uses #BORDER_REPLICATE internally to cope with border pixels, see #BorderTypes
 <p>
 @param src input 1-, 3-, or 4-channel image; when ksize is 3 or 5, the image depth should be
 CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U.
@@ -3961,10 +3980,10 @@ positive and odd. Or, they can be zero's and then they are computed from sigma.
 @param sigmaX Gaussian kernel standard deviation in X direction.
 @param sigmaY Gaussian kernel standard deviation in Y direction; if sigmaY is zero, it is set to be
 equal to sigmaX, if both sigmas are zeros, they are computed from ksize.width and ksize.height,
-respectively (see cv::getGaussianKernel for details); to fully control the result regardless of
+respectively (see #getGaussianKernel for details); to fully control the result regardless of
 possible future modifications of all this semantics, it is recommended to specify all of ksize,
 sigmaX, and sigmaY.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 <p>
 \sa  sepFilter2D, filter2D, blur, boxFilter, bilateralFilter, medianBlur
  */
@@ -4010,7 +4029,7 @@ in larger areas of semi-equal color.
 farther pixels will influence each other as long as their colors are close enough (see sigmaColor
 ). When d\>0, it specifies the neighborhood size regardless of sigmaSpace. Otherwise, d is
 proportional to sigmaSpace.
-@param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+@param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
  */
 @Namespace("cv") public static native void bilateralFilter( @ByVal Mat src, @ByVal Mat dst, int d,
                                    double sigmaColor, double sigmaSpace,
@@ -4040,7 +4059,7 @@ where
 <p>
 Unnormalized box filter is useful for computing various integral characteristics over each pixel
 neighborhood, such as covariance matrices of image derivatives (used in dense optical flow
-algorithms, and so on). If you need to compute pixel sums over variable-size windows, use cv::integral.
+algorithms, and so on). If you need to compute pixel sums over variable-size windows, use #integral.
 <p>
 @param src input image.
 @param dst output image of the same size and type as src.
@@ -4049,7 +4068,7 @@ algorithms, and so on). If you need to compute pixel sums over variable-size win
 @param anchor anchor point; default value Point(-1,-1) means that the anchor is at the kernel
 center.
 @param normalize flag, specifying whether the kernel is normalized by its area or not.
-@param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+@param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
 \sa  blur, bilateralFilter, GaussianBlur, medianBlur, integral
  */
 @Namespace("cv") public static native void boxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
@@ -4086,7 +4105,7 @@ variance and standard deviation around the neighborhood of a pixel.
 @param anchor kernel anchor point. The default value of Point(-1, -1) denotes that the anchor is at the kernel
 center.
 @param normalize flag, specifying whether the kernel is to be normalized by it's area or not.
-@param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+@param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
 \sa boxFilter
 */
 @Namespace("cv") public static native void sqrBoxFilter( @ByVal Mat _src, @ByVal Mat _dst, int ddepth,
@@ -4123,7 +4142,7 @@ the depth should be CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.
 @param ksize blurring kernel size.
 @param anchor anchor point; default value Point(-1,-1) means that the anchor is at the kernel
 center.
-@param borderType border mode used to extrapolate pixels outside of the image, see cv::BorderTypes
+@param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
 \sa  boxFilter, bilateralFilter, GaussianBlur, medianBlur
  */
 @Namespace("cv") public static native void blur( @ByVal Mat src, @ByVal Mat dst,
@@ -4153,7 +4172,7 @@ The function does actually compute correlation, not the convolution:
 \f[\texttt{dst} (x,y) =  \sum _{ \stackrel{0\leq x' < \texttt{kernel.cols},}{0\leq y' < \texttt{kernel.rows}} }  \texttt{kernel} (x',y')* \texttt{src} (x+x'- \texttt{anchor.x} ,y+y'- \texttt{anchor.y} )\f]
 <p>
 That is, the kernel is not mirrored around the anchor point. If you need a real convolution, flip
-the kernel using cv::flip and set the new anchor to {@code (kernel.cols - anchor.x - 1, kernel.rows -
+the kernel using #flip and set the new anchor to {@code (kernel.cols - anchor.x - 1, kernel.rows -
 anchor.y - 1)}.
 <p>
 The function uses the DFT-based algorithm in case of sufficiently large kernels (~{@code 11 x 11} or
@@ -4169,7 +4188,7 @@ separate color planes using split and process them individually.
 the kernel; the anchor should lie within the kernel; default value (-1,-1) means that the anchor
 is at the kernel center.
 @param delta optional value added to the filtered pixels before storing them in dst.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 \sa  sepFilter2D, dft, matchTemplate
  */
 @Namespace("cv") public static native void filter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
@@ -4202,7 +4221,7 @@ kernel kernelY. The final result shifted by delta is stored in dst .
 @param anchor Anchor position within the kernel. The default value \f$(-1,-1)\f$ means that the anchor
 is at the kernel center.
 @param delta Value added to the filtered results before storing them.
-@param borderType Pixel extrapolation method, see cv::BorderTypes
+@param borderType Pixel extrapolation method, see #BorderTypes
 \sa  filter2D, Sobel, GaussianBlur, boxFilter, blur
  */
 @Namespace("cv") public static native void sepFilter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
@@ -4236,7 +4255,7 @@ calculate the derivative. When \f$\texttt{ksize = 1}\f$, the \f$3 \times 1\f$ or
 kernel is used (that is, no Gaussian smoothing is done). {@code ksize = 1} can only be used for the first
 or the second x- or y- derivatives.
 <p>
-There is also the special value {@code ksize = CV_SCHARR (-1)} that corresponds to the \f$3\times3\f$ Scharr
+There is also the special value {@code ksize = #CV_SCHARR (-1)} that corresponds to the \f$3\times3\f$ Scharr
 filter that may give more accurate results than the \f$3\times3\f$ Sobel. The Scharr aperture is
 <p>
 \f[\vecthreethree{-3}{0}{3}{-10}{0}{10}{-3}{0}{3}\f]
@@ -4266,9 +4285,9 @@ The second case corresponds to a kernel of:
 @param dy order of the derivative y.
 @param ksize size of the extended Sobel kernel; it must be 1, 3, 5, or 7.
 @param scale optional scale factor for the computed derivative values; by default, no scaling is
-applied (see cv::getDerivKernels for details).
+applied (see #getDerivKernels for details).
 @param delta optional delta value that is added to the results prior to storing them in dst.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 \sa  Scharr, Laplacian, sepFilter2D, filter2D, GaussianBlur, cartToPolar
  */
 @Namespace("cv") public static native void Sobel( @ByVal Mat src, @ByVal Mat dst, int ddepth,
@@ -4303,7 +4322,7 @@ Sobel( src, dy, CV_16SC1, 0, 1, 3 );
 @param dx output image with first-order derivative in x.
 @param dy output image with first-order derivative in y.
 @param ksize size of Sobel kernel. It must be 3.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 <p>
 \sa Sobel
  */
@@ -4333,7 +4352,7 @@ call
 <p>
 is equivalent to
 <p>
-\f[\texttt{Sobel(src, dst, ddepth, dx, dy, CV\_SCHARR, scale, delta, borderType)} .\f]
+\f[\texttt{Sobel(src, dst, ddepth, dx, dy, CV_SCHARR, scale, delta, borderType)} .\f]
 <p>
 @param src input image.
 @param dst output image of the same size and the same number of channels as src.
@@ -4341,9 +4360,9 @@ is equivalent to
 @param dx order of the derivative x.
 @param dy order of the derivative y.
 @param scale optional scale factor for the computed derivative values; by default, no scaling is
-applied (see getDerivKernels for details).
+applied (see #getDerivKernels for details).
 @param delta optional delta value that is added to the results prior to storing them in dst.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 \sa  cartToPolar
  */
 @Namespace("cv") public static native void Scharr( @ByVal Mat src, @ByVal Mat dst, int ddepth,
@@ -4381,12 +4400,12 @@ with the following \f$3 \times 3\f$ aperture:
 @param src Source image.
 @param dst Destination image of the same size and the same number of channels as src .
 @param ddepth Desired depth of the destination image.
-@param ksize Aperture size used to compute the second-derivative filters. See getDerivKernels for
+@param ksize Aperture size used to compute the second-derivative filters. See #getDerivKernels for
 details. The size must be positive and odd.
 @param scale Optional scale factor for the computed Laplacian values. By default, no scaling is
-applied. See getDerivKernels for details.
+applied. See #getDerivKernels for details.
 @param delta Optional delta value that is added to the results prior to storing them in dst .
-@param borderType Pixel extrapolation method, see cv::BorderTypes
+@param borderType Pixel extrapolation method, see #BorderTypes
 \sa  Sobel, Scharr
  */
 @Namespace("cv") public static native void Laplacian( @ByVal Mat src, @ByVal Mat dst, int ddepth,
@@ -4452,7 +4471,13 @@ Finds edges in an image using the Canny algorithm with custom image gradient.
 <p>
 @param dx 16-bit x derivative of input image (CV_16SC1 or CV_16SC3).
 @param dy 16-bit y derivative of input image (same type as dx).
-@param edges,threshold1,threshold2,L2gradient See cv::Canny
+@param edges output edge map; single channels 8-bit image, which has the same size as image .
+@param threshold1 first threshold for the hysteresis procedure.
+@param threshold2 second threshold for the hysteresis procedure.
+@param L2gradient a flag, indicating whether a more accurate \f$L_2\f$ norm
+\f$=\sqrt{(dI/dx)^2 + (dI/dy)^2}\f$ should be used to calculate the image gradient magnitude (
+L2gradient=true ), or whether the default \f$L_1\f$ norm \f$=|dI/dx|+|dI/dy|\f$ is enough (
+L2gradient=false ).
  */
 @Namespace("cv") public static native void Canny( @ByVal Mat dx, @ByVal Mat dy,
                          @ByVal Mat edges,
@@ -4485,9 +4510,9 @@ of the formulae in the cornerEigenValsAndVecs description.
 @param src Input single-channel 8-bit or floating-point image.
 @param dst Image to store the minimal eigenvalues. It has the type CV_32FC1 and the same size as
 src .
-@param blockSize Neighborhood size (see the details on cornerEigenValsAndVecs ).
+@param blockSize Neighborhood size (see the details on #cornerEigenValsAndVecs ).
 @param ksize Aperture parameter for the Sobel operator.
-@param borderType Pixel extrapolation method. See cv::BorderTypes.
+@param borderType Pixel extrapolation method. See #BorderTypes.
  */
 @Namespace("cv") public static native void cornerMinEigenVal( @ByVal Mat src, @ByVal Mat dst,
                                      int blockSize, int ksize/*=3*/,
@@ -4519,10 +4544,10 @@ Corners in the image can be found as the local maxima of this response map.
 @param src Input single-channel 8-bit or floating-point image.
 @param dst Image to store the Harris detector responses. It has the type CV_32FC1 and the same
 size as src .
-@param blockSize Neighborhood size (see the details on cornerEigenValsAndVecs ).
+@param blockSize Neighborhood size (see the details on #cornerEigenValsAndVecs ).
 @param ksize Aperture parameter for the Sobel operator.
 @param k Harris detector free parameter. See the formula below.
-@param borderType Pixel extrapolation method. See cv::BorderTypes.
+@param borderType Pixel extrapolation method. See #BorderTypes.
  */
 @Namespace("cv") public static native void cornerHarris( @ByVal Mat src, @ByVal Mat dst, int blockSize,
                                 int ksize, double k,
@@ -4562,7 +4587,7 @@ The output of the function can be used for robust edge or corner detection.
 @param dst Image to store the results. It has the same size as src and the type CV_32FC(6) .
 @param blockSize Neighborhood size (see details below).
 @param ksize Aperture parameter for the Sobel operator.
-@param borderType Pixel extrapolation method. See cv::BorderTypes.
+@param borderType Pixel extrapolation method. See #BorderTypes.
 <p>
 \sa  cornerMinEigenVal, cornerHarris, preCornerDetect
  */
@@ -4603,7 +4628,7 @@ The corners can be found as local maximums of the functions, as shown below:
 @param src Source single-channel 8-bit of floating-point image.
 @param dst Output image that has the type CV_32F and the same size as src .
 @param ksize %Aperture size of the Sobel .
-@param borderType Pixel extrapolation method. See cv::BorderTypes.
+@param borderType Pixel extrapolation method. See #BorderTypes.
  */
 @Namespace("cv") public static native void preCornerDetect( @ByVal Mat src, @ByVal Mat dst, int ksize,
                                    int borderType/*=cv::BORDER_DEFAULT*/ );
@@ -4671,7 +4696,7 @@ The function finds the most prominent corners in the image or in the specified i
 described in \cite Shi94
 <p>
 -   Function calculates the corner quality measure at every source image pixel using the
-    cornerMinEigenVal or cornerHarris .
+    #cornerMinEigenVal or #cornerHarris .
 -   Function performs a non-maximum suppression (the local maximums in *3 x 3* neighborhood are
     retained).
 -   The corners with the minimal eigenvalue less than
@@ -4693,7 +4718,7 @@ the strongest of them is returned. {@code maxCorners <= 0} implies that no limit
 and all detected corners are returned.
 @param qualityLevel Parameter characterizing the minimal accepted quality of image corners. The
 parameter value is multiplied by the best corner quality measure, which is the minimal eigenvalue
-(see cornerMinEigenVal ) or the Harris function response (see cornerHarris ). The corners with the
+(see #cornerMinEigenVal ) or the Harris function response (see #cornerHarris ). The corners with the
 quality measure less than the product are rejected. For example, if the best corner has the
 quality measure = 1500, and the qualityLevel=0.01 , then all the corners with the quality measure
 less than 15 are rejected.
@@ -4702,8 +4727,8 @@ less than 15 are rejected.
 CV_8UC1 and the same size as image ), it specifies the region in which the corners are detected.
 @param blockSize Size of an average block for computing a derivative covariation matrix over each
 pixel neighborhood. See cornerEigenValsAndVecs .
-@param useHarrisDetector Parameter indicating whether to use a Harris detector (see cornerHarris)
-or cornerMinEigenVal.
+@param useHarrisDetector Parameter indicating whether to use a Harris detector (see #cornerHarris)
+or #cornerMinEigenVal.
 @param k Free parameter of the Harris detector.
 <p>
 \sa  cornerMinEigenVal, cornerHarris, calcOpticalFlowPyrLK, estimateRigidTransform,
@@ -4899,6 +4924,33 @@ votes ( \f$>\texttt{threshold}\f$ ).
 @Namespace("cv") public static native void HoughLinesP( @ByVal GpuMat image, @ByVal GpuMat lines,
                                double rho, double theta, int threshold );
 
+/** \brief Finds lines in a set of points using the standard Hough transform.
+<p>
+The function finds lines in a set of points using a modification of the Hough transform.
+\include snippets/imgproc_HoughLinesPointSet.cpp
+@param _point Input vector of points. Each vector must be encoded as a Point vector \f$(x,y)\f$. Type must be CV_32FC2 or CV_32SC2.
+@param _lines Output vector of found lines. Each vector is encoded as a vector<Vec3d> \f$(votes, rho, theta)\f$.
+The larger the value of 'votes', the higher the reliability of the Hough line.
+@param lines_max Max count of hough lines.
+@param threshold Accumulator threshold parameter. Only those lines are returned that get enough
+votes ( \f$>\texttt{threshold}\f$ )
+@param min_rho Minimum Distance value of the accumulator in pixels.
+@param max_rho Maximum Distance value of the accumulator in pixels.
+@param rho_step Distance resolution of the accumulator in pixels.
+@param min_theta Minimum angle value of the accumulator in radians.
+@param max_theta Maximum angle value of the accumulator in radians.
+@param theta_step Angle resolution of the accumulator in radians.
+ */
+@Namespace("cv") public static native void HoughLinesPointSet( @ByVal Mat _point, @ByVal Mat _lines, int lines_max, int threshold,
+                                      double min_rho, double max_rho, double rho_step,
+                                      double min_theta, double max_theta, double theta_step );
+@Namespace("cv") public static native void HoughLinesPointSet( @ByVal UMat _point, @ByVal UMat _lines, int lines_max, int threshold,
+                                      double min_rho, double max_rho, double rho_step,
+                                      double min_theta, double max_theta, double theta_step );
+@Namespace("cv") public static native void HoughLinesPointSet( @ByVal GpuMat _point, @ByVal GpuMat _lines, int lines_max, int threshold,
+                                      double min_rho, double max_rho, double rho_step,
+                                      double min_theta, double max_theta, double theta_step );
+
 /** \example houghcircles.cpp
 An example using the Hough circle detector
 */
@@ -4946,27 +4998,28 @@ Example: :
 <p>
 \note Usually the function detects the centers of circles well. However, it may fail to find correct
 radii. You can assist to the function by specifying the radius range ( minRadius and maxRadius ) if
-you know it. Or, you may set maxRadius to 0 to return centers only without radius search, and find the correct
-radius using an additional procedure.
+you know it. Or, you may set maxRadius to a negative number to return centers only without radius
+search, and find the correct radius using an additional procedure.
 <p>
 @param image 8-bit, single-channel, grayscale input image.
 @param circles Output vector of found circles. Each vector is encoded as a 3-element
 floating-point vector \f$(x, y, radius)\f$ .
-@param method Detection method, see cv::HoughModes. Currently, the only implemented method is HOUGH_GRADIENT
+@param method Detection method, see #HoughModes. Currently, the only implemented method is #HOUGH_GRADIENT
 @param dp Inverse ratio of the accumulator resolution to the image resolution. For example, if
 dp=1 , the accumulator has the same resolution as the input image. If dp=2 , the accumulator has
 half as big width and height.
 @param minDist Minimum distance between the centers of the detected circles. If the parameter is
 too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is
 too large, some circles may be missed.
-@param param1 First method-specific parameter. In case of CV_HOUGH_GRADIENT , it is the higher
+@param param1 First method-specific parameter. In case of #HOUGH_GRADIENT , it is the higher
 threshold of the two passed to the Canny edge detector (the lower one is twice smaller).
-@param param2 Second method-specific parameter. In case of CV_HOUGH_GRADIENT , it is the
+@param param2 Second method-specific parameter. In case of #HOUGH_GRADIENT , it is the
 accumulator threshold for the circle centers at the detection stage. The smaller it is, the more
 false circles may be detected. Circles, corresponding to the larger accumulator values, will be
 returned first.
 @param minRadius Minimum circle radius.
-@param maxRadius Maximum circle radius.
+@param maxRadius Maximum circle radius. If <= 0, uses the maximum image dimension. If < 0, returns
+centers without finding the radius.
 <p>
 \sa fitEllipse, minEnclosingCircle
  */
@@ -5014,11 +5067,11 @@ case of multi-channel images, each channel is processed independently.
 CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.
 @param dst output image of the same size and type as src.
 @param kernel structuring element used for erosion; if {@code element=Mat()}, a {@code 3 x 3} rectangular
-structuring element is used. Kernel can be created using getStructuringElement.
+structuring element is used. Kernel can be created using #getStructuringElement.
 @param anchor position of the anchor within the element; default value (-1, -1) means that the
 anchor is at the element center.
 @param iterations number of times erosion is applied.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 @param borderValue border value in case of a constant border
 \sa  dilate, morphologyEx, getStructuringElement
  */
@@ -5054,15 +5107,15 @@ case of multi-channel images, each channel is processed independently.
 <p>
 @param src input image; the number of channels can be arbitrary, but the depth should be one of
 CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.
-@param dst output image of the same size and type as src\{@code .
+@param dst output image of the same size and type as src.
 @param kernel structuring element used for dilation; if elemenat=Mat(), a 3 x 3 rectangular
-structuring element is used. Kernel can be created using getStructuringElement
+structuring element is used. Kernel can be created using #getStructuringElement
 @param anchor position of the anchor within the element; default value (-1, -1) means that the
 anchor is at the element center.
 @param iterations number of times dilation is applied.
-@param borderType pixel extrapolation method, see cv::BorderTypes
+@param borderType pixel extrapolation method, see #BorderTypes
 @param borderValue border value in case of a constant border
-@sa  erode, morphologyEx, getStructuringElement
+\sa  erode, morphologyEx, getStructuringElement
  */
 @Namespace("cv") public static native void dilate( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
                           @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor, int iterations/*=1*/,
@@ -5082,7 +5135,7 @@ anchor is at the element center.
 
 /** \brief Performs advanced morphological transformations.
 <p>
-The function morphologyEx can perform advanced morphological transformations using an erosion and dilation as
+The function cv::morphologyEx can perform advanced morphological transformations using an erosion and dilation as
 basic operations.
 <p>
 Any of the operations can be done in-place. In case of multi-channel images, each channel is
@@ -5091,12 +5144,12 @@ processed independently.
 @param src Source image. The number of channels can be arbitrary. The depth should be one of
 CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.
 @param dst Destination image of the same size and type as source image.
-@param op Type of a morphological operation, see cv::MorphTypes
-@param kernel Structuring element. It can be created using cv::getStructuringElement.
+@param op Type of a morphological operation, see #MorphTypes
+@param kernel Structuring element. It can be created using #getStructuringElement.
 @param anchor Anchor position with the kernel. Negative values mean that the anchor is at the
 kernel center.
 @param iterations Number of times erosion and dilation are applied.
-@param borderType Pixel extrapolation method, see cv::BorderTypes
+@param borderType Pixel extrapolation method, see #BorderTypes
 @param borderValue Border value in case of a constant border. The default value has a special
 meaning.
 \sa  dilate, erode, getStructuringElement
@@ -5147,8 +5200,8 @@ way:
     // specify fx and fy and let the function compute the destination image size.
     resize(src, dst, Size(), 0.5, 0.5, interpolation);
 }</pre>
-To shrink an image, it will generally look best with cv::INTER_AREA interpolation, whereas to
-enlarge an image, it will generally look best with cv::INTER_CUBIC (slow) or cv::INTER_LINEAR
+To shrink an image, it will generally look best with #INTER_AREA interpolation, whereas to
+enlarge an image, it will generally look best with c#INTER_CUBIC (slow) or #INTER_LINEAR
 (faster but still looks OK).
 <p>
 @param src input image.
@@ -5161,7 +5214,7 @@ src.size(), fx, and fy; the type of dst is the same as of src.
 \f[\texttt{(double)dsize.width/src.cols}\f]
 @param fy scale factor along the vertical axis; when it equals 0, it is computed as
 \f[\texttt{(double)dsize.height/src.rows}\f]
-@param interpolation interpolation method, see cv::InterpolationFlags
+@param interpolation interpolation method, see #InterpolationFlags
 <p>
 \sa  warpAffine, warpPerspective, remap
  */
@@ -5187,19 +5240,19 @@ The function warpAffine transforms the source image using the specified matrix:
 <p>
 \f[\texttt{dst} (x,y) =  \texttt{src} ( \texttt{M} _{11} x +  \texttt{M} _{12} y +  \texttt{M} _{13}, \texttt{M} _{21} x +  \texttt{M} _{22} y +  \texttt{M} _{23})\f]
 <p>
-when the flag WARP_INVERSE_MAP is set. Otherwise, the transformation is first inverted
-with cv::invertAffineTransform and then put in the formula above instead of M. The function cannot
+when the flag #WARP_INVERSE_MAP is set. Otherwise, the transformation is first inverted
+with #invertAffineTransform and then put in the formula above instead of M. The function cannot
 operate in-place.
 <p>
 @param src input image.
 @param dst output image that has the size dsize and the same type as src .
 @param M \f$2\times 3\f$ transformation matrix.
 @param dsize size of the output image.
-@param flags combination of interpolation methods (see cv::InterpolationFlags) and the optional
-flag WARP_INVERSE_MAP that means that M is the inverse transformation (
+@param flags combination of interpolation methods (see #InterpolationFlags) and the optional
+flag #WARP_INVERSE_MAP that means that M is the inverse transformation (
 \f$\texttt{dst}\rightarrow\texttt{src}\f$ ).
-@param borderMode pixel extrapolation method (see cv::BorderTypes); when
-borderMode=BORDER_TRANSPARENT, it means that the pixels in the destination image corresponding to
+@param borderMode pixel extrapolation method (see #BorderTypes); when
+borderMode=#BORDER_TRANSPARENT, it means that the pixels in the destination image corresponding to
 the "outliers" in the source image are not modified by the function.
 @param borderValue value used in case of a constant border; by default, it is 0.
 <p>
@@ -5237,17 +5290,17 @@ The function warpPerspective transforms the source image using the specified mat
 \f[\texttt{dst} (x,y) =  \texttt{src} \left ( \frac{M_{11} x + M_{12} y + M_{13}}{M_{31} x + M_{32} y + M_{33}} ,
      \frac{M_{21} x + M_{22} y + M_{23}}{M_{31} x + M_{32} y + M_{33}} \right )\f]
 <p>
-when the flag WARP_INVERSE_MAP is set. Otherwise, the transformation is first inverted with invert
+when the flag #WARP_INVERSE_MAP is set. Otherwise, the transformation is first inverted with invert
 and then put in the formula above instead of M. The function cannot operate in-place.
 <p>
 @param src input image.
 @param dst output image that has the size dsize and the same type as src .
 @param M \f$3\times 3\f$ transformation matrix.
 @param dsize size of the output image.
-@param flags combination of interpolation methods (INTER_LINEAR or INTER_NEAREST) and the
-optional flag WARP_INVERSE_MAP, that sets M as the inverse transformation (
+@param flags combination of interpolation methods (#INTER_LINEAR or #INTER_NEAREST) and the
+optional flag #WARP_INVERSE_MAP, that sets M as the inverse transformation (
 \f$\texttt{dst}\rightarrow\texttt{src}\f$ ).
-@param borderMode pixel extrapolation method (BORDER_CONSTANT or BORDER_REPLICATE).
+@param borderMode pixel extrapolation method (#BORDER_CONSTANT or #BORDER_REPLICATE).
 @param borderValue value used in case of a constant border; by default, it equals 0.
 <p>
 \sa  warpAffine, resize, remap, getRectSubPix, perspectiveTransform
@@ -5297,10 +5350,10 @@ CV_32FC1, or CV_32FC2. See convertMaps for details on converting a floating poin
 representation to fixed-point for speed.
 @param map2 The second map of y values having the type CV_16UC1, CV_32FC1, or none (empty map
 if map1 is (x,y) points), respectively.
-@param interpolation Interpolation method (see cv::InterpolationFlags). The method INTER_AREA is
+@param interpolation Interpolation method (see #InterpolationFlags). The method #INTER_AREA is
 not supported by this function.
-@param borderMode Pixel extrapolation method (see cv::BorderTypes). When
-borderMode=BORDER_TRANSPARENT, it means that the pixels in the destination image that
+@param borderMode Pixel extrapolation method (see #BorderTypes). When
+borderMode=#BORDER_TRANSPARENT, it means that the pixels in the destination image that
 corresponds to the "outliers" in the source image are not modified by the function.
 @param borderValue Value used in case of a constant border. By default, it is 0.
 \note
@@ -5520,11 +5573,11 @@ rotation-invariant template matching, for object tracking and so forth.
 @param dst Destination image. It will have same size and type as src.
 @param center The transformation center; where the output precision is maximal
 @param M Magnitude scale parameter. It determines the radius of the bounding circle to transform too.
-@param flags A combination of interpolation methods, see cv::InterpolationFlags
+@param flags A combination of interpolation methods, see #InterpolationFlags
 <p>
 \note
 -   The function can not operate in-place.
--   To calculate magnitude and angle in degrees \ref cv::cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
+-   To calculate magnitude and angle in degrees #cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
 */
 @Namespace("cv") public static native void logPolar( @ByVal Mat src, @ByVal Mat dst,
                             @ByVal Point2f center, double M, int flags );
@@ -5562,11 +5615,11 @@ and
 @param dst Destination image. It will have same size and type as src.
 @param center The transformation center;
 @param maxRadius The radius of the bounding circle to transform. It determines the inverse magnitude scale parameter too.
-@param flags A combination of interpolation methods, see cv::InterpolationFlags
+@param flags A combination of interpolation methods, see #InterpolationFlags
 <p>
 \note
 -   The function can not operate in-place.
--   To calculate magnitude and angle in degrees \ref cv::cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
+-   To calculate magnitude and angle in degrees #cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
 <p>
 */
 @Namespace("cv") public static native void linearPolar( @ByVal Mat src, @ByVal Mat dst,
@@ -5855,25 +5908,24 @@ An example is shown below:
 /** \brief Applies a fixed-level threshold to each array element.
 <p>
 The function applies fixed-level thresholding to a multiple-channel array. The function is typically
-used to get a bi-level (binary) image out of a grayscale image ( cv::compare could be also used for
+used to get a bi-level (binary) image out of a grayscale image ( #compare could be also used for
 this purpose) or for removing a noise, that is, filtering out pixels with too small or too large
 values. There are several types of thresholding supported by the function. They are determined by
 type parameter.
 <p>
-Also, the special values cv::THRESH_OTSU or cv::THRESH_TRIANGLE may be combined with one of the
+Also, the special values #THRESH_OTSU or #THRESH_TRIANGLE may be combined with one of the
 above values. In these cases, the function determines the optimal threshold value using the Otsu's
-or Triangle algorithm and uses it instead of the specified thresh . The function returns the
-computed threshold value. Currently, the Otsu's and Triangle methods are implemented only for 8-bit
-images.
+or Triangle algorithm and uses it instead of the specified thresh.
 <p>
-\note Input image should be single channel only in case of CV_THRESH_OTSU or CV_THRESH_TRIANGLE flags
+\note Currently, the Otsu's and Triangle methods are implemented only for 8-bit single-channel images.
 <p>
 @param src input array (multiple-channel, 8-bit or 32-bit floating point).
 @param dst output array of the same size  and type and the same number of channels as src.
 @param thresh threshold value.
-@param maxval maximum value to use with the THRESH_BINARY and THRESH_BINARY_INV thresholding
+@param maxval maximum value to use with the #THRESH_BINARY and #THRESH_BINARY_INV thresholding
 types.
-@param type thresholding type (see the cv::ThresholdTypes).
+@param type thresholding type (see #ThresholdTypes).
+@return the computed threshold value if Otsu's or Triangle methods used.
 <p>
 \sa  adaptiveThreshold, findContours, compare, min, max
  */
@@ -5899,10 +5951,10 @@ The function can process the image in-place.
 @param src Source 8-bit single-channel image.
 @param dst Destination image of the same size and the same type as src.
 @param maxValue Non-zero value assigned to the pixels for which the condition is satisfied
-@param adaptiveMethod Adaptive thresholding algorithm to use, see cv::AdaptiveThresholdTypes.
-The BORDER_REPLICATE | BORDER_ISOLATED is used to process boundaries.
-@param thresholdType Thresholding type that must be either THRESH_BINARY or THRESH_BINARY_INV,
-see cv::ThresholdTypes.
+@param adaptiveMethod Adaptive thresholding algorithm to use, see #AdaptiveThresholdTypes.
+The #BORDER_REPLICATE | #BORDER_ISOLATED is used to process boundaries.
+@param thresholdType Thresholding type that must be either #THRESH_BINARY or #THRESH_BINARY_INV,
+see #ThresholdTypes.
 @param blockSize Size of a pixel neighborhood that is used to calculate a threshold value for the
 pixel: 3, 5, 7, and so on.
 @param C Constant subtracted from the mean or weighted mean (see the details below). Normally, it
@@ -5945,7 +5997,7 @@ Then, it downsamples the image by rejecting even rows and columns.
 @param src input image.
 @param dst output image; it has the specified size and the same type as src.
 @param dstsize size of the output image.
-@param borderType Pixel extrapolation method, see cv::BorderTypes (BORDER_CONSTANT isn't supported)
+@param borderType Pixel extrapolation method, see #BorderTypes (#BORDER_CONSTANT isn't supported)
  */
 @Namespace("cv") public static native void pyrDown( @ByVal Mat src, @ByVal Mat dst,
                            @Const @ByRef(nullValue = "cv::Size()") Size dstsize, int borderType/*=cv::BORDER_DEFAULT*/ );
@@ -5972,7 +6024,7 @@ pyrDown multiplied by 4.
 @param src input image.
 @param dst output image. It has the specified size and the same type as src .
 @param dstsize size of the output image.
-@param borderType Pixel extrapolation method, see cv::BorderTypes (only BORDER_DEFAULT is supported)
+@param borderType Pixel extrapolation method, see #BorderTypes (only #BORDER_DEFAULT is supported)
  */
 @Namespace("cv") public static native void pyrUp( @ByVal Mat src, @ByVal Mat dst,
                          @Const @ByRef(nullValue = "cv::Size()") Size dstsize, int borderType/*=cv::BORDER_DEFAULT*/ );
@@ -5993,7 +6045,7 @@ pyrDown to the previously built pyramid layers, starting from {@code dst[0]==src
 @param dst Destination vector of maxlevel+1 images of the same type as src. dst[0] will be the
 same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, and so on.
 @param maxlevel 0-based index of the last (the smallest) pyramid layer. It must be non-negative.
-@param borderType Pixel extrapolation method, see cv::BorderTypes (BORDER_CONSTANT isn't supported)
+@param borderType Pixel extrapolation method, see #BorderTypes (#BORDER_CONSTANT isn't supported)
  */
 @Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal MatVector dst,
                               int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
@@ -6041,7 +6093,7 @@ same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, an
 <p>
 The function transforms an image to compensate radial and tangential lens distortion.
 <p>
-The function is simply a combination of cv::initUndistortRectifyMap (with unity R ) and cv::remap
+The function is simply a combination of #initUndistortRectifyMap (with unity R ) and #remap
 (with bilinear interpolation). See the former function for details of the transformation being
 performed.
 <p>
@@ -6049,10 +6101,10 @@ Those pixels in the destination image, for which there is no correspondent pixel
 image, are filled with zeros (black color).
 <p>
 A particular subset of the source image that will be visible in the corrected image can be regulated
-by newCameraMatrix. You can use cv::getOptimalNewCameraMatrix to compute the appropriate
+by newCameraMatrix. You can use #getOptimalNewCameraMatrix to compute the appropriate
 newCameraMatrix depending on your requirements.
 <p>
-The camera matrix and the distortion parameters can be determined using cv::calibrateCamera. If
+The camera matrix and the distortion parameters can be determined using #calibrateCamera. If
 the resolution of images is different from the resolution used at the calibration stage, \f$f_x,
 f_y, c_x\f$ and \f$c_y\f$ need to be scaled accordingly, while the distortion coefficients remain
 the same.
@@ -6094,8 +6146,8 @@ The function computes the joint undistortion and rectification transformation an
 result in the form of maps for remap. The undistorted image looks like original, as if it is
 captured with a camera using the camera matrix =newCameraMatrix and zero distortion. In case of a
 monocular camera, newCameraMatrix is usually equal to cameraMatrix, or it can be computed by
-cv::getOptimalNewCameraMatrix for a better control over scaling. In case of a stereo camera,
-newCameraMatrix is normally set to P1 or P2 computed by cv::stereoRectify .
+#getOptimalNewCameraMatrix for a better control over scaling. In case of a stereo camera,
+newCameraMatrix is normally set to P1 or P2 computed by #stereoRectify .
 <p>
 Also, this new camera is oriented differently in the coordinate space, according to R. That, for
 example, helps to align two heads of a stereo camera so that the epipolar lines on both images
@@ -6129,9 +6181,9 @@ where \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x
 are the distortion coefficients.
 <p>
 In case of a stereo camera, this function is called twice: once for each camera head, after
-stereoRectify, which in its turn is called after cv::stereoCalibrate. But if the stereo camera
+stereoRectify, which in its turn is called after #stereoCalibrate. But if the stereo camera
 was not calibrated, it is still possible to compute the rectification transformations directly from
-the fundamental matrix using cv::stereoRectifyUncalibrated. For each camera, the function computes
+the fundamental matrix using #stereoRectifyUncalibrated. For each camera, the function computes
 homography H as the rectification transformation in a pixel domain, not a rotation matrix R in 3D
 space. R can be computed from H as
 \f[\texttt{R} = \texttt{cameraMatrix} ^{-1} \cdot \texttt{H} \cdot \texttt{cameraMatrix}\f]
@@ -6142,11 +6194,11 @@ where cameraMatrix can be chosen arbitrarily.
 \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
 of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
 @param R Optional rectification transformation in the object space (3x3 matrix). R1 or R2 ,
-computed by stereoRectify can be passed here. If the matrix is empty, the identity transformation
+computed by #stereoRectify can be passed here. If the matrix is empty, the identity transformation
 is assumed. In cvInitUndistortMap R assumed to be an identity matrix.
 @param newCameraMatrix New camera matrix \f$A'=\vecthreethree{f_x'}{0}{c_x'}{0}{f_y'}{c_y'}{0}{0}{1}\f$.
 @param size Undistorted image size.
-@param m1type Type of the first output map that can be CV_32FC1, CV_32FC2 or CV_16SC2, see cv::convertMaps
+@param m1type Type of the first output map that can be CV_32FC1, CV_32FC2 or CV_16SC2, see #convertMaps
 @param map1 The first output map.
 @param map2 The second output map.
  */
@@ -6160,7 +6212,7 @@ is assumed. In cvInitUndistortMap R assumed to be an identity matrix.
                            @ByVal GpuMat R, @ByVal GpuMat newCameraMatrix,
                            @ByVal Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2 );
 
-/** initializes maps for cv::remap() for wide-angle */
+/** initializes maps for #remap for wide-angle */
 @Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                          @ByVal Size imageSize, int destImageWidth,
                                          int m1type, @ByVal Mat map1, @ByVal Mat map2,
@@ -6194,7 +6246,7 @@ In the latter case, the new camera matrix will be:
 <p>
 where \f$f_x\f$ and \f$f_y\f$ are \f$(0,0)\f$ and \f$(1,1)\f$ elements of cameraMatrix, respectively.
 <p>
-By default, the undistortion functions in OpenCV (see initUndistortRectifyMap, undistort) do not
+By default, the undistortion functions in OpenCV (see #initUndistortRectifyMap, #undistort) do not
 move the principal point. However, when you work with stereo, it is important to move the principal
 points in both views to the same y-coordinate (which is required by most of stereo correspondence
 algorithms), and may be to the same x-coordinate too. So, you can form the new camera matrix for
@@ -6217,7 +6269,7 @@ parameter indicates whether this location should be at the image center or not.
 
 /** \brief Computes the ideal point coordinates from the observed point coordinates.
 <p>
-The function is similar to cv::undistort and cv::initUndistortRectifyMap but it operates on a
+The function is similar to #undistort and #initUndistortRectifyMap but it operates on a
 sparse set of points instead of a raster image. Also the function performs a reverse transformation
 to projectPoints. In case of a 3D object, it does not reconstruct its 3D coordinates, but for a
 planar object, it does, up to a translation vector, if the proper R is specified.
@@ -6251,9 +6303,9 @@ transformation. If matrix P is identity or omitted, dst will contain normalized 
 \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
 of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
 @param R Rectification transformation in the object space (3x3 matrix). R1 or R2 computed by
-cv::stereoRectify can be passed here. If the matrix is empty, the identity transformation is used.
+#stereoRectify can be passed here. If the matrix is empty, the identity transformation is used.
 @param P New camera matrix (3x3) or new projection matrix (3x4) \f$\begin{bmatrix} {f'}_x & 0 & {c'}_x & t_x \\ 0 & {f'}_y & {c'}_y & t_y \\ 0 & 0 & 1 & t_z \end{bmatrix}\f$. P1 or P2 computed by
-cv::stereoRectify can be passed here. If the matrix is empty, the identity new camera matrix is used.
+#stereoRectify can be passed here. If the matrix is empty, the identity new camera matrix is used.
  */
 @Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
@@ -6271,7 +6323,7 @@ cv::stereoRectify can be passed here. If the matrix is empty, the identity new c
 @Namespace("cv") public static native void undistortPoints( @ByVal GpuMat src, @ByVal GpuMat dst,
                                    @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs);
 /** \overload
-    \note Default version of cv::undistortPoints does 5 iterations to compute undistorted points.
+    \note Default version of #undistortPoints does 5 iterations to compute undistorted points.
  <p>
  */
 @Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal Mat src, @ByVal Mat dst,
@@ -6461,7 +6513,7 @@ arrays, or to update the histogram in time.
 
 /** \overload
 <p>
-this variant uses cv::SparseMat for output
+this variant uses %SparseMat for output
 */
 @Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
                           @Const IntPointer channels, @ByVal Mat mask,
@@ -6654,7 +6706,7 @@ this variant uses cv::SparseMat for output
 /** \brief Calculates the back projection of a histogram.
 <p>
 The function cv::calcBackProject calculates the back project of the histogram. That is, similarly to
-cv::calcHist , at each location (x, y) the function collects the values from the selected channels
+#calcHist , at each location (x, y) the function collects the values from the selected channels
 in the input images and finds the corresponding histogram bin. But instead of incrementing it, the
 function reads the bin value, scales it by scale , and stores in backProject(x,y) . In terms of
 statistics, the function computes probability of each element value in respect with the empirical
@@ -6684,11 +6736,11 @@ images[0].channels() + images[1].channels()-1, and so on.
 @param hist Input histogram that can be dense or sparse.
 @param backProject Destination back projection array that is a single-channel array of the same
 size and depth as images[0] .
-@param ranges Array of arrays of the histogram bin boundaries in each dimension. See cv::calcHist .
+@param ranges Array of arrays of the histogram bin boundaries in each dimension. See #calcHist .
 @param scale Optional scale factor for the output back projection.
 @param uniform Flag indicating whether the histogram is uniform or not (see above).
 <p>
-\sa cv::calcHist, cv::compareHist
+\sa calcHist, compareHist
  */
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const IntPointer channels, @ByVal Mat hist,
@@ -6874,11 +6926,11 @@ The function returns \f$d(H_1, H_2)\f$ .
 While the function works well with 1-, 2-, 3-dimensional dense histograms, it may not be suitable
 for high-dimensional sparse histograms. In such histograms, because of aliasing and sampling
 problems, the coordinates of non-zero histogram bins can slightly shift. To compare such histograms
-or more general sparse configurations of weighted points, consider using the cv::EMD function.
+or more general sparse configurations of weighted points, consider using the #EMD function.
 <p>
 @param H1 First compared histogram.
 @param H2 Second compared histogram of the same size as H1 .
-@param method Comparison method, see cv::HistCompMethods
+@param method Comparison method, see #HistCompMethods
  */
 @Namespace("cv") public static native double compareHist( @ByVal Mat H1, @ByVal Mat H2, int method );
 @Namespace("cv") public static native double compareHist( @ByVal UMat H1, @ByVal UMat H2, int method );
@@ -6925,7 +6977,7 @@ non-negative and have at least one non-zero value.
 may be different. The total weights may be different. In this case an extra "dummy" point is added
 to either signature1 or signature2. The weights must be non-negative and have at least one non-zero
 value.
-@param distType Used metric. See cv::DistanceTypes.
+@param distType Used metric. See #DistanceTypes.
 @param cost User-defined \f$\texttt{size1}\times \texttt{size2}\f$ cost matrix. Also, if a cost matrix
 is used, lower boundary lowerBound cannot be calculated because it needs a metric function.
 @param lowerBound Optional input/output parameter: lower boundary of a distance between the two
@@ -6988,7 +7040,7 @@ algorithm, described in \cite Meyer92 .
 Before passing the image to the function, you have to roughly outline the desired regions in the
 image markers with positive (\>0) indices. So, every region is represented as one or more connected
 components with the pixel values 1, 2, 3, and so on. Such markers can be retrieved from a binary
-mask using findContours and drawContours (see the watershed.cpp demo). The markers are "seeds" of
+mask using #findContours and #drawContours (see the watershed.cpp demo). The markers are "seeds" of
 the future image regions. All the other pixels in markers , whose relation to the outlined regions
 is not known and should be defined by the algorithm, should be set to 0's. In the function output,
 each pixel in markers is set to a value of the "seed" components or to -1 at boundaries between the
@@ -7081,17 +7133,17 @@ The function implements the [GrabCut image segmentation algorithm](http://en.wik
 <p>
 @param img Input 8-bit 3-channel image.
 @param mask Input/output 8-bit single-channel mask. The mask is initialized by the function when
-mode is set to GC_INIT_WITH_RECT. Its elements may have one of the cv::GrabCutClasses.
+mode is set to #GC_INIT_WITH_RECT. Its elements may have one of the #GrabCutClasses.
 @param rect ROI containing a segmented object. The pixels outside of the ROI are marked as
-"obvious background". The parameter is only used when mode==GC_INIT_WITH_RECT .
+"obvious background". The parameter is only used when mode==#GC_INIT_WITH_RECT .
 @param bgdModel Temporary array for the background model. Do not modify it while you are
 processing the same image.
 @param fgdModel Temporary arrays for the foreground model. Do not modify it while you are
 processing the same image.
 @param iterCount Number of iterations the algorithm should make before returning the result. Note
-that the result can be refined with further calls with mode==GC_INIT_WITH_MASK or
+that the result can be refined with further calls with mode==#GC_INIT_WITH_MASK or
 mode==GC_EVAL .
-@param mode Operation mode that could be one of the cv::GrabCutModes
+@param mode Operation mode that could be one of the #GrabCutModes
  */
 @Namespace("cv") public static native void grabCut( @ByVal Mat img, @ByVal Mat mask, @ByVal Rect rect,
                            @ByVal Mat bgdModel, @ByVal Mat fgdModel,
@@ -7122,7 +7174,7 @@ An example on using the distance transform\
 The function cv::distanceTransform calculates the approximate or precise distance from every binary
 image pixel to the nearest zero pixel. For zero image pixels, the distance will obviously be zero.
 <p>
-When maskSize == DIST_MASK_PRECISE and distanceType == DIST_L2 , the function runs the
+When maskSize == #DIST_MASK_PRECISE and distanceType == #DIST_L2 , the function runs the
 algorithm described in \cite Felzenszwalb04 . This algorithm is parallelized with the TBB library.
 <p>
 In other cases, the algorithm \cite Borgefors86 is used. This means that for a pixel the function
@@ -7131,8 +7183,8 @@ diagonal, or knight's move (the latest is available for a \f$5\times 5\f$ mask).
 distance is calculated as a sum of these basic distances. Since the distance function should be
 symmetric, all of the horizontal and vertical shifts must have the same cost (denoted as a ), all
 the diagonal shifts must have the same cost (denoted as {@code b}), and all knight's moves must have the
-same cost (denoted as {@code c}). For the cv::DIST_C and cv::DIST_L1 types, the distance is calculated
-precisely, whereas for cv::DIST_L2 (Euclidean distance) the distance can be calculated only with a
+same cost (denoted as {@code c}). For the #DIST_C and #DIST_L1 types, the distance is calculated
+precisely, whereas for #DIST_L2 (Euclidean distance) the distance can be calculated only with a
 relative error (a \f$5\times 5\f$ mask gives more accurate results). For {@code a},{@code b}, and {@code c}, OpenCV
 uses the values suggested in the original paper:
 - DIST_L1: {@code a = 1, b = 2}
@@ -7141,21 +7193,21 @@ uses the values suggested in the original paper:
     - {@code 5 x 5}: {@code a=1, b=1.4, c=2.1969}
 - DIST_C: {@code a = 1, b = 1}
 <p>
-Typically, for a fast, coarse distance estimation DIST_L2, a \f$3\times 3\f$ mask is used. For a
-more accurate distance estimation DIST_L2, a \f$5\times 5\f$ mask or the precise algorithm is used.
+Typically, for a fast, coarse distance estimation #DIST_L2, a \f$3\times 3\f$ mask is used. For a
+more accurate distance estimation #DIST_L2, a \f$5\times 5\f$ mask or the precise algorithm is used.
 Note that both the precise and the approximate algorithms are linear on the number of pixels.
 <p>
 This variant of the function does not only compute the minimum distance for each pixel \f$(x, y)\f$
 but also identifies the nearest connected component consisting of zero pixels
-(labelType==DIST_LABEL_CCOMP) or the nearest zero pixel (labelType==DIST_LABEL_PIXEL). Index of the
-component/pixel is stored in {@code labels(x, y)}. When labelType==DIST_LABEL_CCOMP, the function
+(labelType==#DIST_LABEL_CCOMP) or the nearest zero pixel (labelType==#DIST_LABEL_PIXEL). Index of the
+component/pixel is stored in {@code labels(x, y)}. When labelType==#DIST_LABEL_CCOMP, the function
 automatically finds connected components of zero pixels in the input image and marks them with
-distinct labels. When labelType==DIST_LABEL_CCOMP, the function scans through the input image and
+distinct labels. When labelType==#DIST_LABEL_CCOMP, the function scans through the input image and
 marks all the zero pixels with distinct labels.
 <p>
 In this mode, the complexity is still linear. That is, the function provides a very fast way to
 compute the Voronoi diagram for a binary image. Currently, the second variant can use only the
-approximate distance transform algorithm, i.e. maskSize=DIST_MASK_PRECISE is not supported
+approximate distance transform algorithm, i.e. maskSize=#DIST_MASK_PRECISE is not supported
 yet.
 <p>
 @param src 8-bit, single-channel (binary) source image.
@@ -7163,12 +7215,12 @@ yet.
 single-channel image of the same size as src.
 @param labels Output 2D array of labels (the discrete Voronoi diagram). It has the type
 CV_32SC1 and the same size as src.
-@param distanceType Type of distance, see cv::DistanceTypes
-@param maskSize Size of the distance transform mask, see cv::DistanceTransformMasks.
-DIST_MASK_PRECISE is not supported by this variant. In case of the DIST_L1 or DIST_C distance type,
+@param distanceType Type of distance, see #DistanceTypes
+@param maskSize Size of the distance transform mask, see #DistanceTransformMasks.
+#DIST_MASK_PRECISE is not supported by this variant. In case of the #DIST_L1 or #DIST_C distance type,
 the parameter is forced to 3 because a \f$3\times 3\f$ mask gives the same result as \f$5\times
 5\f$ or any larger aperture.
-@param labelType Type of the label array to build, see cv::DistanceTransformLabelTypes.
+@param labelType Type of the label array to build, see #DistanceTransformLabelTypes.
  */
 @Namespace("cv") public static native @Name("distanceTransform") void distanceTransformWithLabels( @ByVal Mat src, @ByVal Mat dst,
                                      @ByVal Mat labels, int distanceType, int maskSize,
@@ -7190,12 +7242,12 @@ the parameter is forced to 3 because a \f$3\times 3\f$ mask gives the same resul
 @param src 8-bit, single-channel (binary) source image.
 @param dst Output image with calculated distances. It is a 8-bit or 32-bit floating-point,
 single-channel image of the same size as src .
-@param distanceType Type of distance, see cv::DistanceTypes
-@param maskSize Size of the distance transform mask, see cv::DistanceTransformMasks. In case of the
-DIST_L1 or DIST_C distance type, the parameter is forced to 3 because a \f$3\times 3\f$ mask gives
+@param distanceType Type of distance, see #DistanceTypes
+@param maskSize Size of the distance transform mask, see #DistanceTransformMasks. In case of the
+#DIST_L1 or #DIST_C distance type, the parameter is forced to 3 because a \f$3\times 3\f$ mask gives
 the same result as \f$5\times 5\f$ or any larger aperture.
 @param dstType Type of output image. It can be CV_8U or CV_32F. Type CV_8U can be used only for
-the first variant of the function and distanceType == DIST_L1.
+the first variant of the function and distanceType == #DIST_L1.
 */
 @Namespace("cv") public static native void distanceTransform( @ByVal Mat src, @ByVal Mat dst,
                                      int distanceType, int maskSize, int dstType/*=CV_32F*/);
@@ -7276,7 +7328,7 @@ Use these functions to either mark a connected component with the specified colo
 a mask and then extract the contour, or copy the region to another image, and so on.
 <p>
 @param image Input/output 1- or 3-channel, 8-bit, or floating-point image. It is modified by the
-function unless the FLOODFILL_MASK_ONLY flag is set in the second variant of the function. See
+function unless the #FLOODFILL_MASK_ONLY flag is set in the second variant of the function. See
 the details below.
 @param mask Operation mask that should be a single-channel 8-bit image, 2 pixels wider and 2 pixels
 taller than image. Since this is both an input and output parameter, you must take responsibility
@@ -7301,7 +7353,7 @@ will be considered. The next 8 bits (8-16) contain a value between 1 and 255 wit
 the mask (the default value is 1). For example, 4 | ( 255 \<\< 8 ) will consider 4 nearest
 neighbours and fill the mask with a value of 255. The following additional options occupy higher
 bits and therefore may be further combined with the connectivity and mask fill values using
-bit-wise or (|), see cv::FloodFillFlags.
+bit-wise or (|), see #FloodFillFlags.
 <p>
 \note Since the mask is larger than the filled image, a pixel \f$(x, y)\f$ in image corresponds to the
 pixel \f$(x+1, y+1)\f$ in the mask .
@@ -7345,13 +7397,13 @@ In case of linear transformations, the range does not matter. But in case of a n
 transformation, an input RGB image should be normalized to the proper value range to get the correct
 results, for example, for RGB \f$\rightarrow\f$ L\*u\*v\* transformation. For example, if you have a
 32-bit floating-point image directly converted from an 8-bit image without any scaling, then it will
-have the 0..255 value range instead of 0..1 assumed by the function. So, before calling cvtColor ,
+have the 0..255 value range instead of 0..1 assumed by the function. So, before calling #cvtColor ,
 you need first to scale the image down:
 <pre>{@code
     img *= 1./255;
     cvtColor(img, img, COLOR_BGR2Luv);
 }</pre>
-If you use cvtColor with 8-bit images, the conversion will have some information lost. For many
+If you use #cvtColor with 8-bit images, the conversion will have some information lost. For many
 applications, this will not be noticeable but it is recommended to use 32-bit images in applications
 that need the full range of colors or that convert an image before an operation and then convert
 back.
@@ -7362,7 +7414,7 @@ range: 255 for CV_8U, 65535 for CV_16U, 1 for CV_32F.
 @param src input image: 8-bit unsigned, 16-bit unsigned ( CV_16UC... ), or single-precision
 floating-point.
 @param dst output image of the same size and depth as src.
-@param code color space conversion code (see cv::ColorConversionCodes).
+@param code color space conversion code (see #ColorConversionCodes).
 @param dstCn number of channels in the destination image; if the parameter is 0, the number of the
 channels is derived automatically from src and code.
 <p>
@@ -7374,6 +7426,10 @@ channels is derived automatically from src and code.
 @Namespace("cv") public static native void cvtColor( @ByVal UMat src, @ByVal UMat dst, int code );
 @Namespace("cv") public static native void cvtColor( @ByVal GpuMat src, @ByVal GpuMat dst, int code, int dstCn/*=0*/ );
 @Namespace("cv") public static native void cvtColor( @ByVal GpuMat src, @ByVal GpuMat dst, int code );
+
+@Namespace("cv") public static native void cvtColorTwoPlane( @ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst, int code );
+@Namespace("cv") public static native void cvtColorTwoPlane( @ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst, int code );
+@Namespace("cv") public static native void cvtColorTwoPlane( @ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst, int code );
 
 /** \} imgproc_misc */
 
@@ -7473,8 +7529,8 @@ for the available comparison methods ( \f$I\f$ denotes image, \f$T\f$ template, 
 is done over template and/or the image patch: \f$x' = 0...w-1, y' = 0...h-1\f$
 <p>
 After the function finishes the comparison, the best matches can be found as global minimums (when
-TM_SQDIFF was used) or maximums (when TM_CCORR or TM_CCOEFF was used) using the
-minMaxLoc function. In case of a color image, template summation in the numerator and each sum in
+#TM_SQDIFF was used) or maximums (when #TM_CCORR or #TM_CCOEFF was used) using the
+#minMaxLoc function. In case of a color image, template summation in the numerator and each sum in
 the denominator is done over all of the channels and separate mean values are used for each channel.
 That is, the function can take a color template and a color image. The result will still be a
 single-channel image, which is easier to analyze.
@@ -7484,9 +7540,9 @@ single-channel image, which is easier to analyze.
 data type.
 @param result Map of comparison results. It must be single-channel 32-bit floating-point. If image
 is \f$W \times H\f$ and templ is \f$w \times h\f$ , then result is \f$(W-w+1) \times (H-h+1)\f$ .
-@param method Parameter specifying the comparison method, see cv::TemplateMatchModes
+@param method Parameter specifying the comparison method, see #TemplateMatchModes
 @param mask Mask of searched template. It must have the same datatype and size with templ. It is
-not set by default. Currently, only the TM_SQDIFF and TM_CCORR_NORMED methods are supported.
+not set by default. Currently, only the #TM_SQDIFF and #TM_CCORR_NORMED methods are supported.
  */
 @Namespace("cv") public static native void matchTemplate( @ByVal Mat image, @ByVal Mat templ,
                                  @ByVal Mat result, int method, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask );
@@ -7512,16 +7568,16 @@ image with 4 or 8 way connectivity - returns N, the total number of labels [0, N
 represents the background label. ltype specifies the output label image type, an important
 consideration based on the total number of labels or alternatively the total number of pixels in
 the source image. ccltype specifies the connected components labeling algorithm to use, currently
-Grana (BBDT) and Wu's (SAUF) algorithms are supported, see the cv::ConnectedComponentsAlgorithmsTypes
+Grana (BBDT) and Wu's (SAUF) algorithms are supported, see the #ConnectedComponentsAlgorithmsTypes
 for details. Note that SAUF algorithm forces a row major ordering of labels while BBDT does not.
 This function uses parallel version of both Grana and Wu's algorithms if at least one allowed
-parallel framework is enabled and if the rows of the image are at least twice the number returned by getNumberOfCPUs.
+parallel framework is enabled and if the rows of the image are at least twice the number returned by #getNumberOfCPUs.
 <p>
 @param image the 8-bit single-channel image to be labeled
 @param labels destination labeled image
 @param connectivity 8 or 4 for 8-way or 4-way connectivity respectively
 @param ltype output image label type. Currently CV_32S and CV_16U are supported.
-@param ccltype connected components algorithm type (see the cv::ConnectedComponentsAlgorithmsTypes).
+@param ccltype connected components algorithm type (see the #ConnectedComponentsAlgorithmsTypes).
 */
 @Namespace("cv") public static native @Name("connectedComponents") int connectedComponentsWithAlgorithm(@ByVal Mat image, @ByVal Mat labels,
                                                                         int connectivity, int ltype, int ccltype);
@@ -7555,21 +7611,21 @@ image with 4 or 8 way connectivity - returns N, the total number of labels [0, N
 represents the background label. ltype specifies the output label image type, an important
 consideration based on the total number of labels or alternatively the total number of pixels in
 the source image. ccltype specifies the connected components labeling algorithm to use, currently
-Grana's (BBDT) and Wu's (SAUF) algorithms are supported, see the cv::ConnectedComponentsAlgorithmsTypes
+Grana's (BBDT) and Wu's (SAUF) algorithms are supported, see the #ConnectedComponentsAlgorithmsTypes
 for details. Note that SAUF algorithm forces a row major ordering of labels while BBDT does not.
 This function uses parallel version of both Grana and Wu's algorithms (statistics included) if at least one allowed
-parallel framework is enabled and if the rows of the image are at least twice the number returned by getNumberOfCPUs.
+parallel framework is enabled and if the rows of the image are at least twice the number returned by #getNumberOfCPUs.
 <p>
 @param image the 8-bit single-channel image to be labeled
 @param labels destination labeled image
 @param stats statistics output for each label, including the background label, see below for
 available statistics. Statistics are accessed via stats(label, COLUMN) where COLUMN is one of
-cv::ConnectedComponentsTypes. The data type is CV_32S.
+#ConnectedComponentsTypes. The data type is CV_32S.
 @param centroids centroid output for each label, including the background label. Centroids are
 accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data type CV_64F.
 @param connectivity 8 or 4 for 8-way or 4-way connectivity respectively
 @param ltype output image label type. Currently CV_32S and CV_16U are supported.
-@param ccltype connected components algorithm type (see the cv::ConnectedComponentsAlgorithmsTypes).
+@param ccltype connected components algorithm type (see #ConnectedComponentsAlgorithmsTypes).
 */
 @Namespace("cv") public static native @Name("connectedComponentsWithStats") int connectedComponentsWithStatsWithAlgorithm(@ByVal Mat image, @ByVal Mat labels,
                                                                                           @ByVal Mat stats, @ByVal Mat centroids,
@@ -7586,7 +7642,7 @@ accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data t
 @param labels destination labeled image
 @param stats statistics output for each label, including the background label, see below for
 available statistics. Statistics are accessed via stats(label, COLUMN) where COLUMN is one of
-cv::ConnectedComponentsTypes. The data type is CV_32S.
+#ConnectedComponentsTypes. The data type is CV_32S.
 @param centroids centroid output for each label, including the background label. Centroids are
 accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data type CV_64F.
 @param connectivity 8 or 4 for 8-way or 4-way connectivity respectively
@@ -7617,9 +7673,9 @@ OpenCV sample directory.
 \note Since opencv 3.2 source image is not modified by this function.
 <p>
 @param image Source, an 8-bit single-channel image. Non-zero pixels are treated as 1's. Zero
-pixels remain 0's, so the image is treated as binary . You can use cv::compare, cv::inRange, cv::threshold ,
-cv::adaptiveThreshold, cv::Canny, and others to create a binary image out of a grayscale or color one.
-If mode equals to cv::RETR_CCOMP or cv::RETR_FLOODFILL, the input can also be a 32-bit integer image of labels (CV_32SC1).
+pixels remain 0's, so the image is treated as binary . You can use #compare, #inRange, #threshold ,
+#adaptiveThreshold, #Canny, and others to create a binary image out of a grayscale or color one.
+If mode equals to #RETR_CCOMP or #RETR_FLOODFILL, the input can also be a 32-bit integer image of labels (CV_32SC1).
 @param contours Detected contours. Each contour is stored as a vector of points (e.g.
 std::vector<std::vector<cv::Point> >).
 @param hierarchy Optional output vector (e.g. std::vector<cv::Vec4i>), containing information about the image topology. It has
@@ -7628,8 +7684,8 @@ hierarchy[i][0] , hierarchy[i][1] , hierarchy[i][2] , and hierarchy[i][3] are se
 in contours of the next and previous contours at the same hierarchical level, the first child
 contour and the parent contour, respectively. If for the contour i there are no next, previous,
 parent, or nested contours, the corresponding elements of hierarchy[i] will be negative.
-@param mode Contour retrieval mode, see cv::RetrievalModes
-@param method Contour approximation method, see cv::ContourApproximationModes
+@param mode Contour retrieval mode, see #RetrievalModes
+@param method Contour approximation method, see #ContourApproximationModes
 @param offset Optional offset by which every contour point is shifted. This is useful if the
 contours are extracted from the image ROI and then they should be analyzed in the whole image
 context.
@@ -7775,7 +7831,7 @@ The function calculates and returns the minimal up-right bounding rectangle for 
 <p>
 The function computes a contour area. Similarly to moments , the area is computed using the Green
 formula. Thus, the returned area and the number of non-zero pixels, if you draw the contour using
-drawContours or fillPoly , can be different. Also, the function will most certainly give a wrong
+#drawContours or #fillPoly , can be different. Also, the function will most certainly give a wrong
 results for contours with self-intersections.
 <p>
 Example:
@@ -7823,10 +7879,8 @@ indices when data is close to the containing Mat element boundary.
 /** \brief Finds the four vertices of a rotated rect. Useful to draw the rotated rectangle.
 <p>
 The function finds the four vertices of a rotated rectangle. This function is useful to draw the
-rectangle. In C++, instead of using this function, you can directly use box.points() method. Please
-visit the [tutorial on bounding
-rectangle](http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/bounding_rects_circles/bounding_rects_circles.html#bounding-rects-circles)
-for more information.
+rectangle. In C++, instead of using this function, you can directly use RotatedRect::points method. Please
+visit the \ref tutorial_bounding_rotated_ellipses "tutorial on Creating Bounding rotated boxes and ellipses for contours" for more information.
 <p>
 @param box The input rotated rectangle. It may be the output of
 @param points The output array of four vertices of rectangles.
@@ -7875,9 +7929,9 @@ area. The output for a given 2D point set is shown in the image below. 2D points
 <p>
 The implementation of the algorithm is based on O'Rourke's \cite ORourke86 and Klee and Laskowski's
 \cite KleeLaskowski85 papers. O'Rourke provides a \f$\theta(n)\f$ algorithm for finding the minimal
-enclosing triangle of a 2D convex polygon with n vertices. Since the minEnclosingTriangle function
+enclosing triangle of a 2D convex polygon with n vertices. Since the #minEnclosingTriangle function
 takes a 2D point set as input an additional preprocessing step of computing the convex hull of the
-2D point set is required. The complexity of the convexHull function is \f$O(n log(n))\f$ which is higher
+2D point set is required. The complexity of the #convexHull function is \f$O(n log(n))\f$ which is higher
 than \f$\theta(n)\f$. Thus the overall complexity of the function is \f$O(n log(n))\f$.
 <p>
 @param points Input vector of 2D points with depth CV_32S or CV_32F, stored in std::vector\<\> or Mat
@@ -7890,11 +7944,11 @@ of the OutputArray must be CV_32F.
 
 /** \brief Compares two shapes.
 <p>
-The function compares two shapes. All three implemented methods use the Hu invariants (see cv::HuMoments)
+The function compares two shapes. All three implemented methods use the Hu invariants (see #HuMoments)
 <p>
 @param contour1 First contour or grayscale image.
 @param contour2 Second contour or grayscale image.
-@param method Comparison method, see cv::ShapeMatchModes
+@param method Comparison method, see #ShapeMatchModes
 @param parameter Method-specific parameter (not supported now).
  */
 @Namespace("cv") public static native double matchShapes( @ByVal Mat contour1, @ByVal Mat contour2,
@@ -7911,8 +7965,7 @@ An example using the convexHull functionality
 /** \brief Finds the convex hull of a point set.
 <p>
 The function cv::convexHull finds the convex hull of a 2D point set using the Sklansky's algorithm \cite Sklansky82
-that has *O(N logN)* complexity in the current implementation. See the OpenCV sample convexhull.cpp
-that demonstrates the usage of different function variants.
+that has *O(N logN)* complexity in the current implementation.
 <p>
 @param points Input 2D point set, stored in std::vector or Mat.
 @param hull Output convex hull. It is either an integer vector of indices or vector of points. In
@@ -7950,7 +8003,7 @@ The figure below displays convexity defects of a hand contour:
 @param convexhull Convex hull obtained using convexHull that should contain indices of the contour
 points that make the hull.
 @param convexityDefects The output vector of convexity defects. In C++ and the new Python/Java
-interface each convexity defect is represented as 4-element integer vector (a.k.a. cv::Vec4i):
+interface each convexity defect is represented as 4-element integer vector (a.k.a. #Vec4i):
 (start_index, end_index, farthest_pt_index, fixpt_depth), where indices are 0-based indices
 in the original contour of the convexity defect beginning, end and the farthest point, and
 fixpt_depth is fixed-point approximation (with 8 fractional bits) of the distance between the
@@ -8015,7 +8068,7 @@ border of the containing Mat element.
  However, to specify an ellipse, all that is needed is five numbers; the major and minor axes lengths \f$ (a,b) \f$,
  the position \f$ (x_0,y_0) \f$, and the orientation \f$ \theta \f$. This is because the basis set includes lines,
  quadratics, parabolic and hyperbolic functions as well as elliptical functions as possible fits.
- If the fit is found to be a parabolic or hyperbolic function then the standard fitEllipse method is used.
+ If the fit is found to be a parabolic or hyperbolic function then the standard #fitEllipse method is used.
  The AMS method restricts the fit to parabolic, hyperbolic and elliptical curves
  by imposing the condition that \f$ A^T ( D_x^T D_x  +   D_y^T D_y) A = 1 \f$ where
  the matrices \f$ Dx \f$ and \f$ Dy \f$ are the partial derivatives of the design matrix \f$ D \f$ with
@@ -8118,7 +8171,7 @@ weights \f$w_i\f$ are adjusted to be inversely proportional to \f$\rho(r_i)\f$ .
 (x0, y0) is a point on the line. In case of 3D fitting, it should be a vector of 6 elements (like
 Vec6f) - (vx, vy, vz, x0, y0, z0), where (vx, vy, vz) is a normalized vector collinear to the line
 and (x0, y0, z0) is a point on the line.
-@param distType Distance used by the M-estimator, see cv::DistanceTypes
+@param distType Distance used by the M-estimator, see #DistanceTypes
 @param param Numerical parameter ( C ) for some types of distances. If it is 0, an optimal value
 is chosen.
 @param reps Sufficient accuracy for the radius (distance between the coordinate origin and the line).
@@ -8164,14 +8217,19 @@ intersecting region and the red vertices are returned by the function.
 @param rect2 Second rectangle
 @param intersectingRegion The output array of the vertices of the intersecting region. It returns
 at most 8 vertices. Stored as std::vector\<cv::Point2f\> or cv::Mat as Mx1 of type CV_32FC2.
-@return One of cv::RectanglesIntersectTypes
+@return One of #RectanglesIntersectTypes
  */
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal Mat intersectingRegion  );
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal UMat intersectingRegion  );
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal GpuMat intersectingRegion  );
 
-/** \} imgproc_shape */
-
+/** \} imgproc_shape
+/** \brief Creates implementation for cv::CLAHE .
+<p>
+@param clipLimit Threshold for contrast limiting.
+@param tileGridSize Size of grid for histogram equalization. Input image will be divided into
+equally sized rectangular tiles. tileGridSize defines the number of tiles in row and column.
+ */
 @Namespace("cv") public static native @Ptr CLAHE createCLAHE(double clipLimit/*=40.0*/, @ByVal(nullValue = "cv::Size(8, 8)") Size tileGridSize);
 @Namespace("cv") public static native @Ptr CLAHE createCLAHE();
 
@@ -8234,7 +8292,7 @@ An example using applyColorMap function
 <p>
 @param src The source image, grayscale or colored of type CV_8UC1 or CV_8UC3.
 @param dst The result is the colormapped source image. Note: Mat::create is called on dst.
-@param colormap The colormap to apply, see cv::ColormapTypes
+@param colormap The colormap to apply, see #ColormapTypes
 */
 @Namespace("cv") public static native void applyColorMap(@ByVal Mat src, @ByVal Mat dst, int colormap);
 @Namespace("cv") public static native void applyColorMap(@ByVal UMat src, @ByVal UMat dst, int colormap);
@@ -8267,7 +8325,7 @@ lines are drawn using Gaussian filtering.
 @param pt2 Second point of the line segment.
 @param color Line color.
 @param thickness Line thickness.
-@param lineType Type of the line, see cv::LineTypes.
+@param lineType Type of the line. See #LineTypes.
 @param shift Number of fractional bits in the point coordinates.
  */
 @Namespace("cv") public static native void line(@ByVal Mat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
@@ -8282,14 +8340,14 @@ lines are drawn using Gaussian filtering.
 
 /** \brief Draws a arrow segment pointing from the first point to the second one.
 <p>
-The function arrowedLine draws an arrow between pt1 and pt2 points in the image. See also cv::line.
+The function cv::arrowedLine draws an arrow between pt1 and pt2 points in the image. See also #line.
 <p>
 @param img Image.
 @param pt1 The point the arrow starts from.
 @param pt2 The point the arrow points to.
 @param color Line color.
 @param thickness Line thickness.
-@param line_type Type of the line, see cv::LineTypes
+@param line_type Type of the line. See #LineTypes
 @param shift Number of fractional bits in the point coordinates.
 @param tipLength The length of the arrow tip in relation to the arrow length
  */
@@ -8305,16 +8363,16 @@ The function arrowedLine draws an arrow between pt1 and pt2 points in the image.
 
 /** \brief Draws a simple, thick, or filled up-right rectangle.
 <p>
-The function rectangle draws a rectangle outline or a filled rectangle whose two opposite corners
+The function cv::rectangle draws a rectangle outline or a filled rectangle whose two opposite corners
 are pt1 and pt2.
 <p>
 @param img Image.
 @param pt1 Vertex of the rectangle.
 @param pt2 Vertex of the rectangle opposite to pt1 .
 @param color Rectangle color or brightness (grayscale image).
-@param thickness Thickness of lines that make up the rectangle. Negative values, like CV_FILLED ,
+@param thickness Thickness of lines that make up the rectangle. Negative values, like #FILLED,
 mean that the function has to draw a filled rectangle.
-@param lineType Type of the line. See the line description.
+@param lineType Type of the line. See #LineTypes
 @param shift Number of fractional bits in the point coordinates.
  */
 @Namespace("cv") public static native void rectangle(@ByVal Mat img, @ByVal Point pt1, @ByVal Point pt2,
@@ -8349,14 +8407,14 @@ An example using drawing functions
  */
 /** \brief Draws a circle.
 <p>
-The function circle draws a simple or filled circle with a given center and radius.
+The function cv::circle draws a simple or filled circle with a given center and radius.
 @param img Image where the circle is drawn.
 @param center Center of the circle.
 @param radius Radius of the circle.
 @param color Circle color.
-@param thickness Thickness of the circle outline, if positive. Negative thickness means that a
-filled circle is to be drawn.
-@param lineType Type of the circle boundary. See the line description.
+@param thickness Thickness of the circle outline, if positive. Negative values, like #FILLED,
+mean that a filled circle is to be drawn.
+@param lineType Type of the circle boundary. See #LineTypes
 @param shift Number of fractional bits in the coordinates of the center and in the radius value.
  */
 @Namespace("cv") public static native void circle(@ByVal Mat img, @ByVal Point center, int radius,
@@ -8381,7 +8439,7 @@ The function cv::ellipse with more parameters draws an ellipse outline, a filled
 arc, or a filled ellipse sector. The drawing code uses general parametric form.
 A piecewise-linear curve is used to approximate the elliptic arc
 boundary. If you need more control of the ellipse rendering, you can retrieve the curve using
-cv::ellipse2Poly and then render it with polylines or fill it with cv::fillPoly. If you use the first
+#ellipse2Poly and then render it with #polylines or fill it with #fillPoly. If you use the first
 variant of the function and want to draw the whole ellipse, not an arc, pass {@code startAngle=0} and
 {@code endAngle=360}. If {@code startAngle} is greater than {@code endAngle}, they are swapped. The figure below explains
 the meaning of the parameters to draw the blue arc.
@@ -8397,7 +8455,7 @@ the meaning of the parameters to draw the blue arc.
 @param color Ellipse color.
 @param thickness Thickness of the ellipse arc outline, if positive. Otherwise, this indicates that
 a filled ellipse sector is to be drawn.
-@param lineType Type of the ellipse boundary. See the line description.
+@param lineType Type of the ellipse boundary. See #LineTypes
 @param shift Number of fractional bits in the coordinates of the center and values of axes.
  */
 @Namespace("cv") public static native void ellipse(@ByVal Mat img, @ByVal Point center, @ByVal Size axes,
@@ -8429,7 +8487,7 @@ an ellipse inscribed in the rotated rectangle.
 @param color Ellipse color.
 @param thickness Thickness of the ellipse arc outline, if positive. Otherwise, this indicates that
 a filled ellipse sector is to be drawn.
-@param lineType Type of the ellipse boundary. See the line description.
+@param lineType Type of the ellipse boundary. See #LineTypes
 */
 @Namespace("cv") public static native void ellipse(@ByVal Mat img, @Const @ByRef RotatedRect box, @Const @ByRef Scalar color,
                         int thickness/*=1*/, int lineType/*=cv::LINE_8*/);
@@ -8465,15 +8523,15 @@ public static final int
 
 /** \brief Draws a marker on a predefined position in an image.
 <p>
-The function drawMarker draws a marker on a given position in the image. For the moment several
-marker types are supported, see cv::MarkerTypes for more information.
+The function cv::drawMarker draws a marker on a given position in the image. For the moment several
+marker types are supported, see #MarkerTypes for more information.
 <p>
 @param img Image.
 @param position The point where the crosshair is positioned.
 @param color Line color.
-@param markerType The specific type of marker you want to use, see cv::MarkerTypes
+@param markerType The specific type of marker you want to use, see #MarkerTypes
 @param thickness Line thickness.
-@param line_type Type of the line, see cv::LineTypes
+@param line_type Type of the line, See #LineTypes
 @param markerSize The length of the marker axis [default = 20 pixels]
  */
 @Namespace("cv") public static native void drawMarker(@ByRef Mat img, @ByVal Point position, @Const @ByRef Scalar color,
@@ -8494,15 +8552,15 @@ marker types are supported, see cv::MarkerTypes for more information.
 
 /** \brief Fills a convex polygon.
 <p>
-The function fillConvexPoly draws a filled convex polygon. This function is much faster than the
-function cv::fillPoly . It can fill not only convex polygons but any monotonic polygon without
+The function cv::fillConvexPoly draws a filled convex polygon. This function is much faster than the
+function #fillPoly . It can fill not only convex polygons but any monotonic polygon without
 self-intersections, that is, a polygon whose contour intersects every horizontal line (scan line)
 twice at the most (though, its top-most and/or the bottom edge could be horizontal).
 <p>
 @param img Image.
 @param points Polygon vertices.
 @param color Polygon color.
-@param lineType Type of the polygon boundaries. See the line description.
+@param lineType Type of the polygon boundaries. See #LineTypes
 @param shift Number of fractional bits in the vertex coordinates.
  */
 @Namespace("cv") public static native void fillConvexPoly(@ByVal Mat img, @ByVal Mat points,
@@ -8553,14 +8611,14 @@ An example using drawing functions
  */
 /** \brief Fills the area bounded by one or more polygons.
 <p>
-The function fillPoly fills an area bounded by several polygonal contours. The function can fill
+The function cv::fillPoly fills an area bounded by several polygonal contours. The function can fill
 complex areas, for example, areas with holes, contours with self-intersections (some of their
 parts), and so forth.
 <p>
 @param img Image.
 @param pts Array of polygons where each polygon is represented as an array of points.
 @param color Polygon color.
-@param lineType Type of the polygon boundaries. See the line description.
+@param lineType Type of the polygon boundaries. See #LineTypes
 @param shift Number of fractional bits in the vertex coordinates.
 @param offset Optional offset of all points of the contours.
  */
@@ -8638,10 +8696,10 @@ parts), and so forth.
 the function draws a line from the last vertex of each curve to its first vertex.
 @param color Polyline color.
 @param thickness Thickness of the polyline edges.
-@param lineType Type of the line segments. See the line description.
+@param lineType Type of the line segments. See #LineTypes
 @param shift Number of fractional bits in the vertex coordinates.
 <p>
-The function polylines draws one or more polygonal curves.
+The function cv::polylines draws one or more polygonal curves.
  */
 @Namespace("cv") public static native void polylines(@ByVal Mat img, @ByVal MatVector pts,
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
@@ -8750,8 +8808,8 @@ connected components from the binary image and label them: :
 @param contourIdx Parameter indicating a contour to draw. If it is negative, all the contours are drawn.
 @param color Color of the contours.
 @param thickness Thickness of lines the contours are drawn with. If it is negative (for example,
-thickness=CV_FILLED ), the contour interiors are drawn.
-@param lineType Line connectivity. See cv::LineTypes.
+thickness=#FILLED ), the contour interiors are drawn.
+@param lineType Line connectivity. See #LineTypes
 @param hierarchy Optional information about hierarchy. It is only needed if you want to draw only
 some of the contours (see maxLevel ).
 @param maxLevel Maximal level for drawn contours. If it is 0, only the specified contour is drawn.
@@ -8760,10 +8818,10 @@ draws the contours, all the nested contours, all the nested-to-nested contours, 
 parameter is only taken into account when there is hierarchy available.
 @param offset Optional contour shift parameter. Shift all the drawn contours by the specified
 \f$\texttt{offset}=(dx,dy)\f$ .
-\note When thickness=CV_FILLED, the function is designed to handle connected components with holes correctly
+\note When thickness=#FILLED, the function is designed to handle connected components with holes correctly
 even when no hierarchy date is provided. This is done by analyzing all the outlines together
 using even-odd rule. This may give incorrect results if you have a joint collection of separately retrieved
-contours. In order to solve this problem, you need to call drawContours separately for each sub-group
+contours. In order to solve this problem, you need to call #drawContours separately for each sub-group
 of contours, or iterate over the collection using contourIdx parameter.
  */
 @Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal MatVector contours,
@@ -8857,11 +8915,11 @@ it returns true .
 /** \brief Approximates an elliptic arc with a polyline.
 <p>
 The function ellipse2Poly computes the vertices of a polyline that approximates the specified
-elliptic arc. It is used by cv::ellipse. If {@code arcStart} is greater than {@code arcEnd}, they are swapped.
+elliptic arc. It is used by #ellipse. If {@code arcStart} is greater than {@code arcEnd}, they are swapped.
 <p>
 @param center Center of the arc.
-@param axes Half of the size of the ellipse main axes. See the ellipse for details.
-@param angle Rotation angle of the ellipse in degrees. See the ellipse for details.
+@param axes Half of the size of the ellipse main axes. See #ellipse for details.
+@param angle Rotation angle of the ellipse in degrees. See #ellipse for details.
 @param arcStart Starting angle of the elliptic arc in degrees.
 @param arcEnd Ending angle of the elliptic arc in degrees.
 @param delta Angle between the subsequent polyline vertices. It defines the approximation
@@ -8874,12 +8932,11 @@ accuracy.
 
 /** \overload
 @param center Center of the arc.
-@param axes Half of the size of the ellipse main axes. See the ellipse for details.
-@param angle Rotation angle of the ellipse in degrees. See the ellipse for details.
+@param axes Half of the size of the ellipse main axes. See #ellipse for details.
+@param angle Rotation angle of the ellipse in degrees. See #ellipse for details.
 @param arcStart Starting angle of the elliptic arc in degrees.
 @param arcEnd Ending angle of the elliptic arc in degrees.
-@param delta Angle between the subsequent polyline vertices. It defines the approximation
-accuracy.
+@param delta Angle between the subsequent polyline vertices. It defines the approximation accuracy.
 @param pts Output vector of polyline vertices.
 */
 @Namespace("cv") public static native void ellipse2Poly(@ByVal Point2d center, @ByVal Size2d axes, int angle,
@@ -8888,18 +8945,18 @@ accuracy.
 
 /** \brief Draws a text string.
 <p>
-The function putText renders the specified text string in the image. Symbols that cannot be rendered
-using the specified font are replaced by question marks. See getTextSize for a text rendering code
+The function cv::putText renders the specified text string in the image. Symbols that cannot be rendered
+using the specified font are replaced by question marks. See #getTextSize for a text rendering code
 example.
 <p>
 @param img Image.
 @param text Text string to be drawn.
 @param org Bottom-left corner of the text string in the image.
-@param fontFace Font type, see cv::HersheyFonts.
+@param fontFace Font type, see #HersheyFonts.
 @param fontScale Font scale factor that is multiplied by the font-specific base size.
 @param color Text color.
 @param thickness Thickness of the lines used to draw a text.
-@param lineType Line type. See the line for details.
+@param lineType Line type. See #LineTypes
 @param bottomLeftOrigin When true, the image data origin is at the bottom-left corner. Otherwise,
 it is at the top-left corner.
  */
@@ -8942,7 +8999,7 @@ it is at the top-left corner.
 
 /** \brief Calculates the width and height of a text string.
 <p>
-The function getTextSize calculates and returns the size of a box that contains the specified text.
+The function cv::getTextSize calculates and returns the size of a box that contains the specified text.
 That is, the following code renders some text, the tight box surrounding it, and the baseline: :
 <pre>{@code
     String text = "Funny text inside the box";
@@ -8976,14 +9033,14 @@ That is, the following code renders some text, the tight box surrounding it, and
 }</pre>
 <p>
 @param text Input text string.
-@param fontFace Font to use, see cv::HersheyFonts.
+@param fontFace Font to use, see #HersheyFonts.
 @param fontScale Font scale factor that is multiplied by the font-specific base size.
-@param thickness Thickness of lines used to render the text. See putText for details.
+@param thickness Thickness of lines used to render the text. See #putText for details.
 @param [out] baseLine y-coordinate of the baseline relative to the bottom-most text
 point.
 @return The size of a box that contains the specified text.
 <p>
-@see cv::putText
+@see putText
  */
 @Namespace("cv") public static native @ByVal Size getTextSize(@Str BytePointer text, int fontFace,
                             double fontScale, int thickness,
@@ -9003,6 +9060,22 @@ point.
 @Namespace("cv") public static native @ByVal Size getTextSize(@Str String text, int fontFace,
                             double fontScale, int thickness,
                             int[] baseLine);
+
+
+/** \brief Calculates the font-specific size to use to achieve a given height in pixels.
+<p>
+@param fontFace Font to use, see cv::HersheyFonts.
+@param pixelHeight Pixel height to compute the fontScale for
+@param thickness Thickness of lines used to render the text.See putText for details.
+@return The fontSize to use for cv::putText
+<p>
+@see cv::putText
+*/
+@Namespace("cv") public static native double getFontScaleFromHeight(int fontFace,
+                                           int pixelHeight,
+                                           int thickness/*=1*/);
+@Namespace("cv") public static native double getFontScaleFromHeight(int fontFace,
+                                           int pixelHeight);
 
 /** \brief Line iterator
 <p>
@@ -9041,7 +9114,7 @@ for(int i = 0; i < it2.count; i++, ++it2)
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LineIterator(Pointer p) { super(p); }
 
-    /** \brief intializes the iterator
+    /** \brief initializes the iterator
     <p>
     creates iterators for the line connecting pt1 and pt2
     the line will be clipped on the image boundaries
