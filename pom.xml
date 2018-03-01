@@ -1241,11 +1241,11 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
         <module>systems</module>
-        <module>llvm</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1292,13 +1292,13 @@
         <module>openblas</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
         <module>ale</module>
         <module>systems</module>
-        <module>llvm</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
