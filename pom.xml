@@ -1249,6 +1249,7 @@
         <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
@@ -1300,6 +1301,7 @@
         <module>arpack-ng</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
