@@ -7,6 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+if ! [ -d "$PLATFORM$EXTENSION" ]; then
+
 OPENCV_VERSION=3.4.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
@@ -109,5 +111,7 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+fi
 
 cd ../..
