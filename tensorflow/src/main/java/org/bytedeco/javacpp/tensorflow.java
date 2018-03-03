@@ -152,7 +152,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef AttrValue second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const AttrValue second();
     }
 }
 
@@ -194,7 +194,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @ByRef @Const TensorId first();
-        public native @Name("operator*().second") @MemberGetter @ByRef TensorId second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const TensorId second();
     }
 }
 
@@ -415,7 +415,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") Device get();
+        public native @Name("operator*") @Const Device get();
     }
 
     public Device pop_back() {
@@ -470,7 +470,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") DeviceContext get();
+        public native @Name("operator*") @Const DeviceContext get();
     }
 
     public DeviceContext pop_back() {
@@ -525,7 +525,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef Tensor get();
+        public native @Name("operator*") @ByRef @Const Tensor get();
     }
 
     public Tensor pop_back() {
@@ -580,7 +580,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef TensorProto get();
+        public native @Name("operator*") @ByRef @Const TensorProto get();
     }
 
     public TensorProto pop_back() {
@@ -635,7 +635,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef TensorShape get();
+        public native @Name("operator*") @ByRef @Const TensorShape get();
     }
 
     public TensorShape pop_back() {
@@ -690,7 +690,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef NodeBuilder.NodeOut get();
+        public native @Name("operator*") @ByRef @Const NodeBuilder.NodeOut get();
     }
 
     public NodeBuilder.NodeOut pop_back() {
@@ -745,7 +745,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") Node get();
+        public native @Name("operator*") @Const Node get();
     }
 
     public Node pop_back() {
@@ -1014,7 +1014,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") Edge get();
+        public native @Name("operator*") @Const Edge get();
     }
 
     public Edge pop_back() {
@@ -1219,7 +1219,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef TensorSliceSet.SliceInfo second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const TensorSliceSet.SliceInfo second();
     }
 }
 
@@ -1246,7 +1246,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef TensorShape second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const TensorShape second();
     }
 }
 
@@ -1300,7 +1300,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter TensorSliceSet second();
+        public native @Name("operator*().second") @MemberGetter @Const TensorSliceSet second();
     }
 }
 
@@ -1883,6 +1883,7 @@ limitations under the License.
 // #define TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
 
 // #include <complex>
+
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // Disable clang-format to prevent 'FixedPoint' header from being included
 // before 'Tensor' header on which it depends.
@@ -1898,39 +1899,13 @@ limitations under the License.
 // We use Eigen's QInt implementations for our quantized int types.
 
   // namespace tensorflow
-
-
-
-
-public static native @ByVal bfloat16 FloatToBFloat16(float float_val);
-// TODO(xpan): We probably need to overwrite more methods to have correct eigen
-// behavior. E.g. epsilon(), dummy_precision, etc. See NumTraits.h in eigen.
-@Name("Eigen::NumTraits<tensorflow::bfloat16>") public static class bfloat16NumTraits extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public bfloat16NumTraits() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public bfloat16NumTraits(long size) { super((Pointer)null); allocateArray(size); }
+// TOOD(xpan): We probably need to overwrite more methods to have correct eigen
+// behavior. E.g. loest(), is_integer, etc. See NumTraits.h in eigen.
+@Name("Eigen::NumTraits<tensorflow::bfloat16>") @Opaque public static class bfloat16NumTraits extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public bfloat16NumTraits() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bfloat16NumTraits(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public bfloat16NumTraits position(long position) {
-        return (bfloat16NumTraits)super.position(position);
-    }
-
-  /** enum Eigen::NumTraits<tensorflow::bfloat16>:: */
-  public static final int
-    IsInteger = 0,
-    IsSigned = 1,
-    RequireInitialization = 0;
-  public static native @ByVal bfloat16 highest();
-
-  public static native @ByVal bfloat16 lowest();
-
-  public static native @ByVal bfloat16 infinity();
-
-  public static native @ByVal bfloat16 quiet_NaN();
 }
 
 @Namespace("Eigen::numext") public static native @ByVal bfloat16 log(
@@ -2885,14 +2860,10 @@ limitations under the License.
   public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long... file_size);
 
   /** \brief Overwrites the target if it exists. */
-  public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
-  public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
-
-  /** \brief Copy the src to target. */
   
   ///
-  public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer target);
-  public native @ByVal Status CopyFile(@StdString String src, @StdString String target);
+  public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
+  public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
 
   /** \brief Translate an URI to a filename for the FileSystem implementation.
    * 
@@ -3372,10 +3343,6 @@ limitations under the License.
   public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
   public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
 
-  /** \brief Copy the src to target. */
-  public native @ByVal Status CopyFile(@StdString BytePointer src, @StdString BytePointer target);
-  public native @ByVal Status CopyFile(@StdString String src, @StdString String target);
-
   /** \brief Returns the absolute path of the current executable. It resolves
    *  symlinks if there is any. */
   public native @StdString BytePointer GetExecutablePath();
@@ -3562,13 +3529,6 @@ limitations under the License.
   /** Guard area size to use near thread stacks to use (in bytes) */
   public native @Cast("size_t") long guard_size(); public native ThreadOptions guard_size(long guard_size);  // 0: use system default value
 }
-
-/** A utility routine: copy contents of {@code src} in file system {@code src_fs}
- *  to {@code target} in file system {@code target_fs}. */
-@Namespace("tensorflow") public static native @ByVal Status FileSystemCopyFile(FileSystem src_fs, @StdString BytePointer src,
-                          FileSystem target_fs, @StdString BytePointer target);
-@Namespace("tensorflow") public static native @ByVal Status FileSystemCopyFile(FileSystem src_fs, @StdString String src,
-                          FileSystem target_fs, @StdString String target);
 
 /** A utility routine: reads contents of named file into {@code *data} */
 @Namespace("tensorflow") public static native @ByVal Status ReadFileToString(Env env, @StdString BytePointer fname, @StdString @Cast({"char*", "std::string*"}) BytePointer data);
@@ -5016,13 +4976,6 @@ public static final int
   public static final int kDependencyOptimizationFieldNumber = kDependencyOptimizationFieldNumber();
   public native @Cast("tensorflow::RewriterConfig_Toggle") int dependency_optimization();
   public native void set_dependency_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
-
-  // .tensorflow.RewriterConfig.Toggle loop_optimization = 9;
-  public native void clear_loop_optimization();
-  @MemberGetter public static native int kLoopOptimizationFieldNumber();
-  public static final int kLoopOptimizationFieldNumber = kLoopOptimizationFieldNumber();
-  public native @Cast("tensorflow::RewriterConfig_Toggle") int loop_optimization();
-  public native void set_loop_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
 }
 // ===================================================================
 
@@ -5065,11 +5018,6 @@ public static final int
 
 
 // .tensorflow.RewriterConfig.Toggle dependency_optimization = 8;
-
-
-
-
-// .tensorflow.RewriterConfig.Toggle loop_optimization = 9;
 
 
 
@@ -9590,7 +9538,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
+  public native @Cast("size_t") long RequestedSize(Pointer ptr);
 
   // Returns the allocated size of the buffer at 'ptr' if known,
   // otherwise returns RequestedSize(ptr). AllocatedSize(ptr) is
@@ -9600,7 +9548,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
+  public native @Cast("size_t") long AllocatedSize(Pointer ptr);
 
   // Returns either 0 or an identifier assigned to the buffer at 'ptr'
   // when the buffer was returned by AllocateRaw. If non-zero, the
@@ -9611,7 +9559,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
+  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
 
   // Returns the allocated size of the buffer at 'ptr' if known,
   // otherwise returns 0. This method can be called when
@@ -9619,7 +9567,7 @@ limitations under the License.
   //
   // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
   // allocated by this allocator.
-  public native @Cast("size_t") long AllocatedSizeSlow(@Const Pointer ptr);
+  public native @Cast("size_t") long AllocatedSizeSlow(Pointer ptr);
 
   // Fills in 'stats' with statistics collected by this allocator.
   public native void GetStats(AllocatorStats stats);
@@ -9670,13 +9618,13 @@ limitations under the License.
 
   public native @Cast("bool") boolean ShouldAllocateEmptyTensors();
 
-  public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
+  public native @Cast("size_t") long RequestedSize(Pointer ptr);
 
-  public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
+  public native @Cast("size_t") long AllocatedSize(Pointer ptr);
 
-  public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
+  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
 
-  public native @Cast("size_t") long AllocatedSizeSlow(@Const Pointer ptr);
+  public native @Cast("size_t") long AllocatedSizeSlow(Pointer ptr);
 }
 
 // A tensorflow Op may need access to different kinds of memory that
@@ -15847,9 +15795,9 @@ limitations under the License.
                       @Const @ByRef AllocationAttributes allocation_attr);
   public native void DeallocateRaw(Pointer ptr);
   public native @Cast("bool") boolean TracksAllocationSizes();
-  public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
-  public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
-  public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
+  public native @Cast("size_t") long RequestedSize(Pointer ptr);
+  public native @Cast("size_t") long AllocatedSize(Pointer ptr);
+  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
   public native void GetStats(AllocatorStats stats);
   public native void ClearStats();
 
@@ -15981,11 +15929,6 @@ limitations under the License.
 
   // OpKernel won't be instantiated by the scheduler, so you may perform
   // expensive initialization in the descendant's constructor.
-
-  // Specialized constructor that enables the descendant to provide a different
-  // `NodeDef` value. For example, this constructor can be used to provide a
-  // stripped-down `NodeDef` that does not contain the full set of attrs (such
-  // as tensor values) if the descendant stores them in a different form.
 
   // An OpKernel's computation can be either synchronous or
   // asynchronous. All OpKernel Compute() methods must be thread-safe as they
@@ -16980,13 +16923,13 @@ limitations under the License.
   public native @ByVal TensorValue release_output(int index);
 
   public native @Cast("bool") boolean track_allocations();
+  public native @Cast("bool") boolean allocate_on_host(@ByVal AllocatorAttributes alloc_attr);
 
-  // Records temp memory allocation. Tensor object is recorded to identify the
-  // case where temp memory is used as output memory.
-  public native void record_temp_memory_allocation(@Cast("tensorflow::int64") long size, @Const @ByRef Tensor t);
+  // Records temporary memory sizes.
+  public native void record_temp_memory_size(@Cast("tensorflow::int64") long size);
 
   // Returns recorded size of temporary memory;
-  public native @Cast("tensorflow::int64") long temp_memory_allocated();
+  public native @Cast("tensorflow::int64") long temp_memory_size();
 
   // Records persistent memory allocation, size can be negative indicating
   // deallocation.
@@ -16997,9 +16940,6 @@ limitations under the License.
   public native @Cast("tensorflow::int64") long persistent_memory_allocated();
 
   public native @Cast("tensorflow::int64*") @StdVector LongPointer persistent_alloc_ids();
-
-  // Resets counters for temp and persistent memory and recorded ids.
-  public native void clear_recorded_memory();
 
   public native @Cast("bool") boolean input_is_ref(int index);
 }
@@ -18008,10 +17948,6 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsInterconnectLinkImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsInterconnectLink();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsLocalLinksImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsLocalLinks();
 @Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceLocalityImpl();
 @Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceLocality();
 @Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceAttributesImpl();
@@ -18020,187 +17956,10 @@ limitations under the License.
   // namespace tensorflow
 
 
-
-
   // namespace protobuf
   // namespace google
 
 // ===================================================================
-
-@Namespace("tensorflow") @NoOffset public static class InterconnectLink extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public InterconnectLink(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public InterconnectLink(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public InterconnectLink position(long position) {
-        return (InterconnectLink)super.position(position);
-    }
-
-  public InterconnectLink() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public InterconnectLink(@Const @ByRef InterconnectLink from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef InterconnectLink from);
-
-  public native @ByRef @Name("operator =") InterconnectLink put(@Const @ByRef InterconnectLink from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef InterconnectLink default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const InterconnectLink internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(InterconnectLink other);
-  public native void Swap(InterconnectLink other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native InterconnectLink New();
-
-  public native InterconnectLink New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef InterconnectLink from);
-  public native void MergeFrom(@Const @ByRef InterconnectLink from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string type = 2;
-  public native void clear_type();
-  @MemberGetter public static native int kTypeFieldNumber();
-  public static final int kTypeFieldNumber = kTypeFieldNumber();
-  public native @StdString BytePointer type();
-  public native void set_type(@StdString BytePointer value);
-  public native void set_type(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_type(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
-  public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type();
-  public native void unsafe_arena_set_allocated_type(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer type);
-
-  // int32 device_id = 1;
-  public native void clear_device_id();
-  @MemberGetter public static native int kDeviceIdFieldNumber();
-  public static final int kDeviceIdFieldNumber = kDeviceIdFieldNumber();
-  public native @Cast("google::protobuf::int32") int device_id();
-  public native void set_device_id(@Cast("google::protobuf::int32") int value);
-
-  // int32 strength = 3;
-  public native void clear_strength();
-  @MemberGetter public static native int kStrengthFieldNumber();
-  public static final int kStrengthFieldNumber = kStrengthFieldNumber();
-  public native @Cast("google::protobuf::int32") int strength();
-  public native void set_strength(@Cast("google::protobuf::int32") int value);
-}
-// -------------------------------------------------------------------
-
-@Namespace("tensorflow") @NoOffset public static class LocalLinks extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LocalLinks(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public LocalLinks(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public LocalLinks position(long position) {
-        return (LocalLinks)super.position(position);
-    }
-
-  public LocalLinks() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public LocalLinks(@Const @ByRef LocalLinks from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef LocalLinks from);
-
-  public native @ByRef @Name("operator =") LocalLinks put(@Const @ByRef LocalLinks from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef LocalLinks default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const LocalLinks internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(LocalLinks other);
-  public native void Swap(LocalLinks other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native LocalLinks New();
-
-  public native LocalLinks New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef LocalLinks from);
-  public native void MergeFrom(@Const @ByRef LocalLinks from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // repeated .tensorflow.InterconnectLink link = 1;
-  public native int link_size();
-  public native void clear_link();
-  @MemberGetter public static native int kLinkFieldNumber();
-  public static final int kLinkFieldNumber = kLinkFieldNumber();
-  public native InterconnectLink mutable_link(int index);
-  public native @Const @ByRef InterconnectLink link(int index);
-  public native InterconnectLink add_link();
-}
-// -------------------------------------------------------------------
 
 @Namespace("tensorflow") @NoOffset public static class DeviceLocality extends MessageLite {
     static { Loader.load(); }
@@ -18267,32 +18026,12 @@ limitations under the License.
 
   // accessors -------------------------------------------------------
 
-  // .tensorflow.LocalLinks links = 3;
-  public native @Cast("bool") boolean has_links();
-  public native void clear_links();
-  @MemberGetter public static native int kLinksFieldNumber();
-  public static final int kLinksFieldNumber = kLinksFieldNumber();
-  public native @Const @ByRef LocalLinks links();
-  public native LocalLinks release_links();
-  public native LocalLinks mutable_links();
-  public native void set_allocated_links(LocalLinks links);
-  public native void unsafe_arena_set_allocated_links(
-        LocalLinks links);
-  public native LocalLinks unsafe_arena_release_links();
-
   // int32 bus_id = 1;
   public native void clear_bus_id();
   @MemberGetter public static native int kBusIdFieldNumber();
   public static final int kBusIdFieldNumber = kBusIdFieldNumber();
   public native @Cast("google::protobuf::int32") int bus_id();
   public native void set_bus_id(@Cast("google::protobuf::int32") int value);
-
-  // int32 numa_node = 2;
-  public native void clear_numa_node();
-  @MemberGetter public static native int kNumaNodeFieldNumber();
-  public static final int kNumaNodeFieldNumber = kNumaNodeFieldNumber();
-  public native @Cast("google::protobuf::int32") int numa_node();
-  public native void set_numa_node(@Cast("google::protobuf::int32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -18451,65 +18190,9 @@ limitations under the License.
 //   #pragma GCC diagnostic push
 //   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 // #endif  // __GNUC__
-// InterconnectLink
-
-// int32 device_id = 1;
-
-
-
-
-// string type = 2;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// int32 strength = 3;
-
-
-
-
-// -------------------------------------------------------------------
-
-// LocalLinks
-
-// repeated .tensorflow.InterconnectLink link = 1;
-
-
-
-
-
-
-
-
-// -------------------------------------------------------------------
-
 // DeviceLocality
 
 // int32 bus_id = 1;
-
-
-
-
-// int32 numa_node = 2;
-
-
-
-
-// .tensorflow.LocalLinks links = 3;
-
-
-
-
 
 
 
@@ -18585,10 +18268,6 @@ limitations under the License.
 // #ifdef __GNUC__
 //   #pragma GCC diagnostic pop
 // #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 
@@ -19396,7 +19075,7 @@ limitations under the License.
       }
   
     public native @ByRef TensorSlice slice(); public native SliceInfo slice(TensorSlice slice);
-    @MemberGetter public native @StdString BytePointer tag();
+    public native @StdString BytePointer tag(); public native SliceInfo tag(BytePointer tag);
     @MemberGetter public native @Const FloatPointer data();
     public native @Cast("tensorflow::int64") long num_floats(); public native SliceInfo num_floats(long num_floats);
   }
@@ -20326,10 +20005,6 @@ public static native @ByVal TF_Buffer TF_GetBuffer(TF_Buffer buffer);
 //      (*deallocator)(data, len, deallocator_arg)
 // Clients must provide a custom deallocator function so they can pass in
 // memory managed by something like numpy.
-//
-// May return NULL (and invoke the deallocator) if the provided data buffer
-// (data, len) is inconsistent with a tensor of the given TF_DataType
-// and the shape specified by (dima, num_dims).
 public static class Deallocator_Pointer_long_Pointer extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -22834,7 +22509,7 @@ limitations under the License.
 @Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long AttrDefHash(@Cast("const tensorflow::OpDef::AttrDef*") @ByRef OpDef_AttrDef a);
 
 // Returns true if all AttrDefs in `a1` equal corresponding AttrDefs in
-// `a2`. Correspondence is established by name.
+// `a2`. Corrspondence is established by name.
 
 // Returns hash of `a` that is consistent with RepeatedAttrDefEqual
 
@@ -23681,16 +23356,6 @@ limitations under the License.
   // and included in the proto returned by 'ToProto'.
   // This operation is atomic.
   public native @ByVal Status AddGradientDef(@Const @ByRef GradientDef grad);
-
-  // Remove function `func` from the library. Returns non-OK Status unless
-  // `func` is in the library.
-  public native @ByVal Status RemoveFunction(@StdString BytePointer func);
-  public native @ByVal Status RemoveFunction(@StdString String func);
-
-  // Remove gradient of function `func` from the library. Returns non-OK Status
-  // unless `func` has a gradient.
-  public native @ByVal Status RemoveGradient(@StdString BytePointer func);
-  public native @ByVal Status RemoveGradient(@StdString String func);
 
   // Adds the functions and gradients in 'other' to this function library.
   // Duplicate functions and gradients are ignored.
@@ -24771,26 +24436,17 @@ limitations under the License.
   // Creates FunctionLibraryRuntime objects for each device in the provided
   // DeviceMgr. Caller needs to make sure that device_mgr, lib_def and parent
   // (if provided) outlive this object.
-  public ProcessFunctionLibraryRuntime(
-        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
-        @Const FunctionLibraryDefinition lib_def,
-        @Const @ByRef OptimizerOptions optimizer_options,
-        DistributedFunctionLibraryRuntime parent/*=nullptr*/) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, parent); }
-  private native void allocate(
-        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
-        @Const FunctionLibraryDefinition lib_def,
-        @Const @ByRef OptimizerOptions optimizer_options,
-        DistributedFunctionLibraryRuntime parent/*=nullptr*/);
-  public ProcessFunctionLibraryRuntime(
-        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
-        @Const FunctionLibraryDefinition lib_def,
-        @Const @ByRef OptimizerOptions optimizer_options) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options); }
-  private native void allocate(
-        @Const DeviceMgr device_mgr, Env env, int graph_def_version,
-        @Const FunctionLibraryDefinition lib_def,
-        @Const @ByRef OptimizerOptions optimizer_options);
+  public ProcessFunctionLibraryRuntime(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options,
+                                  DistributedFunctionLibraryRuntime parent) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, parent); }
+  private native void allocate(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options,
+                                  DistributedFunctionLibraryRuntime parent);
 
-  // With `custom_kernel_creator`.
   public ProcessFunctionLibraryRuntime(@Const DeviceMgr device_mgr, Env env,
                                   int graph_def_version,
                                   @Const FunctionLibraryDefinition lib_def,
@@ -24803,6 +24459,26 @@ limitations under the License.
                                   @Const @ByRef OptimizerOptions optimizer_options,
                                   @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator,
                                   DistributedFunctionLibraryRuntime parent);
+
+  public ProcessFunctionLibraryRuntime(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options); }
+  private native void allocate(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options);
+
+  public ProcessFunctionLibraryRuntime(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options,
+                                  @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, custom_kernel_creator); }
+  private native void allocate(@Const DeviceMgr device_mgr, Env env,
+                                  int graph_def_version,
+                                  @Const FunctionLibraryDefinition lib_def,
+                                  @Const @ByRef OptimizerOptions optimizer_options,
+                                  @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator);
 
   // Sends `tensors_to_send` from `source_device` to `target_device` using
   // `rendezvous`. `key_prefix` is used as a prefix for the keys sent to the
@@ -25330,13 +25006,6 @@ limitations under the License.
 
   // Serialize to a GraphDef.
   public native void ToGraphDef(GraphDef graph_def);
-
-  // This version can be called from debugger to inspect the graph content.
-  // Use the previous version outside debug context for efficiency reasons.
-  //
-  // Note: We do not expose a DebugString() API, since GraphDef.DebugString() is
-  // not defined in some TensorFlow builds.
-  public native @ByVal GraphDef ToGraphDefDebug();
 
   // Generate new node name with the specified prefix that is unique
   // across this graph.
@@ -26652,6 +26321,14 @@ limitations under the License.
   // Once all the nodes have been added, call this to get whether it was
   // successful, and if so fill *graph_def.
   public native @ByVal Status ToGraphDef(GraphDef graph_def);
+
+  // Like ToGraphDef(), but converts to a Graph (using the default
+  // GraphConstructorOptions).
+  // TODO(josh11b): Make this faster; right now it converts
+  // Graph->GraphDef->Graph.  This cleans up the graph (e.g. adds
+  // edges from the source and to the sink node, resolves back edges
+  // by name), and makes sure the resulting graph is valid.
+  public native @ByVal Status ToGraph(Graph graph);
 
   // Adds the function and gradient definitions in `fdef_lib` to this graph's op
   // registry. Ignores duplicate functions, and returns a bad status if an
@@ -43018,11 +42695,6 @@ limitations under the License.
  * 
  *  Input images can be of different types but output images are always float.
  * 
- *  The range of pixel values for the output image might be slightly different
- *  from the range for the input image because of limited numerical precision.
- *  To guarantee an output range, for example {@code [0.0, 1.0]}, apply
- *  {@code tf.clip_by_value} to the output.
- * 
  *  Each output pixel is computed by first transforming the pixel's footprint into
  *  the input tensor and then averaging the pixels that intersect the footprint. An
  *  input pixel's contribution to the average is weighted by the fraction of its
@@ -49419,7 +49091,7 @@ limitations under the License.
 
 /** Computes the maximum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -49458,7 +49130,7 @@ limitations under the License.
 
 /** Computes the mean along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -49498,7 +49170,7 @@ limitations under the License.
 
 /** Computes the minimum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -49537,7 +49209,7 @@ limitations under the License.
 
 /** Computes the product along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -49576,7 +49248,7 @@ limitations under the License.
 
 /** Computes the sum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
@@ -49843,7 +49515,7 @@ limitations under the License.
 
 /** Computes the mean along sparse segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Like {@code SegmentMean}, but {@code segment_ids} can have rank less than {@code data}'s first
@@ -49906,7 +49578,7 @@ limitations under the License.
  *  Like {@code SparseSegmentMean}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Arguments:
@@ -49940,7 +49612,7 @@ limitations under the License.
  * 
  *  N is the size of the segment being reduced.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Arguments:
@@ -50002,7 +49674,7 @@ limitations under the License.
  *  Like {@code SparseSegmentSqrtN}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Arguments:
@@ -50034,7 +49706,7 @@ limitations under the License.
 
 /** Computes the sum along sparse segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Like {@code SegmentSum}, but {@code segment_ids} can have rank less than {@code data}'s first
@@ -50092,7 +49764,7 @@ limitations under the License.
  *  Like {@code SparseSegmentSum}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  For example:
@@ -50420,21 +50092,20 @@ limitations under the License.
   public native @ByRef Output z(); public native TruncateMod z(Output z);
 }
 
-/** Computes the maximum along segments of a tensor.
+/** Computes the Max along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
- *  This operator is similar to the unsorted segment sum operator found
- *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
- *  Instead of computing the sum over segments, it computes the maximum such that:
+ *  This operator is similar to the [unsorted segment sum operator](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
+ *  Instead of computing the sum over segments, it computes the maximum
+ *  such that:
  * 
  *  \\(output_i = \max_j data_j\\) where max is over {@code j} such
  *  that {@code segment_ids[j] == i}.
  * 
- *  If the maximum is empty for a given segment ID {@code i}, it outputs the smallest
- *  possible value for the specific numeric type,
- *  {@code output[i] = numeric_limits<T>::lowest()}.
+ *  If the maximum is empty for a given segment ID {@code i}, it outputs the smallest possible value for specific numeric type,
+ *   {@code output[i] = numeric_limits<T>::min()}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentMax.png" alt>
@@ -50464,88 +50135,9 @@ limitations under the License.
   public native @ByRef Output output(); public native UnsortedSegmentMax output(Output output);
 }
 
-/** Computes the minimum along segments of a tensor.
- * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
- *  segments.
- * 
- *  This operator is similar to the unsorted segment sum operator found
- *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
- *  Instead of computing the sum over segments, it computes the minimum such that:
- * 
- *  \\(output_i = \min_j data_j\\) where min is over {@code j} such
- *  that {@code segment_ids[j] == i}.
- * 
- *  If the minimum is empty for a given segment ID {@code i}, it outputs the largest
- *  possible value for the specific numeric type,
- *  {@code output[i] = numeric_limits<T>::max()}.
- * 
- *  Arguments:
- *  * scope: A Scope object
- *  * segment_ids: A 1-D tensor whose rank is equal to the rank of {@code data}'s
- *  first dimension.
- * 
- *  Returns:
- *  * {@code Output}: Has same shape as data, except for dimension 0 which
- *  has size {@code num_segments}. */
-@Namespace("tensorflow::ops") @NoOffset public static class UnsortedSegmentMin extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UnsortedSegmentMin(Pointer p) { super(p); }
-
-  public UnsortedSegmentMin(@Const @ByRef Scope scope, @ByVal Input data,
-                     @ByVal Input segment_ids, @ByVal Input num_segments) { super((Pointer)null); allocate(scope, data, segment_ids, num_segments); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
-                     @ByVal Input segment_ids, @ByVal Input num_segments);
-  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
-  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
-  public native Node node();
-
-  public native @ByRef Output output(); public native UnsortedSegmentMin output(Output output);
-}
-
-/** Computes the product along segments of a tensor.
- * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
- *  segments.
- * 
- *  This operator is similar to the unsorted segment sum operator found
- *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
- *  Instead of computing the sum over segments, it computes the product of all
- *  entries belonging to a segment such that:
- * 
- *  \\(output_i = \prod_j data_j\\) where the product is over {@code j} such
- *  that {@code segment_ids[j] == i}.
- * 
- *  If there is no entry for a given segment ID {@code i}, it outputs 1.
- * 
- *  Arguments:
- *  * scope: A Scope object
- *  * segment_ids: A 1-D tensor whose rank is equal to the rank of {@code data}'s
- *  first dimension.
- * 
- *  Returns:
- *  * {@code Output}: Has same shape as data, except for dimension 0 which
- *  has size {@code num_segments}. */
-@Namespace("tensorflow::ops") @NoOffset public static class UnsortedSegmentProd extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UnsortedSegmentProd(Pointer p) { super(p); }
-
-  public UnsortedSegmentProd(@Const @ByRef Scope scope, @ByVal Input data,
-                      @ByVal Input segment_ids, @ByVal Input num_segments) { super((Pointer)null); allocate(scope, data, segment_ids, num_segments); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input data,
-                      @ByVal Input segment_ids, @ByVal Input num_segments);
-  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
-  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
-  public native Node node();
-
-  public native @ByRef Output output(); public native UnsortedSegmentProd output(Output output);
-}
-
 /** Computes the sum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
+ *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
  *  segments.
  * 
  *  Computes a tensor such that
