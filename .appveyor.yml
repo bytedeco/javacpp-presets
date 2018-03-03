@@ -33,6 +33,8 @@ environment:
       OS: windows-x86
     - PROJ: "arpack-ng"
       OS: windows-x86
+    - PROJ: "cminpack"
+      OS: windows-x86
     - PROJ: "fftw"
       OS: windows-x86
     - PROJ: "gsl"
@@ -73,6 +75,8 @@ environment:
     - PROJ: "openblas"
       OS: windows-x86_64
     - PROJ: "arpack-ng"
+      OS: windows-x86_64
+    - PROJ: "cminpack"
       OS: windows-x86_64
     - PROJ: "fftw"
       OS: windows-x86_64
