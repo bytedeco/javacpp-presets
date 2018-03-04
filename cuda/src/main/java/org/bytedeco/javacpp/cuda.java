@@ -15776,7 +15776,8 @@ public static class short4 extends Pointer {
     @Override public short4 position(long position) {
         return (short4)super.position(position);
     }
- public native short x(); public native short4 x(short x); public native short y(); public native short4 y(short y); public native short z(); public native short4 z(short z); public native short w(); public native short4 w(short w);
+ 
+    public native short x(); public native short4 x(short x); public native short y(); public native short4 y(short y); public native short z(); public native short4 z(short z); public native short w(); public native short4 w(short w);
 }
 public static class ushort4 extends Pointer {
     static { Loader.load(); }
@@ -15791,7 +15792,8 @@ public static class ushort4 extends Pointer {
     @Override public ushort4 position(long position) {
         return (ushort4)super.position(position);
     }
- public native @Cast("unsigned short") short x(); public native ushort4 x(short x); public native @Cast("unsigned short") short y(); public native ushort4 y(short y); public native @Cast("unsigned short") short z(); public native ushort4 z(short z); public native @Cast("unsigned short") short w(); public native ushort4 w(short w);
+ 
+    public native @Cast("unsigned short") short x(); public native ushort4 x(short x); public native @Cast("unsigned short") short y(); public native ushort4 y(short y); public native @Cast("unsigned short") short z(); public native ushort4 z(short z); public native @Cast("unsigned short") short w(); public native ushort4 w(short w);
 }
 
 public static class int1 extends Pointer {
@@ -15841,7 +15843,8 @@ public static class int2 extends Pointer {
     @Override public int2 position(long position) {
         return (int2)super.position(position);
     }
- public native int x(); public native int2 x(int x); public native int y(); public native int2 y(int y);
+ 
+    public native int x(); public native int2 x(int x); public native int y(); public native int2 y(int y);
 }
 public static class uint2 extends Pointer {
     static { Loader.load(); }
@@ -15856,7 +15859,8 @@ public static class uint2 extends Pointer {
     @Override public uint2 position(long position) {
         return (uint2)super.position(position);
     }
- public native @Cast("unsigned int") int x(); public native uint2 x(int x); public native @Cast("unsigned int") int y(); public native uint2 y(int y);
+ 
+    public native @Cast("unsigned int") int x(); public native uint2 x(int x); public native @Cast("unsigned int") int y(); public native uint2 y(int y);
 }
 
 public static class int3 extends Pointer {
@@ -15985,7 +15989,8 @@ public static class long2 extends Pointer {
     @Override public long2 position(long position) {
         return (long2)super.position(position);
     }
- public native long x(); public native long2 x(long x); public native long y(); public native long2 y(long y);
+ 
+    public native long x(); public native long2 x(long x); public native long y(); public native long2 y(long y);
 }
 public static class ulong2 extends Pointer {
     static { Loader.load(); }
@@ -16000,7 +16005,8 @@ public static class ulong2 extends Pointer {
     @Override public ulong2 position(long position) {
         return (ulong2)super.position(position);
     }
- public native @Cast("unsigned long int") long x(); public native ulong2 x(long x); public native @Cast("unsigned long int") long y(); public native ulong2 y(long y);
+ 
+    public native @Cast("unsigned long int") long x(); public native ulong2 x(long x); public native @Cast("unsigned long int") long y(); public native ulong2 y(long y);
 }
 // #else /* !_WIN32 */
 
