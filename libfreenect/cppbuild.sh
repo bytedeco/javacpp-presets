@@ -33,23 +33,33 @@ cd libfreenect-$LIBFREENECT_VERSION
 
 case $PLATFORM in
     linux-x86)
-        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        cd ../libusb-$LIBUSB_VERSION
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a
+        make -j $MAKEJ
         make install
         ;;
     linux-x86_64)
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        cd ../libusb-$LIBUSB_VERSION
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a
+        make -j $MAKEJ
         make install
         ;;
     linux-armhf)
         cd ../libusb-$LIBUSB_VERSION
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../libfreenect-$LIBFREENECT_VERSION
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/
-        make -j4
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a
+        make -j $MAKEJ
         make install
         ;;
     linux-ppc64le)
@@ -60,21 +70,21 @@ case $PLATFORM in
         else
             CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc-linux-gnu --disable-udev
         fi
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../libfreenect-$LIBFREENECT_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+          CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a
         else
-          CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+          CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a
         fi
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     macosx-*)
         patch -Np1 < ../../../libfreenect-$LIBFREENECT_VERSION-macosx.patch
         $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     windows-x86)

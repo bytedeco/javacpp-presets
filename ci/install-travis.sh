@@ -19,7 +19,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  if [[ "libfreenect2 librealsense chilitags llvm caffe mxnet tensorflow ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense chilitags llvm caffe mxnet tensorflow ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
   fi
   echo "Starting docker for x86_64 and x86 linux"

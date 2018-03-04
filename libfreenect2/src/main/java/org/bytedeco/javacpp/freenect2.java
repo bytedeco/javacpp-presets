@@ -32,7 +32,7 @@ public class freenect2 extends org.bytedeco.javacpp.presets.freenect2 {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @Cast("libfreenect2::Frame::Type") int first();
-        public native @Name("operator*().second") @MemberGetter Frame second();
+        public native @Name("operator*().second") @MemberGetter @Const Frame second();
     }
 }
 
