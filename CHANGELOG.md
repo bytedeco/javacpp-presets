@@ -1,4 +1,5 @@
 
+ * Add bindings for `b2DynamicTree::Query` and `RayCast` for LiquidFun ([pull #531](https://github.com/bytedeco/javacpp-presets/pull/531))
  * Add builds for `android-arm64` and `android-x86_64` platforms ([issue #52](https://github.com/bytedeco/javacpp-presets/issues/52))
  * Fix x265 encoding with FFmpeg on Android ([issue bytedeco/javacv#866](https://github.com/bytedeco/javacv/issues/866))
  * Add presets for ARPACK-NG

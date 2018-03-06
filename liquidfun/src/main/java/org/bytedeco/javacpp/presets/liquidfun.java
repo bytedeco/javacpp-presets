@@ -103,9 +103,9 @@ public class liquidfun implements InfoMapper {
         // enable callbacks
         .put(new Info("b2QueryCallback", "b2RayCastCallback").virtualize())
         .put(new Info("b2ContactListener", "b2ContactFilter", "b2DestructionListener").virtualize())
-        .put(new Info("b2Draw").virtualize())
-        .put(new Info("b2DynamicTreeQueryCallback").virtualize())
+        .put(new Info("b2Draw", "b2DynamicTreeQueryCallback", "b2DynamicTreeRayCastCallback").virtualize())
         .put(new Info("b2DynamicTree::Query<b2DynamicTreeQueryCallback>").javaNames("Query").define())
+        .put(new Info("b2DynamicTree::RayCast<b2DynamicTreeRayCastCallback>").javaNames("RayCast").define())
         ;
     }
 }

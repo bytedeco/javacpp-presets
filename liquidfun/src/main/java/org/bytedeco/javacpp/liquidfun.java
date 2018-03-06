@@ -2524,6 +2524,7 @@ public static class b2TreeNode extends Pointer {
 	 *  number of proxies in the tree.
 	 *  @param input the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
 	 *  @param callback a callback class that is called for each proxy that is hit by the ray. */
+	public native void RayCast(b2DynamicTreeRayCastCallback callback, @Const @ByRef b2RayCastInput input);
 
 	/** Validate this tree. For testing. */
 	public native void Validate();
@@ -7428,6 +7429,23 @@ public static class b2DynamicTreeQueryCallback extends Pointer {
     }
 
   @Virtual(true) public native @Cast("bool") boolean QueryCallback(@Cast("int32") int nodeId);
+}
+
+public static class b2DynamicTreeRayCastCallback extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public b2DynamicTreeRayCastCallback() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public b2DynamicTreeRayCastCallback(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public b2DynamicTreeRayCastCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public b2DynamicTreeRayCastCallback position(long position) {
+        return (b2DynamicTreeRayCastCallback)super.position(position);
+    }
+
+  @Virtual(true) public native @Cast("bool") boolean RayCastCallback(@ByRef b2RayCastInput subInput, @Cast("int32") int nodeId);
 }
 
 
