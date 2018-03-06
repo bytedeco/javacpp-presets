@@ -103,7 +103,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 3.4.0  https://opencv.org/releases.html
+ * OpenCV 3.4.1  https://opencv.org/releases.html
  * FFmpeg 3.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.11.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
@@ -118,6 +118,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2018.1  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.20  http://www.openblas.net/
  * ARPACK-NG  https://github.com/opencollab/arpack-ng
+ * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.7  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 5.0.x  http://llvm.org/releases/download.html
@@ -127,7 +128,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.1  https://developer.nvidia.com/cuda-downloads
  * MXnet 1.0.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.6.0-rc1  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.6.0  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org

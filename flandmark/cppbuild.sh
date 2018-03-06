@@ -92,14 +92,12 @@ case $PLATFORM in
         cp libflandmark/*.a ../lib
         ;;
     windows-x86)
-        patch -Np1 < ../../../flandmark-$FLANDMARK_VERSION-windows.patch
         "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH
         nmake flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.lib ../lib
         ;;
     windows-x86_64)
-        patch -Np1 < ../../../flandmark-$FLANDMARK_VERSION-windows.patch
         "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH
         nmake flandmark_static
         cp libflandmark/*.h ../include

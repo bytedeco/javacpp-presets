@@ -57,7 +57,6 @@ public:
         }
         return ptr;
     }
-    operator const T*()    { return cvPtr.get(); }
     operator cv::Ptr<T>&() { return cvPtr; }
     operator cv::Ptr<T>*() { return ptr ? &cvPtr : 0; }
     T* ptr;

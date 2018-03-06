@@ -44,7 +44,7 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter int first();
-        public native @Name("operator*().second") @MemberGetter @ByRef @Cast("chilitags::Quad*") FloatPointer second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Cast("chilitags::Quad*") @Const FloatPointer second();
     }
 }
 
@@ -71,7 +71,7 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef @Cast("chilitags::Chilitags3D_<float>::TransformMatrix*") FloatPointer second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Cast("chilitags::Chilitags3D_<float>::TransformMatrix*") @Const FloatPointer second();
     }
 }
 
@@ -98,7 +98,7 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef @Cast("chilitags::Chilitags3D_<double>::TransformMatrix*") DoublePointer second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Cast("chilitags::Chilitags3D_<double>::TransformMatrix*") @Const DoublePointer second();
     }
 }
 

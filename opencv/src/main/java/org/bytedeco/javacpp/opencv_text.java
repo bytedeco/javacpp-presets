@@ -50,6 +50,32 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator*") int get();
     }
 
+    public int[] get() {
+        int[] array = new int[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public int pop_back() {
+        long size = size();
+        int value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public IntDeque push_back(int value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public IntDeque put(int value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
     public IntDeque put(int ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -87,7 +113,18 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef ERStat get();
+        public native @Name("operator*") @ByRef @Const ERStat get();
+    }
+
+    public ERStat[] get() {
+        ERStat[] array = new ERStat[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public ERStat pop_back() {
@@ -142,7 +179,18 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef ERStatVector get();
+        public native @Name("operator*") @ByRef @Const ERStatVector get();
+    }
+
+    public ERStatVector[] get() {
+        ERStatVector[] array = new ERStatVector[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public ERStatVector pop_back() {
@@ -198,6 +246,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*") double get();
+    }
+
+    public double[] get() {
+        double[] array = new double[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public double pop_back() {
@@ -256,6 +315,17 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*") @StdString BytePointer get();
+    }
+
+    public BytePointer[] get() {
+        BytePointer[] array = new BytePointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public BytePointer pop_back() {

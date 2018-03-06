@@ -22,12 +22,12 @@ patch -Np1 < ../../../librealsense.patch
 
 case $PLATFORM in
     linux-x86)
-        CC="$OLDCC -m32" CXX="$OLDCXX -m32" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH"
+        CC="gcc -m32" CXX="gcc -m32 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH"
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86_64)
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH"
+        CC="gcc -m64" CXX="gcc -m64 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH"
         make -j $MAKEJ
         make install/strip
         ;;

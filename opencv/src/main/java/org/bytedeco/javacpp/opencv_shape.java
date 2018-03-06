@@ -262,7 +262,7 @@ the histogram in each bin.
 
 /** \brief Definition of the transformation
 <p>
-ocupied in the paper "Principal Warps: Thin-Plate Splines and Decomposition of Deformations", by
+occupied in the paper "Principal Warps: Thin-Plate Splines and Decomposition of Deformations", by
 F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class ThinPlateSplineShapeTransformer extends ShapeTransformer {

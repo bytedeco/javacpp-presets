@@ -14,10 +14,6 @@
   <version>1.12.1-${project.parent.version}</version>
   <name>JavaCPP Presets for librealsense</name>
 
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -41,16 +37,6 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <encoding>ISO-8859-1</encoding>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib64/</linkPath>

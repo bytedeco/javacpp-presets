@@ -1510,7 +1510,7 @@ use this capability to implement decision tree ensembles.
     results for each of the sample cases. If the model is a classifier, it will return
     a Mat with samples + 1 rows, where the first row gives the class number and the
     following rows return the votes each class had for each sample.
-        @param samples Array containg the samples for which votes will be calculated.
+        @param samples Array containing the samples for which votes will be calculated.
         @param results Array where the result of the calculation will be written.
         @param flags Flags for defining the type of RTrees.
     */
@@ -1934,9 +1934,9 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     public native float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
     public native float predict( @ByVal GpuMat samples );
 
-    /** \brief This function returns the trained paramters arranged across rows.
+    /** \brief This function returns the trained parameters arranged across rows.
     <p>
-    For a two class classifcation problem, it returns a row matrix. It returns learnt paramters of
+    For a two class classifcation problem, it returns a row matrix. It returns learnt parameters of
     the Logistic Regression as a matrix of type CV_32F.
      */
     public native @ByVal Mat get_learnt_thetas();
@@ -2141,7 +2141,7 @@ svmsgd->predict(samples, responses);
 
 
 /****************************************************************************************\
-*                           Auxilary functions declarations                              *
+*                           Auxiliary functions declarations                              *
 \****************************************************************************************/
 
 /** \brief Generates _sample_ from multivariate normal distribution

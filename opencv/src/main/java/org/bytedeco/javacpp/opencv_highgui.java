@@ -220,6 +220,10 @@ public static native void cvSetWindowProperty(String name, int prop_id, double p
 public static native double cvGetWindowProperty(@Cast("const char*") BytePointer name, int prop_id);
 public static native double cvGetWindowProperty(String name, int prop_id);
 
+/* Get window image rectangle coordinates, width and height */
+public static native @ByVal Rect cvGetWindowImageRect(@Cast("const char*") BytePointer name);
+public static native @ByVal Rect cvGetWindowImageRect(String name);
+
 /* display image within window (highgui windows remember their content) */
 public static native void cvShowImage( @Cast("const char*") BytePointer name, @Const CvArr image );
 public static native void cvShowImage( String name, @Const CvArr image );
@@ -977,6 +981,17 @@ The function getWindowProperty returns properties of a window.
  */
 @Namespace("cv") public static native double getWindowProperty(@Str BytePointer winname, int prop_id);
 @Namespace("cv") public static native double getWindowProperty(@Str String winname, int prop_id);
+
+/** \brief Provides rectangle of image in the window.
+<p>
+The function getWindowImageRect returns the client screen coordinates, width and height of the image rendering area.
+<p>
+@param winname Name of the window.
+<p>
+\sa resizeWindow moveWindow
+ */
+@Namespace("cv") public static native @ByVal Rect getWindowImageRect(@Str BytePointer winname);
+@Namespace("cv") public static native @ByVal Rect getWindowImageRect(@Str String winname);
 
 /** \brief Sets mouse handler for the specified window
 <p>

@@ -77,6 +77,10 @@ This section describes experimental algorithms for 2d feature detection.
 <p>
 This section describes two popular algorithms for 2d feature detection, SIFT and SURF, that are
 known to be patented. Use them at your own risk.
+    <p>
+    \defgroup xfeatures2d_match Experimental 2D Features Matching Algorithm
+<p>
+This section describes the GMS (Grid-based Motion Statistics) matching strategy.
 <p>
 \}
 */
@@ -443,15 +447,21 @@ Available types are VGG::VGG_120, VGG::VGG_80, VGG::VGG_64, VGG::VGG_48
                                         @Cast("bool") boolean img_normalize/*=true*/, @Cast("bool") boolean use_scale_orientation/*=true*/,
                                         float scale_factor/*=6.25f*/, @Cast("bool") boolean dsc_normalize/*=false*/ );
     public static native @Ptr VGG create( );
-    /**
-     * @param image image to extract descriptors
-     * @param keypoints of interest within image
-     * @param descriptors resulted descriptors array
-     */
-    public native void compute( @ByVal Mat image, @ByRef KeyPointVector keypoints, @ByVal Mat descriptors );
-    public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat descriptors );
-    public native void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat descriptors );
 
+    public native void setSigma(float isigma);
+    public native float getSigma();
+
+    public native void setUseNormalizeImage(@Cast("const bool") boolean img_normalize);
+    public native @Cast("bool") boolean getUseNormalizeImage();
+
+    public native void setUseScaleOrientation(@Cast("const bool") boolean use_scale_orientation);
+    public native @Cast("bool") boolean getUseScaleOrientation();
+
+    public native void setScaleFactor(float scale_factor);
+    public native float getScaleFactor();
+
+    public native void setUseNormalizeDescriptor(@Cast("const bool") boolean dsc_normalize);
+    public native @Cast("bool") boolean getUseNormalizeDescriptor();
 }
 
 /** \brief Class implementing BoostDesc (Learning Image Descriptors with Boosting), described in
@@ -483,17 +493,8 @@ samples subfolder.
 
 @Namespace("cv::xfeatures2d") public static class BoostDesc extends Feature2D {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public BoostDesc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BoostDesc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BoostDesc(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public BoostDesc position(long position) {
-        return (BoostDesc)super.position(position);
-    }
 
 
     /** enum cv::xfeatures2d::BoostDesc:: */
@@ -504,6 +505,12 @@ samples subfolder.
     public static native @Ptr BoostDesc create( int desc/*=cv::xfeatures2d::BoostDesc::BINBOOST_256*/,
                         @Cast("bool") boolean use_scale_orientation/*=true*/, float scale_factor/*=6.25f*/ );
     public static native @Ptr BoostDesc create( );
+
+    public native void setUseScaleOrientation(@Cast("const bool") boolean use_scale_orientation);
+    public native @Cast("bool") boolean getUseScaleOrientation();
+
+    public native void setScaleFactor(float scale_factor);
+    public native float getScaleFactor();
 }
 
 
@@ -1227,6 +1234,34 @@ Detects corners using the FAST algorithm by \cite Rosten06 .
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
                       int threshold);
 
+
+/** \}
+ <p>
+ <p>
+ *  \addtogroup xfeatures2d_match
+ *  \{
+<p>
+/** \brief GMS  (Grid-based Motion Statistics) feature matching strategy by \cite Bian2017gms .
+    @param size1 Input size of image1.
+    @param size2 Input size of image2.
+    @param keypoints1 Input keypoints of image1.
+    @param keypoints2 Input keypoints of image2.
+    @param matches1to2 Input 1-nearest neighbor matches.
+    @param matchesGMS Matches returned by the GMS matching strategy.
+    @param withRotation Take rotation transformation into account.
+    @param withScale Take scale transformation into account.
+    @param thresholdFactor The higher, the less matches.
+    \note
+        Since GMS works well when the number of features is large, we recommend to use the ORB feature and set FastThreshold to 0 to get as many as possible features quickly.
+        If matching results are not satisfying, please add more features. (We use 10000 for images with 640 X 480).
+        If your images have big rotation and scale changes, please set withRotation or withScale to true.
+ */
+
+@Namespace("cv::xfeatures2d") public static native void matchGMS( @Const @ByRef Size size1, @Const @ByRef Size size2, @Const @ByRef KeyPointVector keypoints1, @Const @ByRef KeyPointVector keypoints2,
+                          @Const @ByRef DMatchVector matches1to2, @ByRef DMatchVector matchesGMS, @Cast("const bool") boolean withRotation/*=false*/,
+                          @Cast("const bool") boolean withScale/*=false*/, double thresholdFactor/*=6.0*/ );
+@Namespace("cv::xfeatures2d") public static native void matchGMS( @Const @ByRef Size size1, @Const @ByRef Size size2, @Const @ByRef KeyPointVector keypoints1, @Const @ByRef KeyPointVector keypoints2,
+                          @Const @ByRef DMatchVector matches1to2, @ByRef DMatchVector matchesGMS );
 
 /** \} */
 

@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
               link = "opencv_dnn@.3.4"),
     @Platform(value = "ios", preload = "libopencv_dnn"),
-    @Platform(value = "windows", link = "opencv_dnn340")},
+    @Platform(value = "windows", link = "opencv_dnn341")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
