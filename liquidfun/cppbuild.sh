@@ -31,6 +31,12 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
+    windows-x86_64)
+        cd liquidfun/Box2D
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF
+        make -j $MAKEJ
+        make install/strip
+        ;;
     macosx-*)
         patch -Np1 <$INSTALL_PATH/../../liquidfun-macosx.patch
         cd liquidfun/Box2D
