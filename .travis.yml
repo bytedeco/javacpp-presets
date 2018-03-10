@@ -232,6 +232,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=cminpack OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=fftw OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
@@ -282,6 +286,10 @@ matrix:
         script: ./ci/install-ppc.sh
       - os: linux
         env: PROJ=arpack-ng OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=cminpack OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -363,6 +371,11 @@ matrix:
       - os: osx
         osx_image: xcode7.3
         env: PROJ=arpack-ng OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=cminpack OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -484,6 +497,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=cminpack OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=fftw OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
@@ -578,6 +595,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=arpack-ng OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cminpack OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux

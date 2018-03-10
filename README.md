@@ -118,6 +118,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2018.1  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.20  http://www.openblas.net/
  * ARPACK-NG  https://github.com/opencollab/arpack-ng
+ * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.7  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 5.0.x  http://llvm.org/releases/download.html
@@ -127,7 +128,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.1  https://developer.nvidia.com/cuda-downloads
  * MXnet 1.0.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.6.0-rc1  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.6.0  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org

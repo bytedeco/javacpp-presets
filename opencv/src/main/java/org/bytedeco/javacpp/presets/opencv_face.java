@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_dnn.class, opencv_objdetect.class, opencv_photo.class, opencv_video.class}, value = {
+@Properties(inherit = {opencv_tracking.class, opencv_objdetect.class, opencv_photo.class, opencv_plot.class}, value = {
     @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>",
                          "<opencv2/face/facemark.hpp>", "<opencv2/face/facemarkLBF.hpp>", "<opencv2/face/facemarkAAM.hpp>",
                          "<opencv2/face/face_alignment.hpp>"},
-              link = "opencv_face@.3.4", preload = {"opencv_plot@.3.4", "opencv_tracking@.3.4"}),
+              link = "opencv_face@.3.4"),
     @Platform(value = "ios", preload = "libopencv_face"),
-    @Platform(value = "windows", link = "opencv_face341", preload = {"opencv_plot341", "opencv_tracking341"})},
+    @Platform(value = "windows", link = "opencv_face341")},
         target = "org.bytedeco.javacpp.opencv_face")
 public class opencv_face implements InfoMapper {
     public void map(InfoMap infoMap) {

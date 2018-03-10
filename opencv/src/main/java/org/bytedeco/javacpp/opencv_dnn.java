@@ -43,6 +43,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @StdVector @Const IntPointer get();
     }
 
+    public IntPointer[] get() {
+        IntPointer[] array = new IntPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
     public IntPointer pop_back() {
         long size = size();
         IntPointer value = get(size - 1);
@@ -98,6 +109,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator*") @ByRef @Const MatShapeVector get();
     }
 
+    public MatShapeVector[] get() {
+        MatShapeVector[] array = new MatShapeVector[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
     public MatShapeVector pop_back() {
         long size = size();
         MatShapeVector value = get(size - 1);
@@ -145,6 +167,20 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Index(function = "at") public native @ByRef Range get(@Cast("size_t") long i, @Cast("size_t") long j);
     public native RangeVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Range value);
 
+    public Range[][] get() {
+        Range[][] array = new Range[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE][];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = new Range[size(i) < Integer.MAX_VALUE ? (int)size(i) : Integer.MAX_VALUE];
+            for (int j = 0; j < array[i].length; j++) {
+                array[i][j] = get(i, j);
+            }
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.deepToString(get());
+    }
+
     public RangeVectorVector put(Range[] ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
@@ -186,6 +222,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*") @Const Mat get();
+    }
+
+    public Mat[] get() {
+        Mat[] array = new Mat[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public Mat pop_back() {
@@ -1558,7 +1605,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  @param outputBlobs contains all output blobs for each layer specified in \p outBlobNames.
          *  @param outBlobNames names for layers which outputs are needed to get
          */
-        public native @Name("forward") void forwardAndRetrieve(@StdVector MatVector outputBlobs,
+        public native @Name("forward") void forwardAndRetrieve(@ByRef MatVectorVector outputBlobs,
                                                             @Const @ByRef StringVector outBlobNames);
 
         /**

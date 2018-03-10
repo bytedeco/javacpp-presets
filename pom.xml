@@ -505,6 +505,7 @@
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -936,6 +937,7 @@
         <module>flandmark</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -981,6 +983,7 @@
         <module>flandmark</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -1026,6 +1029,7 @@
         <module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -1076,6 +1080,7 @@
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1132,6 +1137,7 @@
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1189,6 +1195,7 @@
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1247,6 +1254,7 @@
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1299,6 +1307,7 @@
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
