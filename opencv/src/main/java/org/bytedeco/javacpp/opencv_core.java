@@ -484,6 +484,72 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
+@Name("std::vector<cv::Point3f>") public static class Point3fVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Point3fVector(Pointer p) { super(p); }
+    public Point3fVector(Point3f value) { this(1); put(0, value); }
+    public Point3fVector(Point3f ... array) { this(array.length); put(array); }
+    public Point3fVector()       { allocate();  }
+    public Point3fVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Point3fVector put(@ByRef Point3fVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @ByRef Point3f get(@Cast("size_t") long i);
+    public native Point3fVector put(@Cast("size_t") long i, Point3f value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef @Const Point3f get();
+    }
+
+    public Point3f[] get() {
+        Point3f[] array = new Point3f[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Point3f pop_back() {
+        long size = size();
+        Point3f value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point3fVector push_back(Point3f value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Point3fVector put(Point3f value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Point3fVector put(Point3f ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<cv::Size>") public static class SizeVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -608,6 +674,138 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         return put(0, value);
     }
     public RectVector put(Rect ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Rect2d>") public static class Rect2dVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Rect2dVector(Pointer p) { super(p); }
+    public Rect2dVector(Rect2d value) { this(1); put(0, value); }
+    public Rect2dVector(Rect2d ... array) { this(array.length); put(array); }
+    public Rect2dVector()       { allocate();  }
+    public Rect2dVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Rect2dVector put(@ByRef Rect2dVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @ByRef Rect2d get(@Cast("size_t") long i);
+    public native Rect2dVector put(@Cast("size_t") long i, Rect2d value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef @Const Rect2d get();
+    }
+
+    public Rect2d[] get() {
+        Rect2d[] array = new Rect2d[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Rect2d pop_back() {
+        long size = size();
+        Rect2d value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Rect2dVector push_back(Rect2d value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Rect2dVector put(Rect2d value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Rect2dVector put(Rect2d ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Scalar>") public static class ScalarVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ScalarVector(Pointer p) { super(p); }
+    public ScalarVector(Scalar value) { this(1); put(0, value); }
+    public ScalarVector(Scalar ... array) { this(array.length); put(array); }
+    public ScalarVector()       { allocate();  }
+    public ScalarVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef ScalarVector put(@ByRef ScalarVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @ByRef Scalar get(@Cast("size_t") long i);
+    public native ScalarVector put(@Cast("size_t") long i, Scalar value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef @Const Scalar get();
+    }
+
+    public Scalar[] get() {
+        Scalar[] array = new Scalar[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Scalar pop_back() {
+        long size = size();
+        Scalar value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public ScalarVector push_back(Scalar value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public ScalarVector put(Scalar value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public ScalarVector put(Scalar ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -938,6 +1136,72 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         return put(0, value);
     }
     public Point2dVectorVector put(Point2dVector ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<std::vector<cv::Point3f> >") public static class Point3fVectorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Point3fVectorVector(Pointer p) { super(p); }
+    public Point3fVectorVector(Point3fVector value) { this(1); put(0, value); }
+    public Point3fVectorVector(Point3fVector ... array) { this(array.length); put(array); }
+    public Point3fVectorVector()       { allocate();  }
+    public Point3fVectorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Point3fVectorVector put(@ByRef Point3fVectorVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Cast("std::vector<cv::Point3f>*") @ByRef Point3fVector get(@Cast("size_t") long i);
+    public native Point3fVectorVector put(@Cast("size_t") long i, Point3fVector value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("std::vector<cv::Point3f>*") @ByRef @Const Point3fVector get();
+    }
+
+    public Point3fVector[] get() {
+        Point3fVector[] array = new Point3fVector[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Point3fVector pop_back() {
+        long size = size();
+        Point3fVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Point3fVectorVector push_back(Point3fVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Point3fVectorVector put(Point3fVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Point3fVectorVector put(Point3fVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -1334,6 +1598,72 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
         return put(0, value);
     }
     public GpuMatVector put(GpuMat ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<std::vector<cv::Mat> >") public static class MatVectorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MatVectorVector(Pointer p) { super(p); }
+    public MatVectorVector(MatVector value) { this(1); put(0, value); }
+    public MatVectorVector(MatVector ... array) { this(array.length); put(array); }
+    public MatVectorVector()       { allocate();  }
+    public MatVectorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef MatVectorVector put(@ByRef MatVectorVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @ByRef MatVector get(@Cast("size_t") long i);
+    public native MatVectorVector put(@Cast("size_t") long i, MatVector value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef @Const MatVector get();
+    }
+
+    public MatVector[] get() {
+        MatVector[] array = new MatVector[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public MatVector pop_back() {
+        long size = size();
+        MatVector value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public MatVectorVector push_back(MatVector value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public MatVectorVector put(MatVector value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public MatVectorVector put(MatVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -10855,7 +11185,7 @@ Example:
     /** cross-product */
     public native double cross(@Const @ByRef Point2f pt);
     /** checks whether the point is inside the specified rectangle */
-    public native @Cast("bool") boolean inside(@Const @ByRef Rectf r);
+    public native @Cast("bool") boolean inside(@Const @ByRef Rect2f r);
     /** x coordinate of the point */
     public native float x(); public native Point2f x(float x);
     /** y coordinate of the point */
@@ -10895,7 +11225,7 @@ Example:
     /** cross-product */
     public native double cross(@Const @ByRef Point2d pt);
     /** checks whether the point is inside the specified rectangle */
-    public native @Cast("bool") boolean inside(@Const @ByRef Rectd r);
+    public native @Cast("bool") boolean inside(@Const @ByRef Rect2d r);
     /** x coordinate of the point */
     public native double x(); public native Point2d x(double x);
     /** y coordinate of the point */
@@ -11266,31 +11596,31 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** height of the rectangle */
     public native int height(); public native Rect height(int height);
 }
-@Name("cv::Rect_<float>") @NoOffset public static class Rectf extends FloatPointer {
+@Name("cv::Rect_<float>") @NoOffset public static class Rect2f extends FloatPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Rectf(Pointer p) { super(p); }
+    public Rect2f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Rectf(long size) { super((Pointer)null); allocateArray(size); }
+    public Rect2f(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public Rectf position(long position) {
-        return (Rectf)super.position(position);
+    @Override public Rect2f position(long position) {
+        return (Rect2f)super.position(position);
     }
 
 
     /** default constructor */
-    public Rectf() { super((Pointer)null); allocate(); }
+    public Rect2f() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Rectf(float _x, float _y, float _width, float _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
+    public Rect2f(float _x, float _y, float _width, float _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
     private native void allocate(float _x, float _y, float _width, float _height);
-    public Rectf(@Const @ByRef Rectf r) { super((Pointer)null); allocate(r); }
-    private native void allocate(@Const @ByRef Rectf r);
-    public Rectf(@Const @ByRef Point2f org, @Const @ByRef Size2f sz) { super((Pointer)null); allocate(org, sz); }
+    public Rect2f(@Const @ByRef Rect2f r) { super((Pointer)null); allocate(r); }
+    private native void allocate(@Const @ByRef Rect2f r);
+    public Rect2f(@Const @ByRef Point2f org, @Const @ByRef Size2f sz) { super((Pointer)null); allocate(org, sz); }
     private native void allocate(@Const @ByRef Point2f org, @Const @ByRef Size2f sz);
-    public Rectf(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2) { super((Pointer)null); allocate(pt1, pt2); }
+    public Rect2f(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2) { super((Pointer)null); allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2);
 
-    public native @ByRef @Name("operator =") Rectf put( @Const @ByRef Rectf r );
+    public native @ByRef @Name("operator =") Rect2f put( @Const @ByRef Rect2f r );
     /** the top-left corner */
     public native @ByVal Point2f tl();
     /** the bottom-right corner */
@@ -11309,39 +11639,39 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public native @Cast("bool") boolean contains(@Const @ByRef Point2f pt);
 
     /** x coordinate of the top-left corner */
-    public native float x(); public native Rectf x(float x);
+    public native float x(); public native Rect2f x(float x);
     /** y coordinate of the top-left corner */
-    public native float y(); public native Rectf y(float y);
+    public native float y(); public native Rect2f y(float y);
     /** width of the rectangle */
-    public native float width(); public native Rectf width(float width);
+    public native float width(); public native Rect2f width(float width);
     /** height of the rectangle */
-    public native float height(); public native Rectf height(float height);
+    public native float height(); public native Rect2f height(float height);
 }
-@Name("cv::Rect_<double>") @NoOffset public static class Rectd extends DoublePointer {
+@Name("cv::Rect_<double>") @NoOffset public static class Rect2d extends DoublePointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Rectd(Pointer p) { super(p); }
+    public Rect2d(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Rectd(long size) { super((Pointer)null); allocateArray(size); }
+    public Rect2d(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public Rectd position(long position) {
-        return (Rectd)super.position(position);
+    @Override public Rect2d position(long position) {
+        return (Rect2d)super.position(position);
     }
 
 
     /** default constructor */
-    public Rectd() { super((Pointer)null); allocate(); }
+    public Rect2d() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Rectd(double _x, double _y, double _width, double _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
+    public Rect2d(double _x, double _y, double _width, double _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
     private native void allocate(double _x, double _y, double _width, double _height);
-    public Rectd(@Const @ByRef Rectd r) { super((Pointer)null); allocate(r); }
-    private native void allocate(@Const @ByRef Rectd r);
-    public Rectd(@Const @ByRef Point2d org, @Const @ByRef Size2d sz) { super((Pointer)null); allocate(org, sz); }
+    public Rect2d(@Const @ByRef Rect2d r) { super((Pointer)null); allocate(r); }
+    private native void allocate(@Const @ByRef Rect2d r);
+    public Rect2d(@Const @ByRef Point2d org, @Const @ByRef Size2d sz) { super((Pointer)null); allocate(org, sz); }
     private native void allocate(@Const @ByRef Point2d org, @Const @ByRef Size2d sz);
-    public Rectd(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2) { super((Pointer)null); allocate(pt1, pt2); }
+    public Rect2d(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2) { super((Pointer)null); allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2);
 
-    public native @ByRef @Name("operator =") Rectd put( @Const @ByRef Rectd r );
+    public native @ByRef @Name("operator =") Rect2d put( @Const @ByRef Rect2d r );
     /** the top-left corner */
     public native @ByVal Point2d tl();
     /** the bottom-right corner */
@@ -11360,13 +11690,13 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public native @Cast("bool") boolean contains(@Const @ByRef Point2d pt);
 
     /** x coordinate of the top-left corner */
-    public native double x(); public native Rectd x(double x);
+    public native double x(); public native Rect2d x(double x);
     /** y coordinate of the top-left corner */
-    public native double y(); public native Rectd y(double y);
+    public native double y(); public native Rect2d y(double y);
     /** width of the rectangle */
-    public native double width(); public native Rectd width(double width);
+    public native double width(); public native Rect2d width(double width);
     /** height of the rectangle */
-    public native double height(); public native Rectd height(double height);
+    public native double height(); public native Rect2d height(double height);
 }
  // namespace
 
@@ -11419,7 +11749,7 @@ The sample below demonstrates how to use RotatedRect:
     /** returns the minimal up-right integer rectangle containing the rotated rectangle */
     public native @ByVal Rect boundingRect();
     /** returns the minimal (exact) floating point rectangle containing the rotated rectangle, not intended for use with images */
-    public native @ByVal Rectf boundingRect2f();
+    public native @ByVal Rect2f boundingRect2f();
     /** returns the rectangle mass center */
     public native @ByRef Point2f center(); public native RotatedRect center(Point2f center);
     /** returns width and height of the rectangle */

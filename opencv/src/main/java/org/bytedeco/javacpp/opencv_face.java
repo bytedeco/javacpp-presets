@@ -8,10 +8,12 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_plot.*;
+import static org.bytedeco.javacpp.opencv_video.*;
 import static org.bytedeco.javacpp.opencv_dnn.*;
+import static org.bytedeco.javacpp.opencv_tracking.*;
 import static org.bytedeco.javacpp.opencv_objdetect.*;
 import static org.bytedeco.javacpp.opencv_photo.*;
-import static org.bytedeco.javacpp.opencv_video.*;
 
 public class opencv_face extends org.bytedeco.javacpp.presets.opencv_face {
     static { Loader.load(); }

@@ -1605,7 +1605,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          *  @param outputBlobs contains all output blobs for each layer specified in \p outBlobNames.
          *  @param outBlobNames names for layers which outputs are needed to get
          */
-        public native @Name("forward") void forwardAndRetrieve(@StdVector MatVector outputBlobs,
+        public native @Name("forward") void forwardAndRetrieve(@ByRef MatVectorVector outputBlobs,
                                                             @Const @ByRef StringVector outBlobNames);
 
         /**

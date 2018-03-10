@@ -1,4 +1,5 @@
 
+ * Add presets for the `aruco`, `bgsegm`, `img_hash`, `phase_unwrapping`, `plot`, `structured_light`, `tracking`, and `xphoto` modules of OpenCV ([issue #319](https://github.com/bytedeco/javacpp-presets/issues/319))
  * Add bindings for `b2DynamicTree::Query` and `RayCast` for LiquidFun ([pull #531](https://github.com/bytedeco/javacpp-presets/pull/531))
  * Add support for Windows to presets for LLVM ([pull #530](https://github.com/bytedeco/javacpp-presets/pull/530))
  * Add builds for `android-arm64` and `android-x86_64` platforms ([issue #52](https://github.com/bytedeco/javacpp-presets/issues/52))
