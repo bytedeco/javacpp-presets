@@ -2,12 +2,20 @@
 
 package org.bytedeco.javacpp;
 
+import org.bytedeco.javacpp.annotation.Index;
+import java.nio.*;
+import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
 import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_dnn.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_videoio.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_flann.*;
+import static org.bytedeco.javacpp.opencv_ml.*;
+import static org.bytedeco.javacpp.opencv_features2d.*;
 
 public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     static { Loader.load(); }
