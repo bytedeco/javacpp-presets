@@ -2495,8 +2495,8 @@ public static final int CV_CXX_STD_ARRAY = 1;
 
 
 // Integer types portatibility
-// #if 1
-// #include <stdint.h>
+// #ifdef OPENCV_STDINT_HEADER
+// #include OPENCV_STDINT_HEADER
 // #else
 // #if defined(_MSC_VER) && _MSC_VER < 1600 /* MSVS 2010 */
 
