@@ -20,6 +20,8 @@ cd LibRaw-$LIBRAW_VERSION
 
 case $PLATFORM in
     linux-x86_64)
+        autoreconf -fi --warnings=portability
+        sed -i="" 's/-install_name \\$rpath/-install_name @rpath/g' configure
         ./configure --prefix=$(pwd)/.. --enable-static
         make -j $MAKEJ
         make install
