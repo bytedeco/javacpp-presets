@@ -12,7 +12,7 @@ import org.bytedeco.javacpp.*;
     value = {
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64"}, 
-            link = "raw", 
+            link = "raw@.16",
             include = {
                 "libraw/libraw.h",
                 "libraw/libraw_alloc.h",
