@@ -171,7 +171,7 @@ import java.lang.annotation.Target;
                         "tensorflow/cc/ops/string_ops.h",
                         "tensorflow/cc/ops/training_ops.h",
                         "tensorflow/cc/ops/user_ops.h"},
-                link = {"tensorflow_framework", "tensorflow_cc"}),
+                link = "tensorflow_cc", preload = "tensorflow_framework"),
         @Platform(value = {"linux-x86_64", "macosx-x86_64"}, extension = "-gpu"),
         @Platform(value = {"android"},
                 compiler = {"cpp11"},
@@ -263,7 +263,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
-                link = {"tensorflow_framework", "tensorflow_cc"}),
+                link = "tensorflow_cc", preload = "tensorflow_framework"),
         },
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
