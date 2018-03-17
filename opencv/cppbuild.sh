@@ -158,8 +158,6 @@ case $PLATFORM in
         cp lib/Release/opencv_java.dll ../bin
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X -DWITH_OPENMP=OFF -DWITH_CUDA=OFF -DWITH_IPP=OFF $BUILD_CONTRIB_X
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
         "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
         cp -r ../x64/vc14/lib ..

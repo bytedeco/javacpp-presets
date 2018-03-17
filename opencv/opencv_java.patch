@@ -41,6 +41,27 @@ diff -ruN opencv-3.4.1/modules/java/common.cmake opencv-3.4.1-java/modules/java/
  # get list of modules to wrap
  # message(STATUS "Wrapped in java:")
  set(OPENCV_JAVA_MODULES)
+diff -ruN opencv-3.4.1/modules/java/generator/CMakeLists.txt opencv-3.4.1-java/modules/java/generator/CMakeLists.txt
+--- opencv-3.4.1/modules/java/generator/CMakeLists.txt	2018-02-23 17:38:33.000000000 +0900
++++ opencv-3.4.1-java/modules/java/generator/CMakeLists.txt	2018-03-17 18:16:40.950630600 +0900
+@@ -5,9 +5,6 @@
+ set(OPENCV_JAVA_SIGNATURES_FILE "${CMAKE_CURRENT_BINARY_DIR}/opencv_java_signatures.json" CACHE INTERNAL "")
+ set(OPENCV_JAVA_BINDINGS_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "")
+ 
+-file(REMOVE_RECURSE "${OPENCV_JAVA_BINDINGS_DIR}/gen")
+-file(REMOVE "${OPENCV_DEPHELPER}/gen_opencv_java_source")  # force re-run after CMake
+-
+ # This file is included from a subdirectory
+ set(JAVA_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
+ include(${JAVA_SOURCE_DIR}/common.cmake)
+@@ -75,7 +72,6 @@
+ endif()
+ if(NOT "${__content}" STREQUAL "${__config_str}")
+   file(WRITE "${CONFIG_FILE}" "${__config_str}")
+-  file(REMOVE "${OPENCV_DEPHELPER}/gen_opencv_java_source")
+ endif()
+ unset(__config_str)
+ 
 diff -ruN opencv-3.4.1/modules/java/jni/CMakeLists.txt opencv-3.4.1-java/modules/java/jni/CMakeLists.txt
 --- opencv-3.4.1/modules/java/jni/CMakeLists.txt	2018-02-23 17:38:33.000000000 +0900
 +++ opencv-3.4.1-java/modules/java/jni/CMakeLists.txt	2018-03-17 00:21:57.392355926 +0900

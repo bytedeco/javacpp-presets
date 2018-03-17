@@ -22,7 +22,7 @@ tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
 if [[ $PLATFORM == windows* ]]; then
     download http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/1.2.6.0/libusb-win32-bin-1.2.6.0.zip libusb-win32-bin-1.2.6.0.zip
-    download ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip pthreads-w32-2-9-1-release.zip
+    download http://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip pthreads-w32-2-9-1-release.zip
 
     unzip -o libusb-win32-bin-1.2.6.0.zip
     unzip -o pthreads-w32-2-9-1-release.zip -d pthreads-w32-2-9-1-release/
