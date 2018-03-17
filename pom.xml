@@ -48,14 +48,14 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <id>cibo-artifactory</id>
+        <name>cibotech-snapshots</name>
+        <url>https://cibotech.jfrog.io/cibotech/ext-snapshot-local</url>
     </snapshotRepository>
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Sonatype Nexus Staging</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        <id>cibo-artifactory</id>
+        <name>cibotech-snapshots</name>
+        <url>https://cibotech.jfrog.io/cibotech/ext-release-local</url>
     </repository>
   </distributionManagement>
 
@@ -400,29 +400,6 @@
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
         <version>2.8.2</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.6</version>
-        <executions>
-          <execution>
-            <id>default-deploy</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>deploy</goal>
-            </goals>
-          </execution>
-        </executions>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>sonatype-nexus-staging</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -490,6 +467,7 @@
         </property>
       </activation>
       <modules>
+        <module>libraw</module>
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
