@@ -1,5 +1,5 @@
 
- * Bundle the official Java API of OpenCV via the `opencv_java` module
+ * Bundle the official Java APIs of OpenCV and TensorFlow, via the `opencv_java` and `tensorflow_cc` modules
  * Correct loading order of `mkl_core` to fix MKL issues on Windows ([issue deeplearning4j/deeplearning4j#4776](https://github.com/deeplearning4j/deeplearning4j/issues/4776))
  * Add presets for the `aruco`, `bgsegm`, `img_hash`, `phase_unwrapping`, `plot`, `structured_light`, `tracking`, and `xphoto` modules of OpenCV ([issue #319](https://github.com/bytedeco/javacpp-presets/issues/319))
  * Add bindings for `b2DynamicTree::Query` and `RayCast` for LiquidFun ([pull #531](https://github.com/bytedeco/javacpp-presets/pull/531))

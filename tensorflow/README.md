@@ -16,6 +16,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/tensorflow/apidocs/
 
+&lowast; Call `Loader.load(tensorflow.class)` before using the API in the `org.tensorflow` namespace.
+
 
 Sample Usage
 ------------

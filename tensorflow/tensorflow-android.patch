@@ -1,6 +1,6 @@
 diff -ruN tensorflow-1.7.0-rc0/tensorflow/BUILD tensorflow-1.7.0-rc0-android/tensorflow/BUILD
 --- tensorflow-1.7.0-rc0/tensorflow/BUILD	2018-03-13 13:02:38.000000000 +0900
-+++ tensorflow-1.7.0-rc0-android/tensorflow/BUILD	2018-03-17 22:10:25.214929283 +0900
++++ tensorflow-1.7.0-rc0-android/tensorflow/BUILD	2018-03-18 10:45:50.462447336 +0900
 @@ -798,30 +798,25 @@
  
  tf_cc_shared_object(
@@ -46,7 +46,7 @@ diff -ruN tensorflow-1.7.0-rc0/tensorflow/BUILD tensorflow-1.7.0-rc0-android/ten
 -        "//tensorflow/cc:scope",
 -        "//tensorflow/cc/profiler",
 -        "//tensorflow/core:tensorflow",
-+        "//tensorflow/core:android_tensorflow_lib"
++        "//tensorflow/core:android_tensorflow_lib",
      ],
  )
  
@@ -77,15 +77,16 @@ diff -ruN tensorflow-1.7.0-rc0/tensorflow/c/BUILD tensorflow-1.7.0-rc0-android/t
      srcs = ["tf_status_helper.cc"],
 diff -ruN tensorflow-1.7.0-rc0/tensorflow/core/BUILD tensorflow-1.7.0-rc0-android/tensorflow/core/BUILD
 --- tensorflow-1.7.0-rc0/tensorflow/core/BUILD	2018-03-13 13:02:38.000000000 +0900
-+++ tensorflow-1.7.0-rc0-android/tensorflow/core/BUILD	2018-03-17 20:41:13.777306910 +0900
-@@ -1167,7 +1167,10 @@
++++ tensorflow-1.7.0-rc0-android/tensorflow/core/BUILD	2018-03-19 03:43:57.204772422 +0900
+@@ -1167,7 +1167,11 @@
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
 -    srcs = if_android([":android_op_registrations_and_gradients"]),
 +    srcs = if_android([
-+    	":android_op_registrations_and_gradients",
-+    	"//tensorflow/c:c_api_files",
++        ":android_op_registrations_and_gradients",
++        "//tensorflow/c:c_api_files",
++        "//tensorflow/java/src/main/native:java_api_files",
 +    ]),
      copts = tf_copts(),
      tags = [
@@ -101,6 +102,25 @@ diff -ruN tensorflow-1.7.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.7.0-rc
      ],
  )
  
+diff -ruN tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.7.0-rc0-android/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD	2018-03-13 13:02:38.000000000 +0900
++++ tensorflow-1.7.0-rc0-android/tensorflow/java/src/main/native/BUILD	2018-03-19 02:16:30.498502198 +0900
+@@ -86,3 +86,15 @@
+     ),
+     visibility = ["//tensorflow:__subpackages__"],
+ )
++
++filegroup(
++    name = "java_api_files",
++    srcs = glob(
++        ["**/*"],
++        exclude = [
++            "**/METADATA",
++            "**/OWNERS",
++        ],
++    ),
++    visibility = ["//visibility:public"],
++)
 diff -ruN tensorflow-1.7.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.7.0-rc0-android/tensorflow/tensorflow.bzl
 --- tensorflow-1.7.0-rc0/tensorflow/tensorflow.bzl	2018-03-13 13:02:38.000000000 +0900
 +++ tensorflow-1.7.0-rc0-android/tensorflow/tensorflow.bzl	2018-03-17 20:41:13.783306899 +0900

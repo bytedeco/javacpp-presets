@@ -99,12 +99,14 @@ case $PLATFORM in
     linux-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-java.patch
         sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32"
         ;;
     linux-x86_64)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-java.patch
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
@@ -113,7 +115,7 @@ case $PLATFORM in
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
-
+        patch -Np1 < ../../../tensorflow-java.patch
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
@@ -129,5 +131,12 @@ esac
 
 ./configure
 bazel build -c opt //tensorflow:libtensorflow_cc.so --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
+
+# copy Java source files and work around loader bug in NativeLibrary.java
+mkdir -p ../java
+cp -r tensorflow/java/src/gen/java/* ../java
+cp -r tensorflow/java/src/main/java/* ../java
+cp -r tensorflow/contrib/lite/java/src/main/java/* ../java
+sed -i="" '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 
 cd ../..
