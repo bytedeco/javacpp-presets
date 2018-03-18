@@ -36,7 +36,7 @@
             <id>default-compile</id>
             <configuration>
               <includes>
-                <include>org/opencv/**</include>
+                <include>org/opencv/**/*.java</include>
                 <include>org/bytedeco/javacpp/*.java</include>
               </includes>
             </configuration>
