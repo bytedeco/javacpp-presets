@@ -1317,6 +1317,7 @@
         <module>cuda</module>
         <module>ale</module>
         <module>systems</module>
+        <module>liquidfun</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
