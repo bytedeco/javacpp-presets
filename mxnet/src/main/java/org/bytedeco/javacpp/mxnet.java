@@ -1677,8 +1677,30 @@ public static native int MXAutogradGetSymbol(NDArrayHandle handle, @Cast("Symbol
 /**
  * \brief create cached operator
  */
-public static native int MXCreateCachedOp(SymbolHandle handle,
-                               @ByPtrPtr CachedOpHandle out);
+public static native int MXCreateCachedOp(SymbolHandle handle, @ByPtrPtr CachedOpHandle out);
+/**
+ * \brief create cached operator
+ */
+public static native int MXCreateCachedOpEx(SymbolHandle handle,
+                                 int num_params,
+                                 @Cast("const char**") PointerPointer keys,
+                                 @Cast("const char**") PointerPointer vals,
+                                 @ByPtrPtr CachedOpHandle out);
+public static native int MXCreateCachedOpEx(SymbolHandle handle,
+                                 int num_params,
+                                 @Cast("const char**") @ByPtrPtr BytePointer keys,
+                                 @Cast("const char**") @ByPtrPtr BytePointer vals,
+                                 @ByPtrPtr CachedOpHandle out);
+public static native int MXCreateCachedOpEx(SymbolHandle handle,
+                                 int num_params,
+                                 @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                                 @Cast("const char**") @ByPtrPtr ByteBuffer vals,
+                                 @ByPtrPtr CachedOpHandle out);
+public static native int MXCreateCachedOpEx(SymbolHandle handle,
+                                 int num_params,
+                                 @Cast("const char**") @ByPtrPtr byte[] keys,
+                                 @Cast("const char**") @ByPtrPtr byte[] vals,
+                                 @ByPtrPtr CachedOpHandle out);
 /**
  * \brief free cached operator
  */
@@ -2153,6 +2175,20 @@ public static native int MXSymbolListOutputs(SymbolHandle symbol,
 public static native int MXSymbolListOutputs(SymbolHandle symbol,
                                   @Cast("mx_uint*") int[] out_size,
                                   @Cast("const char***") @ByPtrPtr PointerPointer out_str_array);
+
+/**
+ * \brief Get number of outputs of the symbol.
+ * @param symbol The symbol
+ * @param out_size number of outputs
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXSymbolGetNumOutputs(SymbolHandle symbol,
+                                     @Cast("mx_uint*") IntPointer output_count);
+public static native int MXSymbolGetNumOutputs(SymbolHandle symbol,
+                                     @Cast("mx_uint*") IntBuffer output_count);
+public static native int MXSymbolGetNumOutputs(SymbolHandle symbol,
+                                     @Cast("mx_uint*") int[] output_count);
+
 /**
  * \brief Get a symbol that contains all the internals.
  * @param symbol The symbol
@@ -2186,6 +2222,7 @@ public static native int MXSymbolGetOutput(SymbolHandle symbol,
 public static native int MXSymbolGetOutput(SymbolHandle symbol,
                                 @Cast("mx_uint") int index,
                                 @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle out);
+
 /**
  * \brief List auxiliary states in the symbol.
  * @param symbol the symbol
