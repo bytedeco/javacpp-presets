@@ -1,0 +1,27 @@
+diff -ruN leptonica-1.75.3/src/tiffio.c leptonica-1.75.3-tiffio/src/tiffio.c
+--- leptonica-1.75.3/src/tiffio.c	2017-10-18 09:45:17.000000000 +0900
++++ leptonica-1.75.3-tiffio/src/tiffio.c	2018-03-24 17:34:15.312781549 +0900
+@@ -2079,6 +2079,7 @@
+         return (TIFF *)ERROR_PTR("modestring not defined", procName, NULL);
+ 
+     TIFFSetWarningHandler(dummyHandler);  /* disable warnings */
++    TIFFSetErrorHandler(dummyHandler);    /* disable errors */
+ 
+     fseek(fp, 0, SEEK_SET);
+     return TIFFClientOpen("TIFFstream", modestring, (thandle_t)fp,
+@@ -2117,6 +2118,7 @@
+         return (TIFF *)ERROR_PTR("modestring not defined", procName, NULL);
+ 
+     TIFFSetWarningHandler(dummyHandler);  /* disable warnings */
++    TIFFSetErrorHandler(dummyHandler);    /* disable errors */
+ 
+     fname = genPathname(filename, NULL);
+     tif = TIFFOpen(fname, modestring);
+@@ -2396,6 +2398,7 @@
+         mstream = memstreamCreateForWrite(pdata, pdatasize);
+ 
+     TIFFSetWarningHandler(dummyHandler);  /* disable warnings */
++    TIFFSetErrorHandler(dummyHandler);    /* disable errors */
+ 
+     return TIFFClientOpen(filename, operation, (thandle_t)mstream,
+                           tiffReadCallback, tiffWriteCallback,

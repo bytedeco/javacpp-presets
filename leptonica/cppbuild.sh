@@ -34,6 +34,8 @@ tar --totals -xzf ../$LIBTIFF.tar.gz
 tar --totals -xzf ../$LIBWEBP.tar.gz
 tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
+patch -Np1 -d leptonica-$LEPTONICA_VERSION < ../../leptonica-tiffio.patch
+
 case $PLATFORM in
     android-arm)
 #        ANDROID_ROOT=${ANDROID_ROOT//14/21}
