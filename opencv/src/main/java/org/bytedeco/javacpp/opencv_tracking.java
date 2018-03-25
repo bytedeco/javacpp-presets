@@ -2917,9 +2917,9 @@ occlusions, object absence etc.
   */
   /** enum cv::TrackerKCF::MODE */
   public static final int
-    GRAY   =  (1 << 0),
-    CN     =  (1 << 1),
-    CUSTOM =  (1 << 2);
+    GRAY   = (1 << 0),
+    CN     = (1 << 1),
+    CUSTOM = (1 << 2);
 
   @NoOffset public static class Params extends Pointer {
       static { Loader.load(); }

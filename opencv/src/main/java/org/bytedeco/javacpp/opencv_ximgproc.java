@@ -1888,9 +1888,9 @@ public static final int
 /** enum cv::ximgproc::RulesOption */
 public static final int
   /** Validate each rule in a proper way. */
-  RO_STRICT          =  0x00,
+  RO_STRICT          = 0x00,
   /** Skip validations of image borders. */
-  RO_IGNORE_BORDERS  =  0x01;
+  RO_IGNORE_BORDERS  = 0x01;
 
 /**
 * \brief   Calculates 2D Fast Hough transform of an image.

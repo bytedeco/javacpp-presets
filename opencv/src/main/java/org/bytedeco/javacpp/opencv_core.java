@@ -3473,113 +3473,113 @@ public static final int CV_SUBMINOR_VERSION = CV_VERSION_REVISION;
 /** enum cv::Error::Code */
 public static final int
     /** everything is ok */
-    StsOk= 0,
+    StsOk = 0,
     /** pseudo error for back trace */
-    StsBackTrace= -1,
+    StsBackTrace = -1,
     /** unknown /unspecified error */
-    StsError= -2,
+    StsError = -2,
     /** internal error (bad state) */
-    StsInternal= -3,
+    StsInternal = -3,
     /** insufficient memory */
-    StsNoMem= -4,
+    StsNoMem = -4,
     /** function arg/param is bad */
-    StsBadArg= -5,
+    StsBadArg = -5,
     /** unsupported function */
-    StsBadFunc= -6,
+    StsBadFunc = -6,
     /** iteration didn't converge */
-    StsNoConv= -7,
+    StsNoConv = -7,
     /** tracing */
-    StsAutoTrace= -8,
+    StsAutoTrace = -8,
     /** image header is NULL */
-    HeaderIsNull= -9,
+    HeaderIsNull = -9,
     /** image size is invalid */
-    BadImageSize= -10,
+    BadImageSize = -10,
     /** offset is invalid */
-    BadOffset= -11,
+    BadOffset = -11,
     //!<
-    BadDataPtr= -12,
+    BadDataPtr = -12,
     /** image step is wrong, this may happen for a non-continuous matrix. */
-    BadStep= -13,
+    BadStep = -13,
     //!<
-    BadModelOrChSeq= -14,
+    BadModelOrChSeq = -14,
     /** bad number of channels, for example, some functions accept only single channel matrices. */
-    BadNumChannels= -15,
+    BadNumChannels = -15,
     //!<
-    BadNumChannel1U= -16,
+    BadNumChannel1U = -16,
     /** input image depth is not supported by the function */
-    BadDepth= -17,
+    BadDepth = -17,
     //!<
-    BadAlphaChannel= -18,
+    BadAlphaChannel = -18,
     /** number of dimensions is out of range */
-    BadOrder= -19,
+    BadOrder = -19,
     /** incorrect input origin */
-    BadOrigin= -20,
+    BadOrigin = -20,
     /** incorrect input align */
-    BadAlign= -21,
+    BadAlign = -21,
     //!<
-    BadCallBack= -22,
+    BadCallBack = -22,
     //!<
-    BadTileSize= -23,
+    BadTileSize = -23,
     /** input COI is not supported */
-    BadCOI= -24,
+    BadCOI = -24,
     /** incorrect input roi */
-    BadROISize= -25,
+    BadROISize = -25,
     //!<
-    MaskIsTiled= -26,
+    MaskIsTiled = -26,
     /** null pointer */
-    StsNullPtr= -27,
+    StsNullPtr = -27,
     /** incorrect vector length */
-    StsVecLengthErr= -28,
+    StsVecLengthErr = -28,
     /** incorrect filter structure content */
-    StsFilterStructContentErr= -29,
+    StsFilterStructContentErr = -29,
     /** incorrect transform kernel content */
-    StsKernelStructContentErr= -30,
+    StsKernelStructContentErr = -30,
     /** incorrect filter offset value */
-    StsFilterOffsetErr= -31,
+    StsFilterOffsetErr = -31,
     /** the input/output structure size is incorrect */
-    StsBadSize= -201,
+    StsBadSize = -201,
     /** division by zero */
-    StsDivByZero= -202,
+    StsDivByZero = -202,
     /** in-place operation is not supported */
-    StsInplaceNotSupported= -203,
+    StsInplaceNotSupported = -203,
     /** request can't be completed */
-    StsObjectNotFound= -204,
+    StsObjectNotFound = -204,
     /** formats of input/output arrays differ */
-    StsUnmatchedFormats= -205,
+    StsUnmatchedFormats = -205,
     /** flag is wrong or not supported */
-    StsBadFlag= -206,
+    StsBadFlag = -206,
     /** bad CvPoint */
-    StsBadPoint= -207,
+    StsBadPoint = -207,
     /** bad format of mask (neither 8uC1 nor 8sC1) */
-    StsBadMask= -208,
+    StsBadMask = -208,
     /** sizes of input/output structures do not match */
-    StsUnmatchedSizes= -209,
+    StsUnmatchedSizes = -209,
     /** the data format/type is not supported by the function */
-    StsUnsupportedFormat= -210,
+    StsUnsupportedFormat = -210,
     /** some of parameters are out of range */
-    StsOutOfRange= -211,
+    StsOutOfRange = -211,
     /** invalid syntax/structure of the parsed file */
-    StsParseError= -212,
+    StsParseError = -212,
     /** the requested function/feature is not implemented */
-    StsNotImplemented= -213,
+    StsNotImplemented = -213,
     /** an allocated block has been corrupted */
-    StsBadMemBlock= -214,
+    StsBadMemBlock = -214,
     /** assertion failed */
-    StsAssert= -215,
+    StsAssert = -215,
     /** no CUDA support */
-    GpuNotSupported= -216,
+    GpuNotSupported = -216,
     /** GPU API call error */
-    GpuApiCallError= -217,
+    GpuApiCallError = -217,
     /** no OpenGL support */
-    OpenGlNotSupported= -218,
+    OpenGlNotSupported = -218,
     /** OpenGL API call error */
-    OpenGlApiCallError= -219,
+    OpenGlApiCallError = -219,
     /** OpenCL API call error */
-    OpenCLApiCallError= -220,
-    OpenCLDoubleNotSupported= -221,
+    OpenCLApiCallError = -220,
+    OpenCLDoubleNotSupported = -221,
     /** OpenCL initialization error */
-    OpenCLInitError= -222,
-    OpenCLNoAMDBlasFft= -223;
+    OpenCLInitError = -222,
+    OpenCLNoAMDBlasFft = -223;
  //Error
 
 /** \} core_utils
@@ -3726,12 +3726,12 @@ public static final int
         already considered complex. */
     DFT_COMPLEX_INPUT  = 64,
     /** performs an inverse 1D or 2D transform instead of the default forward transform. */
-    DCT_INVERSE        =  DFT_INVERSE,
+    DCT_INVERSE        = DFT_INVERSE,
     /** performs a forward or inverse transform of every individual row of the input
         matrix. This flag enables you to transform multiple vectors simultaneously and can be used to
         decrease the overhead (which is sometimes several times larger than the processing itself) to
         perform 3D and higher-dimensional transforms and so forth.*/
-    DCT_ROWS           =  DFT_ROWS;
+    DCT_ROWS           = DFT_ROWS;
 
 /** Various border types, image boundaries are denoted with {@code |}
  *  @see borderInterpolate, copyMakeBorder */
@@ -3751,9 +3751,9 @@ public static final int
     BORDER_TRANSPARENT = 5,
 
     /** same as BORDER_REFLECT_101 */
-    BORDER_REFLECT101  =  BORDER_REFLECT_101,
+    BORDER_REFLECT101  = BORDER_REFLECT_101,
     /** same as BORDER_REFLECT_101 */
-    BORDER_DEFAULT     =  BORDER_REFLECT_101,
+    BORDER_DEFAULT     = BORDER_REFLECT_101,
     /** do not look outside of ROI */
     BORDER_ISOLATED    = 16;
 
@@ -3940,7 +3940,7 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
     }
 
     /** enum cv::Hamming:: */
-    public static final int normType =  NORM_HAMMING;
+    public static final int normType = NORM_HAMMING;
 
     /** this will count the bits in a ^ b
      */
@@ -5163,8 +5163,8 @@ public static final int
 /** enum cv::instr::FLAGS */
 public static final int
     FLAGS_NONE              = 0,
-    FLAGS_MAPPING           =  0x01,
-    FLAGS_EXPAND_SAME_NAMES =  0x02;
+    FLAGS_MAPPING           = 0x01,
+    FLAGS_EXPAND_SAME_NAMES = 0x02;
 
 @Namespace("cv::instr") public static native void setFlags(@Cast("cv::instr::FLAGS") int modeFlags);
 @Namespace("cv::instr") public static native @Cast("cv::instr::FLAGS") int getFlags();
@@ -5301,106 +5301,106 @@ bytes of the header. In C++ interface the role of CvArr is played by InputArray 
 /** enum  */
 public static final int
  /** everything is ok                */
- CV_StsOk= 0,
+ CV_StsOk = 0,
  /** pseudo error for back trace     */
- CV_StsBackTrace= -1,
+ CV_StsBackTrace = -1,
  /** unknown /unspecified error      */
- CV_StsError= -2,
+ CV_StsError = -2,
  /** internal error (bad state)      */
- CV_StsInternal= -3,
+ CV_StsInternal = -3,
  /** insufficient memory             */
- CV_StsNoMem= -4,
+ CV_StsNoMem = -4,
  /** function arg/param is bad       */
- CV_StsBadArg= -5,
+ CV_StsBadArg = -5,
  /** unsupported function            */
- CV_StsBadFunc= -6,
+ CV_StsBadFunc = -6,
  /** iter. didn't converge           */
- CV_StsNoConv= -7,
+ CV_StsNoConv = -7,
  /** tracing                         */
- CV_StsAutoTrace= -8,
+ CV_StsAutoTrace = -8,
  /** image header is NULL            */
- CV_HeaderIsNull= -9,
+ CV_HeaderIsNull = -9,
  /** image size is invalid           */
- CV_BadImageSize= -10,
+ CV_BadImageSize = -10,
  /** offset is invalid               */
- CV_BadOffset= -11,
- CV_BadDataPtr= -12,  /**/
+ CV_BadOffset = -11,
+ CV_BadDataPtr = -12,  /**/
  /** image step is wrong, this may happen for a non-continuous matrix */
- CV_BadStep= -13,
- CV_BadModelOrChSeq= -14,  /**/
+ CV_BadStep = -13,
+ CV_BadModelOrChSeq = -14,  /**/
  /** bad number of channels, for example, some functions accept only single channel matrices */
- CV_BadNumChannels= -15,
- CV_BadNumChannel1U= -16,  /**/
+ CV_BadNumChannels = -15,
+ CV_BadNumChannel1U = -16,  /**/
  /** input image depth is not supported by the function */
- CV_BadDepth= -17,
- CV_BadAlphaChannel= -18,  /**/
+ CV_BadDepth = -17,
+ CV_BadAlphaChannel = -18,  /**/
  /** number of dimensions is out of range */
- CV_BadOrder= -19,
+ CV_BadOrder = -19,
  /** incorrect input origin               */
- CV_BadOrigin= -20,
+ CV_BadOrigin = -20,
  /** incorrect input align                */
- CV_BadAlign= -21,
- CV_BadCallBack= -22,  /**/
- CV_BadTileSize= -23,  /**/
+ CV_BadAlign = -21,
+ CV_BadCallBack = -22,  /**/
+ CV_BadTileSize = -23,  /**/
  /** input COI is not supported           */
- CV_BadCOI= -24,
+ CV_BadCOI = -24,
  /** incorrect input roi                  */
- CV_BadROISize= -25,
- CV_MaskIsTiled= -26,  /**/
+ CV_BadROISize = -25,
+ CV_MaskIsTiled = -26,  /**/
  /** null pointer */
- CV_StsNullPtr= -27,
+ CV_StsNullPtr = -27,
  /** incorrect vector length */
- CV_StsVecLengthErr= -28,
+ CV_StsVecLengthErr = -28,
  /** incorrect filter structure content */
- CV_StsFilterStructContentErr= -29,
+ CV_StsFilterStructContentErr = -29,
  /** incorrect transform kernel content */
- CV_StsKernelStructContentErr= -30,
+ CV_StsKernelStructContentErr = -30,
  /** incorrect filter offset value */
- CV_StsFilterOffsetErr= -31,
+ CV_StsFilterOffsetErr = -31,
  /** the input/output structure size is incorrect  */
- CV_StsBadSize= -201,
+ CV_StsBadSize = -201,
  /** division by zero */
- CV_StsDivByZero= -202,
+ CV_StsDivByZero = -202,
  /** in-place operation is not supported */
- CV_StsInplaceNotSupported= -203,
+ CV_StsInplaceNotSupported = -203,
  /** request can't be completed */
- CV_StsObjectNotFound= -204,
+ CV_StsObjectNotFound = -204,
  /** formats of input/output arrays differ */
- CV_StsUnmatchedFormats= -205,
+ CV_StsUnmatchedFormats = -205,
  /** flag is wrong or not supported */
- CV_StsBadFlag= -206,
+ CV_StsBadFlag = -206,
  /** bad CvPoint */
- CV_StsBadPoint= -207,
+ CV_StsBadPoint = -207,
  /** bad format of mask (neither 8uC1 nor 8sC1)*/
- CV_StsBadMask= -208,
+ CV_StsBadMask = -208,
  /** sizes of input/output structures do not match */
- CV_StsUnmatchedSizes= -209,
+ CV_StsUnmatchedSizes = -209,
  /** the data format/type is not supported by the function*/
- CV_StsUnsupportedFormat= -210,
+ CV_StsUnsupportedFormat = -210,
  /** some of parameters are out of range */
- CV_StsOutOfRange= -211,
+ CV_StsOutOfRange = -211,
  /** invalid syntax/structure of the parsed file */
- CV_StsParseError= -212,
+ CV_StsParseError = -212,
  /** the requested function/feature is not implemented */
- CV_StsNotImplemented= -213,
+ CV_StsNotImplemented = -213,
  /** an allocated block has been corrupted */
- CV_StsBadMemBlock= -214,
+ CV_StsBadMemBlock = -214,
  /** assertion failed   */
- CV_StsAssert= -215,
+ CV_StsAssert = -215,
  /** no CUDA support    */
- CV_GpuNotSupported= -216,
+ CV_GpuNotSupported = -216,
  /** GPU API call error */
- CV_GpuApiCallError= -217,
+ CV_GpuApiCallError = -217,
  /** no OpenGL support  */
- CV_OpenGlNotSupported= -218,
+ CV_OpenGlNotSupported = -218,
  /** OpenGL API call error */
- CV_OpenGlApiCallError= -219,
+ CV_OpenGlApiCallError = -219,
  /** OpenCL API call error */
- CV_OpenCLApiCallError= -220,
- CV_OpenCLDoubleNotSupported= -221,
+ CV_OpenCLApiCallError = -220,
+ CV_OpenCLDoubleNotSupported = -221,
  /** OpenCL initialization error */
- CV_OpenCLInitError= -222,
- CV_OpenCLNoAMDBlasFft= -223;
+ CV_OpenCLInitError = -222,
+ CV_OpenCLNoAMDBlasFft = -223;
 
 /****************************************************************************************\
 *                             Common macros and inline functions                         *
@@ -12077,11 +12077,11 @@ be fully initialized using the advanced variant of the constructor.
     /** enum cv::TermCriteria::Type */
     public static final int
         /** the maximum number of iterations or elements to compute */
-        COUNT= 1,
+        COUNT = 1,
         /** ditto */
-        MAX_ITER= COUNT,
+        MAX_ITER = COUNT,
         /** the desired accuracy or change in parameters at which the iterative algorithm stops */
-        EPS= 2;
+        EPS = 2;
 
     /** default constructor */
     public TermCriteria() { super((Pointer)null); allocate(); }
@@ -16280,8 +16280,8 @@ Here is example of SimpleBlobDetector use in your application via Algorithm inte
     }
 
     /** enum cv::Param:: */
-    public static final int INT= 0, BOOLEAN= 1, REAL= 2, STRING= 3, MAT= 4, MAT_VECTOR= 5, ALGORITHM= 6, FLOAT= 7,
-           UNSIGNED_INT= 8, UINT64= 9, UCHAR= 11;
+    public static final int INT = 0, BOOLEAN = 1, REAL = 2, STRING = 3, MAT = 4, MAT_VECTOR = 5, ALGORITHM = 6, FLOAT = 7,
+           UNSIGNED_INT = 8, UINT64 = 9, UCHAR = 11;
 }
 
 /** \} core_basic */
@@ -17088,13 +17088,13 @@ In multi-threading environment the stream objects must be passed explicitly (see
     /** enum cv::cuda::Event::CreateFlags */
     public static final int
         /** Default event flag */
-        DEFAULT        =  0x00,
+        DEFAULT        = 0x00,
         /** Event uses blocking synchronization */
-        BLOCKING_SYNC  =  0x01,
+        BLOCKING_SYNC  = 0x01,
         /** Event will not record timing data */
-        DISABLE_TIMING =  0x02,
+        DISABLE_TIMING = 0x02,
         /** Event is suitable for interprocess use. DisableTiming must be set */
-        INTERPROCESS   =  0x04;
+        INTERPROCESS   = 0x04;
 
     public Event(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::DEFAULT*/) { super((Pointer)null); allocate(flags); }
     private native void allocate(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::DEFAULT*/);
@@ -17173,11 +17173,11 @@ public static final int
     FEATURE_SET_COMPUTE_35 = 35,
     FEATURE_SET_COMPUTE_50 = 50,
 
-    GLOBAL_ATOMICS =  FEATURE_SET_COMPUTE_11,
-    SHARED_ATOMICS =  FEATURE_SET_COMPUTE_12,
-    NATIVE_DOUBLE =  FEATURE_SET_COMPUTE_13,
-    WARP_SHUFFLE_FUNCTIONS =  FEATURE_SET_COMPUTE_30,
-    DYNAMIC_PARALLELISM =  FEATURE_SET_COMPUTE_35;
+    GLOBAL_ATOMICS = FEATURE_SET_COMPUTE_11,
+    SHARED_ATOMICS = FEATURE_SET_COMPUTE_12,
+    NATIVE_DOUBLE = FEATURE_SET_COMPUTE_13,
+    WARP_SHUFFLE_FUNCTIONS = FEATURE_SET_COMPUTE_30,
+    DYNAMIC_PARALLELISM = FEATURE_SET_COMPUTE_35;
 
 /** checks whether current device supports the given feature */
 @Namespace("cv::cuda") public static native @Cast("bool") boolean deviceSupports(@Cast("cv::cuda::FeatureSet") int feature_set);
@@ -17546,13 +17546,13 @@ capability can always be compiled to binary code of greater or equal compute cap
 
     /** enum cv::ocl::Device:: */
     public static final int
-        TYPE_DEFAULT     =  (1 << 0),
-        TYPE_CPU         =  (1 << 1),
-        TYPE_GPU         =  (1 << 2),
-        TYPE_ACCELERATOR =  (1 << 3),
-        TYPE_DGPU        =  TYPE_GPU + (1 << 16),
-        TYPE_IGPU        =  TYPE_GPU + (1 << 17),
-        TYPE_ALL         =  0xFFFFFFFF;
+        TYPE_DEFAULT     = (1 << 0),
+        TYPE_CPU         = (1 << 1),
+        TYPE_GPU         = (1 << 2),
+        TYPE_ACCELERATOR = (1 << 3),
+        TYPE_DGPU        = TYPE_GPU + (1 << 16),
+        TYPE_IGPU        = TYPE_GPU + (1 << 17),
+        TYPE_ALL         = 0xFFFFFFFF;
 
     public native @Str BytePointer name();
     public native @Str BytePointer extensions();
@@ -17576,14 +17576,14 @@ capability can always be compiled to binary code of greater or equal compute cap
 
     /** enum cv::ocl::Device:: */
     public static final int
-        FP_DENORM= (1 << 0),
-        FP_INF_NAN= (1 << 1),
-        FP_ROUND_TO_NEAREST= (1 << 2),
-        FP_ROUND_TO_ZERO= (1 << 3),
-        FP_ROUND_TO_INF= (1 << 4),
-        FP_FMA= (1 << 5),
-        FP_SOFT_FLOAT= (1 << 6),
-        FP_CORRECTLY_ROUNDED_DIVIDE_SQRT= (1 << 7);
+        FP_DENORM = (1 << 0),
+        FP_INF_NAN = (1 << 1),
+        FP_ROUND_TO_NEAREST = (1 << 2),
+        FP_ROUND_TO_ZERO = (1 << 3),
+        FP_ROUND_TO_INF = (1 << 4),
+        FP_FMA = (1 << 5),
+        FP_SOFT_FLOAT = (1 << 6),
+        FP_CORRECTLY_ROUNDED_DIVIDE_SQRT = (1 << 7);
     public native int doubleFPConfig();
     public native int singleFPConfig();
     public native int halfFPConfig();
@@ -17593,17 +17593,17 @@ capability can always be compiled to binary code of greater or equal compute cap
 
     /** enum cv::ocl::Device:: */
     public static final int
-        EXEC_KERNEL= (1 << 0),
-        EXEC_NATIVE_KERNEL= (1 << 1);
+        EXEC_KERNEL = (1 << 0),
+        EXEC_NATIVE_KERNEL = (1 << 1);
     public native int executionCapabilities();
 
     public native @Cast("size_t") long globalMemCacheSize();
 
     /** enum cv::ocl::Device:: */
     public static final int
-        NO_CACHE= 0,
-        READ_ONLY_CACHE= 1,
-        READ_WRITE_CACHE= 2;
+        NO_CACHE = 0,
+        READ_ONLY_CACHE = 1,
+        READ_WRITE_CACHE = 2;
     public native int globalMemCacheType();
     public native int globalMemCacheLineSize();
     public native @Cast("size_t") long globalMemSize();
@@ -17611,9 +17611,9 @@ capability can always be compiled to binary code of greater or equal compute cap
     public native @Cast("size_t") long localMemSize();
     /** enum cv::ocl::Device:: */
     public static final int
-        NO_LOCAL_MEM= 0,
-        LOCAL_IS_LOCAL= 1,
-        LOCAL_IS_GLOBAL= 2;
+        NO_LOCAL_MEM = 0,
+        LOCAL_IS_LOCAL = 1,
+        LOCAL_IS_GLOBAL = 2;
     public native int localMemType();
     public native @Cast("bool") boolean hostUnifiedMemory();
 
@@ -17638,10 +17638,10 @@ capability can always be compiled to binary code of greater or equal compute cap
 
     /** enum cv::ocl::Device:: */
     public static final int
-        UNKNOWN_VENDOR= 0,
-        VENDOR_AMD= 1,
-        VENDOR_INTEL= 2,
-        VENDOR_NVIDIA= 3;
+        UNKNOWN_VENDOR = 0,
+        VENDOR_AMD = 1,
+        VENDOR_INTEL = 2,
+        VENDOR_NVIDIA = 3;
     public native int vendorID();
     // FIXIT
     // dev.isAMD() doesn't work for OpenCL CPU devices from AMD OpenCL platform.
@@ -17848,7 +17848,7 @@ capability can always be compiled to binary code of greater or equal compute cap
     }
 
     /** enum cv::ocl::KernelArg:: */
-    public static final int LOCAL= 1, READ_ONLY= 2, WRITE_ONLY= 4, READ_WRITE= 6, CONSTANT= 8, PTR_ONLY = 16, NO_SIZE= 256;
+    public static final int LOCAL = 1, READ_ONLY = 2, WRITE_ONLY = 4, READ_WRITE = 6, CONSTANT = 8, PTR_ONLY = 16, NO_SIZE = 256;
     public KernelArg(int _flags, UMat _m, int wscale/*=1*/, int iwscale/*=1*/, @Const Pointer _obj/*=0*/, @Cast("size_t") long _sz/*=0*/) { super((Pointer)null); allocate(_flags, _m, wscale, iwscale, _obj, _sz); }
     private native void allocate(int _flags, UMat _m, int wscale/*=1*/, int iwscale/*=1*/, @Const Pointer _obj/*=0*/, @Cast("size_t") long _sz/*=0*/);
     public KernelArg(int _flags, UMat _m) { super((Pointer)null); allocate(_flags, _m); }
@@ -18203,7 +18203,7 @@ public static final int
     OCL_VECTOR_MAX = 1,
 
     // default strategy
-    OCL_VECTOR_DEFAULT =  OCL_VECTOR_OWN;
+    OCL_VECTOR_DEFAULT = OCL_VECTOR_OWN;
 
 @Namespace("cv::ocl") public static native int predictOptimalVectorWidth(@ByVal Mat src1, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src2, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src3,
                                          @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src4, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src5, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat src6,
@@ -18684,8 +18684,8 @@ may or may not be in the same class.
  *  \{ */
 
 /** enum cv:: */
-public static final int ACCESS_READ= 1<<24, ACCESS_WRITE= 1<<25,
-    ACCESS_RW= 3<<24, ACCESS_MASK= ACCESS_RW, ACCESS_FAST= 1<<26;
+public static final int ACCESS_READ = 1<<24, ACCESS_WRITE = 1<<25,
+    ACCESS_RW = 3<<24, ACCESS_MASK = ACCESS_RW, ACCESS_FAST = 1<<26;
 
 //////////////////////// Input/Output Array Arguments /////////////////////////////////
 
@@ -18804,11 +18804,11 @@ public static final int
     USAGE_DEFAULT = 0,
 
     // buffer allocation policy is platform and usage specific
-    USAGE_ALLOCATE_HOST_MEMORY =  1 << 0,
-    USAGE_ALLOCATE_DEVICE_MEMORY =  1 << 1,
-    USAGE_ALLOCATE_SHARED_MEMORY =  1 << 2, // It is not equal to: USAGE_ALLOCATE_HOST_MEMORY | USAGE_ALLOCATE_DEVICE_MEMORY
+    USAGE_ALLOCATE_HOST_MEMORY = 1 << 0,
+    USAGE_ALLOCATE_DEVICE_MEMORY = 1 << 1,
+    USAGE_ALLOCATE_SHARED_MEMORY = 1 << 2, // It is not equal to: USAGE_ALLOCATE_HOST_MEMORY | USAGE_ALLOCATE_DEVICE_MEMORY
 
-    __UMAT_USAGE_FLAGS_32BIT =  0x7fffffff; // Binary compatibility hint
+    __UMAT_USAGE_FLAGS_32BIT = 0x7fffffff; // Binary compatibility hint
 
 /** \brief  Custom array allocator
 */
@@ -18877,10 +18877,10 @@ public static final int
     public UMatData(Pointer p) { super(p); }
 
     /** enum cv::UMatData:: */
-    public static final int COPY_ON_MAP= 1, HOST_COPY_OBSOLETE= 2,
-        DEVICE_COPY_OBSOLETE= 4, TEMP_UMAT= 8, TEMP_COPIED_UMAT= 24,
-        USER_ALLOCATED= 32, DEVICE_MEM_MAPPED= 64,
-        ASYNC_CLEANUP= 128;
+    public static final int COPY_ON_MAP = 1, HOST_COPY_OBSOLETE = 2,
+        DEVICE_COPY_OBSOLETE = 4, TEMP_UMAT = 8, TEMP_COPIED_UMAT = 24,
+        USER_ALLOCATED = 32, DEVICE_MEM_MAPPED = 64,
+        ASYNC_CLEANUP = 128;
     public UMatData(@Const MatAllocator allocator) { super((Pointer)null); allocate(allocator); }
     private native void allocate(@Const MatAllocator allocator);
 
@@ -20513,9 +20513,9 @@ including std::sort().
 // #endif
 
     /** enum cv::Mat:: */
-    public static final int MAGIC_VAL  =  0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG =  CV_MAT_CONT_FLAG, SUBMATRIX_FLAG =  CV_SUBMAT_FLAG;
+    public static final int MAGIC_VAL  = 0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG = CV_MAT_CONT_FLAG, SUBMATRIX_FLAG = CV_SUBMAT_FLAG;
     /** enum cv::Mat:: */
-    public static final int MAGIC_MASK =  0xFFFF0000, TYPE_MASK =  0x00000FFF, DEPTH_MASK = 7;
+    public static final int MAGIC_MASK = 0xFFFF0000, TYPE_MASK = 0x00000FFF, DEPTH_MASK = 7;
 
     /** includes several bit-fields:
          - the magic signature
@@ -20872,9 +20872,9 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     public native void ndoffset(@Cast("size_t*") SizeTPointer ofs);
 
     /** enum cv::UMat:: */
-    public static final int MAGIC_VAL  =  0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG =  CV_MAT_CONT_FLAG, SUBMATRIX_FLAG =  CV_SUBMAT_FLAG;
+    public static final int MAGIC_VAL  = 0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG = CV_MAT_CONT_FLAG, SUBMATRIX_FLAG = CV_SUBMAT_FLAG;
     /** enum cv::UMat:: */
-    public static final int MAGIC_MASK =  0xFFFF0000, TYPE_MASK =  0x00000FFF, DEPTH_MASK = 7;
+    public static final int MAGIC_MASK = 0xFFFF0000, TYPE_MASK = 0x00000FFF, DEPTH_MASK = 7;
 
     /** includes several bit-fields:
          - the magic signature
@@ -21002,7 +21002,7 @@ Elements can be accessed using the following methods:
 
 
     /** enum cv::SparseMat:: */
-    public static final int MAGIC_VAL= 0x42FD0000, MAX_DIM= 32, HASH_SCALE= 0x5bd1e995, HASH_BIT= 0x80000000;
+    public static final int MAGIC_VAL = 0x42FD0000, MAX_DIM = 32, HASH_SCALE = 0x5bd1e995, HASH_BIT = 0x80000000;
 
     /** the sparse matrix header */
     @NoOffset public static class Hdr extends Pointer {
@@ -22244,20 +22244,20 @@ reading data to/from a file.
  *  returned by FileStorage::release) */
         MEMORY      = 4,
         /** mask for format flags */
-        FORMAT_MASK =  (7<<3),
+        FORMAT_MASK = (7<<3),
         /** flag, auto format */
         FORMAT_AUTO = 0,
         /** flag, XML format */
-        FORMAT_XML  =  (1<<3),
+        FORMAT_XML  = (1<<3),
         /** flag, YAML format */
-        FORMAT_YAML =  (2<<3),
+        FORMAT_YAML = (2<<3),
         /** flag, JSON format */
-        FORMAT_JSON =  (3<<3),
+        FORMAT_JSON = (3<<3),
 
         /** flag, write rawdata in Base64 by default. (consider using WRITE_BASE64) */
         BASE64      = 64,
         /** flag, enable both WRITE and BASE64 */
-        WRITE_BASE64 =  BASE64 | WRITE;
+        WRITE_BASE64 = BASE64 | WRITE;
     /** enum cv::FileStorage:: */
     public static final int
         UNDEFINED      = 0,
@@ -22475,11 +22475,11 @@ storage is opened for writing, no data is stored in memory after it is written.
         /** floating-point number */
         REAL      = 2,
         /** synonym or REAL */
-        FLOAT     =  REAL,
+        FLOAT     = REAL,
         /** text string in UTF-8 encoding */
         STR       = 3,
         /** synonym for STR */
-        STRING    =  STR,
+        STRING    = STR,
         /** integer of size size_t. Typically used for storing complex dynamic structures where some elements reference the others */
         REF       = 4,
         /** sequence */
