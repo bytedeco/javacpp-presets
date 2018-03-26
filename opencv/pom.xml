@@ -69,10 +69,30 @@
             <phase>package</phase>
             <configuration>
               <excludes>
+                <exclude>${javacpp.platform.library.path}/lib/*.so*</exclude>
+                <exclude>${javacpp.platform.library.path}/sdk/**/*.so*</exclude>
+                <exclude>${javacpp.platform.library.path}/sdk/native/jni/include/**</exclude>
+                <exclude>${javacpp.platform.library.path}/**/*cascade*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.obj</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.a</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.dylib</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*cascade*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/sdk/**/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/sdk/**/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/sdk/**/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x86/**/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x86/**/*.dll</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x86/**/*.exe</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x64/**/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x64/**/*.dll</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x64/**/*.exe</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/**/*cascade*</exclude>
               </excludes>
             </configuration>
           </execution>

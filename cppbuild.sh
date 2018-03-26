@@ -143,6 +143,14 @@ function download {
     ln -sf "$TOP_PATH/downloads/$2" "$2"
 }
 
+function sedinplace {
+    if [[ "$KERNEL" == "darwin" ]]; then
+        sed -i '' "$@"
+    else
+        sed -i "$@"
+    fi
+}
+
 if [[ -z ${PROJECTS:-} ]]; then
     PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl openblas arpack-ng cminpack fftw gsl llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow ale liquidfun skia systems)
 fi
