@@ -105,9 +105,9 @@ public class fftw3 extends org.bytedeco.javacpp.presets.fftw3 {
 
 /** enum fftw_r2r_kind_do_not_use_me */
 public static final int
-     FFTW_R2HC= 0, FFTW_HC2R= 1, FFTW_DHT= 2,
-     FFTW_REDFT00= 3, FFTW_REDFT01= 4, FFTW_REDFT10= 5, FFTW_REDFT11= 6,
-     FFTW_RODFT00= 7, FFTW_RODFT01= 8, FFTW_RODFT10= 9, FFTW_RODFT11= 10;
+     FFTW_R2HC = 0, FFTW_HC2R = 1, FFTW_DHT = 2,
+     FFTW_REDFT00 = 3, FFTW_REDFT01 = 4, FFTW_REDFT10 = 5, FFTW_REDFT11 = 6,
+     FFTW_RODFT00 = 7, FFTW_RODFT01 = 8, FFTW_RODFT10 = 9, FFTW_RODFT11 = 10;
 
 @Name("fftw_iodim_do_not_use_me") public static class fftw_iodim extends Pointer {
     static { Loader.load(); }
@@ -513,389 +513,484 @@ public static class fftw_read_char_func_do_not_use_me extends FunctionPointer {
 
 public static native void fftw_execute(fftw_plan p);
 
-public static native fftw_plan fftw_plan_dft(int rank, @Const IntPointer n, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft(int rank, @Const IntBuffer n, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft(int rank, @Const int[] n, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft(int rank, @Const IntPointer n, 
+                       @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft(int rank, @Const IntBuffer n, 
+                       @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft(int rank, @Const int[] n, 
+                       @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_dft_1d(int n, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out, int sign,
+public static native fftw_plan fftw_plan_dft_1d(int n,  @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, int sign,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_1d(int n, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, int sign,
+public static native fftw_plan fftw_plan_dft_1d(int n,  @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, int sign,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_1d(int n, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out, int sign,
+public static native fftw_plan fftw_plan_dft_1d(int n,  @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out, int sign,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_2d(int n0, int n1, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_2d(int n0, int n1, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_2d(int n0, int n1, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_3d(int n0, int n1, int n2, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_3d(int n0, int n1, int n2, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_3d(int n0, int n1, int n2, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_2d(int n0, int n1, 
+                          @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_2d(int n0, int n1, 
+                          @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_2d(int n0, int n1, 
+                          @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_3d(int n0, int n1, int n2, 
+                          @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_3d(int n0, int n1, int n2, 
+                          @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_3d(int n0, int n1, int n2, 
+                          @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_many_dft(int rank, @Const IntPointer n,
-                            int howmany, @Cast("fftw_complex*") DoublePointer in, @Const IntPointer inembed,
-                            int istride, int idist, @Cast("fftw_complex*") DoublePointer out, @Const IntPointer onembed,
+                            int howmany, 
+                            @Cast("fftw_complex*") DoublePointer in, @Const IntPointer inembed,
+                            int istride, int idist, 
+                            @Cast("fftw_complex*") DoublePointer out, @Const IntPointer onembed,
                             int ostride, int odist,
                             int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_dft(int rank, @Const IntBuffer n,
-                            int howmany, @Cast("fftw_complex*") DoubleBuffer in, @Const IntBuffer inembed,
-                            int istride, int idist, @Cast("fftw_complex*") DoubleBuffer out, @Const IntBuffer onembed,
+                            int howmany, 
+                            @Cast("fftw_complex*") DoubleBuffer in, @Const IntBuffer inembed,
+                            int istride, int idist, 
+                            @Cast("fftw_complex*") DoubleBuffer out, @Const IntBuffer onembed,
                             int ostride, int odist,
                             int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_dft(int rank, @Const int[] n,
-                            int howmany, @Cast("fftw_complex*") double[] in, @Const int[] inembed,
-                            int istride, int idist, @Cast("fftw_complex*") double[] out, @Const int[] onembed,
+                            int howmany, 
+                            @Cast("fftw_complex*") double[] in, @Const int[] inembed,
+                            int istride, int idist, 
+                            @Cast("fftw_complex*") double[] out, @Const int[] onembed,
                             int ostride, int odist,
                             int sign, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru_dft(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out,
+                            @Const fftw_iodim howmany_dims, 
+                            @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out,
                             int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_dft(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out,
+                            @Const fftw_iodim howmany_dims, 
+                            @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out,
                             int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_dft(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out,
+                            @Const fftw_iodim howmany_dims, 
+                            @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out,
                             int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft(int rank, @Const fftw_iodim dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim howmany_dims, DoublePointer ri, DoublePointer ii, DoublePointer ro, DoublePointer io,
+                                  @Const fftw_iodim howmany_dims, 
+                                  DoublePointer ri,  DoublePointer ii,  DoublePointer ro,  DoublePointer io,
                                   @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft(int rank, @Const fftw_iodim dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim howmany_dims, DoubleBuffer ri, DoubleBuffer ii, DoubleBuffer ro, DoubleBuffer io,
+                                  @Const fftw_iodim howmany_dims, 
+                                  DoubleBuffer ri,  DoubleBuffer ii,  DoubleBuffer ro,  DoubleBuffer io,
                                   @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft(int rank, @Const fftw_iodim dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim howmany_dims, double[] ri, double[] ii, double[] ro, double[] io,
+                                  @Const fftw_iodim howmany_dims, 
+                                  double[] ri,  double[] ii,  double[] ro,  double[] io,
                                   @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru64_dft(int rank,
                               @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out,
                               int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_dft(int rank,
                               @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out,
                               int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_dft(int rank,
                               @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out,
                               int sign, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft(int rank,
                                     @Const fftw_iodim64 dims,
                                     int howmany_rank,
-                                    @Const fftw_iodim64 howmany_dims, DoublePointer ri, DoublePointer ii, DoublePointer ro, DoublePointer io,
+                                    @Const fftw_iodim64 howmany_dims, 
+                                    DoublePointer ri,  DoublePointer ii,  DoublePointer ro,  DoublePointer io,
                                     @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft(int rank,
                                     @Const fftw_iodim64 dims,
                                     int howmany_rank,
-                                    @Const fftw_iodim64 howmany_dims, DoubleBuffer ri, DoubleBuffer ii, DoubleBuffer ro, DoubleBuffer io,
+                                    @Const fftw_iodim64 howmany_dims, 
+                                    DoubleBuffer ri,  DoubleBuffer ii,  DoubleBuffer ro,  DoubleBuffer io,
                                     @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft(int rank,
                                     @Const fftw_iodim64 dims,
                                     int howmany_rank,
-                                    @Const fftw_iodim64 howmany_dims, double[] ri, double[] ii, double[] ro, double[] io,
+                                    @Const fftw_iodim64 howmany_dims, 
+                                    double[] ri,  double[] ii,  double[] ro,  double[] io,
                                     @Cast("unsigned") int flags);
 
-public static native void fftw_execute_dft(fftw_plan p, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out);
-public static native void fftw_execute_dft(fftw_plan p, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out);
-public static native void fftw_execute_dft(fftw_plan p, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out);
+public static native void fftw_execute_dft(fftw_plan p,  @Cast("fftw_complex*") DoublePointer in,  @Cast("fftw_complex*") DoublePointer out);
+public static native void fftw_execute_dft(fftw_plan p,  @Cast("fftw_complex*") DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out);
+public static native void fftw_execute_dft(fftw_plan p,  @Cast("fftw_complex*") double[] in,  @Cast("fftw_complex*") double[] out);
 
-public static native void fftw_execute_split_dft(fftw_plan p, DoublePointer ri, DoublePointer ii, DoublePointer ro, DoublePointer io);
-public static native void fftw_execute_split_dft(fftw_plan p, DoubleBuffer ri, DoubleBuffer ii, DoubleBuffer ro, DoubleBuffer io);
-public static native void fftw_execute_split_dft(fftw_plan p, double[] ri, double[] ii, double[] ro, double[] io);
+public static native void fftw_execute_split_dft(fftw_plan p,  DoublePointer ri,  DoublePointer ii, 
+                                      DoublePointer ro,  DoublePointer io);
+public static native void fftw_execute_split_dft(fftw_plan p,  DoubleBuffer ri,  DoubleBuffer ii, 
+                                      DoubleBuffer ro,  DoubleBuffer io);
+public static native void fftw_execute_split_dft(fftw_plan p,  double[] ri,  double[] ii, 
+                                      double[] ro,  double[] io);
 
 public static native fftw_plan fftw_plan_many_dft_r2c(int rank, @Const IntPointer n,
-                                int howmany, DoublePointer in, @Const IntPointer inembed,
-                                int istride, int idist, @Cast("fftw_complex*") DoublePointer out, @Const IntPointer onembed,
+                                int howmany, 
+                                DoublePointer in, @Const IntPointer inembed,
+                                int istride, int idist, 
+                                @Cast("fftw_complex*") DoublePointer out, @Const IntPointer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_dft_r2c(int rank, @Const IntBuffer n,
-                                int howmany, DoubleBuffer in, @Const IntBuffer inembed,
-                                int istride, int idist, @Cast("fftw_complex*") DoubleBuffer out, @Const IntBuffer onembed,
+                                int howmany, 
+                                DoubleBuffer in, @Const IntBuffer inembed,
+                                int istride, int idist, 
+                                @Cast("fftw_complex*") DoubleBuffer out, @Const IntBuffer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_dft_r2c(int rank, @Const int[] n,
-                                int howmany, double[] in, @Const int[] inembed,
-                                int istride, int idist, @Cast("fftw_complex*") double[] out, @Const int[] onembed,
+                                int howmany, 
+                                double[] in, @Const int[] inembed,
+                                int istride, int idist, 
+                                @Cast("fftw_complex*") double[] out, @Const int[] onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_dft_r2c(int rank, @Const IntPointer n, DoublePointer in, @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_r2c(int rank, @Const IntBuffer n, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_r2c(int rank, @Const int[] n, double[] in, @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_r2c(int rank, @Const IntPointer n, 
+                           DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_r2c(int rank, @Const IntBuffer n, 
+                           DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_r2c(int rank, @Const int[] n, 
+                           double[] in,  @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_dft_r2c_1d(int n, DoublePointer in, @Cast("fftw_complex*") DoublePointer out,@Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_r2c_1d(int n, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out,@Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_r2c_1d(int n, double[] in, @Cast("fftw_complex*") double[] out,@Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_dft_r2c_2d(int n0, int n1, DoublePointer in, @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_r2c_2d(int n0, int n1, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_r2c_2d(int n0, int n1, double[] in, @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_r2c_2d(int n0, int n1, 
+                              DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_r2c_2d(int n0, int n1, 
+                              DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_r2c_2d(int n0, int n1, 
+                              double[] in,  @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_dft_r2c_3d(int n0, int n1,
-                              int n2, DoublePointer in, @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              DoublePointer in,  @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_r2c_3d(int n0, int n1,
-                              int n2, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_r2c_3d(int n0, int n1,
-                              int n2, double[] in, @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
+                              int n2, 
+                              double[] in,  @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_many_dft_c2r(int rank, @Const IntPointer n,
-                                int howmany, @Cast("fftw_complex*") DoublePointer in, @Const IntPointer inembed,
-                                int istride, int idist, DoublePointer out, @Const IntPointer onembed,
+                                int howmany, 
+                                @Cast("fftw_complex*") DoublePointer in, @Const IntPointer inembed,
+                                int istride, int idist, 
+                                DoublePointer out, @Const IntPointer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_dft_c2r(int rank, @Const IntBuffer n,
-                                int howmany, @Cast("fftw_complex*") DoubleBuffer in, @Const IntBuffer inembed,
-                                int istride, int idist, DoubleBuffer out, @Const IntBuffer onembed,
+                                int howmany, 
+                                @Cast("fftw_complex*") DoubleBuffer in, @Const IntBuffer inembed,
+                                int istride, int idist, 
+                                DoubleBuffer out, @Const IntBuffer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_dft_c2r(int rank, @Const int[] n,
-                                int howmany, @Cast("fftw_complex*") double[] in, @Const int[] inembed,
-                                int istride, int idist, double[] out, @Const int[] onembed,
+                                int howmany, 
+                                @Cast("fftw_complex*") double[] in, @Const int[] inembed,
+                                int istride, int idist, 
+                                double[] out, @Const int[] onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_dft_c2r(int rank, @Const IntPointer n, @Cast("fftw_complex*") DoublePointer in, DoublePointer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_c2r(int rank, @Const IntBuffer n, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_c2r(int rank, @Const int[] n, @Cast("fftw_complex*") double[] in, double[] out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_c2r(int rank, @Const IntPointer n, 
+                           @Cast("fftw_complex*") DoublePointer in,  DoublePointer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_c2r(int rank, @Const IntBuffer n, 
+                           @Cast("fftw_complex*") DoubleBuffer in,  DoubleBuffer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_c2r(int rank, @Const int[] n, 
+                           @Cast("fftw_complex*") double[] in,  double[] out, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_dft_c2r_1d(int n, @Cast("fftw_complex*") DoublePointer in, DoublePointer out,@Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_c2r_1d(int n, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out,@Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_c2r_1d(int n, @Cast("fftw_complex*") double[] in, double[] out,@Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_dft_c2r_2d(int n0, int n1, @Cast("fftw_complex*") DoublePointer in, DoublePointer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_c2r_2d(int n0, int n1, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_dft_c2r_2d(int n0, int n1, @Cast("fftw_complex*") double[] in, double[] out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_c2r_2d(int n0, int n1, 
+                              @Cast("fftw_complex*") DoublePointer in,  DoublePointer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_c2r_2d(int n0, int n1, 
+                              @Cast("fftw_complex*") DoubleBuffer in,  DoubleBuffer out, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_dft_c2r_2d(int n0, int n1, 
+                              @Cast("fftw_complex*") double[] in,  double[] out, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_dft_c2r_3d(int n0, int n1,
-                              int n2, @Cast("fftw_complex*") DoublePointer in, DoublePointer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              @Cast("fftw_complex*") DoublePointer in,  DoublePointer out, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_c2r_3d(int n0, int n1,
-                              int n2, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              @Cast("fftw_complex*") DoubleBuffer in,  DoubleBuffer out, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_dft_c2r_3d(int n0, int n1,
-                              int n2, @Cast("fftw_complex*") double[] in, double[] out, @Cast("unsigned") int flags);
+                              int n2, 
+                              @Cast("fftw_complex*") double[] in,  double[] out, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru_dft_r2c(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, DoublePointer in, @Cast("fftw_complex*") DoublePointer out,
+                                @Const fftw_iodim howmany_dims, 
+                                DoublePointer in,  @Cast("fftw_complex*") DoublePointer out,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_dft_r2c(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out,
+                                @Const fftw_iodim howmany_dims, 
+                                DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_dft_r2c(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, double[] in, @Cast("fftw_complex*") double[] out,
+                                @Const fftw_iodim howmany_dims, 
+                                double[] in,  @Cast("fftw_complex*") double[] out,
                                 @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru_dft_c2r(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, @Cast("fftw_complex*") DoublePointer in, DoublePointer out,
+                                @Const fftw_iodim howmany_dims, 
+                                @Cast("fftw_complex*") DoublePointer in,  DoublePointer out,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_dft_c2r(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out,
+                                @Const fftw_iodim howmany_dims, 
+                                @Cast("fftw_complex*") DoubleBuffer in,  DoubleBuffer out,
                                 @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_dft_c2r(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, @Cast("fftw_complex*") double[] in, double[] out,
+                                @Const fftw_iodim howmany_dims, 
+                                @Cast("fftw_complex*") double[] in,  double[] out,
                                 @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru_split_dft_r2c(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, DoublePointer in, DoublePointer ro, DoublePointer io,
+                                      @Const fftw_iodim howmany_dims, 
+                                      DoublePointer in,  DoublePointer ro,  DoublePointer io,
                                       @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft_r2c(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, DoubleBuffer in, DoubleBuffer ro, DoubleBuffer io,
+                                      @Const fftw_iodim howmany_dims, 
+                                      DoubleBuffer in,  DoubleBuffer ro,  DoubleBuffer io,
                                       @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft_r2c(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, double[] in, double[] ro, double[] io,
+                                      @Const fftw_iodim howmany_dims, 
+                                      double[] in,  double[] ro,  double[] io,
                                       @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru_split_dft_c2r(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, DoublePointer ri, DoublePointer ii, DoublePointer out,
+                                      @Const fftw_iodim howmany_dims, 
+                                      DoublePointer ri,  DoublePointer ii,  DoublePointer out,
                                       @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft_c2r(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, DoubleBuffer ri, DoubleBuffer ii, DoubleBuffer out,
+                                      @Const fftw_iodim howmany_dims, 
+                                      DoubleBuffer ri,  DoubleBuffer ii,  DoubleBuffer out,
                                       @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_split_dft_c2r(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, double[] ri, double[] ii, double[] out,
+                                      @Const fftw_iodim howmany_dims, 
+                                      double[] ri,  double[] ii,  double[] out,
                                       @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru64_dft_r2c(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, DoublePointer in, @Cast("fftw_complex*") DoublePointer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  DoublePointer in,  @Cast("fftw_complex*") DoublePointer out,
                                   @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_dft_r2c(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out,
                                   @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_dft_r2c(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, double[] in, @Cast("fftw_complex*") double[] out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  double[] in,  @Cast("fftw_complex*") double[] out,
                                   @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru64_dft_c2r(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, @Cast("fftw_complex*") DoublePointer in, DoublePointer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  @Cast("fftw_complex*") DoublePointer in,  DoublePointer out,
                                   @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_dft_c2r(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  @Cast("fftw_complex*") DoubleBuffer in,  DoubleBuffer out,
                                   @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_dft_c2r(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, @Cast("fftw_complex*") double[] in, double[] out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  @Cast("fftw_complex*") double[] in,  double[] out,
                                   @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru64_split_dft_r2c(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, DoublePointer in, DoublePointer ro, DoublePointer io,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        DoublePointer in,  DoublePointer ro,  DoublePointer io,
                                         @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft_r2c(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, DoubleBuffer in, DoubleBuffer ro, DoubleBuffer io,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        DoubleBuffer in,  DoubleBuffer ro,  DoubleBuffer io,
                                         @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft_r2c(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, double[] in, double[] ro, double[] io,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        double[] in,  double[] ro,  double[] io,
                                         @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft_c2r(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, DoublePointer ri, DoublePointer ii, DoublePointer out,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        DoublePointer ri,  DoublePointer ii,  DoublePointer out,
                                         @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft_c2r(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, DoubleBuffer ri, DoubleBuffer ii, DoubleBuffer out,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        DoubleBuffer ri,  DoubleBuffer ii,  DoubleBuffer out,
                                         @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_split_dft_c2r(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, double[] ri, double[] ii, double[] out,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        double[] ri,  double[] ii,  double[] out,
                                         @Cast("unsigned") int flags);
 
-public static native void fftw_execute_dft_r2c(fftw_plan p, DoublePointer in, @Cast("fftw_complex*") DoublePointer out);
-public static native void fftw_execute_dft_r2c(fftw_plan p, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out);
-public static native void fftw_execute_dft_r2c(fftw_plan p, double[] in, @Cast("fftw_complex*") double[] out);
+public static native void fftw_execute_dft_r2c(fftw_plan p,  DoublePointer in,  @Cast("fftw_complex*") DoublePointer out);
+public static native void fftw_execute_dft_r2c(fftw_plan p,  DoubleBuffer in,  @Cast("fftw_complex*") DoubleBuffer out);
+public static native void fftw_execute_dft_r2c(fftw_plan p,  double[] in,  @Cast("fftw_complex*") double[] out);
 
-public static native void fftw_execute_dft_c2r(fftw_plan p, @Cast("fftw_complex*") DoublePointer in, DoublePointer out);
-public static native void fftw_execute_dft_c2r(fftw_plan p, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out);
-public static native void fftw_execute_dft_c2r(fftw_plan p, @Cast("fftw_complex*") double[] in, double[] out);
+public static native void fftw_execute_dft_c2r(fftw_plan p,  @Cast("fftw_complex*") DoublePointer in,  DoublePointer out);
+public static native void fftw_execute_dft_c2r(fftw_plan p,  @Cast("fftw_complex*") DoubleBuffer in,  DoubleBuffer out);
+public static native void fftw_execute_dft_c2r(fftw_plan p,  @Cast("fftw_complex*") double[] in,  double[] out);
 
-public static native void fftw_execute_split_dft_r2c(fftw_plan p, DoublePointer in, DoublePointer ro, DoublePointer io);
-public static native void fftw_execute_split_dft_r2c(fftw_plan p, DoubleBuffer in, DoubleBuffer ro, DoubleBuffer io);
-public static native void fftw_execute_split_dft_r2c(fftw_plan p, double[] in, double[] ro, double[] io);
+public static native void fftw_execute_split_dft_r2c(fftw_plan p, 
+                                    DoublePointer in,  DoublePointer ro,  DoublePointer io);
+public static native void fftw_execute_split_dft_r2c(fftw_plan p, 
+                                    DoubleBuffer in,  DoubleBuffer ro,  DoubleBuffer io);
+public static native void fftw_execute_split_dft_r2c(fftw_plan p, 
+                                    double[] in,  double[] ro,  double[] io);
 
-public static native void fftw_execute_split_dft_c2r(fftw_plan p, DoublePointer ri, DoublePointer ii, DoublePointer out);
-public static native void fftw_execute_split_dft_c2r(fftw_plan p, DoubleBuffer ri, DoubleBuffer ii, DoubleBuffer out);
-public static native void fftw_execute_split_dft_c2r(fftw_plan p, double[] ri, double[] ii, double[] out);
+public static native void fftw_execute_split_dft_c2r(fftw_plan p, 
+                                    DoublePointer ri,  DoublePointer ii,  DoublePointer out);
+public static native void fftw_execute_split_dft_c2r(fftw_plan p, 
+                                    DoubleBuffer ri,  DoubleBuffer ii,  DoubleBuffer out);
+public static native void fftw_execute_split_dft_c2r(fftw_plan p, 
+                                    double[] ri,  double[] ii,  double[] out);
 
 public static native fftw_plan fftw_plan_many_r2r(int rank, @Const IntPointer n,
-                            int howmany, DoublePointer in, @Const IntPointer inembed,
-                            int istride, int idist, DoublePointer out, @Const IntPointer onembed,
+                            int howmany, 
+                            DoublePointer in, @Const IntPointer inembed,
+                            int istride, int idist, 
+                            DoublePointer out, @Const IntPointer onembed,
                             int ostride, int odist,
                             @Cast("const fftw_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_r2r(int rank, @Const IntBuffer n,
-                            int howmany, DoubleBuffer in, @Const IntBuffer inembed,
-                            int istride, int idist, DoubleBuffer out, @Const IntBuffer onembed,
+                            int howmany, 
+                            DoubleBuffer in, @Const IntBuffer inembed,
+                            int istride, int idist, 
+                            DoubleBuffer out, @Const IntBuffer onembed,
                             int ostride, int odist,
                             @Cast("const fftw_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_many_r2r(int rank, @Const int[] n,
-                            int howmany, double[] in, @Const int[] inembed,
-                            int istride, int idist, double[] out, @Const int[] onembed,
+                            int howmany, 
+                            double[] in, @Const int[] inembed,
+                            int istride, int idist, 
+                            double[] out, @Const int[] onembed,
                             int ostride, int odist,
                             @Cast("const fftw_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_r2r(int rank, @Const IntPointer n, DoublePointer in, DoublePointer out,
+public static native fftw_plan fftw_plan_r2r(int rank, @Const IntPointer n,  DoublePointer in,  DoublePointer out,
                        @Cast("const fftw_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r(int rank, @Const IntBuffer n, DoubleBuffer in, DoubleBuffer out,
+public static native fftw_plan fftw_plan_r2r(int rank, @Const IntBuffer n,  DoubleBuffer in,  DoubleBuffer out,
                        @Cast("const fftw_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r(int rank, @Const int[] n, double[] in, double[] out,
+public static native fftw_plan fftw_plan_r2r(int rank, @Const int[] n,  double[] in,  double[] out,
                        @Cast("const fftw_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_r2r_1d(int n, DoublePointer in, DoublePointer out,
-@Cast("fftw_r2r_kind") int kind, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r_1d(int n, DoubleBuffer in, DoubleBuffer out,
-@Cast("fftw_r2r_kind") int kind, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r_1d(int n, double[] in, double[] out,
-@Cast("fftw_r2r_kind") int kind, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_r2r_1d(int n,  DoublePointer in,  DoublePointer out,
+                          @Cast("fftw_r2r_kind") int kind, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_r2r_1d(int n,  DoubleBuffer in,  DoubleBuffer out,
+                          @Cast("fftw_r2r_kind") int kind, @Cast("unsigned") int flags);
+public static native fftw_plan fftw_plan_r2r_1d(int n,  double[] in,  double[] out,
+                          @Cast("fftw_r2r_kind") int kind, @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_r2r_2d(int n0, int n1, DoublePointer in, DoublePointer out,
-@Cast("fftw_r2r_kind") int kind0,
-@Cast("fftw_r2r_kind") int kind1,
+public static native fftw_plan fftw_plan_r2r_2d(int n0, int n1,  DoublePointer in,  DoublePointer out,
+                          @Cast("fftw_r2r_kind") int kind0, @Cast("fftw_r2r_kind") int kind1,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r_2d(int n0, int n1, DoubleBuffer in, DoubleBuffer out,
-@Cast("fftw_r2r_kind") int kind0,
-@Cast("fftw_r2r_kind") int kind1,
+public static native fftw_plan fftw_plan_r2r_2d(int n0, int n1,  DoubleBuffer in,  DoubleBuffer out,
+                          @Cast("fftw_r2r_kind") int kind0, @Cast("fftw_r2r_kind") int kind1,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r_2d(int n0, int n1, double[] in, double[] out,
-@Cast("fftw_r2r_kind") int kind0,
-@Cast("fftw_r2r_kind") int kind1,
+public static native fftw_plan fftw_plan_r2r_2d(int n0, int n1,  double[] in,  double[] out,
+                          @Cast("fftw_r2r_kind") int kind0, @Cast("fftw_r2r_kind") int kind1,
                           @Cast("unsigned") int flags);
 
-public static native fftw_plan fftw_plan_r2r_3d(int n0, int n1, int n2, DoublePointer in, DoublePointer out,
-@Cast("fftw_r2r_kind") int kind0,
-@Cast("fftw_r2r_kind") int kind1,
-@Cast("fftw_r2r_kind") int kind2,
+public static native fftw_plan fftw_plan_r2r_3d(int n0, int n1, int n2, 
+                          DoublePointer in,  DoublePointer out, @Cast("fftw_r2r_kind") int kind0,
+                          @Cast("fftw_r2r_kind") int kind1, @Cast("fftw_r2r_kind") int kind2,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r_3d(int n0, int n1, int n2, DoubleBuffer in, DoubleBuffer out,
-@Cast("fftw_r2r_kind") int kind0,
-@Cast("fftw_r2r_kind") int kind1,
-@Cast("fftw_r2r_kind") int kind2,
+public static native fftw_plan fftw_plan_r2r_3d(int n0, int n1, int n2, 
+                          DoubleBuffer in,  DoubleBuffer out, @Cast("fftw_r2r_kind") int kind0,
+                          @Cast("fftw_r2r_kind") int kind1, @Cast("fftw_r2r_kind") int kind2,
                           @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_r2r_3d(int n0, int n1, int n2, double[] in, double[] out,
-@Cast("fftw_r2r_kind") int kind0,
-@Cast("fftw_r2r_kind") int kind1,
-@Cast("fftw_r2r_kind") int kind2,
+public static native fftw_plan fftw_plan_r2r_3d(int n0, int n1, int n2, 
+                          double[] in,  double[] out, @Cast("fftw_r2r_kind") int kind0,
+                          @Cast("fftw_r2r_kind") int kind1, @Cast("fftw_r2r_kind") int kind2,
                           @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru_r2r(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, DoublePointer in, DoublePointer out,
+                            @Const fftw_iodim howmany_dims, 
+                            DoublePointer in,  DoublePointer out,
                             @Cast("const fftw_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_r2r(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, DoubleBuffer in, DoubleBuffer out,
+                            @Const fftw_iodim howmany_dims, 
+                            DoubleBuffer in,  DoubleBuffer out,
                             @Cast("const fftw_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru_r2r(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, double[] in, double[] out,
+                            @Const fftw_iodim howmany_dims, 
+                            double[] in,  double[] out,
                             @Cast("const fftw_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
 public static native fftw_plan fftw_plan_guru64_r2r(int rank, @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, DoublePointer in, DoublePointer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              DoublePointer in,  DoublePointer out,
                               @Cast("const fftw_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_r2r(int rank, @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, DoubleBuffer in, DoubleBuffer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              DoubleBuffer in,  DoubleBuffer out,
                               @Cast("const fftw_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
 public static native fftw_plan fftw_plan_guru64_r2r(int rank, @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, double[] in, double[] out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              double[] in,  double[] out,
                               @Cast("const fftw_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
-public static native void fftw_execute_r2r(fftw_plan p, DoublePointer in, DoublePointer out);
-public static native void fftw_execute_r2r(fftw_plan p, DoubleBuffer in, DoubleBuffer out);
-public static native void fftw_execute_r2r(fftw_plan p, double[] in, double[] out);
+public static native void fftw_execute_r2r(fftw_plan p,  DoublePointer in,  DoublePointer out);
+public static native void fftw_execute_r2r(fftw_plan p,  DoubleBuffer in,  DoubleBuffer out);
+public static native void fftw_execute_r2r(fftw_plan p,  double[] in,  double[] out);
 
-public static native void fftw_destroy_plan(
-fftw_plan p);
+public static native void fftw_destroy_plan(fftw_plan p);
 
 public static native void fftw_forget_wisdom();
 public static native void fftw_cleanup();
@@ -917,8 +1012,7 @@ public static native void fftw_export_wisdom_to_file(@Cast("FILE*") Pointer outp
 
 public static native @Cast("char*") BytePointer fftw_export_wisdom_to_string();
 
-public static native void fftw_export_wisdom(
-@Cast("fftw_write_char_func") fftw_write_char_func_do_not_use_me write_char,
+public static native void fftw_export_wisdom(@Cast("fftw_write_char_func") fftw_write_char_func_do_not_use_me write_char,
                                   Pointer data);
 public static native int fftw_import_system_wisdom();
 
@@ -930,8 +1024,7 @@ public static native int fftw_import_wisdom_from_file(@Cast("FILE*") Pointer inp
 public static native int fftw_import_wisdom_from_string(@Cast("const char*") BytePointer input_string);
 public static native int fftw_import_wisdom_from_string(String input_string);
 
-public static native int fftw_import_wisdom(
-@Cast("fftw_read_char_func") fftw_read_char_func_do_not_use_me read_char, Pointer data);
+public static native int fftw_import_wisdom(@Cast("fftw_read_char_func") fftw_read_char_func_do_not_use_me read_char, Pointer data);
 
 public static native void fftw_fprint_plan(fftw_plan p, @Cast("FILE*") Pointer output_file);
 
@@ -976,389 +1069,484 @@ public static native int fftw_alignment_of( double[] p);
 
 public static native void fftwf_execute(fftwf_plan p);
 
-public static native fftwf_plan fftwf_plan_dft(int rank, @Const IntPointer n, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft(int rank, @Const IntBuffer n, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft(int rank, @Const int[] n, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft(int rank, @Const IntPointer n, 
+                       @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft(int rank, @Const IntBuffer n, 
+                       @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft(int rank, @Const int[] n, 
+                       @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_dft_1d(int n, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, int sign,
+public static native fftwf_plan fftwf_plan_dft_1d(int n,  @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, int sign,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_1d(int n, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, int sign,
+public static native fftwf_plan fftwf_plan_dft_1d(int n,  @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, int sign,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_1d(int n, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out, int sign,
+public static native fftwf_plan fftwf_plan_dft_1d(int n,  @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out, int sign,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_2d(int n0, int n1, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_2d(int n0, int n1, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_2d(int n0, int n1, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_3d(int n0, int n1, int n2, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_3d(int n0, int n1, int n2, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_3d(int n0, int n1, int n2, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_2d(int n0, int n1, 
+                          @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_2d(int n0, int n1, 
+                          @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_2d(int n0, int n1, 
+                          @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_3d(int n0, int n1, int n2, 
+                          @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_3d(int n0, int n1, int n2, 
+                          @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_3d(int n0, int n1, int n2, 
+                          @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_many_dft(int rank, @Const IntPointer n,
-                            int howmany, @Cast("fftwf_complex*") FloatPointer in, @Const IntPointer inembed,
-                            int istride, int idist, @Cast("fftwf_complex*") FloatPointer out, @Const IntPointer onembed,
+                            int howmany, 
+                            @Cast("fftwf_complex*") FloatPointer in, @Const IntPointer inembed,
+                            int istride, int idist, 
+                            @Cast("fftwf_complex*") FloatPointer out, @Const IntPointer onembed,
                             int ostride, int odist,
                             int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_dft(int rank, @Const IntBuffer n,
-                            int howmany, @Cast("fftwf_complex*") FloatBuffer in, @Const IntBuffer inembed,
-                            int istride, int idist, @Cast("fftwf_complex*") FloatBuffer out, @Const IntBuffer onembed,
+                            int howmany, 
+                            @Cast("fftwf_complex*") FloatBuffer in, @Const IntBuffer inembed,
+                            int istride, int idist, 
+                            @Cast("fftwf_complex*") FloatBuffer out, @Const IntBuffer onembed,
                             int ostride, int odist,
                             int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_dft(int rank, @Const int[] n,
-                            int howmany, @Cast("fftwf_complex*") float[] in, @Const int[] inembed,
-                            int istride, int idist, @Cast("fftwf_complex*") float[] out, @Const int[] onembed,
+                            int howmany, 
+                            @Cast("fftwf_complex*") float[] in, @Const int[] inembed,
+                            int istride, int idist, 
+                            @Cast("fftwf_complex*") float[] out, @Const int[] onembed,
                             int ostride, int odist,
                             int sign, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru_dft(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out,
+                            @Const fftw_iodim howmany_dims, 
+                            @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out,
                             int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_dft(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out,
+                            @Const fftw_iodim howmany_dims, 
+                            @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out,
                             int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_dft(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out,
+                            @Const fftw_iodim howmany_dims, 
+                            @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out,
                             int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft(int rank, @Const fftw_iodim dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim howmany_dims, FloatPointer ri, FloatPointer ii, FloatPointer ro, FloatPointer io,
+                                  @Const fftw_iodim howmany_dims, 
+                                  FloatPointer ri,  FloatPointer ii,  FloatPointer ro,  FloatPointer io,
                                   @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft(int rank, @Const fftw_iodim dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim howmany_dims, FloatBuffer ri, FloatBuffer ii, FloatBuffer ro, FloatBuffer io,
+                                  @Const fftw_iodim howmany_dims, 
+                                  FloatBuffer ri,  FloatBuffer ii,  FloatBuffer ro,  FloatBuffer io,
                                   @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft(int rank, @Const fftw_iodim dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim howmany_dims, float[] ri, float[] ii, float[] ro, float[] io,
+                                  @Const fftw_iodim howmany_dims, 
+                                  float[] ri,  float[] ii,  float[] ro,  float[] io,
                                   @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru64_dft(int rank,
                               @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out,
                               int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_dft(int rank,
                               @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out,
                               int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_dft(int rank,
                               @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out,
                               int sign, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft(int rank,
                                     @Const fftw_iodim64 dims,
                                     int howmany_rank,
-                                    @Const fftw_iodim64 howmany_dims, FloatPointer ri, FloatPointer ii, FloatPointer ro, FloatPointer io,
+                                    @Const fftw_iodim64 howmany_dims, 
+                                    FloatPointer ri,  FloatPointer ii,  FloatPointer ro,  FloatPointer io,
                                     @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft(int rank,
                                     @Const fftw_iodim64 dims,
                                     int howmany_rank,
-                                    @Const fftw_iodim64 howmany_dims, FloatBuffer ri, FloatBuffer ii, FloatBuffer ro, FloatBuffer io,
+                                    @Const fftw_iodim64 howmany_dims, 
+                                    FloatBuffer ri,  FloatBuffer ii,  FloatBuffer ro,  FloatBuffer io,
                                     @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft(int rank,
                                     @Const fftw_iodim64 dims,
                                     int howmany_rank,
-                                    @Const fftw_iodim64 howmany_dims, float[] ri, float[] ii, float[] ro, float[] io,
+                                    @Const fftw_iodim64 howmany_dims, 
+                                    float[] ri,  float[] ii,  float[] ro,  float[] io,
                                     @Cast("unsigned") int flags);
 
-public static native void fftwf_execute_dft(fftwf_plan p, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out);
-public static native void fftwf_execute_dft(fftwf_plan p, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out);
-public static native void fftwf_execute_dft(fftwf_plan p, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out);
+public static native void fftwf_execute_dft(fftwf_plan p,  @Cast("fftwf_complex*") FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out);
+public static native void fftwf_execute_dft(fftwf_plan p,  @Cast("fftwf_complex*") FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out);
+public static native void fftwf_execute_dft(fftwf_plan p,  @Cast("fftwf_complex*") float[] in,  @Cast("fftwf_complex*") float[] out);
 
-public static native void fftwf_execute_split_dft(fftwf_plan p, FloatPointer ri, FloatPointer ii, FloatPointer ro, FloatPointer io);
-public static native void fftwf_execute_split_dft(fftwf_plan p, FloatBuffer ri, FloatBuffer ii, FloatBuffer ro, FloatBuffer io);
-public static native void fftwf_execute_split_dft(fftwf_plan p, float[] ri, float[] ii, float[] ro, float[] io);
+public static native void fftwf_execute_split_dft(fftwf_plan p,  FloatPointer ri,  FloatPointer ii, 
+                                      FloatPointer ro,  FloatPointer io);
+public static native void fftwf_execute_split_dft(fftwf_plan p,  FloatBuffer ri,  FloatBuffer ii, 
+                                      FloatBuffer ro,  FloatBuffer io);
+public static native void fftwf_execute_split_dft(fftwf_plan p,  float[] ri,  float[] ii, 
+                                      float[] ro,  float[] io);
 
 public static native fftwf_plan fftwf_plan_many_dft_r2c(int rank, @Const IntPointer n,
-                                int howmany, FloatPointer in, @Const IntPointer inembed,
-                                int istride, int idist, @Cast("fftwf_complex*") FloatPointer out, @Const IntPointer onembed,
+                                int howmany, 
+                                FloatPointer in, @Const IntPointer inembed,
+                                int istride, int idist, 
+                                @Cast("fftwf_complex*") FloatPointer out, @Const IntPointer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_dft_r2c(int rank, @Const IntBuffer n,
-                                int howmany, FloatBuffer in, @Const IntBuffer inembed,
-                                int istride, int idist, @Cast("fftwf_complex*") FloatBuffer out, @Const IntBuffer onembed,
+                                int howmany, 
+                                FloatBuffer in, @Const IntBuffer inembed,
+                                int istride, int idist, 
+                                @Cast("fftwf_complex*") FloatBuffer out, @Const IntBuffer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_dft_r2c(int rank, @Const int[] n,
-                                int howmany, float[] in, @Const int[] inembed,
-                                int istride, int idist, @Cast("fftwf_complex*") float[] out, @Const int[] onembed,
+                                int howmany, 
+                                float[] in, @Const int[] inembed,
+                                int istride, int idist, 
+                                @Cast("fftwf_complex*") float[] out, @Const int[] onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_dft_r2c(int rank, @Const IntPointer n, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_r2c(int rank, @Const IntBuffer n, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_r2c(int rank, @Const int[] n, float[] in, @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_r2c(int rank, @Const IntPointer n, 
+                           FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_r2c(int rank, @Const IntBuffer n, 
+                           FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_r2c(int rank, @Const int[] n, 
+                           float[] in,  @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_dft_r2c_1d(int n, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out,@Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_r2c_1d(int n, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out,@Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_r2c_1d(int n, float[] in, @Cast("fftwf_complex*") float[] out,@Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_dft_r2c_2d(int n0, int n1, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_r2c_2d(int n0, int n1, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_r2c_2d(int n0, int n1, float[] in, @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_r2c_2d(int n0, int n1, 
+                              FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_r2c_2d(int n0, int n1, 
+                              FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_r2c_2d(int n0, int n1, 
+                              float[] in,  @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_dft_r2c_3d(int n0, int n1,
-                              int n2, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_r2c_3d(int n0, int n1,
-                              int n2, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_r2c_3d(int n0, int n1,
-                              int n2, float[] in, @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
+                              int n2, 
+                              float[] in,  @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_many_dft_c2r(int rank, @Const IntPointer n,
-                                int howmany, @Cast("fftwf_complex*") FloatPointer in, @Const IntPointer inembed,
-                                int istride, int idist, FloatPointer out, @Const IntPointer onembed,
+                                int howmany, 
+                                @Cast("fftwf_complex*") FloatPointer in, @Const IntPointer inembed,
+                                int istride, int idist, 
+                                FloatPointer out, @Const IntPointer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_dft_c2r(int rank, @Const IntBuffer n,
-                                int howmany, @Cast("fftwf_complex*") FloatBuffer in, @Const IntBuffer inembed,
-                                int istride, int idist, FloatBuffer out, @Const IntBuffer onembed,
+                                int howmany, 
+                                @Cast("fftwf_complex*") FloatBuffer in, @Const IntBuffer inembed,
+                                int istride, int idist, 
+                                FloatBuffer out, @Const IntBuffer onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_dft_c2r(int rank, @Const int[] n,
-                                int howmany, @Cast("fftwf_complex*") float[] in, @Const int[] inembed,
-                                int istride, int idist, float[] out, @Const int[] onembed,
+                                int howmany, 
+                                @Cast("fftwf_complex*") float[] in, @Const int[] inembed,
+                                int istride, int idist, 
+                                float[] out, @Const int[] onembed,
                                 int ostride, int odist,
                                 @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_dft_c2r(int rank, @Const IntPointer n, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_c2r(int rank, @Const IntBuffer n, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_c2r(int rank, @Const int[] n, @Cast("fftwf_complex*") float[] in, float[] out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_c2r(int rank, @Const IntPointer n, 
+                           @Cast("fftwf_complex*") FloatPointer in,  FloatPointer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_c2r(int rank, @Const IntBuffer n, 
+                           @Cast("fftwf_complex*") FloatBuffer in,  FloatBuffer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_c2r(int rank, @Const int[] n, 
+                           @Cast("fftwf_complex*") float[] in,  float[] out, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_dft_c2r_1d(int n, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out,@Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_c2r_1d(int n, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out,@Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_c2r_1d(int n, @Cast("fftwf_complex*") float[] in, float[] out,@Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_dft_c2r_2d(int n0, int n1, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_c2r_2d(int n0, int n1, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_dft_c2r_2d(int n0, int n1, @Cast("fftwf_complex*") float[] in, float[] out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_c2r_2d(int n0, int n1, 
+                              @Cast("fftwf_complex*") FloatPointer in,  FloatPointer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_c2r_2d(int n0, int n1, 
+                              @Cast("fftwf_complex*") FloatBuffer in,  FloatBuffer out, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_dft_c2r_2d(int n0, int n1, 
+                              @Cast("fftwf_complex*") float[] in,  float[] out, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_dft_c2r_3d(int n0, int n1,
-                              int n2, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              @Cast("fftwf_complex*") FloatPointer in,  FloatPointer out, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_c2r_3d(int n0, int n1,
-                              int n2, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out, @Cast("unsigned") int flags);
+                              int n2, 
+                              @Cast("fftwf_complex*") FloatBuffer in,  FloatBuffer out, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_dft_c2r_3d(int n0, int n1,
-                              int n2, @Cast("fftwf_complex*") float[] in, float[] out, @Cast("unsigned") int flags);
+                              int n2, 
+                              @Cast("fftwf_complex*") float[] in,  float[] out, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru_dft_r2c(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out,
+                                @Const fftw_iodim howmany_dims, 
+                                FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_dft_r2c(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out,
+                                @Const fftw_iodim howmany_dims, 
+                                FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_dft_r2c(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, float[] in, @Cast("fftwf_complex*") float[] out,
+                                @Const fftw_iodim howmany_dims, 
+                                float[] in,  @Cast("fftwf_complex*") float[] out,
                                 @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru_dft_c2r(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out,
+                                @Const fftw_iodim howmany_dims, 
+                                @Cast("fftwf_complex*") FloatPointer in,  FloatPointer out,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_dft_c2r(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out,
+                                @Const fftw_iodim howmany_dims, 
+                                @Cast("fftwf_complex*") FloatBuffer in,  FloatBuffer out,
                                 @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_dft_c2r(int rank, @Const fftw_iodim dims,
                                 int howmany_rank,
-                                @Const fftw_iodim howmany_dims, @Cast("fftwf_complex*") float[] in, float[] out,
+                                @Const fftw_iodim howmany_dims, 
+                                @Cast("fftwf_complex*") float[] in,  float[] out,
                                 @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru_split_dft_r2c(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, FloatPointer in, FloatPointer ro, FloatPointer io,
+                                      @Const fftw_iodim howmany_dims, 
+                                      FloatPointer in,  FloatPointer ro,  FloatPointer io,
                                       @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft_r2c(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, FloatBuffer in, FloatBuffer ro, FloatBuffer io,
+                                      @Const fftw_iodim howmany_dims, 
+                                      FloatBuffer in,  FloatBuffer ro,  FloatBuffer io,
                                       @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft_r2c(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, float[] in, float[] ro, float[] io,
+                                      @Const fftw_iodim howmany_dims, 
+                                      float[] in,  float[] ro,  float[] io,
                                       @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru_split_dft_c2r(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, FloatPointer ri, FloatPointer ii, FloatPointer out,
+                                      @Const fftw_iodim howmany_dims, 
+                                      FloatPointer ri,  FloatPointer ii,  FloatPointer out,
                                       @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft_c2r(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, FloatBuffer ri, FloatBuffer ii, FloatBuffer out,
+                                      @Const fftw_iodim howmany_dims, 
+                                      FloatBuffer ri,  FloatBuffer ii,  FloatBuffer out,
                                       @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_split_dft_c2r(int rank, @Const fftw_iodim dims,
                                       int howmany_rank,
-                                      @Const fftw_iodim howmany_dims, float[] ri, float[] ii, float[] out,
+                                      @Const fftw_iodim howmany_dims, 
+                                      float[] ri,  float[] ii,  float[] out,
                                       @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru64_dft_r2c(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out,
                                   @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_dft_r2c(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out,
                                   @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_dft_r2c(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, float[] in, @Cast("fftwf_complex*") float[] out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  float[] in,  @Cast("fftwf_complex*") float[] out,
                                   @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru64_dft_c2r(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  @Cast("fftwf_complex*") FloatPointer in,  FloatPointer out,
                                   @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_dft_c2r(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  @Cast("fftwf_complex*") FloatBuffer in,  FloatBuffer out,
                                   @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_dft_c2r(int rank,
                                   @Const fftw_iodim64 dims,
                                   int howmany_rank,
-                                  @Const fftw_iodim64 howmany_dims, @Cast("fftwf_complex*") float[] in, float[] out,
+                                  @Const fftw_iodim64 howmany_dims, 
+                                  @Cast("fftwf_complex*") float[] in,  float[] out,
                                   @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru64_split_dft_r2c(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, FloatPointer in, FloatPointer ro, FloatPointer io,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        FloatPointer in,  FloatPointer ro,  FloatPointer io,
                                         @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft_r2c(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, FloatBuffer in, FloatBuffer ro, FloatBuffer io,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        FloatBuffer in,  FloatBuffer ro,  FloatBuffer io,
                                         @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft_r2c(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, float[] in, float[] ro, float[] io,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        float[] in,  float[] ro,  float[] io,
                                         @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft_c2r(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, FloatPointer ri, FloatPointer ii, FloatPointer out,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        FloatPointer ri,  FloatPointer ii,  FloatPointer out,
                                         @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft_c2r(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, FloatBuffer ri, FloatBuffer ii, FloatBuffer out,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        FloatBuffer ri,  FloatBuffer ii,  FloatBuffer out,
                                         @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_split_dft_c2r(int rank, @Const fftw_iodim64 dims,
                                         int howmany_rank,
-                                        @Const fftw_iodim64 howmany_dims, float[] ri, float[] ii, float[] out,
+                                        @Const fftw_iodim64 howmany_dims, 
+                                        float[] ri,  float[] ii,  float[] out,
                                         @Cast("unsigned") int flags);
 
-public static native void fftwf_execute_dft_r2c(fftwf_plan p, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out);
-public static native void fftwf_execute_dft_r2c(fftwf_plan p, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out);
-public static native void fftwf_execute_dft_r2c(fftwf_plan p, float[] in, @Cast("fftwf_complex*") float[] out);
+public static native void fftwf_execute_dft_r2c(fftwf_plan p,  FloatPointer in,  @Cast("fftwf_complex*") FloatPointer out);
+public static native void fftwf_execute_dft_r2c(fftwf_plan p,  FloatBuffer in,  @Cast("fftwf_complex*") FloatBuffer out);
+public static native void fftwf_execute_dft_r2c(fftwf_plan p,  float[] in,  @Cast("fftwf_complex*") float[] out);
 
-public static native void fftwf_execute_dft_c2r(fftwf_plan p, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out);
-public static native void fftwf_execute_dft_c2r(fftwf_plan p, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out);
-public static native void fftwf_execute_dft_c2r(fftwf_plan p, @Cast("fftwf_complex*") float[] in, float[] out);
+public static native void fftwf_execute_dft_c2r(fftwf_plan p,  @Cast("fftwf_complex*") FloatPointer in,  FloatPointer out);
+public static native void fftwf_execute_dft_c2r(fftwf_plan p,  @Cast("fftwf_complex*") FloatBuffer in,  FloatBuffer out);
+public static native void fftwf_execute_dft_c2r(fftwf_plan p,  @Cast("fftwf_complex*") float[] in,  float[] out);
 
-public static native void fftwf_execute_split_dft_r2c(fftwf_plan p, FloatPointer in, FloatPointer ro, FloatPointer io);
-public static native void fftwf_execute_split_dft_r2c(fftwf_plan p, FloatBuffer in, FloatBuffer ro, FloatBuffer io);
-public static native void fftwf_execute_split_dft_r2c(fftwf_plan p, float[] in, float[] ro, float[] io);
+public static native void fftwf_execute_split_dft_r2c(fftwf_plan p, 
+                                    FloatPointer in,  FloatPointer ro,  FloatPointer io);
+public static native void fftwf_execute_split_dft_r2c(fftwf_plan p, 
+                                    FloatBuffer in,  FloatBuffer ro,  FloatBuffer io);
+public static native void fftwf_execute_split_dft_r2c(fftwf_plan p, 
+                                    float[] in,  float[] ro,  float[] io);
 
-public static native void fftwf_execute_split_dft_c2r(fftwf_plan p, FloatPointer ri, FloatPointer ii, FloatPointer out);
-public static native void fftwf_execute_split_dft_c2r(fftwf_plan p, FloatBuffer ri, FloatBuffer ii, FloatBuffer out);
-public static native void fftwf_execute_split_dft_c2r(fftwf_plan p, float[] ri, float[] ii, float[] out);
+public static native void fftwf_execute_split_dft_c2r(fftwf_plan p, 
+                                    FloatPointer ri,  FloatPointer ii,  FloatPointer out);
+public static native void fftwf_execute_split_dft_c2r(fftwf_plan p, 
+                                    FloatBuffer ri,  FloatBuffer ii,  FloatBuffer out);
+public static native void fftwf_execute_split_dft_c2r(fftwf_plan p, 
+                                    float[] ri,  float[] ii,  float[] out);
 
 public static native fftwf_plan fftwf_plan_many_r2r(int rank, @Const IntPointer n,
-                            int howmany, FloatPointer in, @Const IntPointer inembed,
-                            int istride, int idist, FloatPointer out, @Const IntPointer onembed,
+                            int howmany, 
+                            FloatPointer in, @Const IntPointer inembed,
+                            int istride, int idist, 
+                            FloatPointer out, @Const IntPointer onembed,
                             int ostride, int odist,
                             @Cast("const fftwf_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_r2r(int rank, @Const IntBuffer n,
-                            int howmany, FloatBuffer in, @Const IntBuffer inembed,
-                            int istride, int idist, FloatBuffer out, @Const IntBuffer onembed,
+                            int howmany, 
+                            FloatBuffer in, @Const IntBuffer inembed,
+                            int istride, int idist, 
+                            FloatBuffer out, @Const IntBuffer onembed,
                             int ostride, int odist,
                             @Cast("const fftwf_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_many_r2r(int rank, @Const int[] n,
-                            int howmany, float[] in, @Const int[] inembed,
-                            int istride, int idist, float[] out, @Const int[] onembed,
+                            int howmany, 
+                            float[] in, @Const int[] inembed,
+                            int istride, int idist, 
+                            float[] out, @Const int[] onembed,
                             int ostride, int odist,
                             @Cast("const fftwf_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_r2r(int rank, @Const IntPointer n, FloatPointer in, FloatPointer out,
+public static native fftwf_plan fftwf_plan_r2r(int rank, @Const IntPointer n,  FloatPointer in,  FloatPointer out,
                        @Cast("const fftwf_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r(int rank, @Const IntBuffer n, FloatBuffer in, FloatBuffer out,
+public static native fftwf_plan fftwf_plan_r2r(int rank, @Const IntBuffer n,  FloatBuffer in,  FloatBuffer out,
                        @Cast("const fftwf_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r(int rank, @Const int[] n, float[] in, float[] out,
+public static native fftwf_plan fftwf_plan_r2r(int rank, @Const int[] n,  float[] in,  float[] out,
                        @Cast("const fftwf_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_r2r_1d(int n, FloatPointer in, FloatPointer out,
-@Cast("fftwf_r2r_kind") int kind, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r_1d(int n, FloatBuffer in, FloatBuffer out,
-@Cast("fftwf_r2r_kind") int kind, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r_1d(int n, float[] in, float[] out,
-@Cast("fftwf_r2r_kind") int kind, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_r2r_1d(int n,  FloatPointer in,  FloatPointer out,
+                          @Cast("fftwf_r2r_kind") int kind, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_r2r_1d(int n,  FloatBuffer in,  FloatBuffer out,
+                          @Cast("fftwf_r2r_kind") int kind, @Cast("unsigned") int flags);
+public static native fftwf_plan fftwf_plan_r2r_1d(int n,  float[] in,  float[] out,
+                          @Cast("fftwf_r2r_kind") int kind, @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_r2r_2d(int n0, int n1, FloatPointer in, FloatPointer out,
-@Cast("fftwf_r2r_kind") int kind0,
-@Cast("fftwf_r2r_kind") int kind1,
+public static native fftwf_plan fftwf_plan_r2r_2d(int n0, int n1,  FloatPointer in,  FloatPointer out,
+                          @Cast("fftwf_r2r_kind") int kind0, @Cast("fftwf_r2r_kind") int kind1,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r_2d(int n0, int n1, FloatBuffer in, FloatBuffer out,
-@Cast("fftwf_r2r_kind") int kind0,
-@Cast("fftwf_r2r_kind") int kind1,
+public static native fftwf_plan fftwf_plan_r2r_2d(int n0, int n1,  FloatBuffer in,  FloatBuffer out,
+                          @Cast("fftwf_r2r_kind") int kind0, @Cast("fftwf_r2r_kind") int kind1,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r_2d(int n0, int n1, float[] in, float[] out,
-@Cast("fftwf_r2r_kind") int kind0,
-@Cast("fftwf_r2r_kind") int kind1,
+public static native fftwf_plan fftwf_plan_r2r_2d(int n0, int n1,  float[] in,  float[] out,
+                          @Cast("fftwf_r2r_kind") int kind0, @Cast("fftwf_r2r_kind") int kind1,
                           @Cast("unsigned") int flags);
 
-public static native fftwf_plan fftwf_plan_r2r_3d(int n0, int n1, int n2, FloatPointer in, FloatPointer out,
-@Cast("fftwf_r2r_kind") int kind0,
-@Cast("fftwf_r2r_kind") int kind1,
-@Cast("fftwf_r2r_kind") int kind2,
+public static native fftwf_plan fftwf_plan_r2r_3d(int n0, int n1, int n2, 
+                          FloatPointer in,  FloatPointer out, @Cast("fftwf_r2r_kind") int kind0,
+                          @Cast("fftwf_r2r_kind") int kind1, @Cast("fftwf_r2r_kind") int kind2,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r_3d(int n0, int n1, int n2, FloatBuffer in, FloatBuffer out,
-@Cast("fftwf_r2r_kind") int kind0,
-@Cast("fftwf_r2r_kind") int kind1,
-@Cast("fftwf_r2r_kind") int kind2,
+public static native fftwf_plan fftwf_plan_r2r_3d(int n0, int n1, int n2, 
+                          FloatBuffer in,  FloatBuffer out, @Cast("fftwf_r2r_kind") int kind0,
+                          @Cast("fftwf_r2r_kind") int kind1, @Cast("fftwf_r2r_kind") int kind2,
                           @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_r2r_3d(int n0, int n1, int n2, float[] in, float[] out,
-@Cast("fftwf_r2r_kind") int kind0,
-@Cast("fftwf_r2r_kind") int kind1,
-@Cast("fftwf_r2r_kind") int kind2,
+public static native fftwf_plan fftwf_plan_r2r_3d(int n0, int n1, int n2, 
+                          float[] in,  float[] out, @Cast("fftwf_r2r_kind") int kind0,
+                          @Cast("fftwf_r2r_kind") int kind1, @Cast("fftwf_r2r_kind") int kind2,
                           @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru_r2r(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, FloatPointer in, FloatPointer out,
+                            @Const fftw_iodim howmany_dims, 
+                            FloatPointer in,  FloatPointer out,
                             @Cast("const fftwf_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_r2r(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, FloatBuffer in, FloatBuffer out,
+                            @Const fftw_iodim howmany_dims, 
+                            FloatBuffer in,  FloatBuffer out,
                             @Cast("const fftwf_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru_r2r(int rank, @Const fftw_iodim dims,
                             int howmany_rank,
-                            @Const fftw_iodim howmany_dims, float[] in, float[] out,
+                            @Const fftw_iodim howmany_dims, 
+                            float[] in,  float[] out,
                             @Cast("const fftwf_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
 public static native fftwf_plan fftwf_plan_guru64_r2r(int rank, @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, FloatPointer in, FloatPointer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              FloatPointer in,  FloatPointer out,
                               @Cast("const fftwf_r2r_kind*") IntPointer kind, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_r2r(int rank, @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, FloatBuffer in, FloatBuffer out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              FloatBuffer in,  FloatBuffer out,
                               @Cast("const fftwf_r2r_kind*") IntBuffer kind, @Cast("unsigned") int flags);
 public static native fftwf_plan fftwf_plan_guru64_r2r(int rank, @Const fftw_iodim64 dims,
                               int howmany_rank,
-                              @Const fftw_iodim64 howmany_dims, float[] in, float[] out,
+                              @Const fftw_iodim64 howmany_dims, 
+                              float[] in,  float[] out,
                               @Cast("const fftwf_r2r_kind*") int[] kind, @Cast("unsigned") int flags);
 
-public static native void fftwf_execute_r2r(fftwf_plan p, FloatPointer in, FloatPointer out);
-public static native void fftwf_execute_r2r(fftwf_plan p, FloatBuffer in, FloatBuffer out);
-public static native void fftwf_execute_r2r(fftwf_plan p, float[] in, float[] out);
+public static native void fftwf_execute_r2r(fftwf_plan p,  FloatPointer in,  FloatPointer out);
+public static native void fftwf_execute_r2r(fftwf_plan p,  FloatBuffer in,  FloatBuffer out);
+public static native void fftwf_execute_r2r(fftwf_plan p,  float[] in,  float[] out);
 
-public static native void fftwf_destroy_plan(
-fftwf_plan p);
+public static native void fftwf_destroy_plan(fftwf_plan p);
 
 public static native void fftwf_forget_wisdom();
 public static native void fftwf_cleanup();
@@ -1380,8 +1568,7 @@ public static native void fftwf_export_wisdom_to_file(@Cast("FILE*") Pointer out
 
 public static native @Cast("char*") BytePointer fftwf_export_wisdom_to_string();
 
-public static native void fftwf_export_wisdom(
-@Cast("fftwf_write_char_func") fftw_write_char_func_do_not_use_me write_char,
+public static native void fftwf_export_wisdom(@Cast("fftwf_write_char_func") fftw_write_char_func_do_not_use_me write_char,
                                   Pointer data);
 public static native int fftwf_import_system_wisdom();
 
@@ -1393,8 +1580,7 @@ public static native int fftwf_import_wisdom_from_file(@Cast("FILE*") Pointer in
 public static native int fftwf_import_wisdom_from_string(@Cast("const char*") BytePointer input_string);
 public static native int fftwf_import_wisdom_from_string(String input_string);
 
-public static native int fftwf_import_wisdom(
-@Cast("fftwf_read_char_func") fftw_read_char_func_do_not_use_me read_char, Pointer data);
+public static native int fftwf_import_wisdom(@Cast("fftwf_read_char_func") fftw_read_char_func_do_not_use_me read_char, Pointer data);
 
 public static native void fftwf_fprint_plan(fftwf_plan p, @Cast("FILE*") Pointer output_file);
 

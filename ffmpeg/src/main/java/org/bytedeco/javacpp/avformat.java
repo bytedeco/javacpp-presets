@@ -2272,7 +2272,7 @@ public static final int
     /** full parsing and repack with timestamp and position generation by parser for raw
                                                              this assumes that each packet in the file contains no demuxer level headers and
                                                              just codec level data, otherwise position generation would fail */
-    AVSTREAM_PARSE_FULL_RAW= AVSTREAM_PARSE_FULL_RAW();
+    AVSTREAM_PARSE_FULL_RAW = AVSTREAM_PARSE_FULL_RAW();
 
 public static class AVIndexEntry extends Pointer {
     static { Loader.load(); }

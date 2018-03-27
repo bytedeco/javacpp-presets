@@ -2751,136 +2751,136 @@ public static final int
     /** XVideo Motion Acceleration via common packet passing */
     AV_PIX_FMT_XVMC_MPEG2_MC = 15,
     AV_PIX_FMT_XVMC_MPEG2_IDCT = 16,
-    AV_PIX_FMT_XVMC =  AV_PIX_FMT_XVMC_MPEG2_IDCT,
+    AV_PIX_FMT_XVMC = AV_PIX_FMT_XVMC_MPEG2_IDCT,
 // #endif /* FF_API_XVMC */
     /** packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1 */
-    AV_PIX_FMT_UYVY422 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 1,
+    AV_PIX_FMT_UYVY422 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 1,
     /** packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3 */
-    AV_PIX_FMT_UYYVYY411 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 2,
+    AV_PIX_FMT_UYYVYY411 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 2,
     /** packed RGB 3:3:2,  8bpp, (msb)2B 3G 3R(lsb) */
-    AV_PIX_FMT_BGR8 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 3,
+    AV_PIX_FMT_BGR8 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 3,
     /** packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits */
-    AV_PIX_FMT_BGR4 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 4,
+    AV_PIX_FMT_BGR4 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 4,
     /** packed RGB 1:2:1,  8bpp, (msb)1B 2G 1R(lsb) */
-    AV_PIX_FMT_BGR4_BYTE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 5,
+    AV_PIX_FMT_BGR4_BYTE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 5,
     /** packed RGB 3:3:2,  8bpp, (msb)2R 3G 3B(lsb) */
-    AV_PIX_FMT_RGB8 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 6,
+    AV_PIX_FMT_RGB8 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 6,
     /** packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits */
-    AV_PIX_FMT_RGB4 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 7,
+    AV_PIX_FMT_RGB4 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 7,
     /** packed RGB 1:2:1,  8bpp, (msb)1R 2G 1B(lsb) */
-    AV_PIX_FMT_RGB4_BYTE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 8,
+    AV_PIX_FMT_RGB4_BYTE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 8,
     /** planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V) */
-    AV_PIX_FMT_NV12 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 9,
+    AV_PIX_FMT_NV12 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 9,
     /** as above, but U and V bytes are swapped */
-    AV_PIX_FMT_NV21 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 10,
+    AV_PIX_FMT_NV21 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 10,
 
     /** packed ARGB 8:8:8:8, 32bpp, ARGBARGB... */
-    AV_PIX_FMT_ARGB =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 11,
+    AV_PIX_FMT_ARGB = AV_PIX_FMT_XVMC_MPEG2_IDCT + 11,
     /** packed RGBA 8:8:8:8, 32bpp, RGBARGBA... */
-    AV_PIX_FMT_RGBA =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 12,
+    AV_PIX_FMT_RGBA = AV_PIX_FMT_XVMC_MPEG2_IDCT + 12,
     /** packed ABGR 8:8:8:8, 32bpp, ABGRABGR... */
-    AV_PIX_FMT_ABGR =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 13,
+    AV_PIX_FMT_ABGR = AV_PIX_FMT_XVMC_MPEG2_IDCT + 13,
     /** packed BGRA 8:8:8:8, 32bpp, BGRABGRA... */
-    AV_PIX_FMT_BGRA =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 14,
+    AV_PIX_FMT_BGRA = AV_PIX_FMT_XVMC_MPEG2_IDCT + 14,
 
     /**        Y        , 16bpp, big-endian */
-    AV_PIX_FMT_GRAY16BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 15,
+    AV_PIX_FMT_GRAY16BE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 15,
     /**        Y        , 16bpp, little-endian */
-    AV_PIX_FMT_GRAY16LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 16,
+    AV_PIX_FMT_GRAY16LE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 16,
     /** planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples) */
-    AV_PIX_FMT_YUV440P =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 17,
+    AV_PIX_FMT_YUV440P = AV_PIX_FMT_XVMC_MPEG2_IDCT + 17,
     /** planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range */
-    AV_PIX_FMT_YUVJ440P =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 18,
+    AV_PIX_FMT_YUVJ440P = AV_PIX_FMT_XVMC_MPEG2_IDCT + 18,
     /** planar YUV 4:2:0, 20bpp, (1 Cr & Cb sample per 2x2 Y & A samples) */
-    AV_PIX_FMT_YUVA420P =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 19,
+    AV_PIX_FMT_YUVA420P = AV_PIX_FMT_XVMC_MPEG2_IDCT + 19,
 // #if FF_API_VDPAU
     /** H.264 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_H264 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 20,
+    AV_PIX_FMT_VDPAU_H264 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 20,
     /** MPEG-1 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_MPEG1 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 21,
+    AV_PIX_FMT_VDPAU_MPEG1 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 21,
     /** MPEG-2 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_MPEG2 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 22,
+    AV_PIX_FMT_VDPAU_MPEG2 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 22,
     /** WMV3 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_WMV3 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 23,
+    AV_PIX_FMT_VDPAU_WMV3 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 23,
     /** VC-1 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_VC1 =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 24,
+    AV_PIX_FMT_VDPAU_VC1 = AV_PIX_FMT_XVMC_MPEG2_IDCT + 24,
 // #endif
     /** packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian */
-    AV_PIX_FMT_RGB48BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 25,
+    AV_PIX_FMT_RGB48BE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 25,
     /** packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian */
-    AV_PIX_FMT_RGB48LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 26,
+    AV_PIX_FMT_RGB48LE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 26,
 
     /** packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian */
-    AV_PIX_FMT_RGB565BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 27,
+    AV_PIX_FMT_RGB565BE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 27,
     /** packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian */
-    AV_PIX_FMT_RGB565LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 28,
+    AV_PIX_FMT_RGB565LE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 28,
     /** packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), big-endian   , X=unused/undefined */
-    AV_PIX_FMT_RGB555BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 29,
+    AV_PIX_FMT_RGB555BE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 29,
     /** packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_RGB555LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 30,
+    AV_PIX_FMT_RGB555LE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 30,
 
     /** packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), big-endian */
-    AV_PIX_FMT_BGR565BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 31,
+    AV_PIX_FMT_BGR565BE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 31,
     /** packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), little-endian */
-    AV_PIX_FMT_BGR565LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 32,
+    AV_PIX_FMT_BGR565LE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 32,
     /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), big-endian   , X=unused/undefined */
-    AV_PIX_FMT_BGR555BE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 33,
+    AV_PIX_FMT_BGR555BE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 33,
     /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_BGR555LE =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 34,
+    AV_PIX_FMT_BGR555LE = AV_PIX_FMT_XVMC_MPEG2_IDCT + 34,
 
 // #if FF_API_VAAPI
     /** \name Deprecated pixel formats */
     /**\{*/
     /** HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers */
-    AV_PIX_FMT_VAAPI_MOCO =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 35,
+    AV_PIX_FMT_VAAPI_MOCO = AV_PIX_FMT_XVMC_MPEG2_IDCT + 35,
     /** HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers */
-    AV_PIX_FMT_VAAPI_IDCT =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 36,
+    AV_PIX_FMT_VAAPI_IDCT = AV_PIX_FMT_XVMC_MPEG2_IDCT + 36,
     /** HW decoding through VA API, Picture.data[3] contains a VASurfaceID */
-    AV_PIX_FMT_VAAPI_VLD =  AV_PIX_FMT_XVMC_MPEG2_IDCT + 37,
+    AV_PIX_FMT_VAAPI_VLD = AV_PIX_FMT_XVMC_MPEG2_IDCT + 37,
     /**\}*/
-    AV_PIX_FMT_VAAPI =  AV_PIX_FMT_VAAPI_VLD,
+    AV_PIX_FMT_VAAPI = AV_PIX_FMT_VAAPI_VLD,
 // #else
 // #endif
 
     /** planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P16LE =  AV_PIX_FMT_VAAPI_VLD + 1,
+    AV_PIX_FMT_YUV420P16LE = AV_PIX_FMT_VAAPI_VLD + 1,
     /** planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P16BE =  AV_PIX_FMT_VAAPI_VLD + 2,
+    AV_PIX_FMT_YUV420P16BE = AV_PIX_FMT_VAAPI_VLD + 2,
     /** planar YUV 4:2:2, 32bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P16LE =  AV_PIX_FMT_VAAPI_VLD + 3,
+    AV_PIX_FMT_YUV422P16LE = AV_PIX_FMT_VAAPI_VLD + 3,
     /** planar YUV 4:2:2, 32bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P16BE =  AV_PIX_FMT_VAAPI_VLD + 4,
+    AV_PIX_FMT_YUV422P16BE = AV_PIX_FMT_VAAPI_VLD + 4,
     /** planar YUV 4:4:4, 48bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P16LE =  AV_PIX_FMT_VAAPI_VLD + 5,
+    AV_PIX_FMT_YUV444P16LE = AV_PIX_FMT_VAAPI_VLD + 5,
     /** planar YUV 4:4:4, 48bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P16BE =  AV_PIX_FMT_VAAPI_VLD + 6,
+    AV_PIX_FMT_YUV444P16BE = AV_PIX_FMT_VAAPI_VLD + 6,
 // #if FF_API_VDPAU
     /** MPEG-4 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_MPEG4 =  AV_PIX_FMT_VAAPI_VLD + 7,
+    AV_PIX_FMT_VDPAU_MPEG4 = AV_PIX_FMT_VAAPI_VLD + 7,
 // #endif
     /** HW decoding through DXVA2, Picture.data[3] contains a LPDIRECT3DSURFACE9 pointer */
-    AV_PIX_FMT_DXVA2_VLD =  AV_PIX_FMT_VAAPI_VLD + 8,
+    AV_PIX_FMT_DXVA2_VLD = AV_PIX_FMT_VAAPI_VLD + 8,
 
     /** packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_RGB444LE =  AV_PIX_FMT_VAAPI_VLD + 9,
+    AV_PIX_FMT_RGB444LE = AV_PIX_FMT_VAAPI_VLD + 9,
     /** packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), big-endian,    X=unused/undefined */
-    AV_PIX_FMT_RGB444BE =  AV_PIX_FMT_VAAPI_VLD + 10,
+    AV_PIX_FMT_RGB444BE = AV_PIX_FMT_VAAPI_VLD + 10,
     /** packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_BGR444LE =  AV_PIX_FMT_VAAPI_VLD + 11,
+    AV_PIX_FMT_BGR444LE = AV_PIX_FMT_VAAPI_VLD + 11,
     /** packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), big-endian,    X=unused/undefined */
-    AV_PIX_FMT_BGR444BE =  AV_PIX_FMT_VAAPI_VLD + 12,
+    AV_PIX_FMT_BGR444BE = AV_PIX_FMT_VAAPI_VLD + 12,
     /** 8 bits gray, 8 bits alpha */
-    AV_PIX_FMT_YA8 =  AV_PIX_FMT_VAAPI_VLD + 13,
+    AV_PIX_FMT_YA8 = AV_PIX_FMT_VAAPI_VLD + 13,
 
     /** alias for AV_PIX_FMT_YA8 */
-    AV_PIX_FMT_Y400A =  AV_PIX_FMT_YA8,
+    AV_PIX_FMT_Y400A = AV_PIX_FMT_YA8,
     /** alias for AV_PIX_FMT_YA8 */
-    AV_PIX_FMT_GRAY8A=  AV_PIX_FMT_YA8,
+    AV_PIX_FMT_GRAY8A = AV_PIX_FMT_YA8,
 
     /** packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as big-endian */
-    AV_PIX_FMT_BGR48BE =  AV_PIX_FMT_YA8 + 1,
+    AV_PIX_FMT_BGR48BE = AV_PIX_FMT_YA8 + 1,
     /** packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as little-endian */
-    AV_PIX_FMT_BGR48LE =  AV_PIX_FMT_YA8 + 2,
+    AV_PIX_FMT_BGR48LE = AV_PIX_FMT_YA8 + 2,
 
     /**
      * The following 12 formats have the disadvantage of needing 1 format for each bit depth.
@@ -2888,149 +2888,149 @@ public static final int
      * If you want to support multiple bit depths, then using AV_PIX_FMT_YUV420P16* with the bpp stored separately is better.
      */
     /** planar YUV 4:2:0, 13.5bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P9BE =  AV_PIX_FMT_YA8 + 3,
+    AV_PIX_FMT_YUV420P9BE = AV_PIX_FMT_YA8 + 3,
     /** planar YUV 4:2:0, 13.5bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P9LE =  AV_PIX_FMT_YA8 + 4,
+    AV_PIX_FMT_YUV420P9LE = AV_PIX_FMT_YA8 + 4,
     /** planar YUV 4:2:0, 15bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P10BE =  AV_PIX_FMT_YA8 + 5,
+    AV_PIX_FMT_YUV420P10BE = AV_PIX_FMT_YA8 + 5,
     /** planar YUV 4:2:0, 15bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P10LE =  AV_PIX_FMT_YA8 + 6,
+    AV_PIX_FMT_YUV420P10LE = AV_PIX_FMT_YA8 + 6,
     /** planar YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P10BE =  AV_PIX_FMT_YA8 + 7,
+    AV_PIX_FMT_YUV422P10BE = AV_PIX_FMT_YA8 + 7,
     /** planar YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P10LE =  AV_PIX_FMT_YA8 + 8,
+    AV_PIX_FMT_YUV422P10LE = AV_PIX_FMT_YA8 + 8,
     /** planar YUV 4:4:4, 27bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P9BE =  AV_PIX_FMT_YA8 + 9,
+    AV_PIX_FMT_YUV444P9BE = AV_PIX_FMT_YA8 + 9,
     /** planar YUV 4:4:4, 27bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P9LE =  AV_PIX_FMT_YA8 + 10,
+    AV_PIX_FMT_YUV444P9LE = AV_PIX_FMT_YA8 + 10,
     /** planar YUV 4:4:4, 30bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P10BE =  AV_PIX_FMT_YA8 + 11,
+    AV_PIX_FMT_YUV444P10BE = AV_PIX_FMT_YA8 + 11,
     /** planar YUV 4:4:4, 30bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P10LE =  AV_PIX_FMT_YA8 + 12,
+    AV_PIX_FMT_YUV444P10LE = AV_PIX_FMT_YA8 + 12,
     /** planar YUV 4:2:2, 18bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P9BE =  AV_PIX_FMT_YA8 + 13,
+    AV_PIX_FMT_YUV422P9BE = AV_PIX_FMT_YA8 + 13,
     /** planar YUV 4:2:2, 18bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P9LE =  AV_PIX_FMT_YA8 + 14,
+    AV_PIX_FMT_YUV422P9LE = AV_PIX_FMT_YA8 + 14,
     /** hardware decoding through VDA */
-    AV_PIX_FMT_VDA_VLD =  AV_PIX_FMT_YA8 + 15,
+    AV_PIX_FMT_VDA_VLD = AV_PIX_FMT_YA8 + 15,
     /** planar GBR 4:4:4 24bpp */
-    AV_PIX_FMT_GBRP =  AV_PIX_FMT_YA8 + 16,
-    AV_PIX_FMT_GBR24P =  AV_PIX_FMT_GBRP, // alias for #AV_PIX_FMT_GBRP
+    AV_PIX_FMT_GBRP = AV_PIX_FMT_YA8 + 16,
+    AV_PIX_FMT_GBR24P = AV_PIX_FMT_GBRP, // alias for #AV_PIX_FMT_GBRP
     /** planar GBR 4:4:4 27bpp, big-endian */
-    AV_PIX_FMT_GBRP9BE =  AV_PIX_FMT_GBRP + 1,
+    AV_PIX_FMT_GBRP9BE = AV_PIX_FMT_GBRP + 1,
     /** planar GBR 4:4:4 27bpp, little-endian */
-    AV_PIX_FMT_GBRP9LE =  AV_PIX_FMT_GBRP + 2,
+    AV_PIX_FMT_GBRP9LE = AV_PIX_FMT_GBRP + 2,
     /** planar GBR 4:4:4 30bpp, big-endian */
-    AV_PIX_FMT_GBRP10BE =  AV_PIX_FMT_GBRP + 3,
+    AV_PIX_FMT_GBRP10BE = AV_PIX_FMT_GBRP + 3,
     /** planar GBR 4:4:4 30bpp, little-endian */
-    AV_PIX_FMT_GBRP10LE =  AV_PIX_FMT_GBRP + 4,
+    AV_PIX_FMT_GBRP10LE = AV_PIX_FMT_GBRP + 4,
     /** planar GBR 4:4:4 48bpp, big-endian */
-    AV_PIX_FMT_GBRP16BE =  AV_PIX_FMT_GBRP + 5,
+    AV_PIX_FMT_GBRP16BE = AV_PIX_FMT_GBRP + 5,
     /** planar GBR 4:4:4 48bpp, little-endian */
-    AV_PIX_FMT_GBRP16LE =  AV_PIX_FMT_GBRP + 6,
+    AV_PIX_FMT_GBRP16LE = AV_PIX_FMT_GBRP + 6,
     /** planar YUV 4:2:2 24bpp, (1 Cr & Cb sample per 2x1 Y & A samples) */
-    AV_PIX_FMT_YUVA422P =  AV_PIX_FMT_GBRP + 7,
+    AV_PIX_FMT_YUVA422P = AV_PIX_FMT_GBRP + 7,
     /** planar YUV 4:4:4 32bpp, (1 Cr & Cb sample per 1x1 Y & A samples) */
-    AV_PIX_FMT_YUVA444P =  AV_PIX_FMT_GBRP + 8,
+    AV_PIX_FMT_YUVA444P = AV_PIX_FMT_GBRP + 8,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA420P9BE =  AV_PIX_FMT_GBRP + 9,
+    AV_PIX_FMT_YUVA420P9BE = AV_PIX_FMT_GBRP + 9,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA420P9LE =  AV_PIX_FMT_GBRP + 10,
+    AV_PIX_FMT_YUVA420P9LE = AV_PIX_FMT_GBRP + 10,
     /** planar YUV 4:2:2 27bpp, (1 Cr & Cb sample per 2x1 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA422P9BE =  AV_PIX_FMT_GBRP + 11,
+    AV_PIX_FMT_YUVA422P9BE = AV_PIX_FMT_GBRP + 11,
     /** planar YUV 4:2:2 27bpp, (1 Cr & Cb sample per 2x1 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA422P9LE =  AV_PIX_FMT_GBRP + 12,
+    AV_PIX_FMT_YUVA422P9LE = AV_PIX_FMT_GBRP + 12,
     /** planar YUV 4:4:4 36bpp, (1 Cr & Cb sample per 1x1 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA444P9BE =  AV_PIX_FMT_GBRP + 13,
+    AV_PIX_FMT_YUVA444P9BE = AV_PIX_FMT_GBRP + 13,
     /** planar YUV 4:4:4 36bpp, (1 Cr & Cb sample per 1x1 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA444P9LE =  AV_PIX_FMT_GBRP + 14,
+    AV_PIX_FMT_YUVA444P9LE = AV_PIX_FMT_GBRP + 14,
     /** planar YUV 4:2:0 25bpp, (1 Cr & Cb sample per 2x2 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA420P10BE =  AV_PIX_FMT_GBRP + 15,
+    AV_PIX_FMT_YUVA420P10BE = AV_PIX_FMT_GBRP + 15,
     /** planar YUV 4:2:0 25bpp, (1 Cr & Cb sample per 2x2 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA420P10LE =  AV_PIX_FMT_GBRP + 16,
+    AV_PIX_FMT_YUVA420P10LE = AV_PIX_FMT_GBRP + 16,
     /** planar YUV 4:2:2 30bpp, (1 Cr & Cb sample per 2x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA422P10BE =  AV_PIX_FMT_GBRP + 17,
+    AV_PIX_FMT_YUVA422P10BE = AV_PIX_FMT_GBRP + 17,
     /** planar YUV 4:2:2 30bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA422P10LE =  AV_PIX_FMT_GBRP + 18,
+    AV_PIX_FMT_YUVA422P10LE = AV_PIX_FMT_GBRP + 18,
     /** planar YUV 4:4:4 40bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA444P10BE =  AV_PIX_FMT_GBRP + 19,
+    AV_PIX_FMT_YUVA444P10BE = AV_PIX_FMT_GBRP + 19,
     /** planar YUV 4:4:4 40bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA444P10LE =  AV_PIX_FMT_GBRP + 20,
+    AV_PIX_FMT_YUVA444P10LE = AV_PIX_FMT_GBRP + 20,
     /** planar YUV 4:2:0 40bpp, (1 Cr & Cb sample per 2x2 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA420P16BE =  AV_PIX_FMT_GBRP + 21,
+    AV_PIX_FMT_YUVA420P16BE = AV_PIX_FMT_GBRP + 21,
     /** planar YUV 4:2:0 40bpp, (1 Cr & Cb sample per 2x2 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA420P16LE =  AV_PIX_FMT_GBRP + 22,
+    AV_PIX_FMT_YUVA420P16LE = AV_PIX_FMT_GBRP + 22,
     /** planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA422P16BE =  AV_PIX_FMT_GBRP + 23,
+    AV_PIX_FMT_YUVA422P16BE = AV_PIX_FMT_GBRP + 23,
     /** planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA422P16LE =  AV_PIX_FMT_GBRP + 24,
+    AV_PIX_FMT_YUVA422P16LE = AV_PIX_FMT_GBRP + 24,
     /** planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA444P16BE =  AV_PIX_FMT_GBRP + 25,
+    AV_PIX_FMT_YUVA444P16BE = AV_PIX_FMT_GBRP + 25,
     /** planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA444P16LE =  AV_PIX_FMT_GBRP + 26,
+    AV_PIX_FMT_YUVA444P16LE = AV_PIX_FMT_GBRP + 26,
 
     /** HW acceleration through VDPAU, Picture.data[3] contains a VdpVideoSurface */
-    AV_PIX_FMT_VDPAU =  AV_PIX_FMT_GBRP + 27,
+    AV_PIX_FMT_VDPAU = AV_PIX_FMT_GBRP + 27,
 
     /** packed XYZ 4:4:4, 36 bpp, (msb) 12X, 12Y, 12Z (lsb), the 2-byte value for each X/Y/Z is stored as little-endian, the 4 lower bits are set to 0 */
-    AV_PIX_FMT_XYZ12LE =  AV_PIX_FMT_GBRP + 28,
+    AV_PIX_FMT_XYZ12LE = AV_PIX_FMT_GBRP + 28,
     /** packed XYZ 4:4:4, 36 bpp, (msb) 12X, 12Y, 12Z (lsb), the 2-byte value for each X/Y/Z is stored as big-endian, the 4 lower bits are set to 0 */
-    AV_PIX_FMT_XYZ12BE =  AV_PIX_FMT_GBRP + 29,
+    AV_PIX_FMT_XYZ12BE = AV_PIX_FMT_GBRP + 29,
     /** interleaved chroma YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples) */
-    AV_PIX_FMT_NV16 =  AV_PIX_FMT_GBRP + 30,
+    AV_PIX_FMT_NV16 = AV_PIX_FMT_GBRP + 30,
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_NV20LE =  AV_PIX_FMT_GBRP + 31,
+    AV_PIX_FMT_NV20LE = AV_PIX_FMT_GBRP + 31,
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_NV20BE =  AV_PIX_FMT_GBRP + 32,
+    AV_PIX_FMT_NV20BE = AV_PIX_FMT_GBRP + 32,
 
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_RGBA64BE =  AV_PIX_FMT_GBRP + 33,
+    AV_PIX_FMT_RGBA64BE = AV_PIX_FMT_GBRP + 33,
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_RGBA64LE =  AV_PIX_FMT_GBRP + 34,
+    AV_PIX_FMT_RGBA64LE = AV_PIX_FMT_GBRP + 34,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_BGRA64BE =  AV_PIX_FMT_GBRP + 35,
+    AV_PIX_FMT_BGRA64BE = AV_PIX_FMT_GBRP + 35,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_BGRA64LE =  AV_PIX_FMT_GBRP + 36,
+    AV_PIX_FMT_BGRA64LE = AV_PIX_FMT_GBRP + 36,
 
     /** packed YUV 4:2:2, 16bpp, Y0 Cr Y1 Cb */
-    AV_PIX_FMT_YVYU422 =  AV_PIX_FMT_GBRP + 37,
+    AV_PIX_FMT_YVYU422 = AV_PIX_FMT_GBRP + 37,
 
     /** HW acceleration through VDA, data[3] contains a CVPixelBufferRef */
-    AV_PIX_FMT_VDA =  AV_PIX_FMT_GBRP + 38,
+    AV_PIX_FMT_VDA = AV_PIX_FMT_GBRP + 38,
 
     /** 16 bits gray, 16 bits alpha (big-endian) */
-    AV_PIX_FMT_YA16BE =  AV_PIX_FMT_GBRP + 39,
+    AV_PIX_FMT_YA16BE = AV_PIX_FMT_GBRP + 39,
     /** 16 bits gray, 16 bits alpha (little-endian) */
-    AV_PIX_FMT_YA16LE =  AV_PIX_FMT_GBRP + 40,
+    AV_PIX_FMT_YA16LE = AV_PIX_FMT_GBRP + 40,
 
     /** planar GBRA 4:4:4:4 32bpp */
-    AV_PIX_FMT_GBRAP =  AV_PIX_FMT_GBRP + 41,
+    AV_PIX_FMT_GBRAP = AV_PIX_FMT_GBRP + 41,
     /** planar GBRA 4:4:4:4 64bpp, big-endian */
-    AV_PIX_FMT_GBRAP16BE =  AV_PIX_FMT_GBRP + 42,
+    AV_PIX_FMT_GBRAP16BE = AV_PIX_FMT_GBRP + 42,
     /** planar GBRA 4:4:4:4 64bpp, little-endian */
-    AV_PIX_FMT_GBRAP16LE =  AV_PIX_FMT_GBRP + 43,
+    AV_PIX_FMT_GBRAP16LE = AV_PIX_FMT_GBRP + 43,
     /**
      *  HW acceleration through QSV, data[3] contains a pointer to the
      *  mfxFrameSurface1 structure.
      */
-    AV_PIX_FMT_QSV =  AV_PIX_FMT_GBRP + 44,
+    AV_PIX_FMT_QSV = AV_PIX_FMT_GBRP + 44,
     /**
      * HW acceleration though MMAL, data[3] contains a pointer to the
      * MMAL_BUFFER_HEADER_T structure.
      */
-    AV_PIX_FMT_MMAL =  AV_PIX_FMT_GBRP + 45,
+    AV_PIX_FMT_MMAL = AV_PIX_FMT_GBRP + 45,
 
     /** HW decoding through Direct3D11 via old API, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
-    AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_GBRP + 46,
+    AV_PIX_FMT_D3D11VA_VLD = AV_PIX_FMT_GBRP + 46,
 
     /**
      * HW acceleration through CUDA. data[i] contain CUdeviceptr pointers
      * exactly as for system memory frames.
      */
-    AV_PIX_FMT_CUDA =  AV_PIX_FMT_GBRP + 47,
+    AV_PIX_FMT_CUDA = AV_PIX_FMT_GBRP + 47,
 
     /** packed RGB 8:8:8, 32bpp, XRGBXRGB...   X=unused/undefined */
-    AV_PIX_FMT_0RGB= 0x123+4,
+    AV_PIX_FMT_0RGB = 0x123+4,
     /** packed RGB 8:8:8, 32bpp, RGBXRGBX...   X=unused/undefined */
     AV_PIX_FMT_RGB0 = 0x123+4 + 1,
     /** packed BGR 8:8:8, 32bpp, XBGRXBGR...   X=unused/undefined */
@@ -3355,7 +3355,7 @@ public static final int
     AVCOL_PRI_BT2020      = 9,
     /** SMPTE ST 428-1 (CIE 1931 XYZ) */
     AVCOL_PRI_SMPTE428    = 10,
-    AVCOL_PRI_SMPTEST428_1 =  AVCOL_PRI_SMPTE428,
+    AVCOL_PRI_SMPTEST428_1 = AVCOL_PRI_SMPTE428,
     /** SMPTE ST 431-2 (2011) / DCI P3 */
     AVCOL_PRI_SMPTE431    = 11,
     /** SMPTE ST 432-1 (2010) / P3 D65 / Display P3 */
@@ -3401,10 +3401,10 @@ public static final int
     AVCOL_TRC_BT2020_12    = 15,
     /** SMPTE ST 2084 for 10-, 12-, 14- and 16-bit systems */
     AVCOL_TRC_SMPTE2084    = 16,
-    AVCOL_TRC_SMPTEST2084  =  AVCOL_TRC_SMPTE2084,
+    AVCOL_TRC_SMPTEST2084  = AVCOL_TRC_SMPTE2084,
     /** SMPTE ST 428-1 */
     AVCOL_TRC_SMPTE428     = 17,
-    AVCOL_TRC_SMPTEST428_1 =  AVCOL_TRC_SMPTE428,
+    AVCOL_TRC_SMPTEST428_1 = AVCOL_TRC_SMPTE428,
     /** ARIB STD-B67, known as "Hybrid log-gamma" */
     AVCOL_TRC_ARIB_STD_B67 = 18,
     /** Not part of ABI */
@@ -3432,7 +3432,7 @@ public static final int
     AVCOL_SPC_SMPTE240M   = 7,
     /** Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16 */
     AVCOL_SPC_YCGCO       = 8,
-    AVCOL_SPC_YCOCG       =  AVCOL_SPC_YCGCO,
+    AVCOL_SPC_YCOCG       = AVCOL_SPC_YCGCO,
     /** ITU-R BT2020 non-constant luminance system */
     AVCOL_SPC_BT2020_NCL  = 9,
     /** ITU-R BT2020 constant luminance system */
@@ -4319,7 +4319,7 @@ public static final int
      * are explicitly documented to accept it. Use this flag only if you
      * absolutely know what you are doing.
      */
-    AV_FRAME_CROP_UNALIGNED     =  1 << 0;
+    AV_FRAME_CROP_UNALIGNED     = 1 << 0;
 
 /**
  * Crop the given video AVFrame according to its crop_left/crop_top/crop_right/

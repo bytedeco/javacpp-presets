@@ -882,17 +882,17 @@ public static native @Cast("bool") boolean b2IsPowerOfTwo(@Cast("uint32") long x
 	/** enum b2Draw:: */
 	public static final int
 		/** draw shapes */
-		e_shapeBit				=  0x0001,
+		e_shapeBit				 = 0x0001,
 		/** draw joint connections */
-		e_jointBit				=  0x0002,
+		e_jointBit				 = 0x0002,
 		/** draw axis aligned bounding boxes */
-		e_aabbBit				=  0x0004,
+		e_aabbBit				 = 0x0004,
 		/** draw broad-phase pairs */
-		e_pairBit				=  0x0008,
+		e_pairBit				 = 0x0008,
 		/** draw center of mass frame */
-		e_centerOfMassBit			=  0x0010,
+		e_centerOfMassBit			 = 0x0010,
 		/** draw particles */
-		e_particleBit				=  0x0020;
+		e_particleBit				 = 0x0020;
 
 	/** Set the drawing flags. */
 	public native void SetFlags(@Cast("uint32") long flags);
@@ -5994,48 +5994,48 @@ public static final int
 	/** Water particle. */
 	b2_waterParticle = 0,
 	/** Removed after next simulation step. */
-	b2_zombieParticle =  1 << 1,
+	b2_zombieParticle = 1 << 1,
 	/** Zero velocity. */
-	b2_wallParticle =  1 << 2,
+	b2_wallParticle = 1 << 2,
 	/** With restitution from stretching. */
-	b2_springParticle =  1 << 3,
+	b2_springParticle = 1 << 3,
 	/** With restitution from deformation. */
-	b2_elasticParticle =  1 << 4,
+	b2_elasticParticle = 1 << 4,
 	/** With viscosity. */
-	b2_viscousParticle =  1 << 5,
+	b2_viscousParticle = 1 << 5,
 	/** Without isotropic pressure. */
-	b2_powderParticle =  1 << 6,
+	b2_powderParticle = 1 << 6,
 	/** With surface tension. */
-	b2_tensileParticle =  1 << 7,
+	b2_tensileParticle = 1 << 7,
 	/** Mix color between contacting particles. */
-	b2_colorMixingParticle =  1 << 8,
+	b2_colorMixingParticle = 1 << 8,
 	/** Call b2DestructionListener on destruction. */
-	b2_destructionListenerParticle =  1 << 9,
+	b2_destructionListenerParticle = 1 << 9,
 	/** Prevents other particles from leaking. */
-	b2_barrierParticle =  1 << 10,
+	b2_barrierParticle = 1 << 10,
 	/** Less compressibility. */
-	b2_staticPressureParticle =  1 << 11,
+	b2_staticPressureParticle = 1 << 11,
 	/** Makes pairs or triads with other particles. */
-	b2_reactiveParticle =  1 << 12,
+	b2_reactiveParticle = 1 << 12,
 	/** With high repulsive force. */
-	b2_repulsiveParticle =  1 << 13,
+	b2_repulsiveParticle = 1 << 13,
 	/** Call b2ContactListener when this particle is about to interact with
 	 *  a rigid body or stops interacting with a rigid body.
 	 *  This results in an expensive operation compared to using
 	 *  b2_fixtureContactFilterParticle to detect collisions between
 	 *  particles. */
-	b2_fixtureContactListenerParticle =  1 << 14,
+	b2_fixtureContactListenerParticle = 1 << 14,
 	/** Call b2ContactListener when this particle is about to interact with
 	 *  another particle or stops interacting with another particle.
 	 *  This results in an expensive operation compared to using
 	 *  b2_particleContactFilterParticle to detect collisions between
 	 *  particles. */
-	b2_particleContactListenerParticle =  1 << 15,
+	b2_particleContactListenerParticle = 1 << 15,
 	/** Call b2ContactFilter when this particle interacts with rigid bodies. */
-	b2_fixtureContactFilterParticle =  1 << 16,
+	b2_fixtureContactFilterParticle = 1 << 16,
 	/** Call b2ContactFilter when this particle interacts with other
 	 *  particles. */
-	b2_particleContactFilterParticle =  1 << 17;
+	b2_particleContactFilterParticle = 1 << 17;
 
 /** Small color object for each particle */
 @NoOffset public static class b2ParticleColor extends Pointer {
@@ -6269,15 +6269,15 @@ public static native @Cast("int32") int b2CalculateParticleIterations(
 /** enum b2ParticleGroupFlag */
 public static final int
 	/** Prevents overlapping or leaking. */
-	b2_solidParticleGroup =  1 << 0,
+	b2_solidParticleGroup = 1 << 0,
 	/** Keeps its shape. */
-	b2_rigidParticleGroup =  1 << 1,
+	b2_rigidParticleGroup = 1 << 1,
 	/** Won't be destroyed if it gets empty. */
-	b2_particleGroupCanBeEmpty =  1 << 2,
+	b2_particleGroupCanBeEmpty = 1 << 2,
 	/** Will be destroyed on next simulation step. */
-	b2_particleGroupWillBeDestroyed =  1 << 3,
+	b2_particleGroupWillBeDestroyed = 1 << 3,
 	/** Updates depth data on next simulation step. */
-	b2_particleGroupNeedsUpdateDepth =  1 << 4,
+	b2_particleGroupNeedsUpdateDepth = 1 << 4,
 	b2_particleGroupInternalMask = 
 		b2_particleGroupWillBeDestroyed |
 		b2_particleGroupNeedsUpdateDepth;

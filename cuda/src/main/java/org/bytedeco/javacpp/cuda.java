@@ -292,7 +292,7 @@ public static class CUipcMemHandle extends Pointer {
 /** enum CUipcMem_flags_enum */
 public static final int
     /** Automatically enable peer access between remote devices as needed */
-    CU_IPC_MEM_LAZY_ENABLE_PEER_ACCESS =  0x1;
+    CU_IPC_MEM_LAZY_ENABLE_PEER_ACCESS = 0x1;
 
 // #endif
 
@@ -302,11 +302,11 @@ public static final int
 /** enum CUmemAttach_flags_enum */
 public static final int
     /** Memory can be accessed by any stream on any device */
-    CU_MEM_ATTACH_GLOBAL =  0x1,
+    CU_MEM_ATTACH_GLOBAL = 0x1,
     /** Memory cannot be accessed by any stream on any device */
-    CU_MEM_ATTACH_HOST   =  0x2,
+    CU_MEM_ATTACH_HOST   = 0x2,
     /** Memory can only be accessed by a single stream on the associated device */
-    CU_MEM_ATTACH_SINGLE =  0x4;
+    CU_MEM_ATTACH_SINGLE = 0x4;
 
 /**
  * Context creation flags
@@ -314,23 +314,23 @@ public static final int
 /** enum CUctx_flags_enum */
 public static final int
     /** Automatic scheduling */
-    CU_CTX_SCHED_AUTO          =  0x00,
+    CU_CTX_SCHED_AUTO          = 0x00,
     /** Set spin as default scheduling */
-    CU_CTX_SCHED_SPIN          =  0x01,
+    CU_CTX_SCHED_SPIN          = 0x01,
     /** Set yield as default scheduling */
-    CU_CTX_SCHED_YIELD         =  0x02,
+    CU_CTX_SCHED_YIELD         = 0x02,
     /** Set blocking synchronization as default scheduling */
-    CU_CTX_SCHED_BLOCKING_SYNC =  0x04,
+    CU_CTX_SCHED_BLOCKING_SYNC = 0x04,
     /** Set blocking synchronization as default scheduling
                                          *  @deprecated This flag was deprecated as of CUDA 4.0
                                          *  and was replaced with ::CU_CTX_SCHED_BLOCKING_SYNC. */
-    CU_CTX_BLOCKING_SYNC       =  0x04,
-    CU_CTX_SCHED_MASK          =  0x07, 
+    CU_CTX_BLOCKING_SYNC       = 0x04,
+    CU_CTX_SCHED_MASK          = 0x07, 
     /** Support mapped pinned allocations */
-    CU_CTX_MAP_HOST            =  0x08,
+    CU_CTX_MAP_HOST            = 0x08,
     /** Keep local memory allocation after launch */
-    CU_CTX_LMEM_RESIZE_TO_MAX  =  0x10,
-    CU_CTX_FLAGS_MASK          =  0x1f;
+    CU_CTX_LMEM_RESIZE_TO_MAX  = 0x10,
+    CU_CTX_FLAGS_MASK          = 0x1f;
 
 /**
  * Stream creation flags
@@ -338,9 +338,9 @@ public static final int
 /** enum CUstream_flags_enum */
 public static final int
     /** Default stream flag */
-    CU_STREAM_DEFAULT      =  0x0,
+    CU_STREAM_DEFAULT      = 0x0,
     /** Stream does not synchronize with stream 0 (the NULL stream) */
-    CU_STREAM_NON_BLOCKING =  0x1;
+    CU_STREAM_NON_BLOCKING = 0x1;
 
 /**
  * Legacy stream handle
@@ -370,13 +370,13 @@ public static final CUstream_st CU_STREAM_PER_THREAD = CU_STREAM_PER_THREAD();
 /** enum CUevent_flags_enum */
 public static final int
     /** Default event flag */
-    CU_EVENT_DEFAULT        =  0x0,
+    CU_EVENT_DEFAULT        = 0x0,
     /** Event uses blocking synchronization */
-    CU_EVENT_BLOCKING_SYNC  =  0x1,
+    CU_EVENT_BLOCKING_SYNC  = 0x1,
     /** Event will not record timing data */
-    CU_EVENT_DISABLE_TIMING =  0x2,
+    CU_EVENT_DISABLE_TIMING = 0x2,
     /** Event is suitable for interprocess use. CU_EVENT_DISABLE_TIMING must be set */
-    CU_EVENT_INTERPROCESS   =  0x4;
+    CU_EVENT_INTERPROCESS   = 0x4;
 
 // #if __CUDA_API_VERSION >= 8000
 /**
@@ -387,16 +387,16 @@ public static final int
     /** Wait until (int32_t)(*addr - value) >= 0 (or int64_t for 64 bit
                                              values). Note this is a cyclic comparison which ignores wraparound.
                                              (Default behavior.) */
-    CU_STREAM_WAIT_VALUE_GEQ   =  0x0,
+    CU_STREAM_WAIT_VALUE_GEQ   = 0x0,
     /** Wait until *addr == value. */
-    CU_STREAM_WAIT_VALUE_EQ    =  0x1,
+    CU_STREAM_WAIT_VALUE_EQ    = 0x1,
     /** Wait until (*addr & value) != 0. */
-    CU_STREAM_WAIT_VALUE_AND   =  0x2,
+    CU_STREAM_WAIT_VALUE_AND   = 0x2,
     /** Wait until ~(*addr | value) != 0. Support for this operation can be
                                              queried with ::cuDeviceGetAttribute() and
                                              ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR. Generally, this
                                              requires compute capability 7.0 or greater. */
-    CU_STREAM_WAIT_VALUE_NOR   =  0x3,
+    CU_STREAM_WAIT_VALUE_NOR   = 0x3,
     /** Follow the wait operation with a flush of outstanding remote writes. This
                                              means that, if a remote write operation is guaranteed to have reached the
                                              device before the wait can be satisfied, that write is guaranteed to be
@@ -404,7 +404,7 @@ public static final int
                                              remote writes internally. For example, this flag would be required if
                                              two remote writes arrive in a defined order, the wait is satisfied by the
                                              second write, and downstream work needs to observe the first write. */
-    CU_STREAM_WAIT_VALUE_FLUSH =  1<<30;
+    CU_STREAM_WAIT_VALUE_FLUSH = 1<<30;
 
 /**
  * Flags for ::cuStreamWriteValue32
@@ -412,14 +412,14 @@ public static final int
 /** enum CUstreamWriteValue_flags_enum */
 public static final int
     /** Default behavior */
-    CU_STREAM_WRITE_VALUE_DEFAULT           =  0x0,
+    CU_STREAM_WRITE_VALUE_DEFAULT           = 0x0,
     /** Permits the write to be reordered with writes which were issued
                                                         before it, as a performance optimization. Normally,
                                                         ::cuStreamWriteValue32 will provide a memory fence before the
                                                         write, which has similar semantics to
                                                         __threadfence_system() but is scoped to the stream
                                                         rather than a CUDA thread. */
-    CU_STREAM_WRITE_VALUE_NO_MEMORY_BARRIER =  0x1;
+    CU_STREAM_WRITE_VALUE_NO_MEMORY_BARRIER = 0x1;
 
 /**
  * Operations for ::cuStreamBatchMemOp
@@ -483,9 +483,9 @@ public static class CUstreamBatchMemOpParams extends Pointer {
 /** enum CUoccupancy_flags_enum */
 public static final int
     /** Default behavior */
-    CU_OCCUPANCY_DEFAULT                  =  0x0,
+    CU_OCCUPANCY_DEFAULT                  = 0x0,
     /** Assume global caching is enabled and cannot be automatically turned off */
-    CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE =  0x1;
+    CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE = 0x1;
 
 /**
  * Array formats
@@ -493,21 +493,21 @@ public static final int
 /** enum CUarray_format_enum */
 public static final int
     /** Unsigned 8-bit integers */
-    CU_AD_FORMAT_UNSIGNED_INT8  =  0x01,
+    CU_AD_FORMAT_UNSIGNED_INT8  = 0x01,
     /** Unsigned 16-bit integers */
-    CU_AD_FORMAT_UNSIGNED_INT16 =  0x02,
+    CU_AD_FORMAT_UNSIGNED_INT16 = 0x02,
     /** Unsigned 32-bit integers */
-    CU_AD_FORMAT_UNSIGNED_INT32 =  0x03,
+    CU_AD_FORMAT_UNSIGNED_INT32 = 0x03,
     /** Signed 8-bit integers */
-    CU_AD_FORMAT_SIGNED_INT8    =  0x08,
+    CU_AD_FORMAT_SIGNED_INT8    = 0x08,
     /** Signed 16-bit integers */
-    CU_AD_FORMAT_SIGNED_INT16   =  0x09,
+    CU_AD_FORMAT_SIGNED_INT16   = 0x09,
     /** Signed 32-bit integers */
-    CU_AD_FORMAT_SIGNED_INT32   =  0x0a,
+    CU_AD_FORMAT_SIGNED_INT32   = 0x0a,
     /** 16-bit floating point */
-    CU_AD_FORMAT_HALF           =  0x10,
+    CU_AD_FORMAT_HALF           = 0x10,
     /** 32-bit floating point */
-    CU_AD_FORMAT_FLOAT          =  0x20;
+    CU_AD_FORMAT_FLOAT          = 0x20;
 
 /**
  * Texture reference addressing modes
@@ -888,13 +888,13 @@ public static final int
 /** enum CUfunc_cache_enum */
 public static final int
     /** no preference for shared memory or L1 (default) */
-    CU_FUNC_CACHE_PREFER_NONE    =  0x00,
+    CU_FUNC_CACHE_PREFER_NONE    = 0x00,
     /** prefer larger shared memory and smaller L1 cache */
-    CU_FUNC_CACHE_PREFER_SHARED  =  0x01,
+    CU_FUNC_CACHE_PREFER_SHARED  = 0x01,
     /** prefer larger L1 cache and smaller shared memory */
-    CU_FUNC_CACHE_PREFER_L1      =  0x02,
+    CU_FUNC_CACHE_PREFER_L1      = 0x02,
     /** prefer equal sized L1 cache and shared memory */
-    CU_FUNC_CACHE_PREFER_EQUAL   =  0x03;
+    CU_FUNC_CACHE_PREFER_EQUAL   = 0x03;
 
 /**
  * Shared memory configurations
@@ -902,11 +902,11 @@ public static final int
 /** enum CUsharedconfig_enum */
 public static final int
     /** set default shared memory bank size */
-    CU_SHARED_MEM_CONFIG_DEFAULT_BANK_SIZE    =  0x00,
+    CU_SHARED_MEM_CONFIG_DEFAULT_BANK_SIZE    = 0x00,
     /** set shared memory bank width to four bytes */
-    CU_SHARED_MEM_CONFIG_FOUR_BYTE_BANK_SIZE  =  0x01,
+    CU_SHARED_MEM_CONFIG_FOUR_BYTE_BANK_SIZE  = 0x01,
     /** set shared memory bank width to eight bytes */
-    CU_SHARED_MEM_CONFIG_EIGHT_BYTE_BANK_SIZE =  0x02;
+    CU_SHARED_MEM_CONFIG_EIGHT_BYTE_BANK_SIZE = 0x02;
 
 /**
  * Shared memory carveout configurations
@@ -923,13 +923,13 @@ public static final int
 /** enum CUmemorytype_enum */
 public static final int
     /** Host memory */
-    CU_MEMORYTYPE_HOST    =  0x01,
+    CU_MEMORYTYPE_HOST    = 0x01,
     /** Device memory */
-    CU_MEMORYTYPE_DEVICE  =  0x02,
+    CU_MEMORYTYPE_DEVICE  = 0x02,
     /** Array memory */
-    CU_MEMORYTYPE_ARRAY   =  0x03,
+    CU_MEMORYTYPE_ARRAY   = 0x03,
     /** Unified device or host memory */
-    CU_MEMORYTYPE_UNIFIED =  0x04;
+    CU_MEMORYTYPE_UNIFIED = 0x04;
 
 /**
  * Compute Modes
@@ -1224,20 +1224,20 @@ public static final int
  */
 /** enum CUgraphicsRegisterFlags_enum */
 public static final int
-    CU_GRAPHICS_REGISTER_FLAGS_NONE           =  0x00,
-    CU_GRAPHICS_REGISTER_FLAGS_READ_ONLY      =  0x01,
-    CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD  =  0x02,
-    CU_GRAPHICS_REGISTER_FLAGS_SURFACE_LDST   =  0x04,
-    CU_GRAPHICS_REGISTER_FLAGS_TEXTURE_GATHER =  0x08;
+    CU_GRAPHICS_REGISTER_FLAGS_NONE           = 0x00,
+    CU_GRAPHICS_REGISTER_FLAGS_READ_ONLY      = 0x01,
+    CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD  = 0x02,
+    CU_GRAPHICS_REGISTER_FLAGS_SURFACE_LDST   = 0x04,
+    CU_GRAPHICS_REGISTER_FLAGS_TEXTURE_GATHER = 0x08;
 
 /**
  * Flags for mapping and unmapping interop resources
  */
 /** enum CUgraphicsMapResourceFlags_enum */
 public static final int
-    CU_GRAPHICS_MAP_RESOURCE_FLAGS_NONE          =  0x00,
-    CU_GRAPHICS_MAP_RESOURCE_FLAGS_READ_ONLY     =  0x01,
-    CU_GRAPHICS_MAP_RESOURCE_FLAGS_WRITE_DISCARD =  0x02;
+    CU_GRAPHICS_MAP_RESOURCE_FLAGS_NONE          = 0x00,
+    CU_GRAPHICS_MAP_RESOURCE_FLAGS_READ_ONLY     = 0x01,
+    CU_GRAPHICS_MAP_RESOURCE_FLAGS_WRITE_DISCARD = 0x02;
 
 /**
  * Array indices for cube faces
@@ -1245,17 +1245,17 @@ public static final int
 /** enum CUarray_cubemap_face_enum */
 public static final int
     /** Positive X face of cubemap */
-    CU_CUBEMAP_FACE_POSITIVE_X  =  0x00,
+    CU_CUBEMAP_FACE_POSITIVE_X  = 0x00,
     /** Negative X face of cubemap */
-    CU_CUBEMAP_FACE_NEGATIVE_X  =  0x01,
+    CU_CUBEMAP_FACE_NEGATIVE_X  = 0x01,
     /** Positive Y face of cubemap */
-    CU_CUBEMAP_FACE_POSITIVE_Y  =  0x02,
+    CU_CUBEMAP_FACE_POSITIVE_Y  = 0x02,
     /** Negative Y face of cubemap */
-    CU_CUBEMAP_FACE_NEGATIVE_Y  =  0x03,
+    CU_CUBEMAP_FACE_NEGATIVE_Y  = 0x03,
     /** Positive Z face of cubemap */
-    CU_CUBEMAP_FACE_POSITIVE_Z  =  0x04,
+    CU_CUBEMAP_FACE_POSITIVE_Z  = 0x04,
     /** Negative Z face of cubemap */
-    CU_CUBEMAP_FACE_NEGATIVE_Z  =  0x05;
+    CU_CUBEMAP_FACE_NEGATIVE_Z  = 0x05;
 
 /**
  * Limits
@@ -1263,16 +1263,16 @@ public static final int
 /** enum CUlimit_enum */
 public static final int
     /** GPU thread stack size */
-    CU_LIMIT_STACK_SIZE                       =  0x00,
+    CU_LIMIT_STACK_SIZE                       = 0x00,
     /** GPU printf FIFO size */
-    CU_LIMIT_PRINTF_FIFO_SIZE                 =  0x01,
+    CU_LIMIT_PRINTF_FIFO_SIZE                 = 0x01,
     /** GPU malloc heap size */
-    CU_LIMIT_MALLOC_HEAP_SIZE                 =  0x02,
+    CU_LIMIT_MALLOC_HEAP_SIZE                 = 0x02,
     /** GPU device runtime launch synchronize depth */
-    CU_LIMIT_DEV_RUNTIME_SYNC_DEPTH           =  0x03,
+    CU_LIMIT_DEV_RUNTIME_SYNC_DEPTH           = 0x03,
     /** GPU device runtime pending launch count */
-    CU_LIMIT_DEV_RUNTIME_PENDING_LAUNCH_COUNT =  0x04,
-    CU_LIMIT_MAX =  0x04 + 1;
+    CU_LIMIT_DEV_RUNTIME_PENDING_LAUNCH_COUNT = 0x04,
+    CU_LIMIT_MAX = 0x04 + 1;
 
 /**
  * Resource types
@@ -1280,13 +1280,13 @@ public static final int
 /** enum CUresourcetype_enum */
 public static final int
     /** Array resoure */
-    CU_RESOURCE_TYPE_ARRAY           =  0x00,
+    CU_RESOURCE_TYPE_ARRAY           = 0x00,
     /** Mipmapped array resource */
-    CU_RESOURCE_TYPE_MIPMAPPED_ARRAY =  0x01,
+    CU_RESOURCE_TYPE_MIPMAPPED_ARRAY = 0x01,
     /** Linear resource */
-    CU_RESOURCE_TYPE_LINEAR          =  0x02,
+    CU_RESOURCE_TYPE_LINEAR          = 0x02,
     /** Pitch 2D resource */
-    CU_RESOURCE_TYPE_PITCH2D         =  0x03;
+    CU_RESOURCE_TYPE_PITCH2D         = 0x03;
 
 /**
  * Error codes
@@ -1708,11 +1708,11 @@ public static final int
 /** enum CUdevice_P2PAttribute_enum */
 public static final int
     /** A relative value indicating the performance of the link between two devices */
-    CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK        =  0x01,
+    CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK        = 0x01,
     /** P2P Access is enable */
-    CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED        =  0x02,
+    CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED        = 0x02,
     /** Atomic operation over the link supported */
-    CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED =  0x03;
+    CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED = 0x03;
 
 // #ifdef _WIN32
 // #define CUDA_CB __stdcall
@@ -2159,75 +2159,75 @@ public static class CUDA_TEXTURE_DESC extends Pointer {
 /** enum CUresourceViewFormat_enum */
 public static final int
     /** No resource view format (use underlying resource format) */
-    CU_RES_VIEW_FORMAT_NONE          =  0x00,
+    CU_RES_VIEW_FORMAT_NONE          = 0x00,
     /** 1 channel unsigned 8-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_1X8      =  0x01,
+    CU_RES_VIEW_FORMAT_UINT_1X8      = 0x01,
     /** 2 channel unsigned 8-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_2X8      =  0x02,
+    CU_RES_VIEW_FORMAT_UINT_2X8      = 0x02,
     /** 4 channel unsigned 8-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_4X8      =  0x03,
+    CU_RES_VIEW_FORMAT_UINT_4X8      = 0x03,
     /** 1 channel signed 8-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_1X8      =  0x04,
+    CU_RES_VIEW_FORMAT_SINT_1X8      = 0x04,
     /** 2 channel signed 8-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_2X8      =  0x05,
+    CU_RES_VIEW_FORMAT_SINT_2X8      = 0x05,
     /** 4 channel signed 8-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_4X8      =  0x06,
+    CU_RES_VIEW_FORMAT_SINT_4X8      = 0x06,
     /** 1 channel unsigned 16-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_1X16     =  0x07,
+    CU_RES_VIEW_FORMAT_UINT_1X16     = 0x07,
     /** 2 channel unsigned 16-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_2X16     =  0x08,
+    CU_RES_VIEW_FORMAT_UINT_2X16     = 0x08,
     /** 4 channel unsigned 16-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_4X16     =  0x09,
+    CU_RES_VIEW_FORMAT_UINT_4X16     = 0x09,
     /** 1 channel signed 16-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_1X16     =  0x0a,
+    CU_RES_VIEW_FORMAT_SINT_1X16     = 0x0a,
     /** 2 channel signed 16-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_2X16     =  0x0b,
+    CU_RES_VIEW_FORMAT_SINT_2X16     = 0x0b,
     /** 4 channel signed 16-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_4X16     =  0x0c,
+    CU_RES_VIEW_FORMAT_SINT_4X16     = 0x0c,
     /** 1 channel unsigned 32-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_1X32     =  0x0d,
+    CU_RES_VIEW_FORMAT_UINT_1X32     = 0x0d,
     /** 2 channel unsigned 32-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_2X32     =  0x0e,
+    CU_RES_VIEW_FORMAT_UINT_2X32     = 0x0e,
     /** 4 channel unsigned 32-bit integers */
-    CU_RES_VIEW_FORMAT_UINT_4X32     =  0x0f,
+    CU_RES_VIEW_FORMAT_UINT_4X32     = 0x0f,
     /** 1 channel signed 32-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_1X32     =  0x10,
+    CU_RES_VIEW_FORMAT_SINT_1X32     = 0x10,
     /** 2 channel signed 32-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_2X32     =  0x11,
+    CU_RES_VIEW_FORMAT_SINT_2X32     = 0x11,
     /** 4 channel signed 32-bit integers */
-    CU_RES_VIEW_FORMAT_SINT_4X32     =  0x12,
+    CU_RES_VIEW_FORMAT_SINT_4X32     = 0x12,
     /** 1 channel 16-bit floating point */
-    CU_RES_VIEW_FORMAT_FLOAT_1X16    =  0x13,
+    CU_RES_VIEW_FORMAT_FLOAT_1X16    = 0x13,
     /** 2 channel 16-bit floating point */
-    CU_RES_VIEW_FORMAT_FLOAT_2X16    =  0x14,
+    CU_RES_VIEW_FORMAT_FLOAT_2X16    = 0x14,
     /** 4 channel 16-bit floating point */
-    CU_RES_VIEW_FORMAT_FLOAT_4X16    =  0x15,
+    CU_RES_VIEW_FORMAT_FLOAT_4X16    = 0x15,
     /** 1 channel 32-bit floating point */
-    CU_RES_VIEW_FORMAT_FLOAT_1X32    =  0x16,
+    CU_RES_VIEW_FORMAT_FLOAT_1X32    = 0x16,
     /** 2 channel 32-bit floating point */
-    CU_RES_VIEW_FORMAT_FLOAT_2X32    =  0x17,
+    CU_RES_VIEW_FORMAT_FLOAT_2X32    = 0x17,
     /** 4 channel 32-bit floating point */
-    CU_RES_VIEW_FORMAT_FLOAT_4X32    =  0x18,
+    CU_RES_VIEW_FORMAT_FLOAT_4X32    = 0x18,
     /** Block compressed 1 */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC1  =  0x19,
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC1  = 0x19,
     /** Block compressed 2 */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC2  =  0x1a,
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC2  = 0x1a,
     /** Block compressed 3 */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC3  =  0x1b,
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC3  = 0x1b,
     /** Block compressed 4 unsigned */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC4  =  0x1c,
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC4  = 0x1c,
     /** Block compressed 4 signed */
-    CU_RES_VIEW_FORMAT_SIGNED_BC4    =  0x1d,
+    CU_RES_VIEW_FORMAT_SIGNED_BC4    = 0x1d,
     /** Block compressed 5 unsigned */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC5  =  0x1e,
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC5  = 0x1e,
     /** Block compressed 5 signed */
-    CU_RES_VIEW_FORMAT_SIGNED_BC5    =  0x1f,
+    CU_RES_VIEW_FORMAT_SIGNED_BC5    = 0x1f,
     /** Block compressed 6 unsigned half-float */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC6H =  0x20,
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC6H = 0x20,
     /** Block compressed 6 signed half-float */
-    CU_RES_VIEW_FORMAT_SIGNED_BC6H   =  0x21,
+    CU_RES_VIEW_FORMAT_SIGNED_BC6H   = 0x21,
     /** Block compressed 7 */
-    CU_RES_VIEW_FORMAT_UNSIGNED_BC7  =  0x22;
+    CU_RES_VIEW_FORMAT_UNSIGNED_BC7  = 0x22;
 
 /**
  * Resource view descriptor
@@ -13702,7 +13702,7 @@ public static final int
     /**
      * This indicates an internal startup failure in the CUDA runtime.
      */
-    cudaErrorStartupFailure               =    0x7f,
+    cudaErrorStartupFailure               =   0x7f,
 
     /**
      * Any unhandled CUDA driver error is added to this value and returned via
@@ -14012,17 +14012,17 @@ public static final int
 /** enum cudaGraphicsCubeFace */
 public static final int
     /** Positive X face of cubemap */
-    cudaGraphicsCubeFacePositiveX =  0x00,
+    cudaGraphicsCubeFacePositiveX = 0x00,
     /** Negative X face of cubemap */
-    cudaGraphicsCubeFaceNegativeX =  0x01,
+    cudaGraphicsCubeFaceNegativeX = 0x01,
     /** Positive Y face of cubemap */
-    cudaGraphicsCubeFacePositiveY =  0x02,
+    cudaGraphicsCubeFacePositiveY = 0x02,
     /** Negative Y face of cubemap */
-    cudaGraphicsCubeFaceNegativeY =  0x03,
+    cudaGraphicsCubeFaceNegativeY = 0x03,
     /** Positive Z face of cubemap */
-    cudaGraphicsCubeFacePositiveZ =  0x04,
+    cudaGraphicsCubeFacePositiveZ = 0x04,
     /** Negative Z face of cubemap */
-    cudaGraphicsCubeFaceNegativeZ =  0x05;
+    cudaGraphicsCubeFaceNegativeZ = 0x05;
 
 /**
  * CUDA resource types
@@ -14030,13 +14030,13 @@ public static final int
 /** enum cudaResourceType */
 public static final int
     /** Array resource */
-    cudaResourceTypeArray          =  0x00,
+    cudaResourceTypeArray          = 0x00,
     /** Mipmapped array resource */
-    cudaResourceTypeMipmappedArray =  0x01,
+    cudaResourceTypeMipmappedArray = 0x01,
     /** Linear resource */
-    cudaResourceTypeLinear         =  0x02,
+    cudaResourceTypeLinear         = 0x02,
     /** Pitch 2D resource */
-    cudaResourceTypePitch2D        =  0x03;
+    cudaResourceTypePitch2D        = 0x03;
 
 /**
  * CUDA texture resource view formats
@@ -14044,75 +14044,75 @@ public static final int
 /** enum cudaResourceViewFormat */
 public static final int
     /** No resource view format (use underlying resource format) */
-    cudaResViewFormatNone                      =  0x00,
+    cudaResViewFormatNone                      = 0x00,
     /** 1 channel unsigned 8-bit integers */
-    cudaResViewFormatUnsignedChar1             =  0x01,
+    cudaResViewFormatUnsignedChar1             = 0x01,
     /** 2 channel unsigned 8-bit integers */
-    cudaResViewFormatUnsignedChar2             =  0x02,
+    cudaResViewFormatUnsignedChar2             = 0x02,
     /** 4 channel unsigned 8-bit integers */
-    cudaResViewFormatUnsignedChar4             =  0x03,
+    cudaResViewFormatUnsignedChar4             = 0x03,
     /** 1 channel signed 8-bit integers */
-    cudaResViewFormatSignedChar1               =  0x04,
+    cudaResViewFormatSignedChar1               = 0x04,
     /** 2 channel signed 8-bit integers */
-    cudaResViewFormatSignedChar2               =  0x05,
+    cudaResViewFormatSignedChar2               = 0x05,
     /** 4 channel signed 8-bit integers */
-    cudaResViewFormatSignedChar4               =  0x06,
+    cudaResViewFormatSignedChar4               = 0x06,
     /** 1 channel unsigned 16-bit integers */
-    cudaResViewFormatUnsignedShort1            =  0x07,
+    cudaResViewFormatUnsignedShort1            = 0x07,
     /** 2 channel unsigned 16-bit integers */
-    cudaResViewFormatUnsignedShort2            =  0x08,
+    cudaResViewFormatUnsignedShort2            = 0x08,
     /** 4 channel unsigned 16-bit integers */
-    cudaResViewFormatUnsignedShort4            =  0x09,
+    cudaResViewFormatUnsignedShort4            = 0x09,
     /** 1 channel signed 16-bit integers */
-    cudaResViewFormatSignedShort1              =  0x0a,
+    cudaResViewFormatSignedShort1              = 0x0a,
     /** 2 channel signed 16-bit integers */
-    cudaResViewFormatSignedShort2              =  0x0b,
+    cudaResViewFormatSignedShort2              = 0x0b,
     /** 4 channel signed 16-bit integers */
-    cudaResViewFormatSignedShort4              =  0x0c,
+    cudaResViewFormatSignedShort4              = 0x0c,
     /** 1 channel unsigned 32-bit integers */
-    cudaResViewFormatUnsignedInt1              =  0x0d,
+    cudaResViewFormatUnsignedInt1              = 0x0d,
     /** 2 channel unsigned 32-bit integers */
-    cudaResViewFormatUnsignedInt2              =  0x0e,
+    cudaResViewFormatUnsignedInt2              = 0x0e,
     /** 4 channel unsigned 32-bit integers */
-    cudaResViewFormatUnsignedInt4              =  0x0f,
+    cudaResViewFormatUnsignedInt4              = 0x0f,
     /** 1 channel signed 32-bit integers */
-    cudaResViewFormatSignedInt1                =  0x10,
+    cudaResViewFormatSignedInt1                = 0x10,
     /** 2 channel signed 32-bit integers */
-    cudaResViewFormatSignedInt2                =  0x11,
+    cudaResViewFormatSignedInt2                = 0x11,
     /** 4 channel signed 32-bit integers */
-    cudaResViewFormatSignedInt4                =  0x12,
+    cudaResViewFormatSignedInt4                = 0x12,
     /** 1 channel 16-bit floating point */
-    cudaResViewFormatHalf1                     =  0x13,
+    cudaResViewFormatHalf1                     = 0x13,
     /** 2 channel 16-bit floating point */
-    cudaResViewFormatHalf2                     =  0x14,
+    cudaResViewFormatHalf2                     = 0x14,
     /** 4 channel 16-bit floating point */
-    cudaResViewFormatHalf4                     =  0x15,
+    cudaResViewFormatHalf4                     = 0x15,
     /** 1 channel 32-bit floating point */
-    cudaResViewFormatFloat1                    =  0x16,
+    cudaResViewFormatFloat1                    = 0x16,
     /** 2 channel 32-bit floating point */
-    cudaResViewFormatFloat2                    =  0x17,
+    cudaResViewFormatFloat2                    = 0x17,
     /** 4 channel 32-bit floating point */
-    cudaResViewFormatFloat4                    =  0x18,
+    cudaResViewFormatFloat4                    = 0x18,
     /** Block compressed 1 */
-    cudaResViewFormatUnsignedBlockCompressed1  =  0x19,
+    cudaResViewFormatUnsignedBlockCompressed1  = 0x19,
     /** Block compressed 2 */
-    cudaResViewFormatUnsignedBlockCompressed2  =  0x1a,
+    cudaResViewFormatUnsignedBlockCompressed2  = 0x1a,
     /** Block compressed 3 */
-    cudaResViewFormatUnsignedBlockCompressed3  =  0x1b,
+    cudaResViewFormatUnsignedBlockCompressed3  = 0x1b,
     /** Block compressed 4 unsigned */
-    cudaResViewFormatUnsignedBlockCompressed4  =  0x1c,
+    cudaResViewFormatUnsignedBlockCompressed4  = 0x1c,
     /** Block compressed 4 signed */
-    cudaResViewFormatSignedBlockCompressed4    =  0x1d,
+    cudaResViewFormatSignedBlockCompressed4    = 0x1d,
     /** Block compressed 5 unsigned */
-    cudaResViewFormatUnsignedBlockCompressed5  =  0x1e,
+    cudaResViewFormatUnsignedBlockCompressed5  = 0x1e,
     /** Block compressed 5 signed */
-    cudaResViewFormatSignedBlockCompressed5    =  0x1f,
+    cudaResViewFormatSignedBlockCompressed5    = 0x1f,
     /** Block compressed 6 unsigned half-float */
-    cudaResViewFormatUnsignedBlockCompressed6H =  0x20,
+    cudaResViewFormatUnsignedBlockCompressed6H = 0x20,
     /** Block compressed 6 signed half-float */
-    cudaResViewFormatSignedBlockCompressed6H   =  0x21,
+    cudaResViewFormatSignedBlockCompressed6H   = 0x21,
     /** Block compressed 7 */
-    cudaResViewFormatUnsignedBlockCompressed7  =  0x22;
+    cudaResViewFormatUnsignedBlockCompressed7  = 0x22;
 
 /**
  * CUDA resource descriptor
@@ -14389,15 +14389,15 @@ public static final int
 /** enum cudaLimit */
 public static final int
     /** GPU thread stack size */
-    cudaLimitStackSize                    =  0x00,
+    cudaLimitStackSize                    = 0x00,
     /** GPU printf/fprintf FIFO size */
-    cudaLimitPrintfFifoSize               =  0x01,
+    cudaLimitPrintfFifoSize               = 0x01,
     /** GPU malloc heap size */
-    cudaLimitMallocHeapSize               =  0x02,
+    cudaLimitMallocHeapSize               = 0x02,
     /** GPU device runtime synchronize depth */
-    cudaLimitDevRuntimeSyncDepth          =  0x03,
+    cudaLimitDevRuntimeSyncDepth          = 0x03,
     /** GPU device runtime pending launch count */
-    cudaLimitDevRuntimePendingLaunchCount =  0x04;
+    cudaLimitDevRuntimePendingLaunchCount = 0x04;
 
 /**
  * CUDA Memory Advise values
@@ -14437,9 +14437,9 @@ public static final int
 /** enum cudaOutputMode */
 public static final int
     /** Output mode Key-Value pair format. */
-    cudaKeyValuePair    =  0x00,
+    cudaKeyValuePair    = 0x00,
     /** Output mode Comma separated values format. */
-    cudaCSV             =  0x01;
+    cudaCSV             = 0x01;
 
 /**
  * CUDA device attributes
@@ -26460,20 +26460,20 @@ public static class __half2_raw extends Pointer {
 
 /** enum cudaDataType_t */
 public static final int
-	CUDA_R_16F= 2,  /* real as a half */
-	CUDA_C_16F= 6,  /* complex as a pair of half numbers */
-	CUDA_R_32F= 0,  /* real as a float */
-	CUDA_C_32F= 4,  /* complex as a pair of float numbers */
-	CUDA_R_64F= 1,  /* real as a double */
-	CUDA_C_64F= 5,  /* complex as a pair of double numbers */
+	CUDA_R_16F = 2,  /* real as a half */
+	CUDA_C_16F = 6,  /* complex as a pair of half numbers */
+	CUDA_R_32F = 0,  /* real as a float */
+	CUDA_C_32F = 4,  /* complex as a pair of float numbers */
+	CUDA_R_64F = 1,  /* real as a double */
+	CUDA_C_64F = 5,  /* complex as a pair of double numbers */
 	CUDA_R_8I = 3,  /* real as a signed char */
 	CUDA_C_8I = 7,  /* complex as a pair of signed char numbers */
 	CUDA_R_8U = 8,  /* real as a unsigned char */
 	CUDA_C_8U = 9,  /* complex as a pair of unsigned char numbers */
-	CUDA_R_32I= 10, /* real as a signed int */
-	CUDA_C_32I= 11, /* complex as a pair of signed int numbers */
-	CUDA_R_32U= 12, /* real as a unsigned int */
-	CUDA_C_32U= 13;  /* complex as a pair of unsigned int numbers */ 
+	CUDA_R_32I = 10, /* real as a signed int */
+	CUDA_C_32I = 11, /* complex as a pair of signed int numbers */
+	CUDA_R_32U = 12, /* real as a unsigned int */
+	CUDA_C_32U = 13;  /* complex as a pair of unsigned int numbers */ 
 
 
 /** enum libraryPropertyType_t */

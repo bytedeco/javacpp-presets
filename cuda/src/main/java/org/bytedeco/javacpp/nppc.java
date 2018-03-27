@@ -267,7 +267,7 @@ public static final int
     /**  Generic Lanczos filtering with order 3. */
     NPPI_INTER_LANCZOS3_ADVANCED = 17,
     /**  Smooth edge filtering. */
-    NPPI_SMOOTH_EDGE             =  (1 << 31); 
+    NPPI_SMOOTH_EDGE             = (1 << 31); 
 
 /** 
  * Bayer Grid Position Registration.
@@ -411,7 +411,7 @@ public static final int
     /**  Error free operation */
     NPP_NO_ERROR                            = 0,
     /**  Successful operation (same as NPP_NO_ERROR) */
-    NPP_SUCCESS =  NPP_NO_ERROR,
+    NPP_SUCCESS = NPP_NO_ERROR,
 
     /* positive return-codes indicate warnings */
     /**  Indicates that no operation was performed */
@@ -892,7 +892,7 @@ public static final int
      */
     NPP_RND_NEAR = 0,
     /** Alias name for ::NPP_RND_NEAR. */
-    NPP_ROUND_NEAREST_TIES_TO_EVEN =  NPP_RND_NEAR,
+    NPP_ROUND_NEAREST_TIES_TO_EVEN = NPP_RND_NEAR,
     /** 
      * Round according to financial rule.
      * All fractional numbers are rounded to their nearest integer. The ambiguous
@@ -902,9 +902,9 @@ public static final int
      * - roundFinancial(0.5)  = 1
      * - roundFinancial(-1.5) = -2
      */
-    NPP_RND_FINANCIAL =  NPP_RND_NEAR + 1,
+    NPP_RND_FINANCIAL = NPP_RND_NEAR + 1,
     /** Alias name for ::NPP_RND_FINANCIAL.  */
-    NPP_ROUND_NEAREST_TIES_AWAY_FROM_ZERO =  NPP_RND_FINANCIAL,
+    NPP_ROUND_NEAREST_TIES_AWAY_FROM_ZERO = NPP_RND_FINANCIAL,
     /**
      * Round towards zero (truncation). 
      * All fractional numbers of the form \<integer\>.\<decimals\> are truncated to
@@ -913,9 +913,9 @@ public static final int
      * - roundZero(1.9) = 1
      * - roundZero(-2.5) = -2
      */
-    NPP_RND_ZERO =  NPP_RND_FINANCIAL + 1,
+    NPP_RND_ZERO = NPP_RND_FINANCIAL + 1,
     /** Alias name for ::NPP_RND_ZERO.  */
-    NPP_ROUND_TOWARD_ZERO =  NPP_RND_ZERO;
+    NPP_ROUND_TOWARD_ZERO = NPP_RND_ZERO;
     
     /*
      * Other rounding modes supported by IEEE-754 (2008) floating-point standard:
@@ -928,7 +928,7 @@ public static final int
 /** enum NppiBorderType */
 public static final int
     NPP_BORDER_UNDEFINED        = 0,
-    NPP_BORDER_NONE             =  NPP_BORDER_UNDEFINED, 
+    NPP_BORDER_NONE             = NPP_BORDER_UNDEFINED, 
     NPP_BORDER_CONSTANT         = 1,
     NPP_BORDER_REPLICATE        = 2,
     NPP_BORDER_WRAP             = 3,

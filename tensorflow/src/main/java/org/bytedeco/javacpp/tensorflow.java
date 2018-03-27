@@ -2494,8 +2494,8 @@ public static final int
   UNAVAILABLE = 14,
   DATA_LOSS = 15,
   DO_NOT_USE_RESERVED_FOR_FUTURE_EXPANSION_USE_DEFAULT_IN_SWITCH_INSTEAD_ = 20,
-  Code_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  Code_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  Code_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  Code_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_IsValid(int value);
 @Namespace("tensorflow::error") @MemberGetter public static native @Cast("const tensorflow::error::Code") int Code_MIN();
 @Namespace("tensorflow::error") @MemberGetter public static native @Cast("const tensorflow::error::Code") int Code_MAX();
@@ -4802,8 +4802,8 @@ public static final int
   RewriterConfig_Toggle_ON = 1,
   RewriterConfig_Toggle_OFF = 2,
   RewriterConfig_Toggle_AGGRESSIVE = 3,
-  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_Toggle_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_Toggle") int RewriterConfig_Toggle_Toggle_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_Toggle") int RewriterConfig_Toggle_Toggle_MAX();
@@ -4832,8 +4832,8 @@ public static final int
   RewriterConfig_MemOptType_RECOMPUTATION_HEURISTICS = 5,
   RewriterConfig_MemOptType_SCHEDULING_HEURISTICS = 6,
   RewriterConfig_MemOptType_HEURISTICS = 3,
-  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_MemOptType_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_MemOptType") int RewriterConfig_MemOptType_MemOptType_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_MemOptType") int RewriterConfig_MemOptType_MemOptType_MAX();
@@ -5396,8 +5396,8 @@ public static final int
 public static final int
   OptimizerOptions_Level_L1 = 0,
   OptimizerOptions_Level_L0 = -1,
-  OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_Level") int OptimizerOptions_Level_Level_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_Level") int OptimizerOptions_Level_Level_MAX();
@@ -5423,8 +5423,8 @@ public static final int
   OptimizerOptions_GlobalJitLevel_OFF = -1,
   OptimizerOptions_GlobalJitLevel_ON_1 = 1,
   OptimizerOptions_GlobalJitLevel_ON_2 = 2,
-  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_GlobalJitLevel_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_GlobalJitLevel") int OptimizerOptions_GlobalJitLevel_GlobalJitLevel_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_GlobalJitLevel") int OptimizerOptions_GlobalJitLevel_GlobalJitLevel_MAX();
@@ -5450,8 +5450,8 @@ public static final int
   RunOptions_TraceLevel_SOFTWARE_TRACE = 1,
   RunOptions_TraceLevel_HARDWARE_TRACE = 2,
   RunOptions_TraceLevel_FULL_TRACE = 3,
-  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean RunOptions_TraceLevel_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RunOptions_TraceLevel") int RunOptions_TraceLevel_TraceLevel_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RunOptions_TraceLevel") int RunOptions_TraceLevel_TraceLevel_MAX();
@@ -10284,8 +10284,8 @@ public static final int
   DT_VARIANT_REF = 121,
   DT_UINT32_REF = 122,
   DT_UINT64_REF = 123,
-  DataType_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  DataType_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  DataType_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  DataType_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean DataType_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::DataType") int DataType_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::DataType") int DataType_MAX();
@@ -27737,8 +27737,8 @@ public static final int
   ApiDef_Visibility_VISIBLE = 1,
   ApiDef_Visibility_SKIP = 2,
   ApiDef_Visibility_HIDDEN = 3,
-  ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MAX();
@@ -28993,8 +28993,8 @@ public static final int
   SaverDef_CheckpointFormatVersion_LEGACY = 0,
   SaverDef_CheckpointFormatVersion_V1 = 1,
   SaverDef_CheckpointFormatVersion_V2 = 2,
-  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
-  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
+  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean SaverDef_CheckpointFormatVersion_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::SaverDef_CheckpointFormatVersion") int SaverDef_CheckpointFormatVersion_CheckpointFormatVersion_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::SaverDef_CheckpointFormatVersion") int SaverDef_CheckpointFormatVersion_CheckpointFormatVersion_MAX();

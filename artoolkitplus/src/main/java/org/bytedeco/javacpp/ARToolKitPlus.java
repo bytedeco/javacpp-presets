@@ -107,7 +107,7 @@ public static final int
 // ARToolKitPlus versioning
 /** enum ARToolKitPlus::ARTKP_VERSION */
 public static final int
-    VERSION_MAJOR =  ARTOOLKITPLUS_VERSION_MAJOR, VERSION_MINOR =  ARTOOLKITPLUS_VERSION_MINOR;
+    VERSION_MAJOR = ARTOOLKITPLUS_VERSION_MAJOR, VERSION_MINOR = ARTOOLKITPLUS_VERSION_MINOR;
 
 /** enum ARToolKitPlus::MARKER_MODE */
 public static final int
@@ -1522,10 +1522,10 @@ public static final int
 
     // number of bits we can use for marker id
     idBits = 9,
-    idMask =  (1 << idBits) - 1,
-    idMax =  (1 << idBits) - 1,
+    idMask = (1 << idBits) - 1,
+    idMax = (1 << idBits) - 1,
 
-    pattBits =  4 * idBits;
+    pattBits = 4 * idBits;
 
 // we only use __int64 under windows.
 // have to use unsigned long long othersie...

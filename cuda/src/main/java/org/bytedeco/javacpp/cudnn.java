@@ -2063,7 +2063,7 @@ public static native @Cast("cudnnStatus_t") int cudnnBatchNormalizationBackward(
 /* APIs for spatial transformer network*/
 /** enum cudnnSamplerType_t */
 public static final int
-    CUDNN_SAMPLER_BILINEAR= 0;
+    CUDNN_SAMPLER_BILINEAR = 0;
  
 public static native @Cast("cudnnStatus_t") int cudnnCreateSpatialTransformerDescriptor(
                                @ByPtrPtr cudnnSpatialTransformerStruct stDesc);
