@@ -1,3 +1,11 @@
 org.bytedeco.javacpp
 org.bytedeco.javacpp.helper
 org.bytedeco.javacpp.presets
+org.tensorflow
+org.tensorflow.examples
+org.tensorflow.lite
+org.tensorflow.op
+org.tensorflow.op.annotation
+org.tensorflow.op.core
+org.tensorflow.processor
+org.tensorflow.types
