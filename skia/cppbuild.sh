@@ -72,10 +72,10 @@ cp third_party/libjpeg-turbo/* third_party/externals/libjpeg-turbo/
 if [[ $PLATFORM == ios* ]]; then
     sed -i="" s/thread_local//g tools/ok.cpp
     sed -i="" /SRC_SK_XFERMODE_MODE/d tests/CTest.cpp
-    bin/gn gen out/Static --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false $EXTRA_ARGS"
+    bin/gn gen out/Static --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\"] $EXTRA_ARGS"
     ninja -C out/Static
 else
-    bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-DSKIA_C_DLL\"] $EXTRA_ARGS"
+    bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
     ninja -C out/Shared
 fi
 

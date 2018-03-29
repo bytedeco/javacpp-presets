@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.1</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -65,7 +65,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>${javacpp.platform}</id>
+            <id>${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
@@ -73,26 +73,26 @@
                 <exclude>${javacpp.platform.library.path}/sdk/**/*.so*</exclude>
                 <exclude>${javacpp.platform.library.path}/sdk/native/jni/include/**</exclude>
                 <exclude>${javacpp.platform.library.path}/**/*cascade*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.obj</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/sdk/**/*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/sdk/**/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/sdk/**/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/share/**/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x86/**/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x86/**/*.dll</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x86/**/*.exe</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x64/**/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x64/**/*.dll</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/x64/**/*.exe</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/**/*cascade*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/bin/*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.dll</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.exe</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.dll</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.exe</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/**/*cascade*</exclude>
               </excludes>
             </configuration>
           </execution>

@@ -144,7 +144,7 @@ function download {
 }
 
 function sedinplace {
-    if [[ "$KERNEL" == "darwin" ]]; then
+    if ! sed --version 2>&1 | grep -i gnu > /dev/null; then
         sed -i '' "$@"
     else
         sed -i "$@"

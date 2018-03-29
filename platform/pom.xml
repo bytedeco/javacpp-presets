@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.1</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -30,6 +30,7 @@
     <module>../mkl/platform</module>
     <module>../openblas/platform</module>
     <module>../arpack-ng/platform</module>
+    <module>../cminpack/platform</module>
     <module>../fftw/platform</module>
     <module>../gsl/platform</module>
     <module>../llvm/platform</module>

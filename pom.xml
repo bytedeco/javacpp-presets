@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.1</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -365,6 +365,10 @@
         <version>3.0.1</version>
         <executions>
           <execution>
+            <id>attach-sources</id>
+            <phase>leave-disabled-to-not-generate-sources-twice-on-release</phase>
+          </execution>
+          <execution>
             <id>attach-source</id>
             <goals>
               <goal>jar-no-fork</goal>
@@ -473,6 +477,7 @@
               </execution>
             </executions>
             <configuration>
+              <passphrase>${env.GPG_PASSPHRASE}</passphrase>
               <useAgent>false</useAgent>
             </configuration>
           </plugin>

@@ -1,4 +1,5 @@
 
+### March 29, 2018 version 1.4.1
  * Disable unneeded error messages from LibTIFF in presets for Leptonica ([issue deeplearning4j/DataVec#518](https://github.com/deeplearning4j/DataVec/pull/518))
  * Bundle the official Java APIs of OpenCV and TensorFlow, via the `opencv_java` and `tensorflow_cc` modules
  * Correct loading order of `mkl_core` to fix MKL issues on Windows ([issue deeplearning4j/deeplearning4j#4776](https://github.com/deeplearning4j/deeplearning4j/issues/4776))

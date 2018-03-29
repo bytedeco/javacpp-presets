@@ -1,10 +1,80 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <profiles>
+    <profile>
+      <id>snapshots</id>
+      <repositories>
+        <repository>
+          <id>sonatype-nexus-snapshots</id>
+          <name>Sonatype Nexus Snapshots</name>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>sonatype-nexus-snapshots</id>
+          <name>Sonatype Nexus Snapshots</name>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
+      <id>staging</id>
+      <repositories>
+        <repository>
+          <id>sonatype-nexus-staging</id>
+          <name>Sonatype Nexus Staging</name>
+          <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${env.STAGING_REPOSITORY}/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>sonatype-nexus-staging</id>
+          <name>Sonatype Nexus Staging</name>
+          <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${env.STAGING_REPOSITORY}/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+   <activeProfile>snapshots</activeProfile>
+   <activeProfile>staging</activeProfile>
+  </activeProfiles>
   <servers>
     <server>
       <id>sonatype-nexus-snapshots</id>
       <username>${env.CI_DEPLOY_USERNAME}</username>
       <password>${env.CI_DEPLOY_PASSWORD}</password>
     </server>
+    <server>
+      <id>sonatype-nexus-staging</id>
+      <username>${env.CI_DEPLOY_USERNAME}</username>
+      <password>${env.CI_DEPLOY_PASSWORD}</password>
+    </server>
   </servers>
-
 </settings>

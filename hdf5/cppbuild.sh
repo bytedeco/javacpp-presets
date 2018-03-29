@@ -55,7 +55,7 @@ case $PLATFORM in
           make install-strip
         else
           echo "Not native ppc so assume cross compiling"
-          patch -Np1 < ../../../hdf5-linux-ppc64le.patch
+          patch -Np1 < ../../../hdf5-linux-ppc64le.patch || true
           #need this to run twice, first run fails so we fake the exit code too
           for x in 1 2; do
               cmake -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" || true
