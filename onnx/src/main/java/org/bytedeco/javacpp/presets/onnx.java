@@ -79,7 +79,7 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                .put(new Info("std::function<std::pair<bool,int>(int)>").pointerTypes("PairBoolIntIntFn"))
                .put(new Info("onnx::DataType").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::unordered_set<onnx::DataType>").pointerTypes("DataTypeSet").define())
-               .put(new Info("const std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define());
+               .put(new Info("std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define());
     }
     public static class BoolIntFn extends FunctionPointer {
         static { Loader.load(); }

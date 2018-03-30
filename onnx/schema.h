@@ -311,6 +311,7 @@ class OpSchema {
 
   // Type constraint.
   struct TypeConstraintParam {
+    TypeConstraintParam(): description("default description") {}
     TypeConstraintParam(
         const std::string& type_param_str_,
         const std::vector<std::string>& allowed_type_strs_,
