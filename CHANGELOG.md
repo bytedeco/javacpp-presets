@@ -1,4 +1,6 @@
 
+ * Upgrade presets for TensorFlow 1.7.0
+
 ### March 29, 2018 version 1.4.1
  * Disable unneeded error messages from LibTIFF in presets for Leptonica ([issue deeplearning4j/DataVec#518](https://github.com/deeplearning4j/DataVec/pull/518))
  * Bundle the official Java APIs of OpenCV and TensorFlow, via the `opencv_java` and `tensorflow_cc` modules
