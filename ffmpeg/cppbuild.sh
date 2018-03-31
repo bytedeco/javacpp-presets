@@ -856,18 +856,18 @@ case $PLATFORM in
         PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-w64-mingw32 # CFLAGS="-m64" CXXFLAGS="-m64"
         make -j $MAKEJ
         make install
-        if [ -d "/C/SDK/Blackmagic\ DeckLink\ SDK\ $BLACK_MAGIC" ]; then
+        BLACK_MAGIC_HOME="/C/SDK/Blackmagic DeckLink SDK $BLACK_MAGIC/Win/include/"
+        if [ -d "$BLACK_MAGIC_HOME" ]; then
             # https://github.com/jb-alvarado/media-autobuild_suite/wiki/Getting-Decklink-headers
-            cd /C/SDK/Blackmagic\ DeckLink\ SDK\ $BLACK_MAGIC/Win/include
+            cd "$BLACK_MAGIC_HOME"
             widl -I/mingw64/x86_64-w64-mingw32/include -h -u DeckLinkAPI.idl
             dos2unix DeckLinkAPI{,version}.h DeckLinkAPI_i.c
             cp *.h *.c $INSTALL_PATH/include
-
             ENABLE="$ENABLE --enable-decklink"
-            patch -Np1 < ../../../ffmpeg-windows-decklink.patch
         fi
         cd $INSTALL_PATH/ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-windows.patch
+        patch -Np1 < ../../../ffmpeg-windows-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
