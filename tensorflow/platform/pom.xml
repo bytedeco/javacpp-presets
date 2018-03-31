@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>tensorflow-platform</artifactId>
-  <version>1.6.0-${project.parent.version}</version>
+  <version>1.7.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for TensorFlow</name>
 
   <properties>

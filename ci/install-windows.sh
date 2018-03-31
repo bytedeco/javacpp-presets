@@ -38,10 +38,16 @@ mvn --version
 /c/python27/python --version
 pip --version
 unzip --version
+gpg --version
 
 pip install requests
 
 mkdir -p /c/Downloads
+
+if [[ "$APPVEYOR_PULL_REQUEST_NUMBER" == "" ]] && [[ "$APPVEYOR_REPO_BRANCH" == "release" ]]; then
+    /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py /c/Users/appveyor/settings.tar.gz
+    tar xzf /c/Users/appveyor/settings.tar.gz -C /c/Users/appveyor/
+fi
 
 echo Perform download files out of main repo
 cd ..

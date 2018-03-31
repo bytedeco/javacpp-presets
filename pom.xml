@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -197,7 +197,6 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
-            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkPath>
           </linkPaths>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
@@ -220,10 +219,8 @@
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/</linkResource>
-            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
-            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib64/</linkResource>
           </linkResources>
         </configuration>
         <executions>
@@ -287,7 +284,7 @@
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
               <copyLibs>true</copyLibs>
-<!--              <copyResources>true</copyResources>-->
+              <copyResources>true</copyResources>
             </configuration>
           </execution>
         </executions>
@@ -344,6 +341,7 @@
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
+                <include>${javacpp.platform}${javacpp.platform.extension}/</include>
                 <include>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <excludes>
@@ -366,6 +364,10 @@
         <artifactId>maven-source-plugin</artifactId>
         <version>3.0.1</version>
         <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>leave-disabled-to-not-generate-sources-twice-on-release</phase>
+          </execution>
           <execution>
             <id>attach-source</id>
             <goals>
@@ -475,6 +477,7 @@
               </execution>
             </executions>
             <configuration>
+              <passphrase>${env.GPG_PASSPHRASE}</passphrase>
               <useAgent>false</useAgent>
             </configuration>
           </plugin>

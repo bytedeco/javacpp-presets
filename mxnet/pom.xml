@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>mxnet</artifactId>
-  <version>1.0.0-${project.parent.version}</version>
+  <version>1.1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
 
   <properties>
@@ -98,7 +98,6 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib64/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           </linkPaths>

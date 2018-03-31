@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -15,13 +15,19 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.6.0</tensorflow.version>
+    <tensorflow.version>1.7.0</tensorflow.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>7.0</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -32,6 +38,17 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <configuration>
+              <includes>
+                <include>org/tensorflow/**/*.java</include>
+                <include>org/bytedeco/javacpp/*.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
@@ -50,10 +67,24 @@
           <linkPaths>
              <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/</linkPath>
           </linkPaths>
+          <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <includes>
+                <include>org/tensorflow/**</include>
+                <include>org/bytedeco/javacpp/*</include>
+                <include>org/bytedeco/javacpp/helper/*</include>
+                <include>org/bytedeco/javacpp/presets/*</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

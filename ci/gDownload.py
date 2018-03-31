@@ -1,6 +1,6 @@
 #Taken from answer provided here https://stackoverflow.com/questions/38511444/python-download-files-from-google-drive-using-url
 
-import sys,requests
+import os,sys,requests
 
 def download_file_from_google_drive(id, destination):
     URL = "https://docs.google.com/uc?export=download"
@@ -36,6 +36,10 @@ if __name__ == "__main__":
     if len(sys.argv) == 3:
        file_id = sys.argv[1]
        destination = sys.argv[2]
+       download_file_from_google_drive(file_id, destination)
+    elif len(sys.argv) == 2:
+       file_id = os.environ['GDOWNLOAD_ID']
+       destination = sys.argv[1]
        download_file_from_google_drive(file_id, destination)
     else:
        print '2 params needed, file ID and output'

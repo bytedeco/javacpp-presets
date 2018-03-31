@@ -39,10 +39,10 @@ download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCO
 download http://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
-download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
+download https://download.videolan.org/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
 download https://github.com/videolan/x265/archive/$X265.tar.gz x265-$X265.tar.gz
 download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
-download ftp://ftp.alsa-project.org/pub/lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
+download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
 download http://download.savannah.gnu.org/releases/freetype/freetype-$FREETYPE_VERSION.tar.bz2 freetype-$FREETYPE_VERSION.tar.bz2
 download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx_dispatch-$MFX_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -70,7 +70,7 @@ X264=`echo x264-snapshot-*`
 
 cd nasm-$NASM_VERSION
 ./configure --prefix=$INSTALL_PATH
-make -j $MAKEJ
+make -j $MAKEJ V=0
 make install
 export PATH=$INSTALL_PATH/bin:$PATH
 cd ..
@@ -94,30 +94,30 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         cd libspeex
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../include
         make install
         cd ../../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-armeabi "$CFLAGS" no-shared
@@ -127,7 +127,7 @@ case $PLATFORM in
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
@@ -165,30 +165,30 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         cd libspeex
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../include
         make install
         cd ../../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android64-aarch64 "$CFLAGS" no-shared
@@ -198,7 +198,7 @@ case $PLATFORM in
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=aarch64-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
@@ -237,30 +237,30 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         cd libspeex
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../include
         make install
         cd ../../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-x86 "$CFLAGS" no-shared
@@ -270,7 +270,7 @@ case $PLATFORM in
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
@@ -308,30 +308,30 @@ case $PLATFORM in
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         cd libspeex
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../include
         make install
         cd ../../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android64 "$CFLAGS" no-shared
@@ -341,7 +341,7 @@ case $PLATFORM in
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=x86_64-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
@@ -367,37 +367,37 @@ case $PLATFORM in
     linux-x86)
         cd $ZLIB
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --static
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         CC="gcc -m32" CXX="g++ -m32" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
@@ -429,37 +429,37 @@ case $PLATFORM in
     linux-x86_64)
         cd $ZLIB
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
@@ -506,27 +506,27 @@ case $PLATFORM in
 
         cd $ZLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         if [ $CROSSCOMPILE -eq 1 ]
@@ -535,7 +535,7 @@ case $PLATFORM in
         else
           ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH
         fi
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf USE_ASM=No install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
@@ -546,7 +546,7 @@ case $PLATFORM in
         else
           ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-cli --disable-asm
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         if [ $CROSSCOMPILE -eq 1 ]
@@ -568,7 +568,7 @@ case $PLATFORM in
         make install
         cd ../alsa-lib-$ALSA_VERSION/
         ./configure --host=arm-linux-gnueabihf --prefix=$INSTALL_PATH --disable-python
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=arm-linux-gnueabihf
@@ -595,7 +595,7 @@ case $PLATFORM in
         else
           CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -603,7 +603,7 @@ case $PLATFORM in
         else
           CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -611,7 +611,7 @@ case $PLATFORM in
         else
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -619,7 +619,7 @@ case $PLATFORM in
         else
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -627,7 +627,7 @@ case $PLATFORM in
         else
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -635,7 +635,7 @@ case $PLATFORM in
         else
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -643,7 +643,7 @@ case $PLATFORM in
         else
           ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH
         fi
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -657,7 +657,7 @@ case $PLATFORM in
         else
           CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --build=ppc64le-linux --host=ppc64le-linux
         fi
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -698,37 +698,37 @@ case $PLATFORM in
     macosx-*)
         cd $ZLIB
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
@@ -754,33 +754,33 @@ case $PLATFORM in
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
@@ -811,33 +811,33 @@ case $PLATFORM in
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPUS
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
         ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
-        make # fails with -j > 1
+        make -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
         CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source

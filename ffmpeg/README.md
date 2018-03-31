@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.ffmpeg</groupId>
     <artifactId>tutorial01</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <properties>
         <exec.mainClass>Tutorial01</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>ffmpeg-platform</artifactId>
-            <version>3.4.1-1.4</version>
+            <version>3.4.1-1.4.1</version>
         </dependency>
     </dependencies>
 </project>

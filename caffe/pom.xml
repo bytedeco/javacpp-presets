@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -104,7 +104,6 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib64/</linkPath>
             <linkPath>${basedir}/../hdf5/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>

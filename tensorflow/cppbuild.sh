@@ -33,7 +33,7 @@ export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.6.0
+TENSORFLOW_VERSION=1.7.0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -71,7 +71,6 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sed -i "s/api_level=21/api_level=14/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11"
         ;;
     android-arm64)
@@ -79,6 +78,7 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        sed -i "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11"
         ;;
     android-x86)
@@ -86,7 +86,6 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sed -i "s/api_level=21/api_level=14/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11"
         ;;
     android-x86_64)
@@ -94,17 +93,20 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        sed -i "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11"
         ;;
     linux-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-java.patch
         sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32"
         ;;
     linux-x86_64)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
+        patch -Np1 < ../../../tensorflow-java.patch
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
@@ -113,7 +115,7 @@ case $PLATFORM in
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
-
+        patch -Np1 < ../../../tensorflow-java.patch
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
@@ -128,6 +130,13 @@ case $PLATFORM in
 esac
 
 ./configure
-bazel build -c opt //tensorflow:libtensorflow_cc.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
+bazel build -c opt //tensorflow:libtensorflow_cc.so --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
+
+# copy Java source files and work around loader bug in NativeLibrary.java
+mkdir -p ../java
+cp -r tensorflow/java/src/gen/java/* ../java
+cp -r tensorflow/java/src/main/java/* ../java
+cp -r tensorflow/contrib/lite/java/src/main/java/* ../java
+sed -i="" '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 
 cd ../..

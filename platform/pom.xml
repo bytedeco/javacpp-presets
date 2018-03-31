@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -30,6 +30,7 @@
     <module>../mkl/platform</module>
     <module>../openblas/platform</module>
     <module>../arpack-ng/platform</module>
+    <module>../cminpack/platform</module>
     <module>../fftw/platform</module>
     <module>../gsl/platform</module>
     <module>../llvm/platform</module>
@@ -176,12 +177,12 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.0.0-${project.version}</version>
+      <version>1.1.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.6.0-${project.version}</version>
+      <version>1.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
