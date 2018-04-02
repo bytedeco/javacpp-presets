@@ -1,4 +1,5 @@
 
+ * Fix build for FFmpeg on `android-x86` and `android-x86_64` platforms ([issue bytedeco/javacv#945](https://github.com/bytedeco/javacv/issues/945))
  * Upgrade presets for TensorFlow 1.7.0
 
 ### March 29, 2018 version 1.4.1

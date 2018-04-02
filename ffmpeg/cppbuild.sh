@@ -89,7 +89,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
+        export LDFLAGS="-Wl,--no-undefined -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
@@ -160,7 +160,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS"
         export CFLAGS="$ANDROID_FLAGS"
         export CXXFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
+        export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
@@ -232,7 +232,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export LDFLAGS="-z text"
+        export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
@@ -278,7 +278,7 @@ case $PLATFORM in
         make install
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --disable-runtime-cpu-detect
+        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=yasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -303,7 +303,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS"
         export CFLAGS="$ANDROID_FLAGS"
         export CXXFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
+        export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
@@ -349,7 +349,7 @@ case $PLATFORM in
         make install
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --disable-runtime-cpu-detect
+        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=yasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
