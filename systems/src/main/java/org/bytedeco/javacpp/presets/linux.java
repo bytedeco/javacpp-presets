@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.BuildEnabled;
@@ -50,6 +51,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h", "bits/confname.h", "unistd.h",
                "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
     link = "dl")}, target = "org.bytedeco.javacpp.linux")
+@NoException
 public class linux implements BuildEnabled, InfoMapper {
 
     private Logger logger;

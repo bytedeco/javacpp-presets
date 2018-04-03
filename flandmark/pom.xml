@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv</artifactId>
-      <version>3.4.0-${project.parent.version}</version>
+      <version>3.4.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -45,12 +45,12 @@
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.0-${project.parent.version}</version>
+            <version>3.4.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.0-${project.parent.version}</version>
+            <version>3.4.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -78,7 +78,6 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib64/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>

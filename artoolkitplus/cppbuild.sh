@@ -15,7 +15,7 @@ cd $PLATFORM
 echo "Decompressing archives..."
 tar --totals -xjf ../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.tar.bz2 --exclude="*/id-markers/*"
 cd ARToolKitPlus-$ARTOOLKITPLUS_VERSION
-patch --binary -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch || true
+patch --binary -Np1 < ../../../ARToolKitPlus.patch || true
 
 case $PLATFORM in
     android-arm)
@@ -23,8 +23,18 @@ case $PLATFORM in
         make -j4
         make install
         ;;
-     android-x86)
+    android-arm64)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j4
+        make install
+        ;;
+    android-x86)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j4
+        make install
+        ;;
+    android-x86_64)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;

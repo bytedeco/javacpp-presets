@@ -1,4 +1,25 @@
 #!/bin/bash
+
+echo Reducing PATH size by removing duplicates to satisfy MKL, etc
+PREVIFS="$IFS"
+NEWPATH="${PATH%%:*}"
+IFS=":"
+for P in $PATH; do
+    FOUND=0
+    for P2 in $NEWPATH; do
+        if [[ "$P" == "$P2" ]]; then
+            FOUND=1
+        fi
+    done
+    if [[ "$FOUND" == "0" ]]; then
+        NEWPATH=$NEWPATH:$P
+    fi
+done
+IFS="$PREVIFS"
+echo ${#PATH}
+echo ${#NEWPATH}
+export PATH=$NEWPATH
+
 set -vx
 
 export PROJ=$1
@@ -17,10 +38,16 @@ mvn --version
 /c/python27/python --version
 pip --version
 unzip --version
+gpg --version
 
 pip install requests
 
 mkdir -p /c/Downloads
+
+if [[ "$APPVEYOR_PULL_REQUEST_NUMBER" == "" ]] && [[ "$APPVEYOR_REPO_BRANCH" == "release" ]]; then
+    /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py /c/Users/appveyor/settings.tar.gz
+    tar xzf /c/Users/appveyor/settings.tar.gz -C /c/Users/appveyor/
+fi
 
 echo Perform download files out of main repo
 cd ..
@@ -61,10 +88,10 @@ fi
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_9.1.85_windows.exe "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_windows"
-       curl -L -o cudnn-9.1-windows7-x64-v7.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.5/cudnn-9.1-windows7-x64-v7.zip"
+       curl -L -o cudnn-9.1-windows7-x64-v7.1.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.1/cudnn-9.1-windows7-x64-v7.1.zip"
        ./cuda_9.1.85_windows.exe -s
        sleep 60
-       unzip ./cudnn-9.1-windows7-x64-v7.zip
+       unzip ./cudnn-9.1-windows7-x64-v7.1.zip
        mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/bin
        mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/include
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/lib/x64

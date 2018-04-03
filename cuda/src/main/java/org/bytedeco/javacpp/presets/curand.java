@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cuda.class, value = {
     @Platform(include = "<curand.h>", link = "curand@.9.1")},
         target = "org.bytedeco.javacpp.curand")
+@NoException
 public class curand implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CURANDAPI").cppTypes().annotations().cppText(""))

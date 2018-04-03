@@ -1,0 +1,41 @@
+diff -ruN tensorflow-1.7.0-rc0/tensorflow/BUILD tensorflow-1.7.0-rc0-java/tensorflow/BUILD
+--- tensorflow-1.7.0-rc0/tensorflow/BUILD	2018-03-13 13:02:38.000000000 +0900
++++ tensorflow-1.7.0-rc0-java/tensorflow/BUILD	2018-03-19 03:07:38.430628042 +0900
+@@ -799,17 +799,12 @@
+ tf_cc_shared_object(
+     name = "libtensorflow_cc.so",
+     linkopts = select({
+-        "//tensorflow:darwin": [
+-            "-Wl,-exported_symbols_list",  # This line must be directly followed by the exported_symbols.lds file
+-            "//tensorflow:tf_exported_symbols.lds",
+-        ],
++        "//tensorflow:darwin": [],
+         "//tensorflow:windows": [],
+         "//tensorflow:windows_msvc": [],
+         "//conditions:default": [
+             "-z defs",
+             "-s",
+-            "-Wl,--version-script",  #  This line must be directly followed by the version_script.lds file
+-            "//tensorflow:tf_version_script.lds",
+         ],
+     }),
+     deps = [
+@@ -822,6 +817,7 @@
+         "//tensorflow/cc:scope",
+         "//tensorflow/cc/profiler",
+         "//tensorflow/core:tensorflow",
++        "//tensorflow/java/src/main/native:native",
+     ],
+ )
+ 
+diff -ruN tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.7.0-rc0-java/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD	2018-03-13 13:02:38.000000000 +0900
++++ tensorflow-1.7.0-rc0-java/tensorflow/java/src/main/native/BUILD	2018-03-19 03:16:32.287475508 +0900
+@@ -29,6 +29,7 @@
+     }),
+     hdrs = glob(["*.h"]),
+     copts = tf_copts(),
++    visibility = ["//visibility:public"],
+     includes = select({
+         "//tensorflow:android": [],
+         "//conditions:default": ["."],

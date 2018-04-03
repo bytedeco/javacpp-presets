@@ -1,23 +1,23 @@
-diff -ruN leptonica-1.74.1/src/Makefile.am leptonica-1.74.1-android/src/Makefile.am
---- leptonica-1.74.1/src/Makefile.am	2016-12-21 08:46:28.000000000 +0900
-+++ leptonica-1.74.1-android/src/Makefile.am	2017-04-09 17:20:48.402106363 +0900
-@@ -3,7 +3,7 @@
+diff -ruN leptonica-1.75.3/src/Makefile.am leptonica-1.75.3-android/src/Makefile.am
+--- leptonica-1.75.3/src/Makefile.am	2018-01-21 07:45:43.000000000 +0900
++++ leptonica-1.75.3-android/src/Makefile.am	2018-02-22 23:17:34.972228886 +0900
+@@ -4,7 +4,7 @@
  lib_LTLIBRARIES = liblept.la
  liblept_la_LIBADD = $(LIBM) $(ZLIB_LIBS) $(LIBPNG_LIBS) $(JPEG_LIBS) $(GIFLIB_LIBS) $(LIBTIFF_LIBS) $(LIBWEBP_LIBS) $(LIBJP2K_LIBS) $(GDI_LIBS)
  
--liblept_la_LDFLAGS = -no-undefined -version-info 5:1:0
+-liblept_la_LDFLAGS = -no-undefined -version-info 5:2:0
 +liblept_la_LDFLAGS = -no-undefined -avoid-version
  
  liblept_la_SOURCES = adaptmap.c affine.c                        \
   affinecompose.c arrayaccess.c                                  \
-diff -ruN leptonica-1.74.1/src/Makefile.in leptonica-1.74.1-android/src/Makefile.in
---- leptonica-1.74.1/src/Makefile.in	2017-01-03 06:49:41.000000000 +0900
-+++ leptonica-1.74.1-android/src/Makefile.in	2017-04-09 17:21:00.882380957 +0900
-@@ -364,7 +364,7 @@
- AM_CFLAGS = $(DEBUG_FLAGS)
+diff -ruN leptonica-1.75.3/src/Makefile.in leptonica-1.75.3-android/src/Makefile.in
+--- leptonica-1.75.3/src/Makefile.in	2018-02-16 08:28:00.000000000 +0900
++++ leptonica-1.75.3-android/src/Makefile.in	2018-02-22 23:18:02.177139060 +0900
+@@ -373,7 +373,7 @@
+ AM_CPPFLAGS = $(ZLIB_CFLAGS) $(LIBPNG_CFLAGS) $(JPEG_CFLAGS) $(LIBTIFF_CFLAGS) $(LIBWEBP_CFLAGS) $(LIBJP2K_CFLAGS)
  lib_LTLIBRARIES = liblept.la
  liblept_la_LIBADD = $(LIBM) $(ZLIB_LIBS) $(LIBPNG_LIBS) $(JPEG_LIBS) $(GIFLIB_LIBS) $(LIBTIFF_LIBS) $(LIBWEBP_LIBS) $(LIBJP2K_LIBS) $(GDI_LIBS)
--liblept_la_LDFLAGS = -no-undefined -version-info 5:1:0
+-liblept_la_LDFLAGS = -no-undefined -version-info 5:2:0
 +liblept_la_LDFLAGS = -no-undefined -avoid-version
  liblept_la_SOURCES = adaptmap.c affine.c                        \
   affinecompose.c arrayaccess.c                                  \

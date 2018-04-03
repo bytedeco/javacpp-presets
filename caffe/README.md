@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Caffe  http://caffe.berkeleyvision.org/
+ * Caffe 1.0  http://caffe.berkeleyvision.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.caffe</groupId>
     <artifactId>caffe</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <properties>
         <exec.mainClass>caffe</exec.mainClass>
     </properties>
@@ -42,8 +42,23 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>caffe-platform</artifactId>
-            <version>1.0-1.4</version>
+            <version>1.0-1.4.1</version>
         </dependency>
+
+        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <dependency>
+          <groupId>org.bytedeco.javacpp-presets</groupId>
+          <artifactId>caffe</artifactId>
+          <version>1.0-1.4.1</version>
+          <classifier>linux-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+          <groupId>org.bytedeco.javacpp-presets</groupId>
+          <artifactId>caffe</artifactId>
+          <version>1.0-1.4.1</version>
+          <classifier>macosx-x86_64-gpu</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```

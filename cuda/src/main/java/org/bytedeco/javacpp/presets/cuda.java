@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -44,6 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                         preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/bin/",
                                            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/lib/x64/") },
         target = "org.bytedeco.javacpp.cuda")
+@NoException
 public class cuda implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__volatile__", "__no_return__", "__noinline__", "__forceinline__", "__thread__", "__restrict__",

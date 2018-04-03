@@ -53,6 +53,43 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
+        env: PROJ=opencv,flandmark OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=artoolkitplus OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=chilitags OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=fftw OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=gsl OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tensorflow OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+
+      - os: linux
         env: PROJ=opencv,flandmark OS=android-x86
         install: true
         script: ./ci/install-travis.sh
@@ -90,6 +127,75 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
+        env: PROJ=opencv,flandmark OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=artoolkitplus OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=chilitags OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=openblas OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=fftw OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=gsl OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tensorflow OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=opencv OS=ios-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=openblas OS=ios-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=skia OS=ios-arm64
+        install: true
+        script: ./ci/install-travis.sh
+
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=opencv OS=ios-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=openblas OS=ios-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=skia OS=ios-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+
+      - os: linux
         env: PROJ=opencv,flandmark OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
@@ -119,6 +225,14 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=openblas OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=arpack-ng OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cminpack OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -168,6 +282,14 @@ matrix:
         script: ./ci/install-ppc.sh
       - os: linux
         env: PROJ=openblas OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=arpack-ng OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=cminpack OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -244,6 +366,16 @@ matrix:
       - os: osx
         osx_image: xcode7.3
         env: PROJ=openblas OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=arpack-ng OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=cminpack OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -361,6 +493,14 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=arpack-ng OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cminpack OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=fftw OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
@@ -454,6 +594,14 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=arpack-ng OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cminpack OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=fftw OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -527,5 +675,10 @@ matrix:
       - os: osx
         osx_image: xcode8.3
         env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh

@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -42,6 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = {"nppial@.9.1", "nppicc@.9.1", "nppicom@.9.1", "nppidei@.9.1", "nppif@.9.1",
                     "nppig@.9.1", "nppim@.9.1", "nppist@.9.1", "nppisu@.9.1", "nppitc@.9.1"} )},
         target = "org.bytedeco.javacpp.nppi")
+@NoException
 public class nppi implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("nppiHLSToBGR_8u_AC4R", "nppiNormRelInfGetBufferHostSize_32s_C1R", "nppiSub_32s_C4IRSfs", "nppiSub_32s_C4RSfs").skip());

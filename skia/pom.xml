@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -42,6 +42,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/include/c/</includePath>
           </includePaths>
           <linkPaths>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/out/Static/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/skia-${skia.version}/out/Shared/</linkPath>
           </linkPaths>
         </configuration>

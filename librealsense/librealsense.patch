@@ -1,6 +1,6 @@
 diff -ruN librealsense-1.12.1/include/librealsense/rs.hpp librealsense-1.12.1-patch/include/librealsense/rs.hpp
 --- librealsense-1.12.1/include/librealsense/rs.hpp	2016-12-27 16:17:15.000000000 +0900
-+++ librealsense-1.12.1-patch/include/librealsense/rs.hpp	2017-12-07 14:14:24.283636151 +0900
++++ librealsense-1.12.1-patch/include/librealsense/rs.hpp	2018-02-28 13:15:22.526560525 +0900
 @@ -384,10 +384,9 @@
          rs_device * device;
          rs_frame_ref * frame_ref;
@@ -13,3 +13,14 @@ diff -ruN librealsense-1.12.1/include/librealsense/rs.hpp librealsense-1.12.1-pa
          frame(rs_device * device, rs_frame_ref * frame_ref) : device(device), frame_ref(frame_ref) {}
          frame(frame&& other) : device(other.device), frame_ref(other.frame_ref) { other.frame_ref = nullptr; }
          frame& operator=(frame other)
+diff -ruN librealsense-1.12.1/src/types.h librealsense-1.12.1-patch/src/types.h
+--- librealsense-1.12.1/src/types.h	2016-12-27 16:17:15.000000000 +0900
++++ librealsense-1.12.1-patch/src/types.h	2018-02-28 13:15:57.741466754 +0900
+@@ -22,6 +22,7 @@
+ #include <atomic>
+ #include <map>          
+ #include <algorithm>
++#include <functional>
+ 
+ const uint8_t RS_STREAM_NATIVE_COUNT    = 5;
+ const int RS_USER_QUEUE_SIZE = 20;

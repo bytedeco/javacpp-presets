@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cuda.class, value = {
     @Platform(define = {"CUBLASAPI", "CUBLAS_V2_H_"}, include = {"<cublas_api.h>", "<cublas.h>", "<cublasXt.h>"}, link = "cublas@.9.1")},
         target = "org.bytedeco.javacpp.cublas")
+@NoException
 public class cublas implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUBLASAPI", "CUBLASWINAPI").cppTypes().annotations().cppText(""))

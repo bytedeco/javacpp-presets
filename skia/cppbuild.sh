@@ -8,7 +8,20 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 export TARGET_CPU=
+export EXTRA_ARGS=
 case $PLATFORM in
+    ios-arm64)
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64"
+        export CXX="$(xcrun --sdk iphoneos --find clang++) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64"
+        export EXTRA_ARGS='target_os="ios"'
+        export TARGET_CPU="arm64"
+        ;;
+    ios-x86_64)
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64"
+        export CXX="$(xcrun --sdk iphonesimulator --find clang++) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64"
+        export EXTRA_ARGS='target_os="ios"'
+        export TARGET_CPU="x64"
+        ;;
     linux-x86)
         export CC="gcc -m32"
         export CXX="g++ -m32"
@@ -41,6 +54,13 @@ tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
 tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
 
 sed -i="" /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
+# Upstream doesn't appear to build ios with is_component_build=true
+patch -p0 skia-$SKIA_VERSION/gn/BUILD.gn <<-PATCH
+696c696
+<     if (is_mac) {
+---
+>     if (is_mac || is_ios) {
+PATCH
 export PATH="$PWD/depot_tools:$PATH"
 
 cd skia-$SKIA_VERSION
@@ -49,7 +69,14 @@ patch -Np1 < ../../../skia.patch || true
 python tools/git-sync-deps
 cp third_party/libjpeg-turbo/* third_party/externals/libjpeg-turbo/
 
-bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-DSKIA_C_DLL\"]"
-ninja -C out/Shared
+if [[ $PLATFORM == ios* ]]; then
+    sed -i="" s/thread_local//g tools/ok.cpp
+    sed -i="" /SRC_SK_XFERMODE_MODE/d tests/CTest.cpp
+    bin/gn gen out/Static --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\"] $EXTRA_ARGS"
+    ninja -C out/Static
+else
+    bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
+    ninja -C out/Shared
+fi
 
 cd ../..

@@ -15,8 +15,8 @@ Downloads
 ---------
 To install manually the JAR files, obtain the following archives and follow the instructions in the [Manual Installation](#manual-installation) section below.
 
- * JavaCPP Presets 1.4 binary archive  [javacpp-presets-platform-1.4-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets-platform/1.4/javacpp-presets-platform-1.4-bin.zip) (738 MB)
- * JavaCPP Presets 1.4 source archive  [javacpp-presets-platform-1.4-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets-platform/1.4/javacpp-presets-platform-1.4-src.zip) (3.9 MB)
+ * JavaCPP Presets 1.4.1 binary archive  [javacpp-presets-platform-1.4.1-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets-platform/1.4.1/javacpp-presets-platform-1.4.1-bin.zip) (892 MB)
+ * JavaCPP Presets 1.4.1 source archive  [javacpp-presets-platform-1.4.1-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets-platform/1.4.1/javacpp-presets-platform-1.4.1-src.zip) (4.6 MB)
 
 The binary archive contains builds for Android, Linux, Mac OS X, and Windows. The JAR files for specific child modules or platforms can also be obtained individually from the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco).
 
@@ -28,20 +28,20 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.4</version>
+    <version>${moduleVersion}-1.4.1</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName + '-platform', version: moduleVersion + '-1.4'
+    compile group: 'org.bytedeco.javacpp-presets', name: moduleName + '-platform', version: moduleVersion + '-1.4.1'
   }
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4"
+  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4.1"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
@@ -53,7 +53,7 @@ To use the JavaCPP Presets, you will need to download and install the following 
 
  * An implementation of Java SE 7 or newer:
    * OpenJDK  http://openjdk.java.net/install/  or
-   * Sun JDK  http://www.oracle.com/technetwork/java/javase/downloads/  or
+   * Oracle JDK  http://www.oracle.com/technetwork/java/javase/downloads/  or
    * IBM JDK  http://www.ibm.com/developerworks/java/jdk/
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
@@ -99,11 +99,11 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.4  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.4.1  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 3.4.0  https://opencv.org/releases.html
+ * OpenCV 3.4.1  https://opencv.org/releases.html
  * FFmpeg 3.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.11.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
@@ -117,16 +117,18 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.1  https://support.hdfgroup.org/HDF5/
  * MKL 2018.1  https://software.intel.com/intel-mkl
  * OpenBLAS 0.2.20  http://www.openblas.net/
+ * ARPACK-NG  https://github.com/opencollab/arpack-ng
+ * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.7  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 5.0.x  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.74.4  http://www.leptonica.org/download.html
+ * Leptonica 1.75.3  http://www.leptonica.org/download.html
  * Tesseract 3.05.01  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.1  https://developer.nvidia.com/cuda-downloads
- * MXnet 1.0.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.5.0  https://github.com/tensorflow/tensorflow
+ * MXnet 1.1.0  https://github.com/dmlc/mxnet
+ * TensorFlow 1.7.0  https://github.com/tensorflow/tensorflow
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org

@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
     target = "org.bytedeco.javacpp.Skia",
     value = {
         @Platform(
-            value = {"linux-x86", "macosx"},
+            value = {"ios", "linux-x86", "macosx"},
             include = {
                 "sk_types.h",
                 "gr_context.h",
@@ -66,7 +66,8 @@ import java.lang.annotation.Target;
                 "sk_xml.h"
             },
             compiler = "cpp11",
-            link = {"skia"}
+            link = "skia",
+            preload = "libskia"
         )
     }
 )

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -197,7 +197,6 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
-            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkPath>
           </linkPaths>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
@@ -216,13 +215,12 @@
             <includeResource>/org/bytedeco/javacpp/${javacpp.platform}/include/</includeResource>
           </includeResources>
           <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/</linkResource>
-            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
-            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib64/</linkResource>
           </linkResources>
         </configuration>
         <executions>
@@ -286,7 +284,7 @@
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
               <copyLibs>true</copyLibs>
-<!--              <copyResources>true</copyResources>-->
+              <copyResources>true</copyResources>
             </configuration>
           </execution>
         </executions>
@@ -343,6 +341,7 @@
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
+                <include>${javacpp.platform}${javacpp.platform.extension}/</include>
                 <include>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <excludes>
@@ -365,6 +364,10 @@
         <artifactId>maven-source-plugin</artifactId>
         <version>3.0.1</version>
         <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>leave-disabled-to-not-generate-sources-twice-on-release</phase>
+          </execution>
           <execution>
             <id>attach-source</id>
             <goals>
@@ -474,6 +477,7 @@
               </execution>
             </executions>
             <configuration>
+              <passphrase>${env.GPG_PASSPHRASE}</passphrase>
               <useAgent>false</useAgent>
             </configuration>
           </plugin>
@@ -503,6 +507,8 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -784,6 +790,138 @@
     </profile>
 
     <profile>
+      <id>javacpp-platform-ios-arm</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>ios-arm</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>openblas</module>
+        <module>skia</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm>${javacpp.platform}</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-ios-arm64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>ios-arm64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>openblas</module>
+        <module>skia</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>${javacpp.platform}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-ios-x86</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>ios-x86</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>openblas</module>
+        <module>skia</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86>${javacpp.platform}</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp-platform-ios-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>ios-x86_64</value>
+        </property>
+      </activation>
+      <modules>
+        <module>opencv</module>
+        <module>openblas</module>
+        <module>skia</module>
+      </modules>
+      <properties>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>${javacpp.platform}</javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
       <id>javacpp-platform-linux-armhf</id>
       <activation>
         <property>
@@ -801,6 +939,8 @@
         <module>chilitags</module>
         <module>flandmark</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -845,6 +985,8 @@
         <module>chilitags</module>
         <module>flandmark</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -889,6 +1031,8 @@
         <module>flandmark</module>
         <module>hdf5</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
@@ -938,6 +1082,8 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -993,6 +1139,8 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1049,6 +1197,8 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
@@ -1106,8 +1256,11 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
@@ -1156,8 +1309,11 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>

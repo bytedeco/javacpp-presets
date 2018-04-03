@@ -49,16 +49,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
         "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.4", "opencv_imgproc@.3.4"},
-        resource = {"include", "lib", "lib64", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}),
+        resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}, linkresource = "lib"),
+    @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
     @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = {"gomp@.1", "opencv_cudev@.3.4"}),
     @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core340", "opencv_imgproc340"}, preload = {"concrt140", "msvcp140", "vcruntime140",
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core341", "opencv_imgproc341"}, preload = {"concrt140", "msvcp140", "vcruntime140",
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0", "opencv_cudev340"}),
+        "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0", "opencv_cudev341"}),
     @Platform(value = "windows-x86", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
                                                     "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
@@ -75,11 +76,12 @@ public class opencv_core implements InfoMapper {
                              "__cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)", "CV_CXX11", "CV_FP16_TYPE").define(false))
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN", "CV__DEBUG_NS_END",
-                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL").cppTypes().annotations())
+                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL").annotations().cppTypes())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
-               .put(new Info("CV_EXPORTS_AS", "CV_WRAP_AS").cppTypes().annotations("@Name").cppText(""))
+               .put(new Info("CV_DEPRECATED").annotations("@Deprecated").cppTypes())
+               .put(new Info("CV_EXPORTS_AS", "CV_WRAP_AS").annotations("@Name").cppTypes().cppText(""))
                .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
-                             "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").cppTypes().annotations().cppText(""))
+                             "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").annotations().cppTypes().cppText(""))
                .put(new Info("CvRNG").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").cppTypes("int", "int"))
                .put(new Info("CV_MAKETYPE", "CV_MAKE_TYPE").cppTypes("int", "int", "int"))
@@ -163,19 +165,24 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::vector<cv::Point2f>").pointerTypes("Point2fVector").define())
                .put(new Info("std::vector<cv::Point2d>").pointerTypes("Point2dVector").define())
                .put(new Info("std::vector<cv::Point3i>", "std::vector<cv::Vec3i>").cast().pointerTypes("Point3iVector").define())
+               .put(new Info("std::vector<cv::Point3f>").cast().pointerTypes("Point3fVector").define())
                .put(new Info("std::vector<cv::Size>").pointerTypes("SizeVector").define())
                .put(new Info("std::vector<cv::Rect>").pointerTypes("RectVector").define())
+               .put(new Info("std::vector<cv::Rect2d>").pointerTypes("Rect2dVector").define())
+               .put(new Info("std::vector<cv::Scalar>").pointerTypes("ScalarVector").define())
                .put(new Info("std::vector<cv::KeyPoint>").pointerTypes("KeyPointVector").define())
                .put(new Info("std::vector<cv::DMatch>").pointerTypes("DMatchVector").define())
                .put(new Info("std::vector<std::vector<cv::Point> >").pointerTypes("PointVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point2f> >").pointerTypes("Point2fVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point2d> >").pointerTypes("Point2dVectorVector").define())
+               .put(new Info("std::vector<std::vector<cv::Point3f> >").pointerTypes("Point3fVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Rect> >").pointerTypes("RectVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::KeyPoint> >").pointerTypes("KeyPointVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define())
                .put(new Info("std::vector<cv::Mat>").pointerTypes("MatVector").define())
                .put(new Info("std::vector<cv::UMat>").pointerTypes("UMatVector").define())
                .put(new Info("std::vector<cv::cuda::GpuMat>").pointerTypes("GpuMatVector").define())
+               .put(new Info("std::vector<std::vector<cv::Mat> >").pointerTypes("MatVectorVector").define())
                .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
                .put(new Info("std::map<int,double>").pointerTypes("IntDoubleMap").define())
                .put(new Info("std::vector<std::pair<int,double> >").pointerTypes("IntDoublePairVector").define())
@@ -208,19 +215,19 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Mat").base("AbstractMat"))
                .put(new Info("cv::noArray()").javaText("public static Mat noArray() { return null; }"))
                .put(new Info("cv::Mat(int, int, int, void*, size_t)").javaText(
-                       "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.data = data; }\n"
+                       "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.pointer = data; }\n"
                      + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
-                     + "private Pointer data; // a reference to prevent deallocation\n"
+                     + "private Pointer pointer; // a reference to prevent deallocation\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
-                     + "public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }\n"
-                     + "public Mat(Point points) { this(1, Math.max(1, points.limit - points.position), CV_32SC2, points); this.data = points; }\n"
-                     + "public Mat(Point2f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC2, points); this.data = points; }\n"
-                     + "public Mat(Point2d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC2, points); this.data = points; }\n"
-                     + "public Mat(Point3i points) { this(1, Math.max(1, points.limit - points.position), CV_32SC3, points); this.data = points; }\n"
-                     + "public Mat(Point3f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC3, points); this.data = points; }\n"
-                     + "public Mat(Point3d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC3, points); this.data = points; }\n"
-                     + "public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_64FC4, scalar); this.data = scalar; }\n"
-                     + "public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_32SC4, scalar); this.data = scalar; }\n"
+                     + "public Mat(CvArr arr) { super(cvarrToMat(arr)); this.pointer = arr; }\n"
+                     + "public Mat(Point points) { this(1, Math.max(1, points.limit - points.position), CV_32SC2, points); this.pointer = points; }\n"
+                     + "public Mat(Point2f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC2, points); this.pointer = points; }\n"
+                     + "public Mat(Point2d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC2, points); this.pointer = points; }\n"
+                     + "public Mat(Point3i points) { this(1, Math.max(1, points.limit - points.position), CV_32SC3, points); this.pointer = points; }\n"
+                     + "public Mat(Point3f points) { this(1, Math.max(1, points.limit - points.position), CV_32FC3, points); this.pointer = points; }\n"
+                     + "public Mat(Point3d points) { this(1, Math.max(1, points.limit - points.position), CV_64FC3, points); this.pointer = points; }\n"
+                     + "public Mat(Scalar scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_64FC4, scalar); this.pointer = scalar; }\n"
+                     + "public Mat(Scalar4i scalar) { this(1, Math.max(1, scalar.limit - scalar.position), CV_32SC4, scalar); this.pointer = scalar; }\n"
                      + "public Mat(byte ... b) { this(b, false); }\n"
                      + "public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }\n"
                      + "public Mat(short ... s) { this(s, true); }\n"
@@ -252,7 +259,6 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Complex<float>").pointerTypes("Complexf").base("FloatPointer"))
                .put(new Info("cv::Complex<double>").pointerTypes("Complexd").base("DoublePointer"))
                .put(new Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
-               .put(new Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
                .put(new Info("cv::Point_<float>").pointerTypes("Point2f").base("FloatPointer"))
                .put(new Info("cv::Point_<double>").pointerTypes("Point2d").base("DoublePointer"))
                .put(new Info("cv::Point3_<int>").pointerTypes("Point3i").base("IntPointer"))
@@ -262,8 +268,8 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Size_<float>").pointerTypes("Size2f").base("FloatPointer"))
                .put(new Info("cv::Size_<double>").pointerTypes("Size2d").base("DoublePointer"))
                .put(new Info("cv::Rect_<int>").pointerTypes("Rect").base("IntPointer"))
-               .put(new Info("cv::Rect_<float>").pointerTypes("Rectf").base("FloatPointer"))
-               .put(new Info("cv::Rect_<double>").pointerTypes("Rectd").base("DoublePointer"))
+               .put(new Info("cv::Rect_<float>").pointerTypes("Rect2f").base("FloatPointer"))
+               .put(new Info("cv::Rect_<double>").pointerTypes("Rect2d").base("DoublePointer"))
                .put(new Info("cv::RotatedRect").pointerTypes("RotatedRect").base("FloatPointer"))
                .put(new Info("cv::Scalar_<double>").pointerTypes("Scalar").base("AbstractScalar"))
                .put(new Info("cv::Scalar_<int>").pointerTypes("Scalar4i").base("IntPointer"))

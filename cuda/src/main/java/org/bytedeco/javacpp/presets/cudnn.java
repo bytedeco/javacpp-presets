@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cuda.class, value = {
     @Platform(include = "<cudnn.h>", link = "cudnn@.7")},
         target = "org.bytedeco.javacpp.cudnn")
+@NoException
 public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDNNWINAPI").cppTypes().annotations().cppText(""))
@@ -49,6 +51,8 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnSpatialTransformerDescriptor_t").valueTypes("cudnnSpatialTransformerStruct").pointerTypes("@ByPtrPtr cudnnSpatialTransformerStruct"))
                .put(new Info("cudnnOpTensorDescriptor_t").valueTypes("cudnnOpTensorStruct").pointerTypes("@ByPtrPtr cudnnOpTensorStruct"))
                .put(new Info("cudnnReduceTensorDescriptor_t").valueTypes("cudnnReduceTensorStruct").pointerTypes("@ByPtrPtr cudnnReduceTensorStruct"))
+               .put(new Info("cudnnAlgorithmDescriptor_t").valueTypes("cudnnAlgorithmStruct").pointerTypes("@ByPtrPtr cudnnAlgorithmStruct"))
+               .put(new Info("cudnnAlgorithmPerformance_t").valueTypes("cudnnAlgorithmPerformanceStruct").pointerTypes("@ByPtrPtr cudnnAlgorithmPerformanceStruct"))
                .put(new Info("cudnnRNNDescriptor_t").valueTypes("cudnnRNNStruct").pointerTypes("@ByPtrPtr cudnnRNNStruct"))
                .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
                .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"))

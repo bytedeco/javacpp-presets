@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -35,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cufft.class, value = {
     @Platform(include = "<cufftw.h>", link = "cufftw@.9.1")},
         target = "org.bytedeco.javacpp.cufftw")
+@NoException
 public class cufftw implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!defined(FFTW_NO_Complex) && defined(_Complex_I) && defined (complex)").define(false));

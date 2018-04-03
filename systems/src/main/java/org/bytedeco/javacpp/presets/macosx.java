@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.BuildEnabled;
@@ -48,6 +49,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "sched.h", "mach/machine.h", "spawn.h", "sys/_types/_seek_set.h", "sys/unistd.h", "unistd.h",
                "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h"},
     includepath = "/usr/include")}, target = "org.bytedeco.javacpp.macosx")
+@NoException
 public class macosx implements BuildEnabled, InfoMapper {
 
     private Logger logger;

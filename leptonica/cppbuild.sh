@@ -9,15 +9,15 @@ fi
 
 ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
-LIBJPEG=libjpeg-turbo-1.5.2
-LIBPNG=libpng-1.6.32
+LIBJPEG=libjpeg-turbo-1.5.3
+LIBPNG=libpng-1.6.34
 LIBTIFF=tiff-4.0.9
 LIBWEBP=libwebp-0.6.1
-LEPTONICA_VERSION=1.74.4
+LEPTONICA_VERSION=1.75.3
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
-download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.32/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.34/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
@@ -34,18 +34,22 @@ tar --totals -xzf ../$LIBTIFF.tar.gz
 tar --totals -xzf ../$LIBWEBP.tar.gz
 tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
+patch -Np1 -d leptonica-$LEPTONICA_VERSION < ../../leptonica-tiffio.patch
+
 case $PLATFORM in
     android-arm)
-        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID"
+#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
+#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
+        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
         export AR="$ANDROID_BIN-ar"
         export RANLIB="$ANDROID_BIN-ranlib"
         export CPP="$ANDROID_BIN-cpp $FLAGS"
-        export CC="$ANDROID_BIN-gcc $FLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -DSIZE_MAX=UINT32_MAX"
+        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT32_MAX"
         export CXX=
         export CPPFLAGS=
         export CFLAGS=
         export CXXFLAGS=
-        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -Wl,--fix-cortex-a8 -z text"
+        export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
         cd $ZLIB
@@ -81,17 +85,65 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-     android-x86)
-        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID"
+    android-arm64)
+        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
         export AR="$ANDROID_BIN-ar"
         export RANLIB="$ANDROID_BIN-ranlib"
         export CPP="$ANDROID_BIN-cpp $FLAGS"
-        export CC="$ANDROID_BIN-gcc $FLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -DSIZE_MAX=UINT32_MAX"
+        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT64_MAX"
         export CXX=
         export CPPFLAGS=
         export CFLAGS=
         export CXXFLAGS=
-        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -z text"
+        export LDFLAGS="-z text"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export STRIP="$ANDROID_BIN-strip"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
+        make install
+        cd ../$LIBPNG
+        rm contrib/arm-neon/android-ndk.c
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux --with-sysroot="$ANDROID_ROOT" --disable-arm-neon
+        make -j $MAKEJ
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        make -j $MAKEJ
+        make install
+        cd ../$LIBWEBP
+        patch -Np1 < ../../../libwebp-arm.patch
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-android --with-sysroot="$ANDROID_ROOT" --disable-neon
+        cd src
+        make -j $MAKEJ
+        make install
+        cd ../../leptonica-$LEPTONICA_VERSION
+        patch -Np1 < ../../../leptonica-android.patch
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-android --disable-programs
+        make -j $MAKEJ
+        make install-strip
+        ;;
+     android-x86)
+#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
+#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
+        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
+        export AR="$ANDROID_BIN-ar"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export CPP="$ANDROID_BIN-cpp $FLAGS"
+        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT32_MAX"
+        export CXX=
+        export CPPFLAGS=
+        export CFLAGS=
+        export CXXFLAGS=
+        export LDFLAGS="-z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
         cd $ZLIB
@@ -123,6 +175,51 @@ case $PLATFORM in
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
         PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
+        make -j $MAKEJ
+        make install-strip
+        ;;
+     android-x86_64)
+        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
+        export AR="$ANDROID_BIN-ar"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export CPP="$ANDROID_BIN-cpp $FLAGS"
+        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT64_MAX"
+        export CXX=
+        export CPPFLAGS=
+        export CFLAGS=
+        export CXXFLAGS=
+        export LDFLAGS="-z text"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export STRIP="$ANDROID_BIN-strip"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
+        make -j $MAKEJ
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
+        make install
+        cd ../$LIBPNG
+        rm contrib/arm-neon/android-ndk.c
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        make -j $MAKEJ
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux-android --with-sysroot="$ANDROID_ROOT"
+        cd src
+        make -j $MAKEJ
+        make install
+        cd ../../leptonica-$LEPTONICA_VERSION
+        patch -Np1 < ../../../leptonica-android.patch
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=x86_64-linux-android --disable-programs
         make -j $MAKEJ
         make install-strip
         ;;

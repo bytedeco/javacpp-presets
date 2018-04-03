@@ -31,9 +31,15 @@ environment:
       OS: windows-x86
     - PROJ: "openblas"
       OS: windows-x86
+    - PROJ: "arpack-ng"
+      OS: windows-x86
+    - PROJ: "cminpack"
+      OS: windows-x86
     - PROJ: "fftw"
       OS: windows-x86
     - PROJ: "gsl"
+      OS: windows-x86
+    - PROJ: "llvm"
       OS: windows-x86
     - PROJ: "leptonica,tesseract"
       OS: windows-x86
@@ -68,9 +74,15 @@ environment:
       OS: windows-x86_64
     - PROJ: "openblas"
       OS: windows-x86_64
+    - PROJ: "arpack-ng"
+      OS: windows-x86_64
+    - PROJ: "cminpack"
+      OS: windows-x86_64
     - PROJ: "fftw"
       OS: windows-x86_64
     - PROJ: "gsl"
+      OS: windows-x86_64
+    - PROJ: "llvm"
       OS: windows-x86_64
     - PROJ: "libpostal"
       OS: windows-x86_64
