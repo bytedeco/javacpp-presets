@@ -31,7 +31,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @ByRef OpSchema.Attribute second();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const OpSchema.Attribute second();
     }
 }
 
@@ -90,6 +90,17 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*") @StdString BytePointer get();
+    }
+
+    public BytePointer[] get() {
+        BytePointer[] array = new BytePointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public BytePointer pop_back() {
@@ -161,7 +172,18 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef OpSchema.FormalParameter get();
+        public native @Name("operator*") @ByRef @Const OpSchema.FormalParameter get();
+    }
+
+    public OpSchema.FormalParameter[] get() {
+        OpSchema.FormalParameter[] array = new OpSchema.FormalParameter[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public OpSchema.FormalParameter pop_back() {
@@ -216,7 +238,18 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef OpSchema get();
+        public native @Name("operator*") @ByRef @Const OpSchema get();
+    }
+
+    public OpSchema[] get() {
+        OpSchema[] array = new OpSchema[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public OpSchema pop_back() {
@@ -271,7 +304,18 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef OpSchema.TypeConstraintParam get();
+        public native @Name("operator*") @ByRef @Const OpSchema.TypeConstraintParam get();
+    }
+
+    public OpSchema.TypeConstraintParam[] get() {
+        OpSchema.TypeConstraintParam[] array = new OpSchema.TypeConstraintParam[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
     }
 
     public OpSchema.TypeConstraintParam pop_back() {
@@ -379,7 +423,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef @Cast({"char*", "std::string*"}) BytePointer get();
+        public native @Name("operator*") @ByRef @Const @Cast({"char*", "std::string*"}) BytePointer get();
     }
 }
 
@@ -734,7 +778,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Attribute(Pointer p) { super(p); }
-   
+  
     public Attribute(
             @Cast("const char*") BytePointer name_,
             @Cast("const char*") BytePointer description_,
