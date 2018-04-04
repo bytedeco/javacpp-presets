@@ -41,6 +41,7 @@
     <module>../cuda/platform</module>
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
+    <module>../tensorrt/platform</module>
     <module>../ale/platform</module>
     <module>../liquidfun/platform</module>
     <module>../skia/platform</module>
@@ -183,6 +184,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
       <version>1.7.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>tensorrt-platform</artifactId>
+      <version>4.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

@@ -638,6 +638,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=tensorrt OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=ale OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
