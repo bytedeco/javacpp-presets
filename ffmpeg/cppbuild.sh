@@ -421,6 +421,9 @@ case $PLATFORM in
         fi
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
+        cp -R $INSTALL_PATH/../../src/main/resources/decklink/linux/* $INSTALL_PATH/include
+        ENABLE="$ENABLE --enable-decklink"
+        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -483,6 +486,9 @@ case $PLATFORM in
         fi
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
+        cp -R $INSTALL_PATH/../../src/main/resources/decklink/linux/* $INSTALL_PATH/include
+        ENABLE="$ENABLE --enable-decklink"
+        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -744,6 +750,9 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
+        cp -R $INSTALL_PATH/../../src/main/resources/decklink/macosx/* $INSTALL_PATH/include
+        ENABLE="$ENABLE --enable-decklink"
+        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
@@ -801,6 +810,9 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-windows.patch
+        cp -R $INSTALL_PATH/../../src/main/resources/decklink/windows/* $INSTALL_PATH/include
+        ENABLE="$ENABLE --enable-decklink"
+        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
@@ -856,18 +868,11 @@ case $PLATFORM in
         PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-w64-mingw32 # CFLAGS="-m64" CXXFLAGS="-m64"
         make -j $MAKEJ
         make install
-        BLACK_MAGIC_HOME="/C/SDK/Blackmagic DeckLink SDK $BLACK_MAGIC/Win/include/"
-        if [ -d "$BLACK_MAGIC_HOME" ]; then
-            # https://github.com/jb-alvarado/media-autobuild_suite/wiki/Getting-Decklink-headers
-            cd "$BLACK_MAGIC_HOME"
-            widl -I/mingw64/x86_64-w64-mingw32/include -h -u DeckLinkAPI.idl
-            dos2unix DeckLinkAPI{,version}.h DeckLinkAPI_i.c
-            cp *.h *.c $INSTALL_PATH/include
-            ENABLE="$ENABLE --enable-decklink"
-        fi
-        cd $INSTALL_PATH/ffmpeg-$FFMPEG_VERSION
+        cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-windows.patch
-        patch -Np1 < ../../../ffmpeg-windows-decklink.patch
+        cp -R $INSTALL_PATH/../../src/main/resources/decklink/windows/* $INSTALL_PATH/include
+        ENABLE="$ENABLE --enable-decklink"
+        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
