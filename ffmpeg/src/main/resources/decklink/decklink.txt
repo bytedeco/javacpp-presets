@@ -2,7 +2,7 @@ Instructions for the files before:
 
 1) Download latest Desktop SDK from https://www.blackmagicdesign.com/support
 2) Install pacman -S mingw-w64-{i686,x86_64}-tools-git dos2unix
-    ** This is in addition to the normal windows values.
+    ** This is in addition to the normal packages.
 
 === Instructions for Compiling on Windows ===
 https://github.com/jb-alvarado/media-autobuild_suite/wiki/Getting-Decklink-headers
