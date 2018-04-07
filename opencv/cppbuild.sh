@@ -190,5 +190,10 @@ case $PLATFORM in
 esac
 
 cp -r modules/java_bindings_generator/gen/java ..
+cp -r modules/java_bindings_generator/gen/android/java ..
+rm ../java/org/opencv/android/AsyncServiceHelper.java
+rm ../java/org/opencv/android/CameraBridgeViewBase.java
+rm ../java/org/opencv/android/JavaCameraView.java
+rm ../java/org/opencv/android/OpenCVLoader.java
 
 cd ../..
