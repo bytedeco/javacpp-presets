@@ -1,0 +1,61 @@
+--- cppbuild/linux-x86_64/onnx-1.0.1/onnx/defs/schema.h	2018-01-25 21:25:37.000000000 -0500
++++ schema.h	2018-04-07 10:36:14.887478089 -0400
+@@ -311,6 +311,7 @@
+ 
+   // Type constraint.
+   struct TypeConstraintParam {
++    TypeConstraintParam(): description("default description") {}
+     TypeConstraintParam(
+         const std::string& type_param_str_,
+         const std::vector<std::string>& allowed_type_strs_,
+@@ -389,6 +390,7 @@
+   int since_version() const {
+     return since_version_;
+   }
++
+   const std::map<std::string, Attribute>& attributes() const {
+     return attributes_;
+   }
+@@ -427,9 +429,9 @@
+   int max_output() const {
+     return max_output_;
+   }
+-  std::pair<UseType, int> consumed(int i) const {
+-    return consumed_(i);
+-  }
++//  std::pair<UseType, int> consumed(int i) const {
++//    return consumed_(i);
++//  }
+ 
+  private:
+   friend class OpSchemaRegistry;
+@@ -448,8 +450,10 @@
+   std::string doc_;
+   // Default domain value ("") means it's ONNX domain.
+   std::string domain_ = "";
++
+   std::map<std::string, Attribute> attributes_{};
+   bool allows_unchecked_attributes_ = false;
++
+   std::vector<FormalParameter> inputs_;
+   std::vector<FormalParameter> outputs_;
+   std::vector<TypeConstraintParam> type_constraint_params_;
+@@ -577,9 +581,9 @@
+     }
+   }
+ 
+- private:
++// private:
+   // OpSchemaRegistry should not need to be instantiated.
+-  OpSchemaRegistry() = delete;
++//  OpSchemaRegistry() = delete;
+ 
+   /**
+    * @brief Returns the underlying string to OpSchema map.
+@@ -623,5 +627,5 @@
+       op_schema_register_once##name) = OpSchema(#name, __FILE__, __LINE__)
+ 
+ // Helper function
+-size_t ReplaceAll(std::string& s, const char* from, const char* to);
++//size_t ReplaceAll(std::string& s, const char* from, const char* to);
+ } // namespace onnx

@@ -9,6 +9,10 @@ ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
 sudo easy_install pip
 sudo pip install requests
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+bash ~/miniconda.sh -f -b -p $HOME/miniconda
+export PATH="$HOME/miniconda/bin:$PATH"
+
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 

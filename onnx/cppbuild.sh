@@ -11,9 +11,6 @@ if [[ $PLATFORM == windows* ]]; then
     #No Windows support yet
     :
 else
-    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
-    bash ~/miniconda.sh -f -b -p $HOME/miniconda
-    export PATH="$HOME/miniconda/bin:$PATH"
     sudo apt-get install protobuf-compiler libprotoc-dev
     pip install 'protobuf==2.6.1'
     conda install -y setuptools
@@ -43,9 +40,9 @@ else
     cp onnx-1.0.1/onnx/*.h include/onnx/
     cp onnx-1.0.1/onnx/defs/*.h include/defs/
     #TODO: Fix so the workaround isn't needed here
-    #next 2 lines to workaround by commenting out parts of schema.h that cause failures
-    rm include/defs/schema.h
-    cp ../../schema.h include/defs/
+    #next line to workaround by commenting out parts of schema.h that cause failures
+    patch cppbuild/linux-x86_64/onnx-1.0.1/onnx/defs/schema.h schema.h.patch
+
     sudo cp onnx-1.0.1/libonnx.so /usr/lib
 fi
 cd ..

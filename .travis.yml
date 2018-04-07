@@ -666,6 +666,11 @@ matrix:
         env: PROJ=tensorflow OS=linux-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=onnx OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+
 
       - os: osx
         osx_image: xcode7.3
