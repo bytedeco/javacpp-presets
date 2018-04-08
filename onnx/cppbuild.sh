@@ -41,7 +41,7 @@ else
     cp onnx-1.0.1/onnx/defs/*.h include/defs/
     #TODO: Fix so the workaround isn't needed here
     #next line to workaround by commenting out parts of schema.h that cause failures
-    patch cppbuild/linux-x86_64/onnx-1.0.1/onnx/defs/schema.h schema.h.patch
+    patch include/defs/schema.h ../../schema.h.patch
 
     sudo cp onnx-1.0.1/libonnx.so /usr/lib
 fi
