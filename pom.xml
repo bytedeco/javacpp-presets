@@ -1156,6 +1156,7 @@
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
+        <module>onnx</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
