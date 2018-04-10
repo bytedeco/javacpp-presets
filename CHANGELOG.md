@@ -1,5 +1,6 @@
 
- * Add Android utility classes from the official Java API of OpenCV ([issue #549](https://github.com/bytedeco/javacpp-presets/issues/549))
+ * Add support for Windows to presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
+ * Add Android utility classes from the official Java API of OpenCV and TensorFlow ([issue #549](https://github.com/bytedeco/javacpp-presets/issues/549))
  * Update build for FFmpeg on Raspbian Stretch ([pull #548](https://github.com/bytedeco/javacpp-presets/pull/548))
  * Add presets for TensorRT
  * Fix build for FFmpeg on `android-x86` and `android-x86_64` platforms ([issue bytedeco/javacv#945](https://github.com/bytedeco/javacv/issues/945))

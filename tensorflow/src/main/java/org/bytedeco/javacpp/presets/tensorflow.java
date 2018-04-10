@@ -48,7 +48,7 @@ import java.lang.annotation.Target;
  */
 @Properties(value = {
         @Platform(
-                value = {"linux-x86", "macosx"},
+                value = {"linux-x86", "macosx", "windows"},
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
@@ -172,10 +172,30 @@ import java.lang.annotation.Target;
                         "tensorflow/cc/ops/training_ops.h",
                         "tensorflow/cc/ops/user_ops.h"},
                 link = "tensorflow_cc", preload = "tensorflow_framework"),
-        @Platform(value = {"linux-x86_64", "macosx-x86_64"}, extension = "-gpu"),
-        @Platform(value = {"android"},
+        @Platform(
+                value = "windows",
+                link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy",
+                        "sqlite", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
+                preload = {"concrt140", "msvcp140", "vcruntime140",
+                           "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
+                           "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
+                           "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"}),
+        @Platform(
+                value = "windows-x86",
+                preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                               "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
+        @Platform(
+                value = "windows-x86_64",
+                preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                               "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
+        @Platform(
+                value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+                extension = "-gpu"),
+        @Platform(
+                value = {"android"},
                 compiler = {"cpp11"},
-                define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std"},
+                define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
                         "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",

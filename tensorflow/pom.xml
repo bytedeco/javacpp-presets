@@ -16,12 +16,25 @@
 
   <properties>
     <tensorflow.version>1.7.0</tensorflow.version>
+    <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>4.1.1.4</version>
+      <exclusions>
+        <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>javax</groupId>
@@ -55,17 +68,36 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <includePaths>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-genfiles/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/nsync/public/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/protobuf_archive/src/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
+            <includePath>${tensorflow.path}/</includePath>
+            <includePath>${tensorflow.path}/bazel-genfiles/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/nsync/public/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/protobuf_archive/src/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/nsync/src/nsync/public/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/protobuf/src/protobuf/src/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/eigen/src/eigen/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
           <linkPaths>
-             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/</linkPath>
+             <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/zlib/src/zlib/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/grpc/src/grpc/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/farmhash/src/farmhash/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/fft2d/src/fft2d/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/lmdb/src/lmdb-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/gif/src/gif-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/jpeg/src/jpeg-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/png/src/png-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/nsync/src/nsync/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/protobuf/src/protobuf/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/re2/src/re2/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/snappy/src/snappy/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/sqlite/src/sqlite-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/tf_cc_op_gen_main.dir/Release/</linkPath>
           </linkPaths>
           <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
         </configuration>
@@ -97,5 +129,39 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>msvc</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}</properties>
+              <compilerOptions>
+                <compilerOption>/DCOMPILER_MSVC</compilerOption>
+                <compilerOption>/DTF_COMPILE_LIBRARY</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/exception_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/graph_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/operation_builder_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/operation_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/saved_model_bundle_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/session_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/tensorflow_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/tensor_jni.cc</compilerOption>
+                <compilerOption>/link</compilerOption>
+                <compilerOption>/WHOLEARCHIVE:tensorflow_static.lib</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
