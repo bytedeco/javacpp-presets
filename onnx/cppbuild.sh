@@ -11,7 +11,6 @@ if [[ $PLATFORM == windows* ]]; then
     #No Windows support yet
     :
 else
-    sudo apt-get install protobuf-compiler libprotoc-dev
     pip install 'protobuf==2.6.1'
     conda install -y setuptools
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
@@ -42,7 +41,6 @@ else
     #TODO: Fix so the workaround isn't needed here
     #next line to workaround by commenting out parts of schema.h that cause failures
     patch include/defs/schema.h ../../schema.h.patch
-
-    sudo cp onnx-1.0.1/libonnx.so /usr/lib
+    cp onnx-1.0.1/libonnx.so lib
 fi
 cd ..

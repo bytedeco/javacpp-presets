@@ -28,7 +28,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>-Djava.library.path=$HOME/dev/javacpp-presets/onnx/src/main/resources/</argLine>
         </configuration>
       </plugin>
       <plugin>
