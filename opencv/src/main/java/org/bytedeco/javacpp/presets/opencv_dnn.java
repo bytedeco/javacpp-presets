@@ -42,7 +42,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CV__DNN_EXPERIMENTAL_NS_BEGIN", "CV__DNN_EXPERIMENTAL_NS_END").cppTypes().annotations())
-               .put(new Info("is_neg").javaNames("is_neg").annotations("@Namespace(\"cv::dnn\")"))
                .put(new Info("cv::dnn::MatShape").annotations("@StdVector").pointerTypes("IntPointer"))
                .put(new Info("std::vector<cv::dnn::MatShape>").pointerTypes("MatShapeVector").define())
                .put(new Info("std::vector<std::vector<cv::dnn::MatShape> >").pointerTypes("MatShapeVectorVector").define())

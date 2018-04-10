@@ -106,32 +106,5 @@ if [ "$PROJ" == "libdc1394" ]; then
        echo Finished libdc1394 install
 fi
 
-if [[ "$PROJ" =~ "hdf5" ]]; then
-       echo Installing HDF5
-       if [ "$OS" == "windows-x86_64" ]; then
-          echo 64bit hdf5 
-          if [[ $(find /c/Downloads/hdf5-64.zip -type f -size +1000000c 2>/dev/null) ]]; then
-             echo "Found hdf5-64 in cache and size seems OK"
-          else
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShTEtPYjU5SDhIZWM /c/Downloads/hdf5-64.zip 
-          fi
-          unzip /c/Downloads/hdf5-64.zip 
-          cd hdf 
-          msiexec //i HDF5-1.10.1-win64.msi //quiet
-       elif [ "$OS" == "windows-x86" ]; then
-          echo 32bit copy for hdf5 
-          if [[ $(find /c/Downloads/hdf5-32.zip -type f -size +1000000c 2>/dev/null) ]]; then
-             echo "Found hdf5-32 in cache and size seems OK"
-          else
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShU1BzVTd1YzZGczg /c/Downloads/hdf5-32.zip 
-          fi
-          unzip /c/Downloads/hdf5-32.zip 
-          cd hdf 
-          msiexec //i HDF5-1.10.1-win32.msi //quiet
-       fi
-       cd ..
-       echo Finished hd5 install 
-fi
-
 echo Finished setting up env in setup.sh
 

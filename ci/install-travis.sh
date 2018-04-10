@@ -29,7 +29,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="rh-maven33 python27"
-  if [[ "librealsense chilitags llvm caffe mxnet tensorflow ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense chilitags llvm caffe mxnet tensorflow tensorrt ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33"
   fi
@@ -89,8 +89,11 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         bash ~/miniconda.sh -f -b -p $HOME/miniconda
         export PATH="$HOME/miniconda/bin:$PATH"
   fi
+  if [ "$PROJ" == "tensorrt" ]; then
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 166ZMg_kQcOu3A57Y7L3mZ3lvhSxof-C2 $HOME/downloads/tensorrt.tar.gz
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -s /usr/local/TensorRT* /usr/local/tensorrt"
+  fi
 fi
-
 
 if [ "$OS" == "linux-armhf" ]; then
 	echo "Setting up tools for linux-armhf build"

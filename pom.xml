@@ -462,6 +462,32 @@
           <value>true</value>
         </property>
       </activation>
+      <repositories>
+        <repository>
+          <id>sonatype-nexus-staging</id>
+          <name>Sonatype Nexus Staging</name>
+          <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${stagingRepositoryId}/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>sonatype-nexus-staging</id>
+          <name>Sonatype Nexus Staging</name>
+          <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${stagingRepositoryId}/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
       <build>
         <plugins>
           <plugin>
@@ -519,6 +545,7 @@
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorrt</module>
         <module>ale</module>
         <module>liquidfun</module>
         <module>skia</module>
@@ -1152,6 +1179,7 @@
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorrt</module>
         <module>ale</module>
         <module>liquidfun</module>
         <module>skia</module>
