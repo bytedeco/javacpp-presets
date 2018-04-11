@@ -130,7 +130,7 @@ case $PLATFORM in
         cd tensorflow/contrib/cmake/build
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX $CMAKE_GPU_FLAGS ..
         MSBuild.exe tensorflow_static.vcxproj //p:Configuration=Release
-        cd ../../..
+        cd ../../../..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
