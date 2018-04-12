@@ -37,7 +37,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install centos-release-scl-rh epel-release" > /dev/null
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install devtoolset-4-toolchain rh-java-common-ant rh-maven33 python27 clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel" > /dev/null
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y install devtoolset-4-toolchain rh-java-common-ant rh-maven33 python27 clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel glfw-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel" > /dev/null
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -y install > /dev/null"
   fi
@@ -93,7 +93,7 @@ if [ "$OS" == "linux-armhf" ]; then
 	sudo dpkg --add-architecture i386
 	sudo apt-get update
 	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-	sudo apt-get -y install clang git file wget unzip tar bzip2 gzip patch autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libglfw3-dev libgtk2.0-dev libusb-dev zlib1g
+	sudo apt-get -y install clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libglfw3-dev libgtk2.0-dev libusb-dev zlib1g
 	git -C $HOME clone https://github.com/raspberrypi/tools
 	git -C $HOME clone https://github.com/raspberrypi/userland
 	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
@@ -118,7 +118,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update > /dev/null
    brew upgrade maven
-   brew install gcc swig libtool libusb nasm yasm xz sdl gpg1
+   brew install gcc swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
    brew link --overwrite gcc
    export PATH=/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 

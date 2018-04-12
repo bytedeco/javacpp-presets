@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.tesseract", inherit=lept.class, value={
-    @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
+@Properties(target = "org.bytedeco.javacpp.tesseract", inherit = lept.class, value = {
+    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
         "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
         "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"},
-        link="tesseract@.3"/*, resource = {"include", "lib"}*/),
-    @Platform(value="android", link="tesseract"),
-    @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
+        compiler = "cpp11", link = "tesseract@.4"/*, resource = {"include", "lib"}*/),
+    @Platform(value = "android", link = "tesseract"),
+    @Platform(value = "windows", link = "libtesseract", preload = "libtesseract-4") })
 public class tesseract implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",
@@ -65,14 +65,15 @@ public class tesseract implements InfoMapper {
                .put(new Info("TessCallback1<STRING>").pointerTypes("StringClearCallback").define().virtualize())
                .put(new Info("TessResultCallback2<bool,const STRING&,const STRING&>").pointerTypes("StringCompareCallback").define().virtualize())
                .put(new Info("TessResultCallback2<bool,FILE*,const STRING&>").pointerTypes("StringWriteCallback").define().virtualize())
-               .put(new Info("TessResultCallback3<bool,FILE*,STRING*,bool>").pointerTypes("StringReadCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,tesseract::TFile*,char*>").pointerTypes("CharReadCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,tesseract::TFile*,STRING*>").pointerTypes("StringReadCallback").define().virtualize())
                .put(new Info("GenericVector<STRING>").pointerTypes("StringGenericVector").define())
                .put(new Info("GenericVector<STRING>::WithinBounds").skip())
 
                .put(new Info("TessCallback1<int>").pointerTypes("IntClearCallback").define().virtualize())
                .put(new Info("TessResultCallback2<bool,const int&,const int&>").pointerTypes("IntCompareCallback").define().virtualize())
                .put(new Info("TessResultCallback2<bool,FILE*,const int&>").pointerTypes("IntWriteCallback").define().virtualize())
-               .put(new Info("TessResultCallback3<bool,FILE*,int*,bool>").pointerTypes("IntReadCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,tesseract::TFile*,int*>").pointerTypes("IntReadCallback").define().virtualize())
                .put(new Info("GenericVector<int>").pointerTypes("IntGenericVector").define())
                .put(new Info("GenericVector<StrongScriptDirection>").cast().pointerTypes("IntGenericVector"))
                .put(new Info("GenericVectorEqEq<int>").pointerTypes("IntGenericVectorEqEq").define())
