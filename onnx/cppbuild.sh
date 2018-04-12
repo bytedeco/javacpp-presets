@@ -17,6 +17,7 @@ else
     mkdir -p $PLATFORM
     cd $PLATFORM
     tar -xzvf ../v1.0.1.tar.gz
+    patch onnx-1.0.1/conda/build.sh ../../build.sh.patch
     cd onnx-1.0.1/third_party/pybind11
     wget https://github.com/pybind/pybind11/archive/v2.2.1.tar.gz
     tar -xzvf v2.2.1.tar.gz
