@@ -11,6 +11,7 @@ if [[ $PLATFORM == windows* ]]; then
     #No Windows support yet
     :
 else
+    export PATH="$HOME/miniconda/bin:$PATH"
     pip install 'protobuf==2.6.1'
     conda install -y setuptools
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
