@@ -18,6 +18,7 @@
     <module>../opencv/platform</module>
     <module>../ffmpeg/platform</module>
     <module>../flycapture/platform</module>
+    <module>../spinnaker/platform</module>
     <module>../libdc1394/platform</module>
     <module>../libfreenect/platform</module>
     <module>../libfreenect2/platform</module>
@@ -69,6 +70,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>flycapture-platform</artifactId>
       <version>2.11.3.121-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>spinnaker-platform</artifactId>
+      <version>1.10.0.31-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

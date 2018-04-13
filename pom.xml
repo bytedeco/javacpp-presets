@@ -522,6 +522,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -960,6 +961,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>artoolkitplus</module>
@@ -1006,6 +1008,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>artoolkitplus</module>
@@ -1099,6 +1102,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -1156,6 +1160,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -1274,6 +1279,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>librealsense</module>
@@ -1326,6 +1332,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
