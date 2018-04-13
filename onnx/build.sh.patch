@@ -1,8 +1,0 @@
---- cppbuild/linux-x86_64/onnx-1.0.1/conda/build.sh	2018-01-25 21:25:37.000000000 -0500
-+++ build.sh	2018-04-12 10:34:41.191422507 -0400
-@@ -5,4 +5,4 @@
-     export MACOSX_DEPLOYMENT_TARGET=10.9
- fi
- # Recommended by https://github.com/conda/conda-build/issues/1191
--python setup.py install --single-version-externally-managed --record=record.txt
-+python3 setup.py install --single-version-externally-managed --record=record.txt
