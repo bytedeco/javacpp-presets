@@ -14,8 +14,7 @@ else
     wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh
     bash ~/miniconda.sh -f -b -p $HOME/miniconda 
     export PATH="$HOME/miniconda/bin:$PATH"
-    pip install 'protobuf==2.6.1'
-    conda install -y setuptools
+    conda install -y -c conda-forge protobuf=2.6.1 numpy setuptools
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
     mkdir -p $PLATFORM
     cd $PLATFORM
