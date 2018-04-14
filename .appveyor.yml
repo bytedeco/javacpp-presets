@@ -5,6 +5,11 @@ os: Visual Studio 2015
 cache:
   - C:\Downloads 
 
+environment:
+  matrix:
+    - PROJ: "opencv,flandmark"
+      OS: windows-x86
+    
 init:
 # uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

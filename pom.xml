@@ -1348,6 +1348,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>tensorflow</module>
         <module>ale</module>
         <module>systems</module>
       </modules>
