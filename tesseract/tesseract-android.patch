@@ -1,35 +1,54 @@
-diff -ruN tesseract-3.05.01/api/baseapi.cpp tesseract-3.05.01-android/api/baseapi.cpp
---- tesseract-3.05.01/api/baseapi.cpp	2017-06-02 03:06:24.000000000 +0900
-+++ tesseract-3.05.01-android/api/baseapi.cpp	2018-02-25 01:38:07.026294918 +0900
-@@ -42,6 +42,10 @@
- #include <string.h>
+diff -ruN tesseract-4.0.0-beta.1/api/baseapi.cpp tesseract-4.0.0-beta.1-android/api/baseapi.cpp
+--- tesseract-4.0.0-beta.1/api/baseapi.cpp	2018-02-24 17:37:25.000000000 +0900
++++ tesseract-4.0.0-beta.1-android/api/baseapi.cpp	2018-04-12 13:10:05.456488001 +0900
+@@ -44,6 +44,10 @@
+ #include <unistd.h>
  #endif  // _WIN32
  
 +#include <stdio.h>
 +int fgetpos(FILE* __fp, fpos_t* __pos);
 +int fsetpos(FILE* __fp, const fpos_t* __pos);
 +
+ #include <fstream>
  #include <iostream>
- #include <string>
  #include <iterator>
-diff -ruN tesseract-3.05.01/api/Makefile.am tesseract-3.05.01-android/api/Makefile.am
---- tesseract-3.05.01/api/Makefile.am	2017-06-02 03:06:24.000000000 +0900
-+++ tesseract-3.05.01-android/api/Makefile.am	2018-02-25 01:36:15.815499281 +0900
-@@ -20,7 +20,7 @@
- noinst_LTLIBRARIES = libtesseract_api.la
- else
- lib_LTLIBRARIES += libtesseract_api.la
--libtesseract_api_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION)
-+libtesseract_api_la_LDFLAGS = -avoid-version
- libtesseract_api_la_LIBADD = \
-     ../ccmain/libtesseract_main.la \
-     ../textord/libtesseract_textord.la \
-@@ -67,7 +67,7 @@
-         ../neural_networks/runtime/libtesseract_neural.la
- endif
+diff -ruN tesseract-4.0.0-beta.1/api/Makefile.am tesseract-4.0.0-beta.1-android/api/Makefile.am
+--- tesseract-4.0.0-beta.1/api/Makefile.am	2018-02-24 17:37:25.000000000 +0900
++++ tesseract-4.0.0-beta.1-android/api/Makefile.am	2018-04-12 12:36:44.680934952 +0900
+@@ -49,7 +49,7 @@
+     ../ccutil/libtesseract_ccutil.la \
+     ../opencl/libtesseract_opencl.la 
  
 -libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) -no-undefined
 +libtesseract_la_LDFLAGS += -avoid-version -no-undefined
  
  bin_PROGRAMS = tesseract
  tesseract_SOURCES = tesseractmain.cpp
+diff -ruN tesseract-4.0.0-beta.1/lstm/lstm.cpp tesseract-4.0.0-beta.1-android/lstm/lstm.cpp
+--- tesseract-4.0.0-beta.1/lstm/lstm.cpp	2018-02-24 17:37:25.000000000 +0900
++++ tesseract-4.0.0-beta.1-android/lstm/lstm.cpp	2018-04-12 13:12:53.079464326 +0900
+@@ -29,6 +29,10 @@
+ #include "networkscratch.h"
+ #include "tprintf.h"
+ 
++#if (defined(_MSC_VER) && _MSC_VER < 1900) || defined(ANDROID)
++extern double log2(double n);
++#endif  // _MSC_VER
++
+ // Macros for openmp code if it is available, otherwise empty macros.
+ #ifdef _OPENMP
+ #define PARALLEL_IF_OPENMP(__num_threads)                                  \
+diff -ruN tesseract-4.0.0-beta.1/lstm/weightmatrix.cpp tesseract-4.0.0-beta.1-android/lstm/weightmatrix.cpp
+--- tesseract-4.0.0-beta.1/lstm/weightmatrix.cpp	2018-02-24 17:37:25.000000000 +0900
++++ tesseract-4.0.0-beta.1-android/lstm/weightmatrix.cpp	2018-04-12 13:12:47.628465085 +0900
+@@ -25,6 +25,10 @@
+ #include "statistc.h"
+ #include "tprintf.h"
+ 
++#if (defined(_MSC_VER) && _MSC_VER < 1900) || defined(ANDROID)
++extern double log2(double n);
++#endif  // _MSC_VER
++
+ namespace tesseract {
+ 
+ // Number of iterations after which the correction effectively becomes unity.

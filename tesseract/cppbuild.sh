@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=3.05.01
+TESSERACT_VERSION=4.0.0-beta.1
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -35,6 +35,8 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
 fi
 
 LEPTONICA_PATH="${LEPTONICA_PATH//\\//}"
+
+sedinplace 's/static string/static std::string/g' ccutil/unichar.h
 
 case $PLATFORM in
     android-arm)
@@ -123,14 +125,14 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        patch -Np1 < ../../../tesseract-windows.patch
+        #patch -Np1 < ../../../tesseract-windows.patch
         cp vs2010/port/* ccutil/
         ./configure --prefix=$INSTALL_PATH --host="i686-w64-mingw32" CC="gcc -m32" CXX="g++ -m32 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
-        patch -Np1 < ../../../tesseract-windows.patch
+        #patch -Np1 < ../../../tesseract-windows.patch
         cp vs2010/port/* ccutil/
         ./configure --prefix=$INSTALL_PATH --host="x86_64-w64-mingw32" CC="gcc -m64" CXX="g++ -m64 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
