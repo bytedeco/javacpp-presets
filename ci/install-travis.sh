@@ -9,7 +9,6 @@ ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
 sudo easy_install pip
 sudo pip install requests
-
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
@@ -81,7 +80,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
         fi
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
   fi
   if [ "$PROJ" == "tensorrt" ]; then
         python $TRAVIS_BUILD_DIR/ci/gDownload.py 166ZMg_kQcOu3A57Y7L3mZ3lvhSxof-C2 $HOME/downloads/tensorrt.tar.gz

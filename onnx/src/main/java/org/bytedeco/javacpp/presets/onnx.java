@@ -33,9 +33,12 @@ include={
 "defs/data_type_utils.h",
 "onnx/onnx-operators.pb.h",
 "onnx/onnx.pb.h",
-"google/protobuf/message_lite.h",
-"google/protobuf/unknown_field_set.h",
+//"google/protobuf/stubs/common.h",
+//"google/protobuf/arena.h",
 //"google/protobuf/descriptor.h",
+"google/protobuf/message_lite.h",
+//"google/protobuf/message.h",
+"google/protobuf/unknown_field_set.h",
 //"google/protobuf/generated_message_table_driven.h",
 //"onnx/checker.h",
 //"onnx_pb.h",
@@ -63,12 +66,15 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
+               .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("ProtoLongPair").define())
+               .put(new Info("google::protobuf::Arena").cast().pointerTypes("Arena").define())
+//               .put(new Info("::google::protobuf::internal::VerifyVersion").cast().pointerTypes("VerifyVersion"))
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
-                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip()) 
+                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField").skip()) 
           
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
                .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
