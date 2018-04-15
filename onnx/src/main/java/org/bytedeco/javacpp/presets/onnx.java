@@ -34,7 +34,7 @@ include={
 "onnx/onnx-operators.pb.h",
 "onnx/onnx.pb.h",
 "google/protobuf/message_lite.h",
-"google/protobuf/stubs/unknown_field_set.h",
+"google/protobuf/unknown_field_set.h",
 //"google/protobuf/descriptor.h",
 //"google/protobuf/generated_message_table_driven.h",
 //"onnx/checker.h",
