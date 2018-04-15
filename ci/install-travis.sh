@@ -83,12 +83,6 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         fi
          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
   fi
-  if [ "$PROJ" == "onnx" ]; then
-        sudo apt-get -y install protobuf-compiler libprotoc-dev
-        wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh
-        bash ~/miniconda.sh -f -b -p $HOME/miniconda
-        export PATH="$HOME/miniconda/bin:$PATH"
-  fi
   if [ "$PROJ" == "tensorrt" ]; then
         python $TRAVIS_BUILD_DIR/ci/gDownload.py 166ZMg_kQcOu3A57Y7L3mZ3lvhSxof-C2 $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -s /usr/local/TensorRT* /usr/local/tensorrt"
