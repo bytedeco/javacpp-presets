@@ -16,6 +16,10 @@ services:
 matrix:
    include:
       - os: linux
-        env: PROJ=onnx OS=linux-x86_64
+        env: PROJ=onnx OS=linux-x86_64 MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
         install: true
         script: ./ci/install-travis.sh
+        addons:
+          apt:
+            packages:
+              - g++-4.9
