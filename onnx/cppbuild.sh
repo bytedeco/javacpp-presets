@@ -18,7 +18,7 @@ else
     bash ~/miniconda.sh -f -b -p $HOME/miniconda 
     export PATH="$HOME/miniconda/bin:$PATH"
     conda install -y -c conda-forge protobuf=$PROTO numpy setuptools
-    export CFLAGS="-I$HOME/miniconda/include"
+    export CFLAGS="-I$HOME/miniconda/include -D_GLIBCXX_USE_CXX11_ABI=0"
     export CONDA_PREFIX="$HOME/miniconda"
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
     mkdir -p $PLATFORM
