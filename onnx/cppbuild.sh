@@ -12,7 +12,7 @@ if [[ $PLATFORM == windows* ]]; then
     :
 else
 
-    export PROTO=3.3.0
+    export PROTO=3.5.1
     export INSTALL_PATH=`pwd`/$PLATFORM
     wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh
     bash ~/miniconda.sh -f -b -p $HOME/miniconda 
