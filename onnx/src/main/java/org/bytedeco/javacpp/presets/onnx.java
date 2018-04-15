@@ -33,8 +33,10 @@ include={
 "defs/data_type_utils.h",
 "onnx/onnx-operators.pb.h",
 "onnx/onnx.pb.h",
-"/usr/include/google/protobuf/message_lite.h",
-"/usr/include/google/protobuf/unknown_field_set.h",
+"google/protobuf/message_lite.h",
+"google/protobuf/stubs/unknown_field_set.h",
+//"google/protobuf/descriptor.h",
+//"google/protobuf/generated_message_table_driven.h",
 //"onnx/checker.h",
 //"onnx_pb.h",
 //"onnx/string_utils.h"
