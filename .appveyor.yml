@@ -41,7 +41,9 @@ environment:
       OS: windows-x86
     - PROJ: "llvm"
       OS: windows-x86
-    - PROJ: "leptonica,tesseract"
+    - PROJ: "leptonica"
+      OS: windows-x86
+    - PROJ: "tesseract"
       OS: windows-x86
     - PROJ: "ale"
       OS: windows-x86
@@ -86,7 +88,9 @@ environment:
       OS: windows-x86_64
     - PROJ: "libpostal"
       OS: windows-x86_64
-    - PROJ: "leptonica,tesseract"
+    - PROJ: "leptonica"
+      OS: windows-x86_64
+    - PROJ: "tesseract"
       OS: windows-x86_64
     - PROJ: "cuda"
       OS: windows-x86_64

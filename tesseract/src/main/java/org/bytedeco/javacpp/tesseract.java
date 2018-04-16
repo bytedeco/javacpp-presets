@@ -646,6 +646,23 @@ public static class TessClosure extends Pointer {
   @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("const char") @ByRef byte arg1);
 }
 
+@Name("TessResultCallback2<bool,tesseract::TFile*,char*>") public static class CharReadCallback extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public CharReadCallback() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CharReadCallback(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CharReadCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public CharReadCallback position(long position) {
+        return (CharReadCallback)super.position(position);
+    }
+
+  @Virtual(true) public native @Cast("bool") boolean Run(TFile arg0,@Cast("char*") BytePointer arg1);
+}
+
 @Name("TessResultCallback2<bool,const STRING&,const STRING&>") public static class StringCompareCallback extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -678,23 +695,6 @@ public static class TessClosure extends Pointer {
     }
 
   @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const @ByRef STRING arg1);
-}
-
-@Name("TessResultCallback2<bool,tesseract::TFile*,char*>") public static class CharReadCallback extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CharReadCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CharReadCallback(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CharReadCallback(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CharReadCallback position(long position) {
-        return (CharReadCallback)super.position(position);
-    }
-
-  @Virtual(true) public native @Cast("bool") boolean Run(TFile arg0,@Cast("char*") BytePointer arg1);
 }
 
 @Name("TessResultCallback2<bool,tesseract::TFile*,STRING*>") public static class StringReadCallback extends Pointer {

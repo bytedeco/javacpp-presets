@@ -44,7 +44,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=android-arm
+        env: PROJ=leptonica OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=android-arm
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -81,7 +85,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=android-arm64
+        env: PROJ=leptonica OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=android-arm64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -118,7 +126,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=android-x86
+        env: PROJ=leptonica OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=android-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -155,7 +167,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=android-x86_64
+        env: PROJ=leptonica OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=android-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -244,7 +260,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=linux-armhf
+        env: PROJ=leptonica OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -301,7 +321,11 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=linux-ppc64le
+        env: PROJ=leptonica OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=tesseract OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -400,7 +424,12 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode7.3
-        env: PROJ=leptonica,tesseract OS=macosx-x86_64
+        env: PROJ=leptonica OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=tesseract OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
@@ -513,7 +542,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=linux-x86
+        env: PROJ=leptonica OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -618,7 +651,11 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=leptonica,tesseract OS=linux-x86_64
+        env: PROJ=leptonica OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=tesseract OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux

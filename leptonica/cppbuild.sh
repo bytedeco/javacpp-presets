@@ -519,4 +519,6 @@ case $PLATFORM in
         ;;
 esac
 
+sedinplace '/dependency_libs/d' ../lib/liblept.la || true
+
 cd ../..
