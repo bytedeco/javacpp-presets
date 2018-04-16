@@ -32,7 +32,7 @@ else
     export CFLAGS="-I`pwd`/include"
     export CXXFLAGS="-I`pwd`/include"
     cd protobuf-$PROTO
-    git submodule update --init --recursive
+#    git submodule update --init --recursive
     patch ./autogen.sh ../../../autogen.sh.patch
     ./autogen.sh
     ./configure "--prefix=$INSTALL_PATH" CFLAGS=-fPIC CXXFLAGS=-fPIC
