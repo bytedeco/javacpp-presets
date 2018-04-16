@@ -61,8 +61,6 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
-               .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("ProtoLongPair").define())
-               .put(new Info("google::protobuf::Arena").cast().pointerTypes("Arena").define())
 
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
