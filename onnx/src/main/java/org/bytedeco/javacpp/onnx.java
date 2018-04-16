@@ -342,6 +342,26 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@NoOffset @Name("std::pair<google::protobuf::uint64,google::protobuf::uint64>") public static class ProtoLongPair extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ProtoLongPair(Pointer p) { super(p); }
+    public ProtoLongPair(long firstValue, long secondValue) { this(); put(firstValue, secondValue); }
+    public ProtoLongPair()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef ProtoLongPair put(@ByRef ProtoLongPair x);
+
+
+    @MemberGetter public native long first(); public native ProtoLongPair first(long first);
+    @MemberGetter public native @Cast("google::protobuf::uint64") long second();  public native ProtoLongPair second(long second);
+
+    public ProtoLongPair put(long firstValue, long secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+}
+
 @NoOffset @Name("std::pair<int,int>") public static class UseTypeIntPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4020,7 +4040,7 @@ public static final int
 // #endif  // PROTOBUF_onnx_2eproto__INCLUDED
 
 
-// Parsed from /usr/include/google/protobuf/message_lite.h
+// Parsed from google/protobuf/message_lite.h
 
 // Protocol Buffers - Google's data interchange format
 // Copyright 2008 Google Inc.  All rights reserved.
@@ -4288,7 +4308,7 @@ public static final int
 // #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 
-// Parsed from /usr/include/google/protobuf/unknown_field_set.h
+// Parsed from google/protobuf/unknown_field_set.h
 
 // Protocol Buffers - Google's data interchange format
 // Copyright 2008 Google Inc.  All rights reserved.

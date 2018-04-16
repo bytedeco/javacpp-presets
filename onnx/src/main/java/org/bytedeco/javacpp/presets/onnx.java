@@ -33,13 +33,8 @@ include={
 "defs/data_type_utils.h",
 "onnx/onnx-operators.pb.h",
 "onnx/onnx.pb.h",
-//"google/protobuf/stubs/common.h",
-//"google/protobuf/arena.h",
-//"google/protobuf/descriptor.h",
 "google/protobuf/message_lite.h",
-//"google/protobuf/message.h",
 "google/protobuf/unknown_field_set.h",
-//"google/protobuf/generated_message_table_driven.h",
 //"onnx/checker.h",
 //"onnx_pb.h",
 //"onnx/string_utils.h"
@@ -68,7 +63,7 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
                .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("ProtoLongPair").define())
                .put(new Info("google::protobuf::Arena").cast().pointerTypes("Arena").define())
-//               .put(new Info("::google::protobuf::internal::VerifyVersion").cast().pointerTypes("VerifyVersion"))
+
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",

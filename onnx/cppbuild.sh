@@ -21,29 +21,25 @@ else
     export CFLAGS="-I$HOME/miniconda/include"
     export CONDA_PREFIX="$HOME/miniconda"
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
+
     mkdir -p $PLATFORM
     cd $PLATFORM
     wget https://github.com/google/protobuf/archive/v$PROTO.tar.gz 
     mv v$PROTO.tar.gz protobuf-$PROTO.tar.gz
     tar -xvf protobuf-$PROTO.tar.gz
-#    git clone https://github.com/google/protobuf.git
+
     export LIBRARY_PATH=`pwd`/lib
-    echo $LIBRARY_PATH
-#    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
     export PATH=$PATH:`pwd`/bin
     export CFLAGS="-I`pwd`/include"
     export CXXFLAGS="-I`pwd`/include"
     cd protobuf-$PROTO
-#    git submodule update --init --recursive
+
     patch ./autogen.sh ../../../autogen.sh.patch
     ./autogen.sh
     ./configure "--prefix=$INSTALL_PATH" CFLAGS=-fPIC CXXFLAGS=-fPIC
     make -j `nproc`
     make install
-#    cd python
-#    python setup.py build
-#    python setup.py install --cpp_implementation --single-version-externally-managed --record record.txt
-#    cd ..
+
     cd ..
     tar -xzvf ../v1.0.1.tar.gz
     cd onnx-1.0.1/third_party/pybind11
@@ -56,22 +52,21 @@ else
     #to build with "Traditional ML" support. Untested.
     #export ONNX_ML=1
     export BASEDIR=build/temp.linux-x86_64-2.7/`pwd`/onnx/
-#    patch setup.py ../../../setup.py.patch
+
     python setup.py install --single-version-externally-managed --record=record.txt
     g++ -v -std=c++11 -shared -Wl,-soname,libonnx.so -fPIC -o libonnx.so $BASEDIR/onnx-operators.pb.o $BASEDIR/onnx.pb.o $BASEDIR/checker.o $BASEDIR/defs/schema.o $BASEDIR/defs/tensor/old.o $BASEDIR/defs/tensor/defs.o $BASEDIR/defs/generator/defs.o $BASEDIR/defs/math/defs.o $BASEDIR/defs/data_type_utils.o $BASEDIR/defs/traditionalml/defs.o $BASEDIR/defs/experiments/defs.o $BASEDIR/defs/nn/defs.o $BASEDIR/defs/nn/old.o $BASEDIR/defs/reduction/defs.o $BASEDIR/defs/logical/defs.o $BASEDIR/defs/rnn/defs.o -pthread
     cd ..
-#    mkdir include
+
     cd include
     mkdir defs
     mkdir onnx
     cd ..
-#    mkdir lib
+
     cp onnx-1.0.1/onnx/*.h include/onnx/
     cp onnx-1.0.1/onnx/defs/*.h include/defs/
     #TODO: Fix so the workaround isn't needed here
     #next line to workaround by commenting out parts of schema.h that cause failures
     patch include/defs/schema.h ../../schema.h.patch
-#    rm include/google/protobuf/stubs/common.h.orig
     cp onnx-1.0.1/libonnx.so lib
 fi
 cd ..
