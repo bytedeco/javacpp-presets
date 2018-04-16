@@ -44,7 +44,7 @@ include={
 //"onnx_pb.h",
 //"onnx/string_utils.h"
 }, 
-link="onnx")})
+link={"onnx", "protobuf"})})
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
 infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
