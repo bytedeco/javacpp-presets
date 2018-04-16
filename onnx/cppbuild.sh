@@ -27,7 +27,9 @@ else
     mv v$PROTO.tar.gz protobuf-$PROTO.tar.gz
     tar -xvf protobuf-$PROTO.tar.gz
 #    git clone https://github.com/google/protobuf.git
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
+    export LIBRARY_PATH=`pwd`/lib
+    echo $LIBRARY_PATH
+#    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
     export PATH=$PATH:`pwd`/bin
     export CFLAGS="-I`pwd`/include"
     export CXXFLAGS="-I`pwd`/include"
