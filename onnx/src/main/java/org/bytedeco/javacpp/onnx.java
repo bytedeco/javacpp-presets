@@ -342,26 +342,6 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
-@NoOffset @Name("std::pair<google::protobuf::uint64,google::protobuf::uint64>") public static class ProtoLongPair extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ProtoLongPair(Pointer p) { super(p); }
-    public ProtoLongPair(long firstValue, long secondValue) { this(); put(firstValue, secondValue); }
-    public ProtoLongPair()       { allocate();  }
-    private native void allocate();
-    public native @Name("operator=") @ByRef ProtoLongPair put(@ByRef ProtoLongPair x);
-
-
-    @MemberGetter public native long first(); public native ProtoLongPair first(long first);
-    @MemberGetter public native @Cast("google::protobuf::uint64") long second();  public native ProtoLongPair second(long second);
-
-    public ProtoLongPair put(long firstValue, long secondValue) {
-        first(firstValue);
-        second(secondValue);
-        return this;
-    }
-}
-
 @NoOffset @Name("std::pair<int,int>") public static class UseTypeIntPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
