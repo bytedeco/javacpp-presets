@@ -15,11 +15,11 @@ else
     export PROTO=2.6.1
     export INSTALL_PATH=`pwd`/$PLATFORM
     wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh
-    bash ~/miniconda.sh -f -b -p $HOME/miniconda 
-    export PATH="$HOME/miniconda/bin:$PATH"
+    bash ~/miniconda.sh -f -b -p $INSTALL_PATH/miniconda 
+    export PATH="$INSTALL_PATH/miniconda/bin:$PATH"
     conda install -y -c conda-forge protobuf=2.6.1 numpy setuptools
-    export CFLAGS="-I$HOME/miniconda/include"
-    export CONDA_PREFIX="$HOME/miniconda"
+    export CFLAGS="-I$INSTALL_PATH/miniconda/include"
+    export CONDA_PREFIX="$INSTALL_PATH/miniconda"
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
 
     mkdir -p $PLATFORM
