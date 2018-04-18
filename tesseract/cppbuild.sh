@@ -19,6 +19,8 @@ cd tesseract-$TESSERACT_VERSION
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
+sedinplace 's/static string/static std::string/g' ccutil/unichar.h
+sedinplace '/tiff/d' api/Makefile.am
 bash autogen.sh
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
@@ -35,8 +37,6 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
 fi
 
 LEPTONICA_PATH="${LEPTONICA_PATH//\\//}"
-
-sedinplace 's/static string/static std::string/g' ccutil/unichar.h
 
 case $PLATFORM in
     android-arm)
@@ -77,7 +77,7 @@ case $PLATFORM in
         patch -Np1 < ../../../tesseract-android.patch
         cp "$ANDROID_ROOT/usr/lib64/crtbegin_so.o" "$ANDROID_ROOT/usr/lib64/crtend_so.o" api
         "$ANDROID_BIN-ar" r api/librt.a "$ANDROID_ROOT/usr/lib64/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/x86_64/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
+        ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib64/ -L$ANDROID_CPP/libs/x86_64/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
         sed -i="" s/lstdc++/lgnustl_static/g libtool
         chmod -w libtool
         make -j $MAKEJ

@@ -98,13 +98,5 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Finished cuda install
 fi 
 
-if [ "$PROJ" == "libdc1394" ]; then
-       echo Installing libdc1394 
-       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShVnNJM3JCclpuTE0 CMU.zip
-       unzip CMU.zip
-       mv CMU /c/Program\ Files\ \(x86\)
-       echo Finished libdc1394 install
-fi
-
 echo Finished setting up env in setup.sh
 

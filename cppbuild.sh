@@ -33,6 +33,9 @@ case $ARCH in
     arm*)
         ARCH=arm
         ;;
+    aarch64*)
+        ARCH=arm64
+        ;;
     i386|i486|i586|i686)
         ARCH=x86
         ;;
