@@ -586,6 +586,72 @@ case $PLATFORM in
         make install
         ;;
 
+    linux-arm64)
+        tar --totals -xjf ../alsa-lib-$ALSA_VERSION.tar.bz2
+
+        export CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        HOST_ARCH="$(uname -m)"
+        cd $ZLIB
+        CC="gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ V=0
+        make install
+        cd ../$LAME
+        CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENSSL
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH  "$CFLAGS" no-shared no-afalgeng no-idea no-mdc2 no-rc5 no-zlib no-ssl3 no-ssl3-method enable-rfc3779 enable-cms
+        make -j $MAKEJ
+        make install_sw
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=gcc CXX=g++
+        cd ../$X264
+        LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl  --disable-cli --enable-asm --host=aarch64-linux --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations"
+        make -j $MAKEJ V=0
+        make install
+        cd ../x265-$X265
+        $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+        patch -Np1 < ../../../disable_vp8_loop_filter_simple_neon.patch
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
+        make -j $MAKEJ
+        make install
+        cd ../alsa-lib-$ALSA_VERSION/
+        ./configure --host=aarch64-linux --prefix=$INSTALL_PATH --disable-python
+        make -j $MAKEJ V=0
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-linux.patch
+        LD_LIBRARY_PATH=../lib/ CC="gcc" CXX="g++" PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure  --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-ldexeflags="-static" --pkg-config-flags="--static" --pkg-config="pkg-config --static"  --extra-libs="-lstdc++ -ldl"
+        make -j $MAKEJ
+        make install
+        ;;
+
+
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         cd $ZLIB
