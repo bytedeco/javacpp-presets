@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018 Samuel Audet, Mariano Scazzariello
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = {opencv_imgproc.class},
+    inherit = opencv_features2d.class,
     value = {
         @Platform(
             include = {
@@ -47,10 +47,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 public class opencv_saliency implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
-    	infoMap.put(new Info("cv::Ptr<cv::saliency::StaticSaliencySpectralResidual>").annotations("@Ptr").pointerTypes("StaticSaliencySpectralResidual"))
-    		   .put(new Info("cv::Ptr<cv::saliency::StaticSaliencyFineGrained>").annotations("@Ptr").pointerTypes("StaticSaliencyFineGrained"))
-    		   .put(new Info("cv::Ptr<cv::saliency::MotionSaliencyBinWangApr2014>").annotations("@Ptr").pointerTypes("MotionSaliencyBinWangApr2014"))
-    		   .put(new Info("cv::Ptr<cv::saliency::ObjectnessBING>").annotations("@Ptr").pointerTypes("ObjectnessBING"));
     }
 }
 
