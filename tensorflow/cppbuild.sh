@@ -27,13 +27,14 @@ export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=9.1
 export TF_CUDNN_VERSION=7
+export TF_DOWNLOAD_CLANG=0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.7.0
+TENSORFLOW_VERSION=1.8.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 

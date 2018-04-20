@@ -1864,6 +1864,9 @@ limitations under the License.
 // #include <cmath>
 // #include <complex>
 
+// We need cpu_info.h here in order to pick up __BYTE_ORDER__.
+// #include "tensorflow/core/platform/cpu_info.h"
+
 // #ifdef __CUDACC__
 // All functions callable from CUDA code must be qualified with __device__
 // #define B16_DEVICE_FUNC __host__ __device__
@@ -1939,6 +1942,34 @@ limitations under the License.
   public native @ByVal @Cast("tensorflow::complex64*") @Name("operator tensorflow::complex64") FloatPointer asFloatPointer();
 
   public native @ByVal @Cast("tensorflow::complex128*") @Name("operator tensorflow::complex128") DoublePointer asDoublePointer();
+
+  public static class FP32 extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public FP32() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public FP32(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public FP32(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public FP32 position(long position) {
+          return (FP32)super.position(position);
+      }
+  
+    public native @Cast("unsigned int") int u(); public native FP32 u(int u);
+    public native float f(); public native FP32 f(float f);
+  }
+
+  // Converts a float point to bfloat16, with round-nearest-to-even as rounding
+  // method.
+  // TODO(b/69266521): Add a truncate_to_bfloat16 function and make this
+  // function as default behavior.
+  // TODO: There is a slightly faster implementation (8% faster on CPU)
+  // than this (documented in cl/175987786), that is exponentially harder to
+  // understand and document. Switch to the faster version when converting to
+  // BF16 becomes compute-bound.
+  public static native @ByVal bfloat16 round_to_bfloat16(float v);
 
   public static native @ByVal bfloat16 epsilon();
 
@@ -2038,6 +2069,7 @@ limitations under the License.
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/FixedPoint"
 // clang-format on
 
+// #include "tensorflow/core/lib/bfloat16/bfloat16.h"
 // #include "tensorflow/core/platform/types.h"
 
 // Single precision complex.
@@ -2162,12 +2194,6 @@ limitations under the License.
 // #else
 // #error Define the appropriate PLATFORM_<foo> macro for this platform
 // #endif
-
-// #if defined(PLATFORM_WINDOWS)
-// #include "tensorflow/core/platform/windows/cpu_info.h"
-// #endif
-
-// #include "tensorflow/core/lib/bfloat16/bfloat16.h"
 
 // Define tensorflow::string to refer to appropriate platform specific type.
 // TODO(josh11b): Move this into the platform/*/integral_types.h files
@@ -2333,11 +2359,18 @@ limitations under the License.
 // #define TF_EXPORT __attribute__((visibility("default")))
 // #endif  // COMPILER_MSVC
 
-// GCC can be told that a certain branch is not likely to be taken (for
-// instance, a CHECK failure), and use that information in static analysis.
-// Giving it this information can help it optimize for the common case in
-// the absence of better information (ie. -fprofile-arcs).
-// #if defined(COMPILER_GCC3)
+// #ifdef __has_builtin
+// #define TF_HAS_BUILTIN(x) __has_builtin(x)
+// #else
+// #define TF_HAS_BUILTIN(x) 0
+// #endif
+
+// Compilers can be told that a certain branch is not likely to be taken
+// (for instance, a CHECK failure), and use that information in static
+// analysis. Giving it this information can help it optimize for the
+// common case in the absence of better information (ie.
+// -fprofile-arcs).
+// #if TF_HAS_BUILTIN(__builtin_expect) || (defined(__GNUC__) && __GNUC__ >= 3)
 // #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
 // #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
 // #else
@@ -2814,7 +2847,6 @@ limitations under the License.
 // #include "tensorflow/core/platform/file_statistics.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/platform.h"
-// #include "tensorflow/core/platform/protobuf.h"
 // #include "tensorflow/core/platform/types.h"
 
 // #ifdef PLATFORM_WINDOWS
@@ -2951,9 +2983,7 @@ limitations under the License.
    *  Typical return codes:
    *   * OK - no errors
    *   * UNIMPLEMENTED - Some underlying functions (like GetChildren) are not
-   *                     implemented
-   *  The default implementation uses a combination of GetChildren, MatchPath
-   *  and IsDirectory. */
+   *                     implemented */
   public native @ByVal Status GetMatchingPaths(@StdString BytePointer pattern,
                                     StringVector results);
   public native @ByVal Status GetMatchingPaths(@StdString String pattern,
@@ -3159,13 +3189,6 @@ limitations under the License.
   /** \brief Returns the length of the memory region in bytes. */
   public native @Cast("tensorflow::uint64") long length();
 }
-
-// START_SKIP_DOXYGEN
-
-// #ifndef SWIG
-// #endif
-
-// END_SKIP_DOXYGEN
 
 /** \brief A registry for file system implementations.
  * 
@@ -3605,6 +3628,9 @@ limitations under the License.
                                          @StdString BytePointer version);
   public native @StdString String FormatLibraryFileName(@StdString String name,
                                          @StdString String version);
+
+  // Returns a possible list of local temporary directories.
+  public native void GetLocalTempDirectories(StringVector list);
 }
 
 /** \brief An implementation of Env that forwards all calls to another Env.
@@ -4823,6 +4849,32 @@ public static final int
     @StdString BytePointer name, @Cast("tensorflow::RewriterConfig_Toggle*") IntBuffer value);
 @Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_Toggle_Parse(
     @StdString String name, @Cast("tensorflow::RewriterConfig_Toggle*") int... value);
+/** enum tensorflow::RewriterConfig_NumIterationsType */
+public static final int
+  RewriterConfig_NumIterationsType_DEFAULT_NUM_ITERS = 0,
+  RewriterConfig_NumIterationsType_ONE = 1,
+  RewriterConfig_NumIterationsType_TWO = 2,
+  RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_IsValid(int value);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_NumIterationsType") int RewriterConfig_NumIterationsType_NumIterationsType_MIN();
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_NumIterationsType") int RewriterConfig_NumIterationsType_NumIterationsType_MAX();
+@Namespace("tensorflow") @MemberGetter public static native int RewriterConfig_NumIterationsType_NumIterationsType_ARRAYSIZE();
+
+@Namespace("tensorflow") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer RewriterConfig_NumIterationsType_descriptor();
+@Namespace("tensorflow") public static native @StdString BytePointer RewriterConfig_NumIterationsType_Name(@Cast("tensorflow::RewriterConfig_NumIterationsType") int value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::RewriterConfig_NumIterationsType*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_Parse(
+    @StdString String name, @Cast("tensorflow::RewriterConfig_NumIterationsType*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::RewriterConfig_NumIterationsType*") int... value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_Parse(
+    @StdString String name, @Cast("tensorflow::RewriterConfig_NumIterationsType*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::RewriterConfig_NumIterationsType*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_Parse(
+    @StdString String name, @Cast("tensorflow::RewriterConfig_NumIterationsType*") int... value);
 /** enum tensorflow::RewriterConfig_MemOptType */
 public static final int
   RewriterConfig_MemOptType_DEFAULT_MEM_OPT = 0,
@@ -5027,6 +5079,33 @@ public static final int
         @Cast("tensorflow::RewriterConfig::Toggle*") IntBuffer value);
   public static native @Cast("bool") boolean Toggle_Parse(@StdString String name,
         @Cast("tensorflow::RewriterConfig::Toggle*") int... value);
+  @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::NumIterationsType") int DEFAULT_NUM_ITERS();
+  public static final int DEFAULT_NUM_ITERS = DEFAULT_NUM_ITERS();
+  @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::NumIterationsType") int ONE();
+  public static final int ONE = ONE();
+  @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::NumIterationsType") int TWO();
+  public static final int TWO = TWO();
+  public static native @Cast("bool") boolean NumIterationsType_IsValid(int value);
+  @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::NumIterationsType") int NumIterationsType_MIN();
+  public static final int NumIterationsType_MIN = NumIterationsType_MIN();
+  @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::NumIterationsType") int NumIterationsType_MAX();
+  public static final int NumIterationsType_MAX = NumIterationsType_MAX();
+  @MemberGetter public static native int NumIterationsType_ARRAYSIZE();
+  public static final int NumIterationsType_ARRAYSIZE = NumIterationsType_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer NumIterationsType_descriptor();
+  public static native @StdString BytePointer NumIterationsType_Name(@Cast("tensorflow::RewriterConfig::NumIterationsType") int value);
+  public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString BytePointer name,
+        @Cast("tensorflow::RewriterConfig::NumIterationsType*") IntPointer value);
+  public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString String name,
+        @Cast("tensorflow::RewriterConfig::NumIterationsType*") IntBuffer value);
+  public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString BytePointer name,
+        @Cast("tensorflow::RewriterConfig::NumIterationsType*") int... value);
+  public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString String name,
+        @Cast("tensorflow::RewriterConfig::NumIterationsType*") IntPointer value);
+  public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString BytePointer name,
+        @Cast("tensorflow::RewriterConfig::NumIterationsType*") IntBuffer value);
+  public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString String name,
+        @Cast("tensorflow::RewriterConfig::NumIterationsType*") int... value);
   @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::MemOptType") int DEFAULT_MEM_OPT();
   public static final int DEFAULT_MEM_OPT = DEFAULT_MEM_OPT();
   @MemberGetter public static native @Cast("const tensorflow::RewriterConfig::MemOptType") int NO_MEM_OPT();
@@ -5172,6 +5251,20 @@ public static final int
   public static final int kFunctionOptimizationFieldNumber = kFunctionOptimizationFieldNumber();
   public native @Cast("tensorflow::RewriterConfig_Toggle") int function_optimization();
   public native void set_function_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
+
+  // .tensorflow.RewriterConfig.Toggle debug_stripper = 11;
+  public native void clear_debug_stripper();
+  @MemberGetter public static native int kDebugStripperFieldNumber();
+  public static final int kDebugStripperFieldNumber = kDebugStripperFieldNumber();
+  public native @Cast("tensorflow::RewriterConfig_Toggle") int debug_stripper();
+  public native void set_debug_stripper(@Cast("tensorflow::RewriterConfig_Toggle") int value);
+
+  // .tensorflow.RewriterConfig.NumIterationsType meta_optimizer_iterations = 12;
+  public native void clear_meta_optimizer_iterations();
+  @MemberGetter public static native int kMetaOptimizerIterationsFieldNumber();
+  public static final int kMetaOptimizerIterationsFieldNumber = kMetaOptimizerIterationsFieldNumber();
+  public native @Cast("tensorflow::RewriterConfig_NumIterationsType") int meta_optimizer_iterations();
+  public native void set_meta_optimizer_iterations(@Cast("tensorflow::RewriterConfig_NumIterationsType") int value);
 }
 // ===================================================================
 
@@ -5228,7 +5321,17 @@ public static final int
 
 
 
+// .tensorflow.RewriterConfig.Toggle debug_stripper = 11;
+
+
+
+
 // bool disable_model_pruning = 2;
+
+
+
+
+// .tensorflow.RewriterConfig.NumIterationsType meta_optimizer_iterations = 12;
 
 
 
@@ -5292,6 +5395,7 @@ public static final int
 // @@protoc_insertion_point(namespace_scope)
 
   // namespace tensorflow
+
 
 
 
@@ -5370,6 +5474,10 @@ public static final int
 @Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunOptions();
 @Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunMetadataImpl();
 @Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunMetadata();
+@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsTensorConnectionImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsTensorConnection();
+@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsCallableOptionsImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsCallableOptions();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 @Namespace("tensorflow") @Opaque public static class ConfigProto_DeviceCountEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -5378,6 +5486,8 @@ public static final int
     public ConfigProto_DeviceCountEntry_DoNotUse(Pointer p) { super(p); }
 }
   // namespace tensorflow
+
+
 
 
 
@@ -6712,6 +6822,261 @@ public static final int
         CostGraphDef cost_graph);
   public native CostGraphDef unsafe_arena_release_cost_graph();
 }
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class TensorConnection extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorConnection(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorConnection(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorConnection position(long position) {
+        return (TensorConnection)super.position(position);
+    }
+
+  public TensorConnection() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public TensorConnection(@Const @ByRef TensorConnection from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef TensorConnection from);
+
+  public native @ByRef @Name("operator =") TensorConnection put(@Const @ByRef TensorConnection from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef TensorConnection default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const TensorConnection internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(TensorConnection other);
+  public native void Swap(TensorConnection other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native TensorConnection New();
+
+  public native TensorConnection New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef TensorConnection from);
+  public native void MergeFrom(@Const @ByRef TensorConnection from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string from_tensor = 1;
+  public native void clear_from_tensor();
+  @MemberGetter public static native int kFromTensorFieldNumber();
+  public static final int kFromTensorFieldNumber = kFromTensorFieldNumber();
+  public native @StdString BytePointer from_tensor();
+  public native void set_from_tensor(@StdString BytePointer value);
+  public native void set_from_tensor(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_from_tensor(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_from_tensor(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_from_tensor();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_from_tensor();
+  public native void set_allocated_from_tensor(@StdString @Cast({"char*", "std::string*"}) BytePointer from_tensor);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_from_tensor();
+  public native void unsafe_arena_set_allocated_from_tensor(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer from_tensor);
+
+  // string to_tensor = 2;
+  public native void clear_to_tensor();
+  @MemberGetter public static native int kToTensorFieldNumber();
+  public static final int kToTensorFieldNumber = kToTensorFieldNumber();
+  public native @StdString BytePointer to_tensor();
+  public native void set_to_tensor(@StdString BytePointer value);
+  public native void set_to_tensor(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_to_tensor(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_to_tensor(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_to_tensor();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_to_tensor();
+  public native void set_allocated_to_tensor(@StdString @Cast({"char*", "std::string*"}) BytePointer to_tensor);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_to_tensor();
+  public native void unsafe_arena_set_allocated_to_tensor(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer to_tensor);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class CallableOptions extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CallableOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CallableOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CallableOptions position(long position) {
+        return (CallableOptions)super.position(position);
+    }
+
+  public CallableOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public CallableOptions(@Const @ByRef CallableOptions from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef CallableOptions from);
+
+  public native @ByRef @Name("operator =") CallableOptions put(@Const @ByRef CallableOptions from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef CallableOptions default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const CallableOptions internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(CallableOptions other);
+  public native void Swap(CallableOptions other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native CallableOptions New();
+
+  public native CallableOptions New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef CallableOptions from);
+  public native void MergeFrom(@Const @ByRef CallableOptions from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated string feed = 1;
+  public native int feed_size();
+  public native void clear_feed();
+  @MemberGetter public static native int kFeedFieldNumber();
+  public static final int kFeedFieldNumber = kFeedFieldNumber();
+  public native @StdString BytePointer feed(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_feed(int index);
+  public native void set_feed(int index, @StdString BytePointer value);
+  public native void set_feed(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_feed(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_feed(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_feed();
+  public native void add_feed(@StdString BytePointer value);
+  public native void add_feed(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_feed(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_feed(String value, @Cast("size_t") long size);
+
+  // repeated string fetch = 2;
+  public native int fetch_size();
+  public native void clear_fetch();
+  @MemberGetter public static native int kFetchFieldNumber();
+  public static final int kFetchFieldNumber = kFetchFieldNumber();
+  public native @StdString BytePointer fetch(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_fetch(int index);
+  public native void set_fetch(int index, @StdString BytePointer value);
+  public native void set_fetch(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_fetch(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_fetch(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_fetch();
+  public native void add_fetch(@StdString BytePointer value);
+  public native void add_fetch(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_fetch(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_fetch(String value, @Cast("size_t") long size);
+
+  // repeated string target = 3;
+  public native int target_size();
+  public native void clear_target();
+  @MemberGetter public static native int kTargetFieldNumber();
+  public static final int kTargetFieldNumber = kTargetFieldNumber();
+  public native @StdString BytePointer target(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_target(int index);
+  public native void set_target(int index, @StdString BytePointer value);
+  public native void set_target(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_target(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_target(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_target();
+  public native void add_target(@StdString BytePointer value);
+  public native void add_target(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_target(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_target(String value, @Cast("size_t") long size);
+
+  // repeated .tensorflow.TensorConnection tensor_connection = 5;
+  public native int tensor_connection_size();
+  public native void clear_tensor_connection();
+  @MemberGetter public static native int kTensorConnectionFieldNumber();
+  public static final int kTensorConnectionFieldNumber = kTensorConnectionFieldNumber();
+  public native TensorConnection mutable_tensor_connection(int index);
+  public native @Const @ByRef TensorConnection tensor_connection(int index);
+  public native TensorConnection add_tensor_connection();
+
+  // .tensorflow.RunOptions run_options = 4;
+  public native @Cast("bool") boolean has_run_options();
+  public native void clear_run_options();
+  @MemberGetter public static native int kRunOptionsFieldNumber();
+  public static final int kRunOptionsFieldNumber = kRunOptionsFieldNumber();
+  public native @Const @ByRef RunOptions run_options();
+  public native RunOptions release_run_options();
+  public native RunOptions mutable_run_options();
+  public native void set_allocated_run_options(RunOptions run_options);
+  public native void unsafe_arena_set_allocated_run_options(
+        RunOptions run_options);
+  public native RunOptions unsafe_arena_release_run_options();
+}
 // ===================================================================
 
 
@@ -7123,9 +7488,132 @@ public static final int
 
 
 
+// -------------------------------------------------------------------
+
+// TensorConnection
+
+// string from_tensor = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string to_tensor = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CallableOptions
+
+// repeated string feed = 1;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string fetch = 2;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string target = 3;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// .tensorflow.RunOptions run_options = 4;
+
+
+
+
+
+
+
+
+// repeated .tensorflow.TensorConnection tensor_connection = 5;
+
+
+
+
+
+
+
+
 // #ifdef __GNUC__
 //   #pragma GCC diagnostic pop
 // #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -9611,8 +10099,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_ALLOCATOR_H_
-// #define TENSORFLOW_FRAMEWORK_ALLOCATOR_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_ALLOCATOR_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_ALLOCATOR_H_
 
 // #include <stdlib.h>
 
@@ -9883,6 +10371,9 @@ limitations under the License.
   // upper 8 bits in device-specific ways, and ops implemented for those
   // devices are responsible for setting those 8 bits appropriately.
   public native int value(); public native AllocatorAttributes value(int value);
+  // EXPERIMENTAL: If this is greater than zero, then allocation is delegated to
+  // a named special-purpose allocator on the same device.
+  public native int scope_id(); public native AllocatorAttributes scope_id(int scope_id);
 }
 
 // Returns a trivial implementation of Allocator which uses the system
@@ -9910,7 +10401,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_ALLOCATOR_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_ALLOCATOR_H_
 
 
 // Parsed from tensorflow/core/framework/tensor_shape.pb.h
@@ -11478,7 +11969,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
-// #include "tensorflow/core/lib/strings/strcat.h"
+// #include "tensorflow/core/lib/strings/str_util.h"
 // #include "tensorflow/core/platform/logging.h"
 
 // START_SKIP_DOXYGEN
@@ -11622,6 +12113,8 @@ limitations under the License.
   public native @ByVal TensorShapeIter begin();
   public native @ByVal TensorShapeIter end();
 }
+
+/** Outputs {@code TensorShapeBase} to {@code std::ostream}. */
 
 /** Represents the shape of a Tensor.
  * 
@@ -15418,6 +15911,9 @@ limitations under the License.
   // Save the tensors in the tensor store of this run to the session.
   public native @ByVal Status SaveTensors(@Const @ByRef StringVector output_names,
                        SessionState session_state);
+
+  // Returns true if no tensors have been added to this store.
+  public native @Cast("bool") boolean empty();
 }
 
   // namespace tensorflow
@@ -16105,7 +16601,7 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorSliceReaderCacheWrapper(Pointer p) { super(p); }
 }
-  // namespace checkpoint  // declared below       // declared below
+  // namespace checkpoint  // declared below       // declared below,
 @Namespace("tensorflow") @Opaque public static class ResourceMgr extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public ResourceMgr() { super((Pointer)null); }
@@ -16117,6 +16613,12 @@ limitations under the License.
     public ScopedStepContainer() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScopedStepContainer(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class CollectiveExecutor extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CollectiveExecutor() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CollectiveExecutor(Pointer p) { super(p); }
 }
 @Namespace("tensorflow") @Opaque public static class StepStatsCollector extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -16597,6 +17099,10 @@ limitations under the License.
     // computations running on other devices.
     public native Rendezvous rendezvous(); public native Params rendezvous(Rendezvous rendezvous);
 
+    // Mechanism for executing a collective op that needs to coordinate
+    // with parallel instances runing on other devices.
+    public native CollectiveExecutor collective_executor(); public native Params collective_executor(CollectiveExecutor collective_executor);
+
     // The session state for this op.
     public native SessionState session_state(); public native Params session_state(SessionState session_state);
 
@@ -16628,6 +17134,14 @@ limitations under the License.
 
     // TensorSliceReaderCache support.
     public native TensorSliceReaderCacheWrapper slice_reader_cache(); public native Params slice_reader_cache(TensorSliceReaderCacheWrapper slice_reader_cache);
+
+    // Support for forwarding reservations (used by ScopedAllocator).
+    @MemberGetter public static native int kNeverForward();
+    public static final int kNeverForward = kNeverForward();
+    @MemberGetter public static native int kNoReservation();
+    public static final int kNoReservation = kNoReservation();
+    // Values in [0,...) represent reservations for the indexed output.
+    @MemberGetter public native @Const IntPointer forward_from_array();
   }
 
   // params must outlive the OpKernelContext.
@@ -16792,14 +17306,31 @@ limitations under the License.
   //     input[input_index] are compatible with those given in dtype, shape,
   //     memory_type, and attr,
   //   * refcount on the underlying buffer is one.
+  //   * Either there is no forwarding reservation for either input_index
+  //     or output_index or the specified input is reserved for the specified
+  //     output. More precisely:
+  //
+  //     These cases mean neither input nor output has a reservation:
+  //        forward_from_array = nullptr
+  //     OR (input_index is not in forward_from_array AND
+  //         (output_index == kNoReservation OR
+  //          forward_from_array[output_index] == kNoReservation))
+  //
+  //     This case means that input_index is reserved for output_index:
+  //        forward_from_array[output_index] == input_index
+  //
+  //     This case means the output is reserved to always be allocated,
+  //     never assigned a forwarded input:
+  //        forward_from_array[output_index] == kNeverForward
+  //
   // Otherwise returns nullptr.
   // NOTE: For Cuda kernels that read inputs using the __ldg() intrinsic,
   // forwarding is only safe if there are no reads via __ldg() after writes
   // to the same address.
   public native @UniquePtr Tensor forward_input(
-        int input_index, @Cast("tensorflow::DataType") int dtype, @Const @ByRef TensorShape shape,
-        @Cast("tensorflow::MemoryType") int memory_type,
-        @Const @ByRef AllocatorAttributes attr);
+        int input_index, int output_index, @Cast("tensorflow::DataType") int output_dtype,
+        @Const @ByRef TensorShape output_shape, @Cast("tensorflow::MemoryType") int output_memory_type,
+        @Const @ByRef AllocatorAttributes output_attr);
 
   // Tries to forward one of the inputs given in input_indices to
   // output[output_index]. If none of the given inputs can be forwarded, calls
@@ -17037,6 +17568,8 @@ limitations under the License.
   // An op kernel communicates with outside environment through
   // Rendezvous Send() and Recv().
   public native Rendezvous rendezvous();
+
+  public native CollectiveExecutor collective_executor();
 
   // An op kernel can access the session state it belongs to.
   public native SessionState session_state();
@@ -17807,6 +18340,7 @@ limitations under the License.
   public native void set_input_tensors_as_shapes(
         @StdVector ShapeHandle input_tensors_as_shapes);
 
+  public native @ByVal ShapeHandle output(@Cast("tensorflow::int64") long idx);
   public native void set_output(int idx, @ByVal ShapeHandle shape);
   public native @ByVal Status set_output(@StringPiece BytePointer output_name,
                       @StdVector ShapeHandle shapes);
@@ -17934,6 +18468,12 @@ limitations under the License.
   // <input_idx>. The tensor must be a 1-dimensional int32 or int64 tensor.  If
   // the input tensor is NULL, then an unknown shape is returned.
   public native @ByVal Status MakeShapeFromShapeTensor(int input_idx, ShapeHandle out);
+
+  // Like the function above, but treats scalar values as unknown
+  // shapes.  **NOTE** If the scalar is statically known, its value
+  // must be -1 or an error is returned.
+  public native @ByVal Status MakeShapeFromShapeTensorTreatScalarAsUnknownShape(int input_idx,
+                                                             ShapeHandle out);
 
   // Returns in <out> a new shape corresponding to <proto>.
   public native @ByVal Status MakeShapeFromShapeProto(@Const @ByRef TensorShapeProto proto,
@@ -18955,6 +19495,37 @@ limitations under the License.
   // address-space of the caller.
   public native @ByVal Status LocalDeviceManager(@Cast("const tensorflow::DeviceMgr**") PointerPointer output);
   public native @ByVal Status LocalDeviceManager(@Const @ByPtrPtr DeviceMgr output);
+
+  /** \brief A handle to a subgraph, created with {@code Session::MakeCallable()}. */
+
+  /** \brief Creates a {@code handle} for invoking the subgraph defined by
+   *  {@code callable_options}.
+   *  NOTE: This API is still experimental and may change. */
+  
+  ///
+  public native @ByVal Status MakeCallable(@Const @ByRef CallableOptions callable_options,
+                                @Cast("tensorflow::Session::CallableHandle*") LongPointer out_handle);
+  public native @ByVal Status MakeCallable(@Const @ByRef CallableOptions callable_options,
+                                @Cast("tensorflow::Session::CallableHandle*") LongBuffer out_handle);
+  public native @ByVal Status MakeCallable(@Const @ByRef CallableOptions callable_options,
+                                @Cast("tensorflow::Session::CallableHandle*") long... out_handle);
+
+  /** \brief Invokes the subgraph named by {@code handle} with the given options and
+   *  input tensors.
+   * 
+   *  The order of tensors in {@code feed_tensors} must and {@code fetch_tensors} will
+   *  match the order of names in {@code CallableOptions::feed()} and
+   *  {@code CallableOptions::fetch()} when this subgraph was created.
+   *  NOTE: This API is still experimental and may change. */
+  public native @ByVal Status RunCallable(@Cast("tensorflow::Session::CallableHandle") long handle,
+                               @Const @ByRef TensorVector feed_tensors,
+                               TensorVector fetch_tensors,
+                               RunMetadata run_metadata);
+
+  /** \brief Releases resources associated with the given {@code handle} in this
+   *  session.
+   *  NOTE: This API is still experimental and may change. */
+  public native @ByVal Status ReleaseCallable(@Cast("tensorflow::Session::CallableHandle") long handle);
 }
 
 /** \brief Create a new session with the given options.
@@ -22602,7 +23173,8 @@ public static native int TF_DeviceListCount(@Const TF_DeviceList list);
 // If index is out of bounds, an error code will be set in the status object,
 // and a null pointer will be returned.
 public static native @Cast("const char*") BytePointer TF_DeviceListName(@Const TF_DeviceList list,
-                                                    int index, TF_Status arg2);
+                                                    int index,
+                                                    TF_Status status);
 
 // Retrieves the type of the device at the given index.
 //
@@ -22612,14 +23184,15 @@ public static native @Cast("const char*") BytePointer TF_DeviceListName(@Const T
 // If index is out of bounds, an error code will be set in the status object,
 // and a null pointer will be returned.
 public static native @Cast("const char*") BytePointer TF_DeviceListType(@Const TF_DeviceList list,
-                                                    int index, TF_Status arg2);
+                                                    int index,
+                                                    TF_Status status);
 
 // Retrieve the amount of memory associated with a given device.
 //
 // If index is out of bounds, an error code will be set in the status object,
 // and -1 will be returned.
 public static native @Cast("int64_t") long TF_DeviceListMemoryBytes(
-    @Const TF_DeviceList list, int index, TF_Status arg2);
+    @Const TF_DeviceList list, int index, TF_Status status);
 
 // --------------------------------------------------------------------------
 // Load plugins containing custom ops and kernels
@@ -24478,8 +25051,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_DEVICE_BASE_H_
-// #define TENSORFLOW_FRAMEWORK_DEVICE_BASE_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_DEVICE_BASE_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_DEVICE_BASE_H_
 
 // #include <memory>
 // #include <string>
@@ -24507,6 +25080,12 @@ limitations under the License.
     public EventMgr() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EventMgr(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class ScopedAllocatorMgr extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ScopedAllocatorMgr() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ScopedAllocatorMgr(Pointer p) { super(p); }
 }
 
 
@@ -24656,6 +25235,13 @@ limitations under the License.
   public native Allocator GetStepAllocator(@ByVal AllocatorAttributes attr,
                                         ResourceMgr arg1);
 
+  // Return an Allocator prepared for use in particular places by graph
+  // optimization
+  public native Allocator GetScopedAllocator(@ByVal AllocatorAttributes attr,
+                                          @Cast("tensorflow::int64") long step_id);
+
+  public native ScopedAllocatorMgr GetScopedAllocatorMgr();
+
   public native @Const ThreadPoolDevice eigen_cpu_device();
 
 // #ifdef TENSORFLOW_USE_SYCL
@@ -24693,7 +25279,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_DEVICE_BASE_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_DEVICE_BASE_H_
 
 
 // Parsed from tensorflow/core/common_runtime/device.h
@@ -24954,11 +25540,13 @@ limitations under the License.
         @Const DeviceMgr device_mgr, Env env, int graph_def_version,
         @Const FunctionLibraryDefinition lib_def,
         @Const @ByRef OptimizerOptions optimizer_options,
-        DistributedFunctionLibraryRuntime parent/*=nullptr*/) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, parent); }
+        ThreadPool thread_pool/*=nullptr*/,
+        DistributedFunctionLibraryRuntime parent/*=nullptr*/) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, thread_pool, parent); }
   private native void allocate(
         @Const DeviceMgr device_mgr, Env env, int graph_def_version,
         @Const FunctionLibraryDefinition lib_def,
         @Const @ByRef OptimizerOptions optimizer_options,
+        ThreadPool thread_pool/*=nullptr*/,
         DistributedFunctionLibraryRuntime parent/*=nullptr*/);
   public ProcessFunctionLibraryRuntime(
         @Const DeviceMgr device_mgr, Env env, int graph_def_version,
@@ -24975,12 +25563,14 @@ limitations under the License.
                                   @Const FunctionLibraryDefinition lib_def,
                                   @Const @ByRef OptimizerOptions optimizer_options,
                                   @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator,
-                                  DistributedFunctionLibraryRuntime parent) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, custom_kernel_creator, parent); }
+                                  ThreadPool thread_pool,
+                                  DistributedFunctionLibraryRuntime parent) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, custom_kernel_creator, thread_pool, parent); }
   private native void allocate(@Const DeviceMgr device_mgr, Env env,
                                   int graph_def_version,
                                   @Const FunctionLibraryDefinition lib_def,
                                   @Const @ByRef OptimizerOptions optimizer_options,
                                   @ByVal @Cast("tensorflow::CustomKernelCreator*") Pointer custom_kernel_creator,
+                                  ThreadPool thread_pool,
                                   DistributedFunctionLibraryRuntime parent);
 
   // Sends `tensors_to_send` from `source_device` to `target_device` using
@@ -25244,7 +25834,8 @@ limitations under the License.
 
   // Inputs requested by the NodeDef.  For the actual inputs, use in_edges.
 
-  // Get the neighboring nodes via edges either in or out of this node.
+  // Get the neighboring nodes via edges either in or out of this node.  This
+  // includes control edges.
   public native @ByVal NeighborIterRange in_nodes();
   public native @ByVal NeighborIterRange out_nodes();
   public native @Const @ByRef EdgeSet in_edges();
@@ -31855,6 +32446,29 @@ limitations under the License.
   public native @ByRef Output output(); public native DebugGradientRefIdentity output(Output output);
 }
 
+/** Makes a copy of {@code x}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * x: The source tensor of type {@code T}.
+ * 
+ *  Returns:
+ *  * {@code Output}:     y: A {@code Tensor} of type {@code T}. A copy of {@code x}. Guaranteed that {@code y}
+ *        is not an alias of {@code x}. */
+@Namespace("tensorflow::ops") @NoOffset public static class DeepCopy extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DeepCopy(Pointer p) { super(p); }
+
+  public DeepCopy(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native DeepCopy y(Output y);
+}
+
 /** DepthToSpace for tensors of type T.
  * 
  *  Rearranges data from depth into blocks of spatial data.
@@ -32310,6 +32924,59 @@ limitations under the License.
   public native @ByRef Output output(); public native EditDistance output(Output output);
 }
 
+/** Creates a tensor with the given shape.
+ * 
+ *  This operation creates a tensor of {@code shape} and {@code dtype}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * shape: 1-D. Represents the shape of the output tensor.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * init: If True, initialize the returned tensor with the default value of dtype.  Otherwise, the implementation is free not to initializethe tensor's content.
+ * 
+ *  Returns:
+ *  * {@code Output}: A {@code Tensor} of type {@code T}. */
+@Namespace("tensorflow::ops") @NoOffset public static class Empty extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Empty(Pointer p) { super(p); }
+
+  /** Optional attribute setters for Empty */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** If True, initialize the returned tensor with the default value of dtype.  Otherwise, the implementation is free not to initializethe tensor's content.
+     * 
+     *  Defaults to false */
+    public native @ByVal Attrs Init(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean init_(); public native Attrs init_(boolean init_);
+  }
+  public Empty(@Const @ByRef Scope scope, @ByVal Input shape, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(scope, shape, dtype); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input shape, @Cast("tensorflow::DataType") int dtype);
+  public Empty(@Const @ByRef Scope scope, @ByVal Input shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, shape, dtype, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs Init(@Cast("bool") boolean x);
+
+  public native @ByRef Output output(); public native Empty output(Output output);
+}
+
 /** Inserts a dimension of 1 into a tensor's shape.
  * 
  *  Given a tensor {@code input}, this operation inserts a dimension of 1 at the
@@ -32427,7 +33094,7 @@ limitations under the License.
  *  {@code inputs} values are quantized into the quantization range ({@code [0; 2^num_bits - 1]}
  *  when {@code narrow_range} is false and {@code [1; 2^num_bits - 1]} when it is true) and
  *  then de-quantized and output as floats in {@code [min; max]} interval.
- *  {@code num_bits} is the bitwidth of the quantization; between 2 and 8, inclusive.
+ *  {@code num_bits} is the bitwidth of the quantization; between 2 and 16, inclusive.
  * 
  *  Quantization is called fake since the output is still in floating point.
  * 
@@ -32568,7 +33235,7 @@ limitations under the License.
  *  {@code inputs} values are quantized into the quantization range ({@code [0; 2^num_bits - 1]}
  *  when {@code narrow_range} is false and {@code [1; 2^num_bits - 1]} when it is true) and
  *  then de-quantized and output as floats in {@code [min; max]} interval.
- *  {@code num_bits} is the bitwidth of the quantization; between 2 and 8, inclusive.
+ *  {@code num_bits} is the bitwidth of the quantization; between 2 and 16, inclusive.
  * 
  *  This operation has a gradient and thus allows for training {@code min} and {@code max}
  *  values.
@@ -32705,7 +33372,7 @@ limitations under the License.
  *  {@code inputs} values are quantized into the quantization range ({@code [0; 2^num_bits - 1]}
  *  when {@code narrow_range} is false and {@code [1; 2^num_bits - 1]} when it is true) and
  *  then de-quantized and output as floats in {@code [min; max]} interval.
- *  {@code num_bits} is the bitwidth of the quantization; between 2 and 8, inclusive.
+ *  {@code num_bits} is the bitwidth of the quantization; between 2 and 16, inclusive.
  * 
  *  This operation has a gradient and thus allows for training {@code min} and {@code max}
  *  values.
@@ -32777,7 +33444,7 @@ limitations under the License.
  *  min, max: Quantization interval, floats of shape {@code [d]}.
  * 
  *  Optional attributes (see {@code Attrs}):
- *  * num_bits: The bitwidth of the quantization; between 2 and 8, inclusive.
+ *  * num_bits: The bitwidth of the quantization; between 2 and 16, inclusive.
  *  * narrow_range: Whether to quantize into 2^num_bits - 1 distinct values.
  * 
  *  Returns:
@@ -32808,7 +33475,7 @@ limitations under the License.
           return (Attrs)super.position(position);
       }
   
-    /** The bitwidth of the quantization; between 2 and 8, inclusive.
+    /** The bitwidth of the quantization; between 2 and 16, inclusive.
      * 
      *  Defaults to 8 */
     
@@ -33266,6 +33933,90 @@ limitations under the License.
   public native Node node();
 
   public native @ByRef Output tensor(); public native ImmutableConst tensor(Output tensor);
+}
+
+/**     Adds v into specified rows of x.
+ * 
+ *      Computes y = x; y[i, :] += v; return y.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * x: A {@code Tensor} of type T.
+ *  * i: A vector. Indices into the left-most dimension of {@code x}.
+ *  * v: A {@code Tensor} of type T. Same dimension sizes as x except the first dimension, which must be the same as i's size.
+ * 
+ *  Returns:
+ *  * {@code Output}: A {@code Tensor} of type T. An alias of {@code x}. The content of {@code y} is undefined if there are duplicates in {@code i}. */
+@Namespace("tensorflow::ops") @NoOffset public static class InplaceAdd extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InplaceAdd(Pointer p) { super(p); }
+
+  public InplaceAdd(@Const @ByRef Scope scope, @ByVal Input x,
+             @ByVal Input i, @ByVal Input v) { super((Pointer)null); allocate(scope, x, i, v); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+             @ByVal Input i, @ByVal Input v);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native InplaceAdd y(Output y);
+}
+
+/**     Subtracts {@code v} into specified rows of {@code x}.
+ * 
+ *      Computes y = x; y[i, :] -= v; return y.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * x: A {@code Tensor} of type T.
+ *  * i: A vector. Indices into the left-most dimension of {@code x}.
+ *  * v: A {@code Tensor} of type T. Same dimension sizes as x except the first dimension, which must be the same as i's size.
+ * 
+ *  Returns:
+ *  * {@code Output}: A {@code Tensor} of type T. An alias of {@code x}. The content of {@code y} is undefined if there are duplicates in {@code i}. */
+@Namespace("tensorflow::ops") @NoOffset public static class InplaceSub extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InplaceSub(Pointer p) { super(p); }
+
+  public InplaceSub(@Const @ByRef Scope scope, @ByVal Input x,
+             @ByVal Input i, @ByVal Input v) { super((Pointer)null); allocate(scope, x, i, v); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+             @ByVal Input i, @ByVal Input v);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native InplaceSub y(Output y);
+}
+
+/**     Updates specified rows with values in {@code v}.
+ * 
+ *      Computes {@code x[i, :] = v; return x}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * x: A tensor of type {@code T}.
+ *  * i: A vector. Indices into the left-most dimension of {@code x}.
+ *  * v: A {@code Tensor} of type T. Same dimension sizes as x except the first dimension, which must be the same as i's size.
+ * 
+ *  Returns:
+ *  * {@code Output}: A {@code Tensor} of type T. An alias of {@code x}. The content of {@code y} is undefined if there are duplicates in {@code i}. */
+@Namespace("tensorflow::ops") @NoOffset public static class InplaceUpdate extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InplaceUpdate(Pointer p) { super(p); }
+
+  public InplaceUpdate(@Const @ByRef Scope scope, @ByVal Input x,
+                @ByVal Input i, @ByVal Input v) { super((Pointer)null); allocate(scope, x, i, v); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+                @ByVal Input i, @ByVal Input v);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native InplaceUpdate y(Output y);
 }
 
 /** Computes the inverse permutation of a tensor.
@@ -45428,14 +46179,14 @@ limitations under the License.
  *  If {@code fast} is {@code True}, then the solution is computed by solving the normal
  *  equations using Cholesky decomposition. Specifically, if \\(m \ge n\\) then
  *  \\(X = (A^H A + \lambda I)^{-1} A^H B\\), which solves the least-squares
- *  problem \\(X = \mathrm{argmin}_{Z \in \Re^{n \times k} } ||A Z - B||_F^2 +
- *  \lambda ||Z||_F^2\\). If \\(m \lt n\\) then {@code output} is computed as
+ *  problem \\(X = \mathrm{argmin}_{Z \in \Re^{n \times k} } ||A Z - B||_F^2 + \lambda ||Z||_F^2\\).
+ *  If \\(m \lt n\\) then {@code output} is computed as
  *  \\(X = A^H (A A^H + \lambda I)^{-1} B\\), which (for \\(\lambda = 0\\)) is the
  *  minimum-norm solution to the under-determined linear system, i.e.
  *  \\(X = \mathrm{argmin}_{Z \in \mathbb{C}^{n \times k} } ||Z||_F^2 \\),
  *  subject to \\(A Z = B\\). Notice that the fast path is only numerically stable
  *  when \\(A\\) is numerically full rank and has a condition number
- *  \\(\mathrm{cond}(A) \lt \frac{1}{\sqrt{\epsilon_{mach} } }\\) or\\(\lambda\\) is
+ *  \\(\mathrm{cond}(A) \lt \frac{1}{\sqrt{\epsilon_{mach} } }\\) or \\(\lambda\\) is
  *  sufficiently large.
  * 
  *  If {@code fast} is {@code False} an algorithm based on the numerically robust complete
@@ -45661,7 +46412,8 @@ limitations under the License.
 /** Computes the eigen decomposition of one or more square self-adjoint matrices.
  * 
  *  Computes the eigenvalues and (optionally) eigenvectors of each inner matrix in
- *  {@code input} such that {@code input[..., :, :] = v[..., :, :] * diag(e[..., :])}.
+ *  {@code input} such that {@code input[..., :, :] = v[..., :, :] * diag(e[..., :])}. The eigenvalues
+ *  are sorted in non-decreasing order.
  * 
  *  <pre>{@code python
  *  # a is a tensor.
@@ -47285,6 +48037,39 @@ limitations under the License.
   public native Node node();
 
   public native @ByRef Output y(); public native Ceil y(Output y);
+}
+
+/** Clips tensor values to a specified min and max.
+ * 
+ *  Given a tensor {@code t}, this operation returns a tensor of the same type and
+ *  shape as {@code t} with its values clipped to {@code clip_value_min} and {@code clip_value_max}.
+ *  Any values less than {@code clip_value_min} are set to {@code clip_value_min}. Any values
+ *  greater than {@code clip_value_max} are set to {@code clip_value_max}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * t: A {@code Tensor}.
+ *  * clip_value_min: A 0-D (scalar) {@code Tensor}, or a {@code Tensor} with the same shape
+ *  as {@code t}. The minimum value to clip by.
+ *  * clip_value_max: A 0-D (scalar) {@code Tensor}, or a {@code Tensor} with the same shape
+ *  as {@code t}. The maximum value to clip by.
+ * 
+ *  Returns:
+ *  * {@code Output}: A clipped {@code Tensor} with the same shape as input 't'. */
+@Namespace("tensorflow::ops") @NoOffset public static class ClipByValue extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ClipByValue(Pointer p) { super(p); }
+
+  public ClipByValue(@Const @ByRef Scope scope, @ByVal Input t,
+              @ByVal Input clip_value_min, @ByVal Input clip_value_max) { super((Pointer)null); allocate(scope, t, clip_value_min, clip_value_max); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input t,
+              @ByVal Input clip_value_min, @ByVal Input clip_value_max);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native ClipByValue output(Output output);
 }
 
 /** Compare values of {@code input} to {@code threshold} and pack resulting bits into a {@code uint8}.
@@ -60034,7 +60819,7 @@ limitations under the License.
  *  Duplicate entries are handled correctly: if multiple {@code indices} reference
  *  the same location, their contributions add.
  * 
- *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt>
@@ -60119,7 +60904,7 @@ limitations under the License.
  *  Duplicate entries are handled correctly: if multiple {@code indices} reference
  *  the same location, their contributions divide.
  * 
- *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -60179,6 +60964,172 @@ limitations under the License.
   public native @ByRef Output output_ref(); public native ScatterDiv output_ref(Output output_ref);
 }
 
+/** Reduces sparse updates into a variable reference using the {@code max} operation.
+ * 
+ *  This operation computes
+ * 
+ *      # Scalar indices
+ *      ref[indices, ...] = max(ref[indices, ...], updates[...])
+ * 
+ *      # Vector indices (for each i)
+ *      ref[indices[i], ...] = max(ref[indices[i], ...], updates[i, ...])
+ * 
+ *      # High rank indices (for each i, ..., j)
+ *      ref[indices[i, ..., j], ...] = max(ref[indices[i, ..., j], ...], updates[i, ..., j, ...])
+ * 
+ *  This operation outputs {@code ref} after the update is done.
+ *  This makes it easier to chain operations that need to use the reset value.
+ * 
+ *  Duplicate entries are handled correctly: if multiple {@code indices} reference
+ *  the same location, their contributions combine.
+ * 
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
+ * 
+ *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt>
+ *  </div>
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * ref: Should be from a {@code Variable} node.
+ *  * indices: A tensor of indices into the first dimension of {@code ref}.
+ *  * updates: A tensor of updated values to reduce into {@code ref}.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the update will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
+ *  Returns:
+ *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
+ *  to use the updated values after the update is done. */
+@Namespace("tensorflow::ops") @NoOffset public static class ScatterMax extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ScatterMax(Pointer p) { super(p); }
+
+  /** Optional attribute setters for ScatterMax */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** If True, the update will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
+    public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
+  }
+  public ScatterMax(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates) { super((Pointer)null); allocate(scope, ref, indices, updates); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates);
+  public ScatterMax(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, ref, indices, updates, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+
+  public native @ByRef Output output_ref(); public native ScatterMax output_ref(Output output_ref);
+}
+
+/** Reduces sparse updates into a variable reference using the {@code min} operation.
+ * 
+ *  This operation computes
+ * 
+ *      # Scalar indices
+ *      ref[indices, ...] = min(ref[indices, ...], updates[...])
+ * 
+ *      # Vector indices (for each i)
+ *      ref[indices[i], ...] = min(ref[indices[i], ...], updates[i, ...])
+ * 
+ *      # High rank indices (for each i, ..., j)
+ *      ref[indices[i, ..., j], ...] = min(ref[indices[i, ..., j], ...], updates[i, ..., j, ...])
+ * 
+ *  This operation outputs {@code ref} after the update is done.
+ *  This makes it easier to chain operations that need to use the reset value.
+ * 
+ *  Duplicate entries are handled correctly: if multiple {@code indices} reference
+ *  the same location, their contributions combine.
+ * 
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
+ * 
+ *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+ *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterAdd.png" alt>
+ *  </div>
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * ref: Should be from a {@code Variable} node.
+ *  * indices: A tensor of indices into the first dimension of {@code ref}.
+ *  * updates: A tensor of updated values to reduce into {@code ref}.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: If True, the update will be protected by a lock;
+ *  otherwise the behavior is undefined, but may exhibit less contention.
+ * 
+ *  Returns:
+ *  * {@code Output}: = Same as {@code ref}.  Returned as a convenience for operations that want
+ *  to use the updated values after the update is done. */
+@Namespace("tensorflow::ops") @NoOffset public static class ScatterMin extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ScatterMin(Pointer p) { super(p); }
+
+  /** Optional attribute setters for ScatterMin */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** If True, the update will be protected by a lock;
+     *  otherwise the behavior is undefined, but may exhibit less contention.
+     * 
+     *  Defaults to false */
+    public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
+  }
+  public ScatterMin(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates) { super((Pointer)null); allocate(scope, ref, indices, updates); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates);
+  public ScatterMin(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, ref, indices, updates, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input ref,
+             @ByVal Input indices, @ByVal Input updates, @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public static native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+
+  public native @ByRef Output output_ref(); public native ScatterMin output_ref(Output output_ref);
+}
+
 /** Multiplies sparse updates into a variable reference.
  * 
  *  This operation computes
@@ -60200,7 +61151,7 @@ limitations under the License.
  *  Duplicate entries are handled correctly: if multiple {@code indices} reference
  *  the same location, their contributions multiply.
  * 
- *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -60575,7 +61526,7 @@ limitations under the License.
  *  Duplicate entries are handled correctly: if multiple {@code indices} reference
  *  the same location, their (negated) contributions add.
  * 
- *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterSub.png" alt>
@@ -60661,7 +61612,7 @@ limitations under the License.
  *  duplicate entries in {@code indices}, the order at which the updates happen
  *  for each value is undefined.
  * 
- *  Requires {@code updates.shape = indices.shape + ref.shape[1:]}.
+ *  Requires {@code updates.shape = indices.shape + ref.shape[1:]} or {@code updates.shape = []}.
  * 
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterUpdate.png" alt>
