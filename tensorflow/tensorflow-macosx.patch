@@ -1,22 +1,6 @@
 diff -ruN tensorflow-1.8.0-rc0/tensorflow/workspace.bzl tensorflow-1.8.0-rc0-macosx/tensorflow/workspace.bzl
 --- tensorflow-1.8.0-rc0/tensorflow/workspace.bzl	2018-04-13 03:07:34.000000000 +0900
 +++ tensorflow-1.8.0-rc0-macosx/tensorflow/workspace.bzl	2018-04-20 12:08:31.820386667 +0900
-@@ -107,11 +107,11 @@
-   tf_http_archive(
-       name = "eigen_archive",
-       urls = [
--          "https://mirror.bazel.build/bitbucket.org/eigen/eigen/get/6913f0cf7d06.tar.gz",
--          "https://bitbucket.org/eigen/eigen/get/6913f0cf7d06.tar.gz",
-+          "https://mirror.bazel.build/bitbucket.org/dtrebbien/eigen/get/374842a18727.tar.gz",
-+          "https://bitbucket.org/dtrebbien/eigen/get/374842a18727.tar.gz",
-       ],
--      sha256 = "791b836cacd03e20bae5bdd25f1c4a5505a0a9975ba94a61eb4e2631fbd1d53a",
--      strip_prefix = "eigen-eigen-6913f0cf7d06",
-+      sha256 = "fa26e9b9ff3a2692b092d154685ec88d6cb84d4e1e895006541aff8603f15c16",
-+      strip_prefix = "dtrebbien-eigen-374842a18727",
-       build_file = clean_dep("//third_party:eigen.BUILD"),
-       patch_file = clean_dep("//third_party:eigen_fix_cuda_compilation.patch")
-   )
 @@ -330,11 +330,11 @@
    tf_http_archive(
        name = "protobuf_archive",
