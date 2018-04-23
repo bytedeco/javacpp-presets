@@ -1,7 +1,7 @@
-diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-macosx/configure
---- ffmpeg-3.4/configure	2017-10-16 00:59:36.000000000 +0900
-+++ ffmpeg-3.4-macosx/configure	2017-10-22 11:32:58.813309672 +0900
-@@ -4963,7 +4963,7 @@
+diff -ruN ffmpeg-4.0/configure ffmpeg-4.0-macosx/configure
+--- ffmpeg-4.0/configure	2018-04-20 19:02:55.000000000 +0900
++++ ffmpeg-4.0-macosx/configure	2018-04-23 15:29:29.557255058 +0900
+@@ -5068,7 +5068,7 @@
      darwin)
          enabled ppc && add_asflags -force_cpusubtype_ALL
          install_name_dir_default='$(SHLIBDIR)'
@@ -10,55 +10,3 @@ diff -ruN ffmpeg-3.4/configure ffmpeg-3.4-macosx/configure
          enabled x86_32 && append SHFLAGS -Wl,-read_only_relocs,suppress
          strip="${strip} -x"
          add_ldflags -Wl,-dynamic,-search_paths_first
-@@ -5925,7 +5925,7 @@
- enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
- enabled fontconfig        && enable libfontconfig
- enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
--enabled libfreetype       && require_pkg_config libfreetype2 freetype2 "ft2build.h FT_FREETYPE_H" FT_Init_FreeType
-+enabled libfreetype       && add_cppflags -I ../include/freetype2/ && require libfreetype "ft2build.h FT_FREETYPE_H" FT_Init_FreeType -lfreetype
- enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
- enabled libgme            && { use_pkg_config libgme libgme gme/gme.h gme_new_emu ||
-                                require libgme gme/gme.h gme_new_emu -lgme -lstdc++; }
-@@ -5954,7 +5954,7 @@
-                                { use_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
-                                  require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
-                                require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
--enabled libopenh264       && require_pkg_config libopenh264 openh264 wels/codec_api.h WelsGetCodecVersion
-+enabled libopenh264       && require openh264 wels/codec_api.h WelsGetCodecVersion -lopenh264
- enabled libopenjpeg       && { { check_lib libopenjpeg openjpeg-2.3/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
-                                check_lib libopenjpeg openjpeg-2.3/openjpeg.h opj_version -lopenjp2 ||
-                                { check_lib libopenjpeg openjpeg-2.2/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
-@@ -5966,14 +5966,7 @@
-                                { check_lib libopenjpeg openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
-                                die "ERROR: libopenjpeg not found"; }
- enabled libopenmpt        && require_pkg_config libopenmpt "libopenmpt >= 0.2.6557" libopenmpt/libopenmpt.h openmpt_module_create
--enabled libopus           && {
--    enabled libopus_decoder && {
--        require_pkg_config libopus opus opus_multistream.h opus_multistream_decoder_create
--    }
--    enabled libopus_encoder && {
--        require_pkg_config libopus opus opus_multistream.h opus_multistream_surround_encoder_create
--    }
--}
-+enabled libopus           && add_cppflags -I ../include/opus/ && require opus opus_multistream.h opus_multistream_decoder_create -lopus
- enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
- enabled librsvg           && require_pkg_config librsvg librsvg-2.0 librsvg-2.0/librsvg/rsvg.h rsvg_handle_render_cairo
- enabled librtmp           && require_pkg_config librtmp librtmp librtmp/rtmp.h RTMP_Socket
-@@ -5984,7 +5977,7 @@
- enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy
- enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
- enabled libssh            && require_pkg_config libssh libssh libssh/sftp.h sftp_init
--enabled libspeex          && require_pkg_config libspeex speex speex/speex.h speex_decoder_init -lspeex
-+enabled libspeex          && require speex speex/speex.h speex_decoder_init -lspeex
- enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
- enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
- enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
-@@ -6031,7 +6024,7 @@
-                              require_cpp_condition x264.h "X264_BUILD >= 118" &&
-                              { check_cpp_condition x264.h "X264_MPEG2" &&
-                                enable libx262; }
--enabled libx265           && require_pkg_config libx265 x265 x265.h x265_api_get &&
-+enabled libx265           && require x265 x265.h x265_encoder_encode -lx265 &&
-                              require_cpp_condition x265.h "X265_BUILD >= 68"
- enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode -lxavs
- enabled libxvid           && require libxvid xvid.h xvid_global -lxvidcore

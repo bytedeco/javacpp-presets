@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avutil.class, target="org.bytedeco.javacpp.swresample", value={
-    @Platform(cinclude="<libswresample/swresample.h>", link="swresample@.2"),
-    @Platform(value="windows", preload="swresample-2") })
+    @Platform(cinclude="<libswresample/swresample.h>", link="swresample@.3"),
+    @Platform(value="windows", preload="swresample-3") })
 public class swresample implements InfoMapper {
     public void map(InfoMap infoMap) {
     }
