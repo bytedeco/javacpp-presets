@@ -76,6 +76,7 @@ export PATH=$INSTALL_PATH/bin:$PATH
 cd ..
 
 patch -p0 < ../../lame.patch
+patch -p0 < ../../decklink_dec.cpp.patch
 
 case $PLATFORM in
     android-arm)

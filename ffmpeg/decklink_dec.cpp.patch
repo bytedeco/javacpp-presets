@@ -1,0 +1,10 @@
+--- ffmpeg-3.4.2/libavdevice/decklink_dec.cpp	2018-02-11 19:29:06.000000000 -0500
++++ ffmpeg-3.4.2/libavdevice/decklink_dec2.cpp	2018-04-25 01:05:05.508627400 -0400
+@@ -675,6 +675,7 @@
+                         "- Frames dropped %u\n", ctx->frameCount, ++ctx->dropped);
+             }
+             no_video = 1;
++            pkt.flags |= AV_PKT_FLAG_DISCARD;
+         } else {
+             if (no_video) {
+                 av_log(avctx, AV_LOG_WARNING, "Frame received (#%lu) - Input returned "
