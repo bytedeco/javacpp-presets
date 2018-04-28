@@ -1,4 +1,5 @@
 
+ * Enhance presets for `ALE` with access to `theOSystem`, etc ([issue #551](https://github.com/bytedeco/javacpp-presets/issues/551))
  * Add presets for the `saliency` module of OpenCV ([pull #555](https://github.com/bytedeco/javacpp-presets/pull/555))
  * Add build for `linux-arm64` to presets for FFmpeg ([pull #556](https://github.com/bytedeco/javacpp-presets/pull/556))
  * Add support for Windows to presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
