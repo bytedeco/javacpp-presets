@@ -51,6 +51,17 @@ We can also have everything downloaded and installed automatically with:
   libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4.1"
 ```
 
+* leiningen project.clj (cuda 8.0, cudnn 6.0, javacpp 1.3)
+```clojure
+(def module-name "cuda")
+(def module-version "8.0-6.0")
+
+(defproject myproject "0.1.0-SNAPSHOT"
+  :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
+	             [~(symbol (str "org.bytedeco.javacpp-presets/" module-name "-platform")) ~(str module-version "-1.3")]]
+)
+```
+
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
 
 
@@ -201,6 +212,6 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 
 
 ----
-Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
-Developer site: https://github.com/bytedeco/javacpp-presets  
+Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)
+Developer site: https://github.com/bytedeco/javacpp-presets
 Discussion group: http://groups.google.com/group/javacpp-project
