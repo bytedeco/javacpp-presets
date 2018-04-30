@@ -39,6 +39,13 @@ We can also have everything downloaded and installed automatically with:
   }
 ```
 
+ * Leiningen (inside the `project.clj` file)
+```clojure
+  :dependencies [
+    [~(symbol (str "org.bytedeco.javacpp-presets/" moduleName "-platform")) ~(str moduleVersion "-1.4.1")]
+  ]
+```
+
  * sbt (inside the `build.sbt` file)
 ```scala
   libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4.1"
