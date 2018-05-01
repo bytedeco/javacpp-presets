@@ -2758,6 +2758,334 @@ public static native void TF_QCHECK_OK(@ByVal Status val);
 // #endif  // TENSORFLOW_CORE_LIB_CORE_STATUS_H_
 
 
+// Parsed from tensorflow/core/lib/io/zlib_compression_options.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_LIB_IO_ZLIB_COMPRESSION_OPTIONS_H_
+// #define TENSORFLOW_LIB_IO_ZLIB_COMPRESSION_OPTIONS_H_
+
+// #include <zlib.h>
+
+// #include "tensorflow/core/platform/types.h"
+
+@Namespace("tensorflow::io") public static class ZlibCompressionOptions extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public ZlibCompressionOptions() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ZlibCompressionOptions(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZlibCompressionOptions(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public ZlibCompressionOptions position(long position) {
+        return (ZlibCompressionOptions)super.position(position);
+    }
+
+  public static native @ByVal ZlibCompressionOptions DEFAULT();
+  public static native @ByVal ZlibCompressionOptions RAW();
+  public static native @ByVal ZlibCompressionOptions GZIP();
+
+  public native @Cast("tensorflow::int8") byte flush_mode(); public native ZlibCompressionOptions flush_mode(byte flush_mode);
+
+  // Size of the buffer used for caching the data read from source file.
+  public native @Cast("tensorflow::int64") long input_buffer_size(); public native ZlibCompressionOptions input_buffer_size(long input_buffer_size);
+
+  // Size of the sink buffer where the compressed/decompressed data produced by
+  // zlib is cached.
+  public native @Cast("tensorflow::int64") long output_buffer_size(); public native ZlibCompressionOptions output_buffer_size(long output_buffer_size);
+
+  // The window_bits parameter is the base two logarithm of the window size
+  // (the size of the history buffer). Larger values of buffer size result in
+  // better compression at the expense of memory usage.
+  //
+  // Accepted values:
+  //
+  // 8..15:
+  // Normal deflate with zlib header and checksum.
+  //
+  // -8..-15:
+  // Negative values can be used for raw deflate/inflate. In this case,
+  // -window_bits determines the window size. deflate() will then generate raw
+  // deflate data  with no zlib header or trailer, and will not compute an
+  // adler32 check value. inflate() will then process raw deflate data, not
+  // looking for a zlib or gzip header, not generating a check value, and not
+  // looking for any check values for comparison at the end of the stream.
+  //
+  // 16 + [8..15]:
+  // window_bits can also be greater than 15 for optional gzip encoding. Add 16
+  // to window_bits to write a simple gzip header and trailer around the
+  // compressed data instead of a zlib wrapper. The gzip header will have no
+  // file name, no extra data, no comment, no modification time (set to zero),
+  // no header crc, and the operating system will be set to 255 (unknown). If a
+  // gzip stream is being written, strm->adler is a crc32 instead of an adler32.
+  //
+  // 0:
+  // window_bits can also be zero to request that inflate use the window size
+  // in the zlib header of the compressed stream.
+  //
+  // While inflating, window_bits must be greater than or equal to the
+  // window_bits value provided used while compressing. If a compressed stream
+  // with a larger window size is given as input, inflate() will return with the
+  // error code Z_DATA_ERROR instead of trying to allocate a larger window.
+  public native @Cast("tensorflow::int8") byte window_bits(); public native ZlibCompressionOptions window_bits(byte window_bits);
+
+  // From the zlib manual (http://www.zlib.net/manual.html):
+  // The compression level must be Z_DEFAULT_COMPRESSION, or between 0 and 9:
+  // 1 gives best speed, 9 gives best compression, 0 gives no compression at all
+  // (the input data is simply copied a block at a time). Z_DEFAULT_COMPRESSION
+  // requests a default compromise between speed and compression (currently
+  // equivalent to level 6).
+  public native @Cast("tensorflow::int8") byte compression_level(); public native ZlibCompressionOptions compression_level(byte compression_level);
+
+  // The only one supported at this time.
+  public native @Cast("tensorflow::int8") byte compression_method(); public native ZlibCompressionOptions compression_method(byte compression_method);
+
+  // From the zlib manual (http://www.zlib.net/manual.html):
+  // The mem_level parameter specifies how much memory should be allocated for
+  // the internal compression state. mem_level=1 uses minimum memory but is slow
+  // and reduces compression ratio; mem_level=9 uses maximum memory for optimal
+  // speed. The default value is 8.
+  public native @Cast("tensorflow::int8") byte mem_level(); public native ZlibCompressionOptions mem_level(byte mem_level);
+
+  // From the zlib manual (http://www.zlib.net/manual.html):
+  // The strategy parameter is used to tune the compression algorithm. Use the
+  // value Z_DEFAULT_STRATEGY for normal data, Z_FILTERED for data produced by
+  // a filter (or predictor), Z_HUFFMAN_ONLY to force Huffman encoding only
+  // (no string match), or Z_RLE to limit match distances to one
+  // (run-length encoding). Filtered data consists mostly of small values with
+  // a somewhat random distribution. In this case, the compression algorithm is
+  // tuned to compress them better. The effect of Z_FILTERED is to force more
+  // Huffman coding and less string matching; it is somewhat intermediate
+  // between Z_DEFAULT_STRATEGY and Z_HUFFMAN_ONLY. Z_RLE is designed to be
+  // almost as fast as Z_HUFFMAN_ONLY, but give better compression for
+  // PNG image data. The strategy parameter only affects the compression ratio
+  // but not the correctness of the compressed output even if it is not set
+  // appropriately. Z_FIXED prevents the use of dynamic Huffman codes, allowing
+  // for a simpler decoder for special applications.
+  public native @Cast("tensorflow::int8") byte compression_strategy(); public native ZlibCompressionOptions compression_strategy(byte compression_strategy);
+}
+
+
+
+
+
+
+
+  // namespace io
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_LIB_IO_ZLIB_COMPRESSION_OPTIONS_H_
+
+
+// Parsed from tensorflow/core/lib/io/zlib_outputbuffer.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_LIB_IO_COMPRESSED_OUTPUTBUFFER_H_
+// #define TENSORFLOW_CORE_LIB_IO_COMPRESSED_OUTPUTBUFFER_H_
+
+// #include <zlib.h>
+
+// #include <string>
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/io/zlib_compression_options.h"
+// #include "tensorflow/core/platform/env.h"
+// #include "tensorflow/core/platform/file_system.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/types.h"
+
+// Provides support for writing compressed output to file using zlib
+// (http://www.zlib.net/).
+// A given instance of an ZlibOutputBuffer is NOT safe for concurrent use
+// by multiple threads
+@Namespace("tensorflow::io") @NoOffset public static class ZlibOutputBuffer extends WritableFile {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZlibOutputBuffer(Pointer p) { super(p); }
+
+  // Create an ZlibOutputBuffer for `file` with two buffers that cache the
+  // 1. input data to be deflated
+  // 2. the deflated output
+  // with sizes `input_buffer_bytes` and `output_buffer_bytes` respectively.
+  // Does not take ownership of `file`.
+  // output_buffer_bytes should be greater than 1.
+  public ZlibOutputBuffer(
+        WritableFile file,
+        int input_buffer_bytes,
+        int output_buffer_bytes,
+        @Const @ByRef ZlibCompressionOptions zlib_options) { super((Pointer)null); allocate(file, input_buffer_bytes, output_buffer_bytes, zlib_options); }
+  private native void allocate(
+        WritableFile file,
+        int input_buffer_bytes,
+        int output_buffer_bytes,
+        @Const @ByRef ZlibCompressionOptions zlib_options);
+
+  // Initializes some state necessary for the output buffer. This call is
+  // required before any other operation on the buffer.
+  public native @ByVal Status Init();
+
+  // Adds `data` to the compression pipeline.
+  //
+  // The input data is buffered in `z_stream_input_` and is compressed in bulk
+  // when the buffer gets full. The compressed output is not immediately
+  // written to file but rather buffered in `z_stream_output_` and gets written
+  // to file when the buffer is full.
+  //
+  // To immediately write contents to file call `Flush()`.
+  public native @ByVal Status Append(@StringPiece BytePointer data);
+  public native @ByVal Status Append(@StringPiece String data);
+
+  // Deflates any cached input and writes all output to file.
+  public native @ByVal Status Flush();
+
+  // Compresses any cached input and writes all output to file. This must be
+  // called before the destructor to avoid any data loss.
+  //
+  // Contrary to `Flush()` this informs zlib that it should not expect any
+  // further input by using Z_FINISH flush mode. Also cleans up z_stream.
+  //
+  // After calling this, any further calls to `Write()`, `Flush()` or `Close()`
+  // will fail.
+  public native @ByVal Status Close();
+
+  // Deflates any cached input, writes all output to file and syncs it.
+  public native @ByVal Status Sync();
+}
+
+  // namespace io
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_LIB_IO_COMPRESSED_OUTPUTBUFFER_H_
+
+
+// Parsed from tensorflow/core/lib/io/record_writer.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+// #define TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #if !defined(IS_SLIM_BUILD)
+// #include "tensorflow/core/lib/io/zlib_compression_options.h"
+// #include "tensorflow/core/lib/io/zlib_outputbuffer.h"
+// #endif  // IS_SLIM_BUILD
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/types.h"
+
+@Namespace("tensorflow::io") public static class RecordWriterOptions extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public RecordWriterOptions() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public RecordWriterOptions(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RecordWriterOptions(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public RecordWriterOptions position(long position) {
+        return (RecordWriterOptions)super.position(position);
+    }
+
+  /** enum tensorflow::io::RecordWriterOptions::CompressionType */
+  public static final int NONE = 0, ZLIB_COMPRESSION = 1;
+  public native @Cast("tensorflow::io::RecordWriterOptions::CompressionType") int compression_type(); public native RecordWriterOptions compression_type(int compression_type);
+
+  public static native @ByVal RecordWriterOptions CreateRecordWriterOptions(
+        @StdString BytePointer compression_type);
+  public static native @ByVal RecordWriterOptions CreateRecordWriterOptions(
+        @StdString String compression_type);
+
+// Options specific to zlib compression.
+// #if !defined(IS_SLIM_BUILD)
+  public native @ByRef ZlibCompressionOptions zlib_options(); public native RecordWriterOptions zlib_options(ZlibCompressionOptions zlib_options);
+// #endif  // IS_SLIM_BUILD
+}
+
+@Namespace("tensorflow::io") @NoOffset public static class RecordWriter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RecordWriter(Pointer p) { super(p); }
+
+  // Create a writer that will append data to "*dest".
+  // "*dest" must be initially empty.
+  // "*dest" must remain live while this Writer is in use.
+  public RecordWriter(WritableFile dest,
+                 @Const @ByRef(nullValue = "tensorflow::io::RecordWriterOptions()") RecordWriterOptions options) { super((Pointer)null); allocate(dest, options); }
+  private native void allocate(WritableFile dest,
+                 @Const @ByRef(nullValue = "tensorflow::io::RecordWriterOptions()") RecordWriterOptions options);
+  public RecordWriter(WritableFile dest) { super((Pointer)null); allocate(dest); }
+  private native void allocate(WritableFile dest);
+
+  // Calls Close() and logs if an error occurs.
+  //
+  // TODO(jhseu): Require that callers explicitly call Close() and remove the
+  // implicit Close() call in the destructor.
+
+  public native @ByVal Status WriteRecord(@StringPiece BytePointer slice);
+  public native @ByVal Status WriteRecord(@StringPiece String slice);
+
+  // Flushes any buffered data held by underlying containers of the
+  // RecordWriter to the WritableFile. Does *not* flush the
+  // WritableFile.
+  public native @ByVal Status Flush();
+
+  // Writes all output to the file. Does *not* close the WritableFile.
+  //
+  // After calling Close(), any further calls to `WriteRecord()` or `Flush()`
+  // are invalid.
+  public native @ByVal Status Close();
+}
+
+  // namespace io
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+
+
 // Parsed from tensorflow/core/platform/protobuf.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
