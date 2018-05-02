@@ -64,6 +64,9 @@ import java.lang.annotation.Target;
                         "tensorflow/core/lib/core/error_codes.pb.h",
                         "tensorflow/core/platform/logging.h",
                         "tensorflow/core/lib/core/status.h",
+                        "tensorflow/core/lib/io/zlib_compression_options.h",
+                        "tensorflow/core/lib/io/zlib_outputbuffer.h",
+                        "tensorflow/core/lib/io/record_writer.h",
                         "tensorflow/core/platform/protobuf.h",
                         "tensorflow/core/platform/file_system.h",
                         "tensorflow/core/platform/file_statistics.h",
@@ -209,6 +212,9 @@ import java.lang.annotation.Target;
                         "tensorflow/core/lib/core/error_codes.pb.h",
                         "tensorflow/core/platform/logging.h",
                         "tensorflow/core/lib/core/status.h",
+                        "tensorflow/core/lib/io/zlib_compression_options.h",
+                        "tensorflow/core/lib/io/zlib_outputbuffer.h",
+                        "tensorflow/core/lib/io/record_writer.h",
                         "tensorflow/core/platform/protobuf.h",
                         "tensorflow/core/platform/file_system.h",
                         "tensorflow/core/platform/file_statistics.h",
@@ -292,7 +298,7 @@ public class tensorflow implements InfoMapper {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
                .put(new Info("B16_DEVICE_FUNC", "EIGEN_ALWAYS_INLINE", "EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
                              "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "TF_ATTRIBUTE_UNUSED",
-                             "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "SHOULD_REGISTER_OP_GRADIENT",
+                             "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "GUARDED_BY", "SHOULD_REGISTER_OP_GRADIENT",
                              "TF_EXPORT", "TF_ATTRIBUTE_ALWAYS_INLINE").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
@@ -377,6 +383,7 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::ApiDef_ArgDefaultTypeInternal", "tensorflow::ApiDef_AttrDefaultTypeInternal", "tensorflow::ApiDef_EndpointDefaultTypeInternal",
                              "tensorflow::ApiDefsDefaultTypeInternal", "tensorflow::DebuggedSourceFileDefaultTypeInternal", "tensorflow::DebuggedSourceFilesDefaultTypeInternal",
                              "tensorflow::AllocationRecordDefaultTypeInternal","tensorflow::GPUOptions_ExperimentalDefaultTypeInternal", "tensorflow::GPUOptions_Experimental_VirtualDevicesDefaultTypeInternal",
+                             "tensorflow::CallableOptionsDefaultTypeInternal", "tensorflow::TensorConnectionDefaultTypeInternal",
                              "tensorflow::InterconnectLinkDefaultTypeInternal", "tensorflow::LocalLinksDefaultTypeInternal",
                              "tensorflow::JobDef_TasksEntry_DoNotUseDefaultTypeInternal", "tensorflow::ConfigProto_DeviceCountEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::NameAttrList_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::NodeDef_AttrEntry_DoNotUseDefaultTypeInternal",
