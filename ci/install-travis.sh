@@ -30,7 +30,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   SCL_ENABLE="rh-maven33 python27"
   if [[ "librealsense chilitags llvm tesseract caffe mxnet tensorflow tensorrt onnx ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE="rh-maven33 python35"
+    SCL_ENABLE="rh-maven33 rh-python35"
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash > /dev/null
