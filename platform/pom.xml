@@ -41,6 +41,7 @@
     <module>../cuda/platform</module>
     <module>../mxnet/platform</module>
     <module>../tensorflow/platform</module>
+    <module>../tensorrt/platform</module>
     <module>../ale/platform</module>
     <module>../liquidfun/platform</module>
     <module>../skia/platform</module>
@@ -62,7 +63,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>3.4.2-${project.version}</version>
+      <version>4.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -112,7 +113,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.10.1-${project.version}</version>
+      <version>1.10.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -147,7 +148,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>5.0.1-${project.version}</version>
+      <version>6.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -162,7 +163,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>3.05.01-${project.version}</version>
+      <version>4.0.0-beta.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -177,12 +178,17 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.1.0-${project.version}</version>
+      <version>1.2.0.rc1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.7.0-${project.version}</version>
+      <version>1.8.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>tensorrt-platform</artifactId>
+      <version>4.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

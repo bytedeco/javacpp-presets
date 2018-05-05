@@ -22,14 +22,15 @@ SPEEX=speex-1.2.0
 OPUS=opus-1.2.1
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.0f # openssl-1.1.0g doesn't work on Windows
+OPENSSL=openssl-1.1.0h
 OPENH264_VERSION=1.7.0
-X265=2.6
-VPX_VERSION=1.6.1
-ALSA_VERSION=1.1.5
-FREETYPE_VERSION=2.8.1
+X265=2.7
+VPX_VERSION=1.7.0
+ALSA_VERSION=1.1.6
+FREETYPE_VERSION=2.9
 MFX_VERSION=1.23
-FFMPEG_VERSION=3.4.2
+NVCODEC_VERSION=8.1.24.1
+FFMPEG_VERSION=4.0
 download http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -45,6 +46,7 @@ download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libv
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
 download http://download.savannah.gnu.org/releases/freetype/freetype-$FREETYPE_VERSION.tar.bz2 freetype-$FREETYPE_VERSION.tar.bz2
 download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx_dispatch-$MFX_VERSION.tar.gz
+download https://github.com/FFmpeg/nv-codec-headers/archive/n8.1.24.1.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
@@ -65,6 +67,7 @@ tar --totals -xzf ../x265-$X265.tar.gz
 tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz
 tar --totals -xjf ../freetype-$FREETYPE_VERSION.tar.bz2
 tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
+tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 X264=`echo x264-snapshot-*`
 
@@ -75,7 +78,8 @@ make install
 export PATH=$INSTALL_PATH/bin:$PATH
 cd ..
 
-patch -p0 < ../../lame.patch
+patch -Np1 -d $LAME < ../../lame.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -p0 < ../../decklink_dec.cpp.patch
 patch -p0 < ../../decklink_common.h.patch
 
@@ -92,7 +96,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
+        export LDFLAGS="-Wl,--no-undefined -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
@@ -163,7 +167,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS"
         export CFLAGS="$ANDROID_FLAGS"
         export CXXFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
+        export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
@@ -235,7 +239,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export LDFLAGS="-z text"
+        export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
@@ -281,7 +285,7 @@ case $PLATFORM in
         make install
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --disable-runtime-cpu-detect
+        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=yasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -306,7 +310,7 @@ case $PLATFORM in
         export CPPFLAGS="$ANDROID_FLAGS"
         export CFLAGS="$ANDROID_FLAGS"
         export CXXFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
+        export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
@@ -352,7 +356,7 @@ case $PLATFORM in
         make install
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --disable-runtime-cpu-detect
+        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=yasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -413,6 +417,7 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ
         make install
+        LIBS=
         if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
             cd ../mfx_dispatch-$MFX_VERSION
             autoreconf -fiv
@@ -420,10 +425,12 @@ case $PLATFORM in
             make -j $MAKEJ
             make install
             ENABLE="$ENABLE --enable-libmfx"
+            LIBS="-lva-drm -lva-x11 -lva"
         fi
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-linux.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
         make -j $MAKEJ
         make install
         ;;
@@ -475,6 +482,7 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
+        LIBS=
         if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
             cd ../mfx_dispatch-$MFX_VERSION
             autoreconf -fiv
@@ -482,10 +490,12 @@ case $PLATFORM in
             make -j $MAKEJ
             make install
             ENABLE="$ENABLE --enable-libmfx"
+            LIBS="-lva-drm -lva-x11 -lva"
         fi
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-linux.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
         make -j $MAKEJ
         make install
         ;;
@@ -577,14 +587,77 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-linux.patch
         if [ $CROSSCOMPILE -eq 1 ]
         then
           USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -ldl -lasound -lvcos" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
         else
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lasound -lvcos" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvcos -lpthread -ldl -lz -lm" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         fi
+        make -j $MAKEJ
+        make install
+        ;;
+
+    linux-arm64)
+        tar --totals -xjf ../alsa-lib-$ALSA_VERSION.tar.bz2
+
+        export CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        HOST_ARCH="$(uname -m)"
+        cd $ZLIB
+        CC="gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        make -j $MAKEJ V=0
+        make install
+        cd ../$LAME
+        CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPUS
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$VO_AMRWBENC
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        cd ../$OPENSSL
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH  "$CFLAGS" no-shared no-afalgeng no-idea no-mdc2 no-rc5 no-zlib no-ssl3 no-ssl3-method enable-rfc3779 enable-cms
+        make -j $MAKEJ
+        make install_sw
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=gcc CXX=g++
+        cd ../$X264
+        LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl  --disable-cli --enable-asm --host=aarch64-linux --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations"
+        make -j $MAKEJ V=0
+        make install
+        cd ../x265-$X265
+        $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+        patch -Np1 < ../../../disable_vp8_loop_filter_simple_neon.patch
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
+        make -j $MAKEJ
+        make install
+        cd ../alsa-lib-$ALSA_VERSION/
+        ./configure --host=aarch64-linux --prefix=$INSTALL_PATH --disable-python
+        make -j $MAKEJ V=0
+        make install
+        cd ../freetype-$FREETYPE_VERSION
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        LD_LIBRARY_PATH=../lib/ CC="gcc" CXX="g++" PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure  --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-ldexeflags="-static" --pkg-config-flags="--static" --pkg-config="pkg-config --static"  --extra-libs="-lstdc++ -lpthread -ldl -lz -lm"
         make -j $MAKEJ
         make install
         ;;
@@ -686,12 +759,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install 
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-linux.patch
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+          PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm"
         else
           echo "configure ffmpeg cross compile"
-          PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -ldl"
+          PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm"
         fi
         make -j $MAKEJ
         make install
@@ -737,8 +809,10 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
+        sedinplace '/avx512/d' configure
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
         make -j $MAKEJ
+        sedinplace '/HAS_AVX512/d' vpx_dsp_rtcd.h
         make install
         cd ../freetype-$FREETYPE_VERSION
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic
@@ -746,7 +820,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -801,12 +875,13 @@ case $PLATFORM in
         PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-w64-mingw32 # CFLAGS="-m32" CXXFLAGS="-m32"
         make -j $MAKEJ
         make install
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-windows.patch
         cp -R $INSTALL_PATH/../../src/main/resources/decklink/windows/* $INSTALL_PATH/include
         ENABLE="$ENABLE --enable-decklink"
         patch -Np1 < ../../../ffmpeg-decklink.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
@@ -861,12 +936,13 @@ case $PLATFORM in
         PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-w64-mingw32 # CFLAGS="-m64" CXXFLAGS="-m64"
         make -j $MAKEJ
         make install
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        patch -Np1 < ../../../ffmpeg-windows.patch
         cp -R $INSTALL_PATH/../../src/main/resources/decklink/windows/* $INSTALL_PATH/include
         ENABLE="$ENABLE --enable-decklink"
         patch -Np1 < ../../../ffmpeg-decklink.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;

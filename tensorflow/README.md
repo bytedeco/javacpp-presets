@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 1.7.0  http://www.tensorflow.org/
+ * TensorFlow 1.8.0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/tensorflow/apidocs/
 
-&lowast; Call `Loader.load(tensorflow.class)` before using the API in the `org.tensorflow` namespace.
+&lowast; Call `Loader.load(org.bytedeco.javacpp.tensorflow.class)` before using the API in the `org.tensorflow` package.
 
 
 Sample Usage
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -44,21 +44,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.7.0-1.4.1</version>
+            <version>1.8.0-1.4.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
-          <groupId>org.bytedeco.javacpp-presets</groupId>
-          <artifactId>tensorflow</artifactId>
-          <version>1.7.0-1.4.1</version>
-          <classifier>linux-x86_64-gpu</classifier>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.8.0-1.4.2-SNAPSHOT</version>
+            <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
-          <groupId>org.bytedeco.javacpp-presets</groupId>
-          <artifactId>tensorflow</artifactId>
-          <version>1.7.0-1.4.1</version>
-          <classifier>macosx-x86_64-gpu</classifier>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.8.0-1.4.2-SNAPSHOT</version>
+            <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
 
     </dependencies>

@@ -45,7 +45,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
     @Platform(value = "windows", include = {"<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
         "<dc1394/camera.h>", "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
-        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, preload = {"libdc1394-22", "libusb-1.0"}) })
+        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"},
+        preload = {"libdc1394-22", "1394camera", "libusb-1.0"}) })
 @NoException
 public class dc1394 implements InfoMapper {
     public void map(InfoMap infoMap) {
