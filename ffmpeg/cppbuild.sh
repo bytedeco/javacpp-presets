@@ -77,6 +77,7 @@ cd ..
 
 patch -p0 < ../../lame.patch
 patch -p0 < ../../decklink_dec.cpp.patch
+patch -p0 < ../../decklink_common.h.patch
 
 case $PLATFORM in
     android-arm)
@@ -422,9 +423,6 @@ case $PLATFORM in
         fi
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
-        cp -R $INSTALL_PATH/../../src/main/resources/decklink/linux/* $INSTALL_PATH/include
-        ENABLE="$ENABLE --enable-decklink"
-        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -487,9 +485,6 @@ case $PLATFORM in
         fi
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-linux.patch
-        cp -R $INSTALL_PATH/../../src/main/resources/decklink/linux/* $INSTALL_PATH/include
-        ENABLE="$ENABLE --enable-decklink"
-        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j $MAKEJ
         make install
@@ -751,9 +746,6 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
-        cp -R $INSTALL_PATH/../../src/main/resources/decklink/macosx/* $INSTALL_PATH/include
-        ENABLE="$ENABLE --enable-decklink"
-        patch -Np1 < ../../../ffmpeg-decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install

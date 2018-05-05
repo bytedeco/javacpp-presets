@@ -1,15 +1,17 @@
-Instructions for the files before:
+Instructions on how to create headers for Windows:
 
-1) Download latest Desktop SDK from https://www.blackmagicdesign.com/support
-2) Install pacman -S mingw-w64-{i686,x86_64}-tools-git dos2unix
-    ** This is in addition to the normal packages.
-
-=== Instructions for Compiling on Windows ===
 https://github.com/jb-alvarado/media-autobuild_suite/wiki/Getting-Decklink-headers
 
-cd <extracted sdk dir>/Win/include
-widl -I/mingw64/x86_64-w64-mingw32/include -h -u DeckLinkAPI.idl
-dos2unix DeckLinkAPI{,version}.h DecklinkAPI_i.c
-Get license from DeckLinkAPI.idl and paste it to the beginning of each resulting file or to a separate LICENSE file
-sed -n '2,24 s/^\*\*//p' DeckLinkAPI.idl > DeckLinkAPI.LICENSE
-Copy DeckLinkAPI.h, DeckLinkAPIVersion.h and DeckLinkAPI_i.c to your /include dir or add their dir path to CFLAGS
+Special thanks to Ricardo Constantino.                                                                                                                                                                                                                                                                                                                                                   1) Download latest Desktop SDK from https://www.blackmagicdesign.com/support
+                                                                                                                                                                                                                                                                                                                                                   2) Install pacman -S mingw-w64-{i686,x86_64}-tools-git dos2unix
+                                                                                                                                                                                                                                                                                                                                                       ** This is in addition to the normal packages.
+
+                                                                                                                                                                                                                                                                                                                                                   === Instructions for Compiling on Windows ===
+                                                                                                                                                                                                                                                                                                                                                   https://github.com/jb-alvarado/media-autobuild_suite/wiki/Getting-Decklink-headers
+
+                                                                                                                                                                                                                                                                                                                                                   cd <extracted sdk dir>/Win/include
+                                                                                                                                                                                                                                                                                                                                                   widl -I/mingw64/x86_64-w64-mingw32/include -h -u DeckLinkAPI.idl
+                                                                                                                                                                                                                                                                                                                                                   dos2unix DeckLinkAPI{,version}.h DecklinkAPI_i.c
+                                                                                                                                                                                                                                                                                                                                                   Get license from DeckLinkAPI.idl and paste it to the beginning of each resulting file or to a separate LICENSE file
+                                                                                                                                                                                                                                                                                                                                                   sed -n '2,24 s/^\*\*//p' DeckLinkAPI.idl > DeckLinkAPI.LICENSE
+                                                                                                                                                                                                                                                                                                                                                   Copy DeckLinkAPI.h, DeckLinkAPIVersion.h and DeckLinkAPI_i.c to your /include dir or add their dir path to CFLAGS
