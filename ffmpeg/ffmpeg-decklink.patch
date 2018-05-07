@@ -1,6 +1,6 @@
---- ffmpeg-3.4.2/configure	2018-02-11 19:29:18.000000000 -0500
-+++ ffmpeg-3.4.2-windows/configure	2018-03-08 23:35:16.586891700 -0500
-@@ -3087,9 +3087,9 @@
+--- ffmpeg-4.0/configure	2018-05-06 22:22:05.446265900 -0400
++++ ffmpeg-4.0/configure2	2018-05-06 22:22:27.712484600 -0400
+@@ -3185,9 +3185,9 @@
  caca_outdev_deps="libcaca"
  decklink_deps_any="libdl LoadLibrary"
  decklink_indev_deps="decklink threads"
@@ -12,3 +12,13 @@
  libndi_newtek_indev_deps="libndi_newtek"
  libndi_newtek_indev_extralibs="-lndi"
  libndi_newtek_outdev_deps="libndi_newtek"
+@@ -5953,8 +5953,7 @@
+ # these are off by default, so fail if requested and not available
+ enabled cuda_sdk          && require cuda_sdk cuda.h cuCtxCreate -lcuda
+ enabled chromaprint       && require chromaprint chromaprint.h chromaprint_get_version -lchromaprint
+-enabled decklink          && { require_header DeckLinkAPI.h &&
+-                               { test_cpp_condition DeckLinkAPIVersion.h "BLACKMAGIC_DECKLINK_API_VERSION >= 0x0a060100" || die "ERROR: Decklink API version must be >= 10.6.1."; } }
++enabled decklink          && require_header DeckLinkAPI.h
+ enabled libndi_newtek     && require_header Processing.NDI.Lib.h
+ enabled frei0r            && require_header frei0r.h
+ enabled gmp               && require gmp gmp.h mpz_export -lgmp
