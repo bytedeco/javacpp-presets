@@ -130,12 +130,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 6.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.75.3  http://www.leptonica.org/download.html
+ * Leptonica 1.76.0  http://www.leptonica.org/download.html
  * Tesseract 4.0.0-beta.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.1  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.1  https://developer.nvidia.com/cudnn
- * MXnet 1.2.0.rc1  https://github.com/dmlc/mxnet
+ * MXNet 1.2.0.rc2  https://github.com/dmlc/mxnet
  * TensorFlow 1.8.0  https://github.com/tensorflow/tensorflow
  * TensorRT 4.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
