@@ -158,6 +158,7 @@ case $PLATFORM in
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc"
         export FC="arm-linux-gnueabihf-gfortran"
+        export LDFLAGS="-Wl,-z,noexecstack"
         export BINARY=32
         export TARGET=ARMV6
         ;;

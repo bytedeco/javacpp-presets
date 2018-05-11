@@ -1,4 +1,5 @@
 
+ * Link OpenBLAS with `-Wl,-z,noexecstack` on `linux-armhf` as required by the JDK ([issue deeplearning4j/libnd4j#700](https://github.com/deeplearning4j/libnd4j/issues/700))
  * Include `textDetector.hpp` from the `opencv_text` module
  * Include `feature.pb.h`, `example.pb.h`, `record_reader.h`, and `record_writer.h` for TensorFlow ([issue tensorflow/tensorflow#17390](https://github.com/tensorflow/tensorflow/issues/17390))
  * Enhance presets for `ALE` with access to `theOSystem`, etc ([issue #551](https://github.com/bytedeco/javacpp-presets/issues/551))
