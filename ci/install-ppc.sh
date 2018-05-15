@@ -51,6 +51,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /; cp -R $HOME/cudaFS/* ."
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.1 /usr/local/cuda"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xf $HOME/cudnn-9.1-linux-ppc64le-v7.1.tgz -C /usr/local/"
 fi
 
