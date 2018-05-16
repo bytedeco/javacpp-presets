@@ -73,12 +73,7 @@ public class SampleGoogleNet {
     {
         @Override public void log(Severity severity, String msg)
         {
-            for (Severity s : Severity.values()) {
-                if (s.value == severity.value) {
-                    severity = s;
-                    break;
-                }
-            }
+            severity = severity.intern();
 
             // suppress info-level messages
             if (severity == Severity.kINFO) return;
