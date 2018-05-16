@@ -364,6 +364,7 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto::TableStruct",
                              "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto::TableStruct",
                              "tensorflow::BytesListDefaultTypeInternal", "tensorflow::FeatureDefaultTypeInternal", "tensorflow::FeatureListDefaultTypeInternal",
+                             "tensorflow::Features_FeatureEntryDefaultTypeInternal", "tensorflow::FeatureLists_FeatureListEntryDefaultTypeInternal",
                              "tensorflow::FeatureListsDefaultTypeInternal", "tensorflow::FeatureLists_FeatureListEntry_DoNotUseDefaultTypeInternal", "tensorflow::FeaturesDefaultTypeInternal",
                              "tensorflow::Features_FeatureEntry_DoNotUseDefaultTypeInternal", "tensorflow::FloatListDefaultTypeInternal", "tensorflow::Int64ListDefaultTypeInternal",
                              "tensorflow::ExampleDefaultTypeInternal", "tensorflow::SequenceExampleDefaultTypeInternal", "tensorflow::VariantTensorDataProtoDefaultTypeInternal",
