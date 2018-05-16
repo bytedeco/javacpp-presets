@@ -124,7 +124,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-armeabi "$CFLAGS" no-shared
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
@@ -195,7 +195,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android64-aarch64 "$CFLAGS" no-shared
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
@@ -267,7 +267,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android-x86 "$CFLAGS" no-shared
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
@@ -338,7 +338,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure --prefix=$INSTALL_PATH android64 "$CFLAGS" no-shared
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -j $MAKEJ
+        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
@@ -394,7 +394,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
@@ -459,7 +459,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
@@ -544,7 +544,7 @@ case $PLATFORM in
         else
           ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH
         fi
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf USE_ASM=No install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
@@ -628,7 +628,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH  "$CFLAGS" no-shared no-afalgeng no-idea no-mdc2 no-rc5 no-zlib no-ssl3 no-ssl3-method enable-rfc3779 enable-cms
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=gcc CXX=g++
@@ -715,7 +715,7 @@ case $PLATFORM in
         else
           ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH
         fi
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
@@ -793,7 +793,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar USE_ASM=No install-static
@@ -847,7 +847,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 USE_ASM=No install-static
@@ -905,7 +905,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
-        make -j $MAKEJ
+        make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 USE_ASM=No install-static
