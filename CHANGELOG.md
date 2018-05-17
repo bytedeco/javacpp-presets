@@ -1,5 +1,5 @@
 
- * Add presets for the NVML module of CUDA ([issue deeplearning4j/nd4j#2895](https://github.com/deeplearning4j/nd4j/issues/2895))
+ * Add presets for the NVBLAS, NVGRAPH, NVRTC, and NVML modules of CUDA ([issue deeplearning4j/nd4j#2895](https://github.com/deeplearning4j/nd4j/issues/2895))
  * Link OpenBLAS with `-Wl,-z,noexecstack` on `linux-armhf` as required by the JDK ([issue deeplearning4j/libnd4j#700](https://github.com/deeplearning4j/libnd4j/issues/700))
  * Include `textDetector.hpp` from the `opencv_text` module
  * Include `feature.pb.h`, `example.pb.h`, `record_reader.h`, and `record_writer.h` for TensorFlow ([issue tensorflow/tensorflow#17390](https://github.com/tensorflow/tensorflow/issues/17390))
