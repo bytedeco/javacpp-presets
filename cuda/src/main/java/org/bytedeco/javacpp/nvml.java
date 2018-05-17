@@ -418,13 +418,10 @@ public static final int
     NVML_TOPOLOGY_SINGLE             = 10, // all devices that only need traverse a single PCIe switch
     NVML_TOPOLOGY_MULTIPLE           = 20, // all devices that need not traverse a host bridge
     NVML_TOPOLOGY_HOSTBRIDGE         = 30, // all devices that are connected to the same host bridge
-    NVML_TOPOLOGY_NODE               = 40, // all devices that are connected to the same NUMA node but possibly multiple host bridges
+    NVML_TOPOLOGY_CPU                = 40, // all devices that are connected to the same CPU but possibly multiple host bridges
     NVML_TOPOLOGY_SYSTEM             = 50; // all devices in the system
 
     // there is purposefully no COUNT here because of the need for spacing above
-
-/* Compatibility for CPU->NODE renaming */
-public static final int NVML_TOPOLOGY_CPU = NVML_TOPOLOGY_NODE;
 
 /* P2P Capability Index Status*/
 /** enum nvmlGpuP2PStatus_enum */
@@ -1258,27 +1255,8 @@ public static final int NVML_FI_DEV_MEMORY_TEMP =  82;
 /** Total energy consumption for the GPU in mJ since the driver was last reloaded */
 public static final int NVML_FI_DEV_TOTAL_ENERGY_CONSUMPTION = 83;
 
-/* NVLink Speed */
-/** NVLink Speed in MBps for Link 0 */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L0 =     84;
-/** NVLink Speed in MBps for Link 1 */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L1 =     85;
-/** NVLink Speed in MBps for Link 2 */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L2 =     86;
-/** NVLink Speed in MBps for Link 3 */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L3 =     87;
-/** NVLink Speed in MBps for Link 4 */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L4 =     88;
-/** NVLink Speed in MBps for Link 5 */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L5 =     89;
-/** Common NVLink Speed in MBps for active links */
-public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_COMMON = 90;
-
-/** Number of NVLinks present on the device */
-public static final int NVML_FI_DEV_NVLINK_LINK_COUNT =        91;
-
 /** One greater than the largest field ID defined above */
-public static final int NVML_FI_MAX = 92;
+public static final int NVML_FI_MAX = 84;
 
 /**
  * Information for a Field Value Sample
@@ -1627,7 +1605,7 @@ public static final long nvmlClocksThrottleReasonGpuIdle =                   0x0
  * @see nvmlDeviceSetApplicationsClocks
  * @see nvmlDeviceGetApplicationsClock
  */
-public static final long nvmlClocksThrottleReasonApplicationsClocksSetting = 0x0000000000000002L;
+public static final long nvmlClocksThrottleReasonApplicationsClocksSetting =   0x0000000000000002L;
 
 /** 
  * @deprecated Renamed to \ref nvmlClocksThrottleReasonApplicationsClocksSetting 
@@ -1678,28 +1656,6 @@ public static final long nvmlClocksThrottleReasonSyncBoost =                 0x0
  */
 public static final long nvmlClocksThrottleReasonSwThermalSlowdown =         0x0000000000000020L;
 
-/** HW Thermal Slowdown (reducing the core clocks by a factor of 2 or more) is engaged
- * 
- * This is an indicator of:
- *   - temperature being too high
- *
- * @see nvmlDeviceGetTemperature
- * @see nvmlDeviceGetTemperatureThreshold
- * @see nvmlDeviceGetPowerUsage
- */
-public static final long nvmlClocksThrottleReasonHwThermalSlowdown =         0x0000000000000040L;
-
-/** HW Power Brake Slowdown (reducing the core clocks by a factor of 2 or more) is engaged
- * 
- * This is an indicator of:
- *   - External Power Brake Assertion being triggered (e.g. by the system power supply)
- *
- * @see nvmlDeviceGetTemperature
- * @see nvmlDeviceGetTemperatureThreshold
- * @see nvmlDeviceGetPowerUsage
- */
-public static final long nvmlClocksThrottleReasonHwPowerBrakeSlowdown =      0x0000000000000080L;
-
 /** Bit mask representing no clocks throttling
  *
  * Clocks are as high as possible.
@@ -1716,8 +1672,6 @@ public static final long nvmlClocksThrottleReasonAll = (nvmlClocksThrottleReason
       | nvmlClocksThrottleReasonHwSlowdown                        
       | nvmlClocksThrottleReasonSyncBoost                         
       | nvmlClocksThrottleReasonSwThermalSlowdown                 
-      | nvmlClocksThrottleReasonHwThermalSlowdown                 
-      | nvmlClocksThrottleReasonHwPowerBrakeSlowdown              
 );
 /** \} */
 
@@ -2046,14 +2000,9 @@ public static class nvmlEncoderSessionInfo_t extends Pointer {
  */
 /***************************************************************************************************/
 
-/** Don't fail nvmlInit() when no GPUs are found */
-public static final int NVML_INIT_FLAG_NO_GPUS =  1;
-
 /**
  * Initialize NVML, but don't initialize any GPUs yet.
  *
- * \note nvmlInit_v3 introduces a "flags" argument, that allows passing boolean values
- *       modifying the behaviour of nvmlInit().
  * \note In NVML 5.319 new nvmlInit_v2 has replaced nvmlInit"_v1" (default in NVML 4.304 and older) that
  *       did initialize all GPU devices in the system.
  *       
@@ -2066,8 +2015,6 @@ public static final int NVML_INIT_FLAG_NO_GPUS =  1;
  * 
  * For all products.
  *
- * @param flags                                 behaviour modifier flags
- *
  * This method, should be called once before invoking any other methods in the library.
  * A reference count of the number of initializations is maintained.  Shutdown only occurs
  * when the reference count reaches zero.
@@ -2079,23 +2026,6 @@ public static final int NVML_INIT_FLAG_NO_GPUS =  1;
  *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlInit_v2();
-
-/**
- * nvmlInitWithFlags is a variant of nvmlInit(), that allows passing a set of boolean values
- *       modifying the behaviour of nvmlInit().
- *       Other than the "flags" parameter it is completely similar to \ref nvmlInit.
- *       
- * For all products.
- *
- * @param flags                                 behaviour modifier flags
- *
- * @return 
- *         - \ref NVML_SUCCESS                   if NVML has been properly initialized
- *         - \ref NVML_ERROR_DRIVER_NOT_LOADED   if NVIDIA driver is not running
- *         - \ref NVML_ERROR_NO_PERMISSION       if NVML does not have permission to talk to the driver
- *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
- */
-public static native @Cast("nvmlReturn_t") int nvmlInitWithFlags(@Cast("unsigned int") int flags);
 
 /**
  * Shut down NVML by releasing all GPU resources previously allocated with \ref nvmlInit().
@@ -3157,6 +3087,10 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPersistenceMode(nvml
  *
  * See \ref nvmlPciInfo_t for details on the available PCI info.
  *
+ * NOTE: If you are linking against a driver earlier than r384.40, then nvmlDeviceGetPciInfo_v2 must be used. This
+ *       API does not populate pci->busId. pci->busIdLegacy will be populated for both nvmlDeviceGetPciInfo and 
+ *       nvmlDeviceGetPciInfo_v2.
+ *
  * @param device                               The identifier of the target device
  * @param pci                                  Reference in which to return the PCI info
  * 
@@ -3168,6 +3102,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPersistenceMode(nvml
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPciInfo_v3(nvmlDevice_st device, nvmlPciInfo_t pci);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPciInfo_v2(nvmlDevice_st device, nvmlPciInfo_t pci);
 
 /**
  * Retrieves the maximum PCIe link generation possible with this device and system

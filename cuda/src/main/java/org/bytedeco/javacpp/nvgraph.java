@@ -295,8 +295,13 @@ public static native @Cast("nvgraphStatus_t") int nvgraphSrSpmv(nvgraphContext h
                                  @Cast("const size_t") long y_index,
                                  @Cast("const nvgraphSemiring_t") int SR);
 
-/* Helper struct for Traversal parameters
+
+/* nvGRAPH Traversal
+ * Compute a traversal of the graph from a single vertex
  */
+
+//List of parameters available
+
 public static class nvgraphTraversalParameter_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -315,37 +320,24 @@ public static class nvgraphTraversalParameter_t extends Pointer {
 	@MemberGetter public native @Cast("size_t*") SizeTPointer pad();
 } 
 
-
-/* Initializes traversal parameters with default values
- */
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalParameterInit(nvgraphTraversalParameter_t param);
 
-/* Stores/retrieves index of a vertex data where target distances will be stored 
- */ 
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalSetDistancesIndex(nvgraphTraversalParameter_t param, @Cast("const size_t") long value);
 
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalGetDistancesIndex(@Const @ByVal nvgraphTraversalParameter_t param, @Cast("size_t*") SizeTPointer value);
 
-/* Stores/retrieves index of a vertex data where path predecessors will be stored
- */
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalSetPredecessorsIndex(nvgraphTraversalParameter_t param, @Cast("const size_t") long value);
 
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalGetPredecessorsIndex(@Const @ByVal nvgraphTraversalParameter_t param, @Cast("size_t*") SizeTPointer value);
 
-/* Stores/retrieves index of an edge data which tells traversal algorithm whether path can go through an edge or not
- */
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalSetEdgeMaskIndex(nvgraphTraversalParameter_t param, @Cast("const size_t") long value);
 
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalGetEdgeMaskIndex(@Const @ByVal nvgraphTraversalParameter_t param, @Cast("size_t*") SizeTPointer value);
 
-/* Stores/retrieves flag that tells an algorithm whether the graph is directed or not
- */
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalSetUndirectedFlag(nvgraphTraversalParameter_t param, @Cast("const size_t") long value);
 
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversalGetUndirectedFlag(@Const @ByVal nvgraphTraversalParameter_t param, @Cast("size_t*") SizeTPointer value);
 
-/* Stores/retrieves 'alpha' and 'beta' parameters for BFS traversal algorithm
- */
 
 
 
@@ -362,9 +354,7 @@ public static final int
 	NVGRAPH_TRAVERSAL_BFS = 0;
 
 
-/* nvGRAPH Traversal API
- * Compute a traversal of the graph from a single vertex using algorithm specified by traversalT parameter
- */
+
 public static native @Cast("nvgraphStatus_t") int nvgraphTraversal(nvgraphContext handle,
                                nvgraphGraphDescr descrG,
                                @Cast("const nvgraphTraversal_t") int traversalT,

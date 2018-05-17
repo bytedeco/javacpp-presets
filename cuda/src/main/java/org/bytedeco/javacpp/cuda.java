@@ -74,7 +74,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
  */
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 9010;
+    public static final int __CUDA_API_VERSION = 9000;
 // #endif /* CUDA_FORCE_API_VERSION */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -127,7 +127,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 9010;
+public static final int CUDA_VERSION = 9000;
 
 // #ifdef __cplusplus
 // #endif
@@ -1144,11 +1144,7 @@ public static final int
     /** Compute device class 6.2.*/
     CU_TARGET_COMPUTE_62 = 62,
     /** Compute device class 7.0.*/
-    CU_TARGET_COMPUTE_70 = 70,
-    /** Compute device class 7.3.*/
-    CU_TARGET_COMPUTE_73 = 73,
-    /** Compute device class 7.5.*/
-    CU_TARGET_COMPUTE_75 = 75;
+    CU_TARGET_COMPUTE_70 = 70;
 
 /**
  * Cubin matching fallback strategies
@@ -8965,10 +8961,20 @@ public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream,
 /**
  * \brief Make a compute stream wait on an event
  *
- * Makes all future work submitted to \p hStream wait for all work captured in
- * \p hEvent.  See ::cuEventRecord() for details on what is captured by an event.
- * The synchronization will be performed efficiently on the device when applicable.
- * \p hEvent may be from a different context or device than \p hStream.
+ * Makes all future work submitted to \p hStream wait until \p hEvent
+ * reports completion before beginning execution.  This synchronization
+ * will be performed efficiently on the device.  The event \p hEvent may
+ * be from a different context than \p hStream, in which case this function
+ * will perform cross-device synchronization.
+ *
+ * The stream \p hStream will wait only for the completion of the most recent
+ * host call to ::cuEventRecord() on \p hEvent.  Once this call has returned,
+ * any functions (including ::cuEventRecord() and ::cuEventDestroy()) may be
+ * called on \p hEvent again, and subsequent calls will not have any
+ * effect on \p hStream.
+ *
+ * If ::cuEventRecord() has not been called on \p hEvent, this call acts as if
+ * the record has already completed, and so is a functional no-op.
  *
  * @param hStream - Stream to wait
  * @param hEvent  - Event to wait on (may not be NULL)
@@ -9249,8 +9255,8 @@ public static native @Cast("CUresult") int cuStreamDestroy(CUstream_st hStream);
 /**
  * \brief Creates an event
  *
- * Creates an event *phEvent for the current context with the flags specified via
- * \p Flags. Valid flags include:
+ * Creates an event *phEvent with the flags specified via \p Flags. Valid flags
+ * include:
  * - ::CU_EVENT_DEFAULT: Default event creation flag.
  * - ::CU_EVENT_BLOCKING_SYNC: Specifies that the created event should use blocking
  *   synchronization.  A CPU thread that uses ::cuEventSynchronize() to wait on
@@ -9290,20 +9296,16 @@ public static native @Cast("CUresult") int cuEventCreate(@ByPtrPtr CUevent_st ph
 /**
  * \brief Records an event
  *
- * Captures in \p hEvent the contents of \p hStream at the time of this call.
- * \p hEvent and \p hStream must be from the same context.
- * Calls such as ::cuEventQuery() or ::cuStreamWaitEvent() will then
- * examine or wait for completion of the work that was captured. Uses of
- * \p hStream after this call do not modify \p hEvent. See note on default
- * stream behavior for what is captured in the default case.
+ * Records an event. See note on NULL stream behavior. Since operation is
+ * asynchronous, ::cuEventQuery or ::cuEventSynchronize() must be used
+ * to determine when the event has actually been recorded.
  *
- * ::cuEventRecord() can be called multiple times on the same event and
- * will overwrite the previously captured state. Other APIs such as
- * ::cuStreamWaitEvent() use the most recently captured state at the time
- * of the API call, and are not affected by later calls to
- * ::cuEventRecord(). Before the first call to ::cuEventRecord(), an
- * event represents an empty set of work, so for example ::cuEventQuery()
- * would return ::CUDA_SUCCESS.
+ * If ::cuEventRecord() has previously been called on \p hEvent, then this
+ * call will overwrite any existing state in \p hEvent.  Any subsequent calls
+ * which examine the status of \p hEvent will only examine the completion of
+ * this most recent call to ::cuEventRecord().
+ *
+ * It is necessary that \p hEvent and \p hStream be created on the same context.
  *
  * @param hEvent  - Event to record
  * @param hStream - Stream to record event for
@@ -9331,11 +9333,14 @@ public static native @Cast("CUresult") int cuEventRecord(CUevent_st hEvent, CUst
 /**
  * \brief Queries an event's status
  *
- * Queries the status of all work currently captured by \p hEvent. See
- * ::cuEventRecord() for details on what is captured by an event.
+ * Query the status of all device work preceding the most recent
+ * call to ::cuEventRecord() (in the appropriate compute streams,
+ * as specified by the arguments to ::cuEventRecord()).
  *
- * Returns ::CUDA_SUCCESS if all captured work has been completed, or
- * ::CUDA_ERROR_NOT_READY if any captured work is incomplete.
+ * If this work has successfully been completed by the device, or if
+ * ::cuEventRecord() has not been called on \p hEvent, then ::CUDA_SUCCESS is
+ * returned. If this work has not yet been completed by the device then
+ * ::CUDA_ERROR_NOT_READY is returned.
  *
  * For the purposes of Unified Memory, a return value of ::CUDA_SUCCESS
  * is equivalent to having called ::cuEventSynchronize().
@@ -9363,8 +9368,12 @@ public static native @Cast("CUresult") int cuEventQuery(CUevent_st hEvent);
 /**
  * \brief Waits for an event to complete
  *
- * Waits until the completion of all work currently captured in \p hEvent.
- * See ::cuEventRecord() for details on what is captured by an event.
+ * Wait until the completion of all device work preceding the most recent
+ * call to ::cuEventRecord() (in the appropriate compute streams, as specified
+ * by the arguments to ::cuEventRecord()).
+ *
+ * If ::cuEventRecord() has not been called on \p hEvent, ::CUDA_SUCCESS is
+ * returned immediately.
  *
  * Waiting for an event that was created with the ::CU_EVENT_BLOCKING_SYNC
  * flag will cause the calling CPU thread to block until the event has
@@ -9397,10 +9406,10 @@ public static native @Cast("CUresult") int cuEventSynchronize(CUevent_st hEvent)
  *
  * Destroys the event specified by \p hEvent.
  *
- * An event may be destroyed before it is complete (i.e., while
- * ::cuEventQuery() would return ::CUDA_ERROR_NOT_READY). In this case, the
- * call does not block on completion of the event, and any associated
- * resources will automatically be released asynchronously at completion.
+ * In case \p hEvent has been recorded but has not yet been completed
+ * when ::cuEventDestroy() is called, the function will return immediately and 
+ * the resources associated with \p hEvent will be released automatically once
+ * the device has completed \p hEvent.
  *
  * @param hEvent - Event to destroy
  *
@@ -14319,7 +14328,7 @@ public static class cudaFuncAttributes extends Pointer {
 
    /**
     * On devices where the L1 cache and shared memory use the same hardware resources, 
-    * this sets the shared memory carveout preference, in percent of the total resources. 
+    * this sets the shared memory carveout preference, in percent of the maximum shared memory. 
     * This is only a hint, and the driver can choose a different ratio if required to execute the function.
     */
    public native int preferredShmemCarveout(); public native cudaFuncAttributes preferredShmemCarveout(int preferredShmemCarveout);
@@ -16648,7 +16657,7 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  9010;
+public static final int CUDART_VERSION =  9000;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
@@ -18594,10 +18603,20 @@ public static native @Cast("cudaError_t") int cudaStreamDestroy(CUstream_st stre
 /**
  * \brief Make a compute stream wait on an event
  *
- * Makes all future work submitted to \p stream wait for all work captured in
- * \p event.  See ::cudaEventRecord() for details on what is captured by an event.
- * The synchronization will be performed efficiently on the device when applicable.
- * \p event may be from a different device than \p stream.
+ * Makes all future work submitted to \p stream wait until \p event reports
+ * completion before beginning execution.  This synchronization will be
+ * performed efficiently on the device.  The event \p event may
+ * be from a different context than \p stream, in which case this function
+ * will perform cross-device synchronization.
+ *
+ * The stream \p stream will wait only for the completion of the most recent
+ * host call to ::cudaEventRecord() on \p event.  Once this call has returned,
+ * any functions (including ::cudaEventRecord() and ::cudaEventDestroy()) may be
+ * called on \p event again, and the subsequent calls will not have any effect
+ * on \p stream.
+ *
+ * If ::cudaEventRecord() has not been called on \p event, this call acts as if
+ * the record has already completed, and so is a functional no-op.
  *
  * @param stream - Stream to wait
  * @param event  - Event to wait on
@@ -18802,7 +18821,7 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  * @return
  * ::cudaSuccess,
  * ::cudaErrorNotReady,
- * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidValue
  * ::cudaErrorInvalidResourceHandle
  * \notefnerr
  *
@@ -18829,7 +18848,7 @@ public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_
 /**
  * \brief Creates an event object
  *
- * Creates an event object for the current device using ::cudaEventDefault.
+ * Creates an event object using ::cudaEventDefault.
  *
  * @param event - Newly created event
  *
@@ -18852,8 +18871,7 @@ public static native @Cast("cudaError_t") int cudaEventCreate(@ByPtrPtr CUevent_
 /**
  * \brief Creates an event object with the specified flags
  *
- * Creates an event object for the current device with the specified flags. Valid
- * flags include:
+ * Creates an event object with the specified flags. Valid flags include:
  * - ::cudaEventDefault: Default event creation flag.
  * - ::cudaEventBlockingSync: Specifies that event should use blocking
  *   synchronization. A host thread that uses ::cudaEventSynchronize() to wait
@@ -18888,20 +18906,14 @@ public static native @Cast("cudaError_t") int cudaEventCreateWithFlags(@ByPtrPtr
 /**
  * \brief Records an event
  *
- * Captures in \p event the contents of \p stream at the time of this call.
- * \p event and \p stream must be on the same device.
- * Calls such as ::cudaEventQuery() or ::cudaStreamWaitEvent() will then
- * examine or wait for completion of the work that was captured. Uses of
- * \p stream after this call do not modify \p event. See note on default
- * stream behavior for what is captured in the default case.
+ * Records an event. See note about NULL stream behavior. Since operation
+ * is asynchronous, ::cudaEventQuery() or ::cudaEventSynchronize() must
+ * be used to determine when the event has actually been recorded.
  *
- * ::cudaEventRecord() can be called multiple times on the same event and
- * will overwrite the previously captured state. Other APIs such as
- * ::cudaStreamWaitEvent() use the most recently captured state at the time
- * of the API call, and are not affected by later calls to
- * ::cudaEventRecord(). Before the first call to ::cudaEventRecord(), an
- * event represents an empty set of work, so for example ::cudaEventQuery()
- * would return ::cudaSuccess.
+ * If ::cudaEventRecord() has previously been called on \p event, then this
+ * call will overwrite any existing state in \p event.  Any subsequent calls
+ * which examine the status of \p event will only examine the completion of
+ * this most recent call to ::cudaEventRecord().
  *
  * @param event  - Event to record
  * @param stream - Stream in which to record event
@@ -18927,11 +18939,14 @@ public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
 /**
  * \brief Queries an event's status
  *
- * Queries the status of all work currently captured by \p event. See
- * ::cudaEventRecord() for details on what is captured by an event.
+ * Query the status of all device work preceding the most recent call to
+ * ::cudaEventRecord() (in the appropriate compute streams, as specified by the
+ * arguments to ::cudaEventRecord()).
  *
- * Returns ::cudaSuccess if all captured work has been completed, or
- * ::cudaErrorNotReady if any captured work is incomplete.
+ * If this work has successfully been completed by the device, or if
+ * ::cudaEventRecord() has not been called on \p event, then ::cudaSuccess is
+ * returned. If this work has not yet been completed by the device then
+ * ::cudaErrorNotReady is returned.
  *
  * For the purposes of Unified Memory, a return value of ::cudaSuccess
  * is equivalent to having called ::cudaEventSynchronize().
@@ -18957,8 +18972,12 @@ public static native @Cast("cudaError_t") int cudaEventQuery(CUevent_st event);
 /**
  * \brief Waits for an event to complete
  *
- * Waits until the completion of all work currently captured in \p event.
- * See ::cudaEventRecord() for details on what is captured by an event.
+ * Wait until the completion of all device work preceding the most recent
+ * call to ::cudaEventRecord() (in the appropriate compute streams, as specified
+ * by the arguments to ::cudaEventRecord()).
+ *
+ * If ::cudaEventRecord() has not been called on \p event, ::cudaSuccess is
+ * returned immediately.
  *
  * Waiting for an event that was created with the ::cudaEventBlockingSync
  * flag will cause the calling CPU thread to block until the event has
@@ -18988,10 +19007,10 @@ public static native @Cast("cudaError_t") int cudaEventSynchronize(CUevent_st ev
  *
  * Destroys the event specified by \p event.
  *
- * An event may be destroyed before it is complete (i.e., while
- * ::cudaEventQuery() would return ::cudaErrorNotReady). In this case, the
- * call does not block on completion of the event, and any associated
- * resources will automatically be released asynchronously at completion.
+ * In case \p event has been recorded but has not yet been completed
+ * when ::cudaEventDestroy() is called, the function will return immediately and 
+ * the resources associated with \p event will be released automatically once
+ * the device has completed \p event.
  *
  * @param event - Event to destroy
  *
@@ -19414,19 +19433,19 @@ public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttr
 /**
  * \brief Set attributes for a given function
  *
- * This function sets the attributes of a function specified via \p entry.
- * The parameter \p entry must be a pointer to a function that executes
- * on the device. The parameter specified by \p entry must be declared as a \p __global__
- * function. The enumeration defined by \p attr is set to the value defined by \p value
+ * This function sets the attributes of a function specified via \p func.
+ * The parameter \p func must be a pointer to a function that executes
+ * on the device. The parameter specified by \p func must be declared as a \p __global__
+ * function. The enumeration defined by \p attr is set to the value defined by \p value.
  * If the specified function does not exist, then ::cudaErrorInvalidDeviceFunction is returned.
  * If the specified attribute cannot be written, or if the value is incorrect, 
  * then ::cudaErrorInvalidValue is returned.
  *
  * Valid values for \p attr are:
- * ::cuFuncAttrMaxDynamicSharedMem - Maximum size of dynamic shared memory per block
- * ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio
+ * - ::cudaFuncAttributeMaxDynamicSharedMemorySize - Maximum size of dynamic shared memory per block
+ * - ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio in percent of maximum shared memory
  *
- * @param entry - Function to get attributes of
+ * @param func  - Function to get attributes of
  * @param attr  - Attribute to set
  * @param value - Value to set
  *
@@ -20121,10 +20140,8 @@ public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmapp
  * All of these flags are orthogonal to one another: a developer may allocate
  * memory that is portable, mapped and/or write-combined with no restrictions.
  *
- * In order for the ::cudaHostAllocMapped flag to have any effect, the CUDA context
- * must support the ::cudaDeviceMapHost flag, which can be checked via
- * ::cudaGetDeviceFlags(). The ::cudaDeviceMapHost flag is implicitly set for
- * contexts created via the runtime API.
+ * ::cudaSetDeviceFlags() must have been called with the ::cudaDeviceMapHost
+ * flag in order for the ::cudaHostAllocMapped flag to have any effect.
  *
  * The ::cudaHostAllocMapped flag may be specified on CUDA contexts for devices
  * that do not support mapped pinned memory. The failure is deferred to
@@ -20146,7 +20163,6 @@ public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmapp
  * \sa ::cudaSetDeviceFlags,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost,
- * ::cudaGetDeviceFlags,
  * ::cuMemHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") PointerPointer pHost, @Cast("size_t") long size, @Cast("unsigned int") int flags);
@@ -24272,14 +24288,6 @@ public static native @ByVal double4 make_double4(double x, double y, double z, d
 // #if !defined(CU_COMPLEX_H_)
 // #define CU_COMPLEX_H_
 
-// #if !defined(__CUDACC_RTC__)
-// #if defined(__GNUC__)
-// #if defined(__clang__) || (!defined(__PGIC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)))
-// #pragma GCC diagnostic ignored "-Wunused-function"
-// #endif
-// #endif
-// #endif
-
 /* When trying to include C header file in C++ Code extern "C" is required
  * But the Standard QNX headers already have ifdef extern in them when compiling C++ Code
  * extern "C" cannot be nested
@@ -24489,10 +24497,32 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 
 // #if defined(__cplusplus) && defined(__CUDACC__)
 
+// #if defined(__CUDACC_RTC__)
+// #define __CUDA_FP16_DECL__ __host__ __device__
+// #define __VECTOR_FUNCTIONS_DECL__ __host__ __device__
+// #else /* !__CUDACC_RTC__ */
 // #define __CUDA_FP16_DECL__ static __device__ __inline__
+// #define __VECTOR_FUNCTIONS_DECL__ static __inline__ __host__ __device__
+// #endif /* __CUDACC_RTC__ */
 
 // #define __CUDA_FP16_TYPES_EXIST__
 /* Forward-declaration of structures defined in "cuda_fp16.hpp" */
+@Opaque public static class __half extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public __half() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half(Pointer p) { super(p); }
+}
+@Opaque public static class __half2 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public __half2() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half2(Pointer p) { super(p); }
+}
+
+/* Vector type creation functions, match vector_functions.h */
+
+// #undef __VECTOR_FUNCTIONS_DECL__
 
 /**
 * \ingroup CUDA_MATH__HALF_MISC
@@ -26162,245 +26192,6 @@ public static final int warpSize =    32;
 // #include "cuda_fp16.hpp"
 
 // #endif /* end of include guard: __CUDA_FP16_H__ */
-
-
-// Parsed from cuda_fp16.hpp
-
-/*
-* Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
-*
-* NOTICE TO LICENSEE:
-*
-* This source code and/or documentation ("Licensed Deliverables") are
-* subject to NVIDIA intellectual property rights under U.S. and
-* international Copyright laws.
-*
-* These Licensed Deliverables contained herein is PROPRIETARY and
-* CONFIDENTIAL to NVIDIA and is being provided under the terms and
-* conditions of a form of NVIDIA software license agreement by and
-* between NVIDIA and Licensee ("License Agreement") or electronically
-* accepted by Licensee.  Notwithstanding any terms or conditions to
-* the contrary in the License Agreement, reproduction or disclosure
-* of the Licensed Deliverables to any third party without the express
-* written consent of NVIDIA is prohibited.
-*
-* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
-* LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
-* SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
-* PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
-* NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
-* DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
-* NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
-* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
-* LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
-* SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
-* DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-* WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
-* ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
-* OF THESE LICENSED DELIVERABLES.
-*
-* U.S. Government End Users.  These Licensed Deliverables are a
-* "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
-* 1995), consisting of "commercial computer software" and "commercial
-* computer software documentation" as such terms are used in 48
-* C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
-* only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
-* 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
-* U.S. Government End Users acquire the Licensed Deliverables with
-* only those rights set forth herein.
-*
-* Any use of the Licensed Deliverables in individual and commercial
-* software must include, in the user documentation and internal
-* comments to the code, the above Disclaimer and U.S. Government End
-* Users Notice.
-*/
-
-// #if !defined(__CUDA_FP16_HPP__)
-// #define __CUDA_FP16_HPP__
-
-/* C++11 header for std::move. 
- * In RTC mode, std::move is provided implicitly; don't include the header
-*/
-// #if (__cplusplus >= 201103L) && !defined(__CUDACC_RTC__)
-// #include <utility>
-// #endif /* __cplusplus >= 201103L && !defined(__CUDACC_RTC__) */
-
-/* Set up function decorations */
-// #if defined(__CUDACC__)
-// #else /* !__CUDACC__ */
-// #define __CUDA_HOSTDEVICE__
-// #endif /* __CUDACC_) */
-
-/* Set up structure-alignment attribute */
-// #if defined(__CUDACC__)
-// #else
-/* Define alignment macro based on compiler type (cannot assume C11 "_Alignas" is available) */
-// #if __cplusplus >= 201103L
-// #define __CUDA_ALIGN__(n) alignas(n)    /* C++11 kindly gives us a keyword for this */
-// #else /* !(__cplusplus >= 201103L)*/
-// #if defined(__GNUC__) /* || defined(__IBMC__) || defined(__clang__) || defined(__PGI) */
-// #define __CUDA_ALIGN__(n) __attribute__ ((aligned(n)))
-// #elif defined(_MSC_VER) /* || defined(__ICC) */
-// #define __CUDA_ALIGN__(n) __declspec(align(n))
-// #else
-// #define __CUDA_ALIGN__(n)
-// #endif /* defined(__GNUC__) */
-// #endif /* __cplusplus >= 201103L */
-// #endif /* defined(__CUDACC__) */
-
-
-/* Macros to allow half & half2 to be used by inline assembly */
-// #define __HALF_TO_US(var) *(reinterpret_cast<unsigned short *>(&(var)))
-// #define __HALF_TO_CUS(var) *(reinterpret_cast<const unsigned short *>(&(var)))
-// #define __HALF2_TO_UI(var) *(reinterpret_cast<unsigned int *>(&(var)))
-// #define __HALF2_TO_CUI(var) *(reinterpret_cast<const unsigned int *>(&(var)))
-
-
-/**
-* Types which allow static initialization of "half" and "half2" until
-* these become an actual builtin. Note this initialization is as a
-* bitfield representation of "half", and not a conversion from short->half.
-* Such a representation will be deprecated in a future version of CUDA. 
-* (Note these are visible to non-nvcc compilers, including C-only compilation)
-*/
-public static class __half_raw extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public __half_raw() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public __half_raw(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half_raw(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public __half_raw position(long position) {
-        return (__half_raw)super.position(position);
-    }
-
-    public native @Cast("unsigned short") short x(); public native __half_raw x(short x);
-}
-
-public static class __half2_raw extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public __half2_raw() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public __half2_raw(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half2_raw(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public __half2_raw position(long position) {
-        return (__half2_raw)super.position(position);
-    }
-
-    public native @Cast("unsigned short") short x(); public native __half2_raw x(short x);
-    public native @Cast("unsigned short") short y(); public native __half2_raw y(short y);
-}
-
-/* All other definitions in this file are only visible to C++ compilers */
-// #if defined(__cplusplus)
-
-/* Hide GCC member initialization list warnings because of host/device in-function init requirement */
-// #if defined(__GNUC__)
-// #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-// #pragma GCC diagnostic push
-// #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-// #pragma GCC diagnostic ignored "-Weffc++"
-// #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
-// #endif /* defined(__GNUC__) */
-
-@NoOffset public static class __half extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public __half(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public __half position(long position) {
-        return (__half)super.position(position);
-    }
-
-// #if __cplusplus >= 201103L
-    public __half() { super((Pointer)null); allocate(); }
-    private native void allocate();
-// #else
-// #endif /* __cplusplus >= 201103L */
-
-    /* Convert to/from __half_raw */
-    public __half(@Const @ByRef __half_raw hr) { super((Pointer)null); allocate(hr); }
-    private native void allocate(@Const @ByRef __half_raw hr);
-    public native @ByRef @Name("operator =") __half put(@Const @ByRef __half_raw hr);
-    public native @ByVal @Cast("__half_raw*") @Name("operator __half_raw") __half_raw as__half_raw();
-
-/* Member functions are only available to nvcc compilation */
-// #if defined(__CUDACC__)
-// #endif /* defined(__CUDACC__) */
-}
-
-/* Global-space operator functions are only available to nvcc compilation */
-// #if defined(__CUDACC__)
-// #endif /* defined(__CUDACC__) */
-
-/* __half2 is visible to non-nvcc host compilers */
-@NoOffset public static class __half2 extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half2(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public __half2(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public __half2 position(long position) {
-        return (__half2)super.position(position);
-    }
-
-    public native @ByRef __half x(); public native __half2 x(__half x);
-    public native @ByRef __half y(); public native __half2 y(__half y);
-// #if __cplusplus >= 201103L
-    public __half2() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public __half2(@ByVal __half2 src) { super((Pointer)null); allocate(src); }
-    private native void allocate(@ByVal __half2 src);
-    public native @ByRef @Name("operator =") __half2 put(@ByVal __half2 src);
-// #else
-// #endif /* __cplusplus >= 201103L */
-    public __half2(@Const @ByRef __half a, @Const @ByRef __half b) { super((Pointer)null); allocate(a, b); }
-    private native void allocate(@Const @ByRef __half a, @Const @ByRef __half b);
-
-    /* Convert to/from __half2_raw */
-    public __half2(@Const @ByRef __half2_raw h2r ) { super((Pointer)null); allocate(h2r); }
-    private native void allocate(@Const @ByRef __half2_raw h2r );
-    public native @ByRef @Name("operator =") __half2 put(@Const @ByRef __half2_raw h2r);
-    public native @ByVal @Cast("__half2_raw*") @Name("operator __half2_raw") __half2_raw as__half2_raw();
-}
-
-/* Restore -Weffc++ warnings from here on */
-// #if defined(__GNUC__)
-// #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-// #pragma GCC diagnostic pop
-// #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
-// #endif /* defined(__GNUC__) */
-
-// #undef __CUDA_HOSTDEVICE__
-// #undef __CUDA_ALIGN__
-
-/* All intrinsic functions are only available to nvcc compilers */
-// #if defined(__CUDACC__)
-// #endif /* defined(__CUDACC__) */
-// #endif /* defined(__cplusplus) */
-
-// #undef __HALF_TO_US
-// #undef __HALF_TO_CUS
-// #undef __HALF2_TO_UI
-// #undef __HALF2_TO_CUI
-
-
-/* Define first-class types "half" and "half2", unless user specifies otherwise via "#define CUDA_NO_HALF" */
-/* C cannot ever have these types defined here, because __half and __half2 are C++ classes */
-// #if defined(__cplusplus) && !defined(CUDA_NO_HALF)
-// #endif /* defined(__cplusplus) && !defined(CUDA_NO_HALF) */
-
-// #endif /* end of include guard: __CUDA_FP16_HPP__ */
 
 
 // Parsed from <library_types.h>
