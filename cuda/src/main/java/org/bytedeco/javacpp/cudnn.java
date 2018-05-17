@@ -69,9 +69,9 @@ public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
 // #if !defined(CUDNN_H_)
 // #define CUDNN_H_
 
-public static final int CUDNN_MAJOR = 7;
-public static final int CUDNN_MINOR = 1;
-public static final int CUDNN_PATCHLEVEL = 1;
+public static final int CUDNN_MAJOR =      6;
+public static final int CUDNN_MINOR =      0;
+public static final int CUDNN_PATCHLEVEL = 21;
 
 public static final int CUDNN_VERSION =    (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
 
@@ -117,42 +117,10 @@ public static final int
     CUDNN_STATUS_EXECUTION_FAILED             = 8,
     CUDNN_STATUS_NOT_SUPPORTED                = 9,
     CUDNN_STATUS_LICENSE_ERROR                = 10,
-    CUDNN_STATUS_RUNTIME_PREREQUISITE_MISSING = 11,
-    CUDNN_STATUS_RUNTIME_IN_PROGRESS          = 12,
-    CUDNN_STATUS_RUNTIME_FP_OVERFLOW          = 13;
+    CUDNN_STATUS_RUNTIME_PREREQUISITE_MISSING = 11;
 
-/* human-readable error messages */
+// human-readable error messages
 public static native @Cast("const char*") BytePointer cudnnGetErrorString(@Cast("cudnnStatus_t") int status);
-
-/* Forward definition in this version only */
-@Opaque public static class cudnnRuntimeTag_t extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cudnnRuntimeTag_t() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnRuntimeTag_t(Pointer p) { super(p); }
-}
-
-/** enum cudnnErrQueryMode_t */
-public static final int
-    CUDNN_ERRQUERY_RAWCODE      = 0,
-    CUDNN_ERRQUERY_NONBLOCKING  = 1,
-    CUDNN_ERRQUERY_BLOCKING     = 2;
-
-public static native @Cast("cudnnStatus_t") int cudnnQueryRuntimeError(
-                                cudnnContext handle,
-                                @Cast("cudnnStatus_t*") IntPointer rstatus,
-                                @Cast("cudnnErrQueryMode_t") int mode,
-                                cudnnRuntimeTag_t tag );
-public static native @Cast("cudnnStatus_t") int cudnnQueryRuntimeError(
-                                cudnnContext handle,
-                                @Cast("cudnnStatus_t*") IntBuffer rstatus,
-                                @Cast("cudnnErrQueryMode_t") int mode,
-                                cudnnRuntimeTag_t tag );
-public static native @Cast("cudnnStatus_t") int cudnnQueryRuntimeError(
-                                cudnnContext handle,
-                                @Cast("cudnnStatus_t*") int[] rstatus,
-                                @Cast("cudnnErrQueryMode_t") int mode,
-                                cudnnRuntimeTag_t tag );
 
 // #ifndef __LIBRARY_TYPES_H__
 
@@ -172,6 +140,7 @@ public static native @Cast("cudnnStatus_t") int cudnnCreate(@ByPtrPtr cudnnConte
 public static native @Cast("cudnnStatus_t") int cudnnDestroy(cudnnContext handle);
 public static native @Cast("cudnnStatus_t") int cudnnSetStream(cudnnContext handle, CUstream_st streamId);
 public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext handle, @ByPtrPtr CUstream_st streamId);
+
 
 /* Data structures to represent Image/Filter and the Neural Network Layer */
 @Opaque public static class cudnnTensorStruct extends Pointer {
@@ -228,33 +197,17 @@ public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext hand
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnReduceTensorStruct(Pointer p) { super(p); }
 }
-@Opaque public static class cudnnCTCLossStruct extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cudnnCTCLossStruct() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnCTCLossStruct(Pointer p) { super(p); }
-}
 /*
 * CUDNN data type
 */
 /** enum cudnnDataType_t */
 public static final int
-    CUDNN_DATA_FLOAT   = 0,
-    CUDNN_DATA_DOUBLE  = 1,
-    CUDNN_DATA_HALF    = 2,
-    CUDNN_DATA_INT8    = 3,
-    CUDNN_DATA_INT32   = 4,
-    CUDNN_DATA_INT8x4  = 5,
-    CUDNN_DATA_UINT8   = 6,
-    CUDNN_DATA_UINT8x4 = 7;
-
-/*
-* CUDNN math type
-*/
-/** enum cudnnMathType_t */
-public static final int 
-    CUDNN_DEFAULT_MATH   = 0,
-    CUDNN_TENSOR_OP_MATH = 1; 
+    CUDNN_DATA_FLOAT  = 0,
+    CUDNN_DATA_DOUBLE = 1,
+    CUDNN_DATA_HALF   = 2,
+    CUDNN_DATA_INT8   = 3,
+    CUDNN_DATA_INT32  = 4,
+    CUDNN_DATA_INT8x4 = 5;
 
 /*
  * CUDNN propagate Nan
@@ -294,7 +247,8 @@ public static native @Cast("cudnnStatus_t") int cudnnSetTensor4dDescriptor(
                                 int n,
                                 int c,
                                 int h,
-                                int w );      /* width of input section */
+                                int w );       // width of input section
+
 
 public static native @Cast("cudnnStatus_t") int cudnnSetTensor4dDescriptorEx(
                                 cudnnTensorStruct tensorDesc,
@@ -341,6 +295,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetTensor4dDescriptor(
                                 int[] cStride,
                                 int[] hStride,
                                 int[] wStride );
+
                                 
 public static native @Cast("cudnnStatus_t") int cudnnSetTensorNdDescriptor(
                                 cudnnTensorStruct tensorDesc,
@@ -401,6 +356,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetTensorNdDescriptor(
                                 int[] nbDims,
                                 int[] dimA,
                                 int[] strideA );
+                                
                                 
 public static native @Cast("cudnnStatus_t") int cudnnGetTensorSizeInBytes(
                                 cudnnTensorStruct tensorDesc,
@@ -464,8 +420,7 @@ public static final int
     CUDNN_OP_TENSOR_MUL  = 1,
     CUDNN_OP_TENSOR_MIN  = 2,
     CUDNN_OP_TENSOR_MAX  = 3,
-    CUDNN_OP_TENSOR_SQRT = 4,
-    CUDNN_OP_TENSOR_NOT  = 5;
+    CUDNN_OP_TENSOR_SQRT = 4;
 
 public static native @Cast("cudnnStatus_t") int cudnnCreateOpTensorDescriptor(
                                 @ByPtrPtr cudnnOpTensorStruct opTensorDesc );
@@ -496,7 +451,7 @@ public static native @Cast("cudnnStatus_t") int cudnnDestroyOpTensorDescriptor(
                                 cudnnOpTensorStruct opTensorDesc );
 
 /* Tensor operation : C = op( alpha1 * A, alpha2 * B ) + beta * C */
-/* B tensor is ignored for CUDNN_OP_TENSOR_SQRT, CUDNN_OP_TENSOR_NOT. */
+/* B tensor is ignored for CUDNN_OP_TENSOR_SQRT. */
 public static native @Cast("cudnnStatus_t") int cudnnOpTensor(
                                 cudnnContext handle,
                                 cudnnOpTensorStruct opTensorDesc,
@@ -515,15 +470,14 @@ public static native @Cast("cudnnStatus_t") int cudnnOpTensor(
 */
 /** enum cudnnReduceTensorOp_t */
 public static final int
-    CUDNN_REDUCE_TENSOR_ADD          = 0,
-    CUDNN_REDUCE_TENSOR_MUL          = 1,
-    CUDNN_REDUCE_TENSOR_MIN          = 2,
-    CUDNN_REDUCE_TENSOR_MAX          = 3,
-    CUDNN_REDUCE_TENSOR_AMAX         = 4,
-    CUDNN_REDUCE_TENSOR_AVG          = 5,
-    CUDNN_REDUCE_TENSOR_NORM1        = 6,
-    CUDNN_REDUCE_TENSOR_NORM2        = 7,
-    CUDNN_REDUCE_TENSOR_MUL_NO_ZEROS = 8;
+    CUDNN_REDUCE_TENSOR_ADD   = 0,
+    CUDNN_REDUCE_TENSOR_MUL   = 1,
+    CUDNN_REDUCE_TENSOR_MIN   = 2,
+    CUDNN_REDUCE_TENSOR_MAX   = 3,
+    CUDNN_REDUCE_TENSOR_AMAX  = 4,
+    CUDNN_REDUCE_TENSOR_AVG   = 5,
+    CUDNN_REDUCE_TENSOR_NORM1 = 6,
+    CUDNN_REDUCE_TENSOR_NORM2 = 7;
 
 /*
 * CUDNN ReduceTensor indices type
@@ -648,7 +602,7 @@ public static native @Cast("cudnnStatus_t") int cudnnSetFilter4dDescriptor(
                                 int k,
                                 int c,
                                 int h,
-                                int w );      /* width of  each input filter */
+                                int w );      // width of  each input filter
 
 
 public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor(
@@ -674,7 +628,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetFilter4dDescriptor(
                                 int[] k,
                                 int[] c,
                                 int[] h,
-                                int[] w );      /* width of  each input filter */
+                                int[] w );      // width of  each input filter
 
 
 public static native @Cast("cudnnStatus_t") int cudnnSetFilterNdDescriptor(
@@ -725,26 +679,6 @@ public static native @Cast("cudnnStatus_t") int cudnnDestroyFilterDescriptor(
 /* Create an instance of convolution descriptor */
 public static native @Cast("cudnnStatus_t") int cudnnCreateConvolutionDescriptor(
                                 @ByPtrPtr cudnnConvolutionStruct convDesc );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionMathType( cudnnConvolutionStruct convDesc,
-                                                       @Cast("cudnnMathType_t") int mathType );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionMathType( cudnnConvolutionStruct convDesc,
-                                                       @Cast("cudnnMathType_t*") IntPointer mathType );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionMathType( cudnnConvolutionStruct convDesc,
-                                                       @Cast("cudnnMathType_t*") IntBuffer mathType );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionMathType( cudnnConvolutionStruct convDesc,
-                                                       @Cast("cudnnMathType_t*") int[] mathType );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionGroupCount( cudnnConvolutionStruct convDesc,
-                                                         int groupCount );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionGroupCount( cudnnConvolutionStruct convDesc,
-                                                         IntPointer groupCount );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionGroupCount( cudnnConvolutionStruct convDesc,
-                                                         IntBuffer groupCount );
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionGroupCount( cudnnConvolutionStruct convDesc,
-                                                         int[] groupCount );
 
 public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor( cudnnConvolutionStruct convDesc,
                                                              int pad_h,
@@ -838,7 +772,7 @@ public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionNdDescriptor(
                                 @Const int[] filterStrideA,
                                 @Const int[] dilationA,
                                 @Cast("cudnnConvolutionMode_t") int mode,
-                                @Cast("cudnnDataType_t") int computeType );  /* convolution data type */
+                                @Cast("cudnnDataType_t") int computeType );  // convolution data type
 
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionNdDescriptor(
                                 cudnnConvolutionStruct convDesc,
@@ -866,7 +800,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionNdDescriptor(
                                 int[] strideA,
                                 int[] dilationA,
                                 @Cast("cudnnConvolutionMode_t*") int[] mode,
-                                @Cast("cudnnDataType_t*") int[] computeType );   /* convolution data type */
+                                @Cast("cudnnDataType_t*") int[] computeType );   // convolution data type
 
 
 /* Helper function to return the dimensions of the output tensor given a convolution descriptor */
@@ -933,17 +867,9 @@ public static class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     public native float time(); public native cudnnConvolutionFwdAlgoPerf_t time(float time);
     public native @Cast("size_t") long memory(); public native cudnnConvolutionFwdAlgoPerf_t memory(long memory);
     public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionFwdAlgoPerf_t determinism(int determinism);
-    public native @Cast("cudnnMathType_t") int mathType(); public native cudnnConvolutionFwdAlgoPerf_t mathType(int mathType);
     public native int reserved(int i); public native cudnnConvolutionFwdAlgoPerf_t reserved(int i, int reserved);
     @MemberGetter public native IntPointer reserved();
 }
-
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgorithmMaxCount( cudnnContext handle,
-                                                                       IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgorithmMaxCount( cudnnContext handle,
-                                                                       IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgorithmMaxCount( cudnnContext handle,
-                                                                       int[] count);
 
 public static native @Cast("cudnnStatus_t") int cudnnFindConvolutionForwardAlgorithm(
                                 cudnnContext handle,
@@ -1045,35 +971,6 @@ public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgori
                                 @Cast("size_t") long memoryLimitInBytes,
                                 @Cast("cudnnConvolutionFwdAlgo_t*") int[] algo );
 
-
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnTensorStruct srcDesc,
-                                cudnnFilterStruct filterDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnTensorStruct destDesc,
-                                int requestedAlgoCount,
-                                IntPointer returnedAlgoCount,
-                                cudnnConvolutionFwdAlgoPerf_t perfResults);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnTensorStruct srcDesc,
-                                cudnnFilterStruct filterDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnTensorStruct destDesc,
-                                int requestedAlgoCount,
-                                IntBuffer returnedAlgoCount,
-                                cudnnConvolutionFwdAlgoPerf_t perfResults);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionForwardAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnTensorStruct srcDesc,
-                                cudnnFilterStruct filterDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnTensorStruct destDesc,
-                                int requestedAlgoCount,
-                                int[] returnedAlgoCount,
-                                cudnnConvolutionFwdAlgoPerf_t perfResults);
-
 /*
  *  convolution algorithm (which requires potentially some workspace)
  */
@@ -1148,11 +1045,11 @@ public static final int
 
 /** enum cudnnConvolutionBwdFilterAlgo_t */
 public static final int
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0                 = 0,  /* non-deterministic */
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0                 = 0,  // non-deterministic
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_1                 = 1,
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_FFT               = 2,
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_3                 = 3,  /* non-deterministic */
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD          = 4,  /* not implemented */
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_3                 = 3,  // non-deterministic, algo0 with workspace
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD          = 4,  // not implemented
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD_NONFUSED = 5,
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_FFT_TILING        = 6,
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_COUNT             = 7;
@@ -1177,18 +1074,10 @@ public static class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
     public native float time(); public native cudnnConvolutionBwdFilterAlgoPerf_t time(float time);
     public native @Cast("size_t") long memory(); public native cudnnConvolutionBwdFilterAlgoPerf_t memory(long memory);
     public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionBwdFilterAlgoPerf_t determinism(int determinism);
-    public native @Cast("cudnnMathType_t") int mathType(); public native cudnnConvolutionBwdFilterAlgoPerf_t mathType(int mathType);
     public native int reserved(int i); public native cudnnConvolutionBwdFilterAlgoPerf_t reserved(int i, int reserved);
     @MemberGetter public native IntPointer reserved();
 }
 
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilterAlgorithmMaxCount( cudnnContext handle,
-                                                                              IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilterAlgorithmMaxCount( cudnnContext handle,
-                                                                              IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilterAlgorithmMaxCount( cudnnContext handle,
-                                                                              int[] count);
-                                                                              
 public static native @Cast("cudnnStatus_t") int cudnnFindConvolutionBackwardFilterAlgorithm(
                                 cudnnContext handle,
                                 cudnnTensorStruct xDesc,
@@ -1288,34 +1177,6 @@ public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilte
                                 @Cast("size_t") long memoryLimitInBytes,
                                 @Cast("cudnnConvolutionBwdFilterAlgo_t*") int[] algo );
 
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilterAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnTensorStruct srcDesc,
-                                cudnnTensorStruct diffDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnFilterStruct gradDesc,
-                                int requestedAlgoCount,
-                                IntPointer returnedAlgoCount,
-                                cudnnConvolutionBwdFilterAlgoPerf_t perfResults);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilterAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnTensorStruct srcDesc,
-                                cudnnTensorStruct diffDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnFilterStruct gradDesc,
-                                int requestedAlgoCount,
-                                IntBuffer returnedAlgoCount,
-                                cudnnConvolutionBwdFilterAlgoPerf_t perfResults);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardFilterAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnTensorStruct srcDesc,
-                                cudnnTensorStruct diffDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnFilterStruct gradDesc,
-                                int requestedAlgoCount,
-                                int[] returnedAlgoCount,
-                                cudnnConvolutionBwdFilterAlgoPerf_t perfResults);
-
 /*
  *  convolution algorithm (which requires potentially some workspace)
  */
@@ -1355,7 +1216,7 @@ public static final int
 
 /** enum cudnnConvolutionBwdDataAlgo_t */
 public static final int
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_0                 = 0, /* non-deterministic */
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_0                 = 0, // non-deterministic
     CUDNN_CONVOLUTION_BWD_DATA_ALGO_1                 = 1,
     CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT               = 2,
     CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT_TILING        = 3,
@@ -1382,17 +1243,10 @@ public static class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     public native float time(); public native cudnnConvolutionBwdDataAlgoPerf_t time(float time);
     public native @Cast("size_t") long memory(); public native cudnnConvolutionBwdDataAlgoPerf_t memory(long memory);
     public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionBwdDataAlgoPerf_t determinism(int determinism);
-    public native @Cast("cudnnMathType_t") int mathType(); public native cudnnConvolutionBwdDataAlgoPerf_t mathType(int mathType);
     public native int reserved(int i); public native cudnnConvolutionBwdDataAlgoPerf_t reserved(int i, int reserved);
     @MemberGetter public native IntPointer reserved();
 }
 
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataAlgorithmMaxCount( cudnnContext handle,
-                                                                            IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataAlgorithmMaxCount( cudnnContext handle,
-                                                                            IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataAlgorithmMaxCount( cudnnContext handle,
-                                                                            int[] count);
 
 public static native @Cast("cudnnStatus_t") int cudnnFindConvolutionBackwardDataAlgorithm(
                                 cudnnContext handle,
@@ -1493,34 +1347,6 @@ public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataA
                                 @Cast("size_t") long memoryLimitInBytes,
                                 @Cast("cudnnConvolutionBwdDataAlgo_t*") int[] algo );
 
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnFilterStruct filterDesc,
-                                cudnnTensorStruct diffDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnTensorStruct gradDesc,
-                                int requestedAlgoCount,
-                                IntPointer returnedAlgoCount,
-                                cudnnConvolutionBwdDataAlgoPerf_t perfResults);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnFilterStruct filterDesc,
-                                cudnnTensorStruct diffDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnTensorStruct gradDesc,
-                                int requestedAlgoCount,
-                                IntBuffer returnedAlgoCount,
-                                cudnnConvolutionBwdDataAlgoPerf_t perfResults);
-public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataAlgorithm_v7(
-                                cudnnContext handle,
-                                cudnnFilterStruct filterDesc,
-                                cudnnTensorStruct diffDesc,
-                                cudnnConvolutionStruct convDesc,
-                                cudnnTensorStruct gradDesc,
-                                int requestedAlgoCount,
-                                int[] returnedAlgoCount,
-                                cudnnConvolutionBwdDataAlgoPerf_t perfResults);
-
  /* Helper function to return the minimum size of the workspace to be passed to the convolution given an algo*/
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionBackwardDataWorkspaceSize(
                                 cudnnContext handle,
@@ -1605,8 +1431,8 @@ public static native @Cast("cudnnStatus_t") int cudnnSoftmaxBackward(
 /** enum cudnnPoolingMode_t */
 public static final int
     CUDNN_POOLING_MAX     = 0,
-    CUDNN_POOLING_AVERAGE_COUNT_INCLUDE_PADDING = 1, /* count for average includes padded values */
-    CUDNN_POOLING_AVERAGE_COUNT_EXCLUDE_PADDING = 2, /* count for average does not include padded values */
+    CUDNN_POOLING_AVERAGE_COUNT_INCLUDE_PADDING = 1, // count for average includes padded values
+    CUDNN_POOLING_AVERAGE_COUNT_EXCLUDE_PADDING = 2, // count for average does not include padded values
     CUDNN_POOLING_MAX_DETERMINISTIC     = 3;
 
 /* Create an instance of pooling descriptor */
@@ -1788,8 +1614,7 @@ public static final int
     CUDNN_ACTIVATION_RELU         = 1,
     CUDNN_ACTIVATION_TANH         = 2,
     CUDNN_ACTIVATION_CLIPPED_RELU = 3,
-    CUDNN_ACTIVATION_ELU          = 4,
-    CUDNN_ACTIVATION_IDENTITY     = 5;
+    CUDNN_ACTIVATION_ELU          = 4;
 
 /* Activation functions: All of the form "output = alpha * Op(inputs) + beta * output" */
 public static native @Cast("cudnnStatus_t") int cudnnCreateActivationDescriptor(
@@ -1853,15 +1678,15 @@ public static native @Cast("cudnnStatus_t") int cudnnActivationBackward(
 public static native @Cast("cudnnStatus_t") int cudnnCreateLRNDescriptor(
                                 @ByPtrPtr cudnnLRNStruct normDesc );
 
-public static final int CUDNN_LRN_MIN_N =     1;       /* minimum allowed lrnN */
-public static final int CUDNN_LRN_MAX_N =     16;      /* maximum allowed lrnN */
-public static final double CUDNN_LRN_MIN_K =     1e-5;    /* minimum allowed lrnK */
-public static final double CUDNN_LRN_MIN_BETA =  0.01;    /* minimum allowed lrnBeta */
+public static final int CUDNN_LRN_MIN_N =     1;       // minimum allowed lrnN
+public static final int CUDNN_LRN_MAX_N =     16;      // maximum allowed lrnN
+public static final double CUDNN_LRN_MIN_K =     1e-5;    // minimum allowed lrnK
+public static final double CUDNN_LRN_MIN_BETA =  0.01;    // minimum allowed lrnBeta
 
 /* LRN layer mode */
 /** enum cudnnLRNMode_t */
 public static final int
-    CUDNN_LRN_CROSS_CHANNEL_DIM1 = 0;/* Normalize across tensor's dimA[1] dimension */
+    CUDNN_LRN_CROSS_CHANNEL_DIM1 = 0;// Normalize across tensor's dimA[1] dimension
 
 /*
 * Uses a window [center-lookBehind, center+lookAhead], where
@@ -1963,23 +1788,17 @@ public static native @Cast("cudnnStatus_t") int cudnnDivisiveNormalizationBackwa
                                 @Const Pointer beta,
                                 cudnnTensorStruct dXdMeansDesc,
                                 Pointer dx,
-                                Pointer dMeans ); /* output means differential, can be NULL */
+                                Pointer dMeans ); // output means differential, can be NULL
 
 /** enum cudnnBatchNormMode_t */
 public static final int
-    /* bnScale, bnBias tensor dims are 1xCxHxWx.. (one value per CHW...-slice, normalized over N slice) */
-    CUDNN_BATCHNORM_PER_ACTIVATION     = 0,
+    // bnScale, bnBias tensor dims are 1xCxHxWx.. (one value per CHW...-slice, normalized over N slice)
+    CUDNN_BATCHNORM_PER_ACTIVATION = 0,
 
-    /* bnScale, bnBias tensor dims are 1xCx1x1 (one value per C-dim normalized over Nx1xHxW subtensors) */
-    CUDNN_BATCHNORM_SPATIAL            = 1,
+    //bnScale, bnBias tensor dims are 1xCx1x1 (one value per C-dim normalized over Nx1xHxW subtensors)
+    CUDNN_BATCHNORM_SPATIAL        = 1;
 
-    /* 
-     * bnScale, bnBias tensor dims are 1xCx1x1 (one value per C-dim normalized over Nx1xHxW subtensors). 
-     * May be faster than CUDNN_BATCHNORM_SPATIAL but imposes some limits on the range of values 
-     */
-    CUDNN_BATCHNORM_SPATIAL_PERSISTENT = 2;
-
-public static final double CUDNN_BN_MIN_EPSILON = 1e-5; /* Minimum epsilon allowed to be used in the Batch Normalization formula */
+public static final double CUDNN_BN_MIN_EPSILON = 1e-5; // Minimum epsilon allowed to be used in the Batch Normalization formula
 
 /*
 * Derives a tensor descriptor from layer data descriptor for BatchNormalization 
@@ -2065,7 +1884,8 @@ public static native @Cast("cudnnStatus_t") int cudnnBatchNormalizationBackward(
 public static final int
     CUDNN_SAMPLER_BILINEAR = 0;
  
-public static native @Cast("cudnnStatus_t") int cudnnCreateSpatialTransformerDescriptor(
+public static native @Cast("cudnnStatus_t") int cudnnCreateSpatialTransformerDescriptor( 
+
                                @ByPtrPtr cudnnSpatialTransformerStruct stDesc);
  
 public static native @Cast("cudnnStatus_t") int cudnnSetSpatialTransformerNdDescriptor(
@@ -2153,43 +1973,14 @@ public static native @Cast("cudnnStatus_t") int cudnnSetDropoutDescriptor(cudnnD
                                                     @Cast("size_t") long stateSizeInBytes, 
                                                     @Cast("unsigned long long") long seed);
 
-// Restores the dropout descriptor to a previously saved-off state
-public static native @Cast("cudnnStatus_t") int cudnnRestoreDropoutDescriptor(cudnnDropoutStruct dropoutDesc, 
-                                                        cudnnContext handle,
-                                                        float dropout, 
-                                                        Pointer states, 
-                                                        @Cast("size_t") long stateSizeInBytes, 
-                                                        @Cast("unsigned long long") long seed);
-
-public static native @Cast("cudnnStatus_t") int cudnnGetDropoutDescriptor(cudnnDropoutStruct dropoutDesc, 
-                                                    cudnnContext handle,
-                                                    FloatPointer dropout, 
-                                                    @Cast("void**") PointerPointer states,
-                                                    @Cast("unsigned long long*") LongPointer seed);
-public static native @Cast("cudnnStatus_t") int cudnnGetDropoutDescriptor(cudnnDropoutStruct dropoutDesc, 
-                                                    cudnnContext handle,
-                                                    FloatPointer dropout, 
-                                                    @Cast("void**") @ByPtrPtr Pointer states,
-                                                    @Cast("unsigned long long*") LongPointer seed);
-public static native @Cast("cudnnStatus_t") int cudnnGetDropoutDescriptor(cudnnDropoutStruct dropoutDesc, 
-                                                    cudnnContext handle,
-                                                    FloatBuffer dropout, 
-                                                    @Cast("void**") @ByPtrPtr Pointer states,
-                                                    @Cast("unsigned long long*") LongBuffer seed);
-public static native @Cast("cudnnStatus_t") int cudnnGetDropoutDescriptor(cudnnDropoutStruct dropoutDesc, 
-                                                    cudnnContext handle,
-                                                    float[] dropout, 
-                                                    @Cast("void**") @ByPtrPtr Pointer states,
-                                                    @Cast("unsigned long long*") long[] seed);
-                                                    
 public static native @Cast("cudnnStatus_t") int cudnnDropoutForward(cudnnContext handle, 
-                                              cudnnDropoutStruct dropoutDesc,
-                                              cudnnTensorStruct xdesc, 
-                                              @Const Pointer x,
-                                              cudnnTensorStruct ydesc,
-                                              Pointer y,
-                                              Pointer reserveSpace,
-                                              @Cast("size_t") long reserveSpaceSizeInBytes);
+                                                      cudnnDropoutStruct dropoutDesc,
+                                                      cudnnTensorStruct xdesc, 
+                                                      @Const Pointer x,
+                                                      cudnnTensorStruct ydesc,
+                                                      Pointer y,
+                                                      Pointer reserveSpace,
+                                                      @Cast("size_t") long reserveSpaceSizeInBytes);
 
 public static native @Cast("cudnnStatus_t") int cudnnDropoutBackward(cudnnContext handle, 
                                                cudnnDropoutStruct dropoutDesc,
@@ -2203,15 +1994,15 @@ public static native @Cast("cudnnStatus_t") int cudnnDropoutBackward(cudnnContex
 /* RNN API */
 /** enum cudnnRNNMode_t */
 public static final int
-    CUDNN_RNN_RELU = 0, /* Stock RNN with ReLu activation */
-    CUDNN_RNN_TANH = 1, /* Stock RNN with tanh activation */
-    CUDNN_LSTM = 2,     /* LSTM with no peephole connections */
-    CUDNN_GRU = 3;       /* Using h' = tanh(r * Uh(t-1) + Wx) and h = (1 - z) * h' + z * h(t-1); */
+    CUDNN_RNN_RELU = 0, // Stock RNN with ReLu activation
+    CUDNN_RNN_TANH = 1, // Stock RNN with tanh activation
+    CUDNN_LSTM = 2,     // LSTM with no peephole connections
+    CUDNN_GRU = 3;       // Using h' = tanh(r * Uh(t-1) + Wx) and h = (1 - z) * h' + z * h(t-1);
 
 /** enum cudnnDirectionMode_t */
 public static final int
    CUDNN_UNIDIRECTIONAL = 0,
-   CUDNN_BIDIRECTIONAL = 1;      /* Using output concatination at each step. Do we also want to support output sum? */
+   CUDNN_BIDIRECTIONAL = 1;      // Using output concatination at each step. Do we also want to support output sum?
 
 /** enum cudnnRNNInputMode_t */
 public static final int
@@ -2221,25 +2012,10 @@ public static final int
   
 /** enum cudnnRNNAlgo_t */
 public static final int
-    CUDNN_RNN_ALGO_STANDARD        = 0, 
-    CUDNN_RNN_ALGO_PERSIST_STATIC  = 1,
-    CUDNN_RNN_ALGO_PERSIST_DYNAMIC = 2,
-    CUDNN_RNN_ALGO_COUNT           = 3;  
-
-@Opaque public static class cudnnAlgorithmStruct extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cudnnAlgorithmStruct() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnAlgorithmStruct(Pointer p) { super(p); }
-}
-
-@Opaque public static class cudnnAlgorithmPerformanceStruct extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cudnnAlgorithmPerformanceStruct() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnAlgorithmPerformanceStruct(Pointer p) { super(p); }
-}
-
+    CUDNN_RNN_ALGO_STANDARD = 0, 
+    CUDNN_RNN_ALGO_PERSIST_STATIC = 1,
+    CUDNN_RNN_ALGO_PERSIST_DYNAMIC = 2;  
+  
 @Opaque public static class cudnnRNNStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public cudnnRNNStruct() { super((Pointer)null); }
@@ -2250,650 +2026,6 @@ public static final int
 public static native @Cast("cudnnStatus_t") int cudnnCreateRNNDescriptor(@ByPtrPtr cudnnRNNStruct rnnDesc);
 public static native @Cast("cudnnStatus_t") int cudnnDestroyRNNDescriptor(cudnnRNNStruct rnnDesc);
 
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNForwardInferenceAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNForwardInferenceAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNForwardInferenceAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                int[] count);
-
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardInferenceAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntPointer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardInferenceAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntBuffer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardInferenceAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    int[] returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardInferenceAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntPointer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardInferenceAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntBuffer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardInferenceAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    int[] returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNForwardTrainingAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNForwardTrainingAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNForwardTrainingAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                int[] count);
-
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardTrainingAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntPointer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes,
-                                                    Pointer reserveSpace,
-                                                    @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardTrainingAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntBuffer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes,
-                                                    Pointer reserveSpace,
-                                                    @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardTrainingAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    int[] returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes,
-                                                    Pointer reserveSpace,
-                                                    @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardTrainingAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntPointer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes,
-                                                    Pointer reserveSpace,
-                                                    @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardTrainingAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    IntBuffer returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes,
-                                                    Pointer reserveSpace,
-                                                    @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNForwardTrainingAlgorithmEx( cudnnContext handle,
-                                                    cudnnRNNStruct rnnDesc,
-                                                    int seqLength,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                    @Const Pointer x,
-                                                    cudnnTensorStruct hxDesc,
-                                                    @Const Pointer hx,
-                                                    cudnnTensorStruct cxDesc,
-                                                    @Const Pointer cx,
-                                                    cudnnFilterStruct wDesc,
-                                                    @Const Pointer w,
-                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                    Pointer y,
-                                                    cudnnTensorStruct hyDesc,
-                                                    Pointer hy,
-                                                    cudnnTensorStruct cyDesc,
-                                                    Pointer cy,
-                                                    float findIntensity,
-                                                    int requestedAlgoCount,
-                                                    int[] returnedAlgoCount,
-                                                    @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                    Pointer workspace,
-                                                    @Cast("size_t") long workSpaceSizeInBytes,
-                                                    Pointer reserveSpace,
-                                                    @Cast("size_t") long reserveSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNBackwardDataAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNBackwardDataAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNBackwardDataAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                int[] count);
-
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardDataAlgorithmEx( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                float findIntensity,
-                                                int requestedAlgoCount,
-                                                IntPointer returnedAlgoCount,
-                                                @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardDataAlgorithmEx( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                float findIntensity,
-                                                int requestedAlgoCount,
-                                                IntBuffer returnedAlgoCount,
-                                                @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardDataAlgorithmEx( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                float findIntensity,
-                                                int requestedAlgoCount,
-                                                int[] returnedAlgoCount,
-                                                @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardDataAlgorithmEx( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                float findIntensity,
-                                                int requestedAlgoCount,
-                                                IntPointer returnedAlgoCount,
-                                                @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardDataAlgorithmEx( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                float findIntensity,
-                                                int requestedAlgoCount,
-                                                IntBuffer returnedAlgoCount,
-                                                @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardDataAlgorithmEx( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                float findIntensity,
-                                                int requestedAlgoCount,
-                                                int[] returnedAlgoCount,
-                                                @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNBackwardWeightsAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntPointer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNBackwardWeightsAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                IntBuffer count);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNBackwardWeightsAlgorithmMaxCount(
-                                cudnnContext handle,
-                          cudnnRNNStruct rnnDesc,
-                                int[] count);
-
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgorithmEx( cudnnContext handle,
-                                                   cudnnRNNStruct rnnDesc,
-                                                   int seqLength,
-                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                   @Const Pointer x,
-                                                   cudnnTensorStruct hxDesc,
-                                                   @Const Pointer hx,
-                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc, 
-                                                   @Const Pointer y,
-                                                   float findIntensity,
-                                                   int requestedAlgoCount,
-                                                   IntPointer returnedAlgoCount,
-                                                   @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                   @Const Pointer workspace, 
-                                                   @Cast("size_t") long workSpaceSizeInBytes, 
-                                                   cudnnFilterStruct dwDesc, 
-                                                   Pointer dw,
-                                                   @Const Pointer reserveSpace, 
-                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgorithmEx( cudnnContext handle,
-                                                   cudnnRNNStruct rnnDesc,
-                                                   int seqLength,
-                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                   @Const Pointer x,
-                                                   cudnnTensorStruct hxDesc,
-                                                   @Const Pointer hx,
-                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
-                                                   @Const Pointer y,
-                                                   float findIntensity,
-                                                   int requestedAlgoCount,
-                                                   IntBuffer returnedAlgoCount,
-                                                   @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                   @Const Pointer workspace, 
-                                                   @Cast("size_t") long workSpaceSizeInBytes, 
-                                                   cudnnFilterStruct dwDesc, 
-                                                   Pointer dw,
-                                                   @Const Pointer reserveSpace, 
-                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgorithmEx( cudnnContext handle,
-                                                   cudnnRNNStruct rnnDesc,
-                                                   int seqLength,
-                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                   @Const Pointer x,
-                                                   cudnnTensorStruct hxDesc,
-                                                   @Const Pointer hx,
-                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc, 
-                                                   @Const Pointer y,
-                                                   float findIntensity,
-                                                   int requestedAlgoCount,
-                                                   int[] returnedAlgoCount,
-                                                   @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                   @Const Pointer workspace, 
-                                                   @Cast("size_t") long workSpaceSizeInBytes, 
-                                                   cudnnFilterStruct dwDesc, 
-                                                   Pointer dw,
-                                                   @Const Pointer reserveSpace, 
-                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgorithmEx( cudnnContext handle,
-                                                   cudnnRNNStruct rnnDesc,
-                                                   int seqLength,
-                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                   @Const Pointer x,
-                                                   cudnnTensorStruct hxDesc,
-                                                   @Const Pointer hx,
-                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
-                                                   @Const Pointer y,
-                                                   float findIntensity,
-                                                   int requestedAlgoCount,
-                                                   IntPointer returnedAlgoCount,
-                                                   @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                   @Const Pointer workspace, 
-                                                   @Cast("size_t") long workSpaceSizeInBytes, 
-                                                   cudnnFilterStruct dwDesc, 
-                                                   Pointer dw,
-                                                   @Const Pointer reserveSpace, 
-                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgorithmEx( cudnnContext handle,
-                                                   cudnnRNNStruct rnnDesc,
-                                                   int seqLength,
-                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                   @Const Pointer x,
-                                                   cudnnTensorStruct hxDesc,
-                                                   @Const Pointer hx,
-                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc, 
-                                                   @Const Pointer y,
-                                                   float findIntensity,
-                                                   int requestedAlgoCount,
-                                                   IntBuffer returnedAlgoCount,
-                                                   @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                   @Const Pointer workspace, 
-                                                   @Cast("size_t") long workSpaceSizeInBytes, 
-                                                   cudnnFilterStruct dwDesc, 
-                                                   Pointer dw,
-                                                   @Const Pointer reserveSpace, 
-                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgorithmEx( cudnnContext handle,
-                                                   cudnnRNNStruct rnnDesc,
-                                                   int seqLength,
-                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                   @Const Pointer x,
-                                                   cudnnTensorStruct hxDesc,
-                                                   @Const Pointer hx,
-                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
-                                                   @Const Pointer y,
-                                                   float findIntensity,
-                                                   int requestedAlgoCount,
-                                                   int[] returnedAlgoCount,
-                                                   @ByPtrPtr cudnnAlgorithmPerformanceStruct perfResults,
-                                                   @Const Pointer workspace, 
-                                                   @Cast("size_t") long workSpaceSizeInBytes, 
-                                                   cudnnFilterStruct dwDesc, 
-                                                   Pointer dw,
-                                                   @Const Pointer reserveSpace, 
-                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
-
 @Opaque public static class cudnnPersistentRNNPlan extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public cudnnPersistentRNNPlan() { super((Pointer)null); }
@@ -2902,619 +2034,387 @@ public static native @Cast("cudnnStatus_t") int cudnnFindRNNBackwardWeightsAlgor
 }
 
                    
-/* Expensive. Creates the plan for the specific settings. */
+// Expensive. Creates the plan for the specific settings.
 public static native @Cast("cudnnStatus_t") int cudnnCreatePersistentRNNPlan(cudnnRNNStruct rnnDesc,
-                                                       int minibatch,
-                                                       @Cast("const cudnnDataType_t") int dataType,
-                                                       @ByPtrPtr cudnnPersistentRNNPlan plan);
-
-/* Attaches the plan to the descriptor. */
+                                             int minibatch,
+                                             @Cast("const cudnnDataType_t") int dataType,
+                                             @ByPtrPtr cudnnPersistentRNNPlan plan);
+                                             
+// Attaches the plan to the descriptor. 
 public static native @Cast("cudnnStatus_t") int cudnnSetPersistentRNNPlan(cudnnRNNStruct rnnDesc,
-                                                    cudnnPersistentRNNPlan plan);
-
+                                          cudnnPersistentRNNPlan plan);
+                                          
 public static native @Cast("cudnnStatus_t") int cudnnDestroyPersistentRNNPlan(cudnnPersistentRNNPlan plan);
+                                          
 
-public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor(cudnnContext handle,
+
+public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor_v6(cudnnContext handle, 
                                                 cudnnRNNStruct rnnDesc,
-                                                int hiddenSize,
-                                                int numLayers,
+                                                int hiddenSize, 
+                                                int numLayers, 
                                                 cudnnDropoutStruct dropoutDesc,
-                                                @Cast("cudnnRNNInputMode_t") int inputMode,          
-                                                @Cast("cudnnDirectionMode_t") int direction,
-                                                @Cast("cudnnRNNMode_t") int mode,
-                                                @Cast("cudnnRNNAlgo_t") int algo,
+                                                @Cast("cudnnRNNInputMode_t") int inputMode,                                                 
+                                                @Cast("cudnnDirectionMode_t") int direction, 
+                                                @Cast("cudnnRNNMode_t") int mode, 
+                                                @Cast("cudnnRNNAlgo_t") int algo, 
                                                 @Cast("cudnnDataType_t") int dataType);
 
-public static native @Cast("cudnnStatus_t") int cudnnSetRNNProjectionLayers(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int recProjSize,
-                                                int outProjSize);
 
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNProjectionLayers(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                IntPointer recProjSize,
-                                                IntPointer outProjSize);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNProjectionLayers(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                IntBuffer recProjSize,
-                                                IntBuffer outProjSize);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNProjectionLayers(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int[] recProjSize,
-                                                int[] outProjSize);
-
-public static native @Cast("cudnnStatus_t") int cudnnSetRNNAlgorithmDescriptor(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                cudnnAlgorithmStruct algoDesc);
+public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor(cudnnRNNStruct rnnDesc,
+                                                int hiddenSize, 
+                                                int numLayers, 
+                                                cudnnDropoutStruct dropoutDesc,
+                                                @Cast("cudnnRNNInputMode_t") int inputMode,                                                 
+                                                @Cast("cudnnDirectionMode_t") int direction, 
+                                                @Cast("cudnnRNNMode_t") int mode, 
+                                                @Cast("cudnnDataType_t") int dataType);
 
 
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNDescriptor(cudnnContext cudnnHandle,
-                                                cudnnRNNStruct rnnDesc,
-                                                IntPointer hiddenSize, 
-                                                IntPointer numLayers, 
-                                                @ByPtrPtr cudnnDropoutStruct dropoutDesc,
-                                                @Cast("cudnnRNNInputMode_t*") IntPointer inputMode, 
-                                                @Cast("cudnnDirectionMode_t*") IntPointer direction, 
-                                                @Cast("cudnnRNNMode_t*") IntPointer mode, 
-                                                @Cast("cudnnRNNAlgo_t*") IntPointer algo, 
-                                                @Cast("cudnnDataType_t*") IntPointer dataType);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNDescriptor(cudnnContext cudnnHandle,
-                                                cudnnRNNStruct rnnDesc,
-                                                IntBuffer hiddenSize, 
-                                                IntBuffer numLayers, 
-                                                @ByPtrPtr cudnnDropoutStruct dropoutDesc,
-                                                @Cast("cudnnRNNInputMode_t*") IntBuffer inputMode, 
-                                                @Cast("cudnnDirectionMode_t*") IntBuffer direction, 
-                                                @Cast("cudnnRNNMode_t*") IntBuffer mode, 
-                                                @Cast("cudnnRNNAlgo_t*") IntBuffer algo, 
-                                                @Cast("cudnnDataType_t*") IntBuffer dataType);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNDescriptor(cudnnContext cudnnHandle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int[] hiddenSize, 
-                                                int[] numLayers, 
-                                                @ByPtrPtr cudnnDropoutStruct dropoutDesc,
-                                                @Cast("cudnnRNNInputMode_t*") int[] inputMode, 
-                                                @Cast("cudnnDirectionMode_t*") int[] direction, 
-                                                @Cast("cudnnRNNMode_t*") int[] mode, 
-                                                @Cast("cudnnRNNAlgo_t*") int[] algo, 
-                                                @Cast("cudnnDataType_t*") int[] dataType);
 
-public static native @Cast("cudnnStatus_t") int cudnnSetRNNMatrixMathType(cudnnRNNStruct desc, @Cast("cudnnMathType_t") int math);
+// dataType in the RNN descriptor is used to determine math precision
+// dataType in weight descriptors and input descriptors is used to describe storage
 
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNMatrixMathType(cudnnRNNStruct rnnDesc, @Cast("cudnnMathType_t*") IntPointer mType);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNMatrixMathType(cudnnRNNStruct rnnDesc, @Cast("cudnnMathType_t*") IntBuffer mType);
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNMatrixMathType(cudnnRNNStruct rnnDesc, @Cast("cudnnMathType_t*") int[] mType);
-                                                
-/* dataType in the RNN descriptor is used to determine math precision */
-/* dataType in weight descriptors and input descriptors is used to describe storage */
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNWorkspaceSize( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,  
-                                                int seqLength, 
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                @Cast("size_t*") SizeTPointer sizeInBytes);
+                                                    cudnnRNNStruct rnnDesc,  
+                                                    int seqLength, 
+                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
+                                                    @Cast("size_t*") SizeTPointer sizeInBytes
+                                                    );
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNWorkspaceSize( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,  
-                                                int seqLength, 
-                                                @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                @Cast("size_t*") SizeTPointer sizeInBytes);
+                                                    cudnnRNNStruct rnnDesc,  
+                                                    int seqLength, 
+                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc,
+                                                    @Cast("size_t*") SizeTPointer sizeInBytes
+                                                    );
                                                       
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNTrainingReserveSize( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,  
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                @Cast("size_t*") SizeTPointer sizeInBytes);
+                                                          cudnnRNNStruct rnnDesc,  
+                                                          int seqLength, 
+                                                          @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
+                                                          @Cast("size_t*") SizeTPointer sizeInBytes
+                                                    );
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNTrainingReserveSize( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,  
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                @Cast("size_t*") SizeTPointer sizeInBytes);
+                                                          cudnnRNNStruct rnnDesc,  
+                                                          int seqLength, 
+                                                          @Cast("cudnnTensorStruct**") PointerPointer xDesc,
+                                                          @Cast("size_t*") SizeTPointer sizeInBytes
+                                                    );
+
                                                     
-public static native @Cast("cudnnStatus_t") int cudnnGetRNNParamsSize(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,  
-                                                cudnnTensorStruct xDesc,
-                                                @Cast("size_t*") SizeTPointer sizeInBytes,
-                                                @Cast("cudnnDataType_t") int dataType);
+public static native @Cast("cudnnStatus_t") int cudnnGetRNNParamsSize( cudnnContext handle,
+                                                 cudnnRNNStruct rnnDesc,  
+                                                 cudnnTensorStruct xDesc,                                                    
+                                                 @Cast("size_t*") SizeTPointer sizeInBytes,
+                                                 @Cast("cudnnDataType_t") int dataType
+                                                    );
 
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNLinLayerMatrixParams( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc, 
-                                                int pseudoLayer,
-                                                cudnnTensorStruct xDesc,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w, 
-                                                int linLayerID,  
-                                                cudnnFilterStruct linLayerMatDesc,
-                                                @Cast("void**") PointerPointer linLayerMat);
+                             cudnnRNNStruct rnnDesc,  
+                             int layer,
+                             cudnnTensorStruct xDesc, 
+                             cudnnFilterStruct wDesc, 
+                             @Const Pointer w, 
+                             int linLayerID,  
+                             cudnnFilterStruct linLayerMatDesc, 
+                             @Cast("void**") PointerPointer linLayerMat
+                             );
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNLinLayerMatrixParams( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc, 
-                                                int pseudoLayer,
-                                                cudnnTensorStruct xDesc,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w, 
-                                                int linLayerID,  
-                                                cudnnFilterStruct linLayerMatDesc,
-                                                @Cast("void**") @ByPtrPtr Pointer linLayerMat);
+                             cudnnRNNStruct rnnDesc,  
+                             int layer,
+                             cudnnTensorStruct xDesc, 
+                             cudnnFilterStruct wDesc, 
+                             @Const Pointer w, 
+                             int linLayerID,  
+                             cudnnFilterStruct linLayerMatDesc, 
+                             @Cast("void**") @ByPtrPtr Pointer linLayerMat
+                             );
 
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNLinLayerBiasParams( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc, 
-                                                int pseudoLayer,
-                                                cudnnTensorStruct xDesc, 
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                int linLayerID,
-                                                cudnnFilterStruct linLayerBiasDesc,
-                                                @Cast("void**") PointerPointer linLayerBias);
+                             cudnnRNNStruct rnnDesc,  
+                             int layer,
+                             cudnnTensorStruct xDesc, 
+                             cudnnFilterStruct wDesc, 
+                             @Const Pointer w, 
+                             int linLayerID, 
+                             cudnnFilterStruct linLayerBiasDesc, 
+                             @Cast("void**") PointerPointer linLayerBias                       
+                             );
 public static native @Cast("cudnnStatus_t") int cudnnGetRNNLinLayerBiasParams( cudnnContext handle,
+                             cudnnRNNStruct rnnDesc,  
+                             int layer,
+                             cudnnTensorStruct xDesc, 
+                             cudnnFilterStruct wDesc, 
+                             @Const Pointer w, 
+                             int linLayerID, 
+                             cudnnFilterStruct linLayerBiasDesc, 
+                             @Cast("void**") @ByPtrPtr Pointer linLayerBias                       
+                             );
+
+
+public static native @Cast("cudnnStatus_t") int cudnnRNNForwardInference( cudnnContext handle, 
+                                                    cudnnRNNStruct rnnDesc, 
+                                                    int seqLength, 
+                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc, 
+                                                    @Const Pointer x, 
+                                                    cudnnTensorStruct hxDesc, 
+                                                    @Const Pointer hx, 
+                                                    cudnnTensorStruct cxDesc, 
+                                                    @Const Pointer cx, 
+                                                    cudnnFilterStruct wDesc, 
+                                                    @Const Pointer w, 
+                                                    @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,  
+                                                    Pointer y, 
+                                                    cudnnTensorStruct hyDesc, 
+                                                    Pointer hy, 
+                                                    cudnnTensorStruct cyDesc, 
+                                                    Pointer cy, 
+                                                    Pointer workspace, 
+                                                    @Cast("size_t") long workSpaceSizeInBytes);
+public static native @Cast("cudnnStatus_t") int cudnnRNNForwardInference( cudnnContext handle, 
+                                                    cudnnRNNStruct rnnDesc, 
+                                                    int seqLength, 
+                                                    @Cast("cudnnTensorStruct**") PointerPointer xDesc, 
+                                                    @Const Pointer x, 
+                                                    cudnnTensorStruct hxDesc, 
+                                                    @Const Pointer hx, 
+                                                    cudnnTensorStruct cxDesc, 
+                                                    @Const Pointer cx, 
+                                                    cudnnFilterStruct wDesc, 
+                                                    @Const Pointer w, 
+                                                    @Cast("cudnnTensorStruct**") PointerPointer yDesc,  
+                                                    Pointer y, 
+                                                    cudnnTensorStruct hyDesc, 
+                                                    Pointer hy, 
+                                                    cudnnTensorStruct cyDesc, 
+                                                    Pointer cy, 
+                                                    Pointer workspace, 
+                                                    @Cast("size_t") long workSpaceSizeInBytes);             
+
+                                           
+
+public static native @Cast("cudnnStatus_t") int cudnnRNNForwardTraining( cudnnContext handle, 
+                                                   cudnnRNNStruct rnnDesc, 
+                                                   int seqLength, 
+                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc, 
+                                                   @Const Pointer x, 
+                                                   cudnnTensorStruct hxDesc, 
+                                                   @Const Pointer hx, 
+                                                   cudnnTensorStruct cxDesc, 
+                                                   @Const Pointer cx, 
+                                                   cudnnFilterStruct wDesc, 
+                                                   @Const Pointer w, 
+                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,  
+                                                   Pointer y, 
+                                                   cudnnTensorStruct hyDesc, 
+                                                   Pointer hy, 
+                                                   cudnnTensorStruct cyDesc, 
+                                                   Pointer cy, 
+                                                   Pointer workspace, 
+                                                   @Cast("size_t") long workSpaceSizeInBytes,
+                                                   Pointer reserveSpace, 
+                                                   @Cast("size_t") long reserveSpaceSizeInBytes);
+public static native @Cast("cudnnStatus_t") int cudnnRNNForwardTraining( cudnnContext handle, 
+                                                   cudnnRNNStruct rnnDesc, 
+                                                   int seqLength, 
+                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc, 
+                                                   @Const Pointer x, 
+                                                   cudnnTensorStruct hxDesc, 
+                                                   @Const Pointer hx, 
+                                                   cudnnTensorStruct cxDesc, 
+                                                   @Const Pointer cx, 
+                                                   cudnnFilterStruct wDesc, 
+                                                   @Const Pointer w, 
+                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc,  
+                                                   Pointer y, 
+                                                   cudnnTensorStruct hyDesc, 
+                                                   Pointer hy, 
+                                                   cudnnTensorStruct cyDesc, 
+                                                   Pointer cy, 
+                                                   Pointer workspace, 
+                                                   @Cast("size_t") long workSpaceSizeInBytes,
+                                                   Pointer reserveSpace, 
+                                                   @Cast("size_t") long reserveSpaceSizeInBytes);
+
+public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnContext handle, 
                                                 cudnnRNNStruct rnnDesc, 
-                                                int pseudoLayer,
-                                                cudnnTensorStruct xDesc, 
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                int linLayerID,
-                                                cudnnFilterStruct linLayerBiasDesc,
-                                                @Cast("void**") @ByPtrPtr Pointer linLayerBias);
-
-public static native @Cast("cudnnStatus_t") int cudnnRNNForwardInference( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                @Const Pointer x,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                Pointer y,
-                                                cudnnTensorStruct hyDesc,
-                                                Pointer hy,
-                                                cudnnTensorStruct cyDesc,
-                                                Pointer cy,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnRNNForwardInference( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                @Const Pointer x,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                Pointer y,
-                                                cudnnTensorStruct hyDesc,
-                                                Pointer hy,
-                                                cudnnTensorStruct cyDesc,
-                                                Pointer cy,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnRNNForwardTraining( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                @Const Pointer x,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                Pointer y,
-                                                cudnnTensorStruct hyDesc,
-                                                Pointer hy,
-                                                cudnnTensorStruct cyDesc,
-                                                Pointer cy,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnRNNForwardTraining( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                @Const Pointer x,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                Pointer y,
-                                                cudnnTensorStruct hyDesc,
-                                                Pointer hy,
-                                                cudnnTensorStruct cyDesc,
-                                                Pointer cy,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer yDesc,
-                                                @Const Pointer y,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dyDesc,
-                                                @Const Pointer dy,
-                                                cudnnTensorStruct dhyDesc,
-                                                @Const Pointer dhy,
-                                                cudnnTensorStruct dcyDesc,
-                                                @Const Pointer dcy,
-                                                cudnnFilterStruct wDesc,
-                                                @Const Pointer w,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
-                                                cudnnTensorStruct cxDesc,
-                                                @Const Pointer cx,
-                                                @Cast("cudnnTensorStruct**") PointerPointer dxDesc,
-                                                Pointer dx,
-                                                cudnnTensorStruct dhxDesc,
-                                                Pointer dhx,
-                                                cudnnTensorStruct dcxDesc,
-                                                Pointer dcx,
-                                                Pointer workspace,
-                                                @Cast("size_t") long workSpaceSizeInBytes,
-                                                Pointer reserveSpace,
-                                                @Cast("size_t") long reserveSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc,
-                                                @Const Pointer x,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
+                                                int seqLength, 
                                                 @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc, 
-                                                @Const Pointer y,
-                                                @Const Pointer workspace, 
-                                                @Cast("size_t") long workSpaceSizeInBytes, 
-                                                cudnnFilterStruct dwDesc, 
-                                                Pointer dw,
-                                                @Const Pointer reserveSpace, 
-                                                @Cast("size_t") long reserveSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int seqLength,
-                                                @Cast("cudnnTensorStruct**") PointerPointer xDesc,
-                                                @Const Pointer x,
-                                                cudnnTensorStruct hxDesc,
-                                                @Const Pointer hx,
+                                                @Const Pointer y,                                                
+                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dyDesc, 
+                                                @Const Pointer dy, 
+                                                cudnnTensorStruct dhyDesc, 
+                                                @Const Pointer dhy, 
+                                                cudnnTensorStruct dcyDesc, 
+                                                @Const Pointer dcy, 
+                                                cudnnFilterStruct wDesc, 
+                                                @Const Pointer w, 
+                                                cudnnTensorStruct hxDesc, 
+                                                @Const Pointer hx,                                                                  
+                                                cudnnTensorStruct cxDesc, 
+                                                @Const Pointer cx,                                                 
+                                                @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct dxDesc, 
+                                                Pointer dx, 
+                                                cudnnTensorStruct dhxDesc,
+                                                Pointer dhx,
+                                                cudnnTensorStruct dcxDesc,
+                                                Pointer dcx,
+                                                Pointer workspace,
+                                                @Cast("size_t") long workSpaceSizeInBytes,
+                                                Pointer reserveSpace, 
+                                                @Cast("size_t") long reserveSpaceSizeInBytes );
+public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardData( cudnnContext handle, 
+                                                cudnnRNNStruct rnnDesc, 
+                                                int seqLength, 
                                                 @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
-                                                @Const Pointer y,
-                                                @Const Pointer workspace, 
-                                                @Cast("size_t") long workSpaceSizeInBytes, 
-                                                cudnnFilterStruct dwDesc, 
-                                                Pointer dw,
-                                                @Const Pointer reserveSpace, 
-                                                @Cast("size_t") long reserveSpaceSizeInBytes);
-
-/** enum cudnnCTCLossAlgo_t */
-public static final int
-    CUDNN_CTC_LOSS_ALGO_DETERMINISTIC = 0,
-    CUDNN_CTC_LOSS_ALGO_NON_DETERMINISTIC = 1;
-
-/* 
-* Create an instance of a CTC (Connectionist Temporal Classification) loss descriptor
-*/
-public static native @Cast("cudnnStatus_t") int cudnnCreateCTCLossDescriptor( @ByPtrPtr cudnnCTCLossStruct ctcLossDesc );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetCTCLossDescriptor(
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("cudnnDataType_t") int compType );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptor(
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("cudnnDataType_t*") IntPointer compType );
-public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptor(
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("cudnnDataType_t*") IntBuffer compType );
-public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptor(
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("cudnnDataType_t*") int[] compType );
-
-public static native @Cast("cudnnStatus_t") int cudnnDestroyCTCLossDescriptor( cudnnCTCLossStruct ctcLossDesc );
-
-/* return the ctc costs and gradients, given the probabilities and labels */
-public static native @Cast("cudnnStatus_t") int cudnnCTCLoss( cudnnContext handle, 
-                                        cudnnTensorStruct probsDesc,
-                                        @Const Pointer probs,
-                                        @Const IntPointer labels,
-                                        @Const IntPointer labelLengths,
-                                        @Const IntPointer inputLengths,
-                                        Pointer costs,
-                                        cudnnTensorStruct gradientsDesc,
-                                        @Const Pointer gradients,
-                                        @Cast("cudnnCTCLossAlgo_t") int algo,
-                                        cudnnCTCLossStruct ctcLossDesc,
-                                        Pointer workspace,
-                                        @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnCTCLoss( cudnnContext handle, 
-                                        cudnnTensorStruct probsDesc,
-                                        @Const Pointer probs,
-                                        @Const IntBuffer labels,
-                                        @Const IntBuffer labelLengths,
-                                        @Const IntBuffer inputLengths,
-                                        Pointer costs,
-                                        cudnnTensorStruct gradientsDesc,
-                                        @Const Pointer gradients,
-                                        @Cast("cudnnCTCLossAlgo_t") int algo,
-                                        cudnnCTCLossStruct ctcLossDesc,
-                                        Pointer workspace,
-                                        @Cast("size_t") long workSpaceSizeInBytes);
-public static native @Cast("cudnnStatus_t") int cudnnCTCLoss( cudnnContext handle, 
-                                        cudnnTensorStruct probsDesc,
-                                        @Const Pointer probs,
-                                        @Const int[] labels,
-                                        @Const int[] labelLengths,
-                                        @Const int[] inputLengths,
-                                        Pointer costs,
-                                        cudnnTensorStruct gradientsDesc,
-                                        @Const Pointer gradients,
-                                        @Cast("cudnnCTCLossAlgo_t") int algo,
-                                        cudnnCTCLossStruct ctcLossDesc,
-                                        Pointer workspace,
-                                        @Cast("size_t") long workSpaceSizeInBytes);                /* the workspace size needed */
-
-/* return the workspace size needed for ctc */
-public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossWorkspaceSize(
-                                cudnnContext handle,
-                                cudnnTensorStruct probsDesc,
-                                cudnnTensorStruct gradientsDesc,
-                                @Const IntPointer labels,
-                                @Const IntPointer labelLengths,
-                                @Const IntPointer inputLengths,
-                                @Cast("cudnnCTCLossAlgo_t") int algo,
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("size_t*") SizeTPointer sizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossWorkspaceSize(
-                                cudnnContext handle,
-                                cudnnTensorStruct probsDesc,
-                                cudnnTensorStruct gradientsDesc,
-                                @Const IntBuffer labels,
-                                @Const IntBuffer labelLengths,
-                                @Const IntBuffer inputLengths,
-                                @Cast("cudnnCTCLossAlgo_t") int algo,
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("size_t*") SizeTPointer sizeInBytes );
-public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossWorkspaceSize(
-                                cudnnContext handle,
-                                cudnnTensorStruct probsDesc,
-                                cudnnTensorStruct gradientsDesc,
-                                @Const int[] labels,
-                                @Const int[] labelLengths,
-                                @Const int[] inputLengths,
-                                @Cast("cudnnCTCLossAlgo_t") int algo,
-                                cudnnCTCLossStruct ctcLossDesc,
-                                @Cast("size_t*") SizeTPointer sizeInBytes );   /* pointer to the returned workspace size */
+                                                @Const Pointer y,                                                
+                                                @Cast("cudnnTensorStruct**") PointerPointer dyDesc, 
+                                                @Const Pointer dy, 
+                                                cudnnTensorStruct dhyDesc, 
+                                                @Const Pointer dhy, 
+                                                cudnnTensorStruct dcyDesc, 
+                                                @Const Pointer dcy, 
+                                                cudnnFilterStruct wDesc, 
+                                                @Const Pointer w, 
+                                                cudnnTensorStruct hxDesc, 
+                                                @Const Pointer hx,                                                                  
+                                                cudnnTensorStruct cxDesc, 
+                                                @Const Pointer cx,                                                 
+                                                @Cast("cudnnTensorStruct**") PointerPointer dxDesc, 
+                                                Pointer dx, 
+                                                cudnnTensorStruct dhxDesc,
+                                                Pointer dhx,
+                                                cudnnTensorStruct dcxDesc,
+                                                Pointer dcx,
+                                                Pointer workspace,
+                                                @Cast("size_t") long workSpaceSizeInBytes,
+                                                Pointer reserveSpace, 
+                                                @Cast("size_t") long reserveSpaceSizeInBytes );
 
 
-public static class cudnnAlgorithm_t extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public cudnnAlgorithm_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public cudnnAlgorithm_t(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnAlgorithm_t(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public cudnnAlgorithm_t position(long position) {
-        return (cudnnAlgorithm_t)super.position(position);
-    }
-
-        @Name("algo.convFwdAlgo") public native @Cast("cudnnConvolutionFwdAlgo_t") int algo_convFwdAlgo(); public native cudnnAlgorithm_t algo_convFwdAlgo(int algo_convFwdAlgo);
-        @Name("algo.convBwdFilterAlgo") public native @Cast("cudnnConvolutionBwdFilterAlgo_t") int algo_convBwdFilterAlgo(); public native cudnnAlgorithm_t algo_convBwdFilterAlgo(int algo_convBwdFilterAlgo);
-        @Name("algo.convBwdDataAlgo") public native @Cast("cudnnConvolutionBwdDataAlgo_t") int algo_convBwdDataAlgo(); public native cudnnAlgorithm_t algo_convBwdDataAlgo(int algo_convBwdDataAlgo);
-        @Name("algo.RNNAlgo") public native @Cast("cudnnRNNAlgo_t") int algo_RNNAlgo(); public native cudnnAlgorithm_t algo_RNNAlgo(int algo_RNNAlgo);
-        @Name("algo.CTCLossAlgo") public native @Cast("cudnnCTCLossAlgo_t") int algo_CTCLossAlgo(); public native cudnnAlgorithm_t algo_CTCLossAlgo(int algo_CTCLossAlgo);
-}
-
-public static native @Cast("cudnnStatus_t") int cudnnCreateAlgorithmDescriptor(
-                                @ByPtrPtr cudnnAlgorithmStruct algoDesc );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetAlgorithmDescriptor(
-                                cudnnAlgorithmStruct algoDesc,
-                                @ByVal cudnnAlgorithm_t algorithm);
-
-public static native @Cast("cudnnStatus_t") int cudnnGetAlgorithmDescriptor(
-                                cudnnAlgorithmStruct algoDesc,
-                                cudnnAlgorithm_t algorithm);
-
-public static native @Cast("cudnnStatus_t") int cudnnCopyAlgorithmDescriptor(
-                                cudnnAlgorithmStruct src,
-                                cudnnAlgorithmStruct dest);
-
-public static native @Cast("cudnnStatus_t") int cudnnDestroyAlgorithmDescriptor(
-                                cudnnAlgorithmStruct algoDesc );
-
-public static native @Cast("cudnnStatus_t") int cudnnCreateAlgorithmPerformance(
-                                @ByPtrPtr cudnnAlgorithmPerformanceStruct algoPerf,
-                                int numberToCreate );
-
-public static native @Cast("cudnnStatus_t") int cudnnSetAlgorithmPerformance(
-                                cudnnAlgorithmPerformanceStruct algoPerf,
-                                cudnnAlgorithmStruct algoDesc,
-                                @Cast("cudnnStatus_t") int status,
-                                float time,
-                                @Cast("size_t") long memory );
-
-public static native @Cast("cudnnStatus_t") int cudnnGetAlgorithmPerformance(
-                                cudnnAlgorithmPerformanceStruct algoPerf,
-                                @ByPtrPtr cudnnAlgorithmStruct algoDesc,
-                                @Cast("cudnnStatus_t*") IntPointer status,
-                                FloatPointer time,
-                                @Cast("size_t*") SizeTPointer memory );
-public static native @Cast("cudnnStatus_t") int cudnnGetAlgorithmPerformance(
-                                cudnnAlgorithmPerformanceStruct algoPerf,
-                                @ByPtrPtr cudnnAlgorithmStruct algoDesc,
-                                @Cast("cudnnStatus_t*") IntBuffer status,
-                                FloatBuffer time,
-                                @Cast("size_t*") SizeTPointer memory );
-public static native @Cast("cudnnStatus_t") int cudnnGetAlgorithmPerformance(
-                                cudnnAlgorithmPerformanceStruct algoPerf,
-                                @ByPtrPtr cudnnAlgorithmStruct algoDesc,
-                                @Cast("cudnnStatus_t*") int[] status,
-                                float[] time,
-                                @Cast("size_t*") SizeTPointer memory );
-
-public static native @Cast("cudnnStatus_t") int cudnnDestroyAlgorithmPerformance(
-                                @ByPtrPtr cudnnAlgorithmPerformanceStruct algoPerf,
-                                int numberToDestroy);
-
-public static native @Cast("cudnnStatus_t") int cudnnGetAlgorithmSpaceSize(
-                                cudnnContext handle,
-                                cudnnAlgorithmStruct algoDesc,
-                                @Cast("size_t*") SizeTPointer algoSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnSaveAlgorithm(
-                                cudnnContext handle,
-                                cudnnAlgorithmStruct algoDesc,
-                                Pointer algoSpace,
-                                @Cast("size_t") long algoSpaceSizeInBytes);
-
-public static native @Cast("cudnnStatus_t") int cudnnRestoreAlgorithm(
-                                cudnnContext handle,
-                                Pointer algoSpace,
-                                @Cast("size_t") long algoSpaceSizeInBytes,
-                                cudnnAlgorithmStruct algoDesc);
-
-
-/** enum cudnnSeverity_t */
-public static final int
-    CUDNN_SEV_FATAL   = 0,
-    CUDNN_SEV_ERROR   = 1,
-    CUDNN_SEV_WARNING = 2,
-    CUDNN_SEV_INFO    = 3;
-
-/* Message masks to be used with cudnnSetCallback() */
-public static final long CUDNN_SEV_ERROR_EN =   (1L << CUDNN_SEV_ERROR);
-public static final long CUDNN_SEV_WARNING_EN = (1L << CUDNN_SEV_WARNING);
-public static final long CUDNN_SEV_INFO_EN =    (1L << CUDNN_SEV_INFO);
-
-/* struct containing useful informaiton for each API call */
-public static class cudnnDebug_t extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public cudnnDebug_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public cudnnDebug_t(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudnnDebug_t(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public cudnnDebug_t position(long position) {
-        return (cudnnDebug_t)super.position(position);
-    }
-
-    public native @Cast("unsigned") int cudnn_version(); public native cudnnDebug_t cudnn_version(int cudnn_version);
-    public native @Cast("cudnnStatus_t") int cudnnStatus(); public native cudnnDebug_t cudnnStatus(int cudnnStatus);
-    public native @Cast("unsigned") int time_sec(); public native cudnnDebug_t time_sec(int time_sec);              /* epoch time in seconds */
-    public native @Cast("unsigned") int time_usec(); public native cudnnDebug_t time_usec(int time_usec);             /* microseconds part of epoch time */
-    public native @Cast("unsigned") int time_delta(); public native cudnnDebug_t time_delta(int time_delta);            /* time since start in seconds */
-    public native cudnnContext handle(); public native cudnnDebug_t handle(cudnnContext handle);           /* cudnn handle */
-    public native CUstream_st stream(); public native cudnnDebug_t stream(CUstream_st stream);            /* cuda stream ID */
-    public native @Cast("unsigned long long") long pid(); public native cudnnDebug_t pid(long pid);         /* process ID */
-    public native @Cast("unsigned long long") long tid(); public native cudnnDebug_t tid(long tid);         /* thread ID */
-    public native int reserved(int i); public native cudnnDebug_t reserved(int i, int reserved);
-    @MemberGetter public native IntPointer reserved();               /* reserved for future use */
-}
-
-public static class cudnnCallback_t extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    cudnnCallback_t(Pointer p) { super(p); }
-    protected cudnnCallback_t() { allocate(); }
-    private native void allocate();
-    public native void call(@Cast("cudnnSeverity_t") int sev, Pointer udata, @Const cudnnDebug_t dbg, @Cast("const char*") BytePointer msg);
-}
-
-public static native @Cast("cudnnStatus_t") int cudnnSetCallback(
-                                @Cast("unsigned") int mask,
-                                Pointer udata,
-                                cudnnCallback_t fptr);
-
-public static native @Cast("cudnnStatus_t") int cudnnGetCallback(
-                                @Cast("unsigned*") IntPointer mask,
-                                @Cast("void**") PointerPointer udata,
-                                @ByPtrPtr cudnnCallback_t fptr);
-public static native @Cast("cudnnStatus_t") int cudnnGetCallback(
-                                @Cast("unsigned*") IntPointer mask,
-                                @Cast("void**") @ByPtrPtr Pointer udata,
-                                @ByPtrPtr cudnnCallback_t fptr);
-public static native @Cast("cudnnStatus_t") int cudnnGetCallback(
-                                @Cast("unsigned*") IntBuffer mask,
-                                @Cast("void**") @ByPtrPtr Pointer udata,
-                                @ByPtrPtr cudnnCallback_t fptr);
-public static native @Cast("cudnnStatus_t") int cudnnGetCallback(
-                                @Cast("unsigned*") int[] mask,
-                                @Cast("void**") @ByPtrPtr Pointer udata,
-                                @ByPtrPtr cudnnCallback_t fptr);
-
+public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnContext handle, 
+                                                   cudnnRNNStruct rnnDesc, 
+                                                   int seqLength, 
+                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct xDesc, 
+                                                   @Const Pointer x, 
+                                                   cudnnTensorStruct hxDesc, 
+                                                   @Const Pointer hx,                                                   
+                                                   @Cast("cudnnTensorStruct**") @ByPtrPtr cudnnTensorStruct yDesc, 
+                                                   @Const Pointer y,
+                                                   @Const Pointer workspace, 
+                                                   @Cast("size_t") long workSpaceSizeInBytes, 
+                                                   cudnnFilterStruct dwDesc, 
+                                                   Pointer dw,
+                                                   @Const Pointer reserveSpace, 
+                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
+public static native @Cast("cudnnStatus_t") int cudnnRNNBackwardWeights( cudnnContext handle, 
+                                                   cudnnRNNStruct rnnDesc, 
+                                                   int seqLength, 
+                                                   @Cast("cudnnTensorStruct**") PointerPointer xDesc, 
+                                                   @Const Pointer x, 
+                                                   cudnnTensorStruct hxDesc, 
+                                                   @Const Pointer hx,                                                   
+                                                   @Cast("cudnnTensorStruct**") PointerPointer yDesc, 
+                                                   @Const Pointer y,
+                                                   @Const Pointer workspace, 
+                                                   @Cast("size_t") long workSpaceSizeInBytes, 
+                                                   cudnnFilterStruct dwDesc, 
+                                                   Pointer dw,
+                                                   @Const Pointer reserveSpace, 
+                                                   @Cast("size_t") long reserveSpaceSizeInBytes );
+                                
 
 /* DEPRECATED routines to be removed next release : 
-   User should use the non-suffixed version (which has the API and functionality of _v6 version)
-   Routines with _v5 suffix has the functionality of the non-suffixed routines in the CUDNN V6
+   User should use the non-suffixed version (which has the API and functionality of _v5 version)
+   Routines with _v4 suffix has the functionality of the non-suffixed routines in the CUDNN V5
  */
 
-public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor_v6(cudnnContext handle,
-                                                cudnnRNNStruct rnnDesc,
-                                                int hiddenSize,
-                                                int numLayers,
-                                                cudnnDropoutStruct dropoutDesc,
-                                                @Cast("cudnnRNNInputMode_t") int inputMode,          
-                                                @Cast("cudnnDirectionMode_t") int direction,
-                                                @Cast("cudnnRNNMode_t") int mode,
-                                                @Cast("cudnnRNNAlgo_t") int algo,
-                                                @Cast("cudnnDataType_t") int dataType);
+ public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,
+        int pad_h, int pad_w, int u, int v, int dilation_h, int dilation_w, int mode) {
+    return cudnnSetConvolution2dDescriptor_v4(convDesc, pad_h, pad_w, u, v, dilation_h, dilation_w, mode);
+}
+public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                int pad_h,
+                                int pad_w,
+                                int u,
+                                int v,
+                                int dilation_h,
+                                int dilation_w,
+                                @Cast("cudnnConvolutionMode_t") int mode );
 
-public static native @Cast("cudnnStatus_t") int cudnnSetRNNDescriptor_v5(cudnnRNNStruct rnnDesc,
-                                                int hiddenSize,
-                                                int numLayers,
-                                                cudnnDropoutStruct dropoutDesc,
-                                                @Cast("cudnnRNNInputMode_t") int inputMode,
-                                                @Cast("cudnnDirectionMode_t") int direction,
-                                                @Cast("cudnnRNNMode_t") int mode,
-                                                @Cast("cudnnDataType_t") int dataType);
+public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor_v5( cudnnConvolutionStruct convDesc,
+                                                             int pad_h,
+                                                             int pad_w,
+                                                             int u,
+                                                             int v,
+                                                             int dilation_h,
+                                                             int dilation_w,
+                                                             @Cast("cudnnConvolutionMode_t") int mode,
+                                                             @Cast("cudnnDataType_t") int computeType
+                                                           );                                
 
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                IntPointer pad_h,
+                                IntPointer pad_w,
+                                IntPointer u,
+                                IntPointer v,
+                                IntPointer dilation_h,
+                                IntPointer dilation_w,
+                                @Cast("cudnnConvolutionMode_t*") IntPointer mode );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                IntBuffer pad_h,
+                                IntBuffer pad_w,
+                                IntBuffer u,
+                                IntBuffer v,
+                                IntBuffer dilation_h,
+                                IntBuffer dilation_w,
+                                @Cast("cudnnConvolutionMode_t*") IntBuffer mode );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v4(
+                                cudnnConvolutionStruct convDesc,
+                                int[] pad_h,
+                                int[] pad_w,
+                                int[] u,
+                                int[] v,
+                                int[] dilation_h,
+                                int[] dilation_w,
+                                @Cast("cudnnConvolutionMode_t*") int[] mode );
 
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+                                                            IntPointer pad_h,
+                                                            IntPointer pad_w,
+                                                            IntPointer u,
+                                                            IntPointer v,
+                                                            IntPointer dilation_h,
+                                                            IntPointer dilation_w,
+                                                            @Cast("cudnnConvolutionMode_t*") IntPointer mode,
+                                                            @Cast("cudnnDataType_t*") IntPointer computeType
+                                                         );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+                                                            IntBuffer pad_h,
+                                                            IntBuffer pad_w,
+                                                            IntBuffer u,
+                                                            IntBuffer v,
+                                                            IntBuffer dilation_h,
+                                                            IntBuffer dilation_w,
+                                                            @Cast("cudnnConvolutionMode_t*") IntBuffer mode,
+                                                            @Cast("cudnnDataType_t*") IntBuffer computeType
+                                                         );
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolution2dDescriptor_v5(  cudnnConvolutionStruct convDesc,
+                                                            int[] pad_h,
+                                                            int[] pad_w,
+                                                            int[] u,
+                                                            int[] v,
+                                                            int[] dilation_h,
+                                                            int[] dilation_w,
+                                                            @Cast("cudnnConvolutionMode_t*") int[] mode,
+                                                            @Cast("cudnnDataType_t*") int[] computeType
+                                                         );                                                                                                                                         
 // #if defined (__cplusplus)
 // #endif
 
 // #endif /* CUDNN_H_ */
-
 
 
 }

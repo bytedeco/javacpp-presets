@@ -74,7 +74,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
  */
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 9010;
+    public static final int __CUDA_API_VERSION = 8000;
 // #endif /* CUDA_FORCE_API_VERSION */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -103,7 +103,6 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 // #endif /* __CUDA_API_VERSION_INTERNAL */
 
 // #if defined(__CUDA_API_PER_THREAD_DEFAULT_STREAM)
-
 // #endif
 
 /**
@@ -127,7 +126,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 9010;
+public static final int CUDA_VERSION = 8000;
 
 // #ifdef __cplusplus
 // #endif
@@ -380,23 +379,17 @@ public static final int
 
 // #if __CUDA_API_VERSION >= 8000
 /**
- * Flags for ::cuStreamWaitValue32 and ::cuStreamWaitValue64
+ * Flags for ::cuStreamWaitValue32
  */
 /** enum CUstreamWaitValue_flags_enum */
 public static final int
-    /** Wait until (int32_t)(*addr - value) >= 0 (or int64_t for 64 bit
-                                             values). Note this is a cyclic comparison which ignores wraparound.
-                                             (Default behavior.) */
+    /** Wait until (int32_t)(*addr - value) >= 0. Note this is a
+                                             cyclic comparison which ignores wraparound. (Default behavior.) */
     CU_STREAM_WAIT_VALUE_GEQ   = 0x0,
     /** Wait until *addr == value. */
     CU_STREAM_WAIT_VALUE_EQ    = 0x1,
     /** Wait until (*addr & value) != 0. */
     CU_STREAM_WAIT_VALUE_AND   = 0x2,
-    /** Wait until ~(*addr | value) != 0. Support for this operation can be
-                                             queried with ::cuDeviceGetAttribute() and
-                                             ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR. Generally, this
-                                             requires compute capability 7.0 or greater. */
-    CU_STREAM_WAIT_VALUE_NOR   = 0x3,
     /** Follow the wait operation with a flush of outstanding remote writes. This
                                              means that, if a remote write operation is guaranteed to have reached the
                                              device before the wait can be satisfied, that write is guaranteed to be
@@ -430,10 +423,6 @@ public static final int
     CU_STREAM_MEM_OP_WAIT_VALUE_32  = 1,
     /** Represents a ::cuStreamWriteValue32 operation */
     CU_STREAM_MEM_OP_WRITE_VALUE_32 = 2,
-    /** Represents a ::cuStreamWaitValue64 operation */
-    CU_STREAM_MEM_OP_WAIT_VALUE_64  = 4,
-    /** Represents a ::cuStreamWriteValue64 operation */
-    CU_STREAM_MEM_OP_WRITE_VALUE_64 = 5,
     /** This has the same effect as ::CU_STREAM_WAIT_VALUE_FLUSH, but as a
                                                   standalone operation. */
     CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES = 3;
@@ -459,14 +448,14 @@ public static class CUstreamBatchMemOpParams extends Pointer {
         @Name("waitValue.operation") public native @Cast("CUstreamBatchMemOpType") int waitValue_operation(); public native CUstreamBatchMemOpParams waitValue_operation(int waitValue_operation);
         @Name("waitValue.address") public native @Cast("CUdeviceptr") long waitValue_address(); public native CUstreamBatchMemOpParams waitValue_address(long waitValue_address);
             @Name("waitValue.value") public native @Cast("cuuint32_t") int waitValue_value(); public native CUstreamBatchMemOpParams waitValue_value(int waitValue_value);
-            @Name("waitValue.value64") public native @Cast("cuuint64_t") int waitValue_value64(); public native CUstreamBatchMemOpParams waitValue_value64(int waitValue_value64);
+            @Name("waitValue.pad") public native @Cast("cuuint64_t") int waitValue_pad(); public native CUstreamBatchMemOpParams waitValue_pad(int waitValue_pad);
         @Name("waitValue.flags") public native @Cast("unsigned int") int waitValue_flags(); public native CUstreamBatchMemOpParams waitValue_flags(int waitValue_flags);
         /** For driver internal use. Initial value is unimportant. */
         @Name("waitValue.alias") public native @Cast("CUdeviceptr") long waitValue_alias(); public native CUstreamBatchMemOpParams waitValue_alias(long waitValue_alias);
         @Name("writeValue.operation") public native @Cast("CUstreamBatchMemOpType") int writeValue_operation(); public native CUstreamBatchMemOpParams writeValue_operation(int writeValue_operation);
         @Name("writeValue.address") public native @Cast("CUdeviceptr") long writeValue_address(); public native CUstreamBatchMemOpParams writeValue_address(long writeValue_address);
             @Name("writeValue.value") public native @Cast("cuuint32_t") int writeValue_value(); public native CUstreamBatchMemOpParams writeValue_value(int writeValue_value);
-            @Name("writeValue.value64") public native @Cast("cuuint64_t") int writeValue_value64(); public native CUstreamBatchMemOpParams writeValue_value64(int writeValue_value64);
+            @Name("writeValue.pad") public native @Cast("cuuint64_t") int writeValue_pad(); public native CUstreamBatchMemOpParams writeValue_pad(int writeValue_pad);
         @Name("writeValue.flags") public native @Cast("unsigned int") int writeValue_flags(); public native CUstreamBatchMemOpParams writeValue_flags(int writeValue_flags);
         /** For driver internal use. Initial value is unimportant. */
         @Name("writeValue.alias") public native @Cast("CUdeviceptr") long writeValue_alias(); public native CUstreamBatchMemOpParams writeValue_alias(long writeValue_alias);
@@ -730,19 +719,7 @@ public static final int
     CU_DEVICE_ATTRIBUTE_COMPUTE_PREEMPTION_SUPPORTED = 90,
     /** Device can access host registered memory at the same virtual address as the CPU */
     CU_DEVICE_ATTRIBUTE_CAN_USE_HOST_POINTER_FOR_REGISTERED_MEM = 91,
-    /** ::cuStreamBatchMemOp and related APIs are supported. */
-    CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS = 92,
-    /** 64-bit operations are supported in ::cuStreamBatchMemOp and related APIs. */
-    CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS = 93,
-    /** ::CU_STREAM_WAIT_VALUE_NOR is supported. */
-    CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR = 94,
-    /** Device supports launching cooperative kernels via ::cuLaunchCooperativeKernel */
-    CU_DEVICE_ATTRIBUTE_COOPERATIVE_LAUNCH = 95,
-    /** Device can participate in cooperative kernels launched via ::cuLaunchCooperativeKernelMultiDevice */
-    CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH = 96,
-    /** Maximum optin shared memory per block */
-    CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN = 97,
-    CU_DEVICE_ATTRIBUTE_MAX = 98;
+    CU_DEVICE_ATTRIBUTE_MAX = 92;
 
 /**
  * Legacy device properties
@@ -866,21 +843,7 @@ public static final int
      */
     CU_FUNC_ATTRIBUTE_CACHE_MODE_CA = 7,
 
-    /**
-     * The maximum size in bytes of dynamically-allocated shared memory that can be used by
-     * this function. If the user-specified dynamic shared memory size is larger than this
-     * value, the launch will fail.
-     */
-    CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES = 8,
-
-    /**
-     * On devices where the L1 cache and shared memory use the same hardware resources, 
-     * this sets the shared memory carveout preference, in percent of the total resources. 
-     * This is only a hint, and the driver can choose a different ratio if required to execute the function.
-     */
-    CU_FUNC_ATTRIBUTE_PREFERRED_SHARED_MEMORY_CARVEOUT = 9,
-
-    CU_FUNC_ATTRIBUTE_MAX = 10;
+    CU_FUNC_ATTRIBUTE_MAX = 8;
 
 /**
  * Function cache configurations
@@ -907,15 +870,6 @@ public static final int
     CU_SHARED_MEM_CONFIG_FOUR_BYTE_BANK_SIZE  = 0x01,
     /** set shared memory bank width to eight bytes */
     CU_SHARED_MEM_CONFIG_EIGHT_BYTE_BANK_SIZE = 0x02;
-
-/**
- * Shared memory carveout configurations
- */
-/** enum CUshared_carveout_enum */
-public static final int
-    CU_SHAREDMEM_CARVEOUT_DEFAULT       = -1,  /** < no preference for shared memory or L1 (default) */
-    CU_SHAREDMEM_CARVEOUT_MAX_SHARED    = 100, /** < prefer maximum available shared memory, minimum L1 cache */
-    CU_SHAREDMEM_CARVEOUT_MAX_L1        = 0;    /** < prefer maximum available L1 cache, minimum shared memory */
 
 /**
  * Memory types
@@ -1119,6 +1073,14 @@ public static final int
  */
 /** enum CUjit_target_enum */
 public static final int
+    /** Compute device class 1.0 */
+    CU_TARGET_COMPUTE_10 = 10,
+    /** Compute device class 1.1 */
+    CU_TARGET_COMPUTE_11 = 11,
+    /** Compute device class 1.2 */
+    CU_TARGET_COMPUTE_12 = 12,
+    /** Compute device class 1.3 */
+    CU_TARGET_COMPUTE_13 = 13,
     /** Compute device class 2.0 */
     CU_TARGET_COMPUTE_20 = 20,
     /** Compute device class 2.1 */
@@ -1137,18 +1099,12 @@ public static final int
     CU_TARGET_COMPUTE_52 = 52,
     /** Compute device class 5.3 */
     CU_TARGET_COMPUTE_53 = 53,
-    /** Compute device class 6.0.*/
+    /** Compute device class 6.0. This must be removed for CUDA 7.0 toolkit. See bug 1518217. */
     CU_TARGET_COMPUTE_60 = 60,
-    /** Compute device class 6.1.*/
+    /** Compute device class 6.1. This must be removed for CUDA 7.0 toolkit.*/
     CU_TARGET_COMPUTE_61 = 61,
-    /** Compute device class 6.2.*/
-    CU_TARGET_COMPUTE_62 = 62,
-    /** Compute device class 7.0.*/
-    CU_TARGET_COMPUTE_70 = 70,
-    /** Compute device class 7.3.*/
-    CU_TARGET_COMPUTE_73 = 73,
-    /** Compute device class 7.5.*/
-    CU_TARGET_COMPUTE_75 = 75;
+    /** Compute device class 6.2. This must be removed for CUDA 7.0 toolkit.*/
+    CU_TARGET_COMPUTE_62 = 62;
 
 /**
  * Cubin matching fallback strategies
@@ -1483,11 +1439,6 @@ public static final int
     CUDA_ERROR_NVLINK_UNCORRECTABLE           = 220,
 
     /**
-    * This indicates that the PTX JIT compiler library was not found.
-    */
-    CUDA_ERROR_JIT_COMPILER_NOT_FOUND         = 221,
-
-    /**
      * This indicates that the device kernel source is invalid.
      */
     CUDA_ERROR_INVALID_SOURCE                 = 300,
@@ -1677,14 +1628,6 @@ public static final int
      */
     CUDA_ERROR_LAUNCH_FAILED                  = 719,
 
-    /**
-     * This error indicates that the number of blocks launched per grid for a kernel that was
-     * launched via either ::cuLaunchCooperativeKernel or ::cuLaunchCooperativeKernelMultiDevice
-     * exceeds the maximum number of blocks as allowed by ::cuOccupancyMaxActiveBlocksPerMultiprocessor
-     * or ::cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags times the number of multiprocessors
-     * as specified by the device attribute ::CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT.
-     */
-    CUDA_ERROR_COOPERATIVE_LAUNCH_TOO_LARGE   = 720,
 
     /**
      * This error indicates that the attempted operation is not permitted.
@@ -2289,64 +2232,6 @@ public static class CUDA_POINTER_ATTRIBUTE_P2P_TOKENS extends Pointer {
 
 // #endif /* __CUDA_API_VERSION >= 5000 */
 
-// #if __CUDA_API_VERSION >= 9000
-
-/**
- * Kernel launch parameters
- */
-public static class CUDA_LAUNCH_PARAMS extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CUDA_LAUNCH_PARAMS() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CUDA_LAUNCH_PARAMS(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CUDA_LAUNCH_PARAMS(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CUDA_LAUNCH_PARAMS position(long position) {
-        return (CUDA_LAUNCH_PARAMS)super.position(position);
-    }
-
-    /** Kernel to launch */
-    public native CUfunc_st function(); public native CUDA_LAUNCH_PARAMS function(CUfunc_st function);
-    /** Width of grid in blocks */
-    public native @Cast("unsigned int") int gridDimX(); public native CUDA_LAUNCH_PARAMS gridDimX(int gridDimX);
-    /** Height of grid in blocks */
-    public native @Cast("unsigned int") int gridDimY(); public native CUDA_LAUNCH_PARAMS gridDimY(int gridDimY);
-    /** Depth of grid in blocks */
-    public native @Cast("unsigned int") int gridDimZ(); public native CUDA_LAUNCH_PARAMS gridDimZ(int gridDimZ);
-    /** X dimension of each thread block */
-    public native @Cast("unsigned int") int blockDimX(); public native CUDA_LAUNCH_PARAMS blockDimX(int blockDimX);
-    /** Y dimension of each thread block */
-    public native @Cast("unsigned int") int blockDimY(); public native CUDA_LAUNCH_PARAMS blockDimY(int blockDimY);
-    /** Z dimension of each thread block */
-    public native @Cast("unsigned int") int blockDimZ(); public native CUDA_LAUNCH_PARAMS blockDimZ(int blockDimZ);
-    /** Dynamic shared-memory size per thread block in bytes */
-    public native @Cast("unsigned int") int sharedMemBytes(); public native CUDA_LAUNCH_PARAMS sharedMemBytes(int sharedMemBytes);
-    /** Stream identifier */
-    public native CUstream_st hStream(); public native CUDA_LAUNCH_PARAMS hStream(CUstream_st hStream);
-    /** Array of pointers to kernel parameters */
-    public native Pointer kernelParams(int i); public native CUDA_LAUNCH_PARAMS kernelParams(int i, Pointer kernelParams);
-    public native @Cast("void**") PointerPointer kernelParams(); public native CUDA_LAUNCH_PARAMS kernelParams(PointerPointer kernelParams);
-}
-
-// #endif /* __CUDA_API_VERSION >= 9000 */
-
-/**
- * If set, each kernel launched as part of ::cuLaunchCooperativeKernelMultiDevice only
- * waits for prior work in the stream corresponding to that GPU to complete before the
- * kernel begins execution.
- */
-public static final int CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_PRE_LAUNCH_SYNC =   0x01;
-
-/**
- * If set, any subsequent work pushed in a stream that participated in a call to
- * ::cuLaunchCooperativeKernelMultiDevice will only wait for the kernel launched on
- * the GPU corresponding to that stream to complete before it begins execution.
- */
-public static final int CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_POST_LAUNCH_SYNC =  0x02;
-
 /**
  * If set, the CUDA array is a collection of layers, where each layer is either a 1D
  * or a 2D array and the Depth member of CUDA_ARRAY3D_DESCRIPTOR specifies the number 
@@ -2493,9 +2378,7 @@ public static final int CU_DEVICE_INVALID = CU_DEVICE_INVALID();
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::CUresult,
- * ::cudaGetErrorString
+ * \sa ::CUresult
  */
 public static native @Cast("CUresult") int cuGetErrorString(@Cast("CUresult") int error, @Cast("const char**") PointerPointer pStr);
 public static native @Cast("CUresult") int cuGetErrorString(@Cast("CUresult") int error, @Cast("const char**") @ByPtrPtr BytePointer pStr);
@@ -2517,9 +2400,7 @@ public static native @Cast("CUresult") int cuGetErrorString(@Cast("CUresult") in
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::CUresult,
- * ::cudaGetErrorName
+ * \sa ::CUresult
  */
 public static native @Cast("CUresult") int cuGetErrorName(@Cast("CUresult") int error, @Cast("const char**") PointerPointer pStr);
 public static native @Cast("CUresult") int cuGetErrorName(@Cast("CUresult") int error, @Cast("const char**") @ByPtrPtr BytePointer pStr);
@@ -2585,10 +2466,6 @@ public static native @Cast("CUresult") int cuInit(@Cast("unsigned int") int Flag
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
- *
- * \sa
- * ::cudaDriverGetVersion,
- * ::cudaRuntimeGetVersion
  */
 public static native @Cast("CUresult") int cuDriverGetVersion(IntPointer driverVersion);
 public static native @Cast("CUresult") int cuDriverGetVersion(IntBuffer driverVersion);
@@ -2640,7 +2517,7 @@ public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") int[] 
  * \brief Returns the number of compute-capable devices
  *
  * Returns in \p *count the number of devices with compute capability greater
- * than or equal to 2.0 that are available for execution. If there is no such
+ * than or equal to 1.0 that are available for execution. If there is no such
  * device, ::cuDeviceGetCount() returns 0.
  *
  * @param count - Returned number of compute-capable devices
@@ -2657,8 +2534,7 @@ public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") int[] 
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetName,
  * ::cuDeviceGet,
- * ::cuDeviceTotalMem,
- * ::cudaGetDeviceCount
+ * ::cuDeviceTotalMem
  */
 public static native @Cast("CUresult") int cuDeviceGetCount(IntPointer count);
 public static native @Cast("CUresult") int cuDeviceGetCount(IntBuffer count);
@@ -2688,8 +2564,7 @@ public static native @Cast("CUresult") int cuDeviceGetCount(int[] count);
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetCount,
  * ::cuDeviceGet,
- * ::cuDeviceTotalMem,
- * ::cudaGetDeviceProperties
+ * ::cuDeviceTotalMem
  */
 public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") BytePointer name, int len, @Cast("CUdevice") int dev);
 public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") ByteBuffer name, int len, @Cast("CUdevice") int dev);
@@ -2719,7 +2594,6 @@ public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") byte[]
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
  * ::cuDeviceGet,
- * ::cudaMemGetInfo
  */
 public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") SizeTPointer bytes, @Cast("CUdevice") int dev);
 // #endif /* __CUDA_API_VERSION >= 3020 */
@@ -2860,7 +2734,6 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * - ::CU_DEVICE_ATTRIBUTE_PCI_BUS_ID: PCI bus identifier of the device;
  * - ::CU_DEVICE_ATTRIBUTE_PCI_DEVICE_ID: PCI device (also known as slot) identifier
  *   of the device;
- * - ::CU_DEVICE_ATTRIBUTE_PCI_DOMAIN_ID: PCI domain identifier of the device
  * - ::CU_DEVICE_ATTRIBUTE_TCC_DRIVER: 1 if the device is using a TCC driver. TCC
  *    is only available on Tesla hardware running Windows Vista or later;
  * - ::CU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE: Peak memory clock frequency in kilohertz;
@@ -2897,9 +2770,6 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_PREEMPTION_SUPPORTED: Device supports Compute Preemption.
  * - ::CU_DEVICE_ATTRIBUTE_CAN_USE_HOST_POINTER_FOR_REGISTERED_MEM: Device can access host registered
  *   memory at the same virtual address as the CPU.
- * -  ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN: The maximum per block shared memory size
- *    suported on this device. This is the maximum value that can be opted into when using the cuFuncSetAttribute() call.
- *    For more details see ::CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES
  *
  * @param pi     - Returned device attribute value
  * @param attrib - Device attribute to query
@@ -2918,9 +2788,7 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
  * ::cuDeviceGet,
- * ::cuDeviceTotalMem,
- * ::cudaDeviceGetAttribute,
- * ::cudaGetDeviceProperties
+ * ::cuDeviceTotalMem
  */
 public static native @Cast("CUresult") int cuDeviceGetAttribute(IntPointer pi, @Cast("CUdevice_attribute") int attrib, @Cast("CUdevice") int dev);
 public static native @Cast("CUresult") int cuDeviceGetAttribute(IntBuffer pi, @Cast("CUdevice_attribute") int attrib, @Cast("CUdevice") int dev);
@@ -3049,8 +2917,8 @@ public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major
  * This section describes the primary context management functions of the low-level
  * CUDA driver application programming interface.
  *
- * The primary context is unique per device and shared with the CUDA runtime API.
- * These functions allow integration with other libraries using CUDA.
+ * The primary context unique per device and it's shared with CUDA runtime API.
+ * Those functions allows seemless integration with other libraries using CUDA.
  *
  * \{
  */
@@ -3199,8 +3067,7 @@ public static native @Cast("CUresult") int cuDevicePrimaryCtxRelease(@Cast("CUde
  * \sa ::cuDevicePrimaryCtxRetain,
  * ::cuDevicePrimaryCtxGetState,
  * ::cuCtxCreate,
- * ::cuCtxGetFlags,
- * ::cudaSetDeviceFlags
+ * ::cuCtxGetFlags
  */
 public static native @Cast("CUresult") int cuDevicePrimaryCtxSetFlags(@Cast("CUdevice") int dev, @Cast("unsigned int") int flags);
 
@@ -3223,10 +3090,8 @@ public static native @Cast("CUresult") int cuDevicePrimaryCtxSetFlags(@Cast("CUd
  * ::CUDA_ERROR_INVALID_VALUE,
  * \notefnerr
  *
- * \sa
- * ::cuDevicePrimaryCtxSetFlags,
- * ::cuCtxGetFlags,
- * ::cudaGetDeviceFlags
+ * \sa ::cuDevicePrimaryCtxSetFlags,
+ * ::cuCtxGetFlags
  */
 public static native @Cast("CUresult") int cuDevicePrimaryCtxGetState(@Cast("CUdevice") int dev, @Cast("unsigned int*") IntPointer flags, IntPointer active);
 public static native @Cast("CUresult") int cuDevicePrimaryCtxGetState(@Cast("CUdevice") int dev, @Cast("unsigned int*") IntBuffer flags, IntBuffer active);
@@ -3265,8 +3130,8 @@ public static native @Cast("CUresult") int cuDevicePrimaryCtxGetState(@Cast("CUd
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
  * ::cuCtxSetLimit,
- * ::cuCtxSynchronize,
- * ::cudaDeviceReset
+ * ::cuCtxSynchronize
+ *
  */
 public static native @Cast("CUresult") int cuDevicePrimaryCtxReset(@Cast("CUdevice") int dev);
 
@@ -3508,11 +3373,7 @@ public static native @Cast("CUresult") int cuCtxPopCurrent(@ByPtrPtr CUctx_st pc
  * ::CUDA_ERROR_INVALID_CONTEXT
  * \notefnerr
  *
- * \sa
- * ::cuCtxGetCurrent,
- * ::cuCtxCreate,
- * ::cuCtxDestroy,
- * ::cudaSetDevice
+ * \sa ::cuCtxGetCurrent, ::cuCtxCreate, ::cuCtxDestroy
  */
 public static native @Cast("CUresult") int cuCtxSetCurrent(CUctx_st ctx);
 
@@ -3531,11 +3392,7 @@ public static native @Cast("CUresult") int cuCtxSetCurrent(CUctx_st ctx);
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * \notefnerr
  *
- * \sa
- * ::cuCtxSetCurrent,
- * ::cuCtxCreate,
- * ::cuCtxDestroy,
- * ::cudaGetDevice
+ * \sa ::cuCtxSetCurrent, ::cuCtxCreate, ::cuCtxDestroy
  */
 public static native @Cast("CUresult") int cuCtxGetCurrent(@ByPtrPtr CUctx_st pctx);
 // #endif /* __CUDA_API_VERSION >= 4000 */
@@ -3565,8 +3422,7 @@ public static native @Cast("CUresult") int cuCtxGetCurrent(@ByPtrPtr CUctx_st pc
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
  * ::cuCtxSetLimit,
- * ::cuCtxSynchronize,
- * ::cudaGetDevice
+ * ::cuCtxSynchronize
  */
 public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") IntPointer device);
 public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") IntBuffer device);
@@ -3596,8 +3452,7 @@ public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") int
  * ::cuCtxGetDevice
  * ::cuCtxGetLimit,
  * ::cuCtxGetSharedMemConfig,
- * ::cuCtxGetStreamPriorityRange,
- * ::cudaGetDeviceFlags
+ * ::cuCtxGetStreamPriorityRange
  */
 public static native @Cast("CUresult") int cuCtxGetFlags(@Cast("unsigned int*") IntPointer flags);
 public static native @Cast("CUresult") int cuCtxGetFlags(@Cast("unsigned int*") IntBuffer flags);
@@ -3629,8 +3484,7 @@ public static native @Cast("CUresult") int cuCtxGetFlags(@Cast("unsigned int*") 
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
- * ::cuCtxSetLimit,
- * ::cudaDeviceSynchronize
+ * ::cuCtxSetLimit
  */
 public static native @Cast("CUresult") int cuCtxSynchronize();
 
@@ -3648,17 +3502,28 @@ public static native @Cast("CUresult") int cuCtxSynchronize();
  * discussed here.
  *
  * - ::CU_LIMIT_STACK_SIZE controls the stack size in bytes of each GPU thread.
+ *   This limit is only applicable to devices of compute capability 2.0 and
+ *   higher. Attempting to set this limit on devices of compute capability
+ *   less than 2.0 will result in the error ::CUDA_ERROR_UNSUPPORTED_LIMIT
+ *   being returned.
  *
  * - ::CU_LIMIT_PRINTF_FIFO_SIZE controls the size in bytes of the FIFO used
  *   by the ::printf() device system call. Setting ::CU_LIMIT_PRINTF_FIFO_SIZE
  *   must be performed before launching any kernel that uses the ::printf()
  *   device system call, otherwise ::CUDA_ERROR_INVALID_VALUE will be returned.
+ *   This limit is only applicable to devices of compute capability 2.0 and
+ *   higher. Attempting to set this limit on devices of compute capability
+ *   less than 2.0 will result in the error ::CUDA_ERROR_UNSUPPORTED_LIMIT
+ *   being returned.
  *
  * - ::CU_LIMIT_MALLOC_HEAP_SIZE controls the size in bytes of the heap used
  *   by the ::malloc() and ::free() device system calls. Setting
  *   ::CU_LIMIT_MALLOC_HEAP_SIZE must be performed before launching any kernel
  *   that uses the ::malloc() or ::free() device system calls, otherwise
- *   ::CUDA_ERROR_INVALID_VALUE will be returned.
+ *   ::CUDA_ERROR_INVALID_VALUE will be returned. This limit is only applicable
+ *   to devices of compute capability 2.0 and higher. Attempting to set this
+ *   limit on devices of compute capability less than 2.0 will result in the
+ *   error ::CUDA_ERROR_UNSUPPORTED_LIMIT being returned.
  *
  * - ::CU_LIMIT_DEV_RUNTIME_SYNC_DEPTH controls the maximum nesting depth of
  *   a grid at which a thread can safely call ::cudaDeviceSynchronize(). Setting
@@ -3714,8 +3579,7 @@ public static native @Cast("CUresult") int cuCtxSynchronize();
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
- * ::cuCtxSynchronize,
- * ::cudaDeviceSetLimit
+ * ::cuCtxSynchronize
  */
 public static native @Cast("CUresult") int cuCtxSetLimit(@Cast("CUlimit") int limit, @Cast("size_t") long value);
 
@@ -3754,8 +3618,7 @@ public static native @Cast("CUresult") int cuCtxSetLimit(@Cast("CUlimit") int li
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
  * ::cuCtxSetLimit,
- * ::cuCtxSynchronize,
- * ::cudaDeviceGetLimit
+ * ::cuCtxSynchronize
  */
 public static native @Cast("CUresult") int cuCtxGetLimit(@Cast("size_t*") SizeTPointer pvalue, @Cast("CUlimit") int limit);
 
@@ -3798,8 +3661,7 @@ public static native @Cast("CUresult") int cuCtxGetLimit(@Cast("size_t*") SizeTP
  * ::cuCtxSetCacheConfig,
  * ::cuCtxSetLimit,
  * ::cuCtxSynchronize,
- * ::cuFuncSetCacheConfig,
- * ::cudaDeviceGetCacheConfig
+ * ::cuFuncSetCacheConfig
  */
 public static native @Cast("CUresult") int cuCtxGetCacheConfig(@Cast("CUfunc_cache*") IntPointer pconfig);
 public static native @Cast("CUresult") int cuCtxGetCacheConfig(@Cast("CUfunc_cache*") IntBuffer pconfig);
@@ -3851,8 +3713,7 @@ public static native @Cast("CUresult") int cuCtxGetCacheConfig(@Cast("CUfunc_cac
  * ::cuCtxPushCurrent,
  * ::cuCtxSetLimit,
  * ::cuCtxSynchronize,
- * ::cuFuncSetCacheConfig,
- * ::cudaDeviceSetCacheConfig
+ * ::cuFuncSetCacheConfig
  */
 public static native @Cast("CUresult") int cuCtxSetCacheConfig(@Cast("CUfunc_cache") int config);
 
@@ -3895,7 +3756,6 @@ public static native @Cast("CUresult") int cuCtxSetCacheConfig(@Cast("CUfunc_cac
  * ::cuCtxSynchronize,
  * ::cuCtxGetSharedMemConfig,
  * ::cuFuncSetCacheConfig,
- * ::cudaDeviceGetSharedMemConfig
  */
 public static native @Cast("CUresult") int cuCtxGetSharedMemConfig(@Cast("CUsharedconfig*") IntPointer pConfig);
 public static native @Cast("CUresult") int cuCtxGetSharedMemConfig(@Cast("CUsharedconfig*") IntBuffer pConfig);
@@ -3950,7 +3810,6 @@ public static native @Cast("CUresult") int cuCtxGetSharedMemConfig(@Cast("CUshar
  * ::cuCtxSynchronize,
  * ::cuCtxGetSharedMemConfig,
  * ::cuFuncSetCacheConfig,
- * ::cudaDeviceSetSharedMemConfig
  */
 public static native @Cast("CUresult") int cuCtxSetSharedMemConfig(@Cast("CUsharedconfig") int config);
 // #endif
@@ -4029,8 +3888,7 @@ public static native @Cast("CUresult") int cuCtxGetApiVersion(CUctx_st ctx, @Cas
  * ::cuCtxGetDevice,
  * ::cuCtxGetFlags,
  * ::cuCtxSetLimit,
- * ::cuCtxSynchronize,
- * ::cudaDeviceGetStreamPriorityRange
+ * ::cuCtxSynchronize
  */
 public static native @Cast("CUresult") int cuCtxGetStreamPriorityRange(IntPointer leastPriority, IntPointer greatestPriority);
 public static native @Cast("CUresult") int cuCtxGetStreamPriorityRange(IntBuffer leastPriority, IntBuffer greatestPriority);
@@ -4168,8 +4026,7 @@ public static native @Cast("CUresult") int cuCtxDetach(CUctx_st ctx);
  * ::CUDA_ERROR_FILE_NOT_FOUND,
  * ::CUDA_ERROR_NO_BINARY_FOR_GPU,
  * ::CUDA_ERROR_SHARED_OBJECT_SYMBOL_NOT_FOUND,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED,
- * ::CUDA_ERROR_JIT_COMPILER_NOT_FOUND
+ * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
  * \notefnerr
  *
  * \sa ::cuModuleGetFunction,
@@ -4206,8 +4063,7 @@ public static native @Cast("CUresult") int cuModuleLoad(@ByPtrPtr CUmod_st modul
  * ::CUDA_ERROR_OUT_OF_MEMORY,
  * ::CUDA_ERROR_NO_BINARY_FOR_GPU,
  * ::CUDA_ERROR_SHARED_OBJECT_SYMBOL_NOT_FOUND,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED,
- * ::CUDA_ERROR_JIT_COMPILER_NOT_FOUND
+ * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
  * \notefnerr
  *
  * \sa ::cuModuleGetFunction,
@@ -4249,8 +4105,7 @@ public static native @Cast("CUresult") int cuModuleLoadData(@ByPtrPtr CUmod_st m
  * ::CUDA_ERROR_OUT_OF_MEMORY,
  * ::CUDA_ERROR_NO_BINARY_FOR_GPU,
  * ::CUDA_ERROR_SHARED_OBJECT_SYMBOL_NOT_FOUND,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED,
- * ::CUDA_ERROR_JIT_COMPILER_NOT_FOUND
+ * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
  * \notefnerr
  *
  * \sa ::cuModuleGetFunction,
@@ -4294,8 +4149,7 @@ public static native @Cast("CUresult") int cuModuleLoadDataEx(@ByPtrPtr CUmod_st
  * ::CUDA_ERROR_OUT_OF_MEMORY,
  * ::CUDA_ERROR_NO_BINARY_FOR_GPU,
  * ::CUDA_ERROR_SHARED_OBJECT_SYMBOL_NOT_FOUND,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED,
- * ::CUDA_ERROR_JIT_COMPILER_NOT_FOUND
+ * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
  * \notefnerr
  *
  * \sa ::cuModuleGetFunction,
@@ -4394,9 +4248,7 @@ public static native @Cast("CUresult") int cuModuleGetFunction(@ByPtrPtr CUfunc_
  * ::cuModuleLoadData,
  * ::cuModuleLoadDataEx,
  * ::cuModuleLoadFatBinary,
- * ::cuModuleUnload,
- * ::cudaGetSymbolAddress,
- * ::cudaGetSymbolSize
+ * ::cuModuleUnload
  */
 public static native @Cast("CUresult") int cuModuleGetGlobal(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t*") SizeTPointer bytes, CUmod_st hmod, @Cast("const char*") BytePointer name);
 public static native @Cast("CUresult") int cuModuleGetGlobal(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t*") SizeTPointer bytes, CUmod_st hmod, String name);
@@ -4435,8 +4287,7 @@ public static native @Cast("CUresult") int cuModuleGetGlobal(@Cast("CUdeviceptr*
  * ::cuModuleLoadData,
  * ::cuModuleLoadDataEx,
  * ::cuModuleLoadFatBinary,
- * ::cuModuleUnload,
- * ::cudaGetTextureReference
+ * ::cuModuleUnload
  */
 public static native @Cast("CUresult") int cuModuleGetTexRef(@ByPtrPtr CUtexref_st pTexRef, CUmod_st hmod, @Cast("const char*") BytePointer name);
 public static native @Cast("CUresult") int cuModuleGetTexRef(@ByPtrPtr CUtexref_st pTexRef, CUmod_st hmod, String name);
@@ -4468,8 +4319,7 @@ public static native @Cast("CUresult") int cuModuleGetTexRef(@ByPtrPtr CUtexref_
  * ::cuModuleLoadData,
  * ::cuModuleLoadDataEx,
  * ::cuModuleLoadFatBinary,
- * ::cuModuleUnload,
- * ::cudaGetSurfaceReference
+ * ::cuModuleUnload
  */
 public static native @Cast("CUresult") int cuModuleGetSurfRef(@ByPtrPtr CUsurfref_st pSurfRef, CUmod_st hmod, @Cast("const char*") BytePointer name);
 public static native @Cast("CUresult") int cuModuleGetSurfRef(@ByPtrPtr CUsurfref_st pSurfRef, CUmod_st hmod, String name);
@@ -4505,8 +4355,7 @@ public static native @Cast("CUresult") int cuModuleGetSurfRef(@ByPtrPtr CUsurfre
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_OUT_OF_MEMORY,
- * ::CUDA_ERROR_JIT_COMPILER_NOT_FOUND
+ * ::CUDA_ERROR_OUT_OF_MEMORY
  * \notefnerr
  *
  * \sa ::cuLinkAddData,
@@ -4701,8 +4550,7 @@ public static native @Cast("CUresult") int cuLinkDestroy(CUlinkState_st state);
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemGetInfo
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemGetInfo(@Cast("size_t*") SizeTPointer free, @Cast("size_t*") SizeTPointer total);
 
@@ -4735,8 +4583,7 @@ public static native @Cast("CUresult") int cuMemGetInfo(@Cast("size_t*") SizeTPo
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMalloc
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemAlloc(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t") long bytesize);
 public static native @Cast("CUresult") int cuMemAlloc(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t") long bytesize);
@@ -4799,8 +4646,7 @@ public static native @Cast("CUresult") int cuMemAlloc(@Cast("CUdeviceptr*") long
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMallocPitch
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemAllocPitch(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t*") SizeTPointer pPitch, @Cast("size_t") long WidthInBytes, @Cast("size_t") long Height, @Cast("unsigned int") int ElementSizeBytes);
 public static native @Cast("CUresult") int cuMemAllocPitch(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t*") SizeTPointer pPitch, @Cast("size_t") long WidthInBytes, @Cast("size_t") long Height, @Cast("unsigned int") int ElementSizeBytes);
@@ -4831,8 +4677,7 @@ public static native @Cast("CUresult") int cuMemAllocPitch(@Cast("CUdeviceptr*")
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaFree
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemFree(@Cast("CUdeviceptr") long dptr);
 
@@ -4853,7 +4698,6 @@ public static native @Cast("CUresult") int cuMemFree(@Cast("CUdeviceptr") long d
  * ::CUDA_ERROR_DEINITIALIZED,
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_CONTEXT,
- * ::CUDA_ERROR_NOT_FOUND,
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
  *
@@ -4914,8 +4758,7 @@ public static native @Cast("CUresult") int cuMemGetAddressRange(@Cast("CUdevicep
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMallocHost
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemAllocHost(@Cast("void**") PointerPointer pp, @Cast("size_t") long bytesize);
 public static native @Cast("CUresult") int cuMemAllocHost(@Cast("void**") @ByPtrPtr Pointer pp, @Cast("size_t") long bytesize);
@@ -4946,8 +4789,7 @@ public static native @Cast("CUresult") int cuMemAllocHost(@Cast("void**") @ByPtr
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaFreeHost
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemFreeHost(Pointer p);
 
@@ -4974,7 +4816,8 @@ public static native @Cast("CUresult") int cuMemFreeHost(Pointer p);
  *
  * - ::CU_MEMHOSTALLOC_DEVICEMAP: Maps the allocation into the CUDA address
  *   space. The device pointer to the memory may be obtained by calling
- *   ::cuMemHostGetDevicePointer().
+ *   ::cuMemHostGetDevicePointer(). This feature is available only on GPUs
+ *   with compute capability greater than or equal to 1.1.
  *
  * - ::CU_MEMHOSTALLOC_WRITECOMBINED: Allocates the memory as write-combined
  *   (WC). WC memory can be transferred across the PCI Express bus more
@@ -5028,8 +4871,7 @@ public static native @Cast("CUresult") int cuMemFreeHost(Pointer p);
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaHostAlloc
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemHostAlloc(@Cast("void**") PointerPointer pp, @Cast("size_t") long bytesize, @Cast("unsigned int") int Flags);
 public static native @Cast("CUresult") int cuMemHostAlloc(@Cast("void**") @ByPtrPtr Pointer pp, @Cast("size_t") long bytesize, @Cast("unsigned int") int Flags);
@@ -5083,8 +4925,7 @@ public static native @Cast("CUresult") int cuMemHostAlloc(@Cast("void**") @ByPtr
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaHostGetDevicePointer
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemHostGetDevicePointer(@Cast("CUdeviceptr*") LongPointer pdptr, Pointer p, @Cast("unsigned int") int Flags);
 public static native @Cast("CUresult") int cuMemHostGetDevicePointer(@Cast("CUdeviceptr*") LongBuffer pdptr, Pointer p, @Cast("unsigned int") int Flags);
@@ -5111,10 +4952,7 @@ public static native @Cast("CUresult") int cuMemHostGetDevicePointer(@Cast("CUde
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
  *
- * \sa
- * ::cuMemAllocHost,
- * ::cuMemHostAlloc,
- * ::cudaHostGetFlags
+ * \sa ::cuMemAllocHost, ::cuMemHostAlloc
  */
 public static native @Cast("CUresult") int cuMemHostGetFlags(@Cast("unsigned int*") IntPointer pFlags, Pointer p);
 public static native @Cast("CUresult") int cuMemHostGetFlags(@Cast("unsigned int*") IntBuffer pFlags, Pointer p);
@@ -5201,7 +5039,6 @@ public static native @Cast("CUresult") int cuMemHostGetFlags(@Cast("unsigned int
  * managed memory supporting devices on which contexts were previously created, even if
  * those contexts have been destroyed. These environment variables are described
  * in the CUDA programming guide under the "CUDA environment variables" section.
- * - On ARM, managed memory is not available on discrete gpu with Drive PX-2.
  *
  * @param dptr     - Returned device pointer
  * @param bytesize - Requested allocation size in bytes
@@ -5227,8 +5064,7 @@ public static native @Cast("CUresult") int cuMemHostGetFlags(@Cast("unsigned int
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
  * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cuDeviceGetAttribute, ::cuStreamAttachMemAsync,
- * ::cudaMallocManaged
+ * ::cuDeviceGetAttribute, ::cuStreamAttachMemAsync
  */
 public static native @Cast("CUresult") int cuMemAllocManaged(@Cast("CUdeviceptr*") LongPointer dptr, @Cast("size_t") long bytesize, @Cast("unsigned int") int flags);
 public static native @Cast("CUresult") int cuMemAllocManaged(@Cast("CUdeviceptr*") LongBuffer dptr, @Cast("size_t") long bytesize, @Cast("unsigned int") int flags);
@@ -5259,11 +5095,7 @@ public static native @Cast("CUresult") int cuMemAllocManaged(@Cast("CUdeviceptr*
  * ::CUDA_ERROR_INVALID_DEVICE
  * \notefnerr
  *
- * \sa
- * ::cuDeviceGet,
- * ::cuDeviceGetAttribute,
- * ::cuDeviceGetPCIBusId,
- * ::cudaDeviceGetByPCIBusId
+ * \sa ::cuDeviceGet, ::cuDeviceGetAttribute, ::cuDeviceGetPCIBusId
  */
 public static native @Cast("CUresult") int cuDeviceGetByPCIBusId(@Cast("CUdevice*") IntPointer dev, @Cast("const char*") BytePointer pciBusId);
 public static native @Cast("CUresult") int cuDeviceGetByPCIBusId(@Cast("CUdevice*") IntBuffer dev, String pciBusId);
@@ -5296,11 +5128,7 @@ public static native @Cast("CUresult") int cuDeviceGetByPCIBusId(@Cast("CUdevice
  * ::CUDA_ERROR_INVALID_DEVICE
  * \notefnerr
  *
- * \sa
- * ::cuDeviceGet,
- * ::cuDeviceGetAttribute,
- * ::cuDeviceGetByPCIBusId,
- * ::cudaDeviceGetPCIBusId
+ * \sa ::cuDeviceGet, ::cuDeviceGetAttribute, ::cuDeviceGetByPCIBusId
  */
 public static native @Cast("CUresult") int cuDeviceGetPCIBusId(@Cast("char*") BytePointer pciBusId, int len, @Cast("CUdevice") int dev);
 public static native @Cast("CUresult") int cuDeviceGetPCIBusId(@Cast("char*") ByteBuffer pciBusId, int len, @Cast("CUdevice") int dev);
@@ -5344,8 +5172,7 @@ public static native @Cast("CUresult") int cuDeviceGetPCIBusId(@Cast("char*") by
  * ::cuIpcOpenEventHandle,
  * ::cuIpcGetMemHandle,
  * ::cuIpcOpenMemHandle,
- * ::cuIpcCloseMemHandle,
- * ::cudaIpcGetEventHandle
+ * ::cuIpcCloseMemHandle
  */
 public static native @Cast("CUresult") int cuIpcGetEventHandle(CUipcEventHandle pHandle, CUevent_st event);
 
@@ -5382,8 +5209,7 @@ public static native @Cast("CUresult") int cuIpcGetEventHandle(CUipcEventHandle 
  * ::cuIpcGetEventHandle,
  * ::cuIpcGetMemHandle,
  * ::cuIpcOpenMemHandle,
- * ::cuIpcCloseMemHandle,
- * ::cudaIpcOpenEventHandle
+ * ::cuIpcCloseMemHandle
  */
 public static native @Cast("CUresult") int cuIpcOpenEventHandle(@ByPtrPtr CUevent_st phEvent, @ByVal CUipcEventHandle handle);
 
@@ -5420,8 +5246,7 @@ public static native @Cast("CUresult") int cuIpcOpenEventHandle(@ByPtrPtr CUeven
  * ::cuIpcGetEventHandle,
  * ::cuIpcOpenEventHandle,
  * ::cuIpcOpenMemHandle,
- * ::cuIpcCloseMemHandle,
- * ::cudaIpcGetMemHandle
+ * ::cuIpcCloseMemHandle
  */
 public static native @Cast("CUresult") int cuIpcGetMemHandle(CUipcMemHandle pHandle, @Cast("CUdeviceptr") long dptr);
 
@@ -5473,7 +5298,6 @@ public static native @Cast("CUresult") int cuIpcGetMemHandle(CUipcMemHandle pHan
  * ::cuIpcCloseMemHandle,
  * ::cuCtxEnablePeerAccess,
  * ::cuDeviceCanAccessPeer,
- * ::cudaIpcOpenMemHandle
  */
 public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") LongPointer pdptr, @ByVal CUipcMemHandle handle, @Cast("unsigned int") int Flags);
 public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr*") LongBuffer pdptr, @ByVal CUipcMemHandle handle, @Cast("unsigned int") int Flags);
@@ -5507,7 +5331,6 @@ public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr
  * ::cuIpcOpenEventHandle,
  * ::cuIpcGetMemHandle,
  * ::cuIpcOpenMemHandle,
- * ::cudaIpcCloseMemHandle
  */
 public static native @Cast("CUresult") int cuIpcCloseMemHandle(@Cast("CUdeviceptr") long dptr);
 
@@ -5539,7 +5362,8 @@ public static native @Cast("CUresult") int cuIpcCloseMemHandle(@Cast("CUdevicept
  *
  * - ::CU_MEMHOSTREGISTER_DEVICEMAP: Maps the allocation into the CUDA address
  *   space. The device pointer to the memory may be obtained by calling
- *   ::cuMemHostGetDevicePointer().
+ *   ::cuMemHostGetDevicePointer(). This feature is available only on GPUs
+ *   with compute capability greater than or equal to 1.1.
  *
  * - ::CU_MEMHOSTREGISTER_IOMEMORY: The pointer is treated as pointing to some
  *   I/O memory space, e.g. the PCI Express resource of a 3rd party device.
@@ -5589,11 +5413,7 @@ public static native @Cast("CUresult") int cuIpcCloseMemHandle(@Cast("CUdevicept
  * ::CUDA_ERROR_NOT_SUPPORTED
  * \notefnerr
  *
- * \sa
- * ::cuMemHostUnregister,
- * ::cuMemHostGetFlags,
- * ::cuMemHostGetDevicePointer,
- * ::cudaHostRegister
+ * \sa ::cuMemHostUnregister, ::cuMemHostGetFlags, ::cuMemHostGetDevicePointer
  */
 public static native @Cast("CUresult") int cuMemHostRegister(Pointer p, @Cast("size_t") long bytesize, @Cast("unsigned int") int Flags);
 
@@ -5617,9 +5437,7 @@ public static native @Cast("CUresult") int cuMemHostRegister(Pointer p, @Cast("s
  * ::CUDA_ERROR_HOST_MEMORY_NOT_REGISTERED,
  * \notefnerr
  *
- * \sa
- * ::cuMemHostRegister,
- * ::cudaHostUnregister
+ * \sa ::cuMemHostRegister
  */
 public static native @Cast("CUresult") int cuMemHostUnregister(Pointer p);
 
@@ -5655,10 +5473,7 @@ public static native @Cast("CUresult") int cuMemHostUnregister(Pointer p);
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy,
- * ::cudaMemcpyToSymbol,
- * ::cudaMemcpyFromSymbol
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpy(@Cast("CUdeviceptr") long dst, @Cast("CUdeviceptr") long src, @Cast("size_t") long ByteCount);
 
@@ -5687,8 +5502,7 @@ public static native @Cast("CUresult") int cuMemcpy(@Cast("CUdeviceptr") long ds
  * \note_sync
  *
  * \sa ::cuMemcpyDtoD, ::cuMemcpy3DPeer, ::cuMemcpyDtoDAsync, ::cuMemcpyPeerAsync,
- * ::cuMemcpy3DPeerAsync,
- * ::cudaMemcpyPeer
+ * ::cuMemcpy3DPeerAsync
  */
 public static native @Cast("CUresult") int cuMemcpyPeer(@Cast("CUdeviceptr") long dstDevice, CUctx_st dstContext, @Cast("CUdeviceptr") long srcDevice, CUctx_st srcContext, @Cast("size_t") long ByteCount);
 
@@ -5724,9 +5538,7 @@ public static native @Cast("CUresult") int cuMemcpyPeer(@Cast("CUdeviceptr") lon
  * ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy,
- * ::cudaMemcpyToSymbol
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyHtoD(@Cast("CUdeviceptr") long dstDevice, @Const Pointer srcHost, @Cast("size_t") long ByteCount);
 
@@ -5759,9 +5571,7 @@ public static native @Cast("CUresult") int cuMemcpyHtoD(@Cast("CUdeviceptr") lon
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy,
- * ::cudaMemcpyFromSymbol
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyDtoH(Pointer dstHost, @Cast("CUdeviceptr") long srcDevice, @Cast("size_t") long ByteCount);
 
@@ -5794,10 +5604,7 @@ public static native @Cast("CUresult") int cuMemcpyDtoH(Pointer dstHost, @Cast("
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy,
- * ::cudaMemcpyToSymbol,
- * ::cudaMemcpyFromSymbol
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyDtoD(@Cast("CUdeviceptr") long dstDevice, @Cast("CUdeviceptr") long srcDevice, @Cast("size_t") long ByteCount);
 
@@ -5832,8 +5639,7 @@ public static native @Cast("CUresult") int cuMemcpyDtoD(@Cast("CUdeviceptr") lon
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpyToArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyDtoA(CUarray_st dstArray, @Cast("size_t") long dstOffset, @Cast("CUdeviceptr") long srcDevice, @Cast("size_t") long ByteCount);
 
@@ -5870,8 +5676,7 @@ public static native @Cast("CUresult") int cuMemcpyDtoA(CUarray_st dstArray, @Ca
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpyFromArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyAtoD(@Cast("CUdeviceptr") long dstDevice, CUarray_st srcArray, @Cast("size_t") long srcOffset, @Cast("size_t") long ByteCount);
 
@@ -5906,8 +5711,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoD(@Cast("CUdeviceptr") lon
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpyToArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyHtoA(CUarray_st dstArray, @Cast("size_t") long dstOffset, @Const Pointer srcHost, @Cast("size_t") long ByteCount);
 
@@ -5942,8 +5746,7 @@ public static native @Cast("CUresult") int cuMemcpyHtoA(CUarray_st dstArray, @Ca
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpyFromArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyAtoH(Pointer dstHost, CUarray_st srcArray, @Cast("size_t") long srcOffset, @Cast("size_t") long ByteCount);
 
@@ -5982,8 +5785,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoH(Pointer dstHost, CUarray
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpyArrayToArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Cast("size_t") long dstOffset, CUarray_st srcArray, @Cast("size_t") long srcOffset, @Cast("size_t") long ByteCount);
 
@@ -6144,10 +5946,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy2D,
- * ::cudaMemcpy2DToArray,
- * ::cudaMemcpy2DFromArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy);
 
@@ -6306,10 +6105,7 @@ public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy2D,
- * ::cudaMemcpy2DToArray,
- * ::cudaMemcpy2DFromArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCPY2D pCopy);
 
@@ -6477,8 +6273,7 @@ public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCP
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMemcpy3D
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemcpy3D(@Const CUDA_MEMCPY3D pCopy);
 // #endif /* __CUDA_API_VERSION >= 3020 */
@@ -6503,8 +6298,7 @@ public static native @Cast("CUresult") int cuMemcpy3D(@Const CUDA_MEMCPY3D pCopy
  * \note_sync
  *
  * \sa ::cuMemcpyDtoD, ::cuMemcpyPeer, ::cuMemcpyDtoDAsync, ::cuMemcpyPeerAsync,
- * ::cuMemcpy3DPeerAsync,
- * ::cudaMemcpy3DPeer
+ * ::cuMemcpy3DPeerAsync
  */
 public static native @Cast("CUresult") int cuMemcpy3DPeer(@Const CUDA_MEMCPY3D_PEER pCopy);
 
@@ -6544,10 +6338,7 @@ public static native @Cast("CUresult") int cuMemcpy3DPeer(@Const CUDA_MEMCPY3D_P
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpyAsync,
- * ::cudaMemcpyToSymbolAsync,
- * ::cudaMemcpyFromSymbolAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpyAsync(@Cast("CUdeviceptr") long dst, @Cast("CUdeviceptr") long src, @Cast("size_t") long ByteCount, CUstream_st hStream);
 
@@ -6578,8 +6369,7 @@ public static native @Cast("CUresult") int cuMemcpyAsync(@Cast("CUdeviceptr") lo
  * \note_null_stream
  *
  * \sa ::cuMemcpyDtoD, ::cuMemcpyPeer, ::cuMemcpy3DPeer, ::cuMemcpyDtoDAsync, 
- * ::cuMemcpy3DPeerAsync,
- * ::cudaMemcpyPeerAsync
+ * ::cuMemcpy3DPeerAsync
  */
 public static native @Cast("CUresult") int cuMemcpyPeerAsync(@Cast("CUdeviceptr") long dstDevice, CUctx_st dstContext, @Cast("CUdeviceptr") long srcDevice, CUctx_st srcContext, @Cast("size_t") long ByteCount, CUstream_st hStream);
 // #endif /* __CUDA_API_VERSION >= 4000 */
@@ -6618,9 +6408,7 @@ public static native @Cast("CUresult") int cuMemcpyPeerAsync(@Cast("CUdeviceptr"
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpyAsync,
- * ::cudaMemcpyToSymbolAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpyHtoDAsync(@Cast("CUdeviceptr") long dstDevice, @Const Pointer srcHost, @Cast("size_t") long ByteCount, CUstream_st hStream);
 
@@ -6657,9 +6445,7 @@ public static native @Cast("CUresult") int cuMemcpyHtoDAsync(@Cast("CUdeviceptr"
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpyAsync,
- * ::cudaMemcpyFromSymbolAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpyDtoHAsync(Pointer dstHost, @Cast("CUdeviceptr") long srcDevice, @Cast("size_t") long ByteCount, CUstream_st hStream);
 
@@ -6696,10 +6482,7 @@ public static native @Cast("CUresult") int cuMemcpyDtoHAsync(Pointer dstHost, @C
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpyAsync,
- * ::cudaMemcpyToSymbolAsync,
- * ::cudaMemcpyFromSymbolAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpyDtoDAsync(@Cast("CUdeviceptr") long dstDevice, @Cast("CUdeviceptr") long srcDevice, @Cast("size_t") long ByteCount, CUstream_st hStream);
 
@@ -6738,8 +6521,7 @@ public static native @Cast("CUresult") int cuMemcpyDtoDAsync(@Cast("CUdeviceptr"
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpyToArrayAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpyHtoAAsync(CUarray_st dstArray, @Cast("size_t") long dstOffset, @Const Pointer srcHost, @Cast("size_t") long ByteCount, CUstream_st hStream);
 
@@ -6778,8 +6560,7 @@ public static native @Cast("CUresult") int cuMemcpyHtoAAsync(CUarray_st dstArray
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpyFromArrayAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CUarray_st srcArray, @Cast("size_t") long srcOffset, @Cast("size_t") long ByteCount, CUstream_st hStream);
 
@@ -6944,10 +6725,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CU
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpy2DAsync,
- * ::cudaMemcpy2DToArrayAsync,
- * ::cudaMemcpy2DFromArrayAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D pCopy, CUstream_st hStream);
 
@@ -7119,8 +6897,7 @@ public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D 
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemcpy3DAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemcpy3DAsync(@Const CUDA_MEMCPY3D pCopy, CUstream_st hStream);
 // #endif /* __CUDA_API_VERSION >= 3020 */
@@ -7147,8 +6924,7 @@ public static native @Cast("CUresult") int cuMemcpy3DAsync(@Const CUDA_MEMCPY3D 
  * \note_null_stream
  *
  * \sa ::cuMemcpyDtoD, ::cuMemcpyPeer, ::cuMemcpyDtoDAsync, ::cuMemcpyPeerAsync,
- * ::cuMemcpy3DPeerAsync,
- * ::cudaMemcpy3DPeerAsync
+ * ::cuMemcpy3DPeerAsync
  */
 public static native @Cast("CUresult") int cuMemcpy3DPeerAsync(@Const CUDA_MEMCPY3D_PEER pCopy, CUstream_st hStream);
 // #endif /* __CUDA_API_VERSION >= 4000 */
@@ -7184,8 +6960,7 @@ public static native @Cast("CUresult") int cuMemcpy3DPeerAsync(@Const CUDA_MEMCP
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD8(@Cast("CUdeviceptr") long dstDevice, @Cast("unsigned char") byte uc, @Cast("size_t") long N);
 
@@ -7219,8 +6994,7 @@ public static native @Cast("CUresult") int cuMemsetD8(@Cast("CUdeviceptr") long 
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD16(@Cast("CUdeviceptr") long dstDevice, @Cast("unsigned short") short us, @Cast("size_t") long N);
 
@@ -7254,8 +7028,7 @@ public static native @Cast("CUresult") int cuMemsetD16(@Cast("CUdeviceptr") long
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32Async,
- * ::cudaMemset
+ * ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD32(@Cast("CUdeviceptr") long dstDevice, @Cast("unsigned int") int ui, @Cast("size_t") long N);
 
@@ -7294,8 +7067,7 @@ public static native @Cast("CUresult") int cuMemsetD32(@Cast("CUdeviceptr") long
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset2D
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD2D8(@Cast("CUdeviceptr") long dstDevice, @Cast("size_t") long dstPitch, @Cast("unsigned char") byte uc, @Cast("size_t") long Width, @Cast("size_t") long Height);
 
@@ -7335,8 +7107,7 @@ public static native @Cast("CUresult") int cuMemsetD2D8(@Cast("CUdeviceptr") lon
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset2D
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD2D16(@Cast("CUdeviceptr") long dstDevice, @Cast("size_t") long dstPitch, @Cast("unsigned short") short us, @Cast("size_t") long Width, @Cast("size_t") long Height);
 
@@ -7376,8 +7147,7 @@ public static native @Cast("CUresult") int cuMemsetD2D16(@Cast("CUdeviceptr") lo
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset2D
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD2D32(@Cast("CUdeviceptr") long dstDevice, @Cast("size_t") long dstPitch, @Cast("unsigned int") int ui, @Cast("size_t") long Width, @Cast("size_t") long Height);
 
@@ -7413,8 +7183,7 @@ public static native @Cast("CUresult") int cuMemsetD2D32(@Cast("CUdeviceptr") lo
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemsetAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD8Async(@Cast("CUdeviceptr") long dstDevice, @Cast("unsigned char") byte uc, @Cast("size_t") long N, CUstream_st hStream);
 
@@ -7450,8 +7219,7 @@ public static native @Cast("CUresult") int cuMemsetD8Async(@Cast("CUdeviceptr") 
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemsetAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD16Async(@Cast("CUdeviceptr") long dstDevice, @Cast("unsigned short") short us, @Cast("size_t") long N, CUstream_st hStream);
 
@@ -7486,8 +7254,7 @@ public static native @Cast("CUresult") int cuMemsetD16Async(@Cast("CUdeviceptr")
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
- * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async, ::cuMemsetD32,
- * ::cudaMemsetAsync
+ * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuMemsetD32Async(@Cast("CUdeviceptr") long dstDevice, @Cast("unsigned int") int ui, @Cast("size_t") long N, CUstream_st hStream);
 
@@ -7528,8 +7295,7 @@ public static native @Cast("CUresult") int cuMemsetD32Async(@Cast("CUdeviceptr")
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset2DAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD2D8Async(@Cast("CUdeviceptr") long dstDevice, @Cast("size_t") long dstPitch, @Cast("unsigned char") byte uc, @Cast("size_t") long Width, @Cast("size_t") long Height, CUstream_st hStream);
 
@@ -7571,8 +7337,7 @@ public static native @Cast("CUresult") int cuMemsetD2D8Async(@Cast("CUdeviceptr"
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D32, ::cuMemsetD2D32Async,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset2DAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD2D16Async(@Cast("CUdeviceptr") long dstDevice, @Cast("size_t") long dstPitch, @Cast("unsigned short") short us, @Cast("size_t") long Width, @Cast("size_t") long Height, CUstream_st hStream);
 
@@ -7614,8 +7379,7 @@ public static native @Cast("CUresult") int cuMemsetD2D16Async(@Cast("CUdeviceptr
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D8Async,
  * ::cuMemsetD2D16, ::cuMemsetD2D16Async, ::cuMemsetD2D32,
  * ::cuMemsetD8, ::cuMemsetD8Async, ::cuMemsetD16, ::cuMemsetD16Async,
- * ::cuMemsetD32, ::cuMemsetD32Async,
- * ::cudaMemset2DAsync
+ * ::cuMemsetD32, ::cuMemsetD32Async
  */
 public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr") long dstDevice, @Cast("size_t") long dstPitch, @Cast("unsigned int") int ui, @Cast("size_t") long Width, @Cast("size_t") long Height, CUstream_st hStream);
 
@@ -7718,8 +7482,7 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMallocArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuArrayCreate(@ByPtrPtr CUarray_st pHandle, @Const CUDA_ARRAY_DESCRIPTOR pAllocateArray);
 
@@ -7752,8 +7515,7 @@ public static native @Cast("CUresult") int cuArrayCreate(@ByPtrPtr CUarray_st pH
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaArrayGetInfo
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuArrayGetDescriptor(CUDA_ARRAY_DESCRIPTOR pArrayDescriptor, CUarray_st hArray);
 // #endif /* __CUDA_API_VERSION >= 3020 */
@@ -7784,8 +7546,7 @@ public static native @Cast("CUresult") int cuArrayGetDescriptor(CUDA_ARRAY_DESCR
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaFreeArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
 
@@ -7965,8 +7726,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaMalloc3DArray
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuArray3DCreate(@ByPtrPtr CUarray_st pHandle, @Const CUDA_ARRAY3D_DESCRIPTOR pAllocateArray);
 
@@ -8002,8 +7762,7 @@ public static native @Cast("CUresult") int cuArray3DCreate(@ByPtrPtr CUarray_st 
  * ::cuMemcpyHtoD, ::cuMemcpyHtoDAsync, ::cuMemFree, ::cuMemFreeHost,
  * ::cuMemGetAddressRange, ::cuMemGetInfo, ::cuMemHostAlloc,
  * ::cuMemHostGetDevicePointer, ::cuMemsetD2D8, ::cuMemsetD2D16,
- * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32,
- * ::cudaArrayGetInfo
+ * ::cuMemsetD2D32, ::cuMemsetD8, ::cuMemsetD16, ::cuMemsetD32
  */
 public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_DESCRIPTOR pArrayDescriptor, CUarray_st hArray);
 // #endif /* __CUDA_API_VERSION >= 3020 */
@@ -8093,40 +7852,26 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
  * <table>
  * <tr><td><b>CUDA array type</b></td>
  * <td><b>Valid extents that must always be met<br>{(width range in elements), (height range), 
- * (depth range)}</b></td>
- * <td><b>Valid extents with CUDA_ARRAY3D_SURFACE_LDST set<br> 
- * {(width range in elements), (height range), (depth range)}</b></td></tr>
+ * (depth range)}</b></td></tr>
  * <tr><td>1D</td>
- * <td><small>{ (1,TEXTURE1D_MIPMAPPED_WIDTH), 0, 0 }</small></td>
- * <td><small>{ (1,SURFACE1D_WIDTH), 0, 0 }</small></td></tr>
+ * <td><small>{ (1,TEXTURE1D_MIPMAPPED_WIDTH), 0, 0 }</small></td></tr>
  * <tr><td>2D</td>
- * <td><small>{ (1,TEXTURE2D_MIPMAPPED_WIDTH), (1,TEXTURE2D_MIPMAPPED_HEIGHT), 0 }</small></td>
- * <td><small>{ (1,SURFACE2D_WIDTH), (1,SURFACE2D_HEIGHT), 0 }</small></td></tr>
+ * <td><small>{ (1,TEXTURE2D_MIPMAPPED_WIDTH), (1,TEXTURE2D_MIPMAPPED_HEIGHT), 0 }</small></td></tr>
  * <tr><td>3D</td>
  * <td><small>{ (1,TEXTURE3D_WIDTH), (1,TEXTURE3D_HEIGHT), (1,TEXTURE3D_DEPTH) }
  * <br>OR<br>{ (1,TEXTURE3D_WIDTH_ALTERNATE), (1,TEXTURE3D_HEIGHT_ALTERNATE), 
- * (1,TEXTURE3D_DEPTH_ALTERNATE) }</small></td>
- * <td><small>{ (1,SURFACE3D_WIDTH), (1,SURFACE3D_HEIGHT), 
- * (1,SURFACE3D_DEPTH) }</small></td></tr>
+ * (1,TEXTURE3D_DEPTH_ALTERNATE) }</small></td></tr>
  * <tr><td>1D Layered</td>
  * <td><small>{ (1,TEXTURE1D_LAYERED_WIDTH), 0, 
- * (1,TEXTURE1D_LAYERED_LAYERS) }</small></td>
- * <td><small>{ (1,SURFACE1D_LAYERED_WIDTH), 0, 
- * (1,SURFACE1D_LAYERED_LAYERS) }</small></td></tr>
+ * (1,TEXTURE1D_LAYERED_LAYERS) }</small></td></tr>
  * <tr><td>2D Layered</td>
  * <td><small>{ (1,TEXTURE2D_LAYERED_WIDTH), (1,TEXTURE2D_LAYERED_HEIGHT), 
- * (1,TEXTURE2D_LAYERED_LAYERS) }</small></td>
- * <td><small>{ (1,SURFACE2D_LAYERED_WIDTH), (1,SURFACE2D_LAYERED_HEIGHT), 
- * (1,SURFACE2D_LAYERED_LAYERS) }</small></td></tr>
+ * (1,TEXTURE2D_LAYERED_LAYERS) }</small></td></tr>
  * <tr><td>Cubemap</td>
- * <td><small>{ (1,TEXTURECUBEMAP_WIDTH), (1,TEXTURECUBEMAP_WIDTH), 6 }</small></td>
- * <td><small>{ (1,SURFACECUBEMAP_WIDTH), 
- * (1,SURFACECUBEMAP_WIDTH), 6 }</small></td></tr>
+ * <td><small>{ (1,TEXTURECUBEMAP_WIDTH), (1,TEXTURECUBEMAP_WIDTH), 6 }</small></td></tr>
  * <tr><td>Cubemap Layered</td>
  * <td><small>{ (1,TEXTURECUBEMAP_LAYERED_WIDTH), (1,TEXTURECUBEMAP_LAYERED_WIDTH), 
- * (1,TEXTURECUBEMAP_LAYERED_LAYERS) }</small></td>
- * <td><small>{ (1,SURFACECUBEMAP_LAYERED_WIDTH), (1,SURFACECUBEMAP_LAYERED_WIDTH), 
- * (1,SURFACECUBEMAP_LAYERED_LAYERS) }</small></td></tr>
+ * (1,TEXTURECUBEMAP_LAYERED_LAYERS) }</small></td></tr>
  * </table>
  *
  *
@@ -8144,11 +7889,7 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
  * ::CUDA_ERROR_UNKNOWN
  * \notefnerr
  *
- * \sa
- * ::cuMipmappedArrayDestroy,
- * ::cuMipmappedArrayGetLevel,
- * ::cuArrayCreate,
- * ::cudaMallocMipmappedArray
+ * \sa ::cuMipmappedArrayDestroy, ::cuMipmappedArrayGetLevel, ::cuArrayCreate,
  */
 public static native @Cast("CUresult") int cuMipmappedArrayCreate(@ByPtrPtr CUmipmappedArray_st pHandle, @Const CUDA_ARRAY3D_DESCRIPTOR pMipmappedArrayDesc, @Cast("unsigned int") int numMipmapLevels);
 
@@ -8174,11 +7915,7 @@ public static native @Cast("CUresult") int cuMipmappedArrayCreate(@ByPtrPtr CUmi
  * ::CUDA_ERROR_INVALID_HANDLE
  * \notefnerr
  *
- * \sa
- * ::cuMipmappedArrayCreate,
- * ::cuMipmappedArrayDestroy,
- * ::cuArrayCreate,
- * ::cudaGetMipmappedArrayLevel
+ * \sa ::cuMipmappedArrayCreate, ::cuMipmappedArrayDestroy, ::cuArrayCreate,
  */
 public static native @Cast("CUresult") int cuMipmappedArrayGetLevel(@ByPtrPtr CUarray_st pLevelArray, CUmipmappedArray_st hMipmappedArray, @Cast("unsigned int") int level);
 
@@ -8198,11 +7935,7 @@ public static native @Cast("CUresult") int cuMipmappedArrayGetLevel(@ByPtrPtr CU
  * ::CUDA_ERROR_ARRAY_IS_MAPPED
  * \notefnerr
  *
- * \sa
- * ::cuMipmappedArrayCreate,
- * ::cuMipmappedArrayGetLevel,
- * ::cuArrayCreate,
- * ::cudaFreeMipmappedArray
+ * \sa ::cuMipmappedArrayCreate, ::cuMipmappedArrayGetLevel, ::cuArrayCreate,
  */
 public static native @Cast("CUresult") int cuMipmappedArrayDestroy(CUmipmappedArray_st hMipmappedArray);
 
@@ -8236,6 +7969,7 @@ public static native @Cast("CUresult") int cuMipmappedArrayDestroy(CUmipmappedAr
  * attribute ::CU_DEVICE_ATTRIBUTE_UNIFIED_ADDRESSING.
  *
  * Unified addressing is automatically enabled in 64-bit processes 
+ * on devices with compute capability greater than or equal to 2.0.
  *
  * \section CUDA_UNIFIED_lookup Looking Up Information from Pointer Values
  *
@@ -8440,16 +8174,14 @@ public static native @Cast("CUresult") int cuMipmappedArrayDestroy(CUmipmappedAr
  * ::CUDA_ERROR_INVALID_DEVICE
  * \notefnerr
  *
- * \sa
- * ::cuPointerSetAttribute,
+ * \sa cuPointerSetAttribute,
  * ::cuMemAlloc,
  * ::cuMemFree,
  * ::cuMemAllocHost,
  * ::cuMemFreeHost,
  * ::cuMemHostAlloc,
  * ::cuMemHostRegister,
- * ::cuMemHostUnregister,
- * ::cudaPointerGetAttributes
+ * ::cuMemHostUnregister
  */
 public static native @Cast("CUresult") int cuPointerGetAttribute(Pointer data, @Cast("CUpointer_attribute") int attribute, @Cast("CUdeviceptr") long ptr);
 // #endif /* __CUDA_API_VERSION >= 4000 */
@@ -8518,8 +8250,7 @@ public static native @Cast("CUresult") int cuPointerGetAttribute(Pointer data, @
  * \note_null_stream
  *
  * \sa ::cuMemcpy, ::cuMemcpyPeer, ::cuMemcpyAsync,
- * ::cuMemcpy3DPeerAsync, ::cuMemAdvise,
- * ::cudaMemPrefetchAsync
+ * ::cuMemcpy3DPeerAsync, ::cuMemAdvise
  */
 public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count, @Cast("CUdevice") int dstDevice, CUstream_st hStream);
 
@@ -8605,8 +8336,7 @@ public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr
  * \note_null_stream
  *
  * \sa ::cuMemcpy, ::cuMemcpyPeer, ::cuMemcpyAsync,
- * ::cuMemcpy3DPeerAsync, ::cuMemPrefetchAsync,
- * ::cudaMemAdvise
+ * ::cuMemcpy3DPeerAsync, ::cuMemPrefetchAsync
  */
 public static native @Cast("CUresult") int cuMemAdvise(@Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count, @Cast("CUmem_advise") int advice, @Cast("CUdevice") int device);
 
@@ -8663,8 +8393,7 @@ public static native @Cast("CUresult") int cuMemAdvise(@Cast("CUdeviceptr") long
  * \note_null_stream
  *
  * \sa ::cuMemRangeGetAttributes, ::cuMemPrefetchAsync,
- * ::cuMemAdvise,
- * ::cudaMemRangeGetAttribute
+ * ::cuMemAdvise
  */
 
 
@@ -8703,8 +8432,7 @@ public static native @Cast("CUresult") int cuMemAdvise(@Cast("CUdeviceptr") long
  * \notefnerr
  *
  * \sa ::cuMemRangeGetAttribute, ::cuMemAdvise
- * ::cuMemPrefetchAsync,
- * ::cudaMemRangeGetAttributes
+ * ::cuMemPrefetchAsync
  */
 
 // #endif /* __CUDA_API_VERSION >= 8000 */
@@ -8789,10 +8517,8 @@ public static native @Cast("CUresult") int cuPointerSetAttribute(@Const Pointer 
  * ::CUDA_ERROR_INVALID_DEVICE
  * \notefnerr
  *
- * \sa
- * ::cuPointerGetAttribute,
- * ::cuPointerSetAttribute,
- * ::cudaPointerGetAttributes
+ * \sa ::cuPointerGetAttribute,
+ * ::cuPointerSetAttribute
  */
 public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigned int") int numAttributes, @Cast("CUpointer_attribute*") IntPointer attributes, @Cast("void**") PointerPointer data, @Cast("CUdeviceptr") long ptr);
 public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigned int") int numAttributes, @Cast("CUpointer_attribute*") IntPointer attributes, @Cast("void**") @ByPtrPtr Pointer data, @Cast("CUdeviceptr") long ptr);
@@ -8843,9 +8569,7 @@ public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigne
  * ::cuStreamWaitEvent,
  * ::cuStreamQuery,
  * ::cuStreamSynchronize,
- * ::cuStreamAddCallback,
- * ::cudaStreamCreate,
- * ::cudaStreamCreateWithFlags
+ * ::cuStreamAddCallback
  */
 public static native @Cast("CUresult") int cuStreamCreate(@ByPtrPtr CUstream_st phStream, @Cast("unsigned int") int Flags);
 
@@ -8878,7 +8602,7 @@ public static native @Cast("CUresult") int cuStreamCreate(@ByPtrPtr CUstream_st 
  * ::CUDA_ERROR_OUT_OF_MEMORY
  * \notefnerr
  *
- * \note Stream priorities are supported only on GPUs
+ * \note Stream priorities are supported only on Quadro and Tesla GPUs
  * with compute capability 3.5 or higher.
  *
  * \note In the current implementation, only compute kernels launched in
@@ -8893,8 +8617,7 @@ public static native @Cast("CUresult") int cuStreamCreate(@ByPtrPtr CUstream_st 
  * ::cuStreamWaitEvent,
  * ::cuStreamQuery,
  * ::cuStreamSynchronize,
- * ::cuStreamAddCallback,
- * ::cudaStreamCreateWithPriority
+ * ::cuStreamAddCallback
  */
 public static native @Cast("CUresult") int cuStreamCreateWithPriority(@ByPtrPtr CUstream_st phStream, @Cast("unsigned int") int flags, int priority);
 
@@ -8924,8 +8647,7 @@ public static native @Cast("CUresult") int cuStreamCreateWithPriority(@ByPtrPtr 
  * ::cuStreamCreate,
  * ::cuStreamCreateWithPriority,
  * ::cuCtxGetStreamPriorityRange,
- * ::cuStreamGetFlags,
- * ::cudaStreamGetPriority
+ * ::cuStreamGetFlags
  */
 public static native @Cast("CUresult") int cuStreamGetPriority(CUstream_st hStream, IntPointer priority);
 public static native @Cast("CUresult") int cuStreamGetPriority(CUstream_st hStream, IntBuffer priority);
@@ -8954,8 +8676,7 @@ public static native @Cast("CUresult") int cuStreamGetPriority(CUstream_st hStre
  *
  * \sa ::cuStreamDestroy,
  * ::cuStreamCreate,
- * ::cuStreamGetPriority,
- * ::cudaStreamGetFlags
+ * ::cuStreamGetPriority
  */
 public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream, @Cast("unsigned int*") IntPointer flags);
 public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream, @Cast("unsigned int*") IntBuffer flags);
@@ -8965,10 +8686,20 @@ public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream,
 /**
  * \brief Make a compute stream wait on an event
  *
- * Makes all future work submitted to \p hStream wait for all work captured in
- * \p hEvent.  See ::cuEventRecord() for details on what is captured by an event.
- * The synchronization will be performed efficiently on the device when applicable.
- * \p hEvent may be from a different context or device than \p hStream.
+ * Makes all future work submitted to \p hStream wait until \p hEvent
+ * reports completion before beginning execution.  This synchronization
+ * will be performed efficiently on the device.  The event \p hEvent may
+ * be from a different context than \p hStream, in which case this function
+ * will perform cross-device synchronization.
+ *
+ * The stream \p hStream will wait only for the completion of the most recent
+ * host call to ::cuEventRecord() on \p hEvent.  Once this call has returned,
+ * any functions (including ::cuEventRecord() and ::cuEventDestroy()) may be
+ * called on \p hEvent again, and subsequent calls will not have any
+ * effect on \p hStream.
+ *
+ * If ::cuEventRecord() has not been called on \p hEvent, this call acts as if
+ * the record has already completed, and so is a functional no-op.
  *
  * @param hStream - Stream to wait
  * @param hEvent  - Event to wait on (may not be NULL)
@@ -8988,8 +8719,7 @@ public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream,
  * ::cuStreamQuery,
  * ::cuStreamSynchronize,
  * ::cuStreamAddCallback,
- * ::cuStreamDestroy,
- * ::cudaStreamWaitEvent
+ * ::cuStreamDestroy
  */
 public static native @Cast("CUresult") int cuStreamWaitEvent(CUstream_st hStream, CUevent_st hEvent, @Cast("unsigned int") int Flags);
 
@@ -9010,6 +8740,11 @@ public static native @Cast("CUresult") int cuStreamWaitEvent(CUstream_st hStream
  * synchronization that may depend on outstanding device work or other callbacks
  * that are not mandated to run earlier.  Callbacks without a mandated order
  * (in independent streams) execute in undefined order and may be serialized.
+ *
+ * This API requires compute capability 1.1 or greater.  See
+ * ::cuDeviceGetAttribute or ::cuDeviceGetProperties to query compute
+ * capability.  Attempting to use this API with earlier compute versions will
+ * return ::CUDA_ERROR_NOT_SUPPORTED.
  *
  * For the purposes of Unified Memory, callback execution makes a number of
  * guarantees:
@@ -9055,8 +8790,7 @@ public static native @Cast("CUresult") int cuStreamWaitEvent(CUstream_st hStream
  * ::cuStreamWaitEvent,
  * ::cuStreamDestroy,
  * ::cuMemAllocManaged,
- * ::cuStreamAttachMemAsync,
- * ::cudaStreamAddCallback
+ * ::cuStreamAttachMemAsync
  */
 public static native @Cast("CUresult") int cuStreamAddCallback(CUstream_st hStream, CUstreamCallback callback, Pointer userData, @Cast("unsigned int") int flags);
 
@@ -9135,8 +8869,7 @@ public static native @Cast("CUresult") int cuStreamAddCallback(CUstream_st hStre
  * ::cuStreamSynchronize,
  * ::cuStreamWaitEvent,
  * ::cuStreamDestroy,
- * ::cuMemAllocManaged,
- * ::cudaStreamAttachMemAsync
+ * ::cuMemAllocManaged
  */
 public static native @Cast("CUresult") int cuStreamAttachMemAsync(CUstream_st hStream, @Cast("CUdeviceptr") long dptr, @Cast("size_t") long length, @Cast("unsigned int") int flags);
 
@@ -9167,8 +8900,7 @@ public static native @Cast("CUresult") int cuStreamAttachMemAsync(CUstream_st hS
  * ::cuStreamWaitEvent,
  * ::cuStreamDestroy,
  * ::cuStreamSynchronize,
- * ::cuStreamAddCallback,
- * ::cudaStreamQuery
+ * ::cuStreamAddCallback
  */
 public static native @Cast("CUresult") int cuStreamQuery(CUstream_st hStream);
 
@@ -9195,8 +8927,7 @@ public static native @Cast("CUresult") int cuStreamQuery(CUstream_st hStream);
  * ::cuStreamDestroy,
  * ::cuStreamWaitEvent,
  * ::cuStreamQuery,
- * ::cuStreamAddCallback,
- * ::cudaStreamSynchronize
+ * ::cuStreamAddCallback
  */
 public static native @Cast("CUresult") int cuStreamSynchronize(CUstream_st hStream);
 
@@ -9225,8 +8956,7 @@ public static native @Cast("CUresult") int cuStreamSynchronize(CUstream_st hStre
  * ::cuStreamWaitEvent,
  * ::cuStreamQuery,
  * ::cuStreamSynchronize,
- * ::cuStreamAddCallback,
- * ::cudaStreamDestroy
+ * ::cuStreamAddCallback
  */
 public static native @Cast("CUresult") int cuStreamDestroy(CUstream_st hStream);
 // #endif /* __CUDA_API_VERSION >= 4000 */
@@ -9249,8 +8979,8 @@ public static native @Cast("CUresult") int cuStreamDestroy(CUstream_st hStream);
 /**
  * \brief Creates an event
  *
- * Creates an event *phEvent for the current context with the flags specified via
- * \p Flags. Valid flags include:
+ * Creates an event *phEvent with the flags specified via \p Flags. Valid flags
+ * include:
  * - ::CU_EVENT_DEFAULT: Default event creation flag.
  * - ::CU_EVENT_BLOCKING_SYNC: Specifies that the created event should use blocking
  *   synchronization.  A CPU thread that uses ::cuEventSynchronize() to wait on
@@ -9281,29 +9011,23 @@ public static native @Cast("CUresult") int cuStreamDestroy(CUstream_st hStream);
  * ::cuEventQuery,
  * ::cuEventSynchronize,
  * ::cuEventDestroy,
- * ::cuEventElapsedTime,
- * ::cudaEventCreate,
- * ::cudaEventCreateWithFlags
+ * ::cuEventElapsedTime
  */
 public static native @Cast("CUresult") int cuEventCreate(@ByPtrPtr CUevent_st phEvent, @Cast("unsigned int") int Flags);
 
 /**
  * \brief Records an event
  *
- * Captures in \p hEvent the contents of \p hStream at the time of this call.
- * \p hEvent and \p hStream must be from the same context.
- * Calls such as ::cuEventQuery() or ::cuStreamWaitEvent() will then
- * examine or wait for completion of the work that was captured. Uses of
- * \p hStream after this call do not modify \p hEvent. See note on default
- * stream behavior for what is captured in the default case.
+ * Records an event. See note on NULL stream behavior. Since operation is
+ * asynchronous, ::cuEventQuery or ::cuEventSynchronize() must be used
+ * to determine when the event has actually been recorded.
  *
- * ::cuEventRecord() can be called multiple times on the same event and
- * will overwrite the previously captured state. Other APIs such as
- * ::cuStreamWaitEvent() use the most recently captured state at the time
- * of the API call, and are not affected by later calls to
- * ::cuEventRecord(). Before the first call to ::cuEventRecord(), an
- * event represents an empty set of work, so for example ::cuEventQuery()
- * would return ::CUDA_SUCCESS.
+ * If ::cuEventRecord() has previously been called on \p hEvent, then this
+ * call will overwrite any existing state in \p hEvent.  Any subsequent calls
+ * which examine the status of \p hEvent will only examine the completion of
+ * this most recent call to ::cuEventRecord().
+ *
+ * It is necessary that \p hEvent and \p hStream be created on the same context.
  *
  * @param hEvent  - Event to record
  * @param hStream - Stream to record event for
@@ -9323,19 +9047,21 @@ public static native @Cast("CUresult") int cuEventCreate(@ByPtrPtr CUevent_st ph
  * ::cuEventSynchronize,
  * ::cuStreamWaitEvent,
  * ::cuEventDestroy,
- * ::cuEventElapsedTime,
- * ::cudaEventRecord
+ * ::cuEventElapsedTime
  */
 public static native @Cast("CUresult") int cuEventRecord(CUevent_st hEvent, CUstream_st hStream);
 
 /**
  * \brief Queries an event's status
  *
- * Queries the status of all work currently captured by \p hEvent. See
- * ::cuEventRecord() for details on what is captured by an event.
+ * Query the status of all device work preceding the most recent
+ * call to ::cuEventRecord() (in the appropriate compute streams,
+ * as specified by the arguments to ::cuEventRecord()).
  *
- * Returns ::CUDA_SUCCESS if all captured work has been completed, or
- * ::CUDA_ERROR_NOT_READY if any captured work is incomplete.
+ * If this work has successfully been completed by the device, or if
+ * ::cuEventRecord() has not been called on \p hEvent, then ::CUDA_SUCCESS is
+ * returned. If this work has not yet been completed by the device then
+ * ::CUDA_ERROR_NOT_READY is returned.
  *
  * For the purposes of Unified Memory, a return value of ::CUDA_SUCCESS
  * is equivalent to having called ::cuEventSynchronize().
@@ -9355,16 +9081,19 @@ public static native @Cast("CUresult") int cuEventRecord(CUevent_st hEvent, CUst
  * ::cuEventRecord,
  * ::cuEventSynchronize,
  * ::cuEventDestroy,
- * ::cuEventElapsedTime,
- * ::cudaEventQuery
+ * ::cuEventElapsedTime
  */
 public static native @Cast("CUresult") int cuEventQuery(CUevent_st hEvent);
 
 /**
  * \brief Waits for an event to complete
  *
- * Waits until the completion of all work currently captured in \p hEvent.
- * See ::cuEventRecord() for details on what is captured by an event.
+ * Wait until the completion of all device work preceding the most recent
+ * call to ::cuEventRecord() (in the appropriate compute streams, as specified
+ * by the arguments to ::cuEventRecord()).
+ *
+ * If ::cuEventRecord() has not been called on \p hEvent, ::CUDA_SUCCESS is
+ * returned immediately.
  *
  * Waiting for an event that was created with the ::CU_EVENT_BLOCKING_SYNC
  * flag will cause the calling CPU thread to block until the event has
@@ -9386,8 +9115,7 @@ public static native @Cast("CUresult") int cuEventQuery(CUevent_st hEvent);
  * ::cuEventRecord,
  * ::cuEventQuery,
  * ::cuEventDestroy,
- * ::cuEventElapsedTime,
- * ::cudaEventSynchronize
+ * ::cuEventElapsedTime
  */
 public static native @Cast("CUresult") int cuEventSynchronize(CUevent_st hEvent);
 
@@ -9397,10 +9125,10 @@ public static native @Cast("CUresult") int cuEventSynchronize(CUevent_st hEvent)
  *
  * Destroys the event specified by \p hEvent.
  *
- * An event may be destroyed before it is complete (i.e., while
- * ::cuEventQuery() would return ::CUDA_ERROR_NOT_READY). In this case, the
- * call does not block on completion of the event, and any associated
- * resources will automatically be released asynchronously at completion.
+ * In case \p hEvent has been recorded but has not yet been completed
+ * when ::cuEventDestroy() is called, the function will return immediately and 
+ * the resources associated with \p hEvent will be released automatically once
+ * the device has completed \p hEvent.
  *
  * @param hEvent - Event to destroy
  *
@@ -9416,8 +9144,7 @@ public static native @Cast("CUresult") int cuEventSynchronize(CUevent_st hEvent)
  * ::cuEventRecord,
  * ::cuEventQuery,
  * ::cuEventSynchronize,
- * ::cuEventElapsedTime,
- * ::cudaEventDestroy
+ * ::cuEventElapsedTime
  */
 public static native @Cast("CUresult") int cuEventDestroy(CUevent_st hEvent);
 // #endif /* __CUDA_API_VERSION >= 4000 */
@@ -9461,8 +9188,7 @@ public static native @Cast("CUresult") int cuEventDestroy(CUevent_st hEvent);
  * ::cuEventRecord,
  * ::cuEventQuery,
  * ::cuEventSynchronize,
- * ::cuEventDestroy,
- * ::cudaEventElapsedTime
+ * ::cuEventDestroy
  */
 public static native @Cast("CUresult") int cuEventElapsedTime(FloatPointer pMilliseconds, CUevent_st hStart, CUevent_st hEnd);
 public static native @Cast("CUresult") int cuEventElapsedTime(FloatBuffer pMilliseconds, CUevent_st hStart, CUevent_st hEnd);
@@ -9482,9 +9208,8 @@ public static native @Cast("CUresult") int cuEventElapsedTime(float[] pMilliseco
  * should be obtained with ::cuMemHostGetDevicePointer(). This function cannot
  * be used with managed memory (::cuMemAllocManaged).
  *
- * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS. The only requirement for basic
- * support is that on Windows, a device must be in TCC mode.
+ * On Windows, the device must be using TCC, or the operation is not supported.
+ * See ::cuDeviceGetAttributes().
  *
  * @param stream The stream to synchronize on the memory location.
  * @param addr The memory location to wait on.
@@ -9497,51 +9222,12 @@ public static native @Cast("CUresult") int cuEventElapsedTime(float[] pMilliseco
  * ::CUDA_ERROR_NOT_SUPPORTED
  * \notefnerr
  *
- * \sa ::cuStreamWaitValue64,
- * ::cuStreamWriteValue32,
- * ::cuStreamWriteValue64
+ * \sa ::cuStreamWriteValue32,
  * ::cuStreamBatchMemOp,
  * ::cuMemHostRegister,
  * ::cuStreamWaitEvent
  */
 public static native @Cast("CUresult") int cuStreamWaitValue32(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint32_t") int value, @Cast("unsigned int") int flags);
-
-/**
- * \brief Wait on a memory location
- *
- * Enqueues a synchronization of the stream on the given memory location. Work
- * ordered after the operation will block until the given condition on the
- * memory is satisfied. By default, the condition is to wait for
- * (int64_t)(*addr - value) >= 0, a cyclic greater-or-equal.
- * Other condition types can be specified via \p flags.
- *
- * If the memory was registered via ::cuMemHostRegister(), the device pointer
- * should be obtained with ::cuMemHostGetDevicePointer().
- *
- * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS. The requirements are
- * compute capability 7.0 or greater, and on Windows, that the device be in
- * TCC mode.
- *
- * @param stream The stream to synchronize on the memory location.
- * @param addr The memory location to wait on.
- * @param value The value to compare with the memory location.
- * @param flags See ::CUstreamWaitValue_flags.
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_NOT_SUPPORTED
- * \notefnerr
- *
- * \sa ::cuStreamWaitValue32,
- * ::cuStreamWriteValue32,
- * ::cuStreamWriteValue64,
- * ::cuStreamBatchMemOp,
- * ::cuMemHostRegister,
- * ::cuStreamWaitEvent
- */
-public static native @Cast("CUresult") int cuStreamWaitValue64(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint64_t") int value, @Cast("unsigned int") int flags);
 
 /**
  * \brief Write a value to memory
@@ -9555,9 +9241,8 @@ public static native @Cast("CUresult") int cuStreamWaitValue64(CUstream_st strea
  * should be obtained with ::cuMemHostGetDevicePointer(). This function cannot
  * be used with managed memory (::cuMemAllocManaged).
  *
- * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS. The only requirement for basic
- * support is that on Windows, a device must be in TCC mode.
+ * On Windows, the device must be using TCC, or the operation is not supported.
+ * See ::cuDeviceGetAttribute().
  *
  * @param stream The stream to do the write in.
  * @param addr The device address to write to.
@@ -9570,50 +9255,12 @@ public static native @Cast("CUresult") int cuStreamWaitValue64(CUstream_st strea
  * ::CUDA_ERROR_NOT_SUPPORTED
  * \notefnerr
  *
- * \sa ::cuStreamWriteValue64,
- * ::cuStreamWaitValue32,
- * ::cuStreamWaitValue64,
+ * \sa ::cuStreamWaitValue32,
  * ::cuStreamBatchMemOp,
  * ::cuMemHostRegister,
  * ::cuEventRecord
  */
 public static native @Cast("CUresult") int cuStreamWriteValue32(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint32_t") int value, @Cast("unsigned int") int flags);
-
-/**
- * \brief Write a value to memory
- *
- * Write a value to memory. Unless the ::CU_STREAM_WRITE_VALUE_NO_MEMORY_BARRIER
- * flag is passed, the write is preceded by a system-wide memory fence,
- * equivalent to a __threadfence_system() but scoped to the stream
- * rather than a CUDA thread.
- *
- * If the memory was registered via ::cuMemHostRegister(), the device pointer
- * should be obtained with ::cuMemHostGetDevicePointer().
- *
- * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS. The requirements are
- * compute capability 7.0 or greater, and on Windows, that the device be in
- * TCC mode.
- *
- * @param stream The stream to do the write in.
- * @param addr The device address to write to.
- * @param value The value to write.
- * @param flags See ::CUstreamWriteValue_flags.
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_NOT_SUPPORTED
- * \notefnerr
- *
- * \sa ::cuStreamWriteValue32,
- * ::cuStreamWaitValue32,
- * ::cuStreamWaitValue64,
- * ::cuStreamBatchMemOp,
- * ::cuMemHostRegister,
- * ::cuEventRecord
- */
-public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint64_t") int value, @Cast("unsigned int") int flags);
 
 /**
  * \brief Batch operations to synchronize the stream via memory operations
@@ -9624,12 +9271,11 @@ public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stre
  * calls. The operations are enqueued in the order they appear in the array.
  *
  * See ::CUstreamBatchMemOpType for the full set of supported operations, and
- * ::cuStreamWaitValue32(), ::cuStreamWaitValue64(), ::cuStreamWriteValue32(),
- * and ::cuStreamWriteValue64() for details of specific operations.
+ * ::cuStreamWaitValue32() and ::cuStreamWriteValue32() for details of specific
+ * operations.
  *
- * Basic support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS. See related APIs for details
- * on querying support for specific operations.
+ * On Windows, the device must be using TCC, or this call is not supported. See
+ * ::cuDeviceGetAttribute().
  *
  * @param stream The stream to enqueue the operations in.
  * @param count The number of operations in the array. Must be less than 256.
@@ -9643,9 +9289,7 @@ public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stre
  * \notefnerr
  *
  * \sa ::cuStreamWaitValue32,
- * ::cuStreamWaitValue64,
  * ::cuStreamWriteValue32,
- * ::cuStreamWriteValue64,
  * ::cuMemHostRegister
  */
 public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream, @Cast("unsigned int") int count, CUstreamBatchMemOpParams paramArray, @Cast("unsigned int") int flags);
@@ -9697,10 +9341,6 @@ public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream
  *   version.
  * - ::CU_FUNC_CACHE_MODE_CA: The attribute to indicate whether the function has  
  *   been compiled with user specified option "-Xptxas --dlcm=ca" set .
- * - ::CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES: The maximum size in bytes of
- *   dynamically-allocated shared memory. 
- * - ::CU_FUNC_ATTRIBUTE_PREFERRED_SHARED_MEMORY_CARVEOUT: Preferred shared memory-L1 
- *   cache split ratio in percent of shared memory.
  *
  * @param pi     - Returned attribute value
  * @param attrib - Attribute requested
@@ -9718,61 +9358,11 @@ public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream
  * \sa ::cuCtxGetCacheConfig,
  * ::cuCtxSetCacheConfig,
  * ::cuFuncSetCacheConfig,
- * ::cuLaunchKernel,
- * ::cudaFuncGetAttributes
- * ::cudaFuncSetAttribute
+ * ::cuLaunchKernel
  */
 public static native @Cast("CUresult") int cuFuncGetAttribute(IntPointer pi, @Cast("CUfunction_attribute") int attrib, CUfunc_st hfunc);
 public static native @Cast("CUresult") int cuFuncGetAttribute(IntBuffer pi, @Cast("CUfunction_attribute") int attrib, CUfunc_st hfunc);
 public static native @Cast("CUresult") int cuFuncGetAttribute(int[] pi, @Cast("CUfunction_attribute") int attrib, CUfunc_st hfunc);
-
-// #if __CUDA_API_VERSION >= 9000
-
-/**
- * \brief Sets information about a function
- *
- * This call sets the value of a specified attribute \p attrib on the kernel given
- * by \p hfunc to an integer value specified by \p val
- * This function returns CUDA_SUCCESS if the new value of the attribute could be
- * successfully set. If the set fails, this call will return an error.
- * Not all attributes can have values set. Attempting to set a value on a read-only
- * attribute will result in an error (CUDA_ERROR_INVALID_VALUE)
- *
- * Supported attributes for the cuFuncSetAttribute call are:
- * - ::CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES: This maximum size in bytes of
- *   dynamically-allocated shared memory. The value should contain the requested
- *   maximum size of dynamically-allocated shared memory. The sum of this value and
- *   the function attribute ::CU_FUNC_ATTRIBUTE_SHARED_SIZE_BYTES cannot exceed the
- *   device attribute ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN.
- *   The maximal size of requestable dynamic shared memory may differ by GPU
- *   architecture.
- * - ::CU_FUNC_ATTRIBUTE_PREFERRED_SHARED_MEMORY_CARVEOUT: On devices where the L1 
- *   cache and shared memory use the same hardware resources, this sets the shared memory
- *   carveout preference, in percent of the total resources. This is only a hint, and the
- *   driver can choose a different ratio if required to execute the function.
- *
- * @param hfunc  - Function to query attribute of
- * @param attrib - Attribute requested
- * @param value   - The value to set
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_CONTEXT,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_INVALID_VALUE
- * \notefnerr
- *
- * \sa ::cuCtxGetCacheConfig,
- * ::cuCtxSetCacheConfig,
- * ::cuFuncSetCacheConfig,
- * ::cuLaunchKernel,
- * ::cudaFuncGetAttributes
- * ::cudaFuncSetAttribute
- */
-public static native @Cast("CUresult") int cuFuncSetAttribute(CUfunc_st hfunc, @Cast("CUfunction_attribute") int attrib, int value);
-// #endif // __CUDA_API_VERSION >= 9000
 
 /**
  * \brief Sets the preferred cache configuration for a device function
@@ -9813,8 +9403,7 @@ public static native @Cast("CUresult") int cuFuncSetAttribute(CUfunc_st hfunc, @
  * \sa ::cuCtxGetCacheConfig,
  * ::cuCtxSetCacheConfig,
  * ::cuFuncGetAttribute,
- * ::cuLaunchKernel,
- * ::cudaFuncSetCacheConfig
+ * ::cuLaunchKernel
  */
 public static native @Cast("CUresult") int cuFuncSetCacheConfig(CUfunc_st hfunc, @Cast("CUfunc_cache") int config);
 
@@ -9866,8 +9455,7 @@ public static native @Cast("CUresult") int cuFuncSetCacheConfig(CUfunc_st hfunc,
  * ::cuCtxGetSharedMemConfig,
  * ::cuCtxSetSharedMemConfig,
  * ::cuFuncGetAttribute,
- * ::cuLaunchKernel,
- * ::cudaFuncSetSharedMemConfig
+ * ::cuLaunchKernel
  */
 public static native @Cast("CUresult") int cuFuncSetSharedMemConfig(CUfunc_st hfunc, @Cast("CUsharedconfig") int config);
 // #endif
@@ -9981,8 +9569,7 @@ public static native @Cast("CUresult") int cuFuncSetSharedMemConfig(CUfunc_st hf
  * \sa ::cuCtxGetCacheConfig,
  * ::cuCtxSetCacheConfig,
  * ::cuFuncSetCacheConfig,
- * ::cuFuncGetAttribute,
- * ::cudaLaunchKernel
+ * ::cuFuncGetAttribute
  */
 public static native @Cast("CUresult") int cuLaunchKernel(CUfunc_st f,
                                 @Cast("unsigned int") int gridDimX,
@@ -10007,240 +9594,6 @@ public static native @Cast("CUresult") int cuLaunchKernel(CUfunc_st f,
                                 @Cast("void**") @ByPtrPtr Pointer kernelParams,
                                 @Cast("void**") @ByPtrPtr Pointer extra);
 // #endif /* __CUDA_API_VERSION >= 4000 */
-// #if __CUDA_API_VERSION >= 9000
-/**
- * \brief Launches a CUDA function where thread blocks can cooperate and synchronize as they execute
- *
- * Invokes the kernel \p f on a \p gridDimX x \p gridDimY x \p gridDimZ
- * grid of blocks. Each block contains \p blockDimX x \p blockDimY x
- * \p blockDimZ threads.
- *
- * \p sharedMemBytes sets the amount of dynamic shared memory that will be
- * available to each thread block.
- *
- * The device on which this kernel is invoked must have a non-zero value for
- * the device attribute ::CU_DEVICE_ATTRIBUTE_COOPERATIVE_LAUNCH.
- *
- * The total number of blocks launched cannot exceed the maximum number of blocks per
- * multiprocessor as returned by ::cuOccupancyMaxActiveBlocksPerMultiprocessor (or
- * ::cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) times the number of multiprocessors
- * as specified by the device attribute ::CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT.
- *
- * The kernel cannot make use of CUDA dynamic parallelism.
- *
- * Kernel parameters must be specified via \p kernelParams.  If \p f
- * has N parameters, then \p kernelParams needs to be an array of N
- * pointers.  Each of \p kernelParams[0] through \p kernelParams[N-1]
- * must point to a region of memory from which the actual kernel
- * parameter will be copied.  The number of kernel parameters and their
- * offsets and sizes do not need to be specified as that information is
- * retrieved directly from the kernel's image.
- *
- * Calling ::cuLaunchCooperativeKernel() sets persistent function state that is
- * the same as function state set through ::cuLaunchKernel API
- *
- * When the kernel \p f is launched via ::cuLaunchCooperativeKernel(), the previous
- * block shape, shared size and parameter info associated with \p f
- * is overwritten.
- *
- * Note that to use ::cuLaunchCooperativeKernel(), the kernel \p f must either have
- * been compiled with toolchain version 3.2 or later so that it will
- * contain kernel parameter information, or have no kernel parameters.
- * If either of these conditions is not met, then ::cuLaunchCooperativeKernel() will
- * return ::CUDA_ERROR_INVALID_IMAGE.
- *
- * @param f              - Kernel to launch
- * @param gridDimX       - Width of grid in blocks
- * @param gridDimY       - Height of grid in blocks
- * @param gridDimZ       - Depth of grid in blocks
- * @param blockDimX      - X dimension of each thread block
- * @param blockDimY      - Y dimension of each thread block
- * @param blockDimZ      - Z dimension of each thread block
- * @param sharedMemBytes - Dynamic shared-memory size per thread block in bytes
- * @param hStream        - Stream identifier
- * @param kernelParams   - Array of pointers to kernel parameters
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_CONTEXT,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_INVALID_IMAGE,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_LAUNCH_FAILED,
- * ::CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES,
- * ::CUDA_ERROR_LAUNCH_TIMEOUT,
- * ::CUDA_ERROR_LAUNCH_INCOMPATIBLE_TEXTURING,
- * ::CUDA_ERROR_COOPERATIVE_LAUNCH_TOO_LARGE,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
- * \note_null_stream
- * \notefnerr
- *
- * \sa ::cuCtxGetCacheConfig,
- * ::cuCtxSetCacheConfig,
- * ::cuFuncSetCacheConfig,
- * ::cuFuncGetAttribute,
- * ::cuLaunchCooperativeKernelMultiDevice,
- * ::cudaLaunchCooperativeKernel
- */
-public static native @Cast("CUresult") int cuLaunchCooperativeKernel(CUfunc_st f,
-                                @Cast("unsigned int") int gridDimX,
-                                @Cast("unsigned int") int gridDimY,
-                                @Cast("unsigned int") int gridDimZ,
-                                @Cast("unsigned int") int blockDimX,
-                                @Cast("unsigned int") int blockDimY,
-                                @Cast("unsigned int") int blockDimZ,
-                                @Cast("unsigned int") int sharedMemBytes,
-                                CUstream_st hStream,
-                                @Cast("void**") PointerPointer kernelParams);
-public static native @Cast("CUresult") int cuLaunchCooperativeKernel(CUfunc_st f,
-                                @Cast("unsigned int") int gridDimX,
-                                @Cast("unsigned int") int gridDimY,
-                                @Cast("unsigned int") int gridDimZ,
-                                @Cast("unsigned int") int blockDimX,
-                                @Cast("unsigned int") int blockDimY,
-                                @Cast("unsigned int") int blockDimZ,
-                                @Cast("unsigned int") int sharedMemBytes,
-                                CUstream_st hStream,
-                                @Cast("void**") @ByPtrPtr Pointer kernelParams);
-
-/**
- * \brief Launches CUDA functions on multiple devices where thread blocks can cooperate and synchronize as they execute
- *
- * Invokes kernels as specified in the \p launchParamsList array where each element
- * of the array specifies all the parameters required to perform a single kernel launch.
- * These kernels can cooperate and synchronize as they execute. The size of the array is
- * specified by \p numDevices.
- *
- * No two kernels can be launched on the same device. All the devices targeted by this
- * multi-device launch must be identical. All devices must have a non-zero value for the
- * device attribute ::CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH.
- * 
- * All kernels launched must be identical with respect to the compiled code. Note that
- * any __device__, __constant__ or __managed__ variables present in the module that owns
- * the kernel launched on each device, are independently instantiated on every device.
- * It is the application's responsiblity to ensure these variables are initialized and
- * used appropriately.
- *
- * The size of the grids as specified in blocks, the size of the blocks themselves
- * and the amount of shared memory used by each thread block must also match across
- * all launched kernels.
- *
- * The streams used to launch these kernels must have been created via either ::cuStreamCreate
- * or ::cuStreamCreateWithPriority. The NULL stream or ::CU_STREAM_LEGACY or ::CU_STREAM_PER_THREAD
- * cannot be used.
- *
- * The total number of blocks launched per kernel cannot exceed the maximum number of blocks
- * per multiprocessor as returned by ::cuOccupancyMaxActiveBlocksPerMultiprocessor (or
- * ::cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) times the number of multiprocessors
- * as specified by the device attribute ::CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT. Since the
- * total number of blocks launched per device has to match across all devices, the maximum
- * number of blocks that can be launched per device will be limited by the device with the
- * least number of multiprocessors.
- *
- * The kernels cannot make use of CUDA dynamic parallelism.
- *
- * The ::CUDA_LAUNCH_PARAMS structure is defined as:
- * <pre>{@code
-        typedef struct CUDA_LAUNCH_PARAMS_st
-        {
-            CUfunction function;
-            unsigned int gridDimX;
-            unsigned int gridDimY;
-            unsigned int gridDimZ;
-            unsigned int blockDimX;
-            unsigned int blockDimY;
-            unsigned int blockDimZ;
-            unsigned int sharedMemBytes;
-            CUstream hStream;
-            void **kernelParams;
-        } CUDA_LAUNCH_PARAMS;
- * }</pre>
- * where:
- * - ::CUDA_LAUNCH_PARAMS::function specifies the kernel to be launched. All functions must
- *   be identical with respect to the compiled code.
- * - ::CUDA_LAUNCH_PARAMS::gridDimX is the width of the grid in blocks. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::gridDimY is the height of the grid in blocks. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::gridDimZ is the depth of the grid in blocks. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::blockDimX is the X dimension of each thread block. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::blockDimX is the Y dimension of each thread block. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::blockDimZ is the Z dimension of each thread block. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::sharedMemBytes is the dynamic shared-memory size per thread block in bytes.
- *   This must match across all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::hStream is the handle to the stream to perform the launch in. This cannot
- *   be the NULL stream or ::CU_STREAM_LEGACY or ::CU_STREAM_PER_THREAD. The CUDA context associated
- *   with this stream must match that associated with ::CUDA_LAUNCH_PARAMS::function.
- * - ::CUDA_LAUNCH_PARAMS::kernelParams is an array of pointers to kernel parameters. If
- *   ::CUDA_LAUNCH_PARAMS::function has N parameters, then ::CUDA_LAUNCH_PARAMS::kernelParams
- *   needs to be an array of N pointers. Each of ::CUDA_LAUNCH_PARAMS::kernelParams[0] through
- *   ::CUDA_LAUNCH_PARAMS::kernelParams[N-1] must point to a region of memory from which the actual
- *   kernel parameter will be copied. The number of kernel parameters and their offsets and sizes
- *   do not need to be specified as that information is retrieved directly from the kernel's image.
- *
- * By default, the kernel won't begin execution on any GPU until all prior work in all the specified
- * streams has completed. This behavior can be overridden by specifying the flag
- * ::CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_PRE_LAUNCH_SYNC. When this flag is specified, each kernel
- * will only wait for prior work in the stream corresponding to that GPU to complete before it begins
- * execution.
- *
- * Similarly, by default, any subsequent work pushed in any of the specified streams will not begin
- * execution until the kernels on all GPUs have completed. This behavior can be overridden by specifying
- * the flag ::CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_POST_LAUNCH_SYNC. When this flag is specified,
- * any subsequent work pushed in any of the specified streams will only wait for the kernel launched
- * on the GPU corresponding to that stream to complete before it begins execution.
- *
- * Calling ::cuLaunchCooperativeKernelMultiDevice() sets persistent function state that is
- * the same as function state set through ::cuLaunchKernel API when called individually for each
- * element in \p launchParamsList.
- *
- * When kernels are launched via ::cuLaunchCooperativeKernelMultiDevice(), the previous
- * block shape, shared size and parameter info associated with each ::CUDA_LAUNCH_PARAMS::function
- * in \p launchParamsList is overwritten.
- *
- * Note that to use ::cuLaunchCooperativeKernelMultiDevice(), the kernels must either have
- * been compiled with toolchain version 3.2 or later so that it will
- * contain kernel parameter information, or have no kernel parameters.
- * If either of these conditions is not met, then ::cuLaunchCooperativeKernelMultiDevice() will
- * return ::CUDA_ERROR_INVALID_IMAGE.
- *
- * @param launchParamsList - List of launch parameters, one per device
- * @param numDevices       - Size of the \p launchParamsList array
- * @param flags            - Flags to control launch behavior
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_CONTEXT,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_INVALID_IMAGE,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_LAUNCH_FAILED,
- * ::CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES,
- * ::CUDA_ERROR_LAUNCH_TIMEOUT,
- * ::CUDA_ERROR_LAUNCH_INCOMPATIBLE_TEXTURING,
- * ::CUDA_ERROR_COOPERATIVE_LAUNCH_TOO_LARGE,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
- * \note_null_stream
- * \notefnerr
- *
- * \sa ::cuCtxGetCacheConfig,
- * ::cuCtxSetCacheConfig,
- * ::cuFuncSetCacheConfig,
- * ::cuFuncGetAttribute,
- * ::cuLaunchCooperativeKernel,
- * ::cudaLaunchCooperativeKernelMultiDevice
- */
-public static native @Cast("CUresult") int cuLaunchCooperativeKernelMultiDevice(CUDA_LAUNCH_PARAMS launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags);
-
-// #endif /* __CUDA_API_VERSION >= 9000 */
 
 /** \} */ /* END CUDA_EXEC */
 
@@ -10642,8 +9995,6 @@ public static native @Cast("CUresult") int cuParamSetTexRef(CUfunc_st hfunc, int
  * ::CUDA_ERROR_UNKNOWN
  * \notefnerr
  *
- * \sa
- * ::cudaOccupancyMaxActiveBlocksPerMultiprocessor
  */
 public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessor(IntPointer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessor(IntBuffer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize);
@@ -10686,8 +10037,6 @@ public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultipro
  * ::CUDA_ERROR_UNKNOWN
  * \notefnerr
  *
- * \sa
- * ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
  */
 public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntPointer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
 public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntBuffer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
@@ -10740,8 +10089,6 @@ public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultipro
  * ::CUDA_ERROR_UNKNOWN
  * \notefnerr
  *
- * \sa
- * ::cudaOccupancyMaxPotentialBlockSize
  */
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSize(IntPointer minGridSize, IntPointer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit);
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSize(IntBuffer minGridSize, IntBuffer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit);
@@ -10788,8 +10135,6 @@ public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSize(int[
  * ::CUDA_ERROR_UNKNOWN
  * \notefnerr
  *
- * \sa
- * ::cudaOccupancyMaxPotentialBlockSizeWithFlags
  */
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSizeWithFlags(IntPointer minGridSize, IntPointer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit, @Cast("unsigned int") int flags);
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSizeWithFlags(IntBuffer minGridSize, IntBuffer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit, @Cast("unsigned int") int flags);
@@ -10834,8 +10179,7 @@ public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSizeWithF
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetArray(CUtexref_st hTexRef, CUarray_st hArray, @Cast("unsigned int") int Flags);
 
@@ -10862,8 +10206,7 @@ public static native @Cast("CUresult") int cuTexRefSetArray(CUtexref_st hTexRef,
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetMipmappedArray(CUtexref_st hTexRef, CUmipmappedArray_st hMipmappedArray, @Cast("unsigned int") int Flags);
 
@@ -10907,8 +10250,7 @@ public static native @Cast("CUresult") int cuTexRefSetMipmappedArray(CUtexref_st
  * \sa ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTexture
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetAddress(@Cast("size_t*") SizeTPointer ByteOffset, CUtexref_st hTexRef, @Cast("CUdeviceptr") long dptr, @Cast("size_t") long bytes);
 
@@ -10960,8 +10302,7 @@ public static native @Cast("CUresult") int cuTexRefSetAddress(@Cast("size_t*") S
  * ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTexture2D
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetAddress2D(CUtexref_st hTexRef, @Const CUDA_ARRAY_DESCRIPTOR desc, @Cast("CUdeviceptr") long dptr, @Cast("size_t") long Pitch);
 // #endif /* __CUDA_API_VERSION >= 3020 */
@@ -10990,12 +10331,7 @@ public static native @Cast("CUresult") int cuTexRefSetAddress2D(CUtexref_st hTex
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFlags,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaCreateChannelDesc,
- * ::cudaBindTexture,
- * ::cudaBindTexture2D,
- * ::cudaBindTextureToArray,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetFormat(CUtexref_st hTexRef, @Cast("CUarray_format") int fmt, int NumPackedComponents);
 
@@ -11035,11 +10371,7 @@ public static native @Cast("CUresult") int cuTexRefSetFormat(CUtexref_st hTexRef
  * ::cuTexRefSetAddress2D, ::cuTexRefSetArray,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTexture,
- * ::cudaBindTexture2D,
- * ::cudaBindTextureToArray,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetAddressMode(CUtexref_st hTexRef, int dim, @Cast("CUaddress_mode") int am);
 
@@ -11072,8 +10404,7 @@ public static native @Cast("CUresult") int cuTexRefSetAddressMode(CUtexref_st hT
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetFilterMode(CUtexref_st hTexRef, @Cast("CUfilter_mode") int fm);
 
@@ -11106,8 +10437,7 @@ public static native @Cast("CUresult") int cuTexRefSetFilterMode(CUtexref_st hTe
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetMipmapFilterMode(CUtexref_st hTexRef, @Cast("CUfilter_mode") int fm);
 
@@ -11133,8 +10463,7 @@ public static native @Cast("CUresult") int cuTexRefSetMipmapFilterMode(CUtexref_
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetMipmapLevelBias(CUtexref_st hTexRef, float bias);
 
@@ -11162,8 +10491,7 @@ public static native @Cast("CUresult") int cuTexRefSetMipmapLevelBias(CUtexref_s
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetMipmapLevelClamp(CUtexref_st hTexRef, float minMipmapLevelClamp, float maxMipmapLevelClamp);
 
@@ -11189,9 +10517,7 @@ public static native @Cast("CUresult") int cuTexRefSetMipmapLevelClamp(CUtexref_
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFlags, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTextureToArray,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetMaxAnisotropy(CUtexref_st hTexRef, @Cast("unsigned int") int maxAniso);
 
@@ -11221,11 +10547,7 @@ public static native @Cast("CUresult") int cuTexRefSetMaxAnisotropy(CUtexref_st 
  * ::CUDA_ERROR_INVALID_VALUE
  *
  * \sa ::cuTexRefSetAddressMode,
- * ::cuTexRefGetAddressMode, ::cuTexRefGetBorderColor,
- * ::cudaBindTexture,
- * ::cudaBindTexture2D,
- * ::cudaBindTextureToArray,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetAddressMode, ::cuTexRefGetBorderColor
  */
 public static native @Cast("CUresult") int cuTexRefSetBorderColor(CUtexref_st hTexRef, FloatPointer pBorderColor);
 public static native @Cast("CUresult") int cuTexRefSetBorderColor(CUtexref_st hTexRef, FloatBuffer pBorderColor);
@@ -11262,11 +10584,7 @@ public static native @Cast("CUresult") int cuTexRefSetBorderColor(CUtexref_st hT
  * ::cuTexRefSetAddress2D, ::cuTexRefSetAddressMode, ::cuTexRefSetArray,
  * ::cuTexRefSetFilterMode, ::cuTexRefSetFormat,
  * ::cuTexRefGetAddress, ::cuTexRefGetAddressMode, ::cuTexRefGetArray,
- * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat,
- * ::cudaBindTexture,
- * ::cudaBindTexture2D,
- * ::cudaBindTextureToArray,
- * ::cudaBindTextureToMipmappedArray
+ * ::cuTexRefGetFilterMode, ::cuTexRefGetFlags, ::cuTexRefGetFormat
  */
 public static native @Cast("CUresult") int cuTexRefSetFlags(CUtexref_st hTexRef, @Cast("unsigned int") int Flags);
 
@@ -11684,10 +11002,7 @@ public static native @Cast("CUresult") int cuTexRefDestroy(CUtexref_st hTexRef);
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuModuleGetSurfRef,
- * ::cuSurfRefGetArray,
- * ::cudaBindSurfaceToArray
+ * \sa ::cuModuleGetSurfRef, ::cuSurfRefGetArray
  */
 public static native @Cast("CUresult") int cuSurfRefSetArray(CUsurfref_st hSurfRef, CUarray_st hArray, @Cast("unsigned int") int Flags);
 
@@ -11930,9 +11245,7 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuTexObjectDestroy,
- * ::cudaCreateTextureObject
+ * \sa ::cuTexObjectDestroy
  */
 public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") LongPointer pTexObject, @Const CUDA_RESOURCE_DESC pResDesc, @Const CUDA_TEXTURE_DESC pTexDesc, @Const CUDA_RESOURCE_VIEW_DESC pResViewDesc);
 public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*") LongBuffer pTexObject, @Const CUDA_RESOURCE_DESC pResDesc, @Const CUDA_TEXTURE_DESC pTexDesc, @Const CUDA_RESOURCE_VIEW_DESC pResViewDesc);
@@ -11952,9 +11265,7 @@ public static native @Cast("CUresult") int cuTexObjectCreate(@Cast("CUtexObject*
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuTexObjectCreate,
- * ::cudaDestroyTextureObject
+ * \sa ::cuTexObjectCreate
  */
 public static native @Cast("CUresult") int cuTexObjectDestroy(@Cast("CUtexObject") long texObject);
 
@@ -11973,9 +11284,7 @@ public static native @Cast("CUresult") int cuTexObjectDestroy(@Cast("CUtexObject
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuTexObjectCreate,
- * ::cudaGetTextureObjectResourceDesc,
+ * \sa ::cuTexObjectCreate
  */
 public static native @Cast("CUresult") int cuTexObjectGetResourceDesc(CUDA_RESOURCE_DESC pResDesc, @Cast("CUtexObject") long texObject);
 
@@ -11994,9 +11303,7 @@ public static native @Cast("CUresult") int cuTexObjectGetResourceDesc(CUDA_RESOU
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuTexObjectCreate,
- * ::cudaGetTextureObjectTextureDesc
+ * \sa ::cuTexObjectCreate
  */
 public static native @Cast("CUresult") int cuTexObjectGetTextureDesc(CUDA_TEXTURE_DESC pTexDesc, @Cast("CUtexObject") long texObject);
 
@@ -12016,9 +11323,7 @@ public static native @Cast("CUresult") int cuTexObjectGetTextureDesc(CUDA_TEXTUR
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuTexObjectCreate,
- * ::cudaGetTextureObjectResourceViewDesc
+ * \sa ::cuTexObjectCreate
  */
 public static native @Cast("CUresult") int cuTexObjectGetResourceViewDesc(CUDA_RESOURCE_VIEW_DESC pResViewDesc, @Cast("CUtexObject") long texObject);
 
@@ -12059,9 +11364,7 @@ public static native @Cast("CUresult") int cuTexObjectGetResourceViewDesc(CUDA_R
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuSurfObjectDestroy,
- * ::cudaCreateSurfaceObject
+ * \sa ::cuSurfObjectDestroy
  */
 public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") LongPointer pSurfObject, @Const CUDA_RESOURCE_DESC pResDesc);
 public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObject*") LongBuffer pSurfObject, @Const CUDA_RESOURCE_DESC pResDesc);
@@ -12081,9 +11384,7 @@ public static native @Cast("CUresult") int cuSurfObjectCreate(@Cast("CUsurfObjec
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuSurfObjectCreate,
- * ::cudaDestroySurfaceObject
+ * \sa ::cuSurfObjectCreate
  */
 public static native @Cast("CUresult") int cuSurfObjectDestroy(@Cast("CUsurfObject") long surfObject);
 
@@ -12102,15 +11403,14 @@ public static native @Cast("CUresult") int cuSurfObjectDestroy(@Cast("CUsurfObje
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  *
- * \sa
- * ::cuSurfObjectCreate,
- * ::cudaGetSurfaceObjectResourceDesc
+ * \sa ::cuSurfObjectCreate
  */
 public static native @Cast("CUresult") int cuSurfObjectGetResourceDesc(CUDA_RESOURCE_DESC pResDesc, @Cast("CUsurfObject") long surfObject);
 
 /** \} */ /* END CUDA_SURFOBJECT */
 // #endif /* __CUDA_API_VERSION >= 5000 */
 
+// #if __CUDA_API_VERSION >= 4000
 /**
  * \defgroup CUDA_PEER_ACCESS Peer Context Memory Access
  *
@@ -12122,9 +11422,7 @@ public static native @Cast("CUresult") int cuSurfObjectGetResourceDesc(CUDA_RESO
  *
  * \{
  */
-
-// #if __CUDA_API_VERSION >= 4000
-
+    
 /**
  * \brief Queries if a device may directly access a peer device's memory.
  *
@@ -12146,14 +11444,49 @@ public static native @Cast("CUresult") int cuSurfObjectGetResourceDesc(CUDA_RESO
  * ::CUDA_ERROR_INVALID_DEVICE
  * \notefnerr
  *
- * \sa
- * ::cuCtxEnablePeerAccess,
- * ::cuCtxDisablePeerAccess,
- * ::cudaDeviceCanAccessPeer
+ * \sa ::cuCtxEnablePeerAccess,
+ * ::cuCtxDisablePeerAccess
  */
 public static native @Cast("CUresult") int cuDeviceCanAccessPeer(IntPointer canAccessPeer, @Cast("CUdevice") int dev, @Cast("CUdevice") int peerDev);
 public static native @Cast("CUresult") int cuDeviceCanAccessPeer(IntBuffer canAccessPeer, @Cast("CUdevice") int dev, @Cast("CUdevice") int peerDev);
 public static native @Cast("CUresult") int cuDeviceCanAccessPeer(int[] canAccessPeer, @Cast("CUdevice") int dev, @Cast("CUdevice") int peerDev);
+
+
+/**
+ * \brief Queries attributes of the link between two devices.
+ *
+ * Returns in \p *value the value of the requested attribute \p attrib of the
+ * link between \p srcDevice and \p dstDevice. The supported attributes are:
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK: A relative value indicating the
+ *   performance of the link between two devices.
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED P2P: 1 if P2P Access is enable.
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED: 1 if Atomic operations over
+ *   the link are supported.
+ *
+ * Returns ::CUDA_ERROR_INVALID_DEVICE if \p srcDevice or \p dstDevice are not valid
+ * or if they represent the same device.
+ *
+ * Returns ::CUDA_ERROR_INVALID_VALUE if \p attrib is not valid or if \p value is
+ * a null pointer.
+ *
+ * @param value         - Returned value of the requested attribute
+ * @param attrib        - The requested attribute of the link between \p srcDevice and \p dstDevice.
+ * @param srcDevice     - The source device of the target link.
+ * @param dstDevice     - The destination device of the target link.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \notefnerr
+ *
+ * \sa ::cuCtxEnablePeerAccess,
+ * ::cuCtxDisablePeerAccess,
+ * ::cuCtxCanAccessPeer
+ */
+
 
 /**
  * \brief Enables direct access to memory allocations in a peer context.
@@ -12199,10 +11532,8 @@ public static native @Cast("CUresult") int cuDeviceCanAccessPeer(int[] canAccess
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
  *
- * \sa
- * ::cuDeviceCanAccessPeer,
- * ::cuCtxDisablePeerAccess,
- * ::cudaDeviceEnablePeerAccess
+ * \sa ::cuDeviceCanAccessPeer,
+ * ::cuCtxDisablePeerAccess
  */
 public static native @Cast("CUresult") int cuCtxEnablePeerAccess(CUctx_st peerContext, @Cast("unsigned int") int Flags);
 
@@ -12226,58 +11557,13 @@ public static native @Cast("CUresult") int cuCtxEnablePeerAccess(CUctx_st peerCo
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * \notefnerr
  *
- * \sa
- * ::cuDeviceCanAccessPeer,
- * ::cuCtxEnablePeerAccess,
- * ::cudaDeviceDisablePeerAccess
+ * \sa ::cuDeviceCanAccessPeer,
+ * ::cuCtxEnablePeerAccess
  */
 public static native @Cast("CUresult") int cuCtxDisablePeerAccess(CUctx_st peerContext);
 
-// #endif /* __CUDA_API_VERSION >= 4000 */
-
-// #if __CUDA_API_VERSION >= 8000
-
-/**
- * \brief Queries attributes of the link between two devices.
- *
- * Returns in \p *value the value of the requested attribute \p attrib of the
- * link between \p srcDevice and \p dstDevice. The supported attributes are:
- * - ::CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK: A relative value indicating the
- *   performance of the link between two devices.
- * - ::CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED P2P: 1 if P2P Access is enable.
- * - ::CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED: 1 if Atomic operations over
- *   the link are supported.
- *
- * Returns ::CUDA_ERROR_INVALID_DEVICE if \p srcDevice or \p dstDevice are not valid
- * or if they represent the same device.
- *
- * Returns ::CUDA_ERROR_INVALID_VALUE if \p attrib is not valid or if \p value is
- * a null pointer.
- *
- * @param value         - Returned value of the requested attribute
- * @param attrib        - The requested attribute of the link between \p srcDevice and \p dstDevice.
- * @param srcDevice     - The source device of the target link.
- * @param dstDevice     - The destination device of the target link.
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_DEVICE,
- * ::CUDA_ERROR_INVALID_VALUE
- * \notefnerr
- *
- * \sa
- * ::cuCtxEnablePeerAccess,
- * ::cuCtxDisablePeerAccess,
- * ::cuDeviceCanAccessPeer,
- * ::cudaDeviceGetP2PAttribute
- */
-
-
-// #endif /* __CUDA_API_VERSION >= 8000 */
-
 /** \} */ /* END CUDA_PEER_ACCESS */
+// #endif /* __CUDA_API_VERSION >= 4000 */
 
 /**
  * \defgroup CUDA_GRAPHICS Graphics Interoperability
@@ -12316,8 +11602,7 @@ public static native @Cast("CUresult") int cuCtxDisablePeerAccess(CUctx_st peerC
  * ::cuGraphicsD3D10RegisterResource,
  * ::cuGraphicsD3D11RegisterResource,
  * ::cuGraphicsGLRegisterBuffer,
- * ::cuGraphicsGLRegisterImage,
- * ::cudaGraphicsUnregisterResource
+ * ::cuGraphicsGLRegisterImage
  */
 public static native @Cast("CUresult") int cuGraphicsUnregisterResource(CUgraphicsResource_st resource);
 
@@ -12355,9 +11640,7 @@ public static native @Cast("CUresult") int cuGraphicsUnregisterResource(CUgraphi
  * ::CUDA_ERROR_NOT_MAPPED_AS_ARRAY
  * \notefnerr
  *
- * \sa
- * ::cuGraphicsResourceGetMappedPointer,
- * ::cudaGraphicsSubResourceGetMappedArray
+ * \sa ::cuGraphicsResourceGetMappedPointer
  */
 public static native @Cast("CUresult") int cuGraphicsSubResourceGetMappedArray(@ByPtrPtr CUarray_st pArray, CUgraphicsResource_st resource, @Cast("unsigned int") int arrayIndex, @Cast("unsigned int") int mipLevel);
 
@@ -12388,9 +11671,7 @@ public static native @Cast("CUresult") int cuGraphicsSubResourceGetMappedArray(@
  * ::CUDA_ERROR_NOT_MAPPED_AS_ARRAY
  * \notefnerr
  *
- * \sa
- * ::cuGraphicsResourceGetMappedPointer,
- * ::cudaGraphicsResourceGetMappedMipmappedArray
+ * \sa ::cuGraphicsResourceGetMappedPointer
  */
 public static native @Cast("CUresult") int cuGraphicsResourceGetMappedMipmappedArray(@ByPtrPtr CUmipmappedArray_st pMipmappedArray, CUgraphicsResource_st resource);
 
@@ -12426,8 +11707,7 @@ public static native @Cast("CUresult") int cuGraphicsResourceGetMappedMipmappedA
  *
  * \sa
  * ::cuGraphicsMapResources,
- * ::cuGraphicsSubResourceGetMappedArray,
- * ::cudaGraphicsResourceGetMappedPointer
+ * ::cuGraphicsSubResourceGetMappedArray
  */
 public static native @Cast("CUresult") int cuGraphicsResourceGetMappedPointer(@Cast("CUdeviceptr*") LongPointer pDevPtr, @Cast("size_t*") SizeTPointer pSize, CUgraphicsResource_st resource);
 public static native @Cast("CUresult") int cuGraphicsResourceGetMappedPointer(@Cast("CUdeviceptr*") LongBuffer pDevPtr, @Cast("size_t*") SizeTPointer pSize, CUgraphicsResource_st resource);
@@ -12470,8 +11750,7 @@ public static native @Cast("CUresult") int cuGraphicsResourceGetMappedPointer(@C
  * \notefnerr
  *
  * \sa
- * ::cuGraphicsMapResources,
- * ::cudaGraphicsResourceSetMapFlags
+ * ::cuGraphicsMapResources
  */
 public static native @Cast("CUresult") int cuGraphicsResourceSetMapFlags(CUgraphicsResource_st resource, @Cast("unsigned int") int flags);
 
@@ -12510,8 +11789,7 @@ public static native @Cast("CUresult") int cuGraphicsResourceSetMapFlags(CUgraph
  * \sa
  * ::cuGraphicsResourceGetMappedPointer,
  * ::cuGraphicsSubResourceGetMappedArray,
- * ::cuGraphicsUnmapResources,
- * ::cudaGraphicsMapResources
+ * ::cuGraphicsUnmapResources
  */
 public static native @Cast("CUresult") int cuGraphicsMapResources(@Cast("unsigned int") int count, @ByPtrPtr CUgraphicsResource_st resources, CUstream_st hStream);
 
@@ -12547,8 +11825,7 @@ public static native @Cast("CUresult") int cuGraphicsMapResources(@Cast("unsigne
  * \notefnerr
  *
  * \sa
- * ::cuGraphicsMapResources,
- * ::cudaGraphicsUnmapResources
+ * ::cuGraphicsMapResources
  */
 public static native @Cast("CUresult") int cuGraphicsUnmapResources(@Cast("unsigned int") int count, @ByPtrPtr CUgraphicsResource_st resources, CUstream_st hStream);
 
@@ -12601,10 +11878,10 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 
 
 
-// Parsed from <crt/host_defines.h>
+// Parsed from <host_defines.h>
 
 /*
- * Copyright 1993-2017 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -12665,7 +11942,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define __no_return__
 //         __attribute__((noreturn))
         
-// #if defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)
+// #if defined(__CUDACC__) || defined(__CUDA_ARCH__)
 /* gcc allows users to define attributes with underscores, 
    e.g., __attribute__((__noinline__)).
    Consider a non-CUDA source file (e.g. .cpp) that has the 
@@ -12676,7 +11953,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 */   
 // #define __noinline__
 //         __attribute__((noinline))
-// #endif /* __CUDACC__  || __CUDA_ARCH__ || __CUDA_LIBDEVICE__ */
+// #endif /* __CUDACC__  || __CUDA_ARCH__ */       
         
 // #define __forceinline__
 //         __inline__ __attribute__((always_inline))
@@ -12764,29 +12041,29 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 //          (_MSC_VER && _MSC_VER < 1900) ||
 //          (!__GNUC__ && !_MSC_VER) */
 
-// #if !defined(__CUDACC__) && !defined(__CUDA_LIBDEVICE__)
+// #if !defined(__CUDACC__) && !defined(__CUDABE__)
 
 // #undef __annotate__
 // #define __annotate__(a)
 
-// #else /* !__CUDACC__ && !__CUDA_LIBDEVICE__ */
+// #else /* !__CUDACC__ && !__CUDABE__ */
 
 // #define __launch_bounds__(...)
 //         __annotate__(launch_bounds(__VA_ARGS__))
 
-// #endif /* !__CUDACC__ && !__CUDA_LIBDEVICE__ */
+// #endif /* !__CUDACC__ && !__CUDABE__ */
 
-// #if defined(__CUDACC__) || defined(__CUDA_LIBDEVICE__) ||
+// #if defined(__CUDACC__) || defined(__CUDABE__) ||
 //     defined(__GNUC__) || defined(_WIN64)
 
 // #define __builtin_align__(a)
 //         __align__(a)
 
-// #else /* __CUDACC__ || __CUDA_LIBDEVICE__ || __GNUC__ || _WIN64 */
+// #else /* __CUDACC__ || __CUDABE__ || __GNUC__ || _WIN64 */
 
 // #define __builtin_align__(a)
 
-// #endif /* __CUDACC__ || __CUDA_LIBDEVICE__ || __GNUC__  || _WIN64 */
+// #endif /* __CUDACC__ || __CUDABE__ || __GNUC__  || _WIN64 */
 
 // #define __host__
 //         __location__(host)
@@ -12801,12 +12078,12 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define __managed__
 //         __location__(managed)
         
-// #if !defined(__CUDACC__)
+// #if (defined(__CUDABE__) && !defined(__CUDACC_INTEGRATED__)) || !defined(__CUDACC__)
 // #define __device_builtin__
 // #define __device_builtin_texture_type__
 // #define __device_builtin_surface_type__
 // #define __cudart_builtin__
-// #else /* defined(__CUDACC__) */
+// #else /* (defined(__CUDABE__) && !defined(__CUDACC_INTEGRATED__))  || !__CUDACC__ */
 // #define __device_builtin__
 //         __location__(device_builtin)
 // #define __device_builtin_texture_type__
@@ -12815,7 +12092,26 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 //         __location__(device_builtin_surface_type)
 // #define __cudart_builtin__
 //         __location__(cudart_builtin)
-// #endif /* !defined(__CUDACC__) */
+// #endif /* (defined(__CUDABE__) && !defined(__CUDACC_INTEGRATED__))  || !__CUDACC__ */
+
+// #if defined(__CUDACC__) && defined(__clang__)
+
+// #if !defined(__has_feature)
+// #error --- !!! The Clang version does not support __has_feature !!! ---
+// #endif /* !__has_feature */
+
+// #if defined(__cplusplus) && defined(__CUDACC__)
+// #if (__has_feature(cxx_noexcept))
+// #define NV_CLANG_ATOMIC_NOEXCEPT noexcept
+// #define NV_CLANG_ATOMIC_NOEXCEPT_(x) noexcept(x)
+// #else /* !__has_feature(cxx_noexcept) */
+// #define NV_CLANG_ATOMIC_NOEXCEPT throw()
+// #define NV_CLANG_ATOMIC_NOEXCEPT_(x)
+// #endif /* __has_feature(cxx_noexcept) */
+// #define _Atomic(X) __nv_clang_atomic_t<X>
+// #endif /* defined(__cplusplus) && defined(__CUDACC__) */
+
+// #endif /* __CUDACC__ && __clang__ */
 
 
 // #endif /* !__HOST_DEFINES_H__ */
@@ -12948,7 +12244,6 @@ public static final int
 // #define __DRIVER_TYPES_H__
 
 // #include "host_defines.h"
-// #include "vector_types.h"
 
 /**
  * \defgroup CUDART_TYPES Data types used by CUDA Runtime
@@ -13078,20 +12373,6 @@ public static final int cudaOccupancyDisableCachingOverride = 0x01;
 public static final int cudaCpuDeviceId =                     ((int)-1);
 /** Device id that represents an invalid device */
 public static final int cudaInvalidDeviceId =                 ((int)-2);
-
-/**
- * If set, each kernel launched as part of ::cudaLaunchCooperativeKernelMultiDevice only
- * waits for prior work in the stream corresponding to that GPU to complete before the
- * kernel begins execution.
- */
-public static final int cudaCooperativeLaunchMultiDeviceNoPreSync =  0x01;
-
-/**
- * If set, any subsequent work pushed in a stream that participated in a call to
- * ::cudaLaunchCooperativeKernelMultiDevice will only wait for the kernel launched on
- * the GPU corresponding to that stream to complete before it begins execution.
- */
-public static final int cudaCooperativeLaunchMultiDeviceNoPostSync = 0x02;
 
 // #endif /* !__CUDA_INTERNAL_COMPILATION__ */
 
@@ -13682,22 +12963,6 @@ public static final int
      * execution.
      */
     cudaErrorNvlinkUncorrectable          = 80,
-
-    /**
-     * This indicates that the PTX JIT compiler library was not found. The JIT Compiler
-     * library is used for PTX compilation. The runtime may fall back to compiling PTX
-     * if an application does not contain a suitable binary for the current device.
-     */
-    cudaErrorJitCompilerNotFound          = 81,
-
-    /**
-     * This error indicates that the number of blocks launched per grid for a kernel that was
-     * launched via either ::cudaLaunchCooperativeKernel or ::cudaLaunchCooperativeKernelMultiDevice
-     * exceeds the maximum number of blocks as allowed by ::cudaOccupancyMaxActiveBlocksPerMultiprocessor
-     * or ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags times the number of multiprocessors
-     * as specified by the device attribute ::cudaDevAttrMultiProcessorCount.
-     */
-    cudaErrorCooperativeLaunchTooLarge    = 82,
 
     /**
      * This indicates an internal startup failure in the CUDA runtime.
@@ -14309,32 +13574,7 @@ public static class cudaFuncAttributes extends Pointer {
     * user specified option "-Xptxas --dlcm=ca" set.
     */
    public native int cacheModeCA(); public native cudaFuncAttributes cacheModeCA(int cacheModeCA);
-
-   /**
-    * The maximum size in bytes of dynamic shared memory per block for 
-    * this function. Any launch must have a dynamic shared memory size
-    * smaller than this value.
-    */
-   public native int maxDynamicSharedSizeBytes(); public native cudaFuncAttributes maxDynamicSharedSizeBytes(int maxDynamicSharedSizeBytes);
-
-   /**
-    * On devices where the L1 cache and shared memory use the same hardware resources, 
-    * this sets the shared memory carveout preference, in percent of the total resources. 
-    * This is only a hint, and the driver can choose a different ratio if required to execute the function.
-    */
-   public native int preferredShmemCarveout(); public native cudaFuncAttributes preferredShmemCarveout(int preferredShmemCarveout);
 }
-
-/**
- * CUDA function attributes that can be set using cudaFuncSetAttribute
- */
-/** enum cudaFuncAttribute */
-public static final int
-    /** Maximum dynamic shared memory size */
-    cudaFuncAttributeMaxDynamicSharedMemorySize = 8,
-    /** Preferred shared memory-L1 cache split ratio */
-    cudaFuncAttributePreferredSharedMemoryCarveout = 9,
-    cudaFuncAttributeMax = 10;
 
 /**
  * CUDA function cache configurations
@@ -14359,15 +13599,6 @@ public static final int
     cudaSharedMemBankSizeDefault   = 0,
     cudaSharedMemBankSizeFourByte  = 1,
     cudaSharedMemBankSizeEightByte = 2;
-
-/** 
- * Shared memory carveout configurations
- */
-/** enum cudaSharedCarveout */
-public static final int
-    cudaSharedmemCarveoutDefault      = -1,  /* * < no preference for shared memory or L1 (default) */
-    cudaSharedmemCarveoutMaxShared    = 100, /* * < prefer maximum available shared memory, minimum L1 cache */
-    cudaSharedmemCarveoutMaxL1        = 0;    /* * < prefer maximum available L1 cache, minimum shared memory */
 
 /**
  * CUDA device compute modes
@@ -14625,16 +13856,7 @@ public static final int
     /** Device supports Compute Preemption */
     cudaDevAttrComputePreemptionSupported     = 90,
     /** Device can access host registered memory at the same virtual address as the CPU */
-    cudaDevAttrCanUseHostPointerForRegisteredMem = 91,
-    cudaDevAttrReserved92                     = 92,
-    cudaDevAttrReserved93                     = 93,
-    cudaDevAttrReserved94                     = 94,
-    /** Device supports launching cooperative kernels via ::cudaLaunchCooperativeKernel*/
-    cudaDevAttrCooperativeLaunch              = 95,
-    /** Device can participate in cooperative kernels launched via ::cudaLaunchCooperativeKernelMultiDevice */
-    cudaDevAttrCooperativeMultiDeviceLaunch   = 96,
-    /** The maximum optin shared memory per block. This value may vary by chip. See ::cudaFuncSetAttribute */
-    cudaDevAttrMaxSharedMemoryPerBlockOptin   = 97;
+    cudaDevAttrCanUseHostPointerForRegisteredMem = 91;
 
 /**
  * CUDA device P2P attributes
@@ -14814,16 +14036,6 @@ public static class cudaDeviceProp extends Pointer {
     public native int pageableMemoryAccess(); public native cudaDeviceProp pageableMemoryAccess(int pageableMemoryAccess);
     /** Device can coherently access managed memory concurrently with the CPU */
     public native int concurrentManagedAccess(); public native cudaDeviceProp concurrentManagedAccess(int concurrentManagedAccess);
-    /** Device supports Compute Preemption */
-    public native int computePreemptionSupported(); public native cudaDeviceProp computePreemptionSupported(int computePreemptionSupported);
-    /** Device can access host registered memory at the same virtual address as the CPU */
-    public native int canUseHostPointerForRegisteredMem(); public native cudaDeviceProp canUseHostPointerForRegisteredMem(int canUseHostPointerForRegisteredMem);
-    /** Device supports launching cooperative kernels via ::cudaLaunchCooperativeKernel */
-    public native int cooperativeLaunch(); public native cudaDeviceProp cooperativeLaunch(int cooperativeLaunch);
-    /** Device can participate in cooperative kernels launched via ::cudaLaunchCooperativeKernelMultiDevice */
-    public native int cooperativeMultiDeviceLaunch(); public native cudaDeviceProp cooperativeMultiDeviceLaunch(int cooperativeMultiDeviceLaunch);
-    /** Per device maximum shared memory per block usable by special opt in */
-    public native @Cast("size_t") long sharedMemPerBlockOptin(); public native cudaDeviceProp sharedMemPerBlockOptin(long sharedMemPerBlockOptin);
 }
 
 /** Empty device properties */
@@ -14895,11 +14107,6 @@ public static class cudaDeviceProp extends Pointer {
 //           0,         /* int    singleToDoublePrecisionPerfRatio */
 //           0,         /* int    pageableMemoryAccess     */
 //           0,         /* int    concurrentManagedAccess  */
-//           0,         /* int    computePreemptionSupported */
-//           0,         /* int    canUseHostPointerForRegisteredMem */
-//           0,         /* int    cooperativeLaunch */
-//           0,         /* int    cooperativeMultiDeviceLaunch */
-//           0,         /* size_t sharedMemPerBlockOptin */
 //         }
 
 /**
@@ -14984,50 +14191,6 @@ public static class cudaIpcMemHandle_t extends Pointer {
 /**
  * CUDA output file modes
  */
-
-/**
- * CUDA cooperative group scope
- */
-/** enum cudaCGScope */
-public static final int
-    /** Invalid cooperative group scope */
-    cudaCGScopeInvalid   = 0,
-    /** Scope represented by a grid_group */
-    cudaCGScopeGrid      = 1,
-    /** Scope represented by a multi_grid_group */
-    cudaCGScopeMultiGrid = 2;
-
-/**
- * CUDA launch parameters
- */
-public static class cudaLaunchParams extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public cudaLaunchParams() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public cudaLaunchParams(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cudaLaunchParams(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public cudaLaunchParams position(long position) {
-        return (cudaLaunchParams)super.position(position);
-    }
-
-    /** Device function symbol */
-    public native Pointer func(); public native cudaLaunchParams func(Pointer func);
-    /** Grid dimentions */
-    public native @ByRef dim3 gridDim(); public native cudaLaunchParams gridDim(dim3 gridDim);
-    /** Block dimentions */
-    public native @ByRef dim3 blockDim(); public native cudaLaunchParams blockDim(dim3 blockDim);
-    /** Arguments */
-    public native Pointer args(int i); public native cudaLaunchParams args(int i, Pointer args);
-    public native @Cast("void**") PointerPointer args(); public native cudaLaunchParams args(PointerPointer args);
-    /** Shared memory */
-    public native @Cast("size_t") long sharedMem(); public native cudaLaunchParams sharedMem(long sharedMem);
-    /** Stream identifier */
-    public native CUstream_st stream(); public native cudaLaunchParams stream(CUstream_st stream);
-}
 
 /** \} */
 /** \} */ /* END CUDART_TYPES */
@@ -15485,6 +14648,11 @@ public static class cudaTextureDesc extends Pointer {
 *                                                                              *
 *******************************************************************************/
 
+// #if !defined(__CUDA_LIBDEVICE__) && !defined(__CUDACC_RTC__)
+// #define EXCLUDE_FROM_RTC
+// #include "builtin_types.h"
+// #undef EXCLUDE_FROM_RTC
+// #endif /* !__CUDA_LIBDEVICE__ && !__CUDACC_RTC__ */
 // #include "host_defines.h"
 
 /*******************************************************************************
@@ -15493,10 +14661,10 @@ public static class cudaTextureDesc extends Pointer {
 *                                                                              *
 *******************************************************************************/
 
-// #if !defined(__CUDACC__) && !defined(__CUDACC_RTC__) &&
+// #if !defined(__CUDACC__) && !defined(__CUDACC_RTC__) && !defined(__CUDABE__) &&
 //     defined(_WIN32) && !defined(_WIN64)
 
-// #else /* !__CUDACC__ && !__CUDACC_RTC__ && _WIN32 && !_WIN64 */
+// #else /* !__CUDACC__ && !__CUDACC_RTC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
 
 // #define __cuda_builtin_vector_align8(tag, members)
 // struct __device_builtin__ __align__(8) tag
@@ -15504,7 +14672,7 @@ public static class cudaTextureDesc extends Pointer {
 //     members
 // }
 
-// #endif /* !__CUDACC__ && !__CUDACC_RTC__ && _WIN32 && !_WIN64 */
+// #endif /* !__CUDACC__ && !__CUDACC_RTC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
 
 public static class char1 extends Pointer {
     static { Loader.load(); }
@@ -16107,11 +15275,11 @@ public static class float1 extends Pointer {
     public native float x(); public native float1 x(float x);
 }
 
-// #if !defined(__CUDACC__) && defined(__arm__) &&
+// #if !defined(__CUDACC__) && !defined(__CUDABE__) && defined(__arm__) &&
 //     defined(__ARM_PCS_VFP) && __GNUC__ == 4 && __GNUC_MINOR__ == 6
 
-// #pragma GCC diagnostic push
-// #pragma GCC diagnostic ignored "-pedantic"
+// #else /* !__CUDACC__ && !__CUDABE__ && __arm__ && __ARM_PCS_VFP &&
+//          __GNUC__ == 4&& __GNUC_MINOR__ == 6 */
 
 public static class float2 extends Pointer {
     static { Loader.load(); }
@@ -16126,17 +15294,11 @@ public static class float2 extends Pointer {
     @Override public float2 position(long position) {
         return (float2)super.position(position);
     }
-
-    public native float x(); public native float2 x(float x); public native float y(); public native float2 y(float y); 
+ 
+    public native float x(); public native float2 x(float x); public native float y(); public native float2 y(float y);
 }
 
-// #pragma GCC poison __cuda_gnu_arm_ice_workaround
-// #pragma GCC diagnostic pop
-
-// #else /* !__CUDACC__ && __arm__ && __ARM_PCS_VFP &&
-//          __GNUC__ == 4&& __GNUC_MINOR__ == 6 */
-
-// #endif /* !__CUDACC__ && __arm__ && __ARM_PCS_VFP &&
+// #endif /* !__CUDACC__ && !__CUDABE__ && __arm__ && __ARM_PCS_VFP &&
 //           __GNUC__ == 4&& __GNUC_MINOR__ == 6 */
 
 public static class float3 extends Pointer {
@@ -16400,11 +15562,10 @@ public static class double4 extends Pointer {
     public native double w(); public native double4 w(double w);
 }
 
-// #if !defined(__CUDACC__) && defined(_WIN32) && !defined(_WIN64)
+// #if !defined(__CUDACC__) && !defined(__CUDABE__) &&
+//     defined(_WIN32) && !defined(_WIN64)
 
-// #pragma warning(pop)
-
-// #endif /* !__CUDACC__ && _WIN32 && !_WIN64 */
+// #endif /* !__CUDACC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
 
 /*******************************************************************************
 *                                                                              *
@@ -16519,7 +15680,7 @@ public static class double4 extends Pointer {
 // Parsed from <cuda_runtime_api.h>
 
 /*
- * Copyright 1993-2017 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -16648,12 +15809,14 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  9010;
+public static final int CUDART_VERSION =  8000;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
 
+// #if !defined(__CUDACC_INTEGRATED__)
 // #include "cuda_device_runtime_api.h"
+// #endif /* !defined(__CUDACC_INTEGRATED__) */
 
 // #if defined(CUDA_API_PER_THREAD_DEFAULT_STREAM) || defined(__CUDA_API_VERSION_INTERNAL)
 //     #define __CUDART_API_PER_THREAD_DEFAULT_STREAM
@@ -16684,7 +15847,7 @@ public static final int CUDART_VERSION =  9010;
 // #endif /* !__dv */
 /** \endcond impl_private */
 
-// #if (!defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 350))   /** Visible to SM>=3.5 and "__host__ __device__" only **/
+// #if !defined(__CUDACC_INTEGRATED__) && (!defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 350))   /** Visible to SM>=3.5 and "__host__ __device__" only **/
 
 // #define CUDART_DEVICE __device__ 
 
@@ -16742,9 +15905,7 @@ public static native @Cast("cudaError_t") int cudaDeviceReset();
  * ::cudaSuccess
  * \notefnerr
  *
- * \sa
- * ::cudaDeviceReset,
- * ::cuCtxSynchronize
+ * \sa ::cudaDeviceReset
  */
 public static native @Cast("cudaError_t") int cudaDeviceSynchronize();
 
@@ -16819,9 +15980,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSynchronize();
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
- * \sa
- * ::cudaDeviceGetLimit,
- * ::cuCtxSetLimit
+ * \sa ::cudaDeviceGetLimit
  */
 public static native @Cast("cudaError_t") int cudaDeviceSetLimit(@Cast("cudaLimit") int limit, @Cast("size_t") long value);
 
@@ -16850,9 +16009,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSetLimit(@Cast("cudaLimi
  * ::cudaErrorInvalidValue
  * \notefnerr
  *
- * \sa
- * ::cudaDeviceSetLimit,
- * ::cuCtxGetLimit
+ * \sa ::cudaDeviceSetLimit
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetLimit(@Cast("size_t*") SizeTPointer pValue, @Cast("cudaLimit") int limit);
 
@@ -16883,8 +16040,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetLimit(@Cast("size_t*"
  *
  * \sa cudaDeviceSetCacheConfig,
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
- * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
- * ::cuCtxGetCacheConfig
+ * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetCacheConfig(@Cast("cudaFuncCache*") IntPointer pCacheConfig);
 public static native @Cast("cudaError_t") int cudaDeviceGetCacheConfig(@Cast("cudaFuncCache*") IntBuffer pCacheConfig);
@@ -16917,12 +16073,11 @@ public static native @Cast("cudaError_t") int cudaDeviceGetCacheConfig(@Cast("cu
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInitializationError
+ * ::cudaErrorInvalidValue
  * \notefnerr
  *
  * \sa ::cudaStreamCreateWithPriority,
- * ::cudaStreamGetPriority,
- * ::cuCtxGetStreamPriorityRange
+ * ::cudaStreamGetPriority
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetStreamPriorityRange(IntPointer leastPriority, IntPointer greatestPriority);
 public static native @Cast("cudaError_t") int cudaDeviceGetStreamPriorityRange(IntBuffer leastPriority, IntBuffer greatestPriority);
@@ -16966,8 +16121,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetStreamPriorityRange(i
  *
  * \sa ::cudaDeviceGetCacheConfig,
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
- * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
- * ::cuCtxSetCacheConfig
+ * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaDeviceSetCacheConfig(@Cast("cudaFuncCache") int cacheConfig);
 
@@ -16996,8 +16150,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSetCacheConfig(@Cast("cu
  * \sa ::cudaDeviceSetCacheConfig,
  * ::cudaDeviceGetCacheConfig,
  * ::cudaDeviceSetSharedMemConfig,
- * ::cudaFuncSetCacheConfig,
- * ::cuCtxGetSharedMemConfig
+ * ::cudaFuncSetCacheConfig
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetSharedMemConfig(@Cast("cudaSharedMemConfig*") IntPointer pConfig);
 public static native @Cast("cudaError_t") int cudaDeviceGetSharedMemConfig(@Cast("cudaSharedMemConfig*") IntBuffer pConfig);
@@ -17041,8 +16194,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetSharedMemConfig(@Cast
  * \sa ::cudaDeviceSetCacheConfig,
  * ::cudaDeviceGetCacheConfig,
  * ::cudaDeviceGetSharedMemConfig,
- * ::cudaFuncSetCacheConfig,
- * ::cuCtxSetSharedMemConfig
+ * ::cudaFuncSetCacheConfig
  */
 public static native @Cast("cudaError_t") int cudaDeviceSetSharedMemConfig(@Cast("cudaSharedMemConfig") int config);
 
@@ -17065,9 +16217,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSetSharedMemConfig(@Cast
  * ::cudaErrorInvalidDevice
  * \notefnerr
  *
- * \sa
- * ::cudaDeviceGetPCIBusId,
- * ::cuDeviceGetByPCIBusId
+ * \sa ::cudaDeviceGetPCIBusId
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetByPCIBusId(IntPointer device, @Cast("const char*") BytePointer pciBusId);
 public static native @Cast("cudaError_t") int cudaDeviceGetByPCIBusId(IntBuffer device, String pciBusId);
@@ -17098,9 +16248,8 @@ public static native @Cast("cudaError_t") int cudaDeviceGetByPCIBusId(int[] devi
  * ::cudaErrorInvalidDevice
  * \notefnerr
  *
- * \sa
- * ::cudaDeviceGetByPCIBusId,
- * ::cuDeviceGetPCIBusId
+ * \sa ::cudaDeviceGetByPCIBusId
+ <p>
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*") BytePointer pciBusId, int len, int device);
 public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*") ByteBuffer pciBusId, int len, int device);
@@ -17122,8 +16271,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*
  * with ::cudaEventDestroy will result in undefined behavior.
  *
  * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems. IPC functionality is not supported
- * on Tegra platforms.
+ * addressing on Linux operating systems.
  *
  * @param handle - Pointer to a user allocated cudaIpcEventHandle
  *                    in which to return the opaque event handle
@@ -17134,8 +16282,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*
  * ::cudaSuccess,
  * ::cudaErrorInvalidResourceHandle,
  * ::cudaErrorMemoryAllocation,
- * ::cudaErrorMapBufferObjectFailed,
- * ::cudaErrorNotSupported
+ * ::cudaErrorMapBufferObjectFailed
  *
  * \sa
  * ::cudaEventCreate,
@@ -17146,8 +16293,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*
  * ::cudaIpcOpenEventHandle,
  * ::cudaIpcGetMemHandle,
  * ::cudaIpcOpenMemHandle,
- * ::cudaIpcCloseMemHandle,
- * ::cuIpcGetEventHandle
+ * ::cudaIpcCloseMemHandle
  */
 public static native @Cast("cudaError_t") int cudaIpcGetEventHandle(cudaIpcEventHandle_t handle, CUevent_st event);
 
@@ -17163,8 +16309,7 @@ public static native @Cast("cudaError_t") int cudaIpcGetEventHandle(cudaIpcEvent
  * been freed with ::cudaEventDestroy will result in undefined behavior.
  *
  * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems. IPC functionality is not supported
- * on Tegra platforms.
+ * addressing on Linux operating systems.
  *
  * @param event - Returns the imported event
  * @param handle  - Interprocess handle to open
@@ -17172,8 +16317,7 @@ public static native @Cast("cudaError_t") int cudaIpcGetEventHandle(cudaIpcEvent
  * @return
  * ::cudaSuccess,
  * ::cudaErrorMapBufferObjectFailed,
- * ::cudaErrorInvalidResourceHandle,
- * ::cudaErrorNotSupported
+ * ::cudaErrorInvalidResourceHandle
  *
   * \sa
  * ::cudaEventCreate,
@@ -17184,8 +16328,7 @@ public static native @Cast("cudaError_t") int cudaIpcGetEventHandle(cudaIpcEvent
  * ::cudaIpcGetEventHandle,
  * ::cudaIpcGetMemHandle,
  * ::cudaIpcOpenMemHandle,
- * ::cudaIpcCloseMemHandle,
- * ::cuIpcOpenEventHandle
+ * ::cudaIpcCloseMemHandle
  */
 public static native @Cast("cudaError_t") int cudaIpcOpenEventHandle(@ByPtrPtr CUevent_st event, @ByVal cudaIpcEventHandle_t handle);
 
@@ -17205,8 +16348,7 @@ public static native @Cast("cudaError_t") int cudaIpcOpenEventHandle(@ByPtrPtr C
  * new memory. 
  *
  * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems. IPC functionality is not supported
- * on Tegra platforms.
+ * addressing on Linux operating systems.
  *
  * @param handle - Pointer to user allocated ::cudaIpcMemHandle to return
  *                    the handle in.
@@ -17217,7 +16359,6 @@ public static native @Cast("cudaError_t") int cudaIpcOpenEventHandle(@ByPtrPtr C
  * ::cudaErrorInvalidResourceHandle,
  * ::cudaErrorMemoryAllocation,
  * ::cudaErrorMapBufferObjectFailed,
- * ::cudaErrorNotSupported
  *
  * \sa
  * ::cudaMalloc,
@@ -17225,8 +16366,7 @@ public static native @Cast("cudaError_t") int cudaIpcOpenEventHandle(@ByPtrPtr C
  * ::cudaIpcGetEventHandle,
  * ::cudaIpcOpenEventHandle,
  * ::cudaIpcOpenMemHandle,
- * ::cudaIpcCloseMemHandle,
- * ::cuIpcGetMemHandle
+ * ::cudaIpcCloseMemHandle
  */
 public static native @Cast("cudaError_t") int cudaIpcGetMemHandle(cudaIpcMemHandle_t handle, Pointer devPtr);
 
@@ -17253,8 +16393,7 @@ public static native @Cast("cudaError_t") int cudaIpcGetMemHandle(cudaIpcMemHand
  * behavior.
  * 
  * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems. IPC functionality is not supported
- * on Tegra platforms.
+ * addressing on Linux operating systems.
  *
  * @param devPtr - Returned device pointer
  * @param handle - ::cudaIpcMemHandle to open
@@ -17264,8 +16403,7 @@ public static native @Cast("cudaError_t") int cudaIpcGetMemHandle(cudaIpcMemHand
  * ::cudaSuccess,
  * ::cudaErrorMapBufferObjectFailed,
  * ::cudaErrorInvalidResourceHandle,
- * ::cudaErrorTooManyPeers,
- * ::cudaErrorNotSupported
+ * ::cudaErrorTooManyPeers
  *
  * \note No guarantees are made about the address returned in \p *devPtr.  
  * In particular, multiple processes may not receive the same address for the same \p handle.
@@ -17279,7 +16417,6 @@ public static native @Cast("cudaError_t") int cudaIpcGetMemHandle(cudaIpcMemHand
  * ::cudaIpcCloseMemHandle,
  * ::cudaDeviceEnablePeerAccess,
  * ::cudaDeviceCanAccessPeer,
- * ::cuIpcOpenMemHandle
  */
 public static native @Cast("cudaError_t") int cudaIpcOpenMemHandle(@Cast("void**") PointerPointer devPtr, @ByVal cudaIpcMemHandle_t handle, @Cast("unsigned int") int flags);
 public static native @Cast("cudaError_t") int cudaIpcOpenMemHandle(@Cast("void**") @ByPtrPtr Pointer devPtr, @ByVal cudaIpcMemHandle_t handle, @Cast("unsigned int") int flags);
@@ -17295,8 +16432,7 @@ public static native @Cast("cudaError_t") int cudaIpcOpenMemHandle(@Cast("void**
  * last mapping using them.
  *
  * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems. IPC functionality is not supported
- * on Tegra platforms.
+ * addressing on Linux operating systems.
  *
  * @param devPtr - Device pointer returned by ::cudaIpcOpenMemHandle
  * 
@@ -17304,7 +16440,6 @@ public static native @Cast("cudaError_t") int cudaIpcOpenMemHandle(@Cast("void**
  * ::cudaSuccess,
  * ::cudaErrorMapBufferObjectFailed,
  * ::cudaErrorInvalidResourceHandle,
- * ::cudaErrorNotSupported
  *
  * \sa
  * ::cudaMalloc,
@@ -17313,7 +16448,6 @@ public static native @Cast("cudaError_t") int cudaIpcOpenMemHandle(@Cast("void**
  * ::cudaIpcOpenEventHandle,
  * ::cudaIpcGetMemHandle,
  * ::cudaIpcOpenMemHandle,
- * ::cuIpcCloseMemHandle
  */
 public static native @Cast("cudaError_t") int cudaIpcCloseMemHandle(Pointer devPtr);
 
@@ -17490,7 +16624,7 @@ public static native @Cast("cudaError_t") int cudaThreadGetLimit(@Cast("size_t*"
  * ::cudaErrorInitializationError
  * \notefnerr
  *
- * \sa ::cudaDeviceGetCacheConfig
+ * \sa cudaDeviceGetCacheConfig
  */
 public static native @Cast("cudaError_t") int cudaThreadGetCacheConfig(@Cast("cudaFuncCache*") IntPointer pCacheConfig);
 public static native @Cast("cudaError_t") int cudaThreadGetCacheConfig(@Cast("cudaFuncCache*") IntBuffer pCacheConfig);
@@ -17577,6 +16711,7 @@ public static native @Cast("cudaError_t") int cudaThreadSetCacheConfig(@Cast("cu
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidSymbol,
  * ::cudaErrorUnmapBufferObjectFailed,
+ * ::cudaErrorInvalidHostPointer,
  * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidTexture,
  * ::cudaErrorInvalidTextureBinding,
@@ -17589,9 +16724,6 @@ public static native @Cast("cudaError_t") int cudaThreadSetCacheConfig(@Cast("cu
  * ::cudaErrorInsufficientDriver,
  * ::cudaErrorSetOnActiveProcess,
  * ::cudaErrorStartupFailure,
- * ::cudaErrorInvalidPtx,
- * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
  * \notefnerr
  *
  * \sa ::cudaPeekAtLastError, ::cudaGetErrorName, ::cudaGetErrorString, ::cudaError
@@ -17620,6 +16752,7 @@ public static native @Cast("cudaError_t") int cudaGetLastError();
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidSymbol,
  * ::cudaErrorUnmapBufferObjectFailed,
+ * ::cudaErrorInvalidHostPointer,
  * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidTexture,
  * ::cudaErrorInvalidTextureBinding,
@@ -17632,9 +16765,6 @@ public static native @Cast("cudaError_t") int cudaGetLastError();
  * ::cudaErrorInsufficientDriver,
  * ::cudaErrorSetOnActiveProcess,
  * ::cudaErrorStartupFailure,
- * ::cudaErrorInvalidPtx,
- * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
  * \notefnerr
  *
  * \sa ::cudaGetLastError, ::cudaGetErrorName, ::cudaGetErrorString, ::cudaError
@@ -17652,8 +16782,7 @@ public static native @Cast("cudaError_t") int cudaPeekAtLastError();
  * @return
  * \p char* pointer to a NULL-terminated string
  *
- * \sa ::cudaGetErrorString, ::cudaGetLastError, ::cudaPeekAtLastError, ::cudaError,
- * ::cuGetErrorName
+ * \sa ::cudaGetErrorString, ::cudaGetLastError, ::cudaPeekAtLastError, ::cudaError
  */
 public static native @Cast("const char*") BytePointer cudaGetErrorName(@Cast("cudaError_t") int error);
 
@@ -17668,8 +16797,7 @@ public static native @Cast("const char*") BytePointer cudaGetErrorName(@Cast("cu
  * @return
  * \p char* pointer to a NULL-terminated string
  *
- * \sa ::cudaGetErrorName, ::cudaGetLastError, ::cudaPeekAtLastError, ::cudaError,
- * ::cuGetErrorString
+ * \sa ::cudaGetErrorName, ::cudaGetLastError, ::cudaPeekAtLastError, ::cudaError
  */
 public static native @Cast("const char*") BytePointer cudaGetErrorString(@Cast("cudaError_t") int error);
 /** \} */ /* END CUDART_ERROR */
@@ -17699,8 +16827,7 @@ public static native @Cast("const char*") BytePointer cudaGetErrorString(@Cast("
  * \notefnerr
  *
  * \sa ::cudaGetDevice, ::cudaSetDevice, ::cudaGetDeviceProperties,
- * ::cudaChooseDevice,
- * ::cuDeviceGetCount
+ * ::cudaChooseDevice
  */
 public static native @Cast("cudaError_t") int cudaGetDeviceCount(IntPointer count);
 public static native @Cast("cudaError_t") int cudaGetDeviceCount(IntBuffer count);
@@ -17778,10 +16905,6 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
         int singleToDoublePrecisionPerfRatio;
         int pageableMemoryAccess;
         int concurrentManagedAccess;
-        int computePreemptionSupported;
-        int canUseHostPointerForRegisteredMem;
-        int cooperativeLaunch;
-        int cooperativeMultiDeviceLaunch;
     }
  }</pre>
  * where:
@@ -17943,14 +17066,6 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
  *   coherently accessing pageable memory without calling cudaHostRegister on it, and 0 otherwise.
  * - \ref ::cudaDeviceProp::concurrentManagedAccess "concurrentManagedAccess" is 1 if the device can
  *   coherently access managed memory concurrently with the CPU, and 0 otherwise.
- * - \ref ::cudaDeviceProp::computePreemptionSupported "computePreemptionSupported" is 1 if the device
- *   supports Compute Preemption, and 0 otherwise.
- * - \ref ::cudaDeviceProp::canUseHostPointerForRegisteredMem "canUseHostPointerForRegisteredMem" is 1 if
- *   the device can access host registered memory at the same virtual address as the CPU, and 0 otherwise.
- * - \ref ::cudaDeviceProp::cooperativeLaunch "cooperativeLaunch" is 1 if the device supports launching
- *   cooperative kernels via ::cudaLaunchCooperativeKernel, and 0 otherwise.
- * - \ref ::cudaDeviceProp::cooperativeMultiDeviceLaunch "cooperativeMultiDeviceLaunch" is 1 if the device
- *   supports launching cooperative kernels via ::cudaLaunchCooperativeKernelMultiDevice, and 0 otherwise.
  *
  * @param prop   - Properties for the specified device
  * @param device - Device number to get properties for
@@ -17960,9 +17075,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
  * ::cudaErrorInvalidDevice
  *
  * \sa ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaSetDevice, ::cudaChooseDevice,
- * ::cudaDeviceGetAttribute,
- * ::cuDeviceGetAttribute,
- * ::cuDeviceGetName
+ * ::cudaDeviceGetAttribute
  */
 public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDeviceProp prop, int device);
 
@@ -18097,7 +17210,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  *   priorities, or 0 if not;
  * - ::cudaDevAttrGlobalL1CacheSupported: 1 if device supports caching globals 
  *    in L1 cache, 0 if not;
- * - ::cudaDevAttrLocalL1CacheSupported: 1 if device supports caching locals 
+ * - ::cudaDevAttrGlobalL1CacheSupported: 1 if device supports caching locals 
  *    in L1 cache, 0 if not;
  * - ::cudaDevAttrMaxSharedMemoryPerMultiprocessor: Maximum amount of shared memory
  *   available to a multiprocessor in bytes; this amount is shared by all 
@@ -18122,10 +17235,6 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  *   Compute Preemption, 0 if not.
  * - ::cudaDevAttrCanUseHostPointerForRegisteredMem: 1 if the device can access host
  *   registered memory at the same virtual address as the CPU, and 0 otherwise.
- * - ::cudaDevAttrCooperativeLaunch: 1 if the device supports launching cooperative kernels
- *   via ::cudaLaunchCooperativeKernel, and 0 otherwise.
- * - ::cudaDevAttrCooperativeMultiDeviceLaunch: 1 if the device supports launching cooperative
- *   kernels via ::cudaLaunchCooperativeKernelMultiDevice, and 0 otherwise.
  *
  * @param value  - Returned device attribute value
  * @param attr   - Device attribute to query
@@ -18138,8 +17247,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  * \notefnerr
  *
  * \sa ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaSetDevice, ::cudaChooseDevice,
- * ::cudaGetDeviceProperties,
- * ::cuDeviceGetAttribute
+ * ::cudaGetDeviceProperties
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(IntPointer value, @Cast("cudaDeviceAttr") int attr, int device);
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(IntBuffer value, @Cast("cudaDeviceAttr") int attr, int device);
@@ -18176,8 +17284,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(int[] value
  *
  * \sa ::cudaCtxEnablePeerAccess,
  * ::cudaCtxDisablePeerAccess,
- * ::cudaCtxCanAccessPeer,
- * ::cuDeviceGetP2PAttribute
+ * ::cudaCtxCanAccessPeer
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetP2PAttribute(IntPointer value, @Cast("cudaDeviceP2PAttr") int attr, int srcDevice, int dstDevice);
 public static native @Cast("cudaError_t") int cudaDeviceGetP2PAttribute(IntBuffer value, @Cast("cudaDeviceP2PAttr") int attr, int srcDevice, int dstDevice);
@@ -18234,8 +17341,7 @@ public static native @Cast("cudaError_t") int cudaChooseDevice(int[] device, @Co
  * \notefnerr
  *
  * \sa ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaGetDeviceProperties,
- * ::cudaChooseDevice,
- * ::cuCtxSetCurrent
+ * ::cudaChooseDevice
  */
 public static native @Cast("cudaError_t") int cudaSetDevice(int device);
 
@@ -18252,8 +17358,7 @@ public static native @Cast("cudaError_t") int cudaSetDevice(int device);
  * \notefnerr
  *
  * \sa ::cudaGetDeviceCount, ::cudaSetDevice, ::cudaGetDeviceProperties,
- * ::cudaChooseDevice,
- * ::cuCtxGetCurrent
+ * ::cudaChooseDevice
  */
 public static native @Cast("cudaError_t") int cudaGetDevice(IntPointer device);
 public static native @Cast("cudaError_t") int cudaGetDevice(IntBuffer device);
@@ -18348,8 +17453,7 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
  *
  * \sa ::cudaGetDeviceFlags, ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaGetDeviceProperties,
  * ::cudaSetDevice, ::cudaSetValidDevices,
- * ::cudaChooseDevice,
- * ::cuDevicePrimaryCtxSetFlags
+ * ::cudaChooseDevice
  */
 public static native @Cast("cudaError_t") int cudaSetDeviceFlags( @Cast("unsigned int") int flags );
 
@@ -18390,9 +17494,7 @@ public static native @Cast("cudaError_t") int cudaSetDeviceFlags( @Cast("unsigne
  * ::cudaErrorInvalidDevice
  *
  * \sa ::cudaGetDevice, ::cudaGetDeviceProperties,
- * ::cudaSetDevice, ::cudaSetDeviceFlags,
- * ::cuCtxGetFlags,
- * ::cuDevicePrimaryCtxGetState
+ * ::cudaSetDevice, ::cudaSetDeviceFlags
  */
 public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigned int*") IntPointer flags );
 public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigned int*") IntBuffer flags );
@@ -18431,8 +17533,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigne
  * ::cudaStreamSynchronize,
  * ::cudaStreamWaitEvent,
  * ::cudaStreamAddCallback,
- * ::cudaStreamDestroy,
- * ::cuStreamCreate
+ * ::cudaStreamDestroy
  */
 public static native @Cast("cudaError_t") int cudaStreamCreate(@ByPtrPtr CUstream_st pStream);
 
@@ -18461,8 +17562,7 @@ public static native @Cast("cudaError_t") int cudaStreamCreate(@ByPtrPtr CUstrea
  * ::cudaStreamSynchronize,
  * ::cudaStreamWaitEvent,
  * ::cudaStreamAddCallback,
- * ::cudaStreamDestroy,
- * ::cuStreamCreate
+ * ::cudaStreamDestroy
  */
 public static native @Cast("cudaError_t") int cudaStreamCreateWithFlags(@ByPtrPtr CUstream_st pStream, @Cast("unsigned int") int flags);
 
@@ -18505,8 +17605,7 @@ public static native @Cast("cudaError_t") int cudaStreamCreateWithFlags(@ByPtrPt
  * ::cudaStreamWaitEvent,
  * ::cudaStreamAddCallback,
  * ::cudaStreamSynchronize,
- * ::cudaStreamDestroy,
- * ::cuStreamCreateWithPriority
+ * ::cudaStreamDestroy
  */
 public static native @Cast("cudaError_t") int cudaStreamCreateWithPriority(@ByPtrPtr CUstream_st pStream, @Cast("unsigned int") int flags, int priority);
 
@@ -18530,8 +17629,7 @@ public static native @Cast("cudaError_t") int cudaStreamCreateWithPriority(@ByPt
  *
  * \sa ::cudaStreamCreateWithPriority,
  * ::cudaDeviceGetStreamPriorityRange,
- * ::cudaStreamGetFlags,
- * ::cuStreamGetPriority
+ * ::cudaStreamGetFlags
  */
 public static native @Cast("cudaError_t") int cudaStreamGetPriority(CUstream_st hStream, IntPointer priority);
 public static native @Cast("cudaError_t") int cudaStreamGetPriority(CUstream_st hStream, IntBuffer priority);
@@ -18550,13 +17648,11 @@ public static native @Cast("cudaError_t") int cudaStreamGetPriority(CUstream_st 
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidResourceHandle
- * \note_null_stream
  * \notefnerr
  *
  * \sa ::cudaStreamCreateWithPriority,
  * ::cudaStreamCreateWithFlags,
- * ::cudaStreamGetPriority,
- * ::cuStreamGetFlags
+ * ::cudaStreamGetPriority
  */
 public static native @Cast("cudaError_t") int cudaStreamGetFlags(CUstream_st hStream, @Cast("unsigned int*") IntPointer flags);
 public static native @Cast("cudaError_t") int cudaStreamGetFlags(CUstream_st hStream, @Cast("unsigned int*") IntBuffer flags);
@@ -18576,28 +17672,30 @@ public static native @Cast("cudaError_t") int cudaStreamGetFlags(CUstream_st hSt
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidResourceHandle
- * \note_null_stream
  * \notefnerr
  *
- * \sa ::cudaStreamCreate,
- * ::cudaStreamCreateWithFlags,
- * ::cudaStreamQuery,
- * ::cudaStreamWaitEvent,
- * ::cudaStreamSynchronize,
- * ::cudaStreamAddCallback,
- * ::cuStreamDestroy
+ * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback
  */
 public static native @Cast("cudaError_t") int cudaStreamDestroy(CUstream_st stream);
 
 /**
  * \brief Make a compute stream wait on an event
  *
- * Makes all future work submitted to \p stream wait for all work captured in
- * \p event.  See ::cudaEventRecord() for details on what is captured by an event.
- * The synchronization will be performed efficiently on the device when applicable.
- * \p event may be from a different device than \p stream.
+ * Makes all future work submitted to \p stream wait until \p event reports
+ * completion before beginning execution.  This synchronization will be
+ * performed efficiently on the device.  The event \p event may
+ * be from a different context than \p stream, in which case this function
+ * will perform cross-device synchronization.
+ *
+ * The stream \p stream will wait only for the completion of the most recent
+ * host call to ::cudaEventRecord() on \p event.  Once this call has returned,
+ * any functions (including ::cudaEventRecord() and ::cudaEventDestroy()) may be
+ * called on \p event again, and the subsequent calls will not have any effect
+ * on \p stream.
+ *
+ * If ::cudaEventRecord() has not been called on \p event, this call acts as if
+ * the record has already completed, and so is a functional no-op.
  *
  * @param stream - Stream to wait
  * @param event  - Event to wait on
@@ -18605,13 +17703,11 @@ public static native @Cast("cudaError_t") int cudaStreamDestroy(CUstream_st stre
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidResourceHandle
  * \note_null_stream
  * \notefnerr
  *
- * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy,
- * ::cuStreamWaitEvent
+ * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy
  */
 public static native @Cast("cudaError_t") int cudaStreamWaitEvent(CUstream_st stream, CUevent_st event, @Cast("unsigned int") int flags);
 
@@ -18689,8 +17785,7 @@ public static native @Cast("cudaError_t") int cudaStreamWaitEvent(CUstream_st st
  * \note_null_stream
  * \notefnerr
  *
- * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamSynchronize, ::cudaStreamWaitEvent, ::cudaStreamDestroy, ::cudaMallocManaged, ::cudaStreamAttachMemAsync,
- * ::cuStreamAddCallback
+ * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamSynchronize, ::cudaStreamWaitEvent, ::cudaStreamDestroy, ::cudaMallocManaged, ::cudaStreamAttachMemAsync
  */
 public static native @Cast("cudaError_t") int cudaStreamAddCallback(CUstream_st stream,
         cudaStreamCallback_t callback, Pointer userData, @Cast("unsigned int") int flags);
@@ -18708,11 +17803,9 @@ public static native @Cast("cudaError_t") int cudaStreamAddCallback(CUstream_st 
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidResourceHandle
- * \note_null_stream
  * \notefnerr
  *
- * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamWaitEvent, ::cudaStreamAddCallback, ::cudaStreamDestroy,
- * ::cuStreamSynchronize
+ * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamQuery, ::cudaStreamWaitEvent, ::cudaStreamAddCallback, ::cudaStreamDestroy
  */
 public static native @Cast("cudaError_t") int cudaStreamSynchronize(CUstream_st stream);
 
@@ -18731,11 +17824,9 @@ public static native @Cast("cudaError_t") int cudaStreamSynchronize(CUstream_st 
  * ::cudaSuccess,
  * ::cudaErrorNotReady,
  * ::cudaErrorInvalidResourceHandle
- * \note_null_stream
  * \notefnerr
  *
- * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy,
- * ::cuStreamQuery
+ * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy
  */
 public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream);
 
@@ -18802,12 +17893,11 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  * @return
  * ::cudaSuccess,
  * ::cudaErrorNotReady,
- * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidValue
  * ::cudaErrorInvalidResourceHandle
  * \notefnerr
  *
- * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy, ::cudaMallocManaged,
- * ::cuStreamAttachMemAsync
+ * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy, ::cudaMallocManaged
  */
 public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr, @Cast("size_t") long length/*=0*/, @Cast("unsigned int") int flags/*=cudaMemAttachSingle*/);
 public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr);
@@ -18829,7 +17919,7 @@ public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_
 /**
  * \brief Creates an event object
  *
- * Creates an event object for the current device using ::cudaEventDefault.
+ * Creates an event object using ::cudaEventDefault.
  *
  * @param event - Newly created event
  *
@@ -18844,16 +17934,14 @@ public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_
  * \sa \ref ::cudaEventCreate(cudaEvent_t*, unsigned int) "cudaEventCreate (C++ API)",
  * ::cudaEventCreateWithFlags, ::cudaEventRecord, ::cudaEventQuery,
  * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventElapsedTime,
- * ::cudaStreamWaitEvent,
- * ::cuEventCreate
+ * ::cudaStreamWaitEvent
  */
 public static native @Cast("cudaError_t") int cudaEventCreate(@ByPtrPtr CUevent_st event);
 
 /**
  * \brief Creates an event object with the specified flags
  *
- * Creates an event object for the current device with the specified flags. Valid
- * flags include:
+ * Creates an event object with the specified flags. Valid flags include:
  * - ::cudaEventDefault: Default event creation flag.
  * - ::cudaEventBlockingSync: Specifies that event should use blocking
  *   synchronization. A host thread that uses ::cudaEventSynchronize() to wait
@@ -18880,28 +17968,21 @@ public static native @Cast("cudaError_t") int cudaEventCreate(@ByPtrPtr CUevent_
  *
  * \sa \ref ::cudaEventCreate(cudaEvent_t*) "cudaEventCreate (C API)",
  * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventElapsedTime,
- * ::cudaStreamWaitEvent,
- * ::cuEventCreate
+ * ::cudaStreamWaitEvent
  */
 public static native @Cast("cudaError_t") int cudaEventCreateWithFlags(@ByPtrPtr CUevent_st event, @Cast("unsigned int") int flags);
 
 /**
  * \brief Records an event
  *
- * Captures in \p event the contents of \p stream at the time of this call.
- * \p event and \p stream must be on the same device.
- * Calls such as ::cudaEventQuery() or ::cudaStreamWaitEvent() will then
- * examine or wait for completion of the work that was captured. Uses of
- * \p stream after this call do not modify \p event. See note on default
- * stream behavior for what is captured in the default case.
+ * Records an event. See note about NULL stream behavior. Since operation
+ * is asynchronous, ::cudaEventQuery() or ::cudaEventSynchronize() must
+ * be used to determine when the event has actually been recorded.
  *
- * ::cudaEventRecord() can be called multiple times on the same event and
- * will overwrite the previously captured state. Other APIs such as
- * ::cudaStreamWaitEvent() use the most recently captured state at the time
- * of the API call, and are not affected by later calls to
- * ::cudaEventRecord(). Before the first call to ::cudaEventRecord(), an
- * event represents an empty set of work, so for example ::cudaEventQuery()
- * would return ::cudaSuccess.
+ * If ::cudaEventRecord() has previously been called on \p event, then this
+ * call will overwrite any existing state in \p event.  Any subsequent calls
+ * which examine the status of \p event will only examine the completion of
+ * this most recent call to ::cudaEventRecord().
  *
  * @param event  - Event to record
  * @param stream - Stream in which to record event
@@ -18918,8 +17999,7 @@ public static native @Cast("cudaError_t") int cudaEventCreateWithFlags(@ByPtrPtr
  * \sa \ref ::cudaEventCreate(cudaEvent_t*) "cudaEventCreate (C API)",
  * ::cudaEventCreateWithFlags, ::cudaEventQuery,
  * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventElapsedTime,
- * ::cudaStreamWaitEvent,
- * ::cuEventRecord
+ * ::cudaStreamWaitEvent
  */
 public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
@@ -18927,11 +18007,14 @@ public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
 /**
  * \brief Queries an event's status
  *
- * Queries the status of all work currently captured by \p event. See
- * ::cudaEventRecord() for details on what is captured by an event.
+ * Query the status of all device work preceding the most recent call to
+ * ::cudaEventRecord() (in the appropriate compute streams, as specified by the
+ * arguments to ::cudaEventRecord()).
  *
- * Returns ::cudaSuccess if all captured work has been completed, or
- * ::cudaErrorNotReady if any captured work is incomplete.
+ * If this work has successfully been completed by the device, or if
+ * ::cudaEventRecord() has not been called on \p event, then ::cudaSuccess is
+ * returned. If this work has not yet been completed by the device then
+ * ::cudaErrorNotReady is returned.
  *
  * For the purposes of Unified Memory, a return value of ::cudaSuccess
  * is equivalent to having called ::cudaEventSynchronize().
@@ -18949,16 +18032,19 @@ public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
  *
  * \sa \ref ::cudaEventCreate(cudaEvent_t*) "cudaEventCreate (C API)",
  * ::cudaEventCreateWithFlags, ::cudaEventRecord,
- * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventElapsedTime,
- * ::cuEventQuery
+ * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventElapsedTime
  */
 public static native @Cast("cudaError_t") int cudaEventQuery(CUevent_st event);
 
 /**
  * \brief Waits for an event to complete
  *
- * Waits until the completion of all work currently captured in \p event.
- * See ::cudaEventRecord() for details on what is captured by an event.
+ * Wait until the completion of all device work preceding the most recent
+ * call to ::cudaEventRecord() (in the appropriate compute streams, as specified
+ * by the arguments to ::cudaEventRecord()).
+ *
+ * If ::cudaEventRecord() has not been called on \p event, ::cudaSuccess is
+ * returned immediately.
  *
  * Waiting for an event that was created with the ::cudaEventBlockingSync
  * flag will cause the calling CPU thread to block until the event has
@@ -18978,8 +18064,7 @@ public static native @Cast("cudaError_t") int cudaEventQuery(CUevent_st event);
  *
  * \sa \ref ::cudaEventCreate(cudaEvent_t*) "cudaEventCreate (C API)",
  * ::cudaEventCreateWithFlags, ::cudaEventRecord,
- * ::cudaEventQuery, ::cudaEventDestroy, ::cudaEventElapsedTime,
- * ::cuEventSynchronize
+ * ::cudaEventQuery, ::cudaEventDestroy, ::cudaEventElapsedTime
  */
 public static native @Cast("cudaError_t") int cudaEventSynchronize(CUevent_st event);
 
@@ -18988,10 +18073,10 @@ public static native @Cast("cudaError_t") int cudaEventSynchronize(CUevent_st ev
  *
  * Destroys the event specified by \p event.
  *
- * An event may be destroyed before it is complete (i.e., while
- * ::cudaEventQuery() would return ::cudaErrorNotReady). In this case, the
- * call does not block on completion of the event, and any associated
- * resources will automatically be released asynchronously at completion.
+ * In case \p event has been recorded but has not yet been completed
+ * when ::cudaEventDestroy() is called, the function will return immediately and 
+ * the resources associated with \p event will be released automatically once
+ * the device has completed \p event.
  *
  * @param event - Event to destroy
  *
@@ -19004,8 +18089,7 @@ public static native @Cast("cudaError_t") int cudaEventSynchronize(CUevent_st ev
  *
  * \sa \ref ::cudaEventCreate(cudaEvent_t*) "cudaEventCreate (C API)",
  * ::cudaEventCreateWithFlags, ::cudaEventQuery,
- * ::cudaEventSynchronize, ::cudaEventRecord, ::cudaEventElapsedTime,
- * ::cuEventDestroy
+ * ::cudaEventSynchronize, ::cudaEventRecord, ::cudaEventElapsedTime
  */
 public static native @Cast("cudaError_t") int cudaEventDestroy(CUevent_st event);
 
@@ -19046,8 +18130,7 @@ public static native @Cast("cudaError_t") int cudaEventDestroy(CUevent_st event)
  *
  * \sa \ref ::cudaEventCreate(cudaEvent_t*) "cudaEventCreate (C API)",
  * ::cudaEventCreateWithFlags, ::cudaEventQuery,
- * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventRecord,
- * ::cuEventElapsedTime
+ * ::cudaEventSynchronize, ::cudaEventDestroy, ::cudaEventRecord
  */
 public static native @Cast("cudaError_t") int cudaEventElapsedTime(FloatPointer ms, CUevent_st start, CUevent_st end);
 public static native @Cast("cudaError_t") int cudaEventElapsedTime(FloatBuffer ms, CUevent_st start, CUevent_st end);
@@ -19070,6 +18153,7 @@ public static native @Cast("cudaError_t") int cudaEventElapsedTime(float[] ms, C
  * \{
  */
 
+// #if CUDART_VERSION >= 7000
 /**
  * \brief Launches a device function
  *
@@ -19103,173 +18187,16 @@ public static native @Cast("cudaError_t") int cudaEventElapsedTime(float[] ms, C
  * ::cudaErrorLaunchFailure,
  * ::cudaErrorLaunchTimeout,
  * ::cudaErrorLaunchOutOfResources,
- * ::cudaErrorSharedObjectInitFailed,
- * ::cudaErrorInvalidPtx,
- * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
+ * ::cudaErrorSharedObjectInitFailed
  * \note_null_stream
  * \notefnerr
  *
- * \sa
- * \ref ::cudaLaunchKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C++ API)",
- * ::cuLaunchKernel
+ * \ref ::cudaLaunchKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaLaunchKernel(@Const Pointer func, @ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("void**") PointerPointer args, @Cast("size_t") long sharedMem, CUstream_st stream);
 public static native @Cast("cudaError_t") int cudaLaunchKernel(@Const Pointer func, @ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("void**") @ByPtrPtr Pointer args, @Cast("size_t") long sharedMem, CUstream_st stream);
 
-/**
- * \brief Launches a device function where thread blocks can cooperate and synchronize as they execute
- *
- * The function invokes kernel \p func on \p gridDim (\p gridDim.x × \p gridDim.y
- * × \p gridDim.z) grid of blocks. Each block contains \p blockDim (\p blockDim.x ×
- * \p blockDim.y × \p blockDim.z) threads.
- *
- * The device on which this kernel is invoked must have a non-zero value for
- * the device attribute ::cudaDevAttrCooperativeLaunch.
- *
- * The total number of blocks launched cannot exceed the maximum number of blocks per
- * multiprocessor as returned by ::cudaOccupancyMaxActiveBlocksPerMultiprocessor (or
- * ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) times the number of multiprocessors
- * as specified by the device attribute ::cudaDevAttrMultiProcessorCount.
- *
- * The kernel cannot make use of CUDA dynamic parallelism.
- *
- * If the kernel has N parameters the \p args should point to array of N pointers.
- * Each pointer, from <tt>args[0]</tt> to <tt>args[N - 1]</tt>, point to the region
- * of memory from which the actual parameter will be copied.
- *
- * For templated functions, pass the function symbol as follows:
- * func_name<template_arg_0,...,template_arg_N>
- *
- * \p sharedMem sets the amount of dynamic shared memory that will be available to
- * each thread block.
- *
- * \p stream specifies a stream the invocation is associated to.
- *
- * @param func        - Device function symbol
- * @param gridDim     - Grid dimentions
- * @param blockDim    - Block dimentions
- * @param args        - Arguments
- * @param sharedMem   - Shared memory
- * @param stream      - Stream identifier
- *
- * @return
- * ::cudaSuccess,
- * ::cudaErrorInvalidDeviceFunction,
- * ::cudaErrorInvalidConfiguration,
- * ::cudaErrorLaunchFailure,
- * ::cudaErrorLaunchTimeout,
- * ::cudaErrorLaunchOutOfResources,
- * ::cudaErrorCooperativeLaunchTooLarge,
- * ::cudaErrorSharedObjectInitFailed
- * \note_null_stream
- * \notefnerr
- *
- * \sa
- * \ref ::cudaLaunchCooperativeKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchCooperativeKernel (C++ API)",
- * ::cudaLaunchCooperativeKernelMultiDevice,
- * ::cuLaunchCooperativeKernel
- */
-public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernel(@Const Pointer func, @ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("void**") PointerPointer args, @Cast("size_t") long sharedMem, CUstream_st stream);
-public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernel(@Const Pointer func, @ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("void**") @ByPtrPtr Pointer args, @Cast("size_t") long sharedMem, CUstream_st stream);
-
-/**
- * \brief Launches device functions on multiple devices where thread blocks can cooperate and synchronize as they execute
- *
- * Invokes kernels as specified in the \p launchParamsList array where each element
- * of the array specifies all the parameters required to perform a single kernel launch.
- * These kernels can cooperate and synchronize as they execute. The size of the array is
- * specified by \p numDevices.
- *
- * No two kernels can be launched on the same device. All the devices targeted by this
- * multi-device launch must be identical. All devices must have a non-zero value for the
- * device attribute ::cudaDevAttrCooperativeLaunch.
- *
- * The same kernel must be launched on all devices. Note that any __device__ or __constant__
- * variables are independently instantiated on every device. It is the application's
- * responsiblity to ensure these variables are initialized and used appropriately.
- *
- * The size of the grids as specified in blocks, the size of the blocks themselves and the
- * amount of shared memory used by each thread block must also match across all launched kernels.
- *
- * The streams used to launch these kernels must have been created via either ::cudaStreamCreate
- * or ::cudaStreamCreateWithPriority or ::cudaStreamCreateWithPriority. The NULL stream or
- * ::cudaStreamLegacy or ::cudaStreamPerThread cannot be used.
- *
- * The total number of blocks launched per kernel cannot exceed the maximum number of blocks
- * per multiprocessor as returned by ::cudaOccupancyMaxActiveBlocksPerMultiprocessor (or
- * ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) times the number of multiprocessors
- * as specified by the device attribute ::cudaDevAttrMultiProcessorCount. Since the
- * total number of blocks launched per device has to match across all devices, the maximum
- * number of blocks that can be launched per device will be limited by the device with the
- * least number of multiprocessors.
- *
- * The kernel cannot make use of CUDA dynamic parallelism.
- *
- * The ::cudaLaunchParams structure is defined as:
- * <pre>{@code
-        struct cudaLaunchParams
-        {
-            void *func;
-            dim3 gridDim;
-            dim3 blockDim;
-            void **args;
-            size_t sharedMem;
-            cudaStream_t stream;
-        };
- * }</pre>
- * where:
- * - ::cudaLaunchParams::func specifies the kernel to be launched. This same functions must
- *   be launched on all devices. For templated functions, pass the function symbol as follows:
- *   func_name<template_arg_0,...,template_arg_N>
- * - ::cudaLaunchParams::gridDim specifies the width, height and depth of the grid in blocks.
- *   This must match across all kernels launched.
- * - ::cudaLaunchParams::blockDim is the width, height and depth of each thread block. This
- *   must match across all kernels launched.
- * - ::cudaLaunchParams::args specifies the arguments to the kernel. If the kernel has
- *   N parameters then ::cudaLaunchParams::args should point to array of N pointers. Each
- *   pointer, from <tt>::cudaLaunchParams::args[0]</tt> to <tt>::cudaLaunchParams::args[N - 1]</tt>,
- *   point to the region of memory from which the actual parameter will be copied.
- * - ::cudaLaunchParams::sharedMem is the dynamic shared-memory size per thread block in bytes.
- *   This must match across all kernels launched.
- * - ::cudaLaunchParams::stream is the handle to the stream to perform the launch in. This cannot
- *   be the NULL stream or ::cudaStreamLegacy or ::cudaStreamPerThread.
- *
- * By default, the kernel won't begin execution on any GPU until all prior work in all the specified
- * streams has completed. This behavior can be overridden by specifying the flag
- * ::cudaCooperativeLaunchMultiDeviceNoPreSync. When this flag is specified, each kernel
- * will only wait for prior work in the stream corresponding to that GPU to complete before it begins
- * execution.
- *
- * Similarly, by default, any subsequent work pushed in any of the specified streams will not begin
- * execution until the kernels on all GPUs have completed. This behavior can be overridden by specifying
- * the flag ::cudaCooperativeLaunchMultiDeviceNoPostSync. When this flag is specified,
- * any subsequent work pushed in any of the specified streams will only wait for the kernel launched
- * on the GPU corresponding to that stream to complete before it begins execution.
- *
- * @param launchParamsList - List of launch parameters, one per device
- * @param numDevices       - Size of the \p launchParamsList array
- * @param flags            - Flags to control launch behavior
- *
- * @return
- * ::cudaSuccess,
- * ::cudaErrorInvalidDeviceFunction,
- * ::cudaErrorInvalidConfiguration,
- * ::cudaErrorLaunchFailure,
- * ::cudaErrorLaunchTimeout,
- * ::cudaErrorLaunchOutOfResources,
- * ::cudaErrorCooperativeLaunchTooLarge,
- * ::cudaErrorSharedObjectInitFailed
- * \note_null_stream
- * \notefnerr
- *
- * \sa
- * \ref ::cudaLaunchCooperativeKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchCooperativeKernel (C++ API)",
- * ::cudaLaunchCooperativeKernel,
- * ::cuLaunchCooperativeKernelMultiDevice
- */
-public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernelMultiDevice(cudaLaunchParams launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags/*=0*/);
-public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernelMultiDevice(cudaLaunchParams launchParamsList, @Cast("unsigned int") int numDevices);
+// #endif /* CUDART_VERSION >= 7000 */
 
 /**
  * \brief Sets the preferred cache configuration for a device function
@@ -19315,8 +18242,7 @@ public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernelMultiDe
  * ::cudaSetDoubleForHost,
  * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
  * ::cudaThreadGetCacheConfig,
- * ::cudaThreadSetCacheConfig,
- * ::cuFuncSetCacheConfig
+ * ::cudaThreadSetCacheConfig
  */
 public static native @Cast("cudaError_t") int cudaFuncSetCacheConfig(@Const Pointer func, @Cast("cudaFuncCache") int cacheConfig);
 
@@ -19370,8 +18296,7 @@ public static native @Cast("cudaError_t") int cudaFuncSetCacheConfig(@Const Poin
  * ::cudaDeviceGetSharedMemConfig,
  * ::cudaDeviceSetCacheConfig,
  * ::cudaDeviceGetCacheConfig,
- * ::cudaFuncSetCacheConfig,
- * ::cuFuncSetSharedMemConfig
+ * ::cudaFuncSetCacheConfig
  */
 public static native @Cast("cudaError_t") int cudaFuncSetSharedMemConfig(@Const Pointer func, @Cast("cudaSharedMemConfig") int config);
 
@@ -19405,46 +18330,9 @@ public static native @Cast("cudaError_t") int cudaFuncSetSharedMemConfig(@Const 
  * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
  * ::cudaSetDoubleForDevice,
  * ::cudaSetDoubleForHost,
- * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
- * ::cuFuncGetAttribute
+ * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)"
  */
 public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttributes attr, @Const Pointer func);
-
-
-/**
- * \brief Set attributes for a given function
- *
- * This function sets the attributes of a function specified via \p entry.
- * The parameter \p entry must be a pointer to a function that executes
- * on the device. The parameter specified by \p entry must be declared as a \p __global__
- * function. The enumeration defined by \p attr is set to the value defined by \p value
- * If the specified function does not exist, then ::cudaErrorInvalidDeviceFunction is returned.
- * If the specified attribute cannot be written, or if the value is incorrect, 
- * then ::cudaErrorInvalidValue is returned.
- *
- * Valid values for \p attr are:
- * ::cuFuncAttrMaxDynamicSharedMem - Maximum size of dynamic shared memory per block
- * ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio
- *
- * @param entry - Function to get attributes of
- * @param attr  - Attribute to set
- * @param value - Value to set
- *
- * @return
- * ::cudaSuccess,
- * ::cudaErrorInitializationError,
- * ::cudaErrorInvalidDeviceFunction,
- * ::cudaErrorInvalidValue
- * \notefnerr
- *
- * \ref ::cudaLaunchKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C++ API)",
- * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
- * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost,
- * \ref ::cudaSetupArgument(T, size_t) "cudaSetupArgument (C++ API)"
- */
-public static native @Cast("cudaError_t") int cudaFuncSetAttribute(@Const Pointer func, @Cast("cudaFuncAttribute") int attr, int value);
 
 /**
  * \brief Converts a double argument to be executed on a device
@@ -19461,7 +18349,6 @@ public static native @Cast("cudaError_t") int cudaFuncSetAttribute(@Const Pointe
  * ::cudaSuccess
  * \notefnerr
  *
- * \sa
  * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
@@ -19487,7 +18374,6 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForDevice(double[] d)
  * ::cudaSuccess
  * \notefnerr
  *
- * \sa
  * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
@@ -19499,6 +18385,8 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForHost(DoubleBuffer 
 public static native @Cast("cudaError_t") int cudaSetDoubleForHost(double[] d);
 
 /** \} */ /* END CUDART_EXECUTION */
+
+// #if CUDART_VERSION >= 6050
 
 /**
  * \defgroup CUDART_OCCUPANCY Occupancy
@@ -19518,7 +18406,7 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForHost(double[] d);
  * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
  * \ref ::cudaOccupancyMaxPotentialBlockSizeWithFlags(int*, int*, T, size_t, int, unsigned int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
  * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)",
- * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)"
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)",
  *
  * \{
  */
@@ -19547,14 +18435,14 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForHost(double[] d);
  * \sa ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags,
  * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
  * \ref ::cudaOccupancyMaxPotentialBlockSizeWithFlags(int*, int*, T, size_t, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeWithFlags (C++ API)",
- * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)",
- * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags (C++ API)",
- * ::cuOccupancyMaxActiveBlocksPerMultiprocessor
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)"
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessor(IntPointer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessor(IntBuffer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessor(int[] numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 
+// #if CUDART_VERSION >= 7000
 /**
  * \brief Returns occupancy for a device function with the specified flags
  *
@@ -19593,15 +18481,16 @@ public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMul
  * \sa ::cudaOccupancyMaxActiveBlocksPerMultiprocessor,
  * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
  * \ref ::cudaOccupancyMaxPotentialBlockSizeWithFlags(int*, int*, T, size_t, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeWithFlags (C++ API)",
- * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)",
- * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags (C++ API)",
- * ::cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)"
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntPointer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntBuffer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int[] numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
 
 /** \} */ /* END CUDA_OCCUPANCY */
+// #endif /* CUDART_VERSION >= 7000 */
+// #endif /* CUDART_VERSION >= 6050 */
 
 /**
  * \defgroup CUDART_EXECUTION_DEPRECATED Execution Control [DEPRECATED]
@@ -19640,7 +18529,6 @@ public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMul
  * \note_null_stream
  * \notefnerr
  *
- * \sa
  * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
@@ -19703,10 +18591,7 @@ public static native @Cast("cudaError_t") int cudaSetupArgument(@Const Pointer a
  * ::cudaErrorLaunchFailure,
  * ::cudaErrorLaunchTimeout,
  * ::cudaErrorLaunchOutOfResources,
- * ::cudaErrorSharedObjectInitFailed,
- * ::cudaErrorInvalidPtx,
- * ::cudaErrorNoKernelImageForDevice,
- * ::cudaErrorJitCompilerNotFound
+ * ::cudaErrorSharedObjectInitFailed
  * \notefnerr
  * \note_string_api_deprecation_50
  *
@@ -19829,15 +18714,14 @@ public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorMemoryAllocation,
- * ::cudaErrorNotSupported,
+ * ::cudaErrorMemoryAllocation
+ * ::cudaErrorNotSupported
  * ::cudaErrorInvalidValue
  *
  * \sa ::cudaMallocPitch, ::cudaFree, ::cudaMallocArray, ::cudaFreeArray,
  * ::cudaMalloc3D, ::cudaMalloc3DArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaFreeHost, ::cudaHostAlloc, ::cudaDeviceGetAttribute, ::cudaStreamAttachMemAsync,
- * ::cuMemAllocManaged
+ * ::cudaFreeHost, ::cudaHostAlloc, ::cudaDeviceGetAttribute, ::cudaStreamAttachMemAsync
  */
 public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags/*=cudaMemAttachGlobal*/);
 public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size);
@@ -19860,14 +18744,12 @@ public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") 
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  *
  * \sa ::cudaMallocPitch, ::cudaFree, ::cudaMallocArray, ::cudaFreeArray,
  * ::cudaMalloc3D, ::cudaMalloc3DArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaFreeHost, ::cudaHostAlloc,
- * ::cuMemAlloc
+ * ::cudaFreeHost, ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaMalloc(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size);
 public static native @Cast("cudaError_t") int cudaMalloc(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size);
@@ -19891,15 +18773,13 @@ public static native @Cast("cudaError_t") int cudaMalloc(@Cast("void**") @ByPtrP
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
  * \sa ::cudaMalloc, ::cudaMallocPitch, ::cudaMallocArray, ::cudaMalloc3D,
  * ::cudaMalloc3DArray, ::cudaHostAlloc, ::cudaFree, ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t, unsigned int) "cudaMallocHost (C++ API)",
- * ::cudaFreeHost, ::cudaHostAlloc,
- * ::cuMemAllocHost
+ * ::cudaFreeHost, ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaMallocHost(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size);
 public static native @Cast("cudaError_t") int cudaMallocHost(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size);
@@ -19933,15 +18813,13 @@ public static native @Cast("cudaError_t") int cudaMallocHost(@Cast("void**") @By
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
  * \sa ::cudaMalloc, ::cudaFree, ::cudaMallocArray, ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaMalloc3D, ::cudaMalloc3DArray,
- * ::cudaHostAlloc,
- * ::cuMemAllocPitch
+ * ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaMallocPitch(@Cast("void**") PointerPointer devPtr, @Cast("size_t*") SizeTPointer pitch, @Cast("size_t") long width, @Cast("size_t") long height);
 public static native @Cast("cudaError_t") int cudaMallocPitch(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t*") SizeTPointer pitch, @Cast("size_t") long width, @Cast("size_t") long height);
@@ -19978,15 +18856,13 @@ public static native @Cast("cudaError_t") int cudaMallocPitch(@Cast("void**") @B
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
  * \sa ::cudaMalloc, ::cudaMallocPitch, ::cudaFree, ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaMalloc3D, ::cudaMalloc3DArray,
- * ::cudaHostAlloc,
- * ::cuArrayCreate
+ * ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaMallocArray(@ByPtrPtr cudaArray array, @Const cudaChannelFormatDesc desc, @Cast("size_t") long width, @Cast("size_t") long height/*=0*/, @Cast("unsigned int") int flags/*=0*/);
 public static native @Cast("cudaError_t") int cudaMallocArray(@ByPtrPtr cudaArray array, @Const cudaChannelFormatDesc desc, @Cast("size_t") long width);
@@ -20014,8 +18890,7 @@ public static native @Cast("cudaError_t") int cudaMallocArray(@ByPtrPtr cudaArra
  * \sa ::cudaMalloc, ::cudaMallocPitch, ::cudaMallocArray, ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaMalloc3D, ::cudaMalloc3DArray,
- * ::cudaHostAlloc,
- * ::cuMemFree
+ * ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaFree(Pointer devPtr);
 
@@ -20029,15 +18904,13 @@ public static native @Cast("cudaError_t") int cudaFree(Pointer devPtr);
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorInitializationError
  * \notefnerr
  *
  * \sa ::cudaMalloc, ::cudaMallocPitch, ::cudaFree, ::cudaMallocArray,
  * ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaMalloc3D, ::cudaMalloc3DArray, ::cudaHostAlloc,
- * ::cuMemFreeHost
+ * ::cudaMalloc3D, ::cudaMalloc3DArray, ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaFreeHost(Pointer ptr);
 
@@ -20059,8 +18932,7 @@ public static native @Cast("cudaError_t") int cudaFreeHost(Pointer ptr);
  *
  * \sa ::cudaMalloc, ::cudaMallocPitch, ::cudaFree, ::cudaMallocArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaFreeHost, ::cudaHostAlloc,
- * ::cuArrayDestroy
+ * ::cudaFreeHost, ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaFreeArray(cudaArray array);
 
@@ -20082,8 +18954,7 @@ public static native @Cast("cudaError_t") int cudaFreeArray(cudaArray array);
  *
  * \sa ::cudaMalloc, ::cudaMallocPitch, ::cudaFree, ::cudaMallocArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaFreeHost, ::cudaHostAlloc,
- * ::cuMipmappedArrayDestroy
+ * ::cudaFreeHost, ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmappedArray mipmappedArray);
 
@@ -20121,10 +18992,8 @@ public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmapp
  * All of these flags are orthogonal to one another: a developer may allocate
  * memory that is portable, mapped and/or write-combined with no restrictions.
  *
- * In order for the ::cudaHostAllocMapped flag to have any effect, the CUDA context
- * must support the ::cudaDeviceMapHost flag, which can be checked via
- * ::cudaGetDeviceFlags(). The ::cudaDeviceMapHost flag is implicitly set for
- * contexts created via the runtime API.
+ * ::cudaSetDeviceFlags() must have been called with the ::cudaDeviceMapHost
+ * flag in order for the ::cudaHostAllocMapped flag to have any effect.
  *
  * The ::cudaHostAllocMapped flag may be specified on CUDA contexts for devices
  * that do not support mapped pinned memory. The failure is deferred to
@@ -20139,15 +19008,12 @@ public static native @Cast("cudaError_t") int cudaFreeMipmappedArray(cudaMipmapp
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
  * \sa ::cudaSetDeviceFlags,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaFreeHost,
- * ::cudaGetDeviceFlags,
- * ::cuMemHostAlloc
+ * ::cudaFreeHost
  */
 public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") PointerPointer pHost, @Cast("size_t") long size, @Cast("unsigned int") int flags);
 public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByPtrPtr Pointer pHost, @Cast("size_t") long size, @Cast("unsigned int") int flags);
@@ -20165,8 +19031,6 @@ public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByP
  * of memory available to the system for paging. As a result, this function is
  * best used sparingly to register staging areas for data exchange between
  * host and device.
- *
- * ::cudaHostRegister is not supported on non I/O coherent devices.
  *
  * The \p flags parameter enables different options to be specified that
  * affect the allocation, as follows.
@@ -20224,12 +19088,10 @@ public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByP
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation,
- * ::cudaErrorHostMemoryAlreadyRegistered,
- * ::cudaErrorNotSupported
+ * ::cudaErrorHostMemoryAlreadyRegistered
  * \notefnerr
  *
- * \sa ::cudaHostUnregister, ::cudaHostGetFlags, ::cudaHostGetDevicePointer,
- * ::cuMemHostRegister
+ * \sa ::cudaHostUnregister, ::cudaHostGetFlags, ::cudaHostGetDevicePointer
  */
 public static native @Cast("cudaError_t") int cudaHostRegister(Pointer ptr, @Cast("size_t") long size, @Cast("unsigned int") int flags);
 
@@ -20245,12 +19107,10 @@ public static native @Cast("cudaError_t") int cudaHostRegister(Pointer ptr, @Cas
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
- * ::cudaErrorHostMemoryNotRegistered
+ * ::cudaErrorInvalidValue
  * \notefnerr
  *
- * \sa ::cudaHostUnregister,
- * ::cuMemHostUnregister
+ * \sa ::cudaHostUnregister
  */
 public static native @Cast("cudaError_t") int cudaHostUnregister(Pointer ptr);
 
@@ -20292,8 +19152,7 @@ public static native @Cast("cudaError_t") int cudaHostUnregister(Pointer ptr);
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
- * \sa ::cudaSetDeviceFlags, ::cudaHostAlloc,
- * ::cuMemHostGetDevicePointer
+ * \sa ::cudaSetDeviceFlags, ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaHostGetDevicePointer(@Cast("void**") PointerPointer pDevice, Pointer pHost, @Cast("unsigned int") int flags);
 public static native @Cast("cudaError_t") int cudaHostGetDevicePointer(@Cast("void**") @ByPtrPtr Pointer pDevice, Pointer pHost, @Cast("unsigned int") int flags);
@@ -20313,8 +19172,7 @@ public static native @Cast("cudaError_t") int cudaHostGetDevicePointer(@Cast("vo
  * ::cudaErrorInvalidValue
  * \notefnerr
  *
- * \sa ::cudaHostAlloc,
- * ::cuMemHostGetFlags
+ * \sa ::cudaHostAlloc
  */
 public static native @Cast("cudaError_t") int cudaHostGetFlags(@Cast("unsigned int*") IntPointer pFlags, Pointer pHost);
 public static native @Cast("cudaError_t") int cudaHostGetFlags(@Cast("unsigned int*") IntBuffer pFlags, Pointer pHost);
@@ -20345,15 +19203,13 @@ public static native @Cast("cudaError_t") int cudaHostGetFlags(@Cast("unsigned i
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
  * \sa ::cudaMallocPitch, ::cudaFree, ::cudaMemcpy3D, ::cudaMemset3D,
  * ::cudaMalloc3DArray, ::cudaMallocArray, ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
- * ::cudaFreeHost, ::cudaHostAlloc, ::make_cudaPitchedPtr, ::make_cudaExtent,
- * ::cuMemAllocPitch
+ * ::cudaFreeHost, ::cudaHostAlloc, ::make_cudaPitchedPtr, ::make_cudaExtent
  */
 public static native @Cast("cudaError_t") int cudaMalloc3D(cudaPitchedPtr pitchedDevPtr, @ByVal cudaExtent extent);
 
@@ -20481,7 +19337,6 @@ public static native @Cast("cudaError_t") int cudaMalloc3D(cudaPitchedPtr pitche
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
@@ -20489,8 +19344,7 @@ public static native @Cast("cudaError_t") int cudaMalloc3D(cudaPitchedPtr pitche
  * ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaHostAlloc,
- * ::make_cudaExtent,
- * ::cuArray3DCreate
+ * ::make_cudaExtent
  */
 public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaArray array, @Const cudaChannelFormatDesc desc, @ByVal cudaExtent extent, @Cast("unsigned int") int flags/*=0*/);
 public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaArray array, @Const cudaChannelFormatDesc desc, @ByVal cudaExtent extent);
@@ -20551,60 +19405,46 @@ public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaAr
  *
  * \xmlonly
  * <table outputclass="xmlonly">
- * <tgroup cols="3" colsep="1" rowsep="1">
+ * <tgroup cols="2" colsep="1" rowsep="1">
  * <colspec colname="c1" colwidth="1.0*"/>
  * <colspec colname="c2" colwidth="3.0*"/>
- * <colspec colname="c3" colwidth="3.0*"/>
  * <thead>
  * <row>
  * <entry>CUDA array type</entry>
- * <entry>Valid extents that must always be met {(width range in elements),
- * (height range), (depth range)}</entry>
- * <entry>Valid extents with cudaArraySurfaceLoadStore set {(width range in
- * elements), (height range), (depth range)}</entry>
+ * <entry>Valid extents {(width range in elements), (height range), (depth
+ * range)}</entry>
  * </row>
  * </thead>
  * <tbody>
  * <row>
  * <entry>1D</entry>
  * <entry>{ (1,maxTexture1DMipmap), 0, 0 }</entry>
- * <entry>{ (1,maxSurface1D), 0, 0 }</entry>
  * </row>
  * <row>
  * <entry>2D</entry>
  * <entry>{ (1,maxTexture2DMipmap[0]), (1,maxTexture2DMipmap[1]), 0 }</entry>
- * <entry>{ (1,maxSurface2D[0]), (1,maxSurface2D[1]), 0 }</entry>
  * </row>
  * <row>
  * <entry>3D</entry>
- * <entry>{ (1,maxTexture3D[0]), (1,maxTexture3D[1]), (1,maxTexture3D[2]) }
- * OR { (1,maxTexture3DAlt[0]), (1,maxTexture3DAlt[1]),
- * (1,maxTexture3DAlt[2]) }</entry>
- * <entry>{ (1,maxSurface3D[0]), (1,maxSurface3D[1]), (1,maxSurface3D[2]) }</entry>
+ * <entry>{ (1,maxTexture3D[0]), (1,maxTexture3D[1]), (1,maxTexture3D[2]) }</entry>
  * </row>
  * <row>
  * <entry>1D Layered</entry>
  * <entry>{ (1,maxTexture1DLayered[0]), 0, (1,maxTexture1DLayered[1]) }</entry>
- * <entry>{ (1,maxSurface1DLayered[0]), 0, (1,maxSurface1DLayered[1]) }</entry>
  * </row>
  * <row>
  * <entry>2D Layered</entry>
  * <entry>{ (1,maxTexture2DLayered[0]), (1,maxTexture2DLayered[1]),
  * (1,maxTexture2DLayered[2]) }</entry>
- * <entry>{ (1,maxSurface2DLayered[0]), (1,maxSurface2DLayered[1]),
- * (1,maxSurface2DLayered[2]) }</entry>
  * </row>
  * <row>
  * <entry>Cubemap</entry>
  * <entry>{ (1,maxTextureCubemap), (1,maxTextureCubemap), 6 }</entry>
- * <entry>{ (1,maxSurfaceCubemap), (1,maxSurfaceCubemap), 6 }</entry>
  * </row>
  * <row>
  * <entry>Cubemap Layered</entry>
  * <entry>{ (1,maxTextureCubemapLayered[0]), (1,maxTextureCubemapLayered[0]),
  * (1,maxTextureCubemapLayered[1]) }</entry>
- * <entry>{ (1,maxSurfaceCubemapLayered[0]), (1,maxSurfaceCubemapLayered[0]),
- * (1,maxSurfaceCubemapLayered[1]) }</entry>
  * </row>
  * </tbody>
  * </tgroup>
@@ -20619,7 +19459,6 @@ public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaAr
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
  * ::cudaErrorMemoryAllocation
  * \notefnerr
  *
@@ -20627,8 +19466,7 @@ public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaAr
  * ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaHostAlloc,
- * ::make_cudaExtent,
- * ::cuMipmappedArrayCreate
+ * ::make_cudaExtent
  */
 public static native @Cast("cudaError_t") int cudaMallocMipmappedArray(@ByPtrPtr cudaMipmappedArray mipmappedArray, @Const cudaChannelFormatDesc desc, @ByVal cudaExtent extent, @Cast("unsigned int") int numLevels, @Cast("unsigned int") int flags/*=0*/);
 public static native @Cast("cudaError_t") int cudaMallocMipmappedArray(@ByPtrPtr cudaMipmappedArray mipmappedArray, @Const cudaChannelFormatDesc desc, @ByVal cudaExtent extent, @Cast("unsigned int") int numLevels);
@@ -20655,8 +19493,7 @@ public static native @Cast("cudaError_t") int cudaMallocMipmappedArray(@ByPtrPtr
  * ::cudaFreeArray,
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaHostAlloc,
- * ::make_cudaExtent,
- * ::cuMipmappedArrayGetLevel
+ * ::make_cudaExtent
  */
 public static native @Cast("cudaError_t") int cudaGetMipmappedArrayLevel(@ByPtrPtr cudaArray levelArray, cudaMipmappedArray mipmappedArray, @Cast("unsigned int") int level);
 
@@ -20707,6 +19544,8 @@ cudaMemcpy3DParms myParms = {0};
  * The \p srcPos and \p dstPos fields are optional offsets into the source and
  * destination objects and are defined in units of each object's elements. The
  * element for a host or device pointer is assumed to be <b>unsigned char</b>.
+ * For CUDA arrays, positions must be in the range [0, 2048) for any
+ * dimension.
  *
  * The \p extent field defines the dimensions of the transferred area in
  * elements. If a CUDA array is participating in the copy, the extent is
@@ -20720,11 +19559,6 @@ cudaMemcpy3DParms myParms = {0};
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
  * inferred from the pointer values. However, ::cudaMemcpyDefault is only
  * allowed on systems that support unified virtual addressing.
- * For ::cudaMemcpyHostToHost or ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToHost
- * passed as kind and cudaArray type passed as source or destination, if the kind
- * implies cudaArray type to be present on the host, ::cudaMemcpy3D() will
- * disregard that implication and silently correct the kind based on the fact that
- * cudaArray type can only be present on the device.
  *
  * If the source and destination are both arrays, ::cudaMemcpy3D() will return
  * an error if they do not have the same element size.
@@ -20745,6 +19579,7 @@ cudaMemcpy3DParms myParms = {0};
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
@@ -20758,8 +19593,7 @@ cudaMemcpy3DParms myParms = {0};
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
  * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::make_cudaExtent, ::make_cudaPos,
- * ::cuMemcpy3D
+ * ::make_cudaExtent, ::make_cudaPos
  */
 public static native @Cast("cudaError_t") int cudaMemcpy3D(@Const cudaMemcpy3DParms p);
 
@@ -20787,8 +19621,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy3D(@Const cudaMemcpy3DPa
  * \note_sync
  *
  * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync, ::cudaMemcpyPeerAsync,
- * ::cudaMemcpy3DPeerAsync,
- * ::cuMemcpy3DPeer
+ * ::cudaMemcpy3DPeerAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy3DPeer(@Const cudaMemcpy3DPeerParms p);
 
@@ -20854,11 +19687,6 @@ cudaMemcpy3DParms myParms = {0};
  * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
  * inferred from the pointer values. However, ::cudaMemcpyDefault is only
  * allowed on systems that support unified virtual addressing.
- * For ::cudaMemcpyHostToHost or ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToHost
- * passed as kind and cudaArray type passed as source or destination, if the kind
- * implies cudaArray type to be present on the host, ::cudaMemcpy3DAsync() will
- * disregard that implication and silently correct the kind based on the fact that
- * cudaArray type can only be present on the device.
  *
  * If the source and destination are both arrays, ::cudaMemcpy3DAsync() will
  * return an error if they do not have the same element size.
@@ -20889,6 +19717,7 @@ cudaMemcpy3DParms myParms = {0};
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
@@ -20903,8 +19732,7 @@ cudaMemcpy3DParms myParms = {0};
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
  * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::make_cudaExtent, ::make_cudaPos,
- * ::cuMemcpy3DAsync
+ * ::make_cudaExtent, ::make_cudaPos
  */
 public static native @Cast("cudaError_t") int cudaMemcpy3DAsync(@Const cudaMemcpy3DParms p, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpy3DAsync(@Const cudaMemcpy3DParms p);
@@ -20928,8 +19756,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy3DAsync(@Const cudaMemcp
  * \note_null_stream
  *
  * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync, ::cudaMemcpyPeerAsync,
- * ::cudaMemcpy3DPeerAsync,
- * ::cuMemcpy3DPeerAsync
+ * ::cudaMemcpy3DPeerAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy3DPeerAsync(@Const cudaMemcpy3DPeerParms p, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpy3DPeerAsync(@Const cudaMemcpy3DPeerParms p);
@@ -20950,8 +19777,6 @@ public static native @Cast("cudaError_t") int cudaMemcpy3DPeerAsync(@Const cudaM
  * ::cudaErrorLaunchFailure
  * \notefnerr
  *
- * \sa
- * ::cuMemGetInfo
  */
 public static native @Cast("cudaError_t") int cudaMemGetInfo(@Cast("size_t*") SizeTPointer free, @Cast("size_t*") SizeTPointer total);
 
@@ -20973,9 +19798,6 @@ public static native @Cast("cudaError_t") int cudaMemGetInfo(@Cast("size_t*") Si
  * ::cudaErrorInvalidValue
  * \notefnerr
  *
- * \sa
- * ::cuArrayGetDescriptor,
- * ::cuArray3DGetDescriptor
  */
 public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormatDesc desc, cudaExtent extent, @Cast("unsigned int*") IntPointer flags, cudaArray array);
 public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormatDesc desc, cudaExtent extent, @Cast("unsigned int*") IntBuffer flags, cudaArray array);
@@ -21003,6 +19825,7 @@ public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormat
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  *
@@ -21014,11 +19837,7 @@ public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormat
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyDtoH,
- * ::cuMemcpyHtoD,
- * ::cuMemcpyDtoD,
- * ::cuMemcpy
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy(Pointer dst, @Const Pointer src, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind);
 
@@ -21050,8 +19869,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy(Pointer dst, @Const Poi
  * \note_sync
  *
  * \sa ::cudaMemcpy, ::cudaMemcpyAsync, ::cudaMemcpyPeerAsync,
- * ::cudaMemcpy3DPeerAsync,
- * ::cuMemcpyPeer
+ * ::cudaMemcpy3DPeerAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyPeer(Pointer dst, int dstDevice, @Const Pointer src, int srcDevice, @Cast("size_t") long count);
 
@@ -21078,6 +19896,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyPeer(Pointer dst, int ds
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_sync
@@ -21088,9 +19907,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyPeer(Pointer dst, int ds
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyHtoA,
- * ::cuMemcpyDtoA
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyToArray(cudaArray dst, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Const Pointer src, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind);
 
@@ -21116,6 +19933,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyToArray(cudaArray dst, @
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_sync
@@ -21126,9 +19944,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyToArray(cudaArray dst, @
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyAtoH,
- * ::cuMemcpyAtoD
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyFromArray(Pointer dst, cudaArray src, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind);
 
@@ -21166,8 +19982,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromArray(Pointer dst, c
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyAtoA
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyArrayToArray(cudaArray dst, @Cast("size_t") long wOffsetDst, @Cast("size_t") long hOffsetDst, cudaArray src, @Cast("size_t") long wOffsetSrc, @Cast("size_t") long hOffsetSrc, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind/*=cudaMemcpyDeviceToDevice*/);
 public static native @Cast("cudaError_t") int cudaMemcpyArrayToArray(cudaArray dst, @Cast("size_t") long wOffsetDst, @Cast("size_t") long hOffsetDst, cudaArray src, @Cast("size_t") long wOffsetSrc, @Cast("size_t") long hOffsetSrc, @Cast("size_t") long count);
@@ -21203,6 +20018,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyArrayToArray(cudaArray d
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidPitchValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  *
@@ -21212,9 +20028,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyArrayToArray(cudaArray d
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2D,
- * ::cuMemcpy2DUnaligned
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2D(Pointer dst, @Cast("size_t") long dpitch, @Const Pointer src, @Cast("size_t") long spitch, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind);
 
@@ -21248,6 +20062,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2D(Pointer dst, @Cast("s
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
@@ -21259,9 +20074,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2D(Pointer dst, @Cast("s
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2D,
- * ::cuMemcpy2DUnaligned
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2DToArray(cudaArray dst, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Const Pointer src, @Cast("size_t") long spitch, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind);
 
@@ -21295,6 +20108,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArray(cudaArray dst,
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
@@ -21306,9 +20120,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArray(cudaArray dst,
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2D,
- * ::cuMemcpy2DUnaligned
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2DFromArray(Pointer dst, @Cast("size_t") long dpitch, cudaArray src, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind);
 
@@ -21351,9 +20163,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArray(Pointer dst,
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2D,
- * ::cuMemcpy2DUnaligned
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2DArrayToArray(cudaArray dst, @Cast("size_t") long wOffsetDst, @Cast("size_t") long hOffsetDst, cudaArray src, @Cast("size_t") long wOffsetSrc, @Cast("size_t") long hOffsetSrc, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind/*=cudaMemcpyDeviceToDevice*/);
 public static native @Cast("cudaError_t") int cudaMemcpy2DArrayToArray(cudaArray dst, @Cast("size_t") long wOffsetDst, @Cast("size_t") long hOffsetDst, cudaArray src, @Cast("size_t") long wOffsetSrc, @Cast("size_t") long hOffsetSrc, @Cast("size_t") long width, @Cast("size_t") long height);
@@ -21380,8 +20190,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DArrayToArray(cudaArray
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidSymbol,
- * ::cudaErrorInvalidMemcpyDirection,
- * ::cudaErrorNoKernelImageForDevice
+ * ::cudaErrorInvalidDevicePointer,
+ * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_sync
  * \note_string_api_deprecation
@@ -21392,10 +20202,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DArrayToArray(cudaArray
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy,
- * ::cuMemcpyHtoD,
- * ::cuMemcpyDtoD
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyToSymbol(@Const Pointer symbol, @Const Pointer src, @Cast("size_t") long count, @Cast("size_t") long offset/*=0*/, @Cast("cudaMemcpyKind") int kind/*=cudaMemcpyHostToDevice*/);
 public static native @Cast("cudaError_t") int cudaMemcpyToSymbol(@Const Pointer symbol, @Const Pointer src, @Cast("size_t") long count);
@@ -21422,8 +20229,8 @@ public static native @Cast("cudaError_t") int cudaMemcpyToSymbol(@Const Pointer 
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidSymbol,
- * ::cudaErrorInvalidMemcpyDirection,
- * ::cudaErrorNoKernelImageForDevice
+ * ::cudaErrorInvalidDevicePointer,
+ * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_sync
  * \note_string_api_deprecation
@@ -21434,10 +20241,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyToSymbol(@Const Pointer 
  * ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy,
- * ::cuMemcpyDtoH,
- * ::cuMemcpyDtoD
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, @Const Pointer symbol, @Cast("size_t") long count, @Cast("size_t") long offset/*=0*/, @Cast("cudaMemcpyKind") int kind/*=cudaMemcpyDeviceToHost*/);
 public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, @Const Pointer symbol, @Cast("size_t") long count);
@@ -21477,6 +20281,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, 
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_async
@@ -21489,10 +20294,6 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, 
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
  * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
- * ::cuMemcpyAsync,
- * ::cuMemcpyDtoHAsync,
- * ::cuMemcpyHtoDAsync,
- * ::cuMemcpyDtoDAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyAsync(Pointer dst, @Const Pointer src, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpyAsync(Pointer dst, @Const Pointer src, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind);
@@ -21525,8 +20326,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyAsync(Pointer dst, @Cons
  * \note_null_stream
  *
  * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync,
- * ::cudaMemcpy3DPeerAsync,
- * ::cuMemcpyPeerAsync
+ * ::cudaMemcpy3DPeerAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyPeerAsync(Pointer dst, int dstDevice, @Const Pointer src, int srcDevice, @Cast("size_t") long count, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpyPeerAsync(Pointer dst, int dstDevice, @Const Pointer src, int srcDevice, @Cast("size_t") long count);
@@ -21561,6 +20361,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyPeerAsync(Pointer dst, i
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_async
@@ -21572,9 +20373,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyPeerAsync(Pointer dst, i
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyHtoAAsync,
- * ::cuMemcpy2DAsync
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyToArrayAsync(cudaArray dst, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Const Pointer src, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpyToArrayAsync(cudaArray dst, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Const Pointer src, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind);
@@ -21608,6 +20407,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyToArrayAsync(cudaArray d
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_async
@@ -21619,9 +20419,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyToArrayAsync(cudaArray d
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyAtoHAsync,
- * ::cuMemcpy2DAsync
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyFromArrayAsync(Pointer dst, cudaArray src, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpyFromArrayAsync(Pointer dst, cudaArray src, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Cast("size_t") long count, @Cast("cudaMemcpyKind") int kind);
@@ -21670,6 +20468,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromArrayAsync(Pointer d
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidPitchValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_async
@@ -21681,8 +20480,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromArrayAsync(Pointer d
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2DAsync
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Cast("size_t") long dpitch, @Const Pointer src, @Cast("size_t") long spitch, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Cast("size_t") long dpitch, @Const Pointer src, @Cast("size_t") long spitch, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind);
@@ -21725,6 +20523,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Ca
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
@@ -21737,8 +20536,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Ca
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2DAsync
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray dst, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Const Pointer src, @Cast("size_t") long spitch, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray dst, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Const Pointer src, @Cast("size_t") long spitch, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind);
@@ -21780,6 +20578,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidPitchValue,
  * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
@@ -21792,8 +20591,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpy2DAsync
+ * ::cudaMemcpyToSymbolAsync, ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpy2DFromArrayAsync(Pointer dst, @Cast("size_t") long dpitch, cudaArray src, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpy2DFromArrayAsync(Pointer dst, @Cast("size_t") long dpitch, cudaArray src, @Cast("size_t") long wOffset, @Cast("size_t") long hOffset, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("cudaMemcpyKind") int kind);
@@ -21827,8 +20625,8 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArrayAsync(Pointer
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidSymbol,
- * ::cudaErrorInvalidMemcpyDirection,
- * ::cudaErrorNoKernelImageForDevice
+ * ::cudaErrorInvalidDevicePointer,
+ * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_async
  * \note_null_stream
@@ -21840,10 +20638,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArrayAsync(Pointer
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyFromSymbolAsync,
- * ::cuMemcpyAsync,
- * ::cuMemcpyHtoDAsync,
- * ::cuMemcpyDtoDAsync
+ * ::cudaMemcpyFromSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyToSymbolAsync(@Const Pointer symbol, @Const Pointer src, @Cast("size_t") long count, @Cast("size_t") long offset, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpyToSymbolAsync(@Const Pointer symbol, @Const Pointer src, @Cast("size_t") long count, @Cast("size_t") long offset, @Cast("cudaMemcpyKind") int kind);
@@ -21877,8 +20672,8 @@ public static native @Cast("cudaError_t") int cudaMemcpyToSymbolAsync(@Const Poi
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
  * ::cudaErrorInvalidSymbol,
- * ::cudaErrorInvalidMemcpyDirection,
- * ::cudaErrorNoKernelImageForDevice
+ * ::cudaErrorInvalidDevicePointer,
+ * ::cudaErrorInvalidMemcpyDirection
  * \notefnerr
  * \note_async
  * \note_null_stream
@@ -21890,10 +20685,7 @@ public static native @Cast("cudaError_t") int cudaMemcpyToSymbolAsync(@Const Poi
  * ::cudaMemcpyFromSymbol, ::cudaMemcpyAsync, ::cudaMemcpy2DAsync,
  * ::cudaMemcpyToArrayAsync, ::cudaMemcpy2DToArrayAsync,
  * ::cudaMemcpyFromArrayAsync, ::cudaMemcpy2DFromArrayAsync,
- * ::cudaMemcpyToSymbolAsync,
- * ::cuMemcpyAsync,
- * ::cuMemcpyDtoHAsync,
- * ::cuMemcpyDtoDAsync
+ * ::cudaMemcpyToSymbolAsync
  */
 public static native @Cast("cudaError_t") int cudaMemcpyFromSymbolAsync(Pointer dst, @Const Pointer symbol, @Cast("size_t") long count, @Cast("size_t") long offset, @Cast("cudaMemcpyKind") int kind, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemcpyFromSymbolAsync(Pointer dst, @Const Pointer symbol, @Cast("size_t") long count, @Cast("size_t") long offset, @Cast("cudaMemcpyKind") int kind);
@@ -21915,13 +20707,12 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromSymbolAsync(Pointer 
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer
  * \notefnerr
  * \note_memset
  *
- * \sa
- * ::cuMemsetD8,
- * ::cuMemsetD16,
- * ::cuMemsetD32
+ * \sa ::cudaMemset2D, ::cudaMemset3D, ::cudaMemsetAsync,
+ * ::cudaMemset2DAsync, ::cudaMemset3DAsync
  */
 public static native @Cast("cudaError_t") int cudaMemset(Pointer devPtr, int value, @Cast("size_t") long count);
 
@@ -21946,14 +20737,12 @@ public static native @Cast("cudaError_t") int cudaMemset(Pointer devPtr, int val
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer
  * \notefnerr
  * \note_memset
  *
  * \sa ::cudaMemset, ::cudaMemset3D, ::cudaMemsetAsync,
- * ::cudaMemset2DAsync, ::cudaMemset3DAsync,
- * ::cuMemsetD2D8,
- * ::cuMemsetD2D16,
- * ::cuMemsetD2D32
+ * ::cudaMemset2DAsync, ::cudaMemset3DAsync
  */
 public static native @Cast("cudaError_t") int cudaMemset2D(Pointer devPtr, @Cast("size_t") long pitch, int value, @Cast("size_t") long width, @Cast("size_t") long height);
 
@@ -21989,6 +20778,7 @@ public static native @Cast("cudaError_t") int cudaMemset2D(Pointer devPtr, @Cast
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer
  * \notefnerr
  * \note_memset
  *
@@ -22021,15 +20811,13 @@ public static native @Cast("cudaError_t") int cudaMemset3D(@ByVal cudaPitchedPtr
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer
  * \notefnerr
  * \note_memset
  * \note_null_stream
  *
  * \sa ::cudaMemset, ::cudaMemset2D, ::cudaMemset3D,
- * ::cudaMemset2DAsync, ::cudaMemset3DAsync,
- * ::cuMemsetD8Async,
- * ::cuMemsetD16Async,
- * ::cuMemsetD32Async
+ * ::cudaMemset2DAsync, ::cudaMemset3DAsync
  */
 public static native @Cast("cudaError_t") int cudaMemsetAsync(Pointer devPtr, int value, @Cast("size_t") long count, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemsetAsync(Pointer devPtr, int value, @Cast("size_t") long count);
@@ -22061,15 +20849,13 @@ public static native @Cast("cudaError_t") int cudaMemsetAsync(Pointer devPtr, in
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer
  * \notefnerr
  * \note_memset
  * \note_null_stream
  *
  * \sa ::cudaMemset, ::cudaMemset2D, ::cudaMemset3D,
- * ::cudaMemsetAsync, ::cudaMemset3DAsync,
- * ::cuMemsetD2D8Async,
- * ::cuMemsetD2D16Async,
- * ::cuMemsetD2D32Async
+ * ::cudaMemsetAsync, ::cudaMemset3DAsync
  */
 public static native @Cast("cudaError_t") int cudaMemset2DAsync(Pointer devPtr, @Cast("size_t") long pitch, int value, @Cast("size_t") long width, @Cast("size_t") long height, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemset2DAsync(Pointer devPtr, @Cast("size_t") long pitch, int value, @Cast("size_t") long width, @Cast("size_t") long height);
@@ -22112,6 +20898,7 @@ public static native @Cast("cudaError_t") int cudaMemset2DAsync(Pointer devPtr, 
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer
  * \notefnerr
  * \note_memset
  * \note_null_stream
@@ -22138,15 +20925,12 @@ public static native @Cast("cudaError_t") int cudaMemset3DAsync(@ByVal cudaPitch
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidSymbol,
- * ::cudaErrorNoKernelImageForDevice
+ * ::cudaErrorInvalidSymbol
  * \notefnerr
  * \note_string_api_deprecation
  *
- * \sa
- * \ref ::cudaGetSymbolAddress(void**, const T&) "cudaGetSymbolAddress (C++ API)",
- * \ref ::cudaGetSymbolSize(size_t*, const void*) "cudaGetSymbolSize (C API)",
- * ::cuModuleGetGlobal
+ * \sa \ref ::cudaGetSymbolAddress(void**, const T&) "cudaGetSymbolAddress (C++ API)",
+ * \ref ::cudaGetSymbolSize(size_t*, const void*) "cudaGetSymbolSize (C API)"
  */
 public static native @Cast("cudaError_t") int cudaGetSymbolAddress(@Cast("void**") PointerPointer devPtr, @Const Pointer symbol);
 public static native @Cast("cudaError_t") int cudaGetSymbolAddress(@Cast("void**") @ByPtrPtr Pointer devPtr, @Const Pointer symbol);
@@ -22164,15 +20948,12 @@ public static native @Cast("cudaError_t") int cudaGetSymbolAddress(@Cast("void**
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidSymbol,
- * ::cudaErrorNoKernelImageForDevice
+ * ::cudaErrorInvalidSymbol
  * \notefnerr
  * \note_string_api_deprecation
  *
- * \sa
- * \ref ::cudaGetSymbolAddress(void**, const void*) "cudaGetSymbolAddress (C API)",
- * \ref ::cudaGetSymbolSize(size_t*, const T&) "cudaGetSymbolSize (C++ API)",
- * ::cuModuleGetGlobal
+ * \sa \ref ::cudaGetSymbolAddress(void**, const void*) "cudaGetSymbolAddress (C API)",
+ * \ref ::cudaGetSymbolSize(size_t*, const T&) "cudaGetSymbolSize (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*") SizeTPointer size, @Const Pointer symbol);
 
@@ -22239,8 +21020,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*")
  * \note_null_stream
  *
  * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync,
- * ::cudaMemcpy3DPeerAsync, ::cudaMemAdvise,
- * ::cuMemPrefetchAsync
+ * ::cudaMemcpy3DPeerAsync, ::cudaMemAdvise
  */
 public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointer devPtr, @Cast("size_t") long count, int dstDevice, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointer devPtr, @Cast("size_t") long count, int dstDevice);
@@ -22327,8 +21107,7 @@ public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointe
  * \note_null_stream
  *
  * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync,
- * ::cudaMemcpy3DPeerAsync, ::cudaMemPrefetchAsync,
- * ::cuMemAdvise
+ * ::cudaMemcpy3DPeerAsync, ::cudaMemPrefetchAsync
  */
 public static native @Cast("cudaError_t") int cudaMemAdvise(@Const Pointer devPtr, @Cast("size_t") long count, @Cast("cudaMemoryAdvise") int advice, int device);
 
@@ -22384,8 +21163,7 @@ public static native @Cast("cudaError_t") int cudaMemAdvise(@Const Pointer devPt
  * \note_null_stream
  *
  * \sa ::cudaMemRangeGetAttributes, ::cudaMemPrefetchAsync,
- * ::cudaMemAdvise,
- * ::cuMemRangeGetAttribute
+ * ::cudaMemAdvise
  */
 public static native @Cast("cudaError_t") int cudaMemRangeGetAttribute(Pointer data, @Cast("size_t") long dataSize, @Cast("cudaMemRangeAttribute") int attribute, @Const Pointer devPtr, @Cast("size_t") long count);
 
@@ -22421,8 +21199,7 @@ public static native @Cast("cudaError_t") int cudaMemRangeGetAttribute(Pointer d
  * \notefnerr
  *
  * \sa ::cudaMemRangeGetAttribute, ::cudaMemAdvise
- * ::cudaMemPrefetchAsync,
- * ::cuMemRangeGetAttributes
+ * ::cudaMemPrefetchAsync
  */
 public static native @Cast("cudaError_t") int cudaMemRangeGetAttributes(@Cast("void**") PointerPointer data, @Cast("size_t*") SizeTPointer dataSizes, @Cast("cudaMemRangeAttribute*") IntPointer attributes, @Cast("size_t") long numAttributes, @Const Pointer devPtr, @Cast("size_t") long count);
 public static native @Cast("cudaError_t") int cudaMemRangeGetAttributes(@Cast("void**") @ByPtrPtr Pointer data, @Cast("size_t*") SizeTPointer dataSizes, @Cast("cudaMemRangeAttribute*") IntPointer attributes, @Cast("size_t") long numAttributes, @Const Pointer devPtr, @Cast("size_t") long count);
@@ -22578,8 +21355,7 @@ public static native @Cast("cudaError_t") int cudaMemRangeGetAttributes(@Cast("v
  * ::cudaErrorInvalidValue
  *
  * \sa ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaSetDevice,
- * ::cudaChooseDevice,
- * ::cuPointerGetAttributes
+ * ::cudaChooseDevice
  */
 public static native @Cast("cudaError_t") int cudaPointerGetAttributes(cudaPointerAttributes attributes, @Const Pointer ptr);
 
@@ -22617,8 +21393,7 @@ public static native @Cast("cudaError_t") int cudaPointerGetAttributes(cudaPoint
  * \notefnerr
  *
  * \sa ::cudaDeviceEnablePeerAccess,
- * ::cudaDeviceDisablePeerAccess,
- * ::cuDeviceCanAccessPeer
+ * ::cudaDeviceDisablePeerAccess
  */
 public static native @Cast("cudaError_t") int cudaDeviceCanAccessPeer(IntPointer canAccessPeer, int device, int peerDevice);
 public static native @Cast("cudaError_t") int cudaDeviceCanAccessPeer(IntBuffer canAccessPeer, int device, int peerDevice);
@@ -22659,8 +21434,7 @@ public static native @Cast("cudaError_t") int cudaDeviceCanAccessPeer(int[] canA
  * \notefnerr
  *
  * \sa ::cudaDeviceCanAccessPeer,
- * ::cudaDeviceDisablePeerAccess,
- * ::cuCtxEnablePeerAccess
+ * ::cudaDeviceDisablePeerAccess
  */
 public static native @Cast("cudaError_t") int cudaDeviceEnablePeerAccess(int peerDevice, @Cast("unsigned int") int flags);
 
@@ -22679,8 +21453,7 @@ public static native @Cast("cudaError_t") int cudaDeviceEnablePeerAccess(int pee
  * \notefnerr
  *
  * \sa ::cudaDeviceCanAccessPeer,
- * ::cudaDeviceEnablePeerAccess,
- * ::cuCtxDisablePeerAccess
+ * ::cudaDeviceEnablePeerAccess
  */
 public static native @Cast("cudaError_t") int cudaDeviceDisablePeerAccess(int peerDevice);
 
@@ -22740,8 +21513,7 @@ public static native @Cast("cudaError_t") int cudaDeviceDisablePeerAccess(int pe
  * ::cudaGraphicsD3D10RegisterResource,
  * ::cudaGraphicsD3D11RegisterResource,
  * ::cudaGraphicsGLRegisterBuffer,
- * ::cudaGraphicsGLRegisterImage,
- * ::cuGraphicsUnregisterResource
+ * ::cudaGraphicsGLRegisterImage
  */
 public static native @Cast("cudaError_t") int cudaGraphicsUnregisterResource(cudaGraphicsResource resource);
 
@@ -22773,8 +21545,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsUnregisterResource(cud
  * \notefnerr
  *
  * \sa
- * ::cudaGraphicsMapResources,
- * ::cuGraphicsResourceSetMapFlags
+ * ::cudaGraphicsMapResources
  */
 public static native @Cast("cudaError_t") int cudaGraphicsResourceSetMapFlags(cudaGraphicsResource resource, @Cast("unsigned int") int flags);
 
@@ -22810,8 +21581,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsResourceSetMapFlags(cu
  * \sa
  * ::cudaGraphicsResourceGetMappedPointer,
  * ::cudaGraphicsSubResourceGetMappedArray,
- * ::cudaGraphicsUnmapResources,
- * ::cuGraphicsMapResources
+ * ::cudaGraphicsUnmapResources
  */
 public static native @Cast("cudaError_t") int cudaGraphicsMapResources(int count, @ByPtrPtr cudaGraphicsResource resources, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaGraphicsMapResources(int count, @ByPtrPtr cudaGraphicsResource resources);
@@ -22844,8 +21614,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsMapResources(int count
  * \notefnerr
  *
  * \sa
- * ::cudaGraphicsMapResources,
- * ::cuGraphicsUnmapResources
+ * ::cudaGraphicsMapResources
  */
 public static native @Cast("cudaError_t") int cudaGraphicsUnmapResources(int count, @ByPtrPtr cudaGraphicsResource resources, CUstream_st stream/*=0*/);
 public static native @Cast("cudaError_t") int cudaGraphicsUnmapResources(int count, @ByPtrPtr cudaGraphicsResource resources);
@@ -22875,8 +21644,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsUnmapResources(int cou
  *
  * \sa
  * ::cudaGraphicsMapResources,
- * ::cudaGraphicsSubResourceGetMappedArray,
- * ::cuGraphicsResourceGetMappedPointer
+ * ::cudaGraphicsSubResourceGetMappedArray
  */
 public static native @Cast("cudaError_t") int cudaGraphicsResourceGetMappedPointer(@Cast("void**") PointerPointer devPtr, @Cast("size_t*") SizeTPointer size, cudaGraphicsResource resource);
 public static native @Cast("cudaError_t") int cudaGraphicsResourceGetMappedPointer(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t*") SizeTPointer size, cudaGraphicsResource resource);
@@ -22911,9 +21679,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsResourceGetMappedPoint
  * ::cudaErrorUnknown
  * \notefnerr
  *
- * \sa
- * ::cudaGraphicsResourceGetMappedPointer,
- * ::cuGraphicsSubResourceGetMappedArray
+ * \sa ::cudaGraphicsResourceGetMappedPointer
  */
 public static native @Cast("cudaError_t") int cudaGraphicsSubResourceGetMappedArray(@ByPtrPtr cudaArray array, cudaGraphicsResource resource, @Cast("unsigned int") int arrayIndex, @Cast("unsigned int") int mipLevel);
 
@@ -22938,9 +21704,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsSubResourceGetMappedAr
  * ::cudaErrorUnknown
  * \notefnerr
  *
- * \sa
- * ::cudaGraphicsResourceGetMappedPointer,
- * ::cuGraphicsResourceGetMappedMipmappedArray
+ * \sa ::cudaGraphicsResourceGetMappedPointer
  */
 public static native @Cast("cudaError_t") int cudaGraphicsResourceGetMappedMipmappedArray(@ByPtrPtr cudaMipmappedArray mipmappedArray, cudaGraphicsResource resource);
 
@@ -23015,8 +21779,7 @@ public static native @Cast("cudaError_t") int cudaGetChannelDesc(cudaChannelForm
  * \ref ::cudaBindTexture2D(size_t*, const struct textureReference*, const void*, const struct cudaChannelFormatDesc*, size_t, size_t, size_t) "cudaBindTexture2D (C API)",
  * \ref ::cudaBindTextureToArray(const struct textureReference*, cudaArray_const_t, const struct cudaChannelFormatDesc*) "cudaBindTextureToArray (C API)",
  * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)",
- * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)",
- * ::cuTexRefSetFormat
+ * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)"
  */
 public static native @ByVal cudaChannelFormatDesc cudaCreateChannelDesc(int x, int y, int z, int w, @Cast("cudaChannelFormatKind") int f);
 
@@ -23053,6 +21816,7 @@ public static native @ByVal cudaChannelFormatDesc cudaCreateChannelDesc(int x, i
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidTexture
  * \notefnerr
  *
@@ -23062,12 +21826,7 @@ public static native @ByVal cudaChannelFormatDesc cudaCreateChannelDesc(int x, i
  * \ref ::cudaBindTexture2D(size_t*, const struct textureReference*, const void*, const struct cudaChannelFormatDesc*, size_t, size_t, size_t) "cudaBindTexture2D (C API)",
  * \ref ::cudaBindTextureToArray(const struct textureReference*, cudaArray_const_t, const struct cudaChannelFormatDesc*) "cudaBindTextureToArray (C API)",
  * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)",
- * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)",
- * ::cuTexRefSetAddress,
- * ::cuTexRefSetAddressMode,
- * ::cuTexRefSetFormat,
- * ::cuTexRefSetFlags,
- * ::cuTexRefSetBorderColor
+ * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)"
  */
 public static native @Cast("cudaError_t") int cudaBindTexture(@Cast("size_t*") SizeTPointer offset, @Const textureReference texref, @Const Pointer devPtr, @Const cudaChannelFormatDesc desc, @Cast("size_t") long size/*=UINT_MAX*/);
 public static native @Cast("cudaError_t") int cudaBindTexture(@Cast("size_t*") SizeTPointer offset, @Const textureReference texref, @Const Pointer devPtr, @Const cudaChannelFormatDesc desc);
@@ -23108,6 +21867,7 @@ public static native @Cast("cudaError_t") int cudaBindTexture(@Cast("size_t*") S
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidTexture
  * \notefnerr
  *
@@ -23118,12 +21878,7 @@ public static native @Cast("cudaError_t") int cudaBindTexture(@Cast("size_t*") S
  * \ref ::cudaBindTexture2D(size_t*, const struct texture<T, dim, readMode>&, const void*, size_t, size_t, size_t) "cudaBindTexture2D (C++ API, inherited channel descriptor)",
  * \ref ::cudaBindTextureToArray(const struct textureReference*, cudaArray_const_t, const struct cudaChannelFormatDesc*) "cudaBindTextureToArray (C API)",
  * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaBindTextureToArray (C API)",
- * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)",
- * ::cuTexRefSetAddress2D,
- * ::cuTexRefSetFormat,
- * ::cuTexRefSetFlags,
- * ::cuTexRefSetAddressMode,
- * ::cuTexRefSetBorderColor
+ * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)"
  */
 public static native @Cast("cudaError_t") int cudaBindTexture2D(@Cast("size_t*") SizeTPointer offset, @Const textureReference texref, @Const Pointer devPtr, @Const cudaChannelFormatDesc desc, @Cast("size_t") long width, @Cast("size_t") long height, @Cast("size_t") long pitch);
 
@@ -23141,6 +21896,7 @@ public static native @Cast("cudaError_t") int cudaBindTexture2D(@Cast("size_t*")
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidTexture
  * \notefnerr
  *
@@ -23150,14 +21906,7 @@ public static native @Cast("cudaError_t") int cudaBindTexture2D(@Cast("size_t*")
  * \ref ::cudaBindTexture2D(size_t*, const struct textureReference*, const void*, const struct cudaChannelFormatDesc*, size_t, size_t, size_t) "cudaBindTexture2D (C API)",
  * \ref ::cudaBindTextureToArray(const struct texture< T, dim, readMode>&, cudaArray_const_t, const struct cudaChannelFormatDesc&) "cudaBindTextureToArray (C++ API)",
  * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)",
- * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)",
- * ::cuTexRefSetArray,
- * ::cuTexRefSetFormat,
- * ::cuTexRefSetFlags,
- * ::cuTexRefSetAddressMode,
- * ::cuTexRefSetFilterMode,
- * ::cuTexRefSetBorderColor,
- * ::cuTexRefSetMaxAnisotropy
+ * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)"
  */
 public static native @Cast("cudaError_t") int cudaBindTextureToArray(@Const textureReference texref, cudaArray array, @Const cudaChannelFormatDesc desc);
 
@@ -23175,6 +21924,7 @@ public static native @Cast("cudaError_t") int cudaBindTextureToArray(@Const text
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevicePointer,
  * ::cudaErrorInvalidTexture
  * \notefnerr
  *
@@ -23184,16 +21934,7 @@ public static native @Cast("cudaError_t") int cudaBindTextureToArray(@Const text
  * \ref ::cudaBindTexture2D(size_t*, const struct textureReference*, const void*, const struct cudaChannelFormatDesc*, size_t, size_t, size_t) "cudaBindTexture2D (C API)",
  * \ref ::cudaBindTextureToArray(const struct texture< T, dim, readMode>&, cudaArray_const_t, const struct cudaChannelFormatDesc&) "cudaBindTextureToArray (C++ API)",
  * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)",
- * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)",
- * ::cuTexRefSetMipmappedArray,
- * ::cuTexRefSetMipmapFilterMode
- * ::cuTexRefSetMipmapLevelClamp,
- * ::cuTexRefSetMipmapLevelBias,
- * ::cuTexRefSetFormat,
- * ::cuTexRefSetFlags,
- * ::cuTexRefSetAddressMode,
- * ::cuTexRefSetBorderColor,
- * ::cuTexRefSetMaxAnisotropy
+ * \ref ::cudaGetTextureAlignmentOffset(size_t*, const struct textureReference*) "cudaGetTextureAlignmentOffset (C API)"
  */
 public static native @Cast("cudaError_t") int cudaBindTextureToMipmappedArray(@Const textureReference texref, cudaMipmappedArray mipmappedArray, @Const cudaChannelFormatDesc desc);
 
@@ -23264,8 +22005,7 @@ public static native @Cast("cudaError_t") int cudaGetTextureAlignmentOffset(@Cas
  * \ref ::cudaBindTexture(size_t*, const struct textureReference*, const void*, const struct cudaChannelFormatDesc*, size_t) "cudaBindTexture (C API)",
  * \ref ::cudaBindTexture2D(size_t*, const struct textureReference*, const void*, const struct cudaChannelFormatDesc*, size_t, size_t, size_t) "cudaBindTexture2D (C API)",
  * \ref ::cudaBindTextureToArray(const struct textureReference*, cudaArray_const_t, const struct cudaChannelFormatDesc*) "cudaBindTextureToArray (C API)",
- * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)",
- * ::cuModuleGetTexRef
+ * \ref ::cudaUnbindTexture(const struct textureReference*) "cudaUnbindTexture (C API)"
  */
 public static native @Cast("cudaError_t") int cudaGetTextureReference(@Cast("const textureReference**") PointerPointer texref, @Const Pointer symbol);
 public static native @Cast("cudaError_t") int cudaGetTextureReference(@Const @ByPtrPtr textureReference texref, @Const Pointer symbol);
@@ -23306,8 +22046,7 @@ public static native @Cast("cudaError_t") int cudaGetTextureReference(@Const @By
  *
  * \sa \ref ::cudaBindSurfaceToArray(const struct surface< T, dim>&, cudaArray_const_t, const struct cudaChannelFormatDesc&) "cudaBindSurfaceToArray (C++ API)",
  * \ref ::cudaBindSurfaceToArray(const struct surface< T, dim>&, cudaArray_const_t) "cudaBindSurfaceToArray (C++ API, inherited channel descriptor)",
- * ::cudaGetSurfaceReference,
- * ::cuSurfRefSetArray
+ * ::cudaGetSurfaceReference
  */
 public static native @Cast("cudaError_t") int cudaBindSurfaceToArray(@Const surfaceReference surfref, cudaArray array, @Const cudaChannelFormatDesc desc);
 
@@ -23326,9 +22065,7 @@ public static native @Cast("cudaError_t") int cudaBindSurfaceToArray(@Const surf
  * \notefnerr
  * \note_string_api_deprecation_50
  *
- * \sa
- * \ref ::cudaBindSurfaceToArray(const struct surfaceReference*, cudaArray_const_t, const struct cudaChannelFormatDesc*) "cudaBindSurfaceToArray (C API)",
- * ::cuModuleGetSurfRef
+ * \sa \ref ::cudaBindSurfaceToArray(const struct surfaceReference*, cudaArray_const_t, const struct cudaChannelFormatDesc*) "cudaBindSurfaceToArray (C API)"
  */
 public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Cast("const surfaceReference**") PointerPointer surfref, @Const Pointer symbol);
 public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @ByPtrPtr surfaceReference surfref, @Const Pointer symbol);
@@ -23554,9 +22291,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaDestroyTextureObject,
- * ::cuTexObjectCreate
+ * \sa ::cudaDestroyTextureObject
  */
 
 public static native @Cast("cudaError_t") int cudaCreateTextureObject(@Cast("cudaTextureObject_t*") LongPointer pTexObject, @Const cudaResourceDesc pResDesc, @Const cudaTextureDesc pTexDesc, @Const cudaResourceViewDesc pResViewDesc);
@@ -23574,9 +22309,7 @@ public static native @Cast("cudaError_t") int cudaCreateTextureObject(@Cast("cud
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaCreateTextureObject,
- * ::cuTexObjectDestroy
+ * \sa ::cudaCreateTextureObject
  */
 public static native @Cast("cudaError_t") int cudaDestroyTextureObject(@Cast("cudaTextureObject_t") long texObject);
 
@@ -23592,9 +22325,7 @@ public static native @Cast("cudaError_t") int cudaDestroyTextureObject(@Cast("cu
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaCreateTextureObject,
- * ::cuTexObjectGetResourceDesc
+ * \sa ::cudaCreateTextureObject
  */
 public static native @Cast("cudaError_t") int cudaGetTextureObjectResourceDesc(cudaResourceDesc pResDesc, @Cast("cudaTextureObject_t") long texObject);
 
@@ -23610,9 +22341,7 @@ public static native @Cast("cudaError_t") int cudaGetTextureObjectResourceDesc(c
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaCreateTextureObject,
- * ::cuTexObjectGetTextureDesc
+ * \sa ::cudaCreateTextureObject
  */
 public static native @Cast("cudaError_t") int cudaGetTextureObjectTextureDesc(cudaTextureDesc pTexDesc, @Cast("cudaTextureObject_t") long texObject);
 
@@ -23629,9 +22358,7 @@ public static native @Cast("cudaError_t") int cudaGetTextureObjectTextureDesc(cu
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaCreateTextureObject,
- * ::cuTexObjectGetResourceViewDesc
+ * \sa ::cudaCreateTextureObject
  */
 public static native @Cast("cudaError_t") int cudaGetTextureObjectResourceViewDesc(cudaResourceViewDesc pResViewDesc, @Cast("cudaTextureObject_t") long texObject);
 
@@ -23669,9 +22396,7 @@ public static native @Cast("cudaError_t") int cudaGetTextureObjectResourceViewDe
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaDestroySurfaceObject,
- * ::cuSurfObjectCreate
+ * \sa ::cudaDestroySurfaceObject
  */
 
 public static native @Cast("cudaError_t") int cudaCreateSurfaceObject(@Cast("cudaSurfaceObject_t*") LongPointer pSurfObject, @Const cudaResourceDesc pResDesc);
@@ -23689,9 +22414,7 @@ public static native @Cast("cudaError_t") int cudaCreateSurfaceObject(@Cast("cud
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaCreateSurfaceObject,
- * ::cuSurfObjectDestroy
+ * \sa ::cudaCreateSurfaceObject
  */
 public static native @Cast("cudaError_t") int cudaDestroySurfaceObject(@Cast("cudaSurfaceObject_t") long surfObject);
 
@@ -23706,9 +22429,7 @@ public static native @Cast("cudaError_t") int cudaDestroySurfaceObject(@Cast("cu
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaCreateSurfaceObject,
- * ::cuSurfObjectGetResourceDesc
+ * \sa ::cudaCreateSurfaceObject
  */
 public static native @Cast("cudaError_t") int cudaGetSurfaceObjectResourceDesc(cudaResourceDesc pResDesc, @Cast("cudaSurfaceObject_t") long surfObject);
 
@@ -23735,9 +22456,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceObjectResourceDesc(c
  * ::cudaErrorInvalidValue
  * \notefnerr
  *
- * \sa
- * ::cudaRuntimeGetVersion,
- * ::cuDriverGetVersion
+ * \sa ::cudaRuntimeGetVersion
  */
 public static native @Cast("cudaError_t") int cudaDriverGetVersion(IntPointer driverVersion);
 public static native @Cast("cudaError_t") int cudaDriverGetVersion(IntBuffer driverVersion);
@@ -23756,9 +22475,7 @@ public static native @Cast("cudaError_t") int cudaDriverGetVersion(int[] driverV
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue
  *
- * \sa
- * ::cudaDriverGetVersion,
- * ::cuDriverGetVersion
+ * \sa ::cudaDriverGetVersion
  */
 public static native @Cast("cudaError_t") int cudaRuntimeGetVersion(IntPointer runtimeVersion);
 public static native @Cast("cudaError_t") int cudaRuntimeGetVersion(IntBuffer runtimeVersion);
@@ -24107,6 +22824,7 @@ public static native @ByVal cudaExtent make_cudaExtent(@Cast("size_t") long w, @
 // #define __VECTOR_FUNCTIONS_DECL__ static __inline__ __host__ __device__
 // #endif /* __CUDACC_RTC__ */
 
+// #if defined(__CUDACC_RTC__)
 /*******************************************************************************
 *                                                                              *
 *                                                                              *
@@ -24208,6 +22926,7 @@ public static native @ByVal double2 make_double2(double x, double y);
 public static native @ByVal double3 make_double3(double x, double y, double z);
 
 public static native @ByVal double4 make_double4(double x, double y, double z, double w);
+// #endif /* __CUDACC_RTC__ */
 
 // #undef __VECTOR_FUNCTIONS_DECL__
 
@@ -24271,14 +22990,6 @@ public static native @ByVal double4 make_double4(double x, double y, double z, d
 
 // #if !defined(CU_COMPLEX_H_)
 // #define CU_COMPLEX_H_
-
-// #if !defined(__CUDACC_RTC__)
-// #if defined(__GNUC__)
-// #if defined(__clang__) || (!defined(__PGIC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)))
-// #pragma GCC diagnostic ignored "-Wunused-function"
-// #endif
-// #endif
-// #endif
 
 /* When trying to include C header file in C++ Code extern "C" is required
  * But the Standard QNX headers already have ifdef extern in them when compiling C++ Code
@@ -24395,2012 +23106,138 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 // Parsed from <cuda_fp16.h>
 
 /*
-* Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
-*
-* NOTICE TO LICENSEE:
-*
-* This source code and/or documentation ("Licensed Deliverables") are
-* subject to NVIDIA intellectual property rights under U.S. and
-* international Copyright laws.
-*
-* These Licensed Deliverables contained herein is PROPRIETARY and
-* CONFIDENTIAL to NVIDIA and is being provided under the terms and
-* conditions of a form of NVIDIA software license agreement by and
-* between NVIDIA and Licensee ("License Agreement") or electronically
-* accepted by Licensee.  Notwithstanding any terms or conditions to
-* the contrary in the License Agreement, reproduction or disclosure
-* of the Licensed Deliverables to any third party without the express
-* written consent of NVIDIA is prohibited.
-*
-* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
-* LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
-* SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
-* PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
-* NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
-* DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
-* NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
-* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
-* LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
-* SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
-* DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-* WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
-* ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
-* OF THESE LICENSED DELIVERABLES.
-*
-* U.S. Government End Users.  These Licensed Deliverables are a
-* "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
-* 1995), consisting of "commercial computer software" and "commercial
-* computer software documentation" as such terms are used in 48
-* C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
-* only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
-* 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
-* U.S. Government End Users acquire the Licensed Deliverables with
-* only those rights set forth herein.
-*
-* Any use of the Licensed Deliverables in individual and commercial
-* software must include, in the user documentation and internal
-* comments to the code, the above Disclaimer and U.S. Government End
-* Users Notice.
-*/
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
+ *
+ * NOTICE TO LICENSEE:
+ *
+ * This source code and/or documentation ("Licensed Deliverables") are
+ * subject to NVIDIA intellectual property rights under U.S. and
+ * international Copyright laws.
+ *
+ * These Licensed Deliverables contained herein is PROPRIETARY and
+ * CONFIDENTIAL to NVIDIA and is being provided under the terms and
+ * conditions of a form of NVIDIA software license agreement by and
+ * between NVIDIA and Licensee ("License Agreement") or electronically
+ * accepted by Licensee.  Notwithstanding any terms or conditions to
+ * the contrary in the License Agreement, reproduction or disclosure
+ * of the Licensed Deliverables to any third party without the express
+ * written consent of NVIDIA is prohibited.
+ *
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
+ * SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
+ * PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
+ * NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
+ * DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
+ * SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
+ * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THESE LICENSED DELIVERABLES.
+ *
+ * U.S. Government End Users.  These Licensed Deliverables are a
+ * "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
+ * 1995), consisting of "commercial computer software" and "commercial
+ * computer software documentation" as such terms are used in 48
+ * C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
+ * only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
+ * 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
+ * U.S. Government End Users acquire the Licensed Deliverables with
+ * only those rights set forth herein.
+ *
+ * Any use of the Licensed Deliverables in individual and commercial
+ * software must include, in the user documentation and internal
+ * comments to the code, the above Disclaimer and U.S. Government End
+ * Users Notice.
+ */
 
 /**
-* \defgroup CUDA_MATH_INTRINSIC_HALF Half Precision Intrinsics
-* This section describes half precision intrinsic functions that are
-* only supported in device code.
-*/
+ * \defgroup CUDA_MATH_INTRINSIC_HALF Half Precision Intrinsics
+ * This section describes half precision intrinsic functions that are
+ * only supported in device code.
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF_ARITHMETIC Half Arithmetic Functions
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF_ARITHMETIC Half Arithmetic Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF2_ARITHMETIC Half2 Arithmetic Functions
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF2_ARITHMETIC Half2 Arithmetic Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF_COMPARISON Half Comparison Functions
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF_COMPARISON Half Comparison Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF2_COMPARISON Half2 Comparison Functions
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF2_COMPARISON Half2 Comparison Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF_MISC Half Precision Conversion And Data Movement
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF_MISC Half Precision Conversion And Data Movement
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF_FUNCTIONS Half Math Functions
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF_FUNCTIONS Half Math Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
 /**
-* \defgroup CUDA_MATH__HALF2_FUNCTIONS Half2 Math Functions
-* \ingroup CUDA_MATH_INTRINSIC_HALF
-*/
+ * \defgroup CUDA_MATH__HALF2_FUNCTIONS Half2 Math Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
 
-// #ifndef __CUDA_FP16_H__
-// #define __CUDA_FP16_H__
+// #ifndef CUDA_FP16_H_JNESTUG4
+// #define CUDA_FP16_H_JNESTUG4
 
-// #if defined(__cplusplus) && defined(__CUDACC__)
-
-// #define __CUDA_FP16_DECL__ static __device__ __inline__
-
-// #define __CUDA_FP16_TYPES_EXIST__
-/* Forward-declaration of structures defined in "cuda_fp16.hpp" */
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts float number to half precision in round-to-nearest-even mode
-* and returns \p half with converted value.
-*
-* Converts float number \p a to half precision in round-to-nearest-even mode.
-*
-* @return Returns \p half result with converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts float number to half precision in round-to-nearest-even mode
-* and returns \p half with converted value.
-*
-* Converts float number \p a to half precision in round-to-nearest-even mode.
-*
-* @return Returns \p half result with converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts float number to half precision in round-towards-zero mode
-* and returns \p half with converted value.
-*
-* Converts float number \p a to half precision in round-towards-zero mode.
-*
-* @return Returns \p half result with converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts float number to half precision in round-down mode
-* and returns \p half with converted value.
-*
-* Converts float number \p a to half precision in round-down mode.
-*
-* @return Returns \p half result with converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts float number to half precision in round-up mode
-* and returns \p half with converted value.
-*
-* Converts float number \p a to half precision in round-up mode.
-*
-* @return Returns \p half result with converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts \p half number to float.
-*
-* Converts half number \p a to float.
-*
-* @return Returns float result with converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-to-nearest-even mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-to-nearest-even mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-towards-zero mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-down mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-up mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-towards-zero mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-down mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-up mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-to-nearest-even mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-to-nearest-even mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-towards-zero mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-down mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-up mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-towards-zero
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-towards-zero
-* mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-down mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-up mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-towards-zero
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-towards-zero
-* mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-down mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-up mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-towards-zero mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-down mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-up mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Truncate input argument to the integral part.
-*
-* Round \p h to the nearest integer value that does not exceed \p h in
-* magnitude.
-*
-* @return Returns truncated integer value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculate ceiling of the input argument.
-*
-* Compute the smallest integer value not less than \p h.
-*
-* @return Returns ceiling expressed as a half-precision floating point number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculate the largest integer less than or equal to \p h.
-*
-* Calculate the largest integer value which is less than or equal to \p h.
-*
-* @return Returns floor expressed as half-precision floating point number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Round input to nearest integer value in half-precision floating point
-* number.
-*
-* Round \p h to the nearest integer value in half-precision floating point
-* format, with halfway cases rounded to the nearest even integer value.
-*
-* @return Returns rounded integer value expressed as half-precision floating
-* point number.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Truncate \p half2 vector input argument to the integral part.
-*
-* Round each component of vector \p h to the nearest integer value that does
-* not exceed \p h in magnitude.
-*
-* @return Returns \p half2 vector truncated integer value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculate \p half2 vector ceiling of the input argument.
-*
-* For each component of vector \p h compute the smallest integer value not less
-* than \p h.
-*
-* @return Returns \p half2 vector ceiling expressed as a pair of half-precision
-* floating point numbers.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculate the largest integer less than or equal to \p h.
-*
-* For each component of vector \p h calculate the largest integer value which
-* is less than or equal to \p h.
-*
-* @return Returns \p half2 vector floor expressed as a pair of half-precision
-* floating point number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Round input to nearest integer value in half-precision floating point
-* number.
-*
-* Round each component of \p half2 vector \p h to the nearest integer value in
-* half-precision floating point format, with halfway cases rounded to the
-* nearest even integer value.
-*
-* @return Returns \p half2 vector of rounded integer values expressed as
-* half-precision floating point numbers.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts input to half precision in round-to-nearest-even mode and
-* populates both halves of \p half2 with converted value.
-*
-* Converts input \p a to half precision in round-to-nearest-even mode and
-* populates both halves of \p half2 with converted value.
-*
-* @return Returns \p half2 with both halves equal to the converted half
-* precision number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts both input floats to half precision in round-to-nearest-even
-* mode and returns \p half2 with converted values.
-*
-* Converts both input floats to half precision in round-to-nearest-even mode
-* and combines the results into one \p half2 number. Low 16 bits of the return
-* value correspond to the input \p a, high 16 bits correspond to the input \p
-* b.
-*
-* @return Returns \p half2 which has corresponding halves equal to the
-* converted input floats.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts both components of float2 number to half precision in
-* round-to-nearest-even mode and returns \p half2 with converted values.
-*
-* Converts both components of float2 to half precision in round-to-nearest
-* mode and combines the results into one \p half2 number. Low 16 bits of the
-* return value correspond to \p a.x and high 16 bits of the return value
-* correspond to \p a.y.
-*
-* @return Returns \p half2 which has corresponding halves equal to the
-* converted float2 components.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts both halves of \p half2 to float2 and returns the result.
-*
-* Converts both halves of \p half2 input \p a to float2 and returns the
-* result.
-*
-* @return Returns converted float2.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts low 16 bits of \p half2 to float and returns the result
-*
-* Converts low 16 bits of \p half2 input \p a to 32 bit floating point number
-* and returns the result.
-*
-* @return Returns low 16 bits of \p a converted to float.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Returns \p half2 with both halves equal to the input value.
-*
-* Returns \p half2 number with both halves equal to the input \p a \p half
-* number.
-*
-* @return Returns \p half2 with both halves equal to the input \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts high 16 bits of \p half2 to float and returns the result
-*
-* Converts high 16 bits of \p half2 input \p a to 32 bit floating point number
-* and returns the result.
-*
-* @return Returns high 16 bits of \p a converted to float.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Swaps both halves of the \p half2 input.
-*
-* Swaps both halves of the \p half2 input and returns a new \p half2 number
-* with swapped halves.
-*
-* @return Returns \p half2 with halves swapped.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts low 16 bits from each of the two \p half2 inputs and combines
-* into one \p half2 number.
-*
-* Extracts low 16 bits from each of the two \p half2 inputs and combines into
-* one \p half2 number. Low 16 bits from input \p a is stored in low 16 bits of
-* the return value, low 16 bits from input \p b is stored in high 16 bits of
-* the return value.
-*
-* @return Returns \p half2 which contains low 16 bits from \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts high 16 bits from each of the two \p half2 inputs and
-* combines into one \p half2 number.
-*
-* Extracts high 16 bits from each of the two \p half2 inputs and combines into
-* one \p half2 number. High 16 bits from input \p a is stored in low 16 bits of
-* the return value, high 16 bits from input \p b is stored in high 16 bits of
-* the return value.
-*
-* @return Returns \p half2 which contains high 16 bits from \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Returns high 16 bits of \p half2 input.
-*
-* Returns high 16 bits of \p half2 input \p a.
-*
-* @return Returns \p half which contains high 16 bits of the input.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Returns low 16 bits of \p half2 input.
-*
-* Returns low 16 bits of \p half2 input \p a.
-*
-* @return Returns \p half which contains low 16 bits of the input.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Checks if the input \p half number is infinite.
-*
-* Checks if the input \p half number \p a is infinite.
-*
-* @return Returns -1 iff \p a is equal to negative infinity, 1 iff \p a is
-* equal to positive infinity and 0 otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Combines two \p half numbers into one \p half2 number.
-*
-* Combines two input \p half number \p a and \p b into one \p half2 number.
-* Input \p a is stored in low 16 bits of the return value, input \p b is stored
-* in high 16 bits of the return value.
-*
-* @return Returns \p half2 number which has one half equal to \p a and the
-* other to \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts low 16 bits from \p half2 input.
-*
-* Extracts low 16 bits from \p half2 input \p a and returns a new \p half2
-* number which has both halves equal to the extracted bits.
-*
-* @return Returns \p half2 with both halves equal to low 16 bits from the
-* input.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts high 16 bits from \p half2 input.
-*
-* Extracts high 16 bits from \p half2 input \p a and returns a new \p half2
-* number which has both halves equal to the extracted bits.
-*
-* @return Returns \p half2 with both halves equal to high 16 bits from the
-* input.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in a \p half as a signed short integer.
-*
-* Reinterprets the bits in the half-precision floating point value \p h
-* as a signed short integer.
-*
-* @return Returns reinterpreted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in a \p half as an unsigned short integer.
-*
-* Reinterprets the bits in the half-precision floating point value \p h
-* as an unsigned short integer.
-*
-* @return Returns reinterpreted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in a signed short integer as a \p half.
-*
-* Reinterprets the bits in the signed short integer value \p i as a
-* half-precision floating point value.
-*
-* @return Returns reinterpreted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in an unsigned short integer as a \p half.
-*
-* Reinterprets the bits in the unsigned short integer value \p i as a
-* half-precision floating point value.
-*
-* @return Returns reinterpreted value.
-*/
-
-// #if __CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)
-// #if !defined warpSize && !defined __local_warpSize
-public static final int warpSize =    32;
-// #define __local_warpSize
-// #endif
-
-// #if defined(_WIN32)
-// # define __DEPRECATED__(msg) __declspec(deprecated(msg))
-// #elif (defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5 && !defined(__clang__))))
-// # define __DEPRECATED__(msg) __attribute__((deprecated))
-// #else
-// # define __DEPRECATED__(msg) __attribute__((deprecated(msg)))
-// #endif
-
-// #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 700
-// #define __WSB_DEPRECATION_MESSAGE(x) #x"() is not valid on compute_70 and above, and should be replaced with "#x"_sync()."
-//     "To continue using "#x"(), specify virtual architecture compute_60 when targeting sm_70 and above, for example, using the pair of compiler options: -arch=compute_60 -code=sm_70."
-// #else
-// #define __WSB_DEPRECATION_MESSAGE(x) #x"() is deprecated in favor of "#x"_sync() and may be removed in a future release (Use -Wno-deprecated-declarations to suppress this warning)."
-// #endif
-
-// #if defined(__local_warpSize)
-// #undef warpSize
-// #undef __local_warpSize
-// #endif
-// #endif /*__CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__) */
-
-// #if defined(__cplusplus) && ( __CUDA_ARCH__ >=320 || !defined(__CUDA_ARCH__) )
-// #endif /*defined(__cplusplus) && ( __CUDA_ARCH__ >=320 || !defined(__CUDA_ARCH__) )*/
-
-// #if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs half2 vector if-equal comparison.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of if-equal comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector not-equal comparison.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of not-equal comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-equal comparison.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of less-equal comparison of
-* vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-equal comparison.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of greater-equal comparison of
-* vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-than comparison.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of less-than comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-than comparison.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the half2 vector result of greater-than comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered if-equal comparison.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered if-equal comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered not-equal comparison.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered not-equal comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-equal comparison.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered less-equal comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-equal comparison.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered greater-equal
-* comparison of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-than comparison.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered less-than comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-than comparison.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered greater-than
-* comparison of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Determine whether \p half2 argument is a NaN.
-*
-* Determine whether each half of input \p half2 number \p a is a NaN.
-*
-* @return Returns \p half2 which has the corresponding \p half results set to
-* 1.0 for true, or 0.0 for false.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector addition in round-to-nearest-even mode.
-*
-* Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
-* mode.
-*
-* @return Returns the \p half2 vector result of adding vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector subtraction in round-to-nearest-even mode.
-*
-* Subtracts \p half2 input vector \p b from input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns the \p half2 vector result of subtraction vector \p b from \p
-* a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector multiplication in round-to-nearest-even mode.
-*
-* Performs \p half2 vector multiplication of inputs \p a and \p b, in
-* round-to-nearest-even mode.
-*
-* @return Returns the \p half2 vector result of multiplying vectors \p a and \p
-* b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half2 vector division in round-to-nearest-even mode.
-*
-* Divides \p half2 input vector \p a by input vector \p b in round-to-nearest
-* mode.
-*
-* @return Returns the \p half2 vector result of division \p a by \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector addition in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
-* mode, and clamps the results to range [0.0, 1.0]. NaN results are flushed to
-* +0.0.
-*
-* @return Returns the \p half2 vector result of adding vectors \p a and \p b
-* with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector subtraction in round-to-nearest-even mode,
-* with saturation to [0.0, 1.0].
-*
-* Subtracts \p half2 input vector \p b from input vector \p a in
-* round-to-nearest-even mode, and clamps the results to range [0.0, 1.0]. NaN
-* results are flushed to +0.0.
-*
-* @return Returns the \p half2 vector result of subtraction vector \p b from \p
-* a with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector multiplication in round-to-nearest-even mode,
-* with saturation to [0.0, 1.0].
-*
-* Performs \p half2 vector multiplication of inputs \p a and \p b, in
-* round-to-nearest-even mode, and clamps the results to range [0.0, 1.0]. NaN
-* results are flushed to +0.0.
-*
-* @return Returns the \p half2 vector result of multiplying vectors \p a and \p
-* b with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector fused multiply-add in round-to-nearest-even
-* mode.
-*
-* Performs \p half2 vector multiply on inputs \p a and \p b,
-* then performs a \p half2 vector add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode.
-*
-* @return Returns the \p half2 vector result of the fused multiply-add
-* operation on vectors \p a, \p b, and \p c.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector fused multiply-add in round-to-nearest-even
-* mode, with saturation to [0.0, 1.0].
-*
-* Performs \p half2 vector multiply on inputs \p a and \p b,
-* then performs a \p half2 vector add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode, and clamps the
-* results to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half2 vector result of the fused multiply-add
-* operation on vectors \p a, \p b, and \p c with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Negates both halves of the input \p half2 number and returns the
-* result.
-*
-* Negates both halves of the input \p half2 number \p a and returns the result.
-*
-* @return Returns \p half2 number with both halves negated.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half addition in round-to-nearest-even mode.
-*
-* Performs \p half addition of inputs \p a and \p b, in round-to-nearest-even
-* mode.
-*
-* @return Returns the \p half result of adding \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half subtraction in round-to-nearest-even mode.
-*
-* Subtracts \p half input \p b from input \p a in round-to-nearest
-* mode.
-*
-* @return Returns the \p half result of subtraction \p b from \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half multiplication in round-to-nearest-even mode.
-*
-* Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
-* mode.
-*
-* @return Returns the \p half result of multiplying \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half division in round-to-nearest-even mode.
-*
-* Divides \p half input \p a by input \p b in round-to-nearest
-* mode.
-*
-* @return Returns the \p half result of division \p a by \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half addition in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Performs \p half add of inputs \p a and \p b, in round-to-nearest-even mode,
-* and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half result of adding \p a and \p b with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half subtraction in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Subtracts \p half input \p b from input \p a in round-to-nearest
-* mode,
-* and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half result of subtraction \p b from \p a
-* with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half multiplication in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
-* mode, and clamps the result to range [0.0, 1.0]. NaN results are flushed to
-* +0.0.
-*
-* @return Returns the \p half result of multiplying \p a and \p b with
-* saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half fused multiply-add in round-to-nearest-even mode.
-*
-* Performs \p half multiply on inputs \p a and \p b,
-* then performs a \p half add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode.
-*
-* @return Returns the \p half result of the fused multiply-add operation on \p
-* a, \p b, and \p c.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half fused multiply-add in round-to-nearest-even mode,
-* with saturation to [0.0, 1.0].
-*
-* Performs \p half multiply on inputs \p a and \p b,
-* then performs a \p half add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode, and clamps the result
-* to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half result of the fused multiply-add operation on \p
-* a, \p b, and \p c with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Negates input \p half number and returns the result.
-*
-* Negates input \p half number and returns the result.
-*
-* @return Returns negated \p half input \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector if-equal comparison, and returns boolean true
-* iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half if-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of if-equal comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector not-equal comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half not-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of not-equal comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-equal comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of less-equal comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-equal comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of greater-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-than comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of less-than comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-than comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of greater-than
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered if-equal comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half if-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered if-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered not-equal comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half not-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered not-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-equal comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered less-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-equal comparison, and
-* returns boolean true iff both \p half results are true, boolean false
-* otherwise.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered
-* greater-equal comparison of vectors \p a and \p b are true, boolean false
-* otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-than comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered less-than
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-than comparison, and
-* returns boolean true iff both \p half results are true, boolean false
-* otherwise.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered
-* greater-than comparison of vectors \p a and \p b are true, boolean false
-* otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half if-equal comparison.
-*
-* Performs \p half if-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of if-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half not-equal comparison.
-*
-* Performs \p half not-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of not-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half less-equal comparison.
-*
-* Performs \p half less-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of less-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half greater-equal comparison.
-*
-* Performs \p half greater-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of greater-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half less-than comparison.
-*
-* Performs \p half less-than comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of less-than comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half greater-than comparison.
-*
-* Performs \p half greater-than comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of greater-than comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered if-equal comparison.
-*
-* Performs \p half if-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered if-equal comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered not-equal comparison.
-*
-* Performs \p half not-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered not-equal comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered less-equal comparison.
-*
-* Performs \p half less-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered less-equal comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered greater-equal comparison.
-*
-* Performs \p half greater-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered greater-equal comparison of \p a
-* and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered less-than comparison.
-*
-* Performs \p half less-than comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered less-than comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered greater-than comparison.
-*
-* Performs \p half greater-than comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered greater-than comparison of \p a
-* and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Determine whether \p half argument is a NaN.
-*
-* Determine whether \p half value \p a is a NaN.
-*
-* @return Returns boolean true iff argument is a NaN, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half square root in round-to-nearest-even mode.
-*
-* Calculates \p half square root of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half square root of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half reciprocal square root in round-to-nearest-even
-* mode.
-*
-* Calculates \p half reciprocal square root of input \p a in round-to-nearest
-* mode.
-*
-* @return Returns \p half reciprocal square root of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half reciprocal in round-to-nearest-even mode.
-*
-* Calculates \p half reciprocal of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half reciprocal of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half natural logarithm in round-to-nearest-even mode.
-*
-* Calculates \p half natural logarithm of input \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half natural logarithm of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half binary logarithm in round-to-nearest-even mode.
-*
-* Calculates \p half binary logarithm of input \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half binary logarithm of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half decimal logarithm in round-to-nearest-even mode.
-*
-* Calculates \p half decimal logarithm of input \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half decimal logarithm of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half natural exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half natural exponential function of input \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half natural exponential function of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half binary exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half binary exponential function of input \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half binary exponential function of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half decimal exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half decimal exponential function of input \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half decimal exponential function of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half cosine in round-to-nearest-even mode.
-*
-* Calculates \p half cosine of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half cosine of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half sine in round-to-nearest-even mode.
-*
-* Calculates \p half sine of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half sine of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector square root in round-to-nearest-even mode.
-*
-* Calculates \p half2 square root of input vector \p a in round-to-nearest
-* mode.
-*
-* @return Returns \p half2 square root of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector reciprocal square root in round-to-nearest
-* mode.
-*
-* Calculates \p half2 reciprocal square root of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 reciprocal square root of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector reciprocal in round-to-nearest-even mode.
-*
-* Calculates \p half2 reciprocal of input vector \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half2 reciprocal of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector natural logarithm in round-to-nearest-even
-* mode.
-*
-* Calculates \p half2 natural logarithm of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 natural logarithm of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector binary logarithm in round-to-nearest-even
-* mode.
-*
-* Calculates \p half2 binary logarithm of input vector \p a in round-to-nearest
-* mode.
-*
-* @return Returns \p half2 binary logarithm of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector decimal logarithm in round-to-nearest-even
-* mode.
-*
-* Calculates \p half2 decimal logarithm of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 decimal logarithm of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half2 exponential function of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 exponential function of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector binary exponential function in
-* round-to-nearest-even mode.
-*
-* Calculates \p half2 binary exponential function of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 binary exponential function of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector decimal exponential function in
-* round-to-nearest-even mode.
-*
-* Calculates \p half2 decimal exponential function of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 decimal exponential function of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector cosine in round-to-nearest-even mode.
-*
-* Calculates \p half2 cosine of input vector \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half2 cosine of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector sine in round-to-nearest-even mode.
-*
-* Calculates \p half2 sine of input vector \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half2 sine of vector \p a.
-*/
-
-// #endif /*if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)*/
-
-// #undef __CUDA_FP16_DECL__
-
-// #endif /* defined(__cplusplus) && defined(__CUDACC__) */
-
-/* Note the .hpp file is included even for host-side compilation, to capture the "half" & "half2" definitions */
-// #include "cuda_fp16.hpp"
-
-// #endif /* end of include guard: __CUDA_FP16_H__ */
-
-
-// Parsed from cuda_fp16.hpp
-
-/*
-* Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
-*
-* NOTICE TO LICENSEE:
-*
-* This source code and/or documentation ("Licensed Deliverables") are
-* subject to NVIDIA intellectual property rights under U.S. and
-* international Copyright laws.
-*
-* These Licensed Deliverables contained herein is PROPRIETARY and
-* CONFIDENTIAL to NVIDIA and is being provided under the terms and
-* conditions of a form of NVIDIA software license agreement by and
-* between NVIDIA and Licensee ("License Agreement") or electronically
-* accepted by Licensee.  Notwithstanding any terms or conditions to
-* the contrary in the License Agreement, reproduction or disclosure
-* of the Licensed Deliverables to any third party without the express
-* written consent of NVIDIA is prohibited.
-*
-* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
-* LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
-* SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
-* PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
-* NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
-* DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
-* NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
-* NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
-* LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
-* SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
-* DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-* WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
-* ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
-* OF THESE LICENSED DELIVERABLES.
-*
-* U.S. Government End Users.  These Licensed Deliverables are a
-* "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
-* 1995), consisting of "commercial computer software" and "commercial
-* computer software documentation" as such terms are used in 48
-* C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
-* only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
-* 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
-* U.S. Government End Users acquire the Licensed Deliverables with
-* only those rights set forth herein.
-*
-* Any use of the Licensed Deliverables in individual and commercial
-* software must include, in the user documentation and internal
-* comments to the code, the above Disclaimer and U.S. Government End
-* Users Notice.
-*/
-
-// #if !defined(__CUDA_FP16_HPP__)
-// #define __CUDA_FP16_HPP__
-
-/* C++11 header for std::move. 
- * In RTC mode, std::move is provided implicitly; don't include the header
-*/
-// #if (__cplusplus >= 201103L) && !defined(__CUDACC_RTC__)
-// #include <utility>
-// #endif /* __cplusplus >= 201103L && !defined(__CUDACC_RTC__) */
-
-/* Set up function decorations */
-// #if defined(__CUDACC__)
-// #else /* !__CUDACC__ */
-// #define __CUDA_HOSTDEVICE__
-// #endif /* __CUDACC_) */
-
-/* Set up structure-alignment attribute */
-// #if defined(__CUDACC__)
-// #else
-/* Define alignment macro based on compiler type (cannot assume C11 "_Alignas" is available) */
-// #if __cplusplus >= 201103L
-// #define __CUDA_ALIGN__(n) alignas(n)    /* C++11 kindly gives us a keyword for this */
-// #else /* !(__cplusplus >= 201103L)*/
-// #if defined(__GNUC__) /* || defined(__IBMC__) || defined(__clang__) || defined(__PGI) */
-// #define __CUDA_ALIGN__(n) __attribute__ ((aligned(n)))
-// #elif defined(_MSC_VER) /* || defined(__ICC) */
-// #define __CUDA_ALIGN__(n) __declspec(align(n))
-// #else
-// #define __CUDA_ALIGN__(n)
-// #endif /* defined(__GNUC__) */
-// #endif /* __cplusplus >= 201103L */
-// #endif /* defined(__CUDACC__) */
-
-
-/* Macros to allow half & half2 to be used by inline assembly */
-// #define __HALF_TO_US(var) *(reinterpret_cast<unsigned short *>(&(var)))
-// #define __HALF_TO_CUS(var) *(reinterpret_cast<const unsigned short *>(&(var)))
-// #define __HALF2_TO_UI(var) *(reinterpret_cast<unsigned int *>(&(var)))
-// #define __HALF2_TO_CUI(var) *(reinterpret_cast<const unsigned int *>(&(var)))
-
-
-/**
-* Types which allow static initialization of "half" and "half2" until
-* these become an actual builtin. Note this initialization is as a
-* bitfield representation of "half", and not a conversion from short->half.
-* Such a representation will be deprecated in a future version of CUDA. 
-* (Note these are visible to non-nvcc compilers, including C-only compilation)
-*/
-public static class __half_raw extends Pointer {
+public static class __half extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public __half_raw() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public __half_raw(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half_raw(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public __half_raw position(long position) {
-        return (__half_raw)super.position(position);
-    }
-
-    public native @Cast("unsigned short") short x(); public native __half_raw x(short x);
-}
-
-public static class __half2_raw extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public __half2_raw() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public __half2_raw(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half2_raw(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public __half2_raw position(long position) {
-        return (__half2_raw)super.position(position);
-    }
-
-    public native @Cast("unsigned short") short x(); public native __half2_raw x(short x);
-    public native @Cast("unsigned short") short y(); public native __half2_raw y(short y);
-}
-
-/* All other definitions in this file are only visible to C++ compilers */
-// #if defined(__cplusplus)
-
-/* Hide GCC member initialization list warnings because of host/device in-function init requirement */
-// #if defined(__GNUC__)
-// #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-// #pragma GCC diagnostic push
-// #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-// #pragma GCC diagnostic ignored "-Weffc++"
-// #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
-// #endif /* defined(__GNUC__) */
-
-@NoOffset public static class __half extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half(Pointer p) { super(p); }
+    public __half() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public __half(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public __half position(long position) {
         return (__half)super.position(position);
     }
 
-// #if __cplusplus >= 201103L
-    public __half() { super((Pointer)null); allocate(); }
-    private native void allocate();
-// #else
-// #endif /* __cplusplus >= 201103L */
-
-    /* Convert to/from __half_raw */
-    public __half(@Const @ByRef __half_raw hr) { super((Pointer)null); allocate(hr); }
-    private native void allocate(@Const @ByRef __half_raw hr);
-    public native @ByRef @Name("operator =") __half put(@Const @ByRef __half_raw hr);
-    public native @ByVal @Cast("__half_raw*") @Name("operator __half_raw") __half_raw as__half_raw();
-
-/* Member functions are only available to nvcc compilation */
-// #if defined(__CUDACC__)
-// #endif /* defined(__CUDACC__) */
+   public native @Cast("unsigned short") short x(); public native __half x(short x);
 }
 
-/* Global-space operator functions are only available to nvcc compilation */
-// #if defined(__CUDACC__)
-// #endif /* defined(__CUDACC__) */
-
-/* __half2 is visible to non-nvcc host compilers */
-@NoOffset public static class __half2 extends Pointer {
+public static class __half2 extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public __half2(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public __half2() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public __half2(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half2(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public __half2 position(long position) {
         return (__half2)super.position(position);
     }
 
-    public native @ByRef __half x(); public native __half2 x(__half x);
-    public native @ByRef __half y(); public native __half2 y(__half y);
-// #if __cplusplus >= 201103L
-    public __half2() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public __half2(@ByVal __half2 src) { super((Pointer)null); allocate(src); }
-    private native void allocate(@ByVal __half2 src);
-    public native @ByRef @Name("operator =") __half2 put(@ByVal __half2 src);
-// #else
-// #endif /* __cplusplus >= 201103L */
-    public __half2(@Const @ByRef __half a, @Const @ByRef __half b) { super((Pointer)null); allocate(a, b); }
-    private native void allocate(@Const @ByRef __half a, @Const @ByRef __half b);
-
-    /* Convert to/from __half2_raw */
-    public __half2(@Const @ByRef __half2_raw h2r ) { super((Pointer)null); allocate(h2r); }
-    private native void allocate(@Const @ByRef __half2_raw h2r );
-    public native @ByRef @Name("operator =") __half2 put(@Const @ByRef __half2_raw h2r);
-    public native @ByVal @Cast("__half2_raw*") @Name("operator __half2_raw") __half2_raw as__half2_raw();
+   public native @Cast("unsigned int") int x(); public native __half2 x(int x);
 }
 
-/* Restore -Weffc++ warnings from here on */
-// #if defined(__GNUC__)
-// #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-// #pragma GCC diagnostic pop
-// #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
-// #endif /* defined(__GNUC__) */
+// #ifndef CUDA_NO_HALF
+// #endif /*CUDA_NO_HALF*/
 
-// #undef __CUDA_HOSTDEVICE__
-// #undef __CUDA_ALIGN__
-
-/* All intrinsic functions are only available to nvcc compilers */
 // #if defined(__CUDACC__)
-// #endif /* defined(__CUDACC__) */
-// #endif /* defined(__cplusplus) */
-
-// #undef __HALF_TO_US
-// #undef __HALF_TO_CUS
-// #undef __HALF2_TO_UI
-// #undef __HALF2_TO_CUI
-
-
-/* Define first-class types "half" and "half2", unless user specifies otherwise via "#define CUDA_NO_HALF" */
-/* C cannot ever have these types defined here, because __half and __half2 are C++ classes */
-// #if defined(__cplusplus) && !defined(CUDA_NO_HALF)
-// #endif /* defined(__cplusplus) && !defined(CUDA_NO_HALF) */
-
-// #endif /* end of include guard: __CUDA_FP16_HPP__ */
+// #endif /*defined(__CUDACC__)*/
+// #endif /* end of include guard: CUDA_FP16_H_JNESTUG4 */
 
 
 // Parsed from <library_types.h>

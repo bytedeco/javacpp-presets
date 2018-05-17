@@ -76,9 +76,7 @@ public class cusparse extends org.bytedeco.javacpp.presets.cusparse {
 
 // #include "driver_types.h"
 // #include "cuComplex.h"   /* import complex data type */
-
 // #include "cuda_fp16.h"
-
 // #include "library_types.h"
 
 // #if defined(__cplusplus)
@@ -204,14 +202,6 @@ public static final int
     public cusparseColorInfo() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusparseColorInfo(Pointer p) { super(p); }
-}
-
-/* Opaque structure holding the prune information */
-@Opaque public static class pruneInfo extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public pruneInfo() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public pruneInfo(Pointer p) { super(p); }
 }
 
 /* Types definitions */
@@ -392,12 +382,6 @@ public static native @Cast("cusparseStatus_t") int cusparseSetColorAlgs(cusparse
 public static native @Cast("cusparseStatus_t") int cusparseGetColorAlgs(cusparseColorInfo info, @Cast("cusparseColorAlg_t*") IntPointer alg);
 public static native @Cast("cusparseStatus_t") int cusparseGetColorAlgs(cusparseColorInfo info, @Cast("cusparseColorAlg_t*") IntBuffer alg);
 public static native @Cast("cusparseStatus_t") int cusparseGetColorAlgs(cusparseColorInfo info, @Cast("cusparseColorAlg_t*") int[] alg);
-
-/* prune information */
-public static native @Cast("cusparseStatus_t") int cusparseCreatePruneInfo(@ByPtrPtr pruneInfo info);
-
-public static native @Cast("cusparseStatus_t") int cusparseDestroyPruneInfo(pruneInfo info);
-
 
 /* --- Sparse Level 1 routines --- */
 
@@ -8193,752 +8177,221 @@ public static native @Cast("cusparseStatus_t") int cusparseZbsric02(cusparseCont
    composed of lower (dl), main (d) and upper (du) diagonals, and 
    the right-hand-sides F are overwritten with the solution X. 
    These routine use pivoting. */
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    FloatPointer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    FloatBuffer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    float[] B,
-    int ldb);
- 
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    DoublePointer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    DoubleBuffer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    double[] B,
-    int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,        
+                                           @Const FloatPointer dl, 
+                                           @Const FloatPointer d,   
+                                           @Const FloatPointer du, 
+                                           FloatPointer B,    
+                                           int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,        
+                                           @Const FloatBuffer dl, 
+                                           @Const FloatBuffer d,   
+                                           @Const FloatBuffer du, 
+                                           FloatBuffer B,    
+                                           int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,        
+                                           @Const float[] dl, 
+                                           @Const float[] d,   
+                                           @Const float[] du, 
+                                           float[] B,    
+                                           int ldb);
+                                 
+public static native @Cast("cusparseStatus_t") int cusparseDgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,       
+                                           @Const DoublePointer dl,  
+                                           @Const DoublePointer d,   
+                                           @Const DoublePointer du, 
+                                           DoublePointer B,    
+                                           int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,       
+                                           @Const DoubleBuffer dl,  
+                                           @Const DoubleBuffer d,   
+                                           @Const DoubleBuffer du, 
+                                           DoubleBuffer B,    
+                                           int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,       
+                                           @Const double[] dl,  
+                                           @Const double[] d,   
+                                           @Const double[] du, 
+                                           double[] B,    
+                                           int ldb);
+                                                                 
+public static native @Cast("cusparseStatus_t") int cusparseCgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,       
+                                           @Cast("const cuComplex*") float2 dl, 
+                                           @Cast("const cuComplex*") float2 d,  
+                                           @Cast("const cuComplex*") float2 du, 
+                                           @Cast("cuComplex*") float2 B,     
+                                           int ldb);
 
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("cuComplex*") float2 B,
-    int ldb);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("cuDoubleComplex*") double2 B,
-    int ldb);
-
-
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    @Const FloatPointer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    @Const FloatBuffer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    @Const float[] B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    @Const DoublePointer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    @Const DoubleBuffer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    @Const double[] B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("const cuComplex*") float2 B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv2_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("const cuDoubleComplex*") double2 B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    FloatPointer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    FloatBuffer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    float[] B,
-    int ldb,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    DoublePointer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    DoubleBuffer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    double[] B,
-    int ldb,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("cuComplex*") float2 B,
-    int ldb,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv2(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("cuDoubleComplex*") double2 B,
-    int ldb,
-    Pointer pBuffer);
-
+public static native @Cast("cusparseStatus_t") int cusparseZgtsv(cusparseContext handle,
+                                           int m,        
+                                           int n,       
+                                           @Cast("const cuDoubleComplex*") double2 dl,  
+                                           @Cast("const cuDoubleComplex*") double2 d,  
+                                           @Cast("const cuDoubleComplex*") double2 du,
+                                           @Cast("cuDoubleComplex*") double2 B,     
+                                           int ldb);
 
 /* Description: Solution of tridiagonal linear system A * X = F, 
    with multiple right-hand-sides. The coefficient matrix A is 
    composed of lower (dl), main (d) and upper (du) diagonals, and 
    the right-hand-sides F are overwritten with the solution X. 
    These routine does not use pivoting. */                               
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    FloatPointer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    FloatBuffer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    float[] B,
-    int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,        
+                                                   @Const FloatPointer dl, 
+                                                   @Const FloatPointer d,   
+                                                   @Const FloatPointer du, 
+                                                   FloatPointer B,    
+                                                   int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,        
+                                                   @Const FloatBuffer dl, 
+                                                   @Const FloatBuffer d,   
+                                                   @Const FloatBuffer du, 
+                                                   FloatBuffer B,    
+                                                   int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,        
+                                                   @Const float[] dl, 
+                                                   @Const float[] d,   
+                                                   @Const float[] du, 
+                                                   float[] B,    
+                                                   int ldb);
                                  
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    DoublePointer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    DoubleBuffer B,
-    int ldb);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    double[] B,
-    int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,       
+                                                   @Const DoublePointer dl,  
+                                                   @Const DoublePointer d,   
+                                                   @Const DoublePointer du, 
+                                                   DoublePointer B,    
+                                                   int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,       
+                                                   @Const DoubleBuffer dl,  
+                                                   @Const DoubleBuffer d,   
+                                                   @Const DoubleBuffer du, 
+                                                   DoubleBuffer B,    
+                                                   int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,       
+                                                   @Const double[] dl,  
+                                                   @Const double[] d,   
+                                                   @Const double[] du, 
+                                                   double[] B,    
+                                                   int ldb);
                                                                  
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("cuComplex*") float2 B,
-    int ldb);
+public static native @Cast("cusparseStatus_t") int cusparseCgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,       
+                                                   @Cast("const cuComplex*") float2 dl, 
+                                                   @Cast("const cuComplex*") float2 d,  
+                                                   @Cast("const cuComplex*") float2 du, 
+                                                   @Cast("cuComplex*") float2 B,     
+                                                   int ldb);
 
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 dl,  
-    @Cast("const cuDoubleComplex*") double2 d,  
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("cuDoubleComplex*") double2 B,     
-    int ldb);                               
+public static native @Cast("cusparseStatus_t") int cusparseZgtsv_nopivot(cusparseContext handle,
+                                                   int m,        
+                                                   int n,       
+                                                   @Cast("const cuDoubleComplex*") double2 dl,  
+                                                   @Cast("const cuDoubleComplex*") double2 d,  
+                                                   @Cast("const cuDoubleComplex*") double2 du,
+                                                   @Cast("cuDoubleComplex*") double2 B,     
+                                                   int ldb);                               
                                   
-
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    @Const FloatPointer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    @Const FloatBuffer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    @Const float[] B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    @Const DoublePointer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    @Const DoubleBuffer B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    @Const double[] B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("const cuComplex*") float2 B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv2_nopivot_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("const cuDoubleComplex*") double2 B,
-    int ldb,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    FloatPointer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    FloatBuffer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    float[] B,
-    int ldb,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    DoublePointer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    DoubleBuffer B,
-    int ldb,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    double[] B,
-    int ldb,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("cuComplex*") float2 B,
-    int ldb,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv2_nopivot(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("cuDoubleComplex*") double2 B,
-    int ldb,
-    Pointer pBuffer);
-
 /* Description: Solution of a set of tridiagonal linear systems 
    A_{i} * x_{i} = f_{i} for i=1,...,batchCount. The coefficient 
    matrices A_{i} are composed of lower (dl), main (d) and upper (du) 
    diagonals and stored separated by a batchStride. Also, the 
    right-hand-sides/solutions f_{i}/x_{i} are separated by a batchStride. */
-public static native @Cast("cusparseStatus_t") int cusparseSgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    FloatPointer x,
-    int batchCount,
-    int batchStride);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    FloatBuffer x,
-    int batchCount,
-    int batchStride);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    float[] x,
-    int batchCount,
-    int batchStride);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    DoublePointer x,
-    int batchCount,
-    int batchStride);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    DoubleBuffer x,
-    int batchCount,
-    int batchStride);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    double[] x,
-    int batchCount,
-    int batchStride);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("cuComplex*") float2 x,
-    int batchCount,
-    int batchStride);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsvStridedBatch(
-    cusparseContext handle,
-    int m, 
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("cuDoubleComplex*") double2 x,
-    int batchCount,
-    int batchStride);
-
-
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    @Const FloatPointer x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    @Const FloatBuffer x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    @Const float[] x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    @Const DoublePointer x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    @Const DoubleBuffer x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    @Const double[] x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("const cuComplex*") float2 x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv2StridedBatch_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("const cuDoubleComplex*") double2 x,
-    int batchCount,
-    int batchStride,
-    @Cast("size_t*") SizeTPointer bufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Const FloatPointer dl,
-    @Const FloatPointer d,
-    @Const FloatPointer du,
-    FloatPointer x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Const FloatBuffer dl,
-    @Const FloatBuffer d,
-    @Const FloatBuffer du,
-    FloatBuffer x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Const float[] dl,
-    @Const float[] d,
-    @Const float[] du,
-    float[] x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Const DoublePointer dl,
-    @Const DoublePointer d,
-    @Const DoublePointer du,
-    DoublePointer x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Const DoubleBuffer dl,
-    @Const DoubleBuffer d,
-    @Const DoubleBuffer du,
-    DoubleBuffer x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Const double[] dl,
-    @Const double[] d,
-    @Const double[] du,
-    double[] x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseCgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Cast("const cuComplex*") float2 dl,
-    @Cast("const cuComplex*") float2 d,
-    @Cast("const cuComplex*") float2 du,
-    @Cast("cuComplex*") float2 x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseZgtsv2StridedBatch(
-    cusparseContext handle,
-    int m,
-    @Cast("const cuDoubleComplex*") double2 dl,
-    @Cast("const cuDoubleComplex*") double2 d,
-    @Cast("const cuDoubleComplex*") double2 du,
-    @Cast("cuDoubleComplex*") double2 x,
-    int batchCount,
-    int batchStride,
-    Pointer pBuffer);
-
+public static native @Cast("cusparseStatus_t") int cusparseSgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Const FloatPointer dl,
+                                                       @Const FloatPointer d,
+                                                       @Const FloatPointer du,
+                                                       FloatPointer x,
+                                                       int batchCount,
+                                                       int batchStride);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Const FloatBuffer dl,
+                                                       @Const FloatBuffer d,
+                                                       @Const FloatBuffer du,
+                                                       FloatBuffer x,
+                                                       int batchCount,
+                                                       int batchStride);
+public static native @Cast("cusparseStatus_t") int cusparseSgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Const float[] dl,
+                                                       @Const float[] d,
+                                                       @Const float[] du,
+                                                       float[] x,
+                                                       int batchCount,
+                                                       int batchStride);
+                                        
+                                        
+public static native @Cast("cusparseStatus_t") int cusparseDgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Const DoublePointer dl,
+                                                       @Const DoublePointer d,
+                                                       @Const DoublePointer du,
+                                                       DoublePointer x,
+                                                       int batchCount,
+                                                       int batchStride);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Const DoubleBuffer dl,
+                                                       @Const DoubleBuffer d,
+                                                       @Const DoubleBuffer du,
+                                                       DoubleBuffer x,
+                                                       int batchCount,
+                                                       int batchStride);
+public static native @Cast("cusparseStatus_t") int cusparseDgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Const double[] dl,
+                                                       @Const double[] d,
+                                                       @Const double[] du,
+                                                       double[] x,
+                                                       int batchCount,
+                                                       int batchStride);
+                                        
+public static native @Cast("cusparseStatus_t") int cusparseCgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Cast("const cuComplex*") float2 dl,
+                                                       @Cast("const cuComplex*") float2 d,
+                                                       @Cast("const cuComplex*") float2 du,
+                                                       @Cast("cuComplex*") float2 x,
+                                                       int batchCount,
+                                                       int batchStride);
+                                        
+public static native @Cast("cusparseStatus_t") int cusparseZgtsvStridedBatch(cusparseContext handle,
+                                                       int m, 
+                                                       @Cast("const cuDoubleComplex*") double2 dl,
+                                                       @Cast("const cuDoubleComplex*") double2 d,
+                                                       @Cast("const cuDoubleComplex*") double2 du,
+                                                       @Cast("cuDoubleComplex*") double2 x,
+                                                       int batchCount,
+                                                       int batchStride);                                        
+                                         
 /* --- Sparse Level 4 routines --- */
 
 /* Description: Compute sparse - sparse matrix multiplication for matrices 
@@ -10439,262 +9892,263 @@ public static native @Cast("cusparseStatus_t") int cusparseZnnz(cusparseContext 
 public static native @Cast("cusparseStatus_t") int cusparseSnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Const FloatPointer csrValA, 
-                                          @Const IntPointer csrRowPtrA, 
+                                          @Const FloatPointer values, 
+                                          @Const IntPointer rowPtr, 
                                           IntPointer nnzPerRow, 
-                                          IntPointer nnzC,
+                                          IntPointer nnzTotal,
                                           float tol);
 public static native @Cast("cusparseStatus_t") int cusparseSnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Const FloatBuffer csrValA, 
-                                          @Const IntBuffer csrRowPtrA, 
+                                          @Const FloatBuffer values, 
+                                          @Const IntBuffer rowPtr, 
                                           IntBuffer nnzPerRow, 
-                                          IntBuffer nnzC,
+                                          IntBuffer nnzTotal,
                                           float tol);
 public static native @Cast("cusparseStatus_t") int cusparseSnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Const float[] csrValA, 
-                                          @Const int[] csrRowPtrA, 
+                                          @Const float[] values, 
+                                          @Const int[] rowPtr, 
                                           int[] nnzPerRow, 
-                                          int[] nnzC,
+                                          int[] nnzTotal,
                                           float tol);
 
 public static native @Cast("cusparseStatus_t") int cusparseDnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Const DoublePointer csrValA, 
-                                          @Const IntPointer csrRowPtrA, 
+                                          @Const DoublePointer values, 
+                                          @Const IntPointer rowPtr, 
                                           IntPointer nnzPerRow, 
-                                          IntPointer nnzC,
+                                          IntPointer nnzTotal,
                                           double tol);
 public static native @Cast("cusparseStatus_t") int cusparseDnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Const DoubleBuffer csrValA, 
-                                          @Const IntBuffer csrRowPtrA, 
+                                          @Const DoubleBuffer values, 
+                                          @Const IntBuffer rowPtr, 
                                           IntBuffer nnzPerRow, 
-                                          IntBuffer nnzC,
+                                          IntBuffer nnzTotal,
                                           double tol);
 public static native @Cast("cusparseStatus_t") int cusparseDnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Const double[] csrValA, 
-                                          @Const int[] csrRowPtrA, 
+                                          @Const double[] values, 
+                                          @Const int[] rowPtr, 
                                           int[] nnzPerRow, 
-                                          int[] nnzC,
+                                          int[] nnzTotal,
                                           double tol);
 
 public static native @Cast("cusparseStatus_t") int cusparseCnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Cast("const cuComplex*") float2 csrValA, 
-                                          @Const IntPointer csrRowPtrA, 
+                                          @Cast("const cuComplex*") float2 values, 
+                                          @Const IntPointer rowPtr, 
                                           IntPointer nnzPerRow, 
-                                          IntPointer nnzC,
+                                          IntPointer nnzTotal,
                                           @ByVal @Cast("cuComplex*") float2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseCnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Cast("const cuComplex*") float2 csrValA, 
-                                          @Const IntBuffer csrRowPtrA, 
+                                          @Cast("const cuComplex*") float2 values, 
+                                          @Const IntBuffer rowPtr, 
                                           IntBuffer nnzPerRow, 
-                                          IntBuffer nnzC,
+                                          IntBuffer nnzTotal,
                                           @ByVal @Cast("cuComplex*") float2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseCnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Cast("const cuComplex*") float2 csrValA, 
-                                          @Const int[] csrRowPtrA, 
+                                          @Cast("const cuComplex*") float2 values, 
+                                          @Const int[] rowPtr, 
                                           int[] nnzPerRow, 
-                                          int[] nnzC,
+                                          int[] nnzTotal,
                                           @ByVal @Cast("cuComplex*") float2 tol);
 
 public static native @Cast("cusparseStatus_t") int cusparseZnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Cast("const cuDoubleComplex*") double2 csrValA, 
-                                          @Const IntPointer csrRowPtrA, 
+                                          @Cast("const cuDoubleComplex*") double2 values, 
+                                          @Const IntPointer rowPtr, 
                                           IntPointer nnzPerRow, 
-                                          IntPointer nnzC,
+                                          IntPointer nnzTotal,
                                           @ByVal @Cast("cuDoubleComplex*") double2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseZnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Cast("const cuDoubleComplex*") double2 csrValA, 
-                                          @Const IntBuffer csrRowPtrA, 
+                                          @Cast("const cuDoubleComplex*") double2 values, 
+                                          @Const IntBuffer rowPtr, 
                                           IntBuffer nnzPerRow, 
-                                          IntBuffer nnzC,
+                                          IntBuffer nnzTotal,
                                           @ByVal @Cast("cuDoubleComplex*") double2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseZnnz_compress(cusparseContext handle, 
                                           int m, 
                                           cusparseMatDescr descr,
-                                          @Cast("const cuDoubleComplex*") double2 csrValA, 
-                                          @Const int[] csrRowPtrA, 
+                                          @Cast("const cuDoubleComplex*") double2 values, 
+                                          @Const int[] rowPtr, 
                                           int[] nnzPerRow, 
-                                          int[] nnzC,
+                                          int[] nnzTotal,
                                           @ByVal @Cast("cuDoubleComplex*") double2 tol);
-/* Description: This routine takes as input a csr form and compresses it to return a compressed csr form*/
+/* Description: This routine takes as input a csr form where the values may have 0 elements
+   and compresses it to return a csr form with no zeros. */
 
 public static native @Cast("cusparseStatus_t") int cusparseScsr2csr_compress(cusparseContext handle,
                                                       int m, 
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Const FloatPointer csrValA,
-                                                      @Const IntPointer csrColIndA,
-                                                      @Const IntPointer csrRowPtrA, 
-                                                      int nnzA,
-                                                      @Const IntPointer nnzPerRow, 
-                                                      FloatPointer csrValC,
-                                                      IntPointer csrColIndC,
-                                                      IntPointer csrRowPtrC,
+                                                      @Const FloatPointer inVal,
+                                                      @Const IntPointer inColInd,
+                                                      @Const IntPointer inRowPtr, 
+                                                      int inNnz,
+                                                      IntPointer nnzPerRow, 
+                                                      FloatPointer outVal,
+                                                      IntPointer outColInd,
+                                                      IntPointer outRowPtr,
                                                       float tol);
 public static native @Cast("cusparseStatus_t") int cusparseScsr2csr_compress(cusparseContext handle,
                                                       int m, 
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Const FloatBuffer csrValA,
-                                                      @Const IntBuffer csrColIndA,
-                                                      @Const IntBuffer csrRowPtrA, 
-                                                      int nnzA,
-                                                      @Const IntBuffer nnzPerRow, 
-                                                      FloatBuffer csrValC,
-                                                      IntBuffer csrColIndC,
-                                                      IntBuffer csrRowPtrC,
+                                                      @Const FloatBuffer inVal,
+                                                      @Const IntBuffer inColInd,
+                                                      @Const IntBuffer inRowPtr, 
+                                                      int inNnz,
+                                                      IntBuffer nnzPerRow, 
+                                                      FloatBuffer outVal,
+                                                      IntBuffer outColInd,
+                                                      IntBuffer outRowPtr,
                                                       float tol);
 public static native @Cast("cusparseStatus_t") int cusparseScsr2csr_compress(cusparseContext handle,
                                                       int m, 
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Const float[] csrValA,
-                                                      @Const int[] csrColIndA,
-                                                      @Const int[] csrRowPtrA, 
-                                                      int nnzA,
-                                                      @Const int[] nnzPerRow, 
-                                                      float[] csrValC,
-                                                      int[] csrColIndC,
-                                                      int[] csrRowPtrC,
+                                                      @Const float[] inVal,
+                                                      @Const int[] inColInd,
+                                                      @Const int[] inRowPtr, 
+                                                      int inNnz,
+                                                      int[] nnzPerRow, 
+                                                      float[] outVal,
+                                                      int[] outColInd,
+                                                      int[] outRowPtr,
                                                       float tol);        
 
 public static native @Cast("cusparseStatus_t") int cusparseDcsr2csr_compress(cusparseContext handle,
                                                       int m,
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Const DoublePointer csrValA,
-                                                      @Const IntPointer csrColIndA,
-                                                      @Const IntPointer csrRowPtrA,
-                                                      int nnzA,
-                                                      @Const IntPointer nnzPerRow,  
-                                                      DoublePointer csrValC,
-                                                      IntPointer csrColIndC,
-                                                      IntPointer csrRowPtrC,
+                                                      @Const DoublePointer inVal,
+                                                      @Const IntPointer inColInd,
+                                                      @Const IntPointer inRowPtr,
+                                                      int inNnz,
+                                                      IntPointer nnzPerRow,
+                                                      DoublePointer outVal,
+                                                      IntPointer outColInd,
+                                                      IntPointer outRowPtr,
                                                       double tol);
 public static native @Cast("cusparseStatus_t") int cusparseDcsr2csr_compress(cusparseContext handle,
                                                       int m,
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Const DoubleBuffer csrValA,
-                                                      @Const IntBuffer csrColIndA,
-                                                      @Const IntBuffer csrRowPtrA,
-                                                      int nnzA,
-                                                      @Const IntBuffer nnzPerRow,  
-                                                      DoubleBuffer csrValC,
-                                                      IntBuffer csrColIndC,
-                                                      IntBuffer csrRowPtrC,
+                                                      @Const DoubleBuffer inVal,
+                                                      @Const IntBuffer inColInd,
+                                                      @Const IntBuffer inRowPtr,
+                                                      int inNnz,
+                                                      IntBuffer nnzPerRow,
+                                                      DoubleBuffer outVal,
+                                                      IntBuffer outColInd,
+                                                      IntBuffer outRowPtr,
                                                       double tol);
 public static native @Cast("cusparseStatus_t") int cusparseDcsr2csr_compress(cusparseContext handle,
                                                       int m,
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Const double[] csrValA,
-                                                      @Const int[] csrColIndA,
-                                                      @Const int[] csrRowPtrA,
-                                                      int nnzA,
-                                                      @Const int[] nnzPerRow,  
-                                                      double[] csrValC,
-                                                      int[] csrColIndC,
-                                                      int[] csrRowPtrC,
+                                                      @Const double[] inVal,
+                                                      @Const int[] inColInd,
+                                                      @Const int[] inRowPtr,
+                                                      int inNnz,
+                                                      int[] nnzPerRow,
+                                                      double[] outVal,
+                                                      int[] outColInd,
+                                                      int[] outRowPtr,
                                                       double tol);
 
 public static native @Cast("cusparseStatus_t") int cusparseCcsr2csr_compress(cusparseContext handle,
                                                         int m,
                                                         int n,
                                                         cusparseMatDescr descra,
-                                                        @Cast("const cuComplex*") float2 csrValA,
-                                                        @Const IntPointer csrColIndA,
-                                                        @Const IntPointer csrRowPtrA,
-                                                        int nnzA,
-                                                        @Const IntPointer nnzPerRow,  
-                                                        @Cast("cuComplex*") float2 csrValC,
-                                                        IntPointer csrColIndC,
-                                                        IntPointer csrRowPtrC,
+                                                        @Cast("const cuComplex*") float2 inVal,
+                                                        @Const IntPointer inColInd,
+                                                        @Const IntPointer inRowPtr,
+                                                        int inNnz,
+                                                        IntPointer nnzPerRow,
+                                                        @Cast("cuComplex*") float2 outVal,
+                                                        IntPointer outColInd,
+                                                        IntPointer outRowPtr,
                                                         @ByVal @Cast("cuComplex*") float2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseCcsr2csr_compress(cusparseContext handle,
                                                         int m,
                                                         int n,
                                                         cusparseMatDescr descra,
-                                                        @Cast("const cuComplex*") float2 csrValA,
-                                                        @Const IntBuffer csrColIndA,
-                                                        @Const IntBuffer csrRowPtrA,
-                                                        int nnzA,
-                                                        @Const IntBuffer nnzPerRow,  
-                                                        @Cast("cuComplex*") float2 csrValC,
-                                                        IntBuffer csrColIndC,
-                                                        IntBuffer csrRowPtrC,
+                                                        @Cast("const cuComplex*") float2 inVal,
+                                                        @Const IntBuffer inColInd,
+                                                        @Const IntBuffer inRowPtr,
+                                                        int inNnz,
+                                                        IntBuffer nnzPerRow,
+                                                        @Cast("cuComplex*") float2 outVal,
+                                                        IntBuffer outColInd,
+                                                        IntBuffer outRowPtr,
                                                         @ByVal @Cast("cuComplex*") float2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseCcsr2csr_compress(cusparseContext handle,
                                                         int m,
                                                         int n,
                                                         cusparseMatDescr descra,
-                                                        @Cast("const cuComplex*") float2 csrValA,
-                                                        @Const int[] csrColIndA,
-                                                        @Const int[] csrRowPtrA,
-                                                        int nnzA,
-                                                        @Const int[] nnzPerRow,  
-                                                        @Cast("cuComplex*") float2 csrValC,
-                                                        int[] csrColIndC,
-                                                        int[] csrRowPtrC,
+                                                        @Cast("const cuComplex*") float2 inVal,
+                                                        @Const int[] inColInd,
+                                                        @Const int[] inRowPtr,
+                                                        int inNnz,
+                                                        int[] nnzPerRow,
+                                                        @Cast("cuComplex*") float2 outVal,
+                                                        int[] outColInd,
+                                                        int[] outRowPtr,
                                                         @ByVal @Cast("cuComplex*") float2 tol);                       
 
 public static native @Cast("cusparseStatus_t") int cusparseZcsr2csr_compress(cusparseContext handle,
                                                       int m,
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Cast("const cuDoubleComplex*") double2 csrValA,
-                                                      @Const IntPointer csrColIndA,
-                                                      @Const IntPointer csrRowPtrA,
-                                                      int nnzA,
-                                                      @Const IntPointer nnzPerRow, 
-                                                      @Cast("cuDoubleComplex*") double2 csrValC,
-                                                      IntPointer csrColIndC,
-                                                      IntPointer csrRowPtrC,
+                                                      @Cast("const cuDoubleComplex*") double2 inVal,
+                                                      @Const IntPointer inColInd,
+                                                      @Const IntPointer inRowPtr,
+                                                      int inNnz,
+                                                      IntPointer nnzPerRow,
+                                                      @Cast("cuDoubleComplex*") double2 outVal,
+                                                      IntPointer outColInd,
+                                                      IntPointer outRowPtr,
                                                       @ByVal @Cast("cuDoubleComplex*") double2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseZcsr2csr_compress(cusparseContext handle,
                                                       int m,
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Cast("const cuDoubleComplex*") double2 csrValA,
-                                                      @Const IntBuffer csrColIndA,
-                                                      @Const IntBuffer csrRowPtrA,
-                                                      int nnzA,
-                                                      @Const IntBuffer nnzPerRow, 
-                                                      @Cast("cuDoubleComplex*") double2 csrValC,
-                                                      IntBuffer csrColIndC,
-                                                      IntBuffer csrRowPtrC,
+                                                      @Cast("const cuDoubleComplex*") double2 inVal,
+                                                      @Const IntBuffer inColInd,
+                                                      @Const IntBuffer inRowPtr,
+                                                      int inNnz,
+                                                      IntBuffer nnzPerRow,
+                                                      @Cast("cuDoubleComplex*") double2 outVal,
+                                                      IntBuffer outColInd,
+                                                      IntBuffer outRowPtr,
                                                       @ByVal @Cast("cuDoubleComplex*") double2 tol);
 public static native @Cast("cusparseStatus_t") int cusparseZcsr2csr_compress(cusparseContext handle,
                                                       int m,
                                                       int n,
                                                       cusparseMatDescr descra,
-                                                      @Cast("const cuDoubleComplex*") double2 csrValA,
-                                                      @Const int[] csrColIndA,
-                                                      @Const int[] csrRowPtrA,
-                                                      int nnzA,
-                                                      @Const int[] nnzPerRow, 
-                                                      @Cast("cuDoubleComplex*") double2 csrValC,
-                                                      int[] csrColIndC,
-                                                      int[] csrRowPtrC,
+                                                      @Cast("const cuDoubleComplex*") double2 inVal,
+                                                      @Const int[] inColInd,
+                                                      @Const int[] inRowPtr,
+                                                      int inNnz,
+                                                      int[] nnzPerRow,
+                                                      @Cast("cuDoubleComplex*") double2 outVal,
+                                                      int[] outColInd,
+                                                      int[] outRowPtr,
                                                       @ByVal @Cast("cuDoubleComplex*") double2 tol);                        
                                                                                                         
 /* Description: This routine converts a dense matrix to a sparse matrix 
@@ -14676,1550 +14130,6 @@ public static native @Cast("cusparseStatus_t") int cusparseZcsr2csru(cusparseCon
                                                int[] csrColInd,
                                                csru2csrInfo info,
                                                Pointer pBuffer);
-
-/* Description: prune dense matrix to a sparse matrix with CSR format */
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer threshold,
-    cusparseMatDescr descrC,
-    @Const FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer threshold,
-    cusparseMatDescr descrC,
-    @Const FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] A,
-    int lda,
-    @Const float[] threshold,
-    cusparseMatDescr descrC,
-    @Const float[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer threshold,
-    cusparseMatDescr descrC,
-    @Const DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer threshold,
-    cusparseMatDescr descrC,
-    @Const DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] A,
-    int lda,
-    @Const double[] threshold,
-    cusparseMatDescr descrC,
-    @Const double[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer threshold,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer threshold,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] A,
-    int lda,
-    @Const float[] threshold,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer threshold,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer threshold,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] A,
-    int lda,
-    @Const double[] threshold,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    Pointer pBuffer);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    @Const FloatPointer threshold,
-    cusparseMatDescr descrC,
-    FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    @Const FloatBuffer threshold,
-    cusparseMatDescr descrC,
-    FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] A,
-    int lda,
-    @Const float[] threshold,
-    cusparseMatDescr descrC,
-    float[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    @Const DoublePointer threshold,
-    cusparseMatDescr descrC,
-    DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    @Const DoubleBuffer threshold,
-    cusparseMatDescr descrC,
-    DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] A,
-    int lda,
-    @Const double[] threshold,
-    cusparseMatDescr descrC,
-    double[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    Pointer pBuffer);
-
-/* Description: prune sparse matrix with CSR format to another sparse matrix with CSR format */
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatPointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const FloatPointer threshold,
-    cusparseMatDescr descrC,
-    @Const FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const FloatBuffer threshold,
-    cusparseMatDescr descrC,
-    @Const FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const float[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const float[] threshold,
-    cusparseMatDescr descrC,
-    @Const float[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoublePointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const DoublePointer threshold,
-    cusparseMatDescr descrC,
-    @Const DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoubleBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const DoubleBuffer threshold,
-    cusparseMatDescr descrC,
-    @Const DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csr_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const double[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const double[] threshold,
-    cusparseMatDescr descrC,
-    @Const double[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatPointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const FloatPointer threshold,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const FloatBuffer threshold,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const float[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const float[] threshold,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoublePointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const DoublePointer threshold,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoubleBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const DoubleBuffer threshold,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrNnz(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const double[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const double[] threshold,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    Pointer pBuffer);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const __half threshold,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatPointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const FloatPointer threshold,
-    cusparseMatDescr descrC,
-    FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const FloatBuffer threshold,
-    cusparseMatDescr descrC,
-    FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const float[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const float[] threshold,
-    cusparseMatDescr descrC,
-    float[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoublePointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    @Const DoublePointer threshold,
-    cusparseMatDescr descrC,
-    DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoubleBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    @Const DoubleBuffer threshold,
-    cusparseMatDescr descrC,
-    DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csr(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const double[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    @Const double[] threshold,
-    cusparseMatDescr descrC,
-    double[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    Pointer pBuffer);
-
-/* Description: prune dense matrix to a sparse matrix with CSR format by percentage */
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const float[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const double[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const __half A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatPointer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const FloatBuffer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const float[] A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    float[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoublePointer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const DoubleBuffer A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneDense2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    @Const double[] A,
-    int lda,
-    float percentage,
-    cusparseMatDescr descrC,
-    double[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-
-
-/* Description: prune sparse matrix to a sparse matrix with CSR format by percentage*/
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const __half csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatPointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const float[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const float[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoublePointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    @Const IntPointer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoubleBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    @Const IntBuffer csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrByPercentage_bufferSizeExt(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const double[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    @Const double[] csrValC,
-    @Const int[] csrRowPtrC,
-    @Const int[] csrColIndC,
-    pruneInfo info,
-    @Cast("size_t*") SizeTPointer pBufferSizeInBytes);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatPointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const float[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoublePointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntPointer csrRowPtrC,
-    IntPointer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoubleBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    IntBuffer csrRowPtrC,
-    IntBuffer nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrNnzByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const double[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    int[] csrRowPtrC,
-    int[] nnzTotalDevHostPtr,
-    pruneInfo info,
-    Pointer pBuffer);
-
-// #if defined(__cplusplus)
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseHpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const __half csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    __half csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-// #endif
-
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatPointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    FloatPointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const FloatBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    FloatBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseSpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const float[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    float[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoublePointer csrValA,
-    @Const IntPointer csrRowPtrA,
-    @Const IntPointer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    DoublePointer csrValC,
-    @Const IntPointer csrRowPtrC,
-    IntPointer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const DoubleBuffer csrValA,
-    @Const IntBuffer csrRowPtrA,
-    @Const IntBuffer csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    DoubleBuffer csrValC,
-    @Const IntBuffer csrRowPtrC,
-    IntBuffer csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-public static native @Cast("cusparseStatus_t") int cusparseDpruneCsr2csrByPercentage(
-    cusparseContext handle,
-    int m,
-    int n,
-    int nnzA,
-    cusparseMatDescr descrA,
-    @Const double[] csrValA,
-    @Const int[] csrRowPtrA,
-    @Const int[] csrColIndA,
-    float percentage,
-    cusparseMatDescr descrC,
-    double[] csrValC,
-    @Const int[] csrRowPtrC,
-    int[] csrColIndC,
-    pruneInfo info,
-    Pointer pBuffer);
-
-
-
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */                         

@@ -40,8 +40,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<nppi_filtering_functions.h>", "<nppi_statistics_functions.h>",
             "<nppi_linear_transforms.h>", "<nppi_geometry_transforms.h>",
             "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"},
-            link = {"nppial@.9.1", "nppicc@.9.1", "nppicom@.9.1", "nppidei@.9.1", "nppif@.9.1",
-                    "nppig@.9.1", "nppim@.9.1", "nppist@.9.1", "nppisu@.9.1", "nppitc@.9.1"} )},
+            link = {"nppial@.8.0", "nppicc@.8.0", "nppicom@.8.0", "nppidei@.8.0", "nppif@.8.0",
+                    "nppig@.8.0", "nppim@.8.0", "nppist@.8.0", "nppisu@.8.0", "nppitc@.8.0"} )},
         target = "org.bytedeco.javacpp.nppi")
 @NoException
 public class nppi implements InfoMapper {

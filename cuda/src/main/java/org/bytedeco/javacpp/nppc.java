@@ -13,7 +13,7 @@ public class nppc extends org.bytedeco.javacpp.presets.nppc {
 
 // Parsed from <npp.h>
 
- /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2014 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -144,9 +144,9 @@ public class nppc extends org.bytedeco.javacpp.presets.nppc {
 // #ifdef __cplusplus
 // #endif
 
-public static final int NPP_VERSION_MAJOR = 9;
-public static final int NPP_VERSION_MINOR = 1;
-public static final int NPP_VERSION_BUILD = 85;
+public static final int NPP_VERSION_MAJOR = 8;
+public static final int NPP_VERSION_MINOR = 0;
+public static final int NPP_VERSION_BUILD = 61;
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif
@@ -157,7 +157,7 @@ public static final int NPP_VERSION_BUILD = 85;
 
 // Parsed from <nppdefs.h>
 
- /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2015 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -468,10 +468,8 @@ public static final int
     NPP_CUDA_6_1             = 610,
     /**  Indicates that CUDA 6.2 capable device is machine's default device */
     NPP_CUDA_6_2             = 620,
-    /**  Indicates that CUDA 6.3 capable device is machine's default device */
-    NPP_CUDA_6_3             = 630,
-    /**  Indicates that CUDA 7.0 or better is machine's default device */
-    NPP_CUDA_7_0             = 700;
+    /**  Indicates that CUDA 6.3 or better is machine's default device */
+    NPP_CUDA_6_3             = 630;
 
 public static class NppLibraryVersion extends Pointer {
     static { Loader.load(); }
@@ -774,27 +772,6 @@ public static class NppiPoint extends Pointer {
     public native int y(); public native NppiPoint y(int y);
 }
 
-/** 
- * 2D Polar Point
- */
-public static class NppPointPolar extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public NppPointPolar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public NppPointPolar(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public NppPointPolar(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public NppPointPolar position(long position) {
-        return (NppPointPolar)super.position(position);
-    }
-
-    public native @Cast("Npp32f") float rho(); public native NppPointPolar rho(float rho);
-    public native @Cast("Npp32f") float theta(); public native NppPointPolar theta(float theta);
-}
-
 /**
  * 2D Size
  * This struct typically represents the size of a a rectangular region in
@@ -941,9 +918,7 @@ public static final int
     NPP_ALG_HINT_FAST = 1,
     NPP_ALG_HINT_ACCURATE = 2;
 
-/* 
- * Alpha composition controls. 
- */
+/* Alpha composition controls */
 
 /** enum NppiAlphaOp */
 public static final int
@@ -962,46 +937,6 @@ public static final int
     NPPI_OP_ALPHA_PREMUL = 12;
 
 
-/** 
- * The NppiHOGConfig structure defines the configuration parameters for the HOG descriptor: 
- */
- 
-public static class NppiHOGConfig extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public NppiHOGConfig() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public NppiHOGConfig(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public NppiHOGConfig(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public NppiHOGConfig position(long position) {
-        return (NppiHOGConfig)super.position(position);
-    }
-
-    /**  square cell size (pixels). */
-    public native int cellSize(); public native NppiHOGConfig cellSize(int cellSize);
-    /**  square histogram block size (pixels). */
-    public native int histogramBlockSize(); public native NppiHOGConfig histogramBlockSize(int histogramBlockSize);
-    /**  required number of histogram bins. */
-    public native int nHistogramBins(); public native NppiHOGConfig nHistogramBins(int nHistogramBins);
-    /**  detection window size (pixels). */
-    public native @ByRef NppiSize detectionWindowSize(); public native NppiHOGConfig detectionWindowSize(NppiSize detectionWindowSize);
-}
-
-/** max horizontal/vertical pixel size of cell.   */
-public static final int NPP_HOG_MAX_CELL_SIZE =                          (16);
-/** max horizontal/vertical pixel size of block.  */
-public static final int NPP_HOG_MAX_BLOCK_SIZE =                         (64);
-/** max number of histogram bins. */
-public static final int NPP_HOG_MAX_BINS_PER_CELL =                      (16);
-/** max number of cells in a descriptor window.   */
-public static final int NPP_HOG_MAX_CELLS_PER_DESCRIPTOR =              (256);
-/** max number of overlapping blocks in a descriptor window.   */
-public static final int NPP_HOG_MAX_OVERLAPPING_BLOCKS_PER_DESCRIPTOR = (256);
-/** max number of descriptor window locations per function call.   */
-public static final int NPP_HOG_MAX_DESCRIPTOR_LOCATIONS_PER_CALL =     (128);
 
 public static class NppiHaarClassifier_32f extends Pointer {
     static { Loader.load(); }
@@ -1083,7 +1018,7 @@ public static final int
 
 // Parsed from <nppcore.h>
 
- /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2015 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
