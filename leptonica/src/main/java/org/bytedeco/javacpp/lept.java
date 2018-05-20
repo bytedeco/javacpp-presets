@@ -6,7 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-public class lept extends org.bytedeco.javacpp.presets.lept {
+public class lept extends org.bytedeco.javacpp.helper.lept {
     static { Loader.load(); }
 
 // Parsed from leptonica/alltypes.h
@@ -3507,7 +3507,7 @@ public static final int ADDED_BORDER = ADDED_BORDER();
      * that direct non-default actions, e.g., in png and jpeg I/O. */
 
 /** Basic Pix */
-@Name("Pix") public static class PIX extends Pointer {
+@Name("Pix") public static class PIX extends AbstractPIX {
     static { Loader.load(); }
     /** Default native constructor. */
     public PIX() { super((Pointer)null); allocate(); }
@@ -4190,7 +4190,7 @@ public static final int PTA_VERSION_NUMBER =      1;
 public static final int FPIX_VERSION_NUMBER =      2;
 
 /** Pix with float array */
-@Name("FPix") public static class FPIX extends Pointer {
+@Name("FPix") public static class FPIX extends AbstractFPIX {
     static { Loader.load(); }
     /** Default native constructor. */
     public FPIX() { super((Pointer)null); allocate(); }
@@ -4256,7 +4256,7 @@ public static final int FPIX_VERSION_NUMBER =      2;
 public static final int DPIX_VERSION_NUMBER =      2;
 
 /** Pix with double array */
-@Name("DPix") public static class DPIX extends Pointer {
+@Name("DPix") public static class DPIX extends AbstractDPIX {
     static { Loader.load(); }
     /** Default native constructor. */
     public DPIX() { super((Pointer)null); allocate(); }

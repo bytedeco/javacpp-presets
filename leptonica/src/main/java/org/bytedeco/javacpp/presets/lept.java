@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.javacpp.lept", value = {
+@Properties(target = "org.bytedeco.javacpp.lept", helper = "org.bytedeco.javacpp.helper.lept", value = {
     @Platform(include = {"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/rbtree.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
@@ -82,7 +82,7 @@ public class lept implements InfoMapper {
                .put(new Info("Sel").pointerTypes("SEL"))
                .put(new Info("Sela").pointerTypes("SELA"))
                .put(new Info("L_Kernel").pointerTypes("L_KERNEL"))
-               .put(new Info("Pix").pointerTypes("PIX"))
+               .put(new Info("Pix").pointerTypes("PIX").base("AbstractPIX"))
                .put(new Info("PixColormap").pointerTypes("PIXCMAP"))
                .put(new Info("RGBA_Quad").pointerTypes("RGBA_QUAD"))
                .put(new Info("Pixa").pointerTypes("PIXA"))
@@ -94,9 +94,9 @@ public class lept implements InfoMapper {
                .put(new Info("Ptaa").pointerTypes("PTAA"))
                .put(new Info("Pixacc").pointerTypes("PIXACC"))
                .put(new Info("PixTiling").pointerTypes("PIXTILING"))
-               .put(new Info("FPix").pointerTypes("FPIX"))
+               .put(new Info("FPix").pointerTypes("FPIX").base("AbstractFPIX"))
                .put(new Info("FPixa").pointerTypes("FPIXA"))
-               .put(new Info("DPix").pointerTypes("DPIX"))
+               .put(new Info("DPix").pointerTypes("DPIX").base("AbstractDPIX"))
                .put(new Info("PixComp").pointerTypes("PIXC"))
                .put(new Info("PixaComp").pointerTypes("PIXAC"))
                .put(new Info("L_Recoga").pointerTypes("L_RECOGA"))

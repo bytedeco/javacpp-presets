@@ -1,4 +1,5 @@
 
+ * Add helper for `PIX`, `FPIX`, and `DPIX` of Leptonica, facilitating access to image data of Tesseract ([issue #517](https://github.com/bytedeco/javacpp-presets/issues/517))
  * Add presets for the NVBLAS, NVGRAPH, NVRTC, and NVML modules of CUDA ([issue deeplearning4j/nd4j#2895](https://github.com/deeplearning4j/nd4j/issues/2895))
  * Link OpenBLAS with `-Wl,-z,noexecstack` on `linux-armhf` as required by the JDK ([issue deeplearning4j/libnd4j#700](https://github.com/deeplearning4j/libnd4j/issues/700))
  * Include `textDetector.hpp` from the `opencv_text` module
