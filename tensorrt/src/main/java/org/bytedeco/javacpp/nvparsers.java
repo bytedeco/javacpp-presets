@@ -211,7 +211,7 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 * \enum UffInputOrder
 * \brief The different possible supported input order
 */
-@Namespace("nvuffparser") public static enum UffInputOrder {
+@Namespace("nvuffparser") public enum UffInputOrder {
     /** NCHW order */
     kNCHW(0),
     /** NHWC order */
@@ -222,6 +222,8 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
     public final int value;
     private UffInputOrder(int v) { this.value = v; }
     private UffInputOrder(UffInputOrder e) { this.value = e.value; }
+    public UffInputOrder intern() { for (UffInputOrder e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 /**
@@ -229,7 +231,7 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 * \brief The possible field types for custom layer
 */
 
-@Namespace("nvuffparser") public static enum FieldType {
+@Namespace("nvuffparser") public enum FieldType {
     /** FP32 field type */
     kFLOAT(0),
     /** INT32 field type */
@@ -245,6 +247,8 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
     public final int value;
     private FieldType(int v) { this.value = v; }
     private FieldType(FieldType e) { this.value = e.value; }
+    public FieldType intern() { for (FieldType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 /**

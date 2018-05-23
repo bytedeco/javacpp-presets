@@ -114,7 +114,7 @@ case $PLATFORM in
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
-        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
+        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174

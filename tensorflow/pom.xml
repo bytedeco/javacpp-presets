@@ -82,6 +82,7 @@
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
             <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/zlib/src/zlib/</includePath>
             <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/nsync/src/nsync/public/</includePath>
             <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/protobuf/src/protobuf/src/</includePath>
             <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/eigen/src/eigen/</includePath>

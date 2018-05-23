@@ -2987,6 +2987,206 @@ limitations under the License.
 // #endif  // TENSORFLOW_CORE_LIB_IO_COMPRESSED_OUTPUTBUFFER_H_
 
 
+// Parsed from tensorflow/core/lib/io/inputstream_interface.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_LIB_IO_INPUTSTREAM_INTERFACE_H_
+// #define TENSORFLOW_LIB_IO_INPUTSTREAM_INTERFACE_H_
+
+// #include <string>
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/types.h"
+
+// An interface that defines input streaming operations.
+@Namespace("tensorflow::io") public static class InputStreamInterface extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InputStreamInterface(Pointer p) { super(p); }
+
+
+  // Reads the next bytes_to_read from the file. Typical return codes:
+  //  * OK - in case of success.
+  //  * OUT_OF_RANGE - not enough bytes remaining before end of file.
+  public native @ByVal Status ReadNBytes(@Cast("tensorflow::int64") long bytes_to_read, @StdString @Cast({"char*", "std::string*"}) BytePointer result);
+
+  // Skips bytes_to_skip before next ReadNBytes. bytes_to_skip should be >= 0.
+  // Typical return codes:
+  //  * OK - in case of success.
+  //  * OUT_OF_RANGE - not enough bytes remaining before end of file.
+  public native @ByVal Status SkipNBytes(@Cast("tensorflow::int64") long bytes_to_skip);
+
+  // Return the offset of the current byte relative to the beginning of the
+  // file.
+  // If we Skip / Read beyond the end of the file, this should return the length
+  // of the file.
+  // If there are any errors, this must return -1.
+  public native @Cast("tensorflow::int64") long Tell();
+
+  // Resets the stream to the beginning.
+  public native @ByVal Status Reset();
+}
+
+  // namespace io
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_LIB_IO_INPUTSTREAM_INTERFACE_H_
+
+
+// Parsed from tensorflow/core/lib/io/record_reader.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_LIB_IO_RECORD_READER_H_
+// #define TENSORFLOW_LIB_IO_RECORD_READER_H_
+
+// #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/io/inputstream_interface.h"
+// #if !defined(IS_SLIM_BUILD)
+// #include "tensorflow/core/lib/io/zlib_compression_options.h"
+// #include "tensorflow/core/lib/io/zlib_inputstream.h"
+// #endif  // IS_SLIM_BUILD
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/types.h"
+
+@Namespace("tensorflow::io") public static class RecordReaderOptions extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public RecordReaderOptions() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public RecordReaderOptions(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RecordReaderOptions(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public RecordReaderOptions position(long position) {
+        return (RecordReaderOptions)super.position(position);
+    }
+
+  /** enum tensorflow::io::RecordReaderOptions::CompressionType */
+  public static final int NONE = 0, ZLIB_COMPRESSION = 1;
+  public native @Cast("tensorflow::io::RecordReaderOptions::CompressionType") int compression_type(); public native RecordReaderOptions compression_type(int compression_type);
+
+  // If buffer_size is non-zero, then all reads must be sequential, and no
+  // skipping around is permitted. (Note: this is the same behavior as reading
+  // compressed files.) Consider using SequentialRecordReader.
+  public native @Cast("tensorflow::int64") long buffer_size(); public native RecordReaderOptions buffer_size(long buffer_size);
+
+  public static native @ByVal RecordReaderOptions CreateRecordReaderOptions(
+        @StdString BytePointer compression_type);
+  public static native @ByVal RecordReaderOptions CreateRecordReaderOptions(
+        @StdString String compression_type);
+
+// #if !defined(IS_SLIM_BUILD)
+  // Options specific to zlib compression.
+  public native @ByRef ZlibCompressionOptions zlib_options(); public native RecordReaderOptions zlib_options(ZlibCompressionOptions zlib_options);
+// #endif  // IS_SLIM_BUILD
+}
+
+// Low-level interface to read TFRecord files.
+//
+// If using compression or buffering, consider using SequentialRecordReader.
+//
+// Note: this class is not thread safe; external synchronization required.
+@Namespace("tensorflow::io") @NoOffset public static class RecordReader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RecordReader(Pointer p) { super(p); }
+
+  // Create a reader that will return log records from "*file".
+  // "*file" must remain live while this Reader is in use.
+  public RecordReader(
+        RandomAccessFile file,
+        @Const @ByRef(nullValue = "tensorflow::io::RecordReaderOptions()") RecordReaderOptions options) { super((Pointer)null); allocate(file, options); }
+  private native void allocate(
+        RandomAccessFile file,
+        @Const @ByRef(nullValue = "tensorflow::io::RecordReaderOptions()") RecordReaderOptions options);
+  public RecordReader(
+        RandomAccessFile file) { super((Pointer)null); allocate(file); }
+  private native void allocate(
+        RandomAccessFile file);
+
+  // Read the record at "*offset" into *record and update *offset to
+  // point to the offset of the next record.  Returns OK on success,
+  // OUT_OF_RANGE for end of file, or something else for an error.
+  //
+  // Note: if buffering is used (with or without compression), access must be
+  // sequential.
+  public native @ByVal Status ReadRecord(@Cast("tensorflow::uint64*") LongPointer offset, @StdString @Cast({"char*", "std::string*"}) BytePointer record);
+  public native @ByVal Status ReadRecord(@Cast("tensorflow::uint64*") LongBuffer offset, @StdString @Cast({"char*", "std::string*"}) BytePointer record);
+  public native @ByVal Status ReadRecord(@Cast("tensorflow::uint64*") long[] offset, @StdString @Cast({"char*", "std::string*"}) BytePointer record);
+
+  // Skip the records till "offset". Returns OK on success,
+  // OUT_OF_RANGE for end of file, or something else for an error.
+  public native @ByVal Status SkipNBytes(@Cast("tensorflow::uint64") long offset);
+}
+
+// High-level interface to read TFRecord files.
+//
+// Note: this class is not thread safe; external synchronization required.
+@Namespace("tensorflow::io") @NoOffset public static class SequentialRecordReader extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SequentialRecordReader(Pointer p) { super(p); }
+
+  // Create a reader that will return log records from "*file".
+  // "*file" must remain live while this Reader is in use.
+  public SequentialRecordReader(
+        RandomAccessFile file,
+        @Const @ByRef(nullValue = "tensorflow::io::RecordReaderOptions()") RecordReaderOptions options) { super((Pointer)null); allocate(file, options); }
+  private native void allocate(
+        RandomAccessFile file,
+        @Const @ByRef(nullValue = "tensorflow::io::RecordReaderOptions()") RecordReaderOptions options);
+  public SequentialRecordReader(
+        RandomAccessFile file) { super((Pointer)null); allocate(file); }
+  private native void allocate(
+        RandomAccessFile file);
+
+  // Reads the next record in the file into *record. Returns OK on success,
+  // OUT_OF_RANGE for end of file, or something else for an error.
+  public native @ByVal Status ReadRecord(@StdString @Cast({"char*", "std::string*"}) BytePointer record);
+
+  // Returns the current offset in the file.
+  public native @Cast("tensorflow::uint64") long TellOffset();
+
+  // Seek to this offset within the file and set this offset as the current
+  // offset. Trying to seek backward will throw error.
+  public native @ByVal Status SeekOffset(@Cast("tensorflow::uint64") long offset);
+}
+
+  // namespace io
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_LIB_IO_RECORD_READER_H_
+
+
 // Parsed from tensorflow/core/lib/io/record_writer.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -4126,6 +4326,1104 @@ limitations under the License.
 //   REGISTER_FILE_SYSTEM_ENV(Env::Default(), scheme, factory);
 
 // #endif  // TENSORFLOW_CORE_PLATFORM_ENV_H_
+
+
+// Parsed from tensorflow/core/example/feature.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/example/feature.proto
+
+// #ifndef PROTOBUF_tensorflow_2fcore_2fexample_2ffeature_2eproto_INCLUDED
+// #define PROTOBUF_tensorflow_2fcore_2fexample_2ffeature_2eproto_INCLUDED
+
+// #include <string>
+
+// #include <google/protobuf/stubs/common.h>
+
+// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please update
+// #error your headers.
+// #endif
+// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/map.h>  // IWYU pragma: export
+// #include <google/protobuf/map_entry.h>
+// #include <google/protobuf/map_field_inl.h>
+// #include <google/protobuf/unknown_field_set.h>
+// @@protoc_insertion_point(includes)
+// Internal implementation detail -- do not use these members.
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsBytesListImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsBytesList();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFloatListImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFloatList();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsInt64ListImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsInt64List();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeature();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatures_FeatureEntry_DoNotUseImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatures_FeatureEntry_DoNotUse();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeaturesImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatures();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureListImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureList();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureLists_FeatureListEntry_DoNotUseImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureLists_FeatureListEntry_DoNotUse();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureListsImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureLists();
+  // namespace protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto
+@Namespace("tensorflow") @Opaque public static class FeatureLists_FeatureListEntry_DoNotUse extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FeatureLists_FeatureListEntry_DoNotUse() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FeatureLists_FeatureListEntry_DoNotUse(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class Features_FeatureEntry_DoNotUse extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Features_FeatureEntry_DoNotUse() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Features_FeatureEntry_DoNotUse(Pointer p) { super(p); }
+}
+  // namespace tensorflow
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+
+// ===================================================================
+
+@Namespace("tensorflow") @NoOffset public static class BytesList extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BytesList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BytesList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BytesList position(long position) {
+        return (BytesList)super.position(position);
+    }
+
+  public BytesList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public BytesList(@Const @ByRef BytesList from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef BytesList from);
+
+  public native @ByRef @Name("operator =") BytesList put(@Const @ByRef BytesList from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef BytesList default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const BytesList internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(BytesList other);
+  public native void Swap(BytesList other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native BytesList New();
+
+  public native BytesList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef BytesList from);
+  public native void MergeFrom(@Const @ByRef BytesList from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated bytes value = 1;
+  public native int value_size();
+  public native void clear_value();
+  @MemberGetter public static native int kValueFieldNumber();
+  public static final int kValueFieldNumber = kValueFieldNumber();
+  public native @StdString BytePointer value(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_value(int index);
+  public native void set_value(int index, @StdString BytePointer value);
+  public native void set_value(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_value(int index, @Const Pointer value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_value();
+  public native void add_value(@StdString BytePointer value);
+  public native void add_value(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_value(@Const Pointer value, @Cast("size_t") long size);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class FloatList extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FloatList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FloatList position(long position) {
+        return (FloatList)super.position(position);
+    }
+
+  public FloatList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public FloatList(@Const @ByRef FloatList from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef FloatList from);
+
+  public native @ByRef @Name("operator =") FloatList put(@Const @ByRef FloatList from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef FloatList default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const FloatList internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(FloatList other);
+  public native void Swap(FloatList other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native FloatList New();
+
+  public native FloatList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef FloatList from);
+  public native void MergeFrom(@Const @ByRef FloatList from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated float value = 1 [packed = true];
+  public native int value_size();
+  public native void clear_value();
+  @MemberGetter public static native int kValueFieldNumber();
+  public static final int kValueFieldNumber = kValueFieldNumber();
+  public native float value(int index);
+  public native void set_value(int index, float value);
+  public native void add_value(float value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class Int64List extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Int64List(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Int64List(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Int64List position(long position) {
+        return (Int64List)super.position(position);
+    }
+
+  public Int64List() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public Int64List(@Const @ByRef Int64List from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef Int64List from);
+
+  public native @ByRef @Name("operator =") Int64List put(@Const @ByRef Int64List from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef Int64List default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const Int64List internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(Int64List other);
+  public native void Swap(Int64List other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native Int64List New();
+
+  public native Int64List New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef Int64List from);
+  public native void MergeFrom(@Const @ByRef Int64List from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated int64 value = 1 [packed = true];
+  public native int value_size();
+  public native void clear_value();
+  @MemberGetter public static native int kValueFieldNumber();
+  public static final int kValueFieldNumber = kValueFieldNumber();
+  public native @Cast("google::protobuf::int64") long value(int index);
+  public native void set_value(int index, @Cast("google::protobuf::int64") long value);
+  public native void add_value(@Cast("google::protobuf::int64") long value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class Feature extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Feature(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Feature(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Feature position(long position) {
+        return (Feature)super.position(position);
+    }
+
+  public Feature() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public Feature(@Const @ByRef Feature from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef Feature from);
+
+  public native @ByRef @Name("operator =") Feature put(@Const @ByRef Feature from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef Feature default_instance();
+
+  /** enum tensorflow::Feature::KindCase */
+  public static final int
+    kBytesList = 1,
+    kFloatList = 2,
+    kInt64List = 3,
+    KIND_NOT_SET = 0;
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const Feature internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(Feature other);
+  public native void Swap(Feature other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native Feature New();
+
+  public native Feature New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef Feature from);
+  public native void MergeFrom(@Const @ByRef Feature from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .tensorflow.BytesList bytes_list = 1;
+  public native @Cast("bool") boolean has_bytes_list();
+  public native void clear_bytes_list();
+  @MemberGetter public static native int kBytesListFieldNumber();
+  public static final int kBytesListFieldNumber = kBytesListFieldNumber();
+  public native @Const @ByRef BytesList bytes_list();
+  public native BytesList release_bytes_list();
+  public native BytesList mutable_bytes_list();
+  public native void set_allocated_bytes_list(BytesList bytes_list);
+  public native void unsafe_arena_set_allocated_bytes_list(
+        BytesList bytes_list);
+  public native BytesList unsafe_arena_release_bytes_list();
+
+  // .tensorflow.FloatList float_list = 2;
+  public native @Cast("bool") boolean has_float_list();
+  public native void clear_float_list();
+  @MemberGetter public static native int kFloatListFieldNumber();
+  public static final int kFloatListFieldNumber = kFloatListFieldNumber();
+  public native @Const @ByRef FloatList float_list();
+  public native FloatList release_float_list();
+  public native FloatList mutable_float_list();
+  public native void set_allocated_float_list(FloatList float_list);
+  public native void unsafe_arena_set_allocated_float_list(
+        FloatList float_list);
+  public native FloatList unsafe_arena_release_float_list();
+
+  // .tensorflow.Int64List int64_list = 3;
+  public native @Cast("bool") boolean has_int64_list();
+  public native void clear_int64_list();
+  @MemberGetter public static native int kInt64ListFieldNumber();
+  public static final int kInt64ListFieldNumber = kInt64ListFieldNumber();
+  public native @Const @ByRef Int64List int64_list();
+  public native Int64List release_int64_list();
+  public native Int64List mutable_int64_list();
+  public native void set_allocated_int64_list(Int64List int64_list);
+  public native void unsafe_arena_set_allocated_int64_list(
+        Int64List int64_list);
+  public native Int64List unsafe_arena_release_int64_list();
+
+  public native @Cast("tensorflow::Feature::KindCase") int kind_case();
+}
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class Features extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Features(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Features(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Features position(long position) {
+        return (Features)super.position(position);
+    }
+
+  public Features() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public Features(@Const @ByRef Features from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef Features from);
+
+  public native @ByRef @Name("operator =") Features put(@Const @ByRef Features from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef Features default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const Features internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(Features other);
+  public native void Swap(Features other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native Features New();
+
+  public native Features New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef Features from);
+  public native void MergeFrom(@Const @ByRef Features from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+
+  // accessors -------------------------------------------------------
+
+  // map<string, .tensorflow.Feature> feature = 1;
+  public native int feature_size();
+  public native void clear_feature();
+  @MemberGetter public static native int kFeatureFieldNumber();
+  public static final int kFeatureFieldNumber = kFeatureFieldNumber();
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class FeatureList extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FeatureList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FeatureList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FeatureList position(long position) {
+        return (FeatureList)super.position(position);
+    }
+
+  public FeatureList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public FeatureList(@Const @ByRef FeatureList from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef FeatureList from);
+
+  public native @ByRef @Name("operator =") FeatureList put(@Const @ByRef FeatureList from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef FeatureList default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const FeatureList internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(FeatureList other);
+  public native void Swap(FeatureList other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native FeatureList New();
+
+  public native FeatureList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef FeatureList from);
+  public native void MergeFrom(@Const @ByRef FeatureList from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.Feature feature = 1;
+  public native int feature_size();
+  public native void clear_feature();
+  @MemberGetter public static native int kFeatureFieldNumber();
+  public static final int kFeatureFieldNumber = kFeatureFieldNumber();
+  public native Feature mutable_feature(int index);
+  public native @Const @ByRef Feature feature(int index);
+  public native Feature add_feature();
+}
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class FeatureLists extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FeatureLists(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FeatureLists(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FeatureLists position(long position) {
+        return (FeatureLists)super.position(position);
+    }
+
+  public FeatureLists() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public FeatureLists(@Const @ByRef FeatureLists from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef FeatureLists from);
+
+  public native @ByRef @Name("operator =") FeatureLists put(@Const @ByRef FeatureLists from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef FeatureLists default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const FeatureLists internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(FeatureLists other);
+  public native void Swap(FeatureLists other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native FeatureLists New();
+
+  public native FeatureLists New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef FeatureLists from);
+  public native void MergeFrom(@Const @ByRef FeatureLists from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+
+  // accessors -------------------------------------------------------
+
+  // map<string, .tensorflow.FeatureList> feature_list = 1;
+  public native int feature_list_size();
+  public native void clear_feature_list();
+  @MemberGetter public static native int kFeatureListFieldNumber();
+  public static final int kFeatureListFieldNumber = kFeatureListFieldNumber();
+}
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// BytesList
+
+// repeated bytes value = 1;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// FloatList
+
+// repeated float value = 1 [packed = true];
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// Int64List
+
+// repeated int64 value = 1 [packed = true];
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// Feature
+
+// .tensorflow.BytesList bytes_list = 1;
+
+
+
+
+
+
+
+
+
+// .tensorflow.FloatList float_list = 2;
+
+
+
+
+
+
+
+
+
+// .tensorflow.Int64List int64_list = 3;
+
+
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// Features
+
+// map<string, .tensorflow.Feature> feature = 1;
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// FeatureList
+
+// repeated .tensorflow.Feature feature = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// FeatureLists
+
+// map<string, .tensorflow.FeatureList> feature_list = 1;
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #endif  // PROTOBUF_tensorflow_2fcore_2fexample_2ffeature_2eproto_INCLUDED
+
+
+// Parsed from tensorflow/core/example/example.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/example/example.proto
+
+// #ifndef PROTOBUF_tensorflow_2fcore_2fexample_2fexample_2eproto_INCLUDED
+// #define PROTOBUF_tensorflow_2fcore_2fexample_2fexample_2eproto_INCLUDED
+
+// #include <string>
+
+// #include <google/protobuf/stubs/common.h>
+
+// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please update
+// #error your headers.
+// #endif
+// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/example/feature.pb.h"
+// @@protoc_insertion_point(includes)
+// Internal implementation detail -- do not use these members.
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsExampleImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsExample();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsSequenceExampleImpl();
+@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsSequenceExample();
+  // namespace protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto
+  // namespace tensorflow
+
+
+  // namespace protobuf
+  // namespace google
+
+// ===================================================================
+
+@Namespace("tensorflow") @NoOffset public static class Example extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Example(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Example(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Example position(long position) {
+        return (Example)super.position(position);
+    }
+
+  public Example() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public Example(@Const @ByRef Example from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef Example from);
+
+  public native @ByRef @Name("operator =") Example put(@Const @ByRef Example from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef Example default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const Example internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(Example other);
+  public native void Swap(Example other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native Example New();
+
+  public native Example New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef Example from);
+  public native void MergeFrom(@Const @ByRef Example from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .tensorflow.Features features = 1;
+  public native @Cast("bool") boolean has_features();
+  public native void clear_features();
+  @MemberGetter public static native int kFeaturesFieldNumber();
+  public static final int kFeaturesFieldNumber = kFeaturesFieldNumber();
+  public native @Const @ByRef Features features();
+  public native Features release_features();
+  public native Features mutable_features();
+  public native void set_allocated_features(Features features);
+  public native void unsafe_arena_set_allocated_features(
+        Features features);
+  public native Features unsafe_arena_release_features();
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class SequenceExample extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SequenceExample(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SequenceExample(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SequenceExample position(long position) {
+        return (SequenceExample)super.position(position);
+    }
+
+  public SequenceExample() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public SequenceExample(@Const @ByRef SequenceExample from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef SequenceExample from);
+
+  public native @ByRef @Name("operator =") SequenceExample put(@Const @ByRef SequenceExample from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef SequenceExample default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const SequenceExample internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(SequenceExample other);
+  public native void Swap(SequenceExample other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native SequenceExample New();
+
+  public native SequenceExample New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef SequenceExample from);
+  public native void MergeFrom(@Const @ByRef SequenceExample from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .tensorflow.Features context = 1;
+  public native @Cast("bool") boolean has_context();
+  public native void clear_context();
+  @MemberGetter public static native int kContextFieldNumber();
+  public static final int kContextFieldNumber = kContextFieldNumber();
+  public native @Const @ByRef Features context();
+  public native Features release_context();
+  public native Features mutable_context();
+  public native void set_allocated_context(Features context);
+  public native void unsafe_arena_set_allocated_context(
+        Features context);
+  public native Features unsafe_arena_release_context();
+
+  // .tensorflow.FeatureLists feature_lists = 2;
+  public native @Cast("bool") boolean has_feature_lists();
+  public native void clear_feature_lists();
+  @MemberGetter public static native int kFeatureListsFieldNumber();
+  public static final int kFeatureListsFieldNumber = kFeatureListsFieldNumber();
+  public native @Const @ByRef FeatureLists feature_lists();
+  public native FeatureLists release_feature_lists();
+  public native FeatureLists mutable_feature_lists();
+  public native void set_allocated_feature_lists(FeatureLists feature_lists);
+  public native void unsafe_arena_set_allocated_feature_lists(
+        FeatureLists feature_lists);
+  public native FeatureLists unsafe_arena_release_feature_lists();
+}
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// Example
+
+// .tensorflow.Features features = 1;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SequenceExample
+
+// .tensorflow.Features context = 1;
+
+
+
+
+
+
+
+// .tensorflow.FeatureLists feature_lists = 2;
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #endif  // PROTOBUF_tensorflow_2fcore_2fexample_2fexample_2eproto_INCLUDED
 
 
 // Parsed from tensorflow/core/protobuf/debug.pb.h
