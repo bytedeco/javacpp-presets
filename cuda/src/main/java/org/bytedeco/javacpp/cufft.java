@@ -447,9 +447,6 @@ public static native @Cast("cufftResult") int cufftExecZ2D(@Cast("cufftHandle") 
 public static native @Cast("cufftResult") int cufftSetStream(@Cast("cufftHandle") int plan,
                                     CUstream_st stream);
 
-public static native @Cast("cufftResult") int cufftSetCompatibilityMode(@Cast("cufftHandle") int plan,
-                                               @Cast("cufftCompatibility") int mode);
-
 public static native @Cast("cufftResult") int cufftDestroy(@Cast("cufftHandle") int plan);
 
 public static native @Cast("cufftResult") int cufftGetVersion(IntPointer version);

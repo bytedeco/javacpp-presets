@@ -47,16 +47,16 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
-          <groupId>org.bytedeco.javacpp-presets</groupId>
-          <artifactId>caffe</artifactId>
-          <version>1.0-1.4.1</version>
-          <classifier>linux-x86_64-gpu</classifier>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>caffe</artifactId>
+            <version>1.0-1.4.1</version>
+            <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
-          <groupId>org.bytedeco.javacpp-presets</groupId>
-          <artifactId>caffe</artifactId>
-          <version>1.0-1.4.1</version>
-          <classifier>macosx-x86_64-gpu</classifier>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>caffe</artifactId>
+            <version>1.0-1.4.1</version>
+            <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
 
     </dependencies>

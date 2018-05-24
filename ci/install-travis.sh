@@ -33,7 +33,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     SCL_ENABLE="rh-maven33 rh-python35"
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install centos-release-scl-rh epel-release"
@@ -204,11 +204,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_mac -o $HOME/cuda_9.1.85_mac.dmg
-        curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.0.4/cudnn-9.0-osx-x64-v7.tgz -o $HOME/cudnn-9.0-osx-x64-v7.tgz
+        curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.64_mac -o $HOME/cuda_9.2.64_mac.dmg
+        curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-osx-x64-v7.1.tgz -o $HOME/cudnn-9.2-osx-x64-v7.1.tgz
 
         echo "Mount dmg"
-        hdiutil mount $HOME/cuda_9.1.85_mac.dmg
+        hdiutil mount $HOME/cuda_9.2.64_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
@@ -218,7 +218,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-9.0-osx-x64-v7.tgz
+        tar xvf $HOME/cudnn-9.2-osx-x64-v7.1.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
