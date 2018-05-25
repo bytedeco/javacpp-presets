@@ -67,8 +67,15 @@ export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
     export TF_NEED_CUDA=1
+    export TF_NEED_TENSORRT=1
     export GPU_FLAGS="--config=cuda"
     export CMAKE_GPU_FLAGS="-Dtensorflow_ENABLE_GPU=ON -Dtensorflow_CUDA_VERSION=$TF_CUDA_VERSION -Dtensorflow_CUDNN_VERSION=$TF_CUDNN_VERSION"
+fi
+
+if [[ "$TF_NEED_CUDA" == 0 ]] || [[ ! -d "$TENSORRT_INSTALL_PATH" ]]; then
+    export TF_NEED_TENSORRT=0
+    unset TF_TENSORRT_VERSION
+    unset TENSORRT_INSTALL_PATH
 fi
 
 case $PLATFORM in
