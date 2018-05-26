@@ -450,7 +450,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::Tensor>").pointerTypes("TensorVector").define())
                .put(new Info("std::vector<tensorflow::TensorProto>").pointerTypes("TensorProtoVector").define())
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
-			   .put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define())
+               .put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define())
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::Node*,int> >").pointerTypes("NodeIntPairVector").define())
