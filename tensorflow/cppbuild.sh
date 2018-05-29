@@ -69,7 +69,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TF_NEED_CUDA=1
     export TF_NEED_TENSORRT=1
     export GPU_FLAGS="--config=cuda"
-    export CMAKE_GPU_FLAGS="-Dtensorflow_ENABLE_GPU=ON -Dtensorflow_CUDA_VERSION=$TF_CUDA_VERSION -Dtensorflow_CUDNN_VERSION=$TF_CUDNN_VERSION"
+    export CMAKE_GPU_FLAGS="-Dtensorflow_ENABLE_GPU=ON -Dtensorflow_CUDA_VERSION=$TF_CUDA_VERSION -Dtensorflow_CUDNN_VERSION=$TF_CUDNN_VERSION -DCUDNN_HOME=$CUDNN_INSTALL_PATH" 
 fi
 
 if [[ "$TF_NEED_CUDA" == 0 ]] || [[ ! -d "$TENSORRT_INSTALL_PATH" ]]; then
@@ -139,11 +139,15 @@ case $PLATFORM in
         export PATH=$DYLD_LIBRARY_PATH:$PATH
         patch -Np1 < ../../../tensorflow-macosx.patch
         ;;
-    windows-x86_64)
+    windows-x86_64)	
+		# help cmake's findCuda-method to find the right cuda version
+		export CUDA_PATH=$CUDA_TOOLKIT_PATH
+	
         mkdir -p tensorflow/contrib/cmake/build
         cd tensorflow/contrib/cmake/build
-        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX $CMAKE_GPU_FLAGS ..
-        MSBuild.exe tensorflow_static.vcxproj //p:Configuration=Release
+        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS ..
+		MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tf_core_gpu_kernels.vcxproj
+        MSBuild.exe  //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
         cd ../../../..
         ;;
     *)

@@ -195,12 +195,28 @@ import java.lang.annotation.Target;
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
         @Platform(
-                value = "windows-x86_64",
-                preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
-                               "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
-        @Platform(
-                value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+                value = "windows-x86_64",							   		
+                preloadpath = {	"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+								"C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
+
+		@Platform(
+                value = {"windows-x86_64"},
+                extension = "-gpu",
+				link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite", 
+						
+						"cuda@.9.2", "cudnn@.7", "cublas@.9.2", "cublas_device@.9.2", "cufft@.9.2", "cufftw@.9.2",  
+						"curand@.9.2", "cusolver@.9.2", "cusparse@.9.2", "cudart@.9.2", "cudart_static@.9.2", "cupti@.9.2", 
+																			
+						"tensorflow_static", "tf_core_gpu_kernels", "tf_protos_cc", "tf_cc_op_gen_main"},
+				includepath = { "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/include/"}, 
+				linkpath = {	"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/lib/x64/",  
+								"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/extras/CUPTI/libx64/"}), 	
+								
+		@Platform(
+                value = {"linux-x86_64", "macosx-x86_64"},
                 extension = "-gpu"),
+				
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
