@@ -39,7 +39,7 @@ MSHADOW_VERSION=a8c650ce8a708608a282c4d1e251c57873a8db25
 PS_VERSION=a6dda54604a07d1fb21b016ed1e3f4246b08222a
 NNVM_VERSION=2bc5144cd3733fd239287e3560c7db8285d21f02
 TVM_VERSION=fdba6cc9bd3bec9ccd0592fa3900b7fe25d6cb97
-MXNET_VERSION=1.2.0.rc2
+MXNET_VERSION=1.2.0
 download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
 download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
 download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz

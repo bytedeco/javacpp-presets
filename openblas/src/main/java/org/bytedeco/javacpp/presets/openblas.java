@@ -95,16 +95,16 @@ public class openblas implements LoadEnabled, InfoMapper {
     }
 
     @Override public void map(InfoMap infoMap) {
-        // skip LAPACK 3.7.0 until supported by MKL, at least
-        infoMap.put(new Info("lapacke.h").linePatterns(".*LAPACKE_ssysv_aa.*", ".*LAPACK_ssysv_aa.*",
-                                                       ".*LAPACK_ssysv_aa.*",  "#ifdef __cplusplus",
+        // skip LAPACK 3.7.0 and 3.8.0 until fully supported by MKL, at least
+        infoMap.put(new Info("lapacke.h").linePatterns(".*LAPACKE_ssysv_aa\\(.*", ".*LAPACK_.*",
+                                                       ".*LAPACK_ssysv_aa\\(.*",  ".*LAPACKE_get_nancheck.*",
                                                        ".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
                              "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "lapack_int", "lapack_logical").cppTypes().annotations())
                .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT",
                              "defined(LAPACK_COMPLEX_STRUCTURE)", "defined(LAPACK_COMPLEX_C99)").define(false))
                .put(new Info("((defined(__STDC_IEC_559_COMPLEX__) || __STDC_VERSION__ >= 199901L ||"
-                       + "      (__GNUC__ >= 3 && !defined(__cplusplus))) && !(defined(FORCE_OPENBLAS_COMPLEX_STRUCT)))",
+                       + "      (__GNUC__ >= 3 && !defined(__cplusplus))) && !(defined(FORCE_OPENBLAS_COMPLEX_STRUCT))) && !defined(_MSC_VER)",
                              "defined(LAPACK_COMPLEX_CPP)", "LAPACK_COMPLEX_CUSTOM").define())
                .put(new Info("openblas_complex_float", "lapack_complex_float").cast().pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("openblas_complex_double", "lapack_complex_double").cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
@@ -119,6 +119,7 @@ public class openblas implements LoadEnabled, InfoMapper {
             "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu", "cblas_cgeadd",
             "cblas_cimatcopy", "cblas_comatcopy", "cblas_dgeadd", "cblas_dimatcopy", "cblas_domatcopy", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
+            "classq", "dlassq", "slassq", "zlassq",
             // deprecated
             "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
             "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
