@@ -145,7 +145,9 @@ case $PLATFORM in
         mkdir -p ../build
         cd ../build
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
-        MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tf_core_gpu_kernels.vcxproj
+        if [[ "$EXTENSION" == *gpu ]]; then
+            MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tf_core_gpu_kernels.vcxproj
+        fi
         MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
         cd ../tensorflow-$TENSORFLOW_VERSION
         ;;
