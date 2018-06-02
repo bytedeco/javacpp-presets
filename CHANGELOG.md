@@ -1,4 +1,5 @@
 
+ * Disable optimized kernels of OpenBLAS on iOS as they return incorrect results ([issue #571](https://github.com/bytedeco/javacpp-presets/issues/571))
  * Get exception messages from `H5::Exception` for HDF5 ([issue deeplearning4j/deeplearning4j#5379](https://github.com/deeplearning4j/deeplearning4j/issues/5379))
  * Add more samples for TensorFlow including a complete training example ([pull #563](https://github.com/bytedeco/javacpp-presets/pull/563))
  * Add helper for `PIX`, `FPIX`, and `DPIX` of Leptonica, facilitating access to image data of Tesseract ([issue #517](https://github.com/bytedeco/javacpp-presets/issues/517))

@@ -91,14 +91,12 @@ case $PLATFORM in
         export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=32
-        export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK
+        export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK: use Accelerate to optimize
         export NO_SHARED=1
         ;;
     ios-arm64)
-        # https://gmplib.org/list-archives/gmp-bugs/2014-September/003538.html
-        sed -i="" 's/add.sp, sp, #-(11 \* 16)/sub sp, sp, #(11 \* 16)/g' kernel/arm64/sgemm_kernel_4x4.S
-        # but still results in a linking error, so disable the assembler entirely
-        sed -i="" 's/sgemm_kernel_4x4.S/..\/generic\/gemmkernel_2x2.c/g' kernel/arm64/KERNEL.ARMV8
+        # use generic kernels as Xcode assembler does not accept optimized ones: use Accelerate to optimize
+        cp kernel/arm/KERNEL.ARMV5 kernel/arm64/KERNEL.ARMV8
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64 -miphoneos-version-min=5.0"
         export FC=
         export NO_LAPACK=1
@@ -113,7 +111,7 @@ case $PLATFORM in
         export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=32
-        export TARGET=ATOM
+        export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
         export NO_SHARED=1
         ;;
     ios-x86_64)
@@ -122,7 +120,7 @@ case $PLATFORM in
         export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=64
-        export TARGET=ATOM
+        export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
         export NO_SHARED=1
         ;;
     linux-x86)
