@@ -140,11 +140,16 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-macosx.patch
         ;;
     windows-x86_64)
-        mkdir -p tensorflow/contrib/cmake/build
-        cd tensorflow/contrib/cmake/build
-        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX $CMAKE_GPU_FLAGS ..
-        MSBuild.exe tensorflow_static.vcxproj //p:Configuration=Release
-        cd ../../../..
+        # help cmake's findCuda-method to find the right cuda version
+        export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
+        mkdir -p ../build
+        cd ../build
+        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
+        if [[ "$EXTENSION" == *gpu ]]; then
+            MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tf_core_gpu_kernels.vcxproj
+        fi
+        MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
+        cd ../tensorflow-$TENSORFLOW_VERSION
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
