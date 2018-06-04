@@ -6616,67 +6616,11 @@ public static native double LAPACKE_zlanhe( int matrix_layout, @Cast("char") byt
 public static native double LAPACKE_zlanhe( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo, int n,
                            @Cast("const lapack_complex_double*") double[] a, int lda );
 
-public static native int LAPACKE_clacrm( int matrix_layout, int m, int n,
-                          @Cast("const lapack_complex_float*") FloatPointer a,
-                          int lda, @Const FloatPointer b,
-                          int ldb, @Cast("lapack_complex_float*") FloatPointer c,
-                          int ldc );
-public static native int LAPACKE_clacrm( int matrix_layout, int m, int n,
-                          @Cast("const lapack_complex_float*") FloatBuffer a,
-                          int lda, @Const FloatBuffer b,
-                          int ldb, @Cast("lapack_complex_float*") FloatBuffer c,
-                          int ldc );
-public static native int LAPACKE_clacrm( int matrix_layout, int m, int n,
-                          @Cast("const lapack_complex_float*") float[] a,
-                          int lda, @Const float[] b,
-                          int ldb, @Cast("lapack_complex_float*") float[] c,
-                          int ldc );
-public static native int LAPACKE_zlacrm( int matrix_layout, int m, int n,
-                           @Cast("const lapack_complex_double*") DoublePointer a,
-                           int lda, @Const DoublePointer b,
-                           int ldb, @Cast("lapack_complex_double*") DoublePointer c,
-                           int ldc );
-public static native int LAPACKE_zlacrm( int matrix_layout, int m, int n,
-                           @Cast("const lapack_complex_double*") DoubleBuffer a,
-                           int lda, @Const DoubleBuffer b,
-                           int ldb, @Cast("lapack_complex_double*") DoubleBuffer c,
-                           int ldc );
-public static native int LAPACKE_zlacrm( int matrix_layout, int m, int n,
-                           @Cast("const lapack_complex_double*") double[] a,
-                           int lda, @Const double[] b,
-                           int ldb, @Cast("lapack_complex_double*") double[] c,
-                           int ldc );
 
-public static native int LAPACKE_clarcm( int matrix_layout, int m, int n,
-                          @Const FloatPointer a, int lda,
-                          @Cast("const lapack_complex_float*") FloatPointer b,
-                          int ldb, @Cast("lapack_complex_float*") FloatPointer c,
-                          int ldc );
-public static native int LAPACKE_clarcm( int matrix_layout, int m, int n,
-                          @Const FloatBuffer a, int lda,
-                          @Cast("const lapack_complex_float*") FloatBuffer b,
-                          int ldb, @Cast("lapack_complex_float*") FloatBuffer c,
-                          int ldc );
-public static native int LAPACKE_clarcm( int matrix_layout, int m, int n,
-                          @Const float[] a, int lda,
-                          @Cast("const lapack_complex_float*") float[] b,
-                          int ldb, @Cast("lapack_complex_float*") float[] c,
-                          int ldc );
-public static native int LAPACKE_zlarcm( int matrix_layout, int m, int n,
-                           @Const DoublePointer a, int lda,
-                           @Cast("const lapack_complex_double*") DoublePointer b,
-                           int ldb, @Cast("lapack_complex_double*") DoublePointer c,
-                           int ldc );
-public static native int LAPACKE_zlarcm( int matrix_layout, int m, int n,
-                           @Const DoubleBuffer a, int lda,
-                           @Cast("const lapack_complex_double*") DoubleBuffer b,
-                           int ldb, @Cast("lapack_complex_double*") DoubleBuffer c,
-                           int ldc );
-public static native int LAPACKE_zlarcm( int matrix_layout, int m, int n,
-                           @Const double[] a, int lda,
-                           @Cast("const lapack_complex_double*") double[] b,
-                           int ldb, @Cast("lapack_complex_double*") double[] c,
-                           int ldc );
+
+
+
+
 
 public static native float LAPACKE_slansy( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo, int n,
                            @Const FloatPointer a, int lda );
@@ -20175,67 +20119,11 @@ public static native double LAPACKE_zlanhe_work( int matrix_layout, @Cast("char"
                                 int n, @Cast("const lapack_complex_double*") double[] a,
                                 int lda, double[] work );
 
-public static native int LAPACKE_clacrm_work( int matrix_layout, int m, int n,
-                                @Cast("const lapack_complex_float*") FloatPointer a,
-                                int lda, @Const FloatPointer b,
-                                int ldb, @Cast("lapack_complex_float*") FloatPointer c,
-                                int ldc, FloatPointer work );
-public static native int LAPACKE_clacrm_work( int matrix_layout, int m, int n,
-                                @Cast("const lapack_complex_float*") FloatBuffer a,
-                                int lda, @Const FloatBuffer b,
-                                int ldb, @Cast("lapack_complex_float*") FloatBuffer c,
-                                int ldc, FloatBuffer work );
-public static native int LAPACKE_clacrm_work( int matrix_layout, int m, int n,
-                                @Cast("const lapack_complex_float*") float[] a,
-                                int lda, @Const float[] b,
-                                int ldb, @Cast("lapack_complex_float*") float[] c,
-                                int ldc, float[] work );
-public static native int LAPACKE_zlacrm_work( int matrix_layout, int m, int n,
-                                @Cast("const lapack_complex_double*") DoublePointer a,
-                                int lda, @Const DoublePointer b,
-                                int ldb, @Cast("lapack_complex_double*") DoublePointer c,
-                                int ldc, DoublePointer work );
-public static native int LAPACKE_zlacrm_work( int matrix_layout, int m, int n,
-                                @Cast("const lapack_complex_double*") DoubleBuffer a,
-                                int lda, @Const DoubleBuffer b,
-                                int ldb, @Cast("lapack_complex_double*") DoubleBuffer c,
-                                int ldc, DoubleBuffer work );
-public static native int LAPACKE_zlacrm_work( int matrix_layout, int m, int n,
-                                @Cast("const lapack_complex_double*") double[] a,
-                                int lda, @Const double[] b,
-                                int ldb, @Cast("lapack_complex_double*") double[] c,
-                                int ldc, double[] work );
 
-public static native int LAPACKE_clarcm_work( int matrix_layout, int m, int n,
-                                @Const FloatPointer a, int lda,
-                                @Cast("const lapack_complex_float*") FloatPointer b,
-                                int ldb, @Cast("lapack_complex_float*") FloatPointer c,
-                                int ldc, FloatPointer work );
-public static native int LAPACKE_clarcm_work( int matrix_layout, int m, int n,
-                                @Const FloatBuffer a, int lda,
-                                @Cast("const lapack_complex_float*") FloatBuffer b,
-                                int ldb, @Cast("lapack_complex_float*") FloatBuffer c,
-                                int ldc, FloatBuffer work );
-public static native int LAPACKE_clarcm_work( int matrix_layout, int m, int n,
-                                @Const float[] a, int lda,
-                                @Cast("const lapack_complex_float*") float[] b,
-                                int ldb, @Cast("lapack_complex_float*") float[] c,
-                                int ldc, float[] work );
-public static native int LAPACKE_zlarcm_work( int matrix_layout, int m, int n,
-                                @Const DoublePointer a, int lda,
-                                @Cast("const lapack_complex_double*") DoublePointer b,
-                                int ldb, @Cast("lapack_complex_double*") DoublePointer c,
-                                int ldc, DoublePointer work );
-public static native int LAPACKE_zlarcm_work( int matrix_layout, int m, int n,
-                                @Const DoubleBuffer a, int lda,
-                                @Cast("const lapack_complex_double*") DoubleBuffer b,
-                                int ldb, @Cast("lapack_complex_double*") DoubleBuffer c,
-                                int ldc, DoubleBuffer work );
-public static native int LAPACKE_zlarcm_work( int matrix_layout, int m, int n,
-                                @Const double[] a, int lda,
-                                @Cast("const lapack_complex_double*") double[] b,
-                                int ldb, @Cast("lapack_complex_double*") double[] c,
-                                int ldc, double[] work );
+
+
+
+
 
 public static native float LAPACKE_slansy_work( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo,
                                 int n, @Const FloatPointer a, int lda,
@@ -42523,54 +42411,10 @@ public static native double LAPACK_zlanhe( @Cast("char*") ByteBuffer norm, @Cast
                     @Cast("const lapack_complex_double*") DoubleBuffer a, IntBuffer lda, DoubleBuffer work );
 public static native double LAPACK_zlanhe( @Cast("char*") byte[] norm, @Cast("char*") byte[] uplo, int[] n,
                     @Cast("const lapack_complex_double*") double[] a, int[] lda, double[] work );
-public static native void LAPACK_clarcm( IntPointer m, IntPointer n, @Const FloatPointer a,
-                    IntPointer lda, @Cast("const lapack_complex_float*") FloatPointer b,
-                    IntPointer ldb, @Cast("lapack_complex_float*") FloatPointer c,
-                    IntPointer ldc, FloatPointer work );
-public static native void LAPACK_clarcm( IntBuffer m, IntBuffer n, @Const FloatBuffer a,
-                    IntBuffer lda, @Cast("const lapack_complex_float*") FloatBuffer b,
-                    IntBuffer ldb, @Cast("lapack_complex_float*") FloatBuffer c,
-                    IntBuffer ldc, FloatBuffer work );
-public static native void LAPACK_clarcm( int[] m, int[] n, @Const float[] a,
-                    int[] lda, @Cast("const lapack_complex_float*") float[] b,
-                    int[] ldb, @Cast("lapack_complex_float*") float[] c,
-                    int[] ldc, float[] work );
-public static native void LAPACK_zlarcm( IntPointer m, IntPointer n, @Const DoublePointer a,
-                    IntPointer lda, @Cast("const lapack_complex_double*") DoublePointer b,
-                    IntPointer ldb, @Cast("lapack_complex_double*") DoublePointer c,
-                    IntPointer ldc, DoublePointer work );
-public static native void LAPACK_zlarcm( IntBuffer m, IntBuffer n, @Const DoubleBuffer a,
-                    IntBuffer lda, @Cast("const lapack_complex_double*") DoubleBuffer b,
-                    IntBuffer ldb, @Cast("lapack_complex_double*") DoubleBuffer c,
-                    IntBuffer ldc, DoubleBuffer work );
-public static native void LAPACK_zlarcm( int[] m, int[] n, @Const double[] a,
-                    int[] lda, @Cast("const lapack_complex_double*") double[] b,
-                    int[] ldb, @Cast("lapack_complex_double*") double[] c,
-                    int[] ldc, double[] work );
-public static native void LAPACK_clacrm( IntPointer m, IntPointer n, @Cast("const lapack_complex_float*") FloatPointer a,
-                    IntPointer lda, @Const FloatPointer b,
-                    IntPointer ldb, @Cast("lapack_complex_float*") FloatPointer c,
-                    IntPointer ldc, FloatPointer work );
-public static native void LAPACK_clacrm( IntBuffer m, IntBuffer n, @Cast("const lapack_complex_float*") FloatBuffer a,
-                    IntBuffer lda, @Const FloatBuffer b,
-                    IntBuffer ldb, @Cast("lapack_complex_float*") FloatBuffer c,
-                    IntBuffer ldc, FloatBuffer work );
-public static native void LAPACK_clacrm( int[] m, int[] n, @Cast("const lapack_complex_float*") float[] a,
-                    int[] lda, @Const float[] b,
-                    int[] ldb, @Cast("lapack_complex_float*") float[] c,
-                    int[] ldc, float[] work );
-public static native void LAPACK_zlacrm( IntPointer m, IntPointer n, @Cast("const lapack_complex_double*") DoublePointer a,
-                    IntPointer lda, @Const DoublePointer b,
-                    IntPointer ldb, @Cast("lapack_complex_double*") DoublePointer c,
-                    IntPointer ldc, DoublePointer work );
-public static native void LAPACK_zlacrm( IntBuffer m, IntBuffer n, @Cast("const lapack_complex_double*") DoubleBuffer a,
-                    IntBuffer lda, @Const DoubleBuffer b,
-                    IntBuffer ldb, @Cast("lapack_complex_double*") DoubleBuffer c,
-                    IntBuffer ldc, DoubleBuffer work );
-public static native void LAPACK_zlacrm( int[] m, int[] n, @Cast("const lapack_complex_double*") double[] a,
-                    int[] lda, @Const double[] b,
-                    int[] ldb, @Cast("lapack_complex_double*") double[] c,
-                    int[] ldc, double[] work );
+
+
+
+
 public static native float LAPACK_slansy( @Cast("char*") BytePointer norm, @Cast("char*") BytePointer uplo, IntPointer n, @Const FloatPointer a,
                     IntPointer lda, FloatPointer work );
 public static native float LAPACK_slansy( @Cast("char*") ByteBuffer norm, @Cast("char*") ByteBuffer uplo, IntBuffer n, @Const FloatBuffer a,
