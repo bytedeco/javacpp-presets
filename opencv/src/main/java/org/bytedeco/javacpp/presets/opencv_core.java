@@ -69,7 +69,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("algorithm", "map", "opencv_adapters.h").skip())
-               .put(new Info("__cplusplus", "CV_StaticAssert").define())
+               .put(new Info("__cplusplus", "CV_StaticAssert", "CV__LEGACY_PERSISTENCE").define())
                .put(new Info("__OPENCV_BUILD", "defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
                              "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
                              "defined __GNUC__ || defined __clang__", "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA",
