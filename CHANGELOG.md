@@ -1,5 +1,7 @@
 
+ * Fix presets for OpenBLAS failing to load MKL when symbolic links are enabled on Windows
  * Define `CV__LEGACY_PERSISTENCE` to get back functions for `KeyPointVector` and `DMatchVector` ([issue bytedeco/javacv#1012](https://github.com/bytedeco/javacv/issues/1012))
+ * Skip by default OpenBLAS functions missing from MKL 2017
  * Fix presets for OpenBLAS on `linux-ppc64le` not bundling correct libraries ([issue deeplearning4j/deeplearning4j#5447](https://github.com/deeplearning4j/deeplearning4j/issues/5447))
  * Fix CUDA build for TensorFlow on Windows ([pull #567](https://github.com/bytedeco/javacpp-presets/pull/567))
  * Disable optimized kernels of OpenBLAS on iOS as they return incorrect results ([issue #571](https://github.com/bytedeco/javacpp-presets/issues/571))
