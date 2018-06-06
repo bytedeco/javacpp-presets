@@ -1173,6 +1173,72 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::vector<tensorflow::Output>") public static class OutputVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OutputVector(Pointer p) { super(p); }
+    public OutputVector(Output value) { this(1); put(0, value); }
+    public OutputVector(Output ... array) { this(array.length); put(array); }
+    public OutputVector()       { allocate();  }
+    public OutputVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef OutputVector put(@ByRef OutputVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @ByRef Output get(@Cast("size_t") long i);
+    public native OutputVector put(@Cast("size_t") long i, Output value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef @Const Output get();
+    }
+
+    public Output[] get() {
+        Output[] array = new Output[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Output pop_back() {
+        long size = size();
+        Output value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public OutputVector push_back(Output value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public OutputVector put(Output value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public OutputVector put(Output ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @NoOffset @Name("std::pair<tensorflow::Allocator*,tensorflow::TrackingAllocator*>") public static class WrappedAllocator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -29877,8 +29943,8 @@ limitations under the License.
 
   /** Implicitly convert a list of outputs to a list of inputs. This is useful
    *  to write code such as ops::Concat(ops::Split(x, 4)). */
-  public InputList(@StdVector Output out) { super((Pointer)null); allocate(out); }
-  private native void allocate(@StdVector Output out);
+  public InputList(@Cast("const tensorflow::OutputList*") @ByRef OutputVector out) { super((Pointer)null); allocate(out); }
+  private native void allocate(@Cast("const tensorflow::OutputList*") @ByRef OutputVector out);
 
   public InputList(@ArraySlice Input inputs) { super((Pointer)null); allocate(inputs); }
   private native void allocate(@ArraySlice Input inputs);
@@ -31137,17 +31203,17 @@ limitations under the License.
  *  to the graph associated with 'scope', which compute (and return in
  *  'grad_outputs') the symbolic partial derivatives of 'L' w.r.t 'inputs'. */
 @Namespace("tensorflow") public static native @ByVal Status AddSymbolicGradients(@Const @ByRef Scope scope,
-                            @StdVector Output outputs,
-                            @StdVector Output inputs,
-                            @StdVector Output grad_inputs,
-                            @StdVector Output grad_outputs);
+                            @Const @ByRef OutputVector outputs,
+                            @Const @ByRef OutputVector inputs,
+                            @Const @ByRef OutputVector grad_inputs,
+                            OutputVector grad_outputs);
 
 // Same as above, but uses 'OnesLike' for all shapes in
 // 'outputs' as grad_inputs.
 @Namespace("tensorflow") public static native @ByVal Status AddSymbolicGradients(@Const @ByRef Scope scope,
-                            @StdVector Output outputs,
-                            @StdVector Output inputs,
-                            @StdVector Output grad_outputs);
+                            @Const @ByRef OutputVector outputs,
+                            @Const @ByRef OutputVector inputs,
+                            OutputVector grad_outputs);
 
 /** Returns a sentinel Output that represents 'no gradient' (i.e. no gradient
  *  flows along some graph edge during backpropagation).
@@ -35525,7 +35591,7 @@ limitations under the License.
   public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
 
 
-  public native @StdVector Output output(); public native IdentityN output(Output output);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output(); public native IdentityN output(OutputVector output);
 }
 
 /** Returns immutable tensor from memory region.
@@ -37666,7 +37732,7 @@ limitations under the License.
 
   public static native @ByVal Attrs OutType(@Cast("tensorflow::DataType") int x);
 
-  public native @StdVector Output output(); public native ShapeN output(Output output);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output(); public native ShapeN output(OutputVector output);
 }
 
 /** Returns the size of a tensor.
@@ -38199,7 +38265,7 @@ limitations under the License.
   public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
 
 
-  public native @StdVector Output output(); public native Split output(Output output);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output(); public native Split output(OutputVector output);
 }
 
 /** Splits a tensor into {@code num_split} tensors along one dimension.
@@ -38229,7 +38295,7 @@ limitations under the License.
   public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
 
 
-  public native @StdVector Output output(); public native SplitV output(Output output);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output(); public native SplitV output(OutputVector output);
 }
 
 /** Removes dimensions of size 1 from the shape of a tensor.
@@ -39191,7 +39257,7 @@ limitations under the License.
 
   public static native @ByVal Attrs Axis(@Cast("tensorflow::int64") long x);
 
-  public native @StdVector Output output(); public native Unstack output(Output output);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output(); public native Unstack output(OutputVector output);
 }
 
 /** Converts a flat index or array of flat indices into a tuple of
@@ -40760,7 +40826,7 @@ limitations under the License.
 
   public native @ByRef Output indices(); public native BarrierTakeMany indices(Output indices);
   public native @ByRef Output keys(); public native BarrierTakeMany keys(Output keys);
-  public native @StdVector Output values(); public native BarrierTakeMany values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native BarrierTakeMany values(OutputVector values);
 }
 
 /** A conditional accumulator for aggregating gradients.
@@ -40923,7 +40989,7 @@ limitations under the License.
   public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
 
 
-  public native @StdVector Output outputs(); public native DynamicPartition outputs(Output outputs);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector outputs(); public native DynamicPartition outputs(OutputVector outputs);
 }
 
 /** Interleave the values from the {@code data} tensors into a single tensor.
@@ -41371,7 +41437,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
-  public native @StdVector Output values(); public native MapPeek values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native MapPeek values(OutputVector values);
 }
 
 /** Op returns the number of elements in the underlying container.
@@ -41593,7 +41659,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
-  public native @StdVector Output values(); public native MapUnstage values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native MapUnstage values(OutputVector values);
 }
 
 /** Op removes and returns a random (key, value)
@@ -41663,7 +41729,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
   public native @ByRef Output key(); public native MapUnstageNoKey key(Output key);
-  public native @StdVector Output values(); public native MapUnstageNoKey values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native MapUnstageNoKey values(OutputVector values);
 }
 
 /** Op removes all elements in the underlying container.
@@ -41862,7 +41928,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
-  public native @StdVector Output values(); public native OrderedMapPeek values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native OrderedMapPeek values(OutputVector values);
 }
 
 /** Op returns the number of elements in the underlying container.
@@ -42094,7 +42160,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
-  public native @StdVector Output values(); public native OrderedMapUnstage values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native OrderedMapUnstage values(OutputVector values);
 }
 
 /** Op removes and returns the (key, value) element with the smallest
@@ -42160,7 +42226,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
   public native @ByRef Output key(); public native OrderedMapUnstageNoKey key(Output key);
-  public native @StdVector Output values(); public native OrderedMapUnstageNoKey values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native OrderedMapUnstageNoKey values(OutputVector values);
 }
 
 /** A queue that produces elements in first-in first-out order.
@@ -42585,7 +42651,7 @@ limitations under the License.
 
   public static native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
-  public native @StdVector Output components(); public native QueueDequeueMany components(Output components);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector components(); public native QueueDequeueMany components(OutputVector components);
 }
 
 /** Dequeues {@code n} tuples of one or more tensors from the given queue.
@@ -42665,7 +42731,7 @@ limitations under the License.
 
   public static native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
-  public native @StdVector Output components(); public native QueueDequeueUpTo components(Output components);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector components(); public native QueueDequeueUpTo components(OutputVector components);
 }
 
 /** Dequeues a tuple of one or more tensors from the given queue.
@@ -42731,7 +42797,7 @@ limitations under the License.
 
   public static native @ByVal Attrs TimeoutMs(@Cast("tensorflow::int64") long x);
 
-  public native @StdVector Output components(); public native QueueDequeue components(Output components);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector components(); public native QueueDequeue components(OutputVector components);
 }
 
 /** Enqueues zero or more tuples of one or more tensors in the given queue.
@@ -43552,7 +43618,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
-  public native @StdVector Output values(); public native StagePeek values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native StagePeek values(OutputVector values);
 }
 
 /** Op returns the number of elements in the underlying container.
@@ -44198,7 +44264,7 @@ limitations under the License.
   public static native @ByVal Attrs SharedName(@StringPiece BytePointer x);
   public static native @ByVal Attrs SharedName(@StringPiece String x);
 
-  public native @StdVector Output values(); public native Unstage values(Output values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector values(); public native Unstage values(OutputVector values);
 }
 
 /** \} */
@@ -47053,7 +47119,7 @@ limitations under the License.
   public native @ByVal @Name("operator []") Output get(@Cast("size_t") long index);
 
 
-  public native @StdVector Output tensors(); public native RestoreV2 tensors(Output tensors);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector tensors(); public native RestoreV2 tensors(OutputVector tensors);
 }
 
 /** Saves the input tensors to disk.
@@ -58892,7 +58958,7 @@ limitations under the License.
   public static native @ByVal Attrs NaValue(@StringPiece BytePointer x);
   public static native @ByVal Attrs NaValue(@StringPiece String x);
 
-  public native @StdVector Output output(); public native DecodeCSV output(Output output);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output(); public native DecodeCSV output(OutputVector output);
 }
 
 /** Decompress strings.
@@ -59109,10 +59175,10 @@ limitations under the License.
                @ByVal Input names, @ByVal InputList sparse_keys,
                @ByVal InputList dense_keys, @ByVal InputList dense_defaults, @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector sparse_types, @ArraySlice PartialTensorShape dense_shapes);
 
-  public native @StdVector Output sparse_indices(); public native ParseExample sparse_indices(Output sparse_indices);
-  public native @StdVector Output sparse_values(); public native ParseExample sparse_values(Output sparse_values);
-  public native @StdVector Output sparse_shapes(); public native ParseExample sparse_shapes(Output sparse_shapes);
-  public native @StdVector Output dense_values(); public native ParseExample dense_values(Output dense_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector sparse_indices(); public native ParseExample sparse_indices(OutputVector sparse_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector sparse_values(); public native ParseExample sparse_values(OutputVector sparse_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector sparse_shapes(); public native ParseExample sparse_shapes(OutputVector sparse_shapes);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector dense_values(); public native ParseExample dense_values(OutputVector dense_values);
 }
 
 /** Transforms a tf.Example proto (as a string) into typed tensors.
@@ -59165,10 +59231,10 @@ limitations under the License.
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input serialized, @ByVal InputList dense_defaults, @Cast("tensorflow::int64") long num_sparse, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector sparse_keys,
                      @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector dense_keys, @Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector sparse_types, @ArraySlice PartialTensorShape dense_shapes);
 
-  public native @StdVector Output sparse_indices(); public native ParseSingleExample sparse_indices(Output sparse_indices);
-  public native @StdVector Output sparse_values(); public native ParseSingleExample sparse_values(Output sparse_values);
-  public native @StdVector Output sparse_shapes(); public native ParseSingleExample sparse_shapes(Output sparse_shapes);
-  public native @StdVector Output dense_values(); public native ParseSingleExample dense_values(Output dense_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector sparse_indices(); public native ParseSingleExample sparse_indices(OutputVector sparse_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector sparse_values(); public native ParseSingleExample sparse_values(OutputVector sparse_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector sparse_shapes(); public native ParseSingleExample sparse_shapes(OutputVector sparse_shapes);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector dense_values(); public native ParseSingleExample dense_values(OutputVector dense_values);
 }
 
 /** Transforms a scalar brain.SequenceExample proto (as strings) into typed tensors.
@@ -59343,14 +59409,14 @@ limitations under the License.
   public static native @ByVal Attrs FeatureListSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
   public static native @ByVal Attrs FeatureListDenseShapes(@ArraySlice PartialTensorShape x);
 
-  public native @StdVector Output context_sparse_indices(); public native ParseSingleSequenceExample context_sparse_indices(Output context_sparse_indices);
-  public native @StdVector Output context_sparse_values(); public native ParseSingleSequenceExample context_sparse_values(Output context_sparse_values);
-  public native @StdVector Output context_sparse_shapes(); public native ParseSingleSequenceExample context_sparse_shapes(Output context_sparse_shapes);
-  public native @StdVector Output context_dense_values(); public native ParseSingleSequenceExample context_dense_values(Output context_dense_values);
-  public native @StdVector Output feature_list_sparse_indices(); public native ParseSingleSequenceExample feature_list_sparse_indices(Output feature_list_sparse_indices);
-  public native @StdVector Output feature_list_sparse_values(); public native ParseSingleSequenceExample feature_list_sparse_values(Output feature_list_sparse_values);
-  public native @StdVector Output feature_list_sparse_shapes(); public native ParseSingleSequenceExample feature_list_sparse_shapes(Output feature_list_sparse_shapes);
-  public native @StdVector Output feature_list_dense_values(); public native ParseSingleSequenceExample feature_list_dense_values(Output feature_list_dense_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_sparse_indices(); public native ParseSingleSequenceExample context_sparse_indices(OutputVector context_sparse_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_sparse_values(); public native ParseSingleSequenceExample context_sparse_values(OutputVector context_sparse_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_sparse_shapes(); public native ParseSingleSequenceExample context_sparse_shapes(OutputVector context_sparse_shapes);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_dense_values(); public native ParseSingleSequenceExample context_dense_values(OutputVector context_dense_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_sparse_indices(); public native ParseSingleSequenceExample feature_list_sparse_indices(OutputVector feature_list_sparse_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_sparse_values(); public native ParseSingleSequenceExample feature_list_sparse_values(OutputVector feature_list_sparse_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_sparse_shapes(); public native ParseSingleSequenceExample feature_list_sparse_shapes(OutputVector feature_list_sparse_shapes);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_dense_values(); public native ParseSingleSequenceExample feature_list_dense_values(OutputVector feature_list_dense_values);
 }
 
 /** Transforms a serialized tensorflow.TensorProto proto into a Tensor.
@@ -61671,9 +61737,9 @@ limitations under the License.
               @ByVal Input indices, @ByVal Input values,
               @ByVal Input shape, @Cast("tensorflow::int64") long num_split);
 
-  public native @StdVector Output output_indices(); public native SparseSplit output_indices(Output output_indices);
-  public native @StdVector Output output_values(); public native SparseSplit output_values(Output output_values);
-  public native @StdVector Output output_shape(); public native SparseSplit output_shape(Output output_shape);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output_indices(); public native SparseSplit output_indices(OutputVector output_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output_values(); public native SparseSplit output_values(OutputVector output_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector output_shape(); public native SparseSplit output_shape(OutputVector output_shape);
 }
 
 /** Adds up a {@code SparseTensor} and a dense {@code Tensor}, producing a dense {@code Tensor}.

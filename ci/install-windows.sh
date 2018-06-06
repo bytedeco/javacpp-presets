@@ -87,14 +87,14 @@ fi
 
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
-       curl -L -o cuda_9.1.85_windows.exe "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_windows"
-       curl -L -o cudnn-9.1-windows7-x64-v7.1.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.1/cudnn-9.1-windows7-x64-v7.1.zip"
-       ./cuda_9.1.85_windows.exe -s
+       curl -L -o cuda_9.2.88_windows.exe "https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.88_windows"
+       curl -L -o cudnn-9.2-windows7-x64-v7.1.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-windows7-x64-v7.1.zip"
+       ./cuda_9.2.88_windows.exe -s
        sleep 60
-       unzip ./cudnn-9.1-windows7-x64-v7.1.zip
-       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/bin
-       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/include
-       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/lib/x64
+       unzip ./cudnn-9.2-windows7-x64-v7.1.zip
+       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/bin
+       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/include
+       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/lib/x64
        echo Finished cuda install
 fi 
 

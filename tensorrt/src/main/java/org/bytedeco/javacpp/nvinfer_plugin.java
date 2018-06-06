@@ -80,7 +80,7 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
      *
      * @see INvPlugin::getPluginType()
      */
-    @Namespace("nvinfer1") public static enum PluginType {
+    @Namespace("nvinfer1") public enum PluginType {
         /** FasterRCNN fused plugin (RPN + ROI pooling) */
         kFASTERRCNN(0),
         /** Normalize plugin */
@@ -103,6 +103,8 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
         public final int value;
         private PluginType(int v) { this.value = v; }
         private PluginType(PluginType e) { this.value = e.value; }
+        public PluginType intern() { for (PluginType e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
     }
     
         /**
@@ -278,7 +280,7 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
     * \params nmsThreshold threshold to be used in NMS
     * \params codeType type of coding method for bbox
     */
-    @Namespace("nvinfer1::plugin") public static enum CodeType_t {
+    @Namespace("nvinfer1::plugin") public enum CodeType_t {
         CORNER     (1),
         CENTER_SIZE(2),
         CORNER_SIZE(3);
@@ -286,6 +288,8 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
         public final int value;
         private CodeType_t(int v) { this.value = v; }
         private CodeType_t(CodeType_t e) { this.value = e.value; }
+        public CodeType_t intern() { for (CodeType_t e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
     }
 
     @Namespace("nvinfer1::plugin") public static class DetectionOutputParameters extends Pointer {

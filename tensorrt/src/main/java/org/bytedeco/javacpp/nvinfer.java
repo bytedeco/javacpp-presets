@@ -151,7 +151,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 * \enum DataType
 * \brief the type of weights and tensors.
 */
-@Namespace("nvinfer1") public static enum DataType {
+@Namespace("nvinfer1") public enum DataType {
     /** FP32 format */
     kFLOAT(0),
     /** FP16 format */
@@ -164,6 +164,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private DataType(int v) { this.value = v; }
     private DataType(DataType e) { this.value = e.value; }
+    public DataType intern() { for (DataType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -172,7 +174,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  * \brief the type of data encoded across this dimension
  */
 
-@Namespace("nvinfer1") public static enum DimensionType {
+@Namespace("nvinfer1") public enum DimensionType {
     /** elements correspond to different spatial data */
     kSPATIAL(0),
     /** elements correspond to different channels */
@@ -185,6 +187,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private DimensionType(int v) { this.value = v; }
     private DimensionType(DimensionType e) { this.value = e.value; }
+    public DimensionType intern() { for (DimensionType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -581,7 +585,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  */
 
-@Namespace("nvinfer1") public static enum LayerType {
+@Namespace("nvinfer1") public enum LayerType {
     /** Convolution layer */
     kCONVOLUTION(0),
     /** Fully connected layer */
@@ -630,6 +634,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private LayerType(int v) { this.value = v; }
     private LayerType(LayerType e) { this.value = e.value; }
+    public LayerType intern() { for (LayerType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -638,7 +644,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  * \enum TensorLocation
  * \brief the location for tensor data storage, device or host
  */
-@Namespace("nvinfer1") public static enum TensorLocation {
+@Namespace("nvinfer1") public enum TensorLocation {
     /** data stored on device */
     kDEVICE(0),
     /** data stored on host */
@@ -647,6 +653,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private TensorLocation(int v) { this.value = v; }
     private TensorLocation(TensorLocation e) { this.value = e.value; }
+    public TensorLocation intern() { for (TensorLocation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1072,7 +1080,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  * \brief enumerates the types of activation to perform in an activation layer.
  *
  */
-@Namespace("nvinfer1") public static enum ActivationType {
+@Namespace("nvinfer1") public enum ActivationType {
     /** rectified linear activation */
     kRELU(0),
     /** sigmoid activation */
@@ -1083,6 +1091,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private ActivationType(int v) { this.value = v; }
     private ActivationType(ActivationType e) { this.value = e.value; }
+    public ActivationType intern() { for (ActivationType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1121,7 +1131,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  */
 
-@Namespace("nvinfer1") public static enum PoolingType {
+@Namespace("nvinfer1") public enum PoolingType {
     kMAX(0),              // Maximum over elements
     kAVERAGE(1),          // Average over elements. If the tensor is padded, the count includes the padding
     kMAX_AVERAGE_BLEND(2);// Blending between the max pooling and average pooling: (1-blendFactor)*maxPool + blendFactor*avgPool
@@ -1129,6 +1139,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private PoolingType(int v) { this.value = v; }
     private PoolingType(PoolingType e) { this.value = e.value; }
+    public PoolingType intern() { for (PoolingType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1325,7 +1337,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  * @see IScaleLayer
  */
 
-@Namespace("nvinfer1") public static enum ScaleMode {
+@Namespace("nvinfer1") public enum ScaleMode {
     /** identical coefficients across all elements of the tensor */
     kUNIFORM(0),
     /** per-channel coefficients */
@@ -1336,6 +1348,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private ScaleMode(int v) { this.value = v; }
     private ScaleMode(ScaleMode e) { this.value = e.value; }
+    public ScaleMode intern() { for (ScaleMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1629,7 +1643,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  * @see IElementWiseLayer
  */
-@Namespace("nvinfer1") public static enum ElementWiseOperation {
+@Namespace("nvinfer1") public enum ElementWiseOperation {
     /** sum of the two elements */
     kSUM(0),
     /** product of the two elements */
@@ -1648,6 +1662,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private ElementWiseOperation(int v) { this.value = v; }
     private ElementWiseOperation(ElementWiseOperation e) { this.value = e.value; }
+    public ElementWiseOperation intern() { for (ElementWiseOperation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1786,7 +1802,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  * @see IRNNLayer, IRNNv2Layer
  */
-@Namespace("nvinfer1") public static enum RNNOperation {
+@Namespace("nvinfer1") public enum RNNOperation {
     /** Single gate RNN w/ ReLU activation function. */
     kRELU(0),
     /** Single gate RNN w/ TANH activation function. */
@@ -1799,6 +1815,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private RNNOperation(int v) { this.value = v; }
     private RNNOperation(RNNOperation e) { this.value = e.value; }
+    public RNNOperation intern() { for (RNNOperation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1809,7 +1827,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  * @see IRNNLayer, IRNNv2Layer
  */
-@Namespace("nvinfer1") public static enum RNNDirection {
+@Namespace("nvinfer1") public enum RNNDirection {
     /** Network iterations from first input to last input. */
     kUNIDIRECTION(0),
     /** Network iterates from first to last and vice versa and outputs concatenated. */
@@ -1818,6 +1836,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private RNNDirection(int v) { this.value = v; }
     private RNNDirection(RNNDirection e) { this.value = e.value; }
+    public RNNDirection intern() { for (RNNDirection e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -1836,7 +1856,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  * @see IRNNLayer, IRNNv2Layer
  */
-@Namespace("nvinfer1") public static enum RNNInputMode {
+@Namespace("nvinfer1") public enum RNNInputMode {
     /** Perform the normal matrix multiplication in the first recurrent layer. */
     kLINEAR(0),
     /** No operation is performed on the first recurrent layer. */
@@ -1845,6 +1865,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private RNNInputMode(int v) { this.value = v; }
     private RNNInputMode(RNNInputMode e) { this.value = e.value; }
+    public RNNInputMode intern() { for (RNNInputMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -2194,7 +2216,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  * @see RNNOperation
  */
-@Namespace("nvinfer1") public static enum RNNGateType {
+@Namespace("nvinfer1") public enum RNNGateType {
     /** input gate  (i) */
     kINPUT (0),
     /** output gate (o) */
@@ -2213,6 +2235,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private RNNGateType(int v) { this.value = v; }
     private RNNGateType(RNNGateType e) { this.value = e.value; }
+    public RNNGateType intern() { for (RNNGateType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -2425,7 +2449,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  * @see IPluginExt::getPluginFormats()
  *
  */
-@Namespace("nvinfer1") public static enum PluginFormat {
+@Namespace("nvinfer1") public enum PluginFormat {
     /** NCHW */
     kNCHW       ((byte)0),
     /** NCHW with 2-element packed channels */
@@ -2436,6 +2460,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final byte value;
     private PluginFormat(byte v) { this.value = v; }
     private PluginFormat(PluginFormat e) { this.value = e.value; }
+    public PluginFormat intern() { for (PluginFormat e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -2631,7 +2657,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 *
 * @see IElementWiseLayer
 */
-@Namespace("nvinfer1") public static enum UnaryOperation {
+@Namespace("nvinfer1") public enum UnaryOperation {
     /** exponentiation */
     kEXP(0),
     /** log (base e) */
@@ -2648,6 +2674,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private UnaryOperation(int v) { this.value = v; }
     private UnaryOperation(UnaryOperation e) { this.value = e.value; }
+    public UnaryOperation intern() { for (UnaryOperation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -2687,7 +2715,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 * \brief enumerates the reduce operations that may be performed by a Reduce layer
 *
 */
-@Namespace("nvinfer1") public static enum ReduceOperation {
+@Namespace("nvinfer1") public enum ReduceOperation {
     kSUM(0),
     kPROD(1),
     kMAX(2),
@@ -2697,6 +2725,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private ReduceOperation(int v) { this.value = v; }
     private ReduceOperation(ReduceOperation e) { this.value = e.value; }
+    public ReduceOperation intern() { for (ReduceOperation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -2905,7 +2935,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 *
 * \brief enumerates the operations that may be performed by a TopK layer
 */
-@Namespace("nvinfer1") public static enum TopKOperation {
+@Namespace("nvinfer1") public enum TopKOperation {
     /** maximum of the elements */
     kMAX(0),
     /** minimum of the elements */
@@ -2914,6 +2944,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     public final int value;
     private TopKOperation(int v) { this.value = v; }
     private TopKOperation(TopKOperation e) { this.value = e.value; }
+    public TopKOperation intern() { for (TopKOperation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -3911,13 +3943,15 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *
  * \brief version of calibration algorithm to use
  */
-@Namespace("nvinfer1") public static enum CalibrationAlgoType {
+@Namespace("nvinfer1") public enum CalibrationAlgoType {
     kLEGACY_CALIBRATION(0),
     kENTROPY_CALIBRATION(1);
 
     public final int value;
     private CalibrationAlgoType(int v) { this.value = v; }
     private CalibrationAlgoType(CalibrationAlgoType e) { this.value = e.value; }
+    public CalibrationAlgoType intern() { for (CalibrationAlgoType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
 }
 
 
@@ -4323,7 +4357,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     * The severity corresponding to a log message
     *
     */
-    public static enum Severity {
+    public enum Severity {
         /** An internal error has occurred. Execution is unrecoverable */
         kINTERNAL_ERROR(0),
         /** An application error has occurred */
@@ -4336,6 +4370,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
         public final int value;
         private Severity(int v) { this.value = v; }
         private Severity(Severity e) { this.value = e.value; }
+        public Severity intern() { for (Severity e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
     }
 
     /**

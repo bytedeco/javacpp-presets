@@ -25,13 +25,15 @@ export TF_NEED_GDR=0
 export TF_NEED_TENSORRT=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
-export TF_CUDA_VERSION=9.1
+export TF_CUDA_VERSION=9.2
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=1.3
+export TF_TENSORRT_VERSION=4.1.0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
+export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
@@ -48,6 +50,9 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
 
+# Stop complaining about possibly incompatible CUDA versions
+sedinplace "s/return (cudnn == cudnn_ver) and (cudart == cuda_ver)/return True/g" configure.py
+
 # Stop the script from annoying us with Android stuff
 sed -i="" "s/return has_any_rule/return True/g" configure.py
 
@@ -62,8 +67,15 @@ export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
     export TF_NEED_CUDA=1
+    export TF_NEED_TENSORRT=1
     export GPU_FLAGS="--config=cuda"
     export CMAKE_GPU_FLAGS="-Dtensorflow_ENABLE_GPU=ON -Dtensorflow_CUDA_VERSION=$TF_CUDA_VERSION -Dtensorflow_CUDNN_VERSION=$TF_CUDNN_VERSION"
+fi
+
+if [[ "$TF_NEED_CUDA" == 0 ]] || [[ ! -d "$TENSORRT_INSTALL_PATH" ]]; then
+    export TF_NEED_TENSORRT=0
+    unset TF_TENSORRT_VERSION
+    unset TENSORRT_INSTALL_PATH
 fi
 
 case $PLATFORM in
@@ -114,7 +126,7 @@ case $PLATFORM in
         export GCC_HOST_COMPILER_PATH=$CC
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
-        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
+        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
@@ -128,11 +140,16 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-macosx.patch
         ;;
     windows-x86_64)
-        mkdir -p tensorflow/contrib/cmake/build
-        cd tensorflow/contrib/cmake/build
-        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX $CMAKE_GPU_FLAGS ..
-        MSBuild.exe tensorflow_static.vcxproj //p:Configuration=Release
-        cd ../../../..
+        # help cmake's findCuda-method to find the right cuda version
+        export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
+        mkdir -p ../build
+        cd ../build
+        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
+        if [[ "$EXTENSION" == *gpu ]]; then
+            MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tf_core_gpu_kernels.vcxproj
+        fi
+        MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
+        cd ../tensorflow-$TENSORFLOW_VERSION
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

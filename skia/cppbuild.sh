@@ -66,16 +66,16 @@ export PATH="$PWD/depot_tools:$PATH"
 cd skia-$SKIA_VERSION
 # Work around the disappearance of https://skia.googlesource.com/third_party/libjpeg-turbo.git
 patch -Np1 < ../../../skia.patch || true
-python tools/git-sync-deps
+python2 tools/git-sync-deps
 cp third_party/libjpeg-turbo/* third_party/externals/libjpeg-turbo/
 
 if [[ $PLATFORM == ios* ]]; then
     sed -i="" s/thread_local//g tools/ok.cpp
     sed -i="" /SRC_SK_XFERMODE_MODE/d tests/CTest.cpp
-    bin/gn gen out/Static --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\"] $EXTRA_ARGS"
+    bin/gn gen out/Static --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\"] $EXTRA_ARGS"
     ninja -C out/Static
 else
-    bin/gn gen out/Shared --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
+    bin/gn gen out/Shared --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
     ninja -C out/Shared
 fi
 

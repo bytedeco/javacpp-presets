@@ -32,9 +32,11 @@ import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.StdString;
+import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.javacpp.tools.Logger;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -180,10 +182,13 @@ import java.lang.annotation.Target;
                         "tensorflow/cc/ops/user_ops.h"},
                 link = "tensorflow_cc", preload = "tensorflow_framework"),
         @Platform(
+                value = {"linux-x86_64", "macosx-x86_64"},
+                extension = "-gpu"),
+        @Platform(
                 value = "windows",
                 link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy",
-                        "sqlite", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
+                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
+                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
                 preload = {"concrt140", "msvcp140", "vcruntime140",
                            "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
                            "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
@@ -197,8 +202,16 @@ import java.lang.annotation.Target;
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
         @Platform(
-                value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-                extension = "-gpu"),
+                value = "windows-x86_64",
+                extension = "-gpu",
+                link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
+                        "cudart", "cudart_static", "cuda", "cublas", "cublas_device", "cudnn",
+                        "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
+                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/extras/CUPTI/libx64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
@@ -225,6 +238,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/platform/file_system.h",
                         "tensorflow/core/platform/file_statistics.h",
                         "tensorflow/core/platform/env.h",
+//                        "tensorflow/core/graph/dot.h",
                         "tensorflow/core/example/feature.pb.h",
                         "tensorflow/core/example/example.pb.h",
                         "tensorflow/core/protobuf/debug.pb.h",
@@ -245,11 +259,13 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/tensor_description.pb.h",
                         "tensorflow/core/framework/tensor_types.h",
                         "tensorflow/core/framework/tensor_shape.h",
+                        //        "tensorflow/core/framework/tensor_slice.h",
                         "tensorflow/core/framework/tensor_util.h",
                         "tensorflow/core/framework/tensor_reference.h",
                         "tensorflow/core/framework/tensor.h",
                         "tensorflow/core/framework/attr_value.pb.h",
                         "tensorflow/core/framework/node_def.pb.h",
+                        "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/function.pb.h",
                         "tensorflow/core/framework/graph.pb.h",
                         "tensorflow/core/framework/session_state.h",
@@ -279,6 +295,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/types.h",
                         "tensorflow/core/graph/edgeset.h",
                         "tensorflow/core/lib/gtl/iterator_range.h",
+                        //        "tensorflow/core/lib/gtl/inlined_vector.h",
                         "tensorflow/core/framework/function.h",
                         "tensorflow/core/util/device_name_utils.h",
                         "tensorflow/core/framework/device_attributes.pb.h",
@@ -290,10 +307,12 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/tensor_id.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
+                        "tensorflow/core/framework/selective_registration.h",
                         "tensorflow/core/graph/node_builder.h",
                         "tensorflow/core/graph/graph_def_builder.h",
                         "tensorflow/core/graph/default_device.h",
                         "tensorflow/core/graph/graph_constructor.h",
+                        "tensorflow/core/graph/gradients.h",
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
@@ -301,7 +320,20 @@ import java.lang.annotation.Target;
         },
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
-public class tensorflow implements InfoMapper {
+public class tensorflow implements BuildEnabled, InfoMapper {
+    private Logger logger;
+    private java.util.Properties properties;
+    private String encoding;
+    private boolean android;
+
+    @Override
+    public void init(Logger logger, java.util.Properties properties, String encoding) {
+        this.logger = logger;
+        this.properties = properties;
+        this.encoding = encoding;
+        this.android = properties.getProperty("platform").startsWith("android-");
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
                .put(new Info("B16_DEVICE_FUNC", "EIGEN_ALWAYS_INLINE", "EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
@@ -364,6 +396,7 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto::TableStruct",
                              "tensorflow::protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto::TableStruct",
                              "tensorflow::BytesListDefaultTypeInternal", "tensorflow::FeatureDefaultTypeInternal", "tensorflow::FeatureListDefaultTypeInternal",
+                             "tensorflow::Features_FeatureEntryDefaultTypeInternal", "tensorflow::FeatureLists_FeatureListEntryDefaultTypeInternal",
                              "tensorflow::FeatureListsDefaultTypeInternal", "tensorflow::FeatureLists_FeatureListEntry_DoNotUseDefaultTypeInternal", "tensorflow::FeaturesDefaultTypeInternal",
                              "tensorflow::Features_FeatureEntry_DoNotUseDefaultTypeInternal", "tensorflow::FloatListDefaultTypeInternal", "tensorflow::Int64ListDefaultTypeInternal",
                              "tensorflow::ExampleDefaultTypeInternal", "tensorflow::SequenceExampleDefaultTypeInternal", "tensorflow::VariantTensorDataProtoDefaultTypeInternal",
@@ -562,6 +595,10 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"StringPiece*\"}) BytePointer"))
                .put(new Info("tensorflow::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
                              "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
+
+        if (!android) {
+            infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
+        }
 
         String[] consts = {"unsigned char", "short", "int", "long long", "float", "double", "bool", "std::string", "tensorflow::StringPiece"};
         for (int i = 0; i < consts.length; i++) {

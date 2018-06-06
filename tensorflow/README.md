@@ -60,6 +60,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>1.8.0-1.4.2-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.8.0-1.4.2-SNAPSHOT</version>
+            <classifier>windows-x86_64-gpu</classifier>
+        </dependency>
 
     </dependencies>
 </project>
