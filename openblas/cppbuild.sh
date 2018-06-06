@@ -13,12 +13,14 @@ download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz Op
 
 mkdir -p $PLATFORM
 cd $PLATFORM
+mkdir -p include lib bin
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
 cd OpenBLAS-$OPENBLAS_VERSION
+cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export CROSS_SUFFIX=

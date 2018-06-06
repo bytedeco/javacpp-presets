@@ -62,23 +62,26 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class openblas implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {
-        String platform = Loader.getPlatform();
+        String platform = properties.getProperty("platform");
         List<String> preloads = properties.get("platform.preload");
 
         // try to load MKL by default, but let users disable it
         String s = System.getProperty("org.bytedeco.javacpp.openblas.nomkl", "false").toLowerCase();
-        if (s.equals("false") || s.equals("f") || s.equals("")) {
-            String[] mkl = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
-                            "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt"};
-            for (int i = 0; i < mkl.length; i++) {
-                preloads.add(i, mkl[i] + "#" + mkl[i]);
+        if ((s.equals("false") || s.equals("f") || s.equals(""))
+               && (platform.startsWith("linux-x86")
+                || platform.startsWith("macosx-x86")
+                || platform.startsWith("windows-x86"))) {
+            String[] libs = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
+                             "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt"};
+            for (int i = 0; i < libs.length; i++) {
+                preloads.add(i, libs[i] + "#" + libs[i]);
             }
             if (platform.startsWith("linux")) {
-                preloads.add(mkl.length, "mkl_rt#openblas@.0");
+                preloads.add(libs.length, "mkl_rt#openblas@.0");
             } else if (platform.startsWith("macosx")) {
-                preloads.add(mkl.length, "mkl_rt#openblas");
+                preloads.add(libs.length, "mkl_rt#openblas");
             } else if (platform.startsWith("windows")) {
-                preloads.add(mkl.length, "mkl_rt#libopenblas");
+                preloads.add(libs.length, "mkl_rt#libopenblas");
             }
         }
 
