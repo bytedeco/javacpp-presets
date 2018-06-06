@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FFTW 3.3.7  http://www.fftw.org/
+ * FFTW 3.3.8  http://www.fftw.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.fftw</groupId>
     <artifactId>example</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>fftw-platform</artifactId>
-            <version>3.3.7-1.4.1</version>
+            <version>3.3.8-1.4.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

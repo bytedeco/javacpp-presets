@@ -124,9 +124,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.2  https://support.hdfgroup.org/HDF5/
  * MKL 2018.1  https://software.intel.com/intel-mkl
  * OpenBLAS 0.3.0  http://www.openblas.net/
- * ARPACK-NG  https://github.com/opencollab/arpack-ng
+ * ARPACK-NG 3.6.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
- * FFTW 3.3.7  http://www.fftw.org/download.html
+ * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
  * LLVM 6.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal

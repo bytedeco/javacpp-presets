@@ -128,7 +128,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>arpack-ng-platform</artifactId>
-      <version>20171109-1d912ad-${project.version}</version>
+      <version>3.6.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -138,7 +138,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>fftw-platform</artifactId>
-      <version>3.3.7-${project.version}</version>
+      <version>3.3.8-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
