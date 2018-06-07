@@ -118,7 +118,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2018.1-${project.version}</version>
+      <version>2018.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

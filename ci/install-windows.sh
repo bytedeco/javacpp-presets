@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo Reducing PATH size by removing duplicates to satisfy MKL, etc
+echo Reducing PATH size by removing duplicates and truncating to satisfy MKL, etc
 PREVIFS="$IFS"
 NEWPATH="${PATH%%:*}"
 IFS=":"
@@ -11,7 +11,7 @@ for P in $PATH; do
             FOUND=1
         fi
     done
-    if [[ "$FOUND" == "0" ]]; then
+    if [[ "$FOUND" == "0" ]] && [[ ${#NEWPATH} -lt 3000 ]]; then
         NEWPATH=$NEWPATH:$P
     fi
 done
@@ -77,7 +77,7 @@ fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/12394/w_mkl_2018.1.156.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13037/w_mkl_2018.3.210.exe"
        ./mkl.exe --s --x --f .
        ./setup.exe install --output=mkllog.txt -eula=accept
        sleep 60

@@ -28,7 +28,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="rh-maven33 python27"
-  if [[ "librealsense chilitags llvm tesseract caffe mxnet tensorflow tensorrt ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense chilitags arpack-ng llvm tesseract caffe mxnet tensorflow tensorrt ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33 rh-python35"
   fi
@@ -68,10 +68,10 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi 
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
-         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/12414/l_mkl_2018.1.163.tgz -o $HOME/mkl.tgz
+         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13005/l_mkl_2018.3.222.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
-         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2018.1.163/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2018.1.163/install.sh -s $HOME/build/l_mkl_2018.1.163/silent.cfg"
+         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2018.3.222/silent.cfg
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2018.3.222/install.sh -s $HOME/build/l_mkl_2018.3.222/silent.cfg"
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
@@ -187,13 +187,13 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       fi 
       if [ "$PROJ" == "mkl" ]; then
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/12335/m_mkl_2018.1.126.dmg -o $HOME/mkl.dmg
+        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13012/m_mkl_2018.3.185.dmg -o $HOME/mkl.dmg
         echo "Mount mkl dmg"
         hdiutil mount $HOME/mkl.dmg
         sleep 10
-        cp /Volumes/m_mkl_2018.1.126/m_mkl_2018.1.126.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
+        cp /Volumes/m_mkl_2018.3.185/m_mkl_2018.3.185.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
         sed -i -e 's/decline/accept/g' $HOME/silent.cfg
-        sudo /Volumes/m_mkl_2018.1.126/m_mkl_2018.1.126.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
+        sudo /Volumes/m_mkl_2018.3.185/m_mkl_2018.3.185.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
         echo "mkl status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "mkl Failed"
