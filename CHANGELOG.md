@@ -1,4 +1,5 @@
 
+ * Map instances of `google::protobuf::Map` to access more of TensorFlow's configuration ([issue #533](https://github.com/bytedeco/javacpp-presets/issues/533))
  * Fix presets for OpenBLAS failing to load MKL when symbolic links are enabled on Windows
  * Define `CV__LEGACY_PERSISTENCE` to get back functions for `KeyPointVector` and `DMatchVector` ([issue bytedeco/javacv#1012](https://github.com/bytedeco/javacv/issues/1012))
  * Skip by default OpenBLAS functions missing from MKL 2017

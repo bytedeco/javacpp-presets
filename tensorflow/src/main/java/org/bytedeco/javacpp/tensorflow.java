@@ -129,6 +129,224 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public native DataTypeVector put(@Cast("size_t") long i, int value);
 }
 
+@Name("google::protobuf::Map<std::string,std::string>") public static class StringStringMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringStringMap(Pointer p) { super(p); }
+    public StringStringMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringStringMap put(@ByRef StringStringMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @StdString BytePointer get(@StdString BytePointer i);
+    public native StringStringMap put(@StdString BytePointer i, BytePointer value);
+    @ValueSetter @Index(function = "at") public native StringStringMap put(@StdString BytePointer i, @StdString String value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @StdString BytePointer second();
+    }
+}
+
+@Name("google::protobuf::Map<std::string,google::protobuf::int32>") public static class StringIntMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringIntMap(Pointer p) { super(p); }
+    public StringIntMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringIntMap put(@ByRef StringIntMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @Cast("google::protobuf::int32") int get(@StdString BytePointer i);
+    public native StringIntMap put(@StdString BytePointer i, int value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @Cast("google::protobuf::int32") int second();
+    }
+}
+
+@Name("google::protobuf::Map<google::protobuf::int32,std::string>") public static class IntStringMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IntStringMap(Pointer p) { super(p); }
+    public IntStringMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef IntStringMap put(@ByRef IntStringMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @StdString BytePointer get(int i);
+    public native IntStringMap put(int i, BytePointer value);
+    @ValueSetter @Index(function = "at") public native IntStringMap put(int i, @StdString String value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter int first();
+        public native @Name("operator*().second") @MemberGetter @StdString BytePointer second();
+    }
+}
+
+@Name("google::protobuf::Map<std::string,tensorflow::Feature>") public static class StringFeatureMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringFeatureMap(Pointer p) { super(p); }
+    public StringFeatureMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringFeatureMap put(@ByRef StringFeatureMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef Feature get(@StdString BytePointer i);
+    public native StringFeatureMap put(@StdString BytePointer i, Feature value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const Feature second();
+    }
+}
+
+@Name("google::protobuf::Map<std::string,tensorflow::FeatureList>") public static class StringFeatureListMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringFeatureListMap(Pointer p) { super(p); }
+    public StringFeatureListMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringFeatureListMap put(@ByRef StringFeatureListMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef FeatureList get(@StdString BytePointer i);
+    public native StringFeatureListMap put(@StdString BytePointer i, FeatureList value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const FeatureList second();
+    }
+}
+
+@Name("google::protobuf::Map<std::string,tensorflow::CollectionDef>") public static class StringCollectionDefMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringCollectionDefMap(Pointer p) { super(p); }
+    public StringCollectionDefMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringCollectionDefMap put(@ByRef StringCollectionDefMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef CollectionDef get(@StdString BytePointer i);
+    public native StringCollectionDefMap put(@StdString BytePointer i, CollectionDef value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const CollectionDef second();
+    }
+}
+
+@Name("google::protobuf::Map<std::string,tensorflow::SignatureDef>") public static class StringSignatureDefMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringSignatureDefMap(Pointer p) { super(p); }
+    public StringSignatureDefMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringSignatureDefMap put(@ByRef StringSignatureDefMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef SignatureDef get(@StdString BytePointer i);
+    public native StringSignatureDefMap put(@StdString BytePointer i, SignatureDef value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const SignatureDef second();
+    }
+}
+
+@Name("google::protobuf::Map<std::string,tensorflow::TensorInfo>") public static class StringTensorInfoMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringTensorInfoMap(Pointer p) { super(p); }
+    public StringTensorInfoMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringTensorInfoMap put(@ByRef StringTensorInfoMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef TensorInfo get(@StdString BytePointer i);
+    public native StringTensorInfoMap put(@StdString BytePointer i, TensorInfo value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const TensorInfo second();
+    }
+}
+
 @Name("google::protobuf::Map<std::string,tensorflow::AttrValue>") public static class StringAttrValueMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4904,6 +5122,8 @@ limitations under the License.
   public native void clear_feature();
   @MemberGetter public static native int kFeatureFieldNumber();
   public static final int kFeatureFieldNumber = kFeatureFieldNumber();
+  public native @Const @ByRef StringFeatureMap feature();
+  public native StringFeatureMap mutable_feature();
 }
 // -------------------------------------------------------------------
 
@@ -5056,6 +5276,8 @@ limitations under the License.
   public native void clear_feature_list();
   @MemberGetter public static native int kFeatureListFieldNumber();
   public static final int kFeatureListFieldNumber = kFeatureListFieldNumber();
+  public native @Const @ByRef StringFeatureListMap feature_list();
+  public native StringFeatureListMap mutable_feature_list();
 }
 // ===================================================================
 
@@ -6308,6 +6530,8 @@ limitations under the License.
   public native void clear_tasks();
   @MemberGetter public static native int kTasksFieldNumber();
   public static final int kTasksFieldNumber = kTasksFieldNumber();
+  public native @Const @ByRef IntStringMap tasks();
+  public native IntStringMap mutable_tasks();
 
   // string name = 1;
   public native void clear_name();
@@ -8129,6 +8353,8 @@ public static final int
   public native void clear_device_count();
   @MemberGetter public static native int kDeviceCountFieldNumber();
   public static final int kDeviceCountFieldNumber = kDeviceCountFieldNumber();
+  public native @Const @ByRef StringIntMap device_count();
+  public native StringIntMap mutable_device_count();
 
   // repeated string device_filters = 4;
   public native int device_filters_size();
@@ -17045,6 +17271,8 @@ limitations under the License.
   public native void clear_ret();
   @MemberGetter public static native int kRetFieldNumber();
   public static final int kRetFieldNumber = kRetFieldNumber();
+  public native @Const @ByRef StringStringMap ret();
+  public native StringStringMap mutable_ret();
 
   // map<string, .tensorflow.AttrValue> attr = 5;
   public native int attr_size();
@@ -31938,12 +32166,16 @@ public static final int
   public native void clear_collection_def();
   @MemberGetter public static native int kCollectionDefFieldNumber();
   public static final int kCollectionDefFieldNumber = kCollectionDefFieldNumber();
+  public native @Const @ByRef StringCollectionDefMap collection_def();
+  public native StringCollectionDefMap mutable_collection_def();
 
   // map<string, .tensorflow.SignatureDef> signature_def = 5;
   public native int signature_def_size();
   public native void clear_signature_def();
   @MemberGetter public static native int kSignatureDefFieldNumber();
   public static final int kSignatureDefFieldNumber = kSignatureDefFieldNumber();
+  public native @Const @ByRef StringSignatureDefMap signature_def();
+  public native StringSignatureDefMap mutable_signature_def();
 
   // repeated .tensorflow.AssetFileDef asset_file_def = 6;
   public native int asset_file_def_size();
@@ -32860,12 +33092,16 @@ public static final int
   public native void clear_inputs();
   @MemberGetter public static native int kInputsFieldNumber();
   public static final int kInputsFieldNumber = kInputsFieldNumber();
+  public native @Const @ByRef StringTensorInfoMap inputs();
+  public native StringTensorInfoMap mutable_inputs();
 
   // map<string, .tensorflow.TensorInfo> outputs = 2;
   public native int outputs_size();
   public native void clear_outputs();
   @MemberGetter public static native int kOutputsFieldNumber();
   public static final int kOutputsFieldNumber = kOutputsFieldNumber();
+  public native @Const @ByRef StringTensorInfoMap outputs();
+  public native StringTensorInfoMap mutable_outputs();
 
   // string method_name = 3;
   public native void clear_method_name();

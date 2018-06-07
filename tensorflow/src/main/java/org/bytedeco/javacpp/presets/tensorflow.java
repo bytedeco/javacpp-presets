@@ -371,11 +371,19 @@ public class tensorflow implements BuildEnabled, InfoMapper {
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
-               .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
+               .put(new Info("google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip())
+               .put(new Info("google::protobuf::Map<std::string,std::string>").pointerTypes("StringStringMap").define())
+               .put(new Info("google::protobuf::Map<std::string,google::protobuf::int32>").pointerTypes("StringIntMap").define())
+               .put(new Info("google::protobuf::Map<google::protobuf::int32,std::string>").pointerTypes("IntStringMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::Feature>").pointerTypes("StringFeatureMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::FeatureList>").pointerTypes("StringFeatureListMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::CollectionDef>").pointerTypes("StringCollectionDefMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::SignatureDef>").pointerTypes("StringSignatureDefMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::TensorInfo>").pointerTypes("StringTensorInfoMap").define())
 
                .put(new Info("tensorflow::error::protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto::TableStruct",
                              "tensorflow::protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto::TableStruct",
