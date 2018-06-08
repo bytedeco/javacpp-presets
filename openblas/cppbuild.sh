@@ -20,6 +20,8 @@ echo "Decompressing archives..."
 tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
 cd OpenBLAS-$OPENBLAS_VERSION
+# Work around clash with winnt.h https://github.com/xianyi/OpenBLAS/issues/1503
+sedinplace 's/-DCR/-DCR=CR/g' driver/level3/Makefile
 cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
