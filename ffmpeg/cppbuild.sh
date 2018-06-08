@@ -80,8 +80,6 @@ cd ..
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
-patch -p0 < ../../decklink_dec.cpp.patch
-patch -p0 < ../../decklink_common.h.patch
 
 case $PLATFORM in
     android-arm)
@@ -880,7 +878,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         cp -R $INSTALL_PATH/../../src/main/resources/decklink/windows/* $INSTALL_PATH/include
         ENABLE="$ENABLE --enable-decklink"
-        patch -Np1 < ../../../ffmpeg-decklink.patch
+        patch -Np1 < ../../../decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
@@ -941,7 +939,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         cp -R $INSTALL_PATH/../../src/main/resources/decklink/windows/* $INSTALL_PATH/include
         ENABLE="$ENABLE --enable-decklink"
-        patch -Np1 < ../../../ffmpeg-decklink.patch
+        patch -Np1 < ../../../decklink.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
