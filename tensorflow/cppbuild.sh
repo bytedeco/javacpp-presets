@@ -37,7 +37,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.8.0
+TENSORFLOW_VERSION=1.9.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -87,7 +87,7 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11"
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-arm64)
         export CC="/usr/bin/gcc"
@@ -95,14 +95,14 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sed -i "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11"
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11"
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-x86_64)
         export CC="/usr/bin/gcc"
@@ -110,21 +110,21 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sed -i "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11"
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     linux-x86)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
         sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
-        export BUILDFLAGS="--copt=-m32 --linkopt=-m32"
+        export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --linkopt=-s"
         ;;
     linux-x86_64)
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
         export GCC_HOST_COMPILER_PATH=$CC
-        export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64"
+        export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
         ;;
@@ -132,7 +132,7 @@ case $PLATFORM in
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
         patch -Np1 < ../../../tensorflow-java.patch
-        export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so"
+        export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH

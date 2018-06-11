@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.8.0-rc0/tensorflow/BUILD tensorflow-1.8.0-rc0-java/tensorflow/BUILD
---- tensorflow-1.8.0-rc0/tensorflow/BUILD	2018-04-13 03:07:34.000000000 +0900
-+++ tensorflow-1.8.0-rc0-java/tensorflow/BUILD	2018-04-20 09:36:11.399593173 +0900
-@@ -502,17 +502,12 @@
+diff -ruN tensorflow-1.9.0-rc0/tensorflow/BUILD tensorflow-1.9.0-rc0-java/tensorflow/BUILD
+--- tensorflow-1.9.0-rc0/tensorflow/BUILD	2018-06-07 07:07:00.000000000 +0900
++++ tensorflow-1.9.0-rc0-java/tensorflow/BUILD	2018-06-11 11:21:24.164130171 +0900
+@@ -506,16 +506,12 @@
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
      linkopts = select({
@@ -14,13 +14,13 @@ diff -ruN tensorflow-1.8.0-rc0/tensorflow/BUILD tensorflow-1.8.0-rc0-java/tensor
          "//tensorflow:windows_msvc": [],
          "//conditions:default": [
              "-z defs",
-             "-s",
++            "-s",
 -            "-Wl,--version-script",  #  This line must be directly followed by the version_script.lds file
 -            "$(location //tensorflow:tf_version_script.lds)",
          ],
      }),
      deps = [
-@@ -525,6 +520,7 @@
+@@ -528,6 +523,7 @@
          "//tensorflow/cc:scope",
          "//tensorflow/cc/profiler",
          "//tensorflow/core:tensorflow",
@@ -28,9 +28,9 @@ diff -ruN tensorflow-1.8.0-rc0/tensorflow/BUILD tensorflow-1.8.0-rc0-java/tensor
      ],
  )
  
-diff -ruN tensorflow-1.8.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.8.0-rc0-java/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.8.0-rc0/tensorflow/java/src/main/native/BUILD	2018-04-13 03:07:34.000000000 +0900
-+++ tensorflow-1.8.0-rc0-java/tensorflow/java/src/main/native/BUILD	2018-04-20 09:35:09.110716204 +0900
+diff -ruN tensorflow-1.9.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.9.0-rc0-java/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.9.0-rc0/tensorflow/java/src/main/native/BUILD	2018-06-07 07:07:00.000000000 +0900
++++ tensorflow-1.9.0-rc0-java/tensorflow/java/src/main/native/BUILD	2018-06-11 11:19:27.411193969 +0900
 @@ -29,6 +29,7 @@
      }),
      hdrs = glob(["*.h"]),

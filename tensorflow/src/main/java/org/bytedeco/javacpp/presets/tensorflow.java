@@ -442,7 +442,10 @@ public class tensorflow implements BuildEnabled, InfoMapper {
                              "tensorflow::NameAttrList_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::NodeDef_AttrEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::FunctionDef_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::FunctionDef_RetEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::MetaGraphDef_CollectionDefEntry_DoNotUseDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntry_DoNotUseDefaultTypeInternal",
-                             "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal").skip())
+                             "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::RewriterConfig_CustomGraphOptimizerDefaultTypeInternal", "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal", "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal").skip())
+
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -494,8 +497,11 @@ public class tensorflow implements BuildEnabled, InfoMapper {
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::Node*,int> >").pointerTypes("NodeIntPairVector").define())
 
-               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator", "AttrValueMap::const_iterator").skip())
+               .put(new Info("tensorflow::tensor::internal::TensorProtoHelper",
+                             "tensorflow::AttrValueMap::const_iterator",
+                             "google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator").skip())
                .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>",
+                             "google::protobuf::Map<std::string,::tensorflow::AttrValue>",
                              "tensorflow::protobuf::Map<tensorflow::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::FunctionDefHelper::AttrValueWrapper").pointerTypes("FunctionDefHelper.AttrValueWrapper"))
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >",
