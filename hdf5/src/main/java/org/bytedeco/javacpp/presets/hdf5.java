@@ -80,7 +80,7 @@ public class hdf5 implements InfoMapper {
                      + "    protected attr_operator_t() { allocate(); }\n"
                      + "    private native void allocate();\n"
                      + "    public native void call( @ByRef H5Object loc/*in*/,\n"
-                     + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter\") BytePointer attr_name/*in*/,\n"
+                     + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter<char>\") BytePointer attr_name/*in*/,\n"
                      + "            Pointer operator_data/*in,out*/);\n"
                      + "}\n"))
 
