@@ -1,0 +1,377 @@
+From 6e6dcf4ed62324069631cdcd23e7187ae75f6340 Mon Sep 17 00:00:00 2001
+From: "A. Unique TensorFlower" <gardener@tensorflow.org>
+Date: Tue, 22 May 2018 00:44:47 -0700
+Subject: [PATCH] Unifiy the cuda toolchain definition of gcc/nvcc and
+ cuda-clang.
+
+gcc >= 7 will change how it treats -pie [1]; passing -pie after -shared
+on the command line is not possible any more; given that the legacy way to
+configure flags in the gcc/nvcc toolchain does not allow control over where
+the flags go or how to provide -pie only for linking of binaries, we can
+prevent this from breaking in the future by also using the new feature
+mechanism for gcc/nvcc.
+
+In addition to moving the gcc-specific workarounds in the toolchain to
+cuda_configure.bzl, document them, so we don't need to rediscover them in the
+future.
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77464
+
+PiperOrigin-RevId: 197522719
+---
+ .../{CROSSTOOL_clang.tpl => CROSSTOOL.tpl}         |   6 +-
+ third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl      | 249 ---------------------
+ third_party/gpus/cuda_configure.bzl                |  40 +++-
+ 3 files changed, 34 insertions(+), 261 deletions(-)
+ rename third_party/gpus/crosstool/{CROSSTOOL_clang.tpl => CROSSTOOL.tpl} (96%)
+ delete mode 100644 third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl
+
+diff --git a/third_party/gpus/crosstool/CROSSTOOL_clang.tpl b/third_party/gpus/crosstool/CROSSTOOL.tpl
+similarity index 96%
+rename from third_party/gpus/crosstool/CROSSTOOL_clang.tpl
+rename to third_party/gpus/crosstool/CROSSTOOL.tpl
+index 2f09473ee2d..60b19daf1d7 100644
+--- a/third_party/gpus/crosstool/CROSSTOOL_clang.tpl
++++ b/third_party/gpus/crosstool/CROSSTOOL.tpl
+@@ -140,9 +140,7 @@ toolchain {
+       flag_group {
+         # All warnings are enabled. Maybe enable -Werror as well?
+         flag: "-Wall"
+-        # Some parts of the codebase set -Werror and hit this warning, so
+-        # switch it off for now.
+-        flag: "-Wno-invalid-partial-specialization"
++        %{host_compiler_warnings}
+       }
+     }
+   }
+@@ -278,7 +276,7 @@ toolchain {
+   }
+ 
+   # Set clang as a C/C++ compiler.
+-  tool_path { name: "gcc" path: "%{clang_path}" }
++  tool_path { name: "gcc" path: "%{host_compiler_path}" }
+ 
+   # Use the default system toolchain for everything else.
+   tool_path { name: "ar" path: "/usr/bin/ar" }
+diff --git a/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl b/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl
+deleted file mode 100644
+index 05290d647ea..00000000000
+--- a/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl
++++ /dev/null
+@@ -1,249 +0,0 @@
+-major_version: "local"
+-minor_version: ""
+-default_target_cpu: "same_as_host"
+-
+-default_toolchain {
+-  cpu: "k8"
+-  toolchain_identifier: "local_linux"
+-}
+-default_toolchain {
+-  cpu: "piii"
+-  toolchain_identifier: "local_linux"
+-}
+-default_toolchain {
+-  cpu: "arm"
+-  toolchain_identifier: "local_linux"
+-}
+-default_toolchain {
+-  cpu: "darwin"
+-  toolchain_identifier: "local_darwin"
+-}
+-default_toolchain {
+-  cpu: "ppc"
+-  toolchain_identifier: "local_linux"
+-}
+-
+-toolchain {
+-  abi_version: "local"
+-  abi_libc_version: "local"
+-  builtin_sysroot: ""
+-  compiler: "compiler"
+-  host_system_name: "local"
+-  needsPic: true
+-  supports_gold_linker: false
+-  supports_incremental_linker: false
+-  supports_fission: false
+-  supports_interface_shared_objects: false
+-  supports_normalizing_ar: false
+-  supports_start_end_lib: false
+-  supports_thin_archives: false
+-  target_libc: "local"
+-  target_cpu: "local"
+-  target_system_name: "local"
+-  toolchain_identifier: "local_linux"
+-
+-  tool_path { name: "ar" path: "/usr/bin/ar" }
+-  tool_path { name: "compat-ld" path: "/usr/bin/ld" }
+-  tool_path { name: "cpp" path: "/usr/bin/cpp" }
+-  tool_path { name: "dwp" path: "/usr/bin/dwp" }
+-  # As part of the TensorFlow release, we place some cuda-related compilation
+-  # files in @local_config_cuda//crosstool/clang/bin, and this relative
+-  # path, combined with the rest of our Bazel configuration causes our
+-  # compilation to use those files.
+-  tool_path { name: "gcc" path: "clang/bin/crosstool_wrapper_driver_is_not_gcc" }
+-  # Use "-std=c++11" for nvcc. For consistency, force both the host compiler
+-  # and the device compiler to use "-std=c++11".
+-  cxx_flag: "-std=c++11"
+-  linker_flag: "-Wl,-no-as-needed"
+-  linker_flag: "-lstdc++"
+-  linker_flag: "-B/usr/bin/"
+-
+-%{host_compiler_includes}
+-  tool_path { name: "gcov" path: "/usr/bin/gcov" }
+-
+-  # C(++) compiles invoke the compiler (as that is the one knowing where
+-  # to find libraries), but we provide LD so other rules can invoke the linker.
+-  tool_path { name: "ld" path: "/usr/bin/ld" }
+-
+-  tool_path { name: "nm" path: "/usr/bin/nm" }
+-  tool_path { name: "objcopy" path: "/usr/bin/objcopy" }
+-  objcopy_embed_flag: "-I"
+-  objcopy_embed_flag: "binary"
+-  tool_path { name: "objdump" path: "/usr/bin/objdump" }
+-  tool_path { name: "strip" path: "/usr/bin/strip" }
+-
+-  # Anticipated future default.
+-  unfiltered_cxx_flag: "-no-canonical-prefixes"
+-
+-  # Make C++ compilation deterministic. Use linkstamping instead of these
+-  # compiler symbols.
+-  unfiltered_cxx_flag: "-Wno-builtin-macro-redefined"
+-  unfiltered_cxx_flag: "-D__DATE__=\"redacted\""
+-  unfiltered_cxx_flag: "-D__TIMESTAMP__=\"redacted\""
+-  unfiltered_cxx_flag: "-D__TIME__=\"redacted\""
+-
+-  # Security hardening on by default.
+-  # Conservative choice; -D_FORTIFY_SOURCE=2 may be unsafe in some cases.
+-  # We need to undef it before redefining it as some distributions now have
+-  # it enabled by default.
+-  compiler_flag: "-U_FORTIFY_SOURCE"
+-  compiler_flag: "-D_FORTIFY_SOURCE=1"
+-  compiler_flag: "-fstack-protector"
+-  compiler_flag: "-fPIE"
+-  linker_flag: "-pie"
+-  linker_flag: "-Wl,-z,relro,-z,now"
+-
+-  # Enable coloring even if there's no attached terminal. Bazel removes the
+-  # escape sequences if --nocolor is specified. This isn't supported by gcc
+-  # on Ubuntu 14.04.
+-  # compiler_flag: "-fcolor-diagnostics"
+-
+-  # All warnings are enabled. Maybe enable -Werror as well?
+-  compiler_flag: "-Wall"
+-  # Enable a few more warnings that aren't part of -Wall.
+-  compiler_flag: "-Wunused-but-set-parameter"
+-  # But disable some that are problematic.
+-  compiler_flag: "-Wno-free-nonheap-object" # has false positives
+-
+-  # Keep stack frames for debugging, even in opt mode.
+-  compiler_flag: "-fno-omit-frame-pointer"
+-
+-  # Anticipated future default.
+-  linker_flag: "-no-canonical-prefixes"
+-  unfiltered_cxx_flag: "-fno-canonical-system-headers"
+-  # Have gcc return the exit code from ld.
+-  linker_flag: "-pass-exit-codes"
+-  # Stamp the binary with a unique identifier.
+-  linker_flag: "-Wl,--build-id=md5"
+-  linker_flag: "-Wl,--hash-style=gnu"
+-  # Gold linker only? Can we enable this by default?
+-  # linker_flag: "-Wl,--warn-execstack"
+-  # linker_flag: "-Wl,--detect-odr-violations"
+-
+-  # Include directory for cuda headers.
+-%{cuda_include_path}
+-
+-  compilation_mode_flags {
+-    mode: DBG
+-    # Enable debug symbols.
+-    compiler_flag: "-g"
+-  }
+-  compilation_mode_flags {
+-    mode: OPT
+-
+-    # No debug symbols.
+-    # Maybe we should enable https://gcc.gnu.org/wiki/DebugFission for opt or
+-    # even generally? However, that can't happen here, as it requires special
+-    # handling in Bazel.
+-    compiler_flag: "-g0"
+-
+-    # Conservative choice for -O
+-    # -O3 can increase binary size and even slow down the resulting binaries.
+-    # Profile first and / or use FDO if you need better performance than this.
+-    compiler_flag: "-O2"
+-
+-    # Disable assertions
+-    compiler_flag: "-DNDEBUG"
+-
+-    # Removal of unused code and data at link time (can this increase binary size in some cases?).
+-    compiler_flag: "-ffunction-sections"
+-    compiler_flag: "-fdata-sections"
+-    linker_flag: "-Wl,--gc-sections"
+-  }
+-  linking_mode_flags { mode: DYNAMIC }
+-}
+-
+-toolchain {
+-  abi_version: "local"
+-  abi_libc_version: "local"
+-  builtin_sysroot: ""
+-  compiler: "compiler"
+-  host_system_name: "local"
+-  needsPic: true
+-  target_libc: "macosx"
+-  target_cpu: "darwin"
+-  target_system_name: "local"
+-  toolchain_identifier: "local_darwin"
+-
+-  tool_path { name: "ar" path: "/usr/bin/libtool" }
+-  tool_path { name: "compat-ld" path: "/usr/bin/ld" }
+-  tool_path { name: "cpp" path: "/usr/bin/cpp" }
+-  tool_path { name: "dwp" path: "/usr/bin/dwp" }
+-  tool_path { name: "gcc" path: "clang/bin/crosstool_wrapper_driver_is_not_gcc" }
+-  cxx_flag: "-std=c++11"
+-  ar_flag: "-static"
+-  ar_flag: "-s"
+-  ar_flag: "-o"
+-  linker_flag: "-lc++"
+-  linker_flag: "-undefined"
+-  linker_flag: "dynamic_lookup"
+-  # TODO(ulfjack): This is wrong on so many levels. Figure out a way to auto-detect the proper
+-  # setting from the local compiler, and also how to make incremental builds correct.
+-  cxx_builtin_include_directory: "/"
+-  tool_path { name: "gcov" path: "/usr/bin/gcov" }
+-  tool_path { name: "ld" path: "/usr/bin/ld" }
+-  tool_path { name: "nm" path: "/usr/bin/nm" }
+-  tool_path { name: "objcopy" path: "/usr/bin/objcopy" }
+-  objcopy_embed_flag: "-I"
+-  objcopy_embed_flag: "binary"
+-  tool_path { name: "objdump" path: "/usr/bin/objdump" }
+-  tool_path { name: "strip" path: "/usr/bin/strip" }
+-
+-  # Anticipated future default.
+-  unfiltered_cxx_flag: "-no-canonical-prefixes"
+-  # Make C++ compilation deterministic. Use linkstamping instead of these
+-  # compiler symbols.
+-  unfiltered_cxx_flag: "-Wno-builtin-macro-redefined"
+-  unfiltered_cxx_flag: "-D__DATE__=\"redacted\""
+-  unfiltered_cxx_flag: "-D__TIMESTAMP__=\"redacted\""
+-  unfiltered_cxx_flag: "-D__TIME__=\"redacted\""
+-
+-  # Security hardening on by default.
+-  # Conservative choice; -D_FORTIFY_SOURCE=2 may be unsafe in some cases.
+-  compiler_flag: "-D_FORTIFY_SOURCE=1"
+-  compiler_flag: "-fstack-protector"
+-
+-  # Enable coloring even if there's no attached terminal. Bazel removes the
+-  # escape sequences if --nocolor is specified.
+-  compiler_flag: "-fcolor-diagnostics"
+-
+-  # All warnings are enabled. Maybe enable -Werror as well?
+-  compiler_flag: "-Wall"
+-  # Enable a few more warnings that aren't part of -Wall.
+-  compiler_flag: "-Wthread-safety"
+-  compiler_flag: "-Wself-assign"
+-
+-  # Keep stack frames for debugging, even in opt mode.
+-  compiler_flag: "-fno-omit-frame-pointer"
+-
+-  # Anticipated future default.
+-  linker_flag: "-no-canonical-prefixes"
+-
+-  # Include directory for cuda headers.
+-%{cuda_include_path}
+-
+-  compilation_mode_flags {
+-    mode: DBG
+-    # Enable debug symbols.
+-    compiler_flag: "-g"
+-  }
+-  compilation_mode_flags {
+-    mode: OPT
+-    # No debug symbols.
+-    # Maybe we should enable https://gcc.gnu.org/wiki/DebugFission for opt or even generally?
+-    # However, that can't happen here, as it requires special handling in Bazel.
+-    compiler_flag: "-g0"
+-
+-    # Conservative choice for -O
+-    # -O3 can increase binary size and even slow down the resulting binaries.
+-    # Profile first and / or use FDO if you need better performance than this.
+-    compiler_flag: "-O2"
+-
+-    # Disable assertions
+-    compiler_flag: "-DNDEBUG"
+-
+-    # Removal of unused code and data at link time (can this increase binary size in some cases?).
+-    compiler_flag: "-ffunction-sections"
+-    compiler_flag: "-fdata-sections"
+-  }
+-}
+diff --git a/third_party/gpus/cuda_configure.bzl b/third_party/gpus/cuda_configure.bzl
+index ede7e318976..50d1b778d9e 100644
+--- a/third_party/gpus/cuda_configure.bzl
++++ b/third_party/gpus/cuda_configure.bzl
+@@ -1073,23 +1073,46 @@ def _create_local_cuda_repository(repository_ctx):
+   cc_fullpath = cc if not should_download_clang else "crosstool/" + cc
+ 
+   host_compiler_includes = _host_compiler_includes(repository_ctx, cc_fullpath)
+-  cuda_defines = {
+-           "%{cuda_include_path}": _cuda_include_path(repository_ctx,
+-                                                      cuda_config),
+-           "%{host_compiler_includes}": host_compiler_includes,
+-       }
++  cuda_defines = {}
+   if is_cuda_clang:
+-    cuda_defines["%{clang_path}"] = cc
++    cuda_defines["%{host_compiler_path}"] = str(cc)
++    cuda_defines["%{host_compiler_warnings}"] = """
++        # Some parts of the codebase set -Werror and hit this warning, so
++        # switch it off for now.
++        flag: "-Wno-invalid-partial-specialization"
++    """
++    cuda_defines["%{host_compiler_includes}"] = host_compiler_includes
+     _tpl(repository_ctx, "crosstool:BUILD", {"%{linker_files}": ":empty"})
+-    _tpl(repository_ctx, "crosstool:CROSSTOOL_clang", cuda_defines, out="crosstool/CROSSTOOL")
+     repository_ctx.file("crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc", "")
+   else:
++    cuda_defines["%{host_compiler_path}"] = "clang/bin/crosstool_wrapper_driver_is_not_gcc"
++    cuda_defines["%{host_compiler_warnings}"] = ""
++    # TODO(klimek): We currently need to inject "/" as builtin directory path
++    # to disable bazel's dependency checks.
++    # The problem is that:
++    # - the python rules symlink the python headers into the bazel root
++    # - the rules use 'includes' in the BUILD file to redirect includes of the
++    #   python headers through those paths
++    # - bazel currently uses -isystem for include paths specified via 'includes'
++    # - gcc follows symlinks when resolving files via -isystem paths, and puts
++    #   the resolved paths into the .d file, which makes the dependency check
++    #   fail for bazel
++    # There are multiple possible ways to solve this:
++    # 1. make bazel not use -isystem for paths specified via 'includes'
++    # 2. cp the headers instead of symlinking them
++    #
++    # Once this is fixed, the right builtin directory path is:
++    # (host_compiler_includes +
++    #    "\n  cxx_builtin_include_directory: \"%s\"" % cuda_include_path)
++    # The cuda directory needs to be passed, as there is currently no rule
++    # providing the cuda headers in the same way the python headers are
++    # provided.
++    cuda_defines["%{host_compiler_includes}"] = "\n  cxx_builtin_include_directory: \"/\""
+     nvcc_path = str(repository_ctx.path("%s/bin/nvcc%s" %
+         (cuda_config.cuda_toolkit_path,
+         ".exe" if cuda_config.cpu_value == "Windows" else "")))
+     _tpl(repository_ctx, "crosstool:BUILD",
+          {"%{linker_files}": ":crosstool_wrapper_driver_is_not_gcc"})
+-    _tpl(repository_ctx, "crosstool:CROSSTOOL_nvcc", cuda_defines, out="crosstool/CROSSTOOL")
+     _tpl(repository_ctx,
+          "crosstool:clang/bin/crosstool_wrapper_driver_is_not_gcc",
+          {
+@@ -1100,6 +1123,7 @@ def _create_local_cuda_repository(repository_ctx):
+              "%{cuda_compute_capabilities}": ", ".join(
+                  ["\"%s\"" % c for c in cuda_config.compute_capabilities]),
+          })
++  _tpl(repository_ctx, "crosstool:CROSSTOOL", cuda_defines, out="crosstool/CROSSTOOL")
+ 
+   # Set up cuda_config.h, which is used by
+   # tensorflow/stream_executor/dso_loader.cc.

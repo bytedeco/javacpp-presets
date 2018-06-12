@@ -91,6 +91,7 @@
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
              <linkPath>${tensorflow.path}/../build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/double-conversion/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/farmhash/src/farmhash/Release/</linkPath>

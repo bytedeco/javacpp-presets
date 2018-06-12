@@ -131,6 +131,8 @@ case $PLATFORM in
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
+        # https://github.com/tensorflow/tensorflow/issues/19676
+        patch -R -Np1 < ../../../tensorflow-macosx-nogpu.patch || true
         patch -Np1 < ../../../tensorflow-java.patch
         export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH

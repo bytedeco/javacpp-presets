@@ -186,8 +186,8 @@ import java.lang.annotation.Target;
                 extension = "-gpu"),
         @Platform(
                 value = "windows",
-                link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
+                link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
                         "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
                 preload = {"concrt140", "msvcp140", "vcruntime140",
                            "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
@@ -204,8 +204,8 @@ import java.lang.annotation.Target;
         @Platform(
                 value = "windows-x86_64",
                 extension = "-gpu",
-                link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
+                link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
                         "cudart", "cudart_static", "cuda", "cublas", "cublas_device", "cudnn",
                         "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
                         "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
@@ -444,8 +444,8 @@ public class tensorflow implements BuildEnabled, InfoMapper {
                              "tensorflow::MetaGraphDef_CollectionDefEntry_DoNotUseDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::RewriterConfig_CustomGraphOptimizerDefaultTypeInternal", "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUseDefaultTypeInternal",
-                             "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal", "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal").skip())
-
+                             "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntryDefaultTypeInternal", "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal",
+                             "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
