@@ -118,7 +118,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update
    brew upgrade maven
-   brew install gcc swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
+   brew install gcc@7 swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
    brew link --overwrite gcc
    export PATH=/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 
