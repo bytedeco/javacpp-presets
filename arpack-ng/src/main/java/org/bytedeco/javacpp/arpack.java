@@ -6,6 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.openblas_nolapack.*;
 import static org.bytedeco.javacpp.openblas.*;
 
 public class arpack extends org.bytedeco.javacpp.presets.arpack {

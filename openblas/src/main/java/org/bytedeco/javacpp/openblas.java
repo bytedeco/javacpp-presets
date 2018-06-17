@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.openblas_nolapack.*;
+
 public class openblas extends org.bytedeco.javacpp.presets.openblas {
     static { Loader.load(); }
 

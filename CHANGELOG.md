@@ -1,4 +1,5 @@
 
+ * Add `openblas_nolapack` class to make it easier to load BLAS libraries missing LAPACK such as MKLML
  * Map instances of `google::protobuf::Map` to access more of TensorFlow's configuration ([issue #533](https://github.com/bytedeco/javacpp-presets/issues/533))
  * Fix presets for OpenBLAS failing to load MKL when symbolic links are enabled on Windows
  * Define `CV__LEGACY_PERSISTENCE` to get back functions for `KeyPointVector` and `DMatchVector` ([issue bytedeco/javacv#1012](https://github.com/bytedeco/javacv/issues/1012))
@@ -19,7 +20,7 @@
  * Add support for Windows to presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
  * Add Android utility classes from the official Java API of OpenCV and TensorFlow ([issue #549](https://github.com/bytedeco/javacpp-presets/issues/549))
  * Update build for FFmpeg on Raspbian Stretch ([pull #548](https://github.com/bytedeco/javacpp-presets/pull/548))
- * Add presets for TensorRT
+ * Add presets for MKL-DNN and TensorRT
  * Fix build for FFmpeg on `android-x86` and `android-x86_64` platforms ([issue bytedeco/javacv#945](https://github.com/bytedeco/javacv/issues/945))
  * Upgrade presets for FFmpeg 4.0, HDF5 1.10.2, MKL 2018.3, OpenBLAS 0.3.0, ARPACK-NG 3.6.0, FFTW 3.3.8, LLVM 6.0.0, Leptonica 1.76.0, Tesseract 4.0.0-beta.1 ([issue #385](https://github.com/bytedeco/javacpp-presets/issues/385)), CUDA 9.2, MXNet 1.2.0, TensorFlow 1.9.0-rc0, and their dependencies
 

@@ -28,6 +28,7 @@
     <module>../flandmark/platform</module>
     <module>../hdf5/platform</module>
     <module>../mkl/platform</module>
+    <module>../mkl-dnn/platform</module>
     <module>../openblas/platform</module>
     <module>../arpack-ng/platform</module>
     <module>../cminpack/platform</module>
@@ -119,6 +120,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-platform</artifactId>
       <version>2018.3-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>mkl-dnn-platform</artifactId>
+      <version>0.14-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

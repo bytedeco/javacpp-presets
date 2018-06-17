@@ -12,6 +12,7 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 import static org.bytedeco.javacpp.opencv_videoio.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.hdf5.*;
+import static org.bytedeco.javacpp.openblas_nolapack.*;
 import static org.bytedeco.javacpp.openblas.*;
 
 public class caffe extends org.bytedeco.javacpp.presets.caffe {
