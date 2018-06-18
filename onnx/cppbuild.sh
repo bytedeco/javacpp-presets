@@ -12,7 +12,7 @@ if [[ $PLATFORM == windows* ]]; then
     :
 else
 
-    export PROTO=2.6.1
+    export PROTO=3.3.2
     export INSTALL_PATH=`pwd`/$PLATFORM
     wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
 
@@ -28,7 +28,7 @@ else
     export CXXFLAGS="-I$INSTALL_PATH/include"
     cd protobuf-$PROTO
 
-    patch ./autogen.sh ../../../autogen.sh.patch
+#    patch ./autogen.sh ../../../autogen.sh.patch
     ./autogen.sh
     ./configure "--prefix=$INSTALL_PATH" CFLAGS=-fPIC CXXFLAGS=-fPIC
     make -j $MAKEJ
@@ -47,7 +47,7 @@ else
     #export ONNX_ML=1
     export BASEDIR=build/temp.linux-x86_64-?.?/`pwd`/onnx/
 
-    python setup.py build
+    python3 setup.py build
     g++ -v -std=c++11 -shared -Wl,-soname,libonnx.so -fPIC -o libonnx.so $BASEDIR/onnx-operators.pb.o $BASEDIR/onnx.pb.o $BASEDIR/checker.o $BASEDIR/defs/schema.o $BASEDIR/defs/tensor/old.o $BASEDIR/defs/tensor/defs.o $BASEDIR/defs/generator/defs.o $BASEDIR/defs/math/defs.o $BASEDIR/defs/data_type_utils.o $BASEDIR/defs/traditionalml/defs.o $BASEDIR/defs/experiments/defs.o $BASEDIR/defs/nn/defs.o $BASEDIR/defs/nn/old.o $BASEDIR/defs/reduction/defs.o $BASEDIR/defs/logical/defs.o $BASEDIR/defs/rnn/defs.o -pthread
     cd ..
 

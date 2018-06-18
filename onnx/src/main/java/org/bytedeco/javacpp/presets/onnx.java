@@ -45,7 +45,8 @@ public class onnx implements InfoMapper {
 infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
               .put(new Info("int", "int32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
               .put(new Info("onnx::TensorProto::DataType").valueTypes("int"))
-              .put(new Info("onnx::TensorProto_DataType").valueTypes("int"))
+              .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL").cppTypes().annotations())
+	      .put(new Info("onnx::TensorProto_DataType").valueTypes("int"))
 //              .put(new Info("onnx::OpSchema::UseType").valueTypes("int"))
               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
               .put(new Info("std::set<int>").pointerTypes("IntSet").define())
@@ -67,7 +68,12 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
-                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField").skip()) 
+                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "onnx::_TypeProto_default_instance_",  
+			     "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
+			     "onnx::_TensorShapeProto_default_instance_", "onnx::_TensorProto_Segment_default_instance_","onnx::_TensorProto_default_instance_",
+			     "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_",
+			     "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
+			     "onnx::_AttributeProto_default_instance_", "google::protobuf::UnknownField::LengthDelimited").skip()) 
           
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
                .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
