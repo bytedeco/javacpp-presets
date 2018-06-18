@@ -1,4 +1,5 @@
 
+ * Make it possible to set the `TF_Buffer::data` field for C API of TensorFlow
  * Add `openblas_nolapack` class to make it easier to load BLAS libraries missing LAPACK such as MKLML
  * Map instances of `google::protobuf::Map` to access more of TensorFlow's configuration ([issue #533](https://github.com/bytedeco/javacpp-presets/issues/533))
  * Fix presets for OpenBLAS failing to load MKL when symbolic links are enabled on Windows

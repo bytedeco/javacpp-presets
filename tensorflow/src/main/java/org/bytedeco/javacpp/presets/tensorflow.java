@@ -610,6 +610,8 @@ public class tensorflow implements BuildEnabled, InfoMapper {
                .put(new Info("tensorflow::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
                              "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
 
+        infoMap.put(new Info("TF_Buffer::data").javaText("public native @Const Pointer data(); public native TF_Buffer data(Pointer data);"));
+
         if (!android) {
             infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
         }

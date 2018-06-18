@@ -14631,14 +14631,6 @@ limitations under the License.
 @Namespace("tensorflow") public static class TensorShape extends TensorShapeBase {
     static { Loader.load(); }
 
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public TensorShape(Pointer p) { super(p); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public TensorShape(long size) { super((Pointer)null); allocateArray(size); }
-      private native void allocateArray(long size);
-      @Override public TensorShape position(long position) {
-          return (TensorShape)super.position(position);
-      }
   
     public TensorShape(@Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
     private native void allocate(@Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes);
@@ -14651,6 +14643,15 @@ limitations under the License.
   
     public TensorShape(@Const @ByRef TensorShapeProto proto) { super((Pointer)null); allocate(proto); }
     private native void allocate(@Const @ByRef TensorShapeProto proto);
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorShape(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorShape(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorShape position(long position) {
+        return (TensorShape)super.position(position);
+    }
+
 
   /** Allow a TensorShape to be used as a PartialTensorShape without copying */
   public native @Const @ByRef @Name("operator const tensorflow::PartialTensorShape&") PartialTensorShape asPartialTensorShape();  // NOLINT(runtime/explicit)
@@ -19239,8 +19240,9 @@ limitations under the License.
 @Namespace("tensorflow") public static class AsyncOpKernel extends OpKernel {
     static { Loader.load(); }
 
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public AsyncOpKernel(Pointer p) { super(p); }  // Lift OpKernel constructors.
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AsyncOpKernel(Pointer p) { super(p); }
+  // Lift OpKernel constructors.
 
   // Asynchronous compute.
   //
@@ -23525,7 +23527,7 @@ public static class TF_Buffer extends Pointer {
         return (TF_Buffer)super.position(position);
     }
 
-  @MemberGetter public native @Const Pointer data();
+  public native @Const Pointer data(); public native TF_Buffer data(Pointer data);
   public native @Cast("size_t") long length(); public native TF_Buffer length(long length);
   public static class Data_deallocator_Pointer_long extends FunctionPointer {
       static { Loader.load(); }
