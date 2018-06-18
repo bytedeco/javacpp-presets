@@ -70,8 +70,8 @@ public class mkl_rt implements InfoMapper {
                              "mkl_mic_get_device_count", "mkl_mic_get_cpuinfo", "mkl_mic_get_meminfo", "mkl_mic_set_resource_limit", "mkl_mic_get_resource_limit",
                              "mkl_mic_set_workdivision", "mkl_mic_get_workdivision", "mkl_mic_set_max_memory", "mkl_mic_free_memory", "mkl_mic_set_offload_report",
                              "mkl_mic_set_device_num_threads", "mkl_mic_set_flags", "mkl_mic_get_flags", "mkl_mic_get_status", "mkl_mic_clear_status", "mkl_cbwr_get",
-                             "mkl_cbwr_set", "mkl_cbwr_get_auto_branch", "mkl_set_env_mode", "mkl_verbose", "mkl_set_exit_handler", "mkl_mic_register_memory",
-                             "mkl_set_mpi", "mkl_set_memory_limit", "mkl_finalize",
+                             "mkl_cbwr_set", "mkl_cbwr_get_auto_branch", "mkl_set_env_mode", "mkl_verbose", "mkl_verbose_output_file", "mkl_set_exit_handler",
+                             "mkl_mic_register_memory", "mkl_set_mpi", "mkl_set_memory_limit", "mkl_finalize",
 
                              "DFTI_DFT_Desc_struct", "DFTI_Descriptor_struct", "DFTI_Descriptor",
 
@@ -84,6 +84,9 @@ public class mkl_rt implements InfoMapper {
                              "mkl_dc_gemm", "mkl_dc_syrk", "mkl_dc_trsm", "mkl_dc_axpy", "mkl_dc_dot", "MKL_DC_DOT_CONVERT",
                              "mkl_dc_getrf", "mkl_dc_lapacke_getrf_convert", "mkl_dc_getri", "mkl_dc_lapacke_getri_convert", "mkl_dc_getrs", "mkl_dc_lapacke_getrs_convert",
                              "__inline", "MKL_DIRECT_CALL_INIT_FLAG").cppTypes().annotations())
+
+               .put(new Info("DEPRECATED").cppText("#define DEPRECATED deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("sparse_matrix_t").valueTypes("sparse_matrix").pointerTypes("@ByPtrPtr sparse_matrix"))
                .put(new Info("sparse_vector_t").valueTypes("sparse_vector").pointerTypes("@ByPtrPtr sparse_vector"))

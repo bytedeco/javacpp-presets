@@ -22743,6 +22743,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef SparseMat value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef SparseMat value );
 // #ifdef CV__LEGACY_PERSISTENCE
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef KeyPointVector value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef KeyPointVector value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatchVector value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef DMatchVector value);
 // #endif
 
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, int value );
@@ -22772,6 +22776,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef(nullValue = "cv::SparseMat()") SparseMat default_mat );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat );
 // #ifdef CV__LEGACY_PERSISTENCE
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef KeyPointVector keypoints);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DMatchVector matches);
 // #endif
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef KeyPoint value, @Const @ByRef KeyPoint default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DMatch value, @Const @ByRef DMatch default_value);
@@ -22830,6 +22836,12 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef DMatch m);
 
 // #ifdef CV__LEGACY_PERSISTENCE
+// This code is not needed anymore, but it is preserved here to keep source compatibility
+// Implementation is similar to templates instantiations
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef KeyPoint kpt);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef DMatch m);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef KeyPointVector vec);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef DMatchVector vec);
 // #endif
 
 /** \} FileStorage
@@ -22896,6 +22908,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPoint kpt);
 
 // #ifdef CV__LEGACY_PERSISTENCE
+@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef KeyPointVector vec);
+@Namespace("cv") public static native @Name("operator >>") void shiftRight(@Const @ByRef FileNode n, @ByRef DMatchVector vec);
 // #endif
 
 /** \brief Reads DMatch from a file storage.

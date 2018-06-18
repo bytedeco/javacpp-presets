@@ -117,6 +117,7 @@ public static final String NVML_API_VERSION_STR =        "9";
 // #define nvmlDeviceGetHandleByIndex  nvmlDeviceGetHandleByIndex_v2
 // #define nvmlDeviceGetHandleByPciBusId nvmlDeviceGetHandleByPciBusId_v2
 // #define nvmlDeviceGetNvLinkRemotePciInfo nvmlDeviceGetNvLinkRemotePciInfo_v2
+// #define nvmlDeviceRemoveGpu         nvmlDeviceRemoveGpu_v2
 
 /***************************************************************************************************/
 /** \defgroup nvmlDeviceStructs Device Structs
@@ -684,9 +685,10 @@ public static final int
     NVML_BRAND_NVS     = 3,
     NVML_BRAND_GRID    = 4,
     NVML_BRAND_GEFORCE = 5,
+    NVML_BRAND_TITAN   = 6,
 
     // Keep this last
-    NVML_BRAND_COUNT = 6;
+    NVML_BRAND_COUNT = 7;
 
 /**
  * Temperature thresholds.
@@ -1277,8 +1279,13 @@ public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_COMMON = 90;
 /** Number of NVLinks present on the device */
 public static final int NVML_FI_DEV_NVLINK_LINK_COUNT =        91;
 
+/** If any pages are pending retirement due to SBE. 1=yes. 0=no. */
+public static final int NVML_FI_DEV_RETIRED_PENDING_SBE =      92;
+/** If any pages are pending retirement due to DBE. 1=yes. 0=no. */
+public static final int NVML_FI_DEV_RETIRED_PENDING_DBE =      93;
+
 /** One greater than the largest field ID defined above */
-public static final int NVML_FI_MAX = 92;
+public static final int NVML_FI_MAX = 94;
 
 /**
  * Information for a Field Value Sample
@@ -1700,6 +1707,12 @@ public static final long nvmlClocksThrottleReasonHwThermalSlowdown =         0x0
  */
 public static final long nvmlClocksThrottleReasonHwPowerBrakeSlowdown =      0x0000000000000080L;
 
+/** GPU clocks are limited by current setting of Display clocks
+ *
+ * @see bug 1997531
+ */
+public static final long nvmlClocksThrottleReasonDisplayClockSetting =       0x0000000000000100L;
+
 /** Bit mask representing no clocks throttling
  *
  * Clocks are as high as possible.
@@ -1718,6 +1731,7 @@ public static final long nvmlClocksThrottleReasonAll = (nvmlClocksThrottleReason
       | nvmlClocksThrottleReasonSwThermalSlowdown                 
       | nvmlClocksThrottleReasonHwThermalSlowdown                 
       | nvmlClocksThrottleReasonHwPowerBrakeSlowdown              
+      | nvmlClocksThrottleReasonDisplayClockSetting               
 );
 /** \} */
 
@@ -1797,13 +1811,14 @@ public static final int NVML_GRID_LICENSE_BUFFER_SIZE =       128;
 
 public static final int NVML_VGPU_NAME_BUFFER_SIZE =          64;
 
-public static final int NVML_MAX_VGPU_TYPES_PER_PGPU =        17;
-
-public static final int NVML_MAX_VGPU_INSTANCES_PER_PGPU =    24;
-
 public static final int NVML_GRID_LICENSE_FEATURE_MAX_COUNT = 3;
 
-public static final int NVML_GRID_LICENSE_INFO_MAX_LENGTH =   128;
+/**
+ * Macros for pGPU's virtualization capabilities bitfield.
+ */
+// #define NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION         0:0
+public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_NO =      0x0;
+public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x1;
 
 /** \} */
 
@@ -2038,6 +2053,30 @@ public static class nvmlEncoderSessionInfo_t extends Pointer {
 /** \} */
 
 /***************************************************************************************************/
+/** \defgroup nvmlDrainDefs definitions related to the drain state
+ *  \{
+ */
+/***************************************************************************************************/
+
+/**
+ *  Is the GPU device to be removed from the kernel by nvmlDeviceRemoveGpu()
+ */
+/** enum nvmlDetachGpuState_enum */
+public static final int
+    NVML_DETACH_GPU_KEEP         = 0,
+    NVML_DETACH_GPU_REMOVE = 1;
+
+/**
+ *  Parent bridge PCIe link state requested by nvmlDeviceRemoveGpu()
+ */
+/** enum nvmlPcieLinkState_enum */
+public static final int
+    NVML_PCIE_LINK_KEEP         = 0,
+    NVML_PCIE_LINK_SHUT_DOWN = 1;
+
+/** \} */
+
+/***************************************************************************************************/
 /** \defgroup nvmlInitializationAndCleanup Initialization and Cleanup
  * This chapter describes the methods that handle NVML initialization and cleanup.
  * It is the user's responsibility to call \ref nvmlInit() before calling any other methods, and 
@@ -2047,7 +2086,9 @@ public static class nvmlEncoderSessionInfo_t extends Pointer {
 /***************************************************************************************************/
 
 /** Don't fail nvmlInit() when no GPUs are found */
-public static final int NVML_INIT_FLAG_NO_GPUS =  1;
+public static final int NVML_INIT_FLAG_NO_GPUS =      1;
+/** Don't attach GPUs */
+public static final int NVML_INIT_FLAG_NO_ATTACH =    2;
 
 /**
  * Initialize NVML, but don't initialize any GPUs yet.
@@ -2065,8 +2106,6 @@ public static final int NVML_INIT_FLAG_NO_GPUS =  1;
  *       a bad or unstable state.
  * 
  * For all products.
- *
- * @param flags                                 behaviour modifier flags
  *
  * This method, should be called once before invoking any other methods in the library.
  * A reference count of the number of initializations is maintained.  Shutdown only occurs
@@ -4286,7 +4325,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderUtilization(n
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEncoderUtilization(nvmlDevice_st device, @Cast("unsigned int*") int[] utilization, @Cast("unsigned int*") int[] samplingPeriodUs);
 
 /**
- * Retrieves the current capacity of the device's encoder, in macroblocks per second.
+ * Retrieves the current capacity of the device's encoder, as a percentage of maximum encoder capacity with valid values in the range 0-100.
  *
  * For Maxwell &tm; or newer fully supported devices.
  *
@@ -5734,6 +5773,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceQueryDrainState(nvmlPci
  * Some Kepler devices supported.
  *
  * @param pciInfo                              The PCI address of the GPU to be removed
+ * @param gpuState                             Whether the GPU is to be removed, from the OS
+ *                                             see \ref nvmlDetachGpuState_t
+ * @param linkState                            Requested upstream PCIe link state, see \ref nvmlPcieLinkState_t
  *
  * @return
  *         - \ref NVML_SUCCESS                 if counters were successfully reset
@@ -5742,7 +5784,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceQueryDrainState(nvmlPci
  *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device doesn't support this feature
  *         - \ref NVML_ERROR_IN_USE            if the device is still in use and cannot be removed
  */
-public static native @Cast("nvmlReturn_t") int nvmlDeviceRemoveGpu(nvmlPciInfo_t pciInfo);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceRemoveGpu_v2(nvmlPciInfo_t pciInfo, @Cast("nvmlDetachGpuState_t") int gpuState, @Cast("nvmlPcieLinkState_t") int linkState);
 
 /**
  * Request the OS and the NVIDIA kernel driver to rediscover a portion of the PCI subsystem looking for GPUs that
@@ -6301,7 +6343,7 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFrameRateLimit
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFrameRateLimit(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") int[] frameRateLimit);
 
 /**
- * Retrieve the encoder Capacity of a vGPU instance, in macroblocks per second.
+ * Retrieve the encoder capacity of a vGPU instance, as a percentage of maximum encoder capacity with valid values in the range 0-100.
  *
  * For Maxwell &tm; or newer fully supported devices.
  *
@@ -6319,7 +6361,7 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetEncoderCapacit
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetEncoderCapacity(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") int[] encoderCapacity);
 
 /**
- * Set the encoder Capacity of a vGPU instance, in macroblocks per second.
+ * Set the encoder capacity of a vGPU instance, as a percentage of maximum encoder capacity with valid values in the range 0-100.
  *
  * For Maxwell &tm; or newer fully supported devices.
  *
@@ -6559,10 +6601,228 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetProcessUtilization(n
 
 /** \} */
 
+/***************************************************************************************************/
+/** \defgroup nvml vGPU Migration
+ * This chapter describes NVML operations that are associated with vGPU Migration.
+ *  \{
+ */
+/***************************************************************************************************/
+
+/**
+ * vGPU metadata structure.
+ */
+public static class nvmlVgpuMetadata_t extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public nvmlVgpuMetadata_t() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public nvmlVgpuMetadata_t(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public nvmlVgpuMetadata_t(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public nvmlVgpuMetadata_t position(long position) {
+        return (nvmlVgpuMetadata_t)super.position(position);
+    }
+
+    /** Current version of the structure */
+    public native @Cast("unsigned int") int version(); public native nvmlVgpuMetadata_t version(int version);
+    /** Current revision of the structure */
+    public native @Cast("unsigned int") int revision(); public native nvmlVgpuMetadata_t revision(int revision);
+    /** Current state of Guest-dependent fields */
+    public native @Cast("nvmlVgpuGuestInfoState_t") int guestInfoState(); public native nvmlVgpuMetadata_t guestInfoState(int guestInfoState);
+    /** Version of driver installed in guest */
+    public native @Cast("char") byte guestDriverVersion(int i); public native nvmlVgpuMetadata_t guestDriverVersion(int i, byte guestDriverVersion);
+    @MemberGetter public native @Cast("char*") BytePointer guestDriverVersion();
+    /** Version of driver installed in host */
+    public native @Cast("char") byte hostDriverVersion(int i); public native nvmlVgpuMetadata_t hostDriverVersion(int i, byte hostDriverVersion);
+    @MemberGetter public native @Cast("char*") BytePointer hostDriverVersion();
+    /** Reserved for internal use */
+    public native @Cast("unsigned int") int reserved(int i); public native nvmlVgpuMetadata_t reserved(int i, int reserved);
+    @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
+    /** Size of opaque data field in bytes */
+    public native @Cast("unsigned int") int opaqueDataSize(); public native nvmlVgpuMetadata_t opaqueDataSize(int opaqueDataSize);
+    /** Opaque data */
+    public native @Cast("char") byte opaqueData(int i); public native nvmlVgpuMetadata_t opaqueData(int i, byte opaqueData);
+    @MemberGetter public native @Cast("char*") BytePointer opaqueData();
+}
+
+/**
+ * Physical GPU metadata structure
+ */
+public static class nvmlVgpuPgpuMetadata_t extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public nvmlVgpuPgpuMetadata_t() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public nvmlVgpuPgpuMetadata_t(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public nvmlVgpuPgpuMetadata_t(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public nvmlVgpuPgpuMetadata_t position(long position) {
+        return (nvmlVgpuPgpuMetadata_t)super.position(position);
+    }
+
+    /** Current version of the structure */
+    public native @Cast("unsigned int") int version(); public native nvmlVgpuPgpuMetadata_t version(int version);
+    /** Current revision of the structure */
+    public native @Cast("unsigned int") int revision(); public native nvmlVgpuPgpuMetadata_t revision(int revision);
+    /** Host driver version */
+    public native @Cast("char") byte hostDriverVersion(int i); public native nvmlVgpuPgpuMetadata_t hostDriverVersion(int i, byte hostDriverVersion);
+    @MemberGetter public native @Cast("char*") BytePointer hostDriverVersion();
+    /** Pgpu virtualizaion capabilities bitfileld */
+    public native @Cast("unsigned int") int pgpuVirtualizationCaps(); public native nvmlVgpuPgpuMetadata_t pgpuVirtualizationCaps(int pgpuVirtualizationCaps);
+    /** Reserved for internal use */
+    public native @Cast("unsigned int") int reserved(int i); public native nvmlVgpuPgpuMetadata_t reserved(int i, int reserved);
+    @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
+    /** Size of opaque data field in bytes */
+    public native @Cast("unsigned int") int opaqueDataSize(); public native nvmlVgpuPgpuMetadata_t opaqueDataSize(int opaqueDataSize);
+    /** Opaque data */
+    public native @Cast("char") byte opaqueData(int i); public native nvmlVgpuPgpuMetadata_t opaqueData(int i, byte opaqueData);
+    @MemberGetter public native @Cast("char*") BytePointer opaqueData();
+}
+
+/**
+ * vGPU VM compatibility codes
+ */
+/** enum nvmlVgpuVmCompatibility_enum */
+public static final int
+    /** vGPU is not runnable */
+    NVML_VGPU_VM_COMPATIBILITY_NONE         = 0x0,
+    /** vGPU is runnable from a cold / powered-off state (ACPI S5) */
+    NVML_VGPU_VM_COMPATIBILITY_COLD         = 0x1,
+    /** vGPU is runnable from a hibernated state (ACPI S4) */
+    NVML_VGPU_VM_COMPATIBILITY_HIBERNATE    = 0x2,
+    /** vGPU is runnable from a sleeped state (ACPI S3) */
+    NVML_VGPU_VM_COMPATIBILITY_SLEEP        = 0x4,
+    /** vGPU is runnable from a live/paused (ACPI S0) */
+    NVML_VGPU_VM_COMPATIBILITY_LIVE         = 0x8;
+
+/**
+ *  vGPU-pGPU compatibility limit codes
+ */
+/** enum nvmlVgpuPgpuCompatibilityLimitCode_enum */
+public static final int
+    /** Compatibility is not limited. */
+    NVML_VGPU_COMPATIBILITY_LIMIT_NONE          = 0x0,
+    /** Compatibility is limited by host driver version. */
+    NVML_VGPU_COMPATIBILITY_LIMIT_HOST_DRIVER   = 0x1,
+    /** Compatibility is limited by guest driver version. */
+    NVML_VGPU_COMPATIBILITY_LIMIT_GUEST_DRIVER  = 0x2,
+    /** Compatibility is limited by GPU hardware. */
+    NVML_VGPU_COMPATIBILITY_LIMIT_GPU           = 0x4,
+    /** Compatibility is limited by an undefined factor. */
+    NVML_VGPU_COMPATIBILITY_LIMIT_OTHER         = 0x80000000;
+
+/**
+ * vGPU-pGPU compatibility structure
+ */
+public static class nvmlVgpuPgpuCompatibility_t extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public nvmlVgpuPgpuCompatibility_t() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public nvmlVgpuPgpuCompatibility_t(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public nvmlVgpuPgpuCompatibility_t(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public nvmlVgpuPgpuCompatibility_t position(long position) {
+        return (nvmlVgpuPgpuCompatibility_t)super.position(position);
+    }
+
+    /** Compatibility of vGPU VM. See \ref nvmlVgpuVmCompatibility_t */
+    public native @Cast("nvmlVgpuVmCompatibility_t") int vgpuVmCompatibility(); public native nvmlVgpuPgpuCompatibility_t vgpuVmCompatibility(int vgpuVmCompatibility);
+    /** Limiting factor for vGPU-pGPU compatibility. See \ref nvmlVgpuPgpuCompatibilityLimitCode_t */
+    public native @Cast("nvmlVgpuPgpuCompatibilityLimitCode_t") int compatibilityLimitCode(); public native nvmlVgpuPgpuCompatibility_t compatibilityLimitCode(int compatibilityLimitCode);
+}
+
+/**
+ * Returns vGPU metadata structure for a running vGPU. The structure contains information about the vGPU and its associated VM
+ * such as the currently installed NVIDIA guest driver version, together with host driver version and an opaque data section
+ * containing internal state.
+ *
+ * nvmlVgpuInstanceGetMetadata() may be called at any time for a vGPU instance. Some fields in the returned structure are
+ * dependent on information obtained from the guest VM, which may not yet have reached a state where that information
+ * is available. The current state of these dependent fields is reflected in the info structure's \ref guestInfoState field.
+ *
+ * The VMM may choose to read and save the vGPU's VM info as persistent metadata associated with the VM, and provide
+ * it to GRID Virtual GPU Manager when creating a vGPU for subsequent instances of the VM.
+ *
+ * The caller passes in a buffer via \a vgpuMetadata, with the size of the buffer in \a bufferSize. If the vGPU Metadata structure
+ * is too large to fit in the supplied buffer, the function returns NVML_ERROR_INSUFFICIENT_SIZE with the size needed
+ * in \a bufferSize.
+ *
+ * @param vgpuInstance             vGPU instance handle
+ * @param vgpuMetadata             Pointer to caller-supplied buffer into which vGPU metadata is written
+ * @param bufferSize               Size of vgpuMetadata buffer
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                   vGPU metadata structure was successfully returned
+ *         - \ref NVML_ERROR_INSUFFICIENT_SIZE   vgpuMetadata buffer is too small, required size is returned in \a bufferSize
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a bufferSize is NULL or \a vgpuInstance is invalid; if \a vgpuMetadata is NULL and the value of \a bufferSize is not 0.
+ *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetMetadata(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuMetadata_t vgpuMetadata, @Cast("unsigned int*") IntPointer bufferSize);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetMetadata(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuMetadata_t vgpuMetadata, @Cast("unsigned int*") IntBuffer bufferSize);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetMetadata(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuMetadata_t vgpuMetadata, @Cast("unsigned int*") int[] bufferSize);
+
+/**
+ * Returns a vGPU metadata structure for the physical GPU indicated by \a device. The structure contains information about
+ * the GPU and the currently installed NVIDIA host driver version that's controlling it, together with an opaque data section
+ * containing internal state.
+ *
+ * The caller passes in a buffer via \a pgpuMetadata, with the size of the buffer in \a bufferSize. If the \a pgpuMetadata
+ * structure is too large to fit in the supplied buffer, the function returns NVML_ERROR_INSUFFICIENT_SIZE with the size needed
+ * in \a bufferSize.
+ *
+ * @param device                The identifier of the target device
+ * @param pgpuMetadata          Pointer to caller-supplied buffer into which \a pgpuMetadata is written
+ * @param bufferSize            Pointer to size of \a pgpuMetadata buffer
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                   GPU metadata structure was successfully returned
+ *         - \ref NVML_ERROR_INSUFFICIENT_SIZE   pgpuMetadata buffer is too small, required size is returned in \a bufferSize
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a bufferSize is NULL or \a device is invalid; if \a pgpuMetadata is NULL and the value of \a bufferSize is not 0.
+ *         - \ref NVML_ERROR_NOT_SUPPORTED       vGPU is not supported by the system
+ *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuMetadata(nvmlDevice_st device, nvmlVgpuPgpuMetadata_t pgpuMetadata, @Cast("unsigned int*") IntPointer bufferSize);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuMetadata(nvmlDevice_st device, nvmlVgpuPgpuMetadata_t pgpuMetadata, @Cast("unsigned int*") IntBuffer bufferSize);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuMetadata(nvmlDevice_st device, nvmlVgpuPgpuMetadata_t pgpuMetadata, @Cast("unsigned int*") int[] bufferSize);
+
+/**
+ * Takes a vGPU instance metadata structure read from \ref nvmlVgpuInstanceGetMetadata(), and a vGPU metadata structure for a
+ * physical GPU read from \ref nvmlDeviceGetVgpuMetadata(), and returns compatibility information of the vGPU instance and the
+ * physical GPU.
+ *
+ * The caller passes in a buffer via \a compatibilityInfo, into which a compatibility information structure is written. The
+ * structure defines the states in which the vGPU / VM may be booted on the physical GPU. If the vGPU / VM compatibility
+ * with the physical GPU is limited, a limit code indicates the factor limiting compability.
+ * (see \ref nvmlVgpuPgpuCompatibilityLimitCode_t for details).
+ *
+ * Note: vGPU compatibility does not take into account dynamic capacity conditions that may limit a system's ability to
+ *       boot a given vGPU or associated VM.
+ *
+ * @param vgpuMetadata          Pointer to caller-supplied vGPU metadata structure
+ * @param pgpuMetadata          Pointer to caller-supplied GPU metadata structure
+ * @param compatibilityInfo     Pointer to caller-supplied buffer to hold compatibility info
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                   vGPU metadata structure was successfully returned
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a vgpuMetadata or \a pgpuMetadata or \a bufferSize are NULL
+ *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGetVgpuCompatibility(nvmlVgpuMetadata_t vgpuMetadata, nvmlVgpuPgpuMetadata_t pgpuMetadata, nvmlVgpuPgpuCompatibility_t compatibilityInfo);
+
+/** \} */
+
 /**
  * NVML API versioning support
  */
 // #if defined(__NVML_API_VERSION_INTERNAL)
+// #undef nvmlDeviceRemoveGpu
 // #undef nvmlDeviceGetNvLinkRemotePciInfo
 // #undef nvmlDeviceGetPciInfo
 // #undef nvmlDeviceGetCount

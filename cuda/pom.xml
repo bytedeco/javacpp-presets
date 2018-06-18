@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>cuda</artifactId>
-  <version>9.1-7.1-${project.parent.version}</version>
+  <version>9.2-7.1-${project.parent.version}</version>
   <name>JavaCPP Presets for CUDA</name>
 
   <properties>

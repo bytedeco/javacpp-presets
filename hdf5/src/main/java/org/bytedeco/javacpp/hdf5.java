@@ -11399,7 +11399,7 @@ public static class attr_operator_t extends FunctionPointer {
     protected attr_operator_t() { allocate(); }
     private native void allocate();
     public native void call( @ByRef H5Object loc/*in*/,
-            @Cast({"", "std::string", "std::string&"}) @Adapter("StringAdapter") BytePointer attr_name/*in*/,
+            @Cast({"", "std::string", "std::string&"}) @Adapter("StringAdapter<char>") BytePointer attr_name/*in*/,
             Pointer operator_data/*in,out*/);
 }
 
