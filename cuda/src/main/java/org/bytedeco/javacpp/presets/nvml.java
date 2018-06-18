@@ -41,8 +41,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nvml implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("DECLDIR", "nvmlInit", "nvmlDeviceGetPciInfo", "nvmlDeviceGetCount", "nvmlDeviceGetHandleByIndex",
-                             "nvmlDeviceGetHandleByPciBusId", "nvmlDeviceGetNvLinkRemotePciInfo", "nvmlEccBitType_t").cppTypes().annotations())
+                             "nvmlDeviceGetHandleByPciBusId", "nvmlDeviceGetNvLinkRemotePciInfo", "nvmlDeviceRemoveGpu", "nvmlEccBitType_t").cppTypes().annotations())
                .put(new Info("NVML_SINGLE_BIT_ECC", "NVML_DOUBLE_BIT_ECC").translate(false))
+               .put(new Info("NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION").skip(true))
                .put(new Info("nvmlDevice_t").valueTypes("nvmlDevice_st").pointerTypes("@ByPtrPtr nvmlDevice_st", "@Cast(\"nvmlDevice_st**\") PointerPointer"))
                .put(new Info("nvmlUnit_t").valueTypes("nvmlUnit_st").pointerTypes("@ByPtrPtr nvmlUnit_st", "@Cast(\"nvmlUnit_st**\") PointerPointer"))
                .put(new Info("nvmlEventSet_t").valueTypes("nvmlEventSet_st").pointerTypes("@ByPtrPtr nvmlEventSet_st", "@Cast(\"nvmlEventSet_st**\") PointerPointer"));

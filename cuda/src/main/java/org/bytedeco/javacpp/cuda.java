@@ -69,12 +69,27 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 // #include <stdint.h>
 // #endif
 
+// __TEMP_WAR__ 200338925 - define manually for ARM/AARCH64 to enable promotion
+// #if !defined(CUDA_ENABLE_DEPRECATED) && (defined(__arm__) || defined(__aarch64__))
+// #define CUDA_ENABLE_DEPRECATED
+// #endif
+
 /**
  * CUDA API versioning support
  */
+// #if defined(__CUDA_API_VERSION_INTERNAL) || defined(__DOXYGEN_ONLY__) || defined(CUDA_ENABLE_DEPRECATED)
+// #define __CUDA_DEPRECATED
+// #elif defined(_MSC_VER)
+// #define __CUDA_DEPRECATED __declspec(deprecated)
+// #elif defined(__GNUC__)
+// #define __CUDA_DEPRECATED __attribute__((deprecated))
+// #else
+// #define __CUDA_DEPRECATED
+// #endif
+
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 9010;
+    public static final int __CUDA_API_VERSION = 9020;
 // #endif /* CUDA_FORCE_API_VERSION */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -127,7 +142,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 9010;
+public static final int CUDA_VERSION = 9020;
 
 // #ifdef __cplusplus
 // #endif
@@ -394,8 +409,7 @@ public static final int
     CU_STREAM_WAIT_VALUE_AND   = 0x2,
     /** Wait until ~(*addr | value) != 0. Support for this operation can be
                                              queried with ::cuDeviceGetAttribute() and
-                                             ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR. Generally, this
-                                             requires compute capability 7.0 or greater. */
+                                             ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR.*/
     CU_STREAM_WAIT_VALUE_NOR   = 0x3,
     /** Follow the wait operation with a flush of outstanding remote writes. This
                                              means that, if a remote write operation is guaranteed to have reached the
@@ -403,7 +417,9 @@ public static final int
                                              visible to downstream device work. The device is permitted to reorder
                                              remote writes internally. For example, this flag would be required if
                                              two remote writes arrive in a defined order, the wait is satisfied by the
-                                             second write, and downstream work needs to observe the first write. */
+                                             second write, and downstream work needs to observe the first write.
+                                             Support for this operation is restricted to selected platforms and can be 
+                                             queried with ::CU_DEVICE_ATTRIBUTE_CAN_USE_WAIT_VALUE_FLUSH.*/
     CU_STREAM_WAIT_VALUE_FLUSH = 1<<30;
 
 /**
@@ -742,7 +758,15 @@ public static final int
     CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH = 96,
     /** Maximum optin shared memory per block */
     CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN = 97,
-    CU_DEVICE_ATTRIBUTE_MAX = 98;
+    /** Both the ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the device. See \ref CUDA_MEMOP for additional details. */
+    CU_DEVICE_ATTRIBUTE_CAN_FLUSH_REMOTE_WRITES = 98,
+    /** Device supports host memory registration via ::cudaHostRegister. */
+    CU_DEVICE_ATTRIBUTE_HOST_REGISTER_SUPPORTED = 99,
+    /** Device accesses pageable memory via the host's page tables. */
+    CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES = 100,
+    /** The host can directly access managed memory on the device without migration. */
+    CU_DEVICE_ATTRIBUTE_DIRECT_MANAGED_MEM_ACCESS_FROM_HOST = 101,
+    CU_DEVICE_ATTRIBUTE_MAX = 102;
 
 /**
  * Legacy device properties
@@ -805,7 +829,9 @@ public static final int
     /** A process-wide unique ID for an allocated memory region*/
     CU_POINTER_ATTRIBUTE_BUFFER_ID = 7,
     /** Indicates if the pointer points to managed memory */
-    CU_POINTER_ATTRIBUTE_IS_MANAGED = 8;
+    CU_POINTER_ATTRIBUTE_IS_MANAGED = 8,
+    /** A device ordinal of a device on which a pointer was allocated or registered */
+    CU_POINTER_ATTRIBUTE_DEVICE_ORDINAL = 9;
 
 /**
  * Function properties
@@ -1708,11 +1734,13 @@ public static final int
 /** enum CUdevice_P2PAttribute_enum */
 public static final int
     /** A relative value indicating the performance of the link between two devices */
-    CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK        = 0x01,
+    CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK              = 0x01,
     /** P2P Access is enable */
-    CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED        = 0x02,
+    CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED              = 0x02,
     /** Atomic operation over the link supported */
-    CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED = 0x03;
+    CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED       = 0x03,
+    /** Accessing CUDA arrays over the link supported */
+    CU_DEVICE_P2P_ATTRIBUTE_ARRAY_ACCESS_ACCESS_SUPPORTED = 0x04;
 
 // #ifdef _WIN32
 // #define CUDA_CB __stdcall
@@ -2630,6 +2658,7 @@ public static native @Cast("CUresult") int cuDriverGetVersion(int[] driverVersio
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
  * ::cuDeviceTotalMem
  */
 public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") IntPointer device, int ordinal);
@@ -2656,6 +2685,7 @@ public static native @Cast("CUresult") int cuDeviceGet(@Cast("CUdevice*") int[] 
  * \sa
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem,
  * ::cudaGetDeviceCount
@@ -2695,6 +2725,35 @@ public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") BytePo
 public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") ByteBuffer name, int len, @Cast("CUdevice") int dev);
 public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") byte[] name, int len, @Cast("CUdevice") int dev);
 
+// #if __CUDA_API_VERSION >= 9020
+/**
+ * \brief Return an UUID for the device
+ *
+ * Returns 16-octets identifing the device \p dev in the structure
+ * pointed by the \p uuid.
+ *
+ * @param uuid - Returned UUID
+ * @param dev  - Device to get identifier string for
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ *
+ * \sa
+ * ::cuDeviceGetAttribute,
+ * ::cuDeviceGetCount,
+ * ::cuDeviceGetName,
+ * ::cuDeviceGet,
+ * ::cuDeviceTotalMem,
+ * ::cudaGetDeviceProperties
+ */
+public static native @Cast("CUresult") int cuDeviceGetUuid(CUuuid uuid, @Cast("CUdevice") int dev);
+// #endif
+
 // #if __CUDA_API_VERSION >= 3020
 /**
  * \brief Returns the total amount of memory on the device
@@ -2718,6 +2777,7 @@ public static native @Cast("CUresult") int cuDeviceGetName(@Cast("char*") byte[]
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
  * ::cudaMemGetInfo
  */
@@ -2900,6 +2960,9 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * -  ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN: The maximum per block shared memory size
  *    suported on this device. This is the maximum value that can be opted into when using the cuFuncSetAttribute() call.
  *    For more details see ::CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES
+ * - ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES: Device accesses pageable memory via the host's
+ *   page tables.
+ * - ::CU_DEVICE_ATTRIBUTE_DIRECT_MANAGED_MEM_ACCESS_FROM_HOST: The host can directly access managed memory on the device without migration.
  *
  * @param pi     - Returned device attribute value
  * @param attrib - Device attribute to query
@@ -2917,6 +2980,7 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * \sa
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem,
  * ::cudaDeviceGetAttribute,
@@ -2998,6 +3062,7 @@ public static native @Cast("CUresult") int cuDeviceGetAttribute(int[] pi, @Cast(
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem
  */
@@ -3031,6 +3096,7 @@ public static native @Cast("CUresult") int cuDeviceGetProperties(CUdevprop prop,
  * ::cuDeviceGetAttribute,
  * ::cuDeviceGetCount,
  * ::cuDeviceGetName,
+ * ::cuDeviceGetUuid,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem
  */
@@ -5321,8 +5387,9 @@ public static native @Cast("CUresult") int cuDeviceGetPCIBusId(@Cast("char*") by
  * on the imported event after the exported event has been freed 
  * with ::cuEventDestroy will result in undefined behavior.
  *
- * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems.
+ * IPC functionality is restricted to devices with support for unified
+ * addressing on Linux and Windows operating systems.
+ * IPC functionality on Windows is restricted to GPUs in TCC mode
  *
  * @param pHandle - Pointer to a user allocated CUipcEventHandle
  *                    in which to return the opaque event handle
@@ -5360,8 +5427,9 @@ public static native @Cast("CUresult") int cuIpcGetEventHandle(CUipcEventHandle 
  * Performing operations on the imported event after the exported event has 
  * been freed with ::cuEventDestroy will result in undefined behavior.
  *
- * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems.
+ * IPC functionality is restricted to devices with support for unified
+ * addressing on Linux and Windows operating systems.
+ * IPC functionality on Windows is restricted to GPUs in TCC mode
  *
  * @param phEvent - Returns the imported event
  * @param handle  - Interprocess handle to open
@@ -5401,8 +5469,9 @@ public static native @Cast("CUresult") int cuIpcOpenEventHandle(@ByPtrPtr CUeven
  * ::cuIpcGetMemHandle will return a unique handle for the
  * new memory. 
  *
- * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems.
+ * IPC functionality is restricted to devices with support for unified
+ * addressing on Linux and Windows operating systems.
+ * IPC functionality on Windows is restricted to GPUs in TCC mode
  *
  * @param pHandle - Pointer to user allocated ::CUipcMemHandle to return
  *                    the handle in.
@@ -5447,8 +5516,9 @@ public static native @Cast("CUresult") int cuIpcGetMemHandle(CUipcMemHandle pHan
  * ::cuIpcCloseMemHandle in the importing context will result in undefined
  * behavior.
  *
- * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems.
+ * IPC functionality is restricted to devices with support for unified
+ * addressing on Linux and Windows operating systems.
+ * IPC functionality on Windows is restricted to GPUs in TCC mode
  * 
  * @param pdptr  - Returned device pointer
  * @param handle - ::CUipcMemHandle to open
@@ -5489,8 +5559,9 @@ public static native @Cast("CUresult") int cuIpcOpenMemHandle(@Cast("CUdeviceptr
  * Any resources used to enable peer access will be freed if this is the
  * last mapping using them.
  *
- * IPC functionality is restricted to devices with support for unified 
- * addressing on Linux operating systems.
+ * IPC functionality is restricted to devices with support for unified
+ * addressing on Linux and Windows operating systems.
+ * IPC functionality on Windows is restricted to GPUs in TCC mode
  *
  * @param dptr - Device pointer returned by ::cuIpcOpenMemHandle
  * 
@@ -8409,6 +8480,11 @@ public static native @Cast("CUresult") int cuMipmappedArrayDestroy(CUmipmappedAr
  *      Returns in \p *data a boolean that indicates whether the pointer points to
  *      managed memory or not.
  *
+ * - ::CU_POINTER_ATTRIBUTE_DEVICE_ORDINAL:
+ *      
+ *      Returns in \p *data an integer representing a device ordinal of a device against 
+ *      which the memory was allocated or registered.
+ *
  * \par
  *
  * Note that for most allocations in the unified virtual address space
@@ -8530,7 +8606,10 @@ public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr
  * starting at \p devPtr with a size of \p count bytes. The start address and end address of the memory
  * range will be rounded down and rounded up respectively to be aligned to CPU page size before the
  * advice is applied. The memory range must refer to managed memory allocated via ::cuMemAllocManaged
- * or declared via __managed__ variables.
+ * or declared via __managed__ variables. The memory range could also refer to system-allocated pageable
+ * memory provided it represents a valid, host-accessible region of memory and all additional constraints
+ * imposed by \p advice as outlined below are also satisfied. Specifying an invalid system-allocated pageable
+ * memory range results in an error being returned.
  *
  * The \p advice parameter can take the following values:
  * - ::CU_MEM_ADVISE_SET_READ_MOSTLY: This implies that the data is mostly going to be read
@@ -8544,11 +8623,18 @@ public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr
  * Also, if a context is created on a device that does not have the device attribute
  * ::CU_DEVICE_ATTRIBUTE_CONCURRENT_MANAGED_ACCESS set, then read-duplication will not occur until
  * all such contexts are destroyed.
+ * If the memory region refers to valid system-allocated pageable memory, then the accessing device must
+ * have a non-zero value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS for a read-only
+ * copy to be created on that device. Note however that if the accessing device also has a non-zero value for the
+ * device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES, then setting this advice
+ * will not create a read-only copy when that device accesses this memory region.
+ *
  * - ::CU_MEM_ADVISE_UNSET_READ_MOSTLY:  Undoes the effect of ::CU_MEM_ADVISE_SET_READ_MOSTLY and also prevents the
  * Unified Memory driver from attempting heuristic read-duplication on the memory range. Any read-duplicated
  * copies of the data will be collapsed into a single copy. The location for the collapsed
  * copy will be the preferred location if the page has a preferred location and one of the read-duplicated
  * copies was resident at that location. Otherwise, the location chosen is arbitrary.
+ *
  * - ::CU_MEM_ADVISE_SET_PREFERRED_LOCATION: This advice sets the preferred location for the
  * data to be the memory belonging to \p device. Passing in CU_DEVICE_CPU for \p device sets the
  * preferred location as host memory. If \p device is a GPU, then it must have a non-zero value for the
@@ -8565,9 +8651,17 @@ public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr
  * memory, the page may eventually be pinned to host memory by the Unified Memory driver. But
  * if the preferred location is set as device memory, then the page will continue to thrash indefinitely.
  * If ::CU_MEM_ADVISE_SET_READ_MOSTLY is also set on this memory region or any subset of it, then the
- * policies associated with that advice will override the policies of this advice.
+ * policies associated with that advice will override the policies of this advice, unless read accesses from
+ * \p device will not result in a read-only copy being created on that device as outlined in description for
+ * the advice ::CU_MEM_ADVISE_SET_READ_MOSTLY.
+ * If the memory region refers to valid system-allocated pageable memory, then \p device must have a non-zero
+ * value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS. Additionally, if \p device has
+ * a non-zero value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES,
+ * then this call has no effect. Note however that this behavior may change in the future.
+ *
  * - ::CU_MEM_ADVISE_UNSET_PREFERRED_LOCATION: Undoes the effect of ::CU_MEM_ADVISE_SET_PREFERRED_LOCATION
  * and changes the preferred location to none.
+ *
  * - ::CU_MEM_ADVISE_SET_ACCESSED_BY: This advice implies that the data will be accessed by \p device.
  * Passing in ::CU_DEVICE_CPU for \p device will set the advice for the CPU. If \p device is a GPU, then
  * the device attribute ::CU_DEVICE_ATTRIBUTE_CONCURRENT_MANAGED_ACCESS must be non-zero.
@@ -8588,8 +8682,17 @@ public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr
  * policies associated with that advice will override the policies of this advice. Additionally, if the
  * preferred location of this memory region or any subset of it is also \p device, then the policies
  * associated with ::CU_MEM_ADVISE_SET_PREFERRED_LOCATION will override the policies of this advice.
+ * If the memory region refers to valid system-allocated pageable memory, then \p device must have a non-zero
+ * value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS. Additionally, if \p device has
+ * a non-zero value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES,
+ * then this call has no effect.
+ *
  * - ::CU_MEM_ADVISE_UNSET_ACCESSED_BY: Undoes the effect of ::CU_MEM_ADVISE_SET_ACCESSED_BY. Any mappings to
  * the data from \p device may be removed at any time causing accesses to result in non-fatal page faults.
+ * If the memory region refers to valid system-allocated pageable memory, then \p device must have a non-zero
+ * value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS. Additionally, if \p device has
+ * a non-zero value for the device attribute ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES,
+ * then this call has no effect.
  *
  * @param devPtr - Pointer to memory to set the advice for
  * @param count  - Size in bytes of the memory range
@@ -8766,6 +8869,7 @@ public static native @Cast("CUresult") int cuPointerSetAttribute(@Const Pointer 
  * - ::CU_POINTER_ATTRIBUTE_SYNC_MEMOPS
  * - ::CU_POINTER_ATTRIBUTE_BUFFER_ID
  * - ::CU_POINTER_ATTRIBUTE_IS_MANAGED
+ * - ::CU_POINTER_ATTRIBUTE_DEVICE_ORDINAL
  *
  * @param numAttributes - Number of attributes to query
  * @param attributes    - An array of attributes to query
@@ -8961,6 +9065,53 @@ public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream,
 public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream, @Cast("unsigned int*") IntBuffer flags);
 public static native @Cast("CUresult") int cuStreamGetFlags(CUstream_st hStream, @Cast("unsigned int*") int[] flags);
 
+// #if __CUDA_API_VERSION >= 9020
+
+/**
+ * \brief Query the context associated with a stream
+ *
+ * Returns the CUDA context that the stream is associated with. 
+ *
+ * The stream handle \p hStream can refer to any of the following:
+ * <ul>
+ *   <li>a stream created via any of the CUDA driver APIs such as ::cuStreamCreate
+ *   and ::cuStreamCreateWithPriority, or their runtime API equivalents such as
+ *   ::cudaStreamCreate, ::cudaStreamCreateWithFlags and ::cudaStreamCreateWithPriority.
+ *   The returned context is the context that was active in the calling thread when the
+ *   stream was created. Passing an invalid handle will result in undefined behavior.</li>
+ *   <li>any of the special streams such as the NULL stream, ::CU_STREAM_LEGACY and
+ *   ::CU_STREAM_PER_THREAD. The runtime API equivalents of these are also accepted,
+ *   which are NULL, ::cudaStreamLegacy and ::cudaStreamPerThread respectively.
+ *   Specifying any of the special handles will return the context current to the
+ *   calling thread. If no context is current to the calling thread,
+ *   ::CUDA_ERROR_INVALID_CONTEXT is returned.</li>
+ * </ul>
+ *
+ * @param hStream - Handle to the stream to be queried
+ * @param pctx    - Returned context associated with the stream
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_HANDLE,
+ * \notefnerr
+ *
+ * \sa ::cuStreamDestroy,
+ * ::cuStreamCreateWithPriority,
+ * ::cuStreamGetPriority,
+ * ::cuStreamGetFlags,
+ * ::cuStreamWaitEvent,
+ * ::cuStreamQuery,
+ * ::cuStreamSynchronize,
+ * ::cuStreamAddCallback,
+ * ::cudaStreamCreate,
+ * ::cudaStreamCreateWithFlags
+ */
+public static native @Cast("CUresult") int cuStreamGetCtx(CUstream_st hStream, @ByPtrPtr CUctx_st pctx);
+
+// #endif /* __CUDA_API_VERSION >= 9020 */
 
 /**
  * \brief Make a compute stream wait on an event
@@ -9071,12 +9222,20 @@ public static native @Cast("CUresult") int cuStreamAddCallback(CUstream_st hStre
  * only take effect when, previous work in stream has completed. Any
  * previous association is automatically replaced.
  *
- * \p dptr must point to an address within managed memory space declared
- * using the __managed__ keyword or allocated with ::cuMemAllocManaged.
+ * \p dptr must point to one of the following types of memories:
+ * - managed memory declared using the __managed__ keyword or allocated with
+ *   ::cuMemAllocManaged.
+ * - a valid host-accessible region of system-allocated pageable memory. This
+ *   type of memory may only be specified if the device associated with the
+ *   stream reports a non-zero value for the device attribute
+ *   ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS.
  *
- * \p length must be zero, to indicate that the entire allocation's
- * stream association is being changed. Currently, it's not possible
- * to change stream association for a portion of an allocation.
+ * For managed allocations, \p length must be either zero or the entire
+ * allocation's size. Both indicate that the entire allocation's stream
+ * association is being changed. Currently, it is not possible to change stream
+ * association for a portion of a managed allocation.
+ *
+ * For pageable host allocations, \p length must be non-zero.
  *
  * The stream association is specified using \p flags which must be
  * one of ::CUmemAttach_flags.
@@ -9101,7 +9260,7 @@ public static native @Cast("CUresult") int cuStreamAddCallback(CUstream_st hStre
  * Accessing memory on the device from streams that are not associated with
  * it will produce undefined results. No error checking is performed by the
  * Unified Memory system to ensure that kernels launched into other streams
- * do not access this region. 
+ * do not access this region.
  *
  * It is a program's responsibility to order calls to ::cuStreamAttachMemAsync
  * via events, synchronization or other means to ensure legal access to memory
@@ -9116,8 +9275,10 @@ public static native @Cast("CUresult") int cuStreamAddCallback(CUstream_st hStre
  * happen until all work in the stream has completed.
  *
  * @param hStream - Stream in which to enqueue the attach operation
- * @param dptr    - Pointer to memory (must be a pointer to managed memory)
- * @param length  - Length of memory (must be zero)
+ * @param dptr    - Pointer to memory (must be a pointer to managed memory or
+*                   to a valid host-accessible region of system-allocated
+*                   pageable memory)
+ * @param length  - Length of memory
  * @param flags   - Must be one of ::CUmemAttach_flags
  *
  * @return
@@ -9468,6 +9629,51 @@ public static native @Cast("CUresult") int cuEventElapsedTime(FloatPointer pMill
 public static native @Cast("CUresult") int cuEventElapsedTime(FloatBuffer pMilliseconds, CUevent_st hStart, CUevent_st hEnd);
 public static native @Cast("CUresult") int cuEventElapsedTime(float[] pMilliseconds, CUevent_st hStart, CUevent_st hEnd);
 
+/** \} */ /* END CUDA_EVENT */
+
+/**
+ * \defgroup CUDA_MEMOP Stream memory operations
+ *
+ * ___MANBRIEF___ Stream memory operations of the low-level CUDA driver API
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the stream memory operations of the low-level CUDA
+ * driver application programming interface.
+ *
+ * The whole set of operations is disabled by default. Users are required
+ * to explicitly enable them, e.g. on Linux by passing the kernel module
+ * parameter shown below:
+ *     modprobe nvidia NVreg_EnableStreamMemOPs=1
+ * There is currently no way to enable these operations on other operating
+ * systems.
+ *
+ * Users can programmatically query whether the device supports these
+ * operations with ::cuDeviceGetAttribute() and
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS.
+ *
+ * Support for the ::CU_STREAM_WAIT_VALUE_NOR flag can be queried with
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR.
+ *
+ * Support for the ::cuStreamWriteValue64() and ::cuStreamWaitValue64()
+ * functions, as well as for the ::CU_STREAM_MEM_OP_WAIT_VALUE_64 and
+ * ::CU_STREAM_MEM_OP_WRITE_VALUE_64 flags, can be queried with
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS.
+ *
+ * Support for both ::CU_STREAM_WAIT_VALUE_FLUSH and
+ * ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES requires dedicated platform
+ * hardware features and can be queried with ::cuDeviceGetAttribute() and
+ * ::CU_DEVICE_ATTRIBUTE_CAN_FLUSH_REMOTE_WRITES.
+ *
+ * Note that all memory pointers passed as parameters to these operations
+ * are device pointers. Where necessary a device pointer should be
+ * obtained, for example with ::cuMemHostGetDevicePointer().
+ *
+ * None of the operations accepts pointers to managed memory buffers
+ * (::cuMemAllocManaged).
+ *
+ * \{
+ */
+
 // #if __CUDA_API_VERSION >= 8000
 /**
  * \brief Wait on a memory location
@@ -9483,8 +9689,10 @@ public static native @Cast("CUresult") int cuEventElapsedTime(float[] pMilliseco
  * be used with managed memory (::cuMemAllocManaged).
  *
  * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS. The only requirement for basic
- * support is that on Windows, a device must be in TCC mode.
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS.
+ *
+ * Support for CU_STREAM_WAIT_VALUE_NOR can be queried with ::cuDeviceGetAttribute() and
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR.
  *
  * @param stream The stream to synchronize on the memory location.
  * @param addr The memory location to wait on.
@@ -9519,9 +9727,7 @@ public static native @Cast("CUresult") int cuStreamWaitValue32(CUstream_st strea
  * should be obtained with ::cuMemHostGetDevicePointer().
  *
  * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS. The requirements are
- * compute capability 7.0 or greater, and on Windows, that the device be in
- * TCC mode.
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS.
  *
  * @param stream The stream to synchronize on the memory location.
  * @param addr The memory location to wait on.
@@ -9556,8 +9762,7 @@ public static native @Cast("CUresult") int cuStreamWaitValue64(CUstream_st strea
  * be used with managed memory (::cuMemAllocManaged).
  *
  * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS. The only requirement for basic
- * support is that on Windows, a device must be in TCC mode.
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_MEM_OPS.
  *
  * @param stream The stream to do the write in.
  * @param addr The device address to write to.
@@ -9591,9 +9796,7 @@ public static native @Cast("CUresult") int cuStreamWriteValue32(CUstream_st stre
  * should be obtained with ::cuMemHostGetDevicePointer().
  *
  * Support for this can be queried with ::cuDeviceGetAttribute() and
- * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS. The requirements are
- * compute capability 7.0 or greater, and on Windows, that the device be in
- * TCC mode.
+ * ::CU_DEVICE_ATTRIBUTE_CAN_USE_64_BIT_STREAM_MEM_OPS.
  *
  * @param stream The stream to do the write in.
  * @param addr The device address to write to.
@@ -9651,7 +9854,7 @@ public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stre
 public static native @Cast("CUresult") int cuStreamBatchMemOp(CUstream_st stream, @Cast("unsigned int") int count, CUstreamBatchMemOpParams paramArray, @Cast("unsigned int") int flags);
 // #endif /* __CUDA_API_VERSION >= 8000 */
 
-/** \} */ /* END CUDA_EVENT */
+/** \} */ /* END CUDA_MEMOP */
 
 /**
  * \defgroup CUDA_EXEC Execution Control
@@ -12247,6 +12450,8 @@ public static native @Cast("CUresult") int cuCtxDisablePeerAccess(CUctx_st peerC
  * - ::CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED P2P: 1 if P2P Access is enable.
  * - ::CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED: 1 if Atomic operations over
  *   the link are supported.
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_CUDA_ARRAY_ACCESS_SUPPORTED: 1 if cudaArray can
+ *   be accessed over the link.
  *
  * Returns ::CUDA_ERROR_INVALID_DEVICE if \p srcDevice or \p dstDevice are not valid
  * or if they represent the same device.
@@ -12596,6 +12801,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #endif
 
 // #undef __CUDA_API_VERSION
+// #undef __CUDA_DEPRECATED
 
 // #endif /* __cuda_cuda_h__ */
 
@@ -12656,7 +12862,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define __HOST_DEFINES_H__
 
 /* CUDA JIT mode (__CUDACC_RTC__) also uses GNU style attributes */
-// #if defined(__GNUC__) || defined(__CUDA_LIBDEVICE__) || defined(__CUDACC_RTC__)
+// #if defined(__GNUC__) || (defined(__PGIC__) && defined(__linux__)) || defined(__CUDA_LIBDEVICE__) || defined(__CUDACC_RTC__)
 
 // #if defined(__CUDACC_RTC__)
 // #define __volatile__ volatile
@@ -14319,7 +14525,7 @@ public static class cudaFuncAttributes extends Pointer {
 
    /**
     * On devices where the L1 cache and shared memory use the same hardware resources, 
-    * this sets the shared memory carveout preference, in percent of the total resources. 
+    * this sets the shared memory carveout preference, in percent of the maximum shared memory. 
     * This is only a hint, and the driver can choose a different ratio if required to execute the function.
     */
    public native int preferredShmemCarveout(); public native cudaFuncAttributes preferredShmemCarveout(int preferredShmemCarveout);
@@ -14390,7 +14596,7 @@ public static final int
 public static final int
     /** GPU thread stack size */
     cudaLimitStackSize                    = 0x00,
-    /** GPU printf/fprintf FIFO size */
+    /** GPU printf FIFO size */
     cudaLimitPrintfFifoSize               = 0x01,
     /** GPU malloc heap size */
     cudaLimitMallocHeapSize               = 0x02,
@@ -14634,7 +14840,15 @@ public static final int
     /** Device can participate in cooperative kernels launched via ::cudaLaunchCooperativeKernelMultiDevice */
     cudaDevAttrCooperativeMultiDeviceLaunch   = 96,
     /** The maximum optin shared memory per block. This value may vary by chip. See ::cudaFuncSetAttribute */
-    cudaDevAttrMaxSharedMemoryPerBlockOptin   = 97;
+    cudaDevAttrMaxSharedMemoryPerBlockOptin   = 97,
+    /** Device supports flushing of outstanding remote writes. */
+    cudaDevAttrCanFlushRemoteWrites           = 98,
+    /** Device supports host memory registration via ::cudaHostRegister. */
+    cudaDevAttrHostRegisterSupported          = 99,
+    /** Device accesses pageable memory via the host's page tables. */
+    cudaDevAttrPageableMemoryAccessUsesHostPageTables = 100,
+    /** Host can directly access managed memory on the device without migration. */
+    cudaDevAttrDirectManagedMemAccessFromHost = 101;
 
 /**
  * CUDA device P2P attributes
@@ -14647,7 +14861,9 @@ public static final int
     /** Peer access is enabled */
     cudaDevP2PAttrAccessSupported              = 2,
     /** Native atomic operation over the link supported */
-    cudaDevP2PAttrNativeAtomicSupported        = 3;
+    cudaDevP2PAttrNativeAtomicSupported        = 3,
+    /** Accessing CUDA arrays over the link supported */
+    cudaDevP2PAttrCudaArrayAccessSupported     = 4;
 /**
  * CUDA device properties
  */
@@ -14824,6 +15040,10 @@ public static class cudaDeviceProp extends Pointer {
     public native int cooperativeMultiDeviceLaunch(); public native cudaDeviceProp cooperativeMultiDeviceLaunch(int cooperativeMultiDeviceLaunch);
     /** Per device maximum shared memory per block usable by special opt in */
     public native @Cast("size_t") long sharedMemPerBlockOptin(); public native cudaDeviceProp sharedMemPerBlockOptin(long sharedMemPerBlockOptin);
+    /** Device accesses pageable memory via the host's page tables */
+    public native int pageableMemoryAccessUsesHostPageTables(); public native cudaDeviceProp pageableMemoryAccessUsesHostPageTables(int pageableMemoryAccessUsesHostPageTables);
+    /** Host can directly access managed memory on the device without migration. */
+    public native int directManagedMemAccessFromHost(); public native cudaDeviceProp directManagedMemAccessFromHost(int directManagedMemAccessFromHost);
 }
 
 /** Empty device properties */
@@ -14900,6 +15120,8 @@ public static class cudaDeviceProp extends Pointer {
 //           0,         /* int    cooperativeLaunch */
 //           0,         /* int    cooperativeMultiDeviceLaunch */
 //           0,         /* size_t sharedMemPerBlockOptin */
+//           0,         /* int    pageableMemoryAccessUsesHostPageTables */
+//           0,         /* int    directManagedMemAccessFromHost */
 //         }
 
 /**
@@ -16648,7 +16870,7 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  9010;
+public static final int CUDART_VERSION =  9020;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
@@ -16764,9 +16986,9 @@ public static native @Cast("cudaError_t") int cudaDeviceSynchronize();
  * - ::cudaLimitStackSize controls the stack size in bytes of each GPU thread.
  *
  * - ::cudaLimitPrintfFifoSize controls the size in bytes of the shared FIFO
- *   used by the ::printf() and ::fprintf() device system calls. Setting
+ *   used by the ::printf() device system call. Setting
  *   ::cudaLimitPrintfFifoSize must not be performed after launching any kernel
- *   that uses the ::printf() or ::fprintf() device system calls - in such case
+ *   that uses the ::printf() device system call - in such case
  *   ::cudaErrorInvalidValue will be returned.
  *
  * - ::cudaLimitMallocHeapSize controls the size in bytes of the heap used by
@@ -16832,7 +17054,7 @@ public static native @Cast("cudaError_t") int cudaDeviceSetLimit(@Cast("cudaLimi
  * ::cudaLimit values are:
  * - ::cudaLimitStackSize: stack size in bytes of each GPU thread;
  * - ::cudaLimitPrintfFifoSize: size in bytes of the shared FIFO used by the
- *   ::printf() and ::fprintf() device system calls.
+ *   ::printf() device system call.
  * - ::cudaLimitMallocHeapSize: size in bytes of the heap used by the
  *   ::malloc() and ::free() device system calls;
  * - ::cudaLimitDevRuntimeSyncDepth: maximum grid depth at which a
@@ -17404,10 +17626,10 @@ public static native @Cast("cudaError_t") int cudaThreadSynchronize();
  * - ::cudaLimitStackSize controls the stack size of each GPU thread.
  *
  * - ::cudaLimitPrintfFifoSize controls the size of the shared FIFO
- *   used by the ::printf() and ::fprintf() device system calls.
+ *   used by the ::printf() device system call.
  *   Setting ::cudaLimitPrintfFifoSize must be performed before
- *   launching any kernel that uses the ::printf() or ::fprintf() device
- *   system calls, otherwise ::cudaErrorInvalidValue will be returned.
+ *   launching any kernel that uses the ::printf() device
+ *   system call, otherwise ::cudaErrorInvalidValue will be returned.
  *
  * - ::cudaLimitMallocHeapSize controls the size of the heap used
  *   by the ::malloc() and ::free() device system calls.  Setting
@@ -17442,7 +17664,7 @@ public static native @Cast("cudaError_t") int cudaThreadSetLimit(@Cast("cudaLimi
  * ::cudaLimit values are:
  * - ::cudaLimitStackSize: stack size of each GPU thread;
  * - ::cudaLimitPrintfFifoSize: size of the shared FIFO used by the
- *   ::printf() and ::fprintf() device system calls.
+ *   ::printf() device system call.
  * - ::cudaLimitMallocHeapSize: size of the heap used by the
  *   ::malloc() and ::free() device system calls;
  *
@@ -17772,7 +17994,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
         int localL1CacheSupported;
         size_t sharedMemPerMultiprocessor;
         int regsPerMultiprocessor;
-        int managedMemSupported;
+        int managedMemory;
         int isMultiGpuBoard;
         int multiGpuBoardGroupID;
         int singleToDoublePrecisionPerfRatio;
@@ -17782,6 +18004,8 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
         int canUseHostPointerForRegisteredMem;
         int cooperativeLaunch;
         int cooperativeMultiDeviceLaunch;
+        int pageableMemoryAccessUsesHostPageTables;
+        int directManagedMemAccessFromHost;
     }
  }</pre>
  * where:
@@ -17951,6 +18175,10 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
  *   cooperative kernels via ::cudaLaunchCooperativeKernel, and 0 otherwise.
  * - \ref ::cudaDeviceProp::cooperativeMultiDeviceLaunch "cooperativeMultiDeviceLaunch" is 1 if the device
  *   supports launching cooperative kernels via ::cudaLaunchCooperativeKernelMultiDevice, and 0 otherwise.
+ * - \ref ::cudaDeviceProp::pageableMemoryAccessUsesHostPageTables "pageableMemoryAccessUsesHostPageTables" is 1 if the device accesses
+ *   pageable memory via the host's page tables, and 0 otherwise.
+ * - \ref ::cudaDeviceProp::directManagedMemAccessFromHost "directManagedMemAccessFromHost" is 1 if the host can directly access managed
+ *   memory on the device without migration, and 0 otherwise.
  *
  * @param prop   - Properties for the specified device
  * @param device - Device number to get properties for
@@ -18105,7 +18333,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  * - ::cudaDevAttrMaxRegistersPerMultiprocessor: Maximum number of 32-bit registers 
  *   available to a multiprocessor; this number is shared by all thread blocks
  *   simultaneously resident on a multiprocessor;
- * - ::cudaDevAttrManagedMemSupported: 1 if device supports allocating
+ * - ::cudaDevAttrManagedMemory: 1 if device supports allocating
  *   managed memory, 0 if not;
  * - ::cudaDevAttrIsMultiGpuBoard: 1 if device is on a multi-GPU board, 0 if not;
  * - ::cudaDevAttrMultiGpuBoardGroupID: Unique identifier for a group of devices on the
@@ -18126,6 +18354,14 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  *   via ::cudaLaunchCooperativeKernel, and 0 otherwise.
  * - ::cudaDevAttrCooperativeMultiDeviceLaunch: 1 if the device supports launching cooperative
  *   kernels via ::cudaLaunchCooperativeKernelMultiDevice, and 0 otherwise.
+ * - ::cudaDevAttrCanFlushRemoteWrites: 1 if the device supports flushing of outstanding 
+ *   remote writes, and 0 otherwise.
+ * - ::cudaDevAttrHostRegisterSupported: 1 if the device supports host memory registration
+ *   via ::cudaHostRegister, and 0 otherwise.
+ * - ::cudaDevAttrPageableMemoryAccessUsesHostPageTables: 1 if the device accesses pageable memory via the
+ *   host's page tables, and 0 otherwise.
+ * - ::cudaDevAttrDirectManagedMemAccessFromHost: 1 if the host can directly access managed memory on the device
+ *   without migration, and 0 otherwise.
  *
  * @param value  - Returned device attribute value
  * @param attr   - Device attribute to query
@@ -18150,12 +18386,14 @@ public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(int[] value
  *
  * Returns in \p *value the value of the requested attribute \p attrib of the
  * link between \p srcDevice and \p dstDevice. The supported attributes are:
- * - ::CudaDevP2PAttrPerformanceRank: A relative value indicating the
+ * - ::cudaDevP2PAttrPerformanceRank: A relative value indicating the
  *   performance of the link between two devices. Lower value means better
  *   performance (0 being the value used for most performant link).
- * - ::CudaDevP2PAttrAccessSupported: 1 if peer access is enabled.
- * - ::CudaDevP2PAttrNativeAtomicSupported: 1 if native atomic operations over
+ * - ::cudaDevP2PAttrAccessSupported: 1 if peer access is enabled.
+ * - ::cudaDevP2PAttrNativeAtomicSupported: 1 if native atomic operations over
  *   the link are supported.
+ * - ::cudaDevP2PAttrCudaArrayAccessSupported: 1 if accessing CUDA arrays over
+ *   the link is supported.
  *
  * Returns ::cudaErrorInvalidDevice if \p srcDevice or \p dstDevice are not valid
  * or if they represent the same device.
@@ -18248,7 +18486,8 @@ public static native @Cast("cudaError_t") int cudaSetDevice(int device);
  * executes the device code.
  *
  * @return
- * ::cudaSuccess
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
  * \notefnerr
  *
  * \sa ::cudaGetDeviceCount, ::cudaSetDevice, ::cudaGetDeviceProperties,
@@ -18343,7 +18582,7 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
  *
  * @return
  * ::cudaSuccess,
- * ::cudaErrorInvalidDevice,
+ * ::cudaErrorInvalidValue,
  * ::cudaErrorSetOnActiveProcess
  *
  * \sa ::cudaGetDeviceFlags, ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaGetDeviceProperties,
@@ -18685,6 +18924,7 @@ public static native @Cast("cudaError_t") int cudaStreamWaitEvent(CUstream_st st
  * @return
  * ::cudaSuccess,
  * ::cudaErrorInvalidResourceHandle,
+ * ::cudaErrorInvalidValue,
  * ::cudaErrorNotSupported
  * \note_null_stream
  * \notefnerr
@@ -18748,13 +18988,20 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  * only take effect when, previous work in stream has completed. Any
  * previous association is automatically replaced.
  *
- * \p devPtr must point to an address within managed memory space declared
- * using the __managed__ keyword or allocated with ::cudaMallocManaged.
+ * \p devPtr must point to an one of the following types of memories:
+ * - managed memory declared using the __managed__ keyword or allocated with
+ *   ::cudaMallocManaged.
+ * - a valid host-accessible region of system-allocated pageable memory. This
+ *   type of memory may only be specified if the device associated with the
+ *   stream reports a non-zero value for the device attribute
+ *   ::cudaDevAttrPageableMemoryAccess.
  *
- * \p length must be zero, to indicate that the entire allocation's
- * stream association is being changed.  Currently, it's not possible
- * to change stream association for a portion of an allocation. The default
- * value for \p length is zero.
+ * For managed allocations, \p length must be either zero or the entire
+ * allocation's size. Both indicate that the entire allocation's stream
+ * association is being changed. Currently, it is not possible to change stream
+ * association for a portion of a managed allocation.
+ *
+ * For pageable allocations, \p length must be non-zero.
  *
  * The stream association is specified using \p flags which must be
  * one of ::cudaMemAttachGlobal, ::cudaMemAttachHost or ::cudaMemAttachSingle.
@@ -18795,8 +19042,10 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  * happen until all work in the stream has completed.
  *
  * @param stream  - Stream in which to enqueue the attach operation
- * @param devPtr  - Pointer to memory (must be a pointer to managed memory)
- * @param length  - Length of memory (must be zero, defaults to zero)
+ * @param devPtr  - Pointer to memory (must be a pointer to managed memory or
+ *                  to a valid host-accessible region of system-allocated
+ *                  memory)
+ * @param length  - Length of memory (defaults to zero)
  * @param flags   - Must be one of ::cudaMemAttachGlobal, ::cudaMemAttachHost or ::cudaMemAttachSingle (defaults to ::cudaMemAttachSingle)
  *
  * @return
@@ -19183,7 +19432,7 @@ public static native @Cast("cudaError_t") int cudaLaunchCooperativeKernel(@Const
  *
  * No two kernels can be launched on the same device. All the devices targeted by this
  * multi-device launch must be identical. All devices must have a non-zero value for the
- * device attribute ::cudaDevAttrCooperativeLaunch.
+ * device attribute ::cudaDevAttrCooperativeMultiDeviceLaunch.
  *
  * The same kernel must be launched on all devices. Note that any __device__ or __constant__
  * variables are independently instantiated on every device. It is the application's
@@ -19414,19 +19663,19 @@ public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttr
 /**
  * \brief Set attributes for a given function
  *
- * This function sets the attributes of a function specified via \p entry.
- * The parameter \p entry must be a pointer to a function that executes
- * on the device. The parameter specified by \p entry must be declared as a \p __global__
- * function. The enumeration defined by \p attr is set to the value defined by \p value
+ * This function sets the attributes of a function specified via \p func.
+ * The parameter \p func must be a pointer to a function that executes
+ * on the device. The parameter specified by \p func must be declared as a \p __global__
+ * function. The enumeration defined by \p attr is set to the value defined by \p value.
  * If the specified function does not exist, then ::cudaErrorInvalidDeviceFunction is returned.
  * If the specified attribute cannot be written, or if the value is incorrect, 
  * then ::cudaErrorInvalidValue is returned.
  *
  * Valid values for \p attr are:
- * ::cuFuncAttrMaxDynamicSharedMem - Maximum size of dynamic shared memory per block
- * ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio
+ * - ::cudaFuncAttributeMaxDynamicSharedMemorySize - Maximum size of dynamic shared memory per block
+ * - ::cudaFuncAttributePreferredSharedMemoryCarveout - Preferred shared memory-L1 cache split ratio in percent of maximum shared memory
  *
- * @param entry - Function to get attributes of
+ * @param func  - Function to get attributes of
  * @param attr  - Attribute to set
  * @param value - Value to set
  *
@@ -20044,10 +20293,9 @@ public static native @Cast("cudaError_t") int cudaFreeHost(Pointer ptr);
 /**
  * \brief Frees an array on the device
  *
- * Frees the CUDA array \p array, which must have been * returned by a
- * previous call to ::cudaMallocArray(). If ::cudaFreeArray(\p array) has
- * already been called before, ::cudaErrorInvalidValue is returned. If
- * \p devPtr is 0, no operation is performed.
+ * Frees the CUDA array \p array, which must have been returned by a
+ * previous call to ::cudaMallocArray(). If \p devPtr is 0,
+ * no operation is performed.
  *
  * @param array - Pointer to array to free
  *
@@ -20068,9 +20316,8 @@ public static native @Cast("cudaError_t") int cudaFreeArray(cudaArray array);
  * \brief Frees a mipmapped array on the device
  *
  * Frees the CUDA mipmapped array \p mipmappedArray, which must have been 
- * returned by a previous call to ::cudaMallocMipmappedArray(). 
- * If ::cudaFreeMipmappedArray(\p mipmappedArray) has already been called before,
- * ::cudaErrorInvalidValue is returned.
+ * returned by a previous call to ::cudaMallocMipmappedArray(). If \p devPtr
+ * is 0, no operation is performed.
  *
  * @param mipmappedArray - Pointer to mipmapped array to free
  *
@@ -20166,7 +20413,8 @@ public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByP
  * best used sparingly to register staging areas for data exchange between
  * host and device.
  *
- * ::cudaHostRegister is not supported on non I/O coherent devices.
+ * ::cudaHostRegister is supported only on I/O coherent devices that have a non-zero
+ * value for the device attribute ::cudaDevAttrHostRegisterSupported.
  *
  * The \p flags parameter enables different options to be specified that
  * affect the allocation, as follows.
@@ -22252,7 +22500,10 @@ public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointe
  * starting at \p devPtr with a size of \p count bytes. The start address and end address of the memory
  * range will be rounded down and rounded up respectively to be aligned to CPU page size before the
  * advice is applied. The memory range must refer to managed memory allocated via ::cudaMallocManaged
- * or declared via __managed__ variables.
+ * or declared via __managed__ variables. The memory range could also refer to system-allocated pageable
+ * memory provided it represents a valid, host-accessible region of memory and all additional constraints
+ * imposed by \p advice as outlined below are also satisfied. Specifying an invalid system-allocated pageable
+ * memory range results in an error being returned.
  *
  * The \p advice parameter can take the following values:
  * - ::cudaMemAdviseSetReadMostly: This implies that the data is mostly going to be read
@@ -22266,11 +22517,18 @@ public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointe
  * Also, if a context is created on a device that does not have the device attribute
  * ::cudaDevAttrConcurrentManagedAccess set, then read-duplication will not occur until
  * all such contexts are destroyed.
+ * If the memory region refers to valid system-allocated pageable memory, then the accessing device must
+ * have a non-zero value for the device attribute ::cudaDevAttrPageableMemoryAccess for a read-only
+ * copy to be created on that device. Note however that if the accessing device also has a non-zero value for the
+ * device attribute ::cudaDevAttrPageableMemoryAccessUsesHostPageTables, then setting this advice
+ * will not create a read-only copy when that device accesses this memory region.
+ *
  * - ::cudaMemAdviceUnsetReadMostly: Undoes the effect of ::cudaMemAdviceReadMostly and also prevents the
  * Unified Memory driver from attempting heuristic read-duplication on the memory range. Any read-duplicated
  * copies of the data will be collapsed into a single copy. The location for the collapsed
  * copy will be the preferred location if the page has a preferred location and one of the read-duplicated
  * copies was resident at that location. Otherwise, the location chosen is arbitrary.
+ *
  * - ::cudaMemAdviseSetPreferredLocation: This advice sets the preferred location for the
  * data to be the memory belonging to \p device. Passing in cudaCpuDeviceId for \p device sets the
  * preferred location as host memory. If \p device is a GPU, then it must have a non-zero value for the
@@ -22287,9 +22545,17 @@ public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointe
  * memory, the page may eventually be pinned to host memory by the Unified Memory driver. But
  * if the preferred location is set as device memory, then the page will continue to thrash indefinitely.
  * If ::cudaMemAdviseSetReadMostly is also set on this memory region or any subset of it, then the
- * policies associated with that advice will override the policies of this advice.
+ * policies associated with that advice will override the policies of this advice, unless read accesses from
+ * \p device will not result in a read-only copy being created on that device as outlined in description for
+ * the advice ::cudaMemAdviseSetReadMostly.
+ * If the memory region refers to valid system-allocated pageable memory, then \p device must have a non-zero
+ * value for the device attribute ::cudaDevAttrPageableMemoryAccess. Additionally, if \p device has
+ * a non-zero value for the device attribute ::cudaDevAttrPageableMemoryAccessUsesHostPageTables,
+ * then this call has no effect. Note however that this behavior may change in the future.
+ *
  * - ::cudaMemAdviseUnsetPreferredLocation: Undoes the effect of ::cudaMemAdviseSetPreferredLocation
  * and changes the preferred location to none.
+ *
  * - ::cudaMemAdviseSetAccessedBy: This advice implies that the data will be accessed by \p device.
  * Passing in ::cudaCpuDeviceId for \p device will set the advice for the CPU. If \p device is a GPU, then
  * the device attribute ::cudaDevAttrConcurrentManagedAccess must be non-zero.
@@ -22310,8 +22576,17 @@ public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointe
  * policies associated with that advice will override the policies of this advice. Additionally, if the
  * preferred location of this memory region or any subset of it is also \p device, then the policies
  * associated with ::cudaMemAdviseSetPreferredLocation will override the policies of this advice.
+ * If the memory region refers to valid system-allocated pageable memory, then \p device must have a non-zero
+ * value for the device attribute ::cudaDevAttrPageableMemoryAccess. Additionally, if \p device has
+ * a non-zero value for the device attribute ::cudaDevAttrPageableMemoryAccessUsesHostPageTables,
+ * then this call has no effect.
+ *
  * - ::cudaMemAdviseUnsetAccessedBy: Undoes the effect of ::cudaMemAdviseSetAccessedBy. Any mappings to
  * the data from \p device may be removed at any time causing accesses to result in non-fatal page faults.
+ * If the memory region refers to valid system-allocated pageable memory, then \p device must have a non-zero
+ * value for the device attribute ::cudaDevAttrPageableMemoryAccess. Additionally, if \p device has
+ * a non-zero value for the device attribute ::cudaDevAttrPageableMemoryAccessUsesHostPageTables,
+ * then this call has no effect.
  *
  * @param devPtr - Pointer to memory to set the advice for
  * @param count  - Size in bytes of the memory range
@@ -23200,12 +23475,13 @@ public static native @Cast("cudaError_t") int cudaBindTextureToMipmappedArray(@C
 /**
  * \brief Unbinds a texture
  *
- * Unbinds the texture bound to \p texref.
+ * Unbinds the texture bound to \p texref. If \p texref is not currently bound, no operation is performed.
  *
  * @param texref - Texture to unbind
  *
  * @return
- * ::cudaSuccess
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidTexture
  * \notefnerr
  *
  * \sa \ref ::cudaCreateChannelDesc(int, int, int, int, cudaChannelFormatKind) "cudaCreateChannelDesc (C API)",
@@ -24447,49 +24723,59 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 * \defgroup CUDA_MATH_INTRINSIC_HALF Half Precision Intrinsics
 * This section describes half precision intrinsic functions that are
 * only supported in device code.
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_ARITHMETIC Half Arithmetic Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF2_ARITHMETIC Half2 Arithmetic Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_COMPARISON Half Comparison Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF2_COMPARISON Half2 Comparison Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_MISC Half Precision Conversion And Data Movement
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF_FUNCTIONS Half Math Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 /**
 * \defgroup CUDA_MATH__HALF2_FUNCTIONS Half2 Math Functions
 * \ingroup CUDA_MATH_INTRINSIC_HALF
+* To use these functions include the header file \p cuda_fp16.h in your program.
 */
 
 // #ifndef __CUDA_FP16_H__
 // #define __CUDA_FP16_H__
 
-// #if defined(__cplusplus) && defined(__CUDACC__)
-
-// #define __CUDA_FP16_DECL__ static __device__ __inline__
+// #if defined(__cplusplus)
+// #if defined(__CUDACC__)
+// #else
+// #define __CUDA_HOSTDEVICE_FP16_DECL__ static
+// #endif /* defined(__CUDACC__) */
 
 // #define __CUDA_FP16_TYPES_EXIST__
 /* Forward-declaration of structures defined in "cuda_fp16.hpp" */
@@ -24503,6 +24789,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns \p half result with converted value.
 */
+public static native @ByVal __half __float2half(float a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts float number to half precision in round-to-nearest-even mode
@@ -24512,6 +24799,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns \p half result with converted value.
 */
+public static native @ByVal __half __float2half_rn(float a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts float number to half precision in round-towards-zero mode
@@ -24521,6 +24809,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns \p half result with converted value.
 */
+public static native @ByVal __half __float2half_rz(float a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts float number to half precision in round-down mode
@@ -24530,6 +24819,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns \p half result with converted value.
 */
+public static native @ByVal __half __float2half_rd(float a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts float number to half precision in round-up mode
@@ -24539,6 +24829,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns \p half result with converted value.
 */
+public static native @ByVal __half __float2half_ru(float a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts \p half number to float.
@@ -24547,542 +24838,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns float result with converted value.
 */
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-to-nearest-even mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to a signed integer in
-* round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-to-nearest-even mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-towards-zero mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-down mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed integer to a half in round-up mode.
-*
-* Convert the signed integer value \p i to a half-precision floating point
-* value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed short integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to a signed short
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-towards-zero mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-down mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed short integer to a half in round-up mode.
-*
-* Convert the signed short integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-to-nearest-even mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned integer
-* in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-to-nearest-even mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-towards-zero mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-down mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned integer to a half in round-up mode.
-*
-* Convert the unsigned integer value \p i to a half-precision floating point
-* value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-towards-zero
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned short integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned short
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-towards-zero
-* mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-down mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned short integer to a half in round-up mode.
-*
-* Convert the unsigned short integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-towards-zero
-* mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to an unsigned 64-bit integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to an unsigned 64-bit
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-towards-zero
-* mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-down mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert an unsigned 64-bit integer to a half in round-up mode.
-*
-* Convert the unsigned 64-bit integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-to-nearest-even
-* mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-towards-zero mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-down mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a half to a signed 64-bit integer in round-up mode.
-*
-* Convert the half-precision floating point value \p h to a signed 64-bit
-* integer in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-to-nearest-even
-* mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-to-nearest-even mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-towards-zero mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-towards-zero mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-down mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-down mode.
-*
-* @return Returns converted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Convert a signed 64-bit integer to a half in round-up mode.
-*
-* Convert the signed 64-bit integer value \p i to a half-precision floating
-* point value in round-up mode.
-*
-* @return Returns converted value.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Truncate input argument to the integral part.
-*
-* Round \p h to the nearest integer value that does not exceed \p h in
-* magnitude.
-*
-* @return Returns truncated integer value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculate ceiling of the input argument.
-*
-* Compute the smallest integer value not less than \p h.
-*
-* @return Returns ceiling expressed as a half-precision floating point number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculate the largest integer less than or equal to \p h.
-*
-* Calculate the largest integer value which is less than or equal to \p h.
-*
-* @return Returns floor expressed as half-precision floating point number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Round input to nearest integer value in half-precision floating point
-* number.
-*
-* Round \p h to the nearest integer value in half-precision floating point
-* format, with halfway cases rounded to the nearest even integer value.
-*
-* @return Returns rounded integer value expressed as half-precision floating
-* point number.
-*/
-
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Truncate \p half2 vector input argument to the integral part.
-*
-* Round each component of vector \p h to the nearest integer value that does
-* not exceed \p h in magnitude.
-*
-* @return Returns \p half2 vector truncated integer value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculate \p half2 vector ceiling of the input argument.
-*
-* For each component of vector \p h compute the smallest integer value not less
-* than \p h.
-*
-* @return Returns \p half2 vector ceiling expressed as a pair of half-precision
-* floating point numbers.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculate the largest integer less than or equal to \p h.
-*
-* For each component of vector \p h calculate the largest integer value which
-* is less than or equal to \p h.
-*
-* @return Returns \p half2 vector floor expressed as a pair of half-precision
-* floating point number.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Round input to nearest integer value in half-precision floating point
-* number.
-*
-* Round each component of \p half2 vector \p h to the nearest integer value in
-* half-precision floating point format, with halfway cases rounded to the
-* nearest even integer value.
-*
-* @return Returns \p half2 vector of rounded integer values expressed as
-* half-precision floating point numbers.
-*/
-
+public static native float __half2float(@Const @ByVal __half a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts input to half precision in round-to-nearest-even mode and
@@ -25094,6 +24850,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 * @return Returns \p half2 with both halves equal to the converted half
 * precision number.
 */
+public static native @ByVal __half2 __float2half2_rn(float a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts both input floats to half precision in round-to-nearest-even
@@ -25107,28 +24864,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 * @return Returns \p half2 which has corresponding halves equal to the
 * converted input floats.
 */
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts both components of float2 number to half precision in
-* round-to-nearest-even mode and returns \p half2 with converted values.
-*
-* Converts both components of float2 to half precision in round-to-nearest
-* mode and combines the results into one \p half2 number. Low 16 bits of the
-* return value correspond to \p a.x and high 16 bits of the return value
-* correspond to \p a.y.
-*
-* @return Returns \p half2 which has corresponding halves equal to the
-* converted float2 components.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Converts both halves of \p half2 to float2 and returns the result.
-*
-* Converts both halves of \p half2 input \p a to float2 and returns the
-* result.
-*
-* @return Returns converted float2.
-*/
+public static native @ByVal __half2 __floats2half2_rn(float a, float b);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts low 16 bits of \p half2 to float and returns the result
@@ -25138,15 +24874,7 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns low 16 bits of \p a converted to float.
 */
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Returns \p half2 with both halves equal to the input value.
-*
-* Returns \p half2 number with both halves equal to the input \p a \p half
-* number.
-*
-* @return Returns \p half2 with both halves equal to the input \p a.
-*/
+public static native float __low2float(@Const @ByVal __half2 a);
 /**
 * \ingroup CUDA_MATH__HALF_MISC
 * \brief Converts high 16 bits of \p half2 to float and returns the result
@@ -25156,1007 +24884,16 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
 *
 * @return Returns high 16 bits of \p a converted to float.
 */
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Swaps both halves of the \p half2 input.
-*
-* Swaps both halves of the \p half2 input and returns a new \p half2 number
-* with swapped halves.
-*
-* @return Returns \p half2 with halves swapped.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts low 16 bits from each of the two \p half2 inputs and combines
-* into one \p half2 number.
-*
-* Extracts low 16 bits from each of the two \p half2 inputs and combines into
-* one \p half2 number. Low 16 bits from input \p a is stored in low 16 bits of
-* the return value, low 16 bits from input \p b is stored in high 16 bits of
-* the return value.
-*
-* @return Returns \p half2 which contains low 16 bits from \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts high 16 bits from each of the two \p half2 inputs and
-* combines into one \p half2 number.
-*
-* Extracts high 16 bits from each of the two \p half2 inputs and combines into
-* one \p half2 number. High 16 bits from input \p a is stored in low 16 bits of
-* the return value, high 16 bits from input \p b is stored in high 16 bits of
-* the return value.
-*
-* @return Returns \p half2 which contains high 16 bits from \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Returns high 16 bits of \p half2 input.
-*
-* Returns high 16 bits of \p half2 input \p a.
-*
-* @return Returns \p half which contains high 16 bits of the input.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Returns low 16 bits of \p half2 input.
-*
-* Returns low 16 bits of \p half2 input \p a.
-*
-* @return Returns \p half which contains low 16 bits of the input.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Checks if the input \p half number is infinite.
-*
-* Checks if the input \p half number \p a is infinite.
-*
-* @return Returns -1 iff \p a is equal to negative infinity, 1 iff \p a is
-* equal to positive infinity and 0 otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Combines two \p half numbers into one \p half2 number.
-*
-* Combines two input \p half number \p a and \p b into one \p half2 number.
-* Input \p a is stored in low 16 bits of the return value, input \p b is stored
-* in high 16 bits of the return value.
-*
-* @return Returns \p half2 number which has one half equal to \p a and the
-* other to \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts low 16 bits from \p half2 input.
-*
-* Extracts low 16 bits from \p half2 input \p a and returns a new \p half2
-* number which has both halves equal to the extracted bits.
-*
-* @return Returns \p half2 with both halves equal to low 16 bits from the
-* input.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Extracts high 16 bits from \p half2 input.
-*
-* Extracts high 16 bits from \p half2 input \p a and returns a new \p half2
-* number which has both halves equal to the extracted bits.
-*
-* @return Returns \p half2 with both halves equal to high 16 bits from the
-* input.
-*/
+public static native float __high2float(@Const @ByVal __half2 a);
 
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in a \p half as a signed short integer.
-*
-* Reinterprets the bits in the half-precision floating point value \p h
-* as a signed short integer.
-*
-* @return Returns reinterpreted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in a \p half as an unsigned short integer.
-*
-* Reinterprets the bits in the half-precision floating point value \p h
-* as an unsigned short integer.
-*
-* @return Returns reinterpreted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in a signed short integer as a \p half.
-*
-* Reinterprets the bits in the signed short integer value \p i as a
-* half-precision floating point value.
-*
-* @return Returns reinterpreted value.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_MISC
-* \brief Reinterprets bits in an unsigned short integer as a \p half.
-*
-* Reinterprets the bits in the unsigned short integer value \p i as a
-* half-precision floating point value.
-*
-* @return Returns reinterpreted value.
-*/
+// #if defined(__CUDACC__)
 
-// #if __CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)
-// #if !defined warpSize && !defined __local_warpSize
-public static final int warpSize =    32;
-// #define __local_warpSize
-// #endif
-
-// #if defined(_WIN32)
-// # define __DEPRECATED__(msg) __declspec(deprecated(msg))
-// #elif (defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5 && !defined(__clang__))))
-// # define __DEPRECATED__(msg) __attribute__((deprecated))
-// #else
-// # define __DEPRECATED__(msg) __attribute__((deprecated(msg)))
-// #endif
-
-// #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 700
-// #define __WSB_DEPRECATION_MESSAGE(x) #x"() is not valid on compute_70 and above, and should be replaced with "#x"_sync()."
-//     "To continue using "#x"(), specify virtual architecture compute_60 when targeting sm_70 and above, for example, using the pair of compiler options: -arch=compute_60 -code=sm_70."
-// #else
-// #define __WSB_DEPRECATION_MESSAGE(x) #x"() is deprecated in favor of "#x"_sync() and may be removed in a future release (Use -Wno-deprecated-declarations to suppress this warning)."
-// #endif
-
-// #if defined(__local_warpSize)
-// #undef warpSize
-// #undef __local_warpSize
-// #endif
-// #endif /*__CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__) */
-
-// #if defined(__cplusplus) && ( __CUDA_ARCH__ >=320 || !defined(__CUDA_ARCH__) )
-// #endif /*defined(__cplusplus) && ( __CUDA_ARCH__ >=320 || !defined(__CUDA_ARCH__) )*/
-
-// #if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs half2 vector if-equal comparison.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of if-equal comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector not-equal comparison.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of not-equal comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-equal comparison.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of less-equal comparison of
-* vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-equal comparison.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of greater-equal comparison of
-* vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-than comparison.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the \p half2 vector result of less-than comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-than comparison.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate false results.
-*
-* @return Returns the half2 vector result of greater-than comparison of vectors
-* \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered if-equal comparison.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered if-equal comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered not-equal comparison.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered not-equal comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-equal comparison.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered less-equal comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-equal comparison.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered greater-equal
-* comparison of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-than comparison.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered less-than comparison
-* of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-than comparison.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
-* NaN inputs generate true results.
-*
-* @return Returns the \p half2 vector result of unordered greater-than
-* comparison of vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Determine whether \p half2 argument is a NaN.
-*
-* Determine whether each half of input \p half2 number \p a is a NaN.
-*
-* @return Returns \p half2 which has the corresponding \p half results set to
-* 1.0 for true, or 0.0 for false.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector addition in round-to-nearest-even mode.
-*
-* Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
-* mode.
-*
-* @return Returns the \p half2 vector result of adding vectors \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector subtraction in round-to-nearest-even mode.
-*
-* Subtracts \p half2 input vector \p b from input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns the \p half2 vector result of subtraction vector \p b from \p
-* a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector multiplication in round-to-nearest-even mode.
-*
-* Performs \p half2 vector multiplication of inputs \p a and \p b, in
-* round-to-nearest-even mode.
-*
-* @return Returns the \p half2 vector result of multiplying vectors \p a and \p
-* b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half2 vector division in round-to-nearest-even mode.
-*
-* Divides \p half2 input vector \p a by input vector \p b in round-to-nearest
-* mode.
-*
-* @return Returns the \p half2 vector result of division \p a by \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector addition in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
-* mode, and clamps the results to range [0.0, 1.0]. NaN results are flushed to
-* +0.0.
-*
-* @return Returns the \p half2 vector result of adding vectors \p a and \p b
-* with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector subtraction in round-to-nearest-even mode,
-* with saturation to [0.0, 1.0].
-*
-* Subtracts \p half2 input vector \p b from input vector \p a in
-* round-to-nearest-even mode, and clamps the results to range [0.0, 1.0]. NaN
-* results are flushed to +0.0.
-*
-* @return Returns the \p half2 vector result of subtraction vector \p b from \p
-* a with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector multiplication in round-to-nearest-even mode,
-* with saturation to [0.0, 1.0].
-*
-* Performs \p half2 vector multiplication of inputs \p a and \p b, in
-* round-to-nearest-even mode, and clamps the results to range [0.0, 1.0]. NaN
-* results are flushed to +0.0.
-*
-* @return Returns the \p half2 vector result of multiplying vectors \p a and \p
-* b with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector fused multiply-add in round-to-nearest-even
-* mode.
-*
-* Performs \p half2 vector multiply on inputs \p a and \p b,
-* then performs a \p half2 vector add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode.
-*
-* @return Returns the \p half2 vector result of the fused multiply-add
-* operation on vectors \p a, \p b, and \p c.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Performs \p half2 vector fused multiply-add in round-to-nearest-even
-* mode, with saturation to [0.0, 1.0].
-*
-* Performs \p half2 vector multiply on inputs \p a and \p b,
-* then performs a \p half2 vector add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode, and clamps the
-* results to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half2 vector result of the fused multiply-add
-* operation on vectors \p a, \p b, and \p c with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_ARITHMETIC
-* \brief Negates both halves of the input \p half2 number and returns the
-* result.
-*
-* Negates both halves of the input \p half2 number \p a and returns the result.
-*
-* @return Returns \p half2 number with both halves negated.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half addition in round-to-nearest-even mode.
-*
-* Performs \p half addition of inputs \p a and \p b, in round-to-nearest-even
-* mode.
-*
-* @return Returns the \p half result of adding \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half subtraction in round-to-nearest-even mode.
-*
-* Subtracts \p half input \p b from input \p a in round-to-nearest
-* mode.
-*
-* @return Returns the \p half result of subtraction \p b from \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half multiplication in round-to-nearest-even mode.
-*
-* Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
-* mode.
-*
-* @return Returns the \p half result of multiplying \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half division in round-to-nearest-even mode.
-*
-* Divides \p half input \p a by input \p b in round-to-nearest
-* mode.
-*
-* @return Returns the \p half result of division \p a by \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half addition in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Performs \p half add of inputs \p a and \p b, in round-to-nearest-even mode,
-* and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half result of adding \p a and \p b with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half subtraction in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Subtracts \p half input \p b from input \p a in round-to-nearest
-* mode,
-* and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half result of subtraction \p b from \p a
-* with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half multiplication in round-to-nearest-even mode, with
-* saturation to [0.0, 1.0].
-*
-* Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
-* mode, and clamps the result to range [0.0, 1.0]. NaN results are flushed to
-* +0.0.
-*
-* @return Returns the \p half result of multiplying \p a and \p b with
-* saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half fused multiply-add in round-to-nearest-even mode.
-*
-* Performs \p half multiply on inputs \p a and \p b,
-* then performs a \p half add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode.
-*
-* @return Returns the \p half result of the fused multiply-add operation on \p
-* a, \p b, and \p c.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Performs \p half fused multiply-add in round-to-nearest-even mode,
-* with saturation to [0.0, 1.0].
-*
-* Performs \p half multiply on inputs \p a and \p b,
-* then performs a \p half add of the result with \p c,
-* rounding the result once in round-to-nearest-even mode, and clamps the result
-* to range [0.0, 1.0]. NaN results are flushed to +0.0.
-*
-* @return Returns the \p half result of the fused multiply-add operation on \p
-* a, \p b, and \p c with saturation.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_ARITHMETIC
-* \brief Negates input \p half number and returns the result.
-*
-* Negates input \p half number and returns the result.
-*
-* @return Returns negated \p half input \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector if-equal comparison, and returns boolean true
-* iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half if-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of if-equal comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector not-equal comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half not-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of not-equal comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-equal comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of less-equal comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-equal comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of greater-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector less-than comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of less-than comparison
-* of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector greater-than comparison, and returns boolean
-* true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate false results.
-*
-* @return Returns boolean true if both \p half results of greater-than
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered if-equal comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half if-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered if-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered not-equal comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half not-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered not-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-equal comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered less-equal
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-equal comparison, and
-* returns boolean true iff both \p half results are true, boolean false
-* otherwise.
-*
-* Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-equal comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered
-* greater-equal comparison of vectors \p a and \p b are true, boolean false
-* otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered less-than comparison, and returns
-* boolean true iff both \p half results are true, boolean false otherwise.
-*
-* Performs \p half2 vector less-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half less-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered less-than
-* comparison of vectors \p a and \p b are true, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_COMPARISON
-* \brief Performs \p half2 vector unordered greater-than comparison, and
-* returns boolean true iff both \p half results are true, boolean false
-* otherwise.
-*
-* Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
-* The bool result is set to true only if both \p half greater-than comparisons
-* evaluate to true, or false otherwise.
-* NaN inputs generate true results.
-*
-* @return Returns boolean true if both \p half results of unordered
-* greater-than comparison of vectors \p a and \p b are true, boolean false
-* otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half if-equal comparison.
-*
-* Performs \p half if-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of if-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half not-equal comparison.
-*
-* Performs \p half not-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of not-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half less-equal comparison.
-*
-* Performs \p half less-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of less-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half greater-equal comparison.
-*
-* Performs \p half greater-equal comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of greater-equal comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half less-than comparison.
-*
-* Performs \p half less-than comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of less-than comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half greater-than comparison.
-*
-* Performs \p half greater-than comparison of inputs \p a and \p b.
-* NaN inputs generate false results.
-*
-* @return Returns boolean result of greater-than comparison of \p a and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered if-equal comparison.
-*
-* Performs \p half if-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered if-equal comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered not-equal comparison.
-*
-* Performs \p half not-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered not-equal comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered less-equal comparison.
-*
-* Performs \p half less-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered less-equal comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered greater-equal comparison.
-*
-* Performs \p half greater-equal comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered greater-equal comparison of \p a
-* and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered less-than comparison.
-*
-* Performs \p half less-than comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered less-than comparison of \p a and
-* \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Performs \p half unordered greater-than comparison.
-*
-* Performs \p half greater-than comparison of inputs \p a and \p b.
-* NaN inputs generate true results.
-*
-* @return Returns boolean result of unordered greater-than comparison of \p a
-* and \p b.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_COMPARISON
-* \brief Determine whether \p half argument is a NaN.
-*
-* Determine whether \p half value \p a is a NaN.
-*
-* @return Returns boolean true iff argument is a NaN, boolean false otherwise.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half square root in round-to-nearest-even mode.
-*
-* Calculates \p half square root of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half square root of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half reciprocal square root in round-to-nearest-even
-* mode.
-*
-* Calculates \p half reciprocal square root of input \p a in round-to-nearest
-* mode.
-*
-* @return Returns \p half reciprocal square root of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half reciprocal in round-to-nearest-even mode.
-*
-* Calculates \p half reciprocal of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half reciprocal of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half natural logarithm in round-to-nearest-even mode.
-*
-* Calculates \p half natural logarithm of input \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half natural logarithm of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half binary logarithm in round-to-nearest-even mode.
-*
-* Calculates \p half binary logarithm of input \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half binary logarithm of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half decimal logarithm in round-to-nearest-even mode.
-*
-* Calculates \p half decimal logarithm of input \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half decimal logarithm of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half natural exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half natural exponential function of input \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half natural exponential function of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half binary exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half binary exponential function of input \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half binary exponential function of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half decimal exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half decimal exponential function of input \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half decimal exponential function of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half cosine in round-to-nearest-even mode.
-*
-* Calculates \p half cosine of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half cosine of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF_FUNCTIONS
-* \brief Calculates \p half sine in round-to-nearest-even mode.
-*
-* Calculates \p half sine of input \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half sine of \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector square root in round-to-nearest-even mode.
-*
-* Calculates \p half2 square root of input vector \p a in round-to-nearest
-* mode.
-*
-* @return Returns \p half2 square root of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector reciprocal square root in round-to-nearest
-* mode.
-*
-* Calculates \p half2 reciprocal square root of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 reciprocal square root of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector reciprocal in round-to-nearest-even mode.
-*
-* Calculates \p half2 reciprocal of input vector \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half2 reciprocal of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector natural logarithm in round-to-nearest-even
-* mode.
-*
-* Calculates \p half2 natural logarithm of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 natural logarithm of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector binary logarithm in round-to-nearest-even
-* mode.
-*
-* Calculates \p half2 binary logarithm of input vector \p a in round-to-nearest
-* mode.
-*
-* @return Returns \p half2 binary logarithm of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector decimal logarithm in round-to-nearest-even
-* mode.
-*
-* Calculates \p half2 decimal logarithm of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 decimal logarithm of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector exponential function in round-to-nearest
-* mode.
-*
-* Calculates \p half2 exponential function of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 exponential function of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector binary exponential function in
-* round-to-nearest-even mode.
-*
-* Calculates \p half2 binary exponential function of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 binary exponential function of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector decimal exponential function in
-* round-to-nearest-even mode.
-*
-* Calculates \p half2 decimal exponential function of input vector \p a in
-* round-to-nearest-even mode.
-*
-* @return Returns \p half2 decimal exponential function of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector cosine in round-to-nearest-even mode.
-*
-* Calculates \p half2 cosine of input vector \p a in round-to-nearest-even
-* mode.
-*
-* @return Returns \p half2 cosine of vector \p a.
-*/
-/**
-* \ingroup CUDA_MATH__HALF2_FUNCTIONS
-* \brief Calculates \p half2 vector sine in round-to-nearest-even mode.
-*
-* Calculates \p half2 sine of input vector \p a in round-to-nearest-even mode.
-*
-* @return Returns \p half2 sine of vector \p a.
-*/
-
-// #endif /*if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)*/
+// #endif /* defined(__CUDACC__) */
 
 // #undef __CUDA_FP16_DECL__
+// #undef __CUDA_HOSTDEVICE_FP16_DECL__
 
-// #endif /* defined(__cplusplus) && defined(__CUDACC__) */
+// #endif /* defined(__cplusplus) */
 
 /* Note the .hpp file is included even for host-side compilation, to capture the "half" & "half2" definitions */
 // #include "cuda_fp16.hpp"
@@ -26226,10 +24963,16 @@ public static final int warpSize =    32;
 // #endif /* __cplusplus >= 201103L && !defined(__CUDACC_RTC__) */
 
 /* Set up function decorations */
+/* Set up function decorations */
 // #if defined(__CUDACC__)
-// #else /* !__CUDACC__ */
+// #else /* !defined(__CUDACC__) */
+// #if defined(__GNUC__) /* || defined(__IBMC__) || defined(__clang__) || defined(__PGI) */
+// #define __CUDA_HOSTDEVICE_FP16_DECL__ static __attribute__ ((unused))
+// #else
+// #define __CUDA_HOSTDEVICE_FP16_DECL__ static
+// #endif /* defined(__GNUC__) */
 // #define __CUDA_HOSTDEVICE__
-// #endif /* __CUDACC_) */
+// #endif /* defined(__CUDACC_) */
 
 /* Set up structure-alignment attribute */
 // #if defined(__CUDACC__)
@@ -26252,9 +24995,18 @@ public static final int warpSize =    32;
 /* Macros to allow half & half2 to be used by inline assembly */
 // #define __HALF_TO_US(var) *(reinterpret_cast<unsigned short *>(&(var)))
 // #define __HALF_TO_CUS(var) *(reinterpret_cast<const unsigned short *>(&(var)))
+// #define __HALF_TO_VUS(var) *(reinterpret_cast<volatile unsigned short *>(&(var)))
+// #define __HALF_TO_CVUS(var) *(reinterpret_cast<const volatile unsigned short *>(&(var)))
 // #define __HALF2_TO_UI(var) *(reinterpret_cast<unsigned int *>(&(var)))
 // #define __HALF2_TO_CUI(var) *(reinterpret_cast<const unsigned int *>(&(var)))
 
+/* Type punning macros for host-side implementations */
+// #if defined(__CUDACC__)
+// #else
+// #include <string.h>
+// #define __COPY_FLOAT_TO_UI(to, from) memcpy(&(to), &(from), sizeof((to)))
+// #define __COPY_UI_TO_FLOAT(to, from) memcpy(&(to), &(from), sizeof((to)))
+// #endif
 
 /**
 * Types which allow static initialization of "half" and "half2" until
@@ -26310,6 +25062,13 @@ public static class __half2_raw extends Pointer {
 // #endif /* __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) */
 // #endif /* defined(__GNUC__) */
 
+/* class' : multiple assignment operators specified
+   The class has multiple assignment operators of a single type. This warning is informational */
+// #if defined(_MSC_VER) && _MSC_VER >= 1500
+// #pragma warning( push )
+// #pragma warning( disable:4522 )
+// #endif /* defined(__GNUC__) */
+
 @NoOffset public static class __half extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -26333,9 +25092,24 @@ public static class __half2_raw extends Pointer {
     public native @ByRef @Name("operator =") __half put(@Const @ByRef __half_raw hr);
     public native @ByVal @Cast("__half_raw*") @Name("operator __half_raw") __half_raw as__half_raw();
 
-/* Member functions are only available to nvcc compilation */
+// #if !defined(__CUDA_NO_HALF_CONVERSIONS__)
+
+    /* Construct from float/double */
+    public __half(float f) { super((Pointer)null); allocate(f); }
+    private native void allocate(float f);
+    public __half(double f) { super((Pointer)null); allocate(f); }
+    private native void allocate(double f);
+
+    public native @Name("operator float") float asFloat();
+    public native @ByRef @Name("operator =") __half put(float f);
+
+    /* We omit "cast to double" operator, so as to not be ambiguous about up-cast */
+    public native @ByRef @Name("operator =") __half put(double f);
+
+/* Member functions only available to nvcc compilation so far */
 // #if defined(__CUDACC__)
 // #endif /* defined(__CUDACC__) */
+// #endif /* !defined(__CUDA_NO_HALF_CONVERSIONS__) */
 }
 
 /* Global-space operator functions are only available to nvcc compilation */
@@ -26374,6 +25148,15 @@ public static class __half2_raw extends Pointer {
     public native @ByVal @Cast("__half2_raw*") @Name("operator __half2_raw") __half2_raw as__half2_raw();
 }
 
+/* Global-space operator functions are only available to nvcc compilation */
+// #if defined(__CUDACC__)
+// #endif /* defined(__CUDACC__) */
+
+/* Restore warning for multiple assignment operators */
+// #if defined(_MSC_VER) && _MSC_VER >= 1500
+// #pragma warning( pop )
+// #endif
+
 /* Restore -Weffc++ warnings from here on */
 // #if defined(__GNUC__)
 // #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
@@ -26384,16 +25167,29 @@ public static class __half2_raw extends Pointer {
 // #undef __CUDA_HOSTDEVICE__
 // #undef __CUDA_ALIGN__
 
-/* All intrinsic functions are only available to nvcc compilers */
+// #ifndef __CUDACC_RTC__  /* no host functions in NVRTC mode */
+public static native @Cast("unsigned short") short __internal_float2half(float f, @Cast("unsigned int*") @ByRef IntPointer sign, @Cast("unsigned int*") @ByRef IntPointer remainder);
+public static native @Cast("unsigned short") short __internal_float2half(float f, @Cast("unsigned int*") @ByRef IntBuffer sign, @Cast("unsigned int*") @ByRef IntBuffer remainder);
+public static native @Cast("unsigned short") short __internal_float2half(float f, @Cast("unsigned int*") @ByRef int[] sign, @Cast("unsigned int*") @ByRef int[] remainder);
+// #endif  /* #if !defined(__CUDACC_RTC__) */
+
+// #ifndef __CUDACC_RTC__  /* no host functions in NVRTC mode */
+public static native float __internal_half2float(@Cast("unsigned short") short h);
+// #endif  /* !defined(__CUDACC_RTC__) */
+
+/* Intrinsic functions only available to nvcc compilers */
 // #if defined(__CUDACC__)
 // #endif /* defined(__CUDACC__) */
 // #endif /* defined(__cplusplus) */
 
+// #undef __CUDA_HOSTDEVICE_FP16_DECL__
+// #undef __CUDA_FP16_DECL__
 // #undef __HALF_TO_US
 // #undef __HALF_TO_CUS
 // #undef __HALF2_TO_UI
 // #undef __HALF2_TO_CUI
-
+// #undef __COPY_FLOAT_TO_UI
+// #undef __COPY_UI_TO_FLOAT
 
 /* Define first-class types "half" and "half2", unless user specifies otherwise via "#define CUDA_NO_HALF" */
 /* C cannot ever have these types defined here, because __half and __half2 are C++ classes */

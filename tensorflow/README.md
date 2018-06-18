@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 1.8.0  http://www.tensorflow.org/
+ * TensorFlow 1.9.0-rc0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,21 +44,27 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.8.0-1.4.2-SNAPSHOT</version>
+            <version>1.9.0-rc0-1.4.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.8.0-1.4.2-SNAPSHOT</version>
+            <version>1.9.0-rc0-1.4.2-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.8.0-1.4.2-SNAPSHOT</version>
+            <version>1.9.0-rc0-1.4.2-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.9.0-rc0-1.4.2-SNAPSHOT</version>
+            <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
     </dependencies>

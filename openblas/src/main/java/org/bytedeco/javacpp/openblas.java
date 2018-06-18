@@ -6,6 +6,8 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.openblas_nolapack.*;
+
 public class openblas extends org.bytedeco.javacpp.presets.openblas {
     static { Loader.load(); }
 
@@ -44,7 +46,7 @@ public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 12288;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.2.20 ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.0.dev ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -95,7 +97,7 @@ public static final String OPENBLAS_VERSION = " OpenBLAS 0.2.20 ";
    extension since version 3.0.  If neither are available, use a compatible
    structure as fallback (see Clause 6.2.5.13 of the C99 standard). */
 // #if ((defined(__STDC_IEC_559_COMPLEX__) || __STDC_VERSION__ >= 199901L ||
-//       (__GNUC__ >= 3 && !defined(__cplusplus))) && !(defined(FORCE_OPENBLAS_COMPLEX_STRUCT)))
+//       (__GNUC__ >= 3 && !defined(__cplusplus))) && !(defined(FORCE_OPENBLAS_COMPLEX_STRUCT))) && !defined(_MSC_VER)
 //   #define OPENBLAS_COMPLEX_C99
 // #ifndef __cplusplus
 //   #include <complex.h>
@@ -192,18 +194,10 @@ public static native double cblas_ddot(@Cast("const blasint") int n, @Const doub
 
 
 
-public static native void cblas_cdotu_sub(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx, @Const FloatPointer y, @Cast("const blasint") int incy, @Cast("openblas_complex_float*") FloatPointer ret);
-public static native void cblas_cdotu_sub(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx, @Const FloatBuffer y, @Cast("const blasint") int incy, @Cast("openblas_complex_float*") FloatBuffer ret);
-public static native void cblas_cdotu_sub(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx, @Const float[] y, @Cast("const blasint") int incy, @Cast("openblas_complex_float*") float[] ret);
-public static native void cblas_cdotc_sub(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx, @Const FloatPointer y, @Cast("const blasint") int incy, @Cast("openblas_complex_float*") FloatPointer ret);
-public static native void cblas_cdotc_sub(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx, @Const FloatBuffer y, @Cast("const blasint") int incy, @Cast("openblas_complex_float*") FloatBuffer ret);
-public static native void cblas_cdotc_sub(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx, @Const float[] y, @Cast("const blasint") int incy, @Cast("openblas_complex_float*") float[] ret);
-public static native void cblas_zdotu_sub(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx, @Const DoublePointer y, @Cast("const blasint") int incy, @Cast("openblas_complex_double*") DoublePointer ret);
-public static native void cblas_zdotu_sub(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx, @Const DoubleBuffer y, @Cast("const blasint") int incy, @Cast("openblas_complex_double*") DoubleBuffer ret);
-public static native void cblas_zdotu_sub(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx, @Const double[] y, @Cast("const blasint") int incy, @Cast("openblas_complex_double*") double[] ret);
-public static native void cblas_zdotc_sub(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx, @Const DoublePointer y, @Cast("const blasint") int incy, @Cast("openblas_complex_double*") DoublePointer ret);
-public static native void cblas_zdotc_sub(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx, @Const DoubleBuffer y, @Cast("const blasint") int incy, @Cast("openblas_complex_double*") DoubleBuffer ret);
-public static native void cblas_zdotc_sub(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx, @Const double[] y, @Cast("const blasint") int incy, @Cast("openblas_complex_double*") double[] ret);
+public static native void cblas_cdotu_sub(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx, @Const Pointer y, @Cast("const blasint") int incy, Pointer ret);
+public static native void cblas_cdotc_sub(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx, @Const Pointer y, @Cast("const blasint") int incy, Pointer ret);
+public static native void cblas_zdotu_sub(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx, @Const Pointer y, @Cast("const blasint") int incy, Pointer ret);
+public static native void cblas_zdotc_sub(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx, @Const Pointer y, @Cast("const blasint") int incy, Pointer ret);
 
 public static native float cblas_sasum(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx);
 public static native float cblas_sasum(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx);
@@ -211,12 +205,8 @@ public static native float cblas_sasum(@Cast("const blasint") int n, @Const floa
 public static native double cblas_dasum(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx);
 public static native double cblas_dasum(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx);
 public static native double cblas_dasum(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
-public static native float cblas_scasum(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx);
-public static native float cblas_scasum(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx);
-public static native float cblas_scasum(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx);
-public static native double cblas_dzasum(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx);
-public static native double cblas_dzasum(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx);
-public static native double cblas_dzasum(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
+public static native float cblas_scasum(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
+public static native double cblas_dzasum(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 
 public static native float cblas_snrm2(@Cast("const blasint") int N, @Const FloatPointer X, @Cast("const blasint") int incX);
 public static native float cblas_snrm2(@Cast("const blasint") int N, @Const FloatBuffer X, @Cast("const blasint") int incX);
@@ -224,12 +214,8 @@ public static native float cblas_snrm2(@Cast("const blasint") int N, @Const floa
 public static native double cblas_dnrm2(@Cast("const blasint") int N, @Const DoublePointer X, @Cast("const blasint") int incX);
 public static native double cblas_dnrm2(@Cast("const blasint") int N, @Const DoubleBuffer X, @Cast("const blasint") int incX);
 public static native double cblas_dnrm2(@Cast("const blasint") int N, @Const double[] X, @Cast("const blasint") int incX);
-public static native float cblas_scnrm2(@Cast("const blasint") int N, @Const FloatPointer X, @Cast("const blasint") int incX);
-public static native float cblas_scnrm2(@Cast("const blasint") int N, @Const FloatBuffer X, @Cast("const blasint") int incX);
-public static native float cblas_scnrm2(@Cast("const blasint") int N, @Const float[] X, @Cast("const blasint") int incX);
-public static native double cblas_dznrm2(@Cast("const blasint") int N, @Const DoublePointer X, @Cast("const blasint") int incX);
-public static native double cblas_dznrm2(@Cast("const blasint") int N, @Const DoubleBuffer X, @Cast("const blasint") int incX);
-public static native double cblas_dznrm2(@Cast("const blasint") int N, @Const double[] X, @Cast("const blasint") int incX);
+public static native float cblas_scnrm2(@Cast("const blasint") int N, @Const Pointer X, @Cast("const blasint") int incX);
+public static native double cblas_dznrm2(@Cast("const blasint") int N, @Const Pointer X, @Cast("const blasint") int incX);
 
 public static native @Cast("size_t") long cblas_isamax(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_isamax(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx);
@@ -237,12 +223,8 @@ public static native @Cast("size_t") long cblas_isamax(@Cast("const blasint") in
 public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 
 public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha, @Const FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
 public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha, @Const FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
@@ -250,12 +232,8 @@ public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha,
 public static native void cblas_daxpy(@Cast("const blasint") int n, double alpha, @Const DoublePointer x, @Cast("const blasint") int incx, DoublePointer y, @Cast("const blasint") int incy);
 public static native void cblas_daxpy(@Cast("const blasint") int n, double alpha, @Const DoubleBuffer x, @Cast("const blasint") int incx, DoubleBuffer y, @Cast("const blasint") int incy);
 public static native void cblas_daxpy(@Cast("const blasint") int n, double alpha, @Const double[] x, @Cast("const blasint") int incx, double[] y, @Cast("const blasint") int incy);
-public static native void cblas_caxpy(@Cast("const blasint") int n, @Const FloatPointer alpha, @Const FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
-public static native void cblas_caxpy(@Cast("const blasint") int n, @Const FloatBuffer alpha, @Const FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_caxpy(@Cast("const blasint") int n, @Const float[] alpha, @Const float[] x, @Cast("const blasint") int incx, float[] y, @Cast("const blasint") int incy);
-public static native void cblas_zaxpy(@Cast("const blasint") int n, @Const DoublePointer alpha, @Const DoublePointer x, @Cast("const blasint") int incx, DoublePointer y, @Cast("const blasint") int incy);
-public static native void cblas_zaxpy(@Cast("const blasint") int n, @Const DoubleBuffer alpha, @Const DoubleBuffer x, @Cast("const blasint") int incx, DoubleBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_zaxpy(@Cast("const blasint") int n, @Const double[] alpha, @Const double[] x, @Cast("const blasint") int incx, double[] y, @Cast("const blasint") int incy);
+public static native void cblas_caxpy(@Cast("const blasint") int n, @Const Pointer alpha, @Const Pointer x, @Cast("const blasint") int incx, Pointer y, @Cast("const blasint") int incy);
+public static native void cblas_zaxpy(@Cast("const blasint") int n, @Const Pointer alpha, @Const Pointer x, @Cast("const blasint") int incx, Pointer y, @Cast("const blasint") int incy);
 
 public static native void cblas_scopy(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
 public static native void cblas_scopy(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
@@ -263,12 +241,8 @@ public static native void cblas_scopy(@Cast("const blasint") int n, @Const float
 public static native void cblas_dcopy(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx, DoublePointer y, @Cast("const blasint") int incy);
 public static native void cblas_dcopy(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx, DoubleBuffer y, @Cast("const blasint") int incy);
 public static native void cblas_dcopy(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx, double[] y, @Cast("const blasint") int incy);
-public static native void cblas_ccopy(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
-public static native void cblas_ccopy(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_ccopy(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx, float[] y, @Cast("const blasint") int incy);
-public static native void cblas_zcopy(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx, DoublePointer y, @Cast("const blasint") int incy);
-public static native void cblas_zcopy(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx, DoubleBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_zcopy(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx, double[] y, @Cast("const blasint") int incy);
+public static native void cblas_ccopy(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx, Pointer y, @Cast("const blasint") int incy);
+public static native void cblas_zcopy(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx, Pointer y, @Cast("const blasint") int incy);
 
 public static native void cblas_sswap(@Cast("const blasint") int n, FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
 public static native void cblas_sswap(@Cast("const blasint") int n, FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
@@ -276,12 +250,8 @@ public static native void cblas_sswap(@Cast("const blasint") int n, float[] x, @
 public static native void cblas_dswap(@Cast("const blasint") int n, DoublePointer x, @Cast("const blasint") int incx, DoublePointer y, @Cast("const blasint") int incy);
 public static native void cblas_dswap(@Cast("const blasint") int n, DoubleBuffer x, @Cast("const blasint") int incx, DoubleBuffer y, @Cast("const blasint") int incy);
 public static native void cblas_dswap(@Cast("const blasint") int n, double[] x, @Cast("const blasint") int incx, double[] y, @Cast("const blasint") int incy);
-public static native void cblas_cswap(@Cast("const blasint") int n, FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
-public static native void cblas_cswap(@Cast("const blasint") int n, FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_cswap(@Cast("const blasint") int n, float[] x, @Cast("const blasint") int incx, float[] y, @Cast("const blasint") int incy);
-public static native void cblas_zswap(@Cast("const blasint") int n, DoublePointer x, @Cast("const blasint") int incx, DoublePointer y, @Cast("const blasint") int incy);
-public static native void cblas_zswap(@Cast("const blasint") int n, DoubleBuffer x, @Cast("const blasint") int incx, DoubleBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_zswap(@Cast("const blasint") int n, double[] x, @Cast("const blasint") int incx, double[] y, @Cast("const blasint") int incy);
+public static native void cblas_cswap(@Cast("const blasint") int n, Pointer x, @Cast("const blasint") int incx, Pointer y, @Cast("const blasint") int incy);
+public static native void cblas_zswap(@Cast("const blasint") int n, Pointer x, @Cast("const blasint") int incx, Pointer y, @Cast("const blasint") int incy);
 
 public static native void cblas_srot(@Cast("const blasint") int N, FloatPointer X, @Cast("const blasint") int incX, FloatPointer Y, @Cast("const blasint") int incY, float c, float s);
 public static native void cblas_srot(@Cast("const blasint") int N, FloatBuffer X, @Cast("const blasint") int incX, FloatBuffer Y, @Cast("const blasint") int incY, float c, float s);
@@ -317,18 +287,10 @@ public static native void cblas_sscal(@Cast("const blasint") int N, float alpha,
 public static native void cblas_dscal(@Cast("const blasint") int N, double alpha, DoublePointer X, @Cast("const blasint") int incX);
 public static native void cblas_dscal(@Cast("const blasint") int N, double alpha, DoubleBuffer X, @Cast("const blasint") int incX);
 public static native void cblas_dscal(@Cast("const blasint") int N, double alpha, double[] X, @Cast("const blasint") int incX);
-public static native void cblas_cscal(@Cast("const blasint") int N, @Const FloatPointer alpha, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_cscal(@Cast("const blasint") int N, @Const FloatBuffer alpha, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_cscal(@Cast("const blasint") int N, @Const float[] alpha, float[] X, @Cast("const blasint") int incX);
-public static native void cblas_zscal(@Cast("const blasint") int N, @Const DoublePointer alpha, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_zscal(@Cast("const blasint") int N, @Const DoubleBuffer alpha, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_zscal(@Cast("const blasint") int N, @Const double[] alpha, double[] X, @Cast("const blasint") int incX);
-public static native void cblas_csscal(@Cast("const blasint") int N, float alpha, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_csscal(@Cast("const blasint") int N, float alpha, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_csscal(@Cast("const blasint") int N, float alpha, float[] X, @Cast("const blasint") int incX);
-public static native void cblas_zdscal(@Cast("const blasint") int N, double alpha, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_zdscal(@Cast("const blasint") int N, double alpha, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_zdscal(@Cast("const blasint") int N, double alpha, double[] X, @Cast("const blasint") int incX);
+public static native void cblas_cscal(@Cast("const blasint") int N, @Const Pointer alpha, Pointer X, @Cast("const blasint") int incX);
+public static native void cblas_zscal(@Cast("const blasint") int N, @Const Pointer alpha, Pointer X, @Cast("const blasint") int incX);
+public static native void cblas_csscal(@Cast("const blasint") int N, float alpha, Pointer X, @Cast("const blasint") int incX);
+public static native void cblas_zdscal(@Cast("const blasint") int N, double alpha, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_sgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
 		 float alpha, @Const FloatPointer a, @Cast("const blasint") int lda,  @Const FloatPointer x, @Cast("const blasint") int incx,  float beta,  FloatPointer y, @Cast("const blasint") int incy);
@@ -343,17 +305,9 @@ public static native void cblas_dgemv(@Cast("const CBLAS_ORDER") int order,  @Ca
 public static native void cblas_dgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
 		 double alpha, @Const double[] a, @Cast("const blasint") int lda,  @Const double[] x, @Cast("const blasint") int incx,  double beta,  double[] y, @Cast("const blasint") int incy);
 public static native void cblas_cgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
-		 @Const FloatPointer alpha, @Const FloatPointer a, @Cast("const blasint") int lda,  @Const FloatPointer x, @Cast("const blasint") int incx,  @Const FloatPointer beta,  FloatPointer y, @Cast("const blasint") int incy);
-public static native void cblas_cgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
-		 @Const FloatBuffer alpha, @Const FloatBuffer a, @Cast("const blasint") int lda,  @Const FloatBuffer x, @Cast("const blasint") int incx,  @Const FloatBuffer beta,  FloatBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_cgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
-		 @Const float[] alpha, @Const float[] a, @Cast("const blasint") int lda,  @Const float[] x, @Cast("const blasint") int incx,  @Const float[] beta,  float[] y, @Cast("const blasint") int incy);
+		 @Const Pointer alpha, @Const Pointer a, @Cast("const blasint") int lda,  @Const Pointer x, @Cast("const blasint") int incx,  @Const Pointer beta,  Pointer y, @Cast("const blasint") int incy);
 public static native void cblas_zgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
-		 @Const DoublePointer alpha, @Const DoublePointer a, @Cast("const blasint") int lda,  @Const DoublePointer x, @Cast("const blasint") int incx,  @Const DoublePointer beta,  DoublePointer y, @Cast("const blasint") int incy);
-public static native void cblas_zgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
-		 @Const DoubleBuffer alpha, @Const DoubleBuffer a, @Cast("const blasint") int lda,  @Const DoubleBuffer x, @Cast("const blasint") int incx,  @Const DoubleBuffer beta,  DoubleBuffer y, @Cast("const blasint") int incy);
-public static native void cblas_zgemv(@Cast("const CBLAS_ORDER") int order,  @Cast("const CBLAS_TRANSPOSE") int trans,  @Cast("const blasint") int m, @Cast("const blasint") int n,
-		 @Const double[] alpha, @Const double[] a, @Cast("const blasint") int lda,  @Const double[] x, @Cast("const blasint") int incx,  @Const double[] beta,  double[] y, @Cast("const blasint") int incy);
+		 @Const Pointer alpha, @Const Pointer a, @Cast("const blasint") int lda,  @Const Pointer x, @Cast("const blasint") int incx,  @Const Pointer beta,  Pointer y, @Cast("const blasint") int incy);
 
 public static native void cblas_sger(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, float alpha, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer A, @Cast("const blasint") int lda);
 public static native void cblas_sger(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, float alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer Y, @Cast("const blasint") int incY, FloatBuffer A, @Cast("const blasint") int lda);
@@ -361,18 +315,10 @@ public static native void cblas_sger(@Cast("const CBLAS_ORDER") int order, @Cast
 public static native void cblas_dger(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, double alpha, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer Y, @Cast("const blasint") int incY, DoublePointer A, @Cast("const blasint") int lda);
 public static native void cblas_dger(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, double alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer A, @Cast("const blasint") int lda);
 public static native void cblas_dger(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, double alpha, @Const double[] X, @Cast("const blasint") int incX, @Const double[] Y, @Cast("const blasint") int incY, double[] A, @Cast("const blasint") int lda);
-public static native void cblas_cgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer A, @Cast("const blasint") int lda);
-public static native void cblas_cgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer Y, @Cast("const blasint") int incY, FloatBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_cgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] X, @Cast("const blasint") int incX, @Const float[] Y, @Cast("const blasint") int incY, float[] A, @Cast("const blasint") int lda);
-public static native void cblas_cgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer A, @Cast("const blasint") int lda);
-public static native void cblas_cgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer Y, @Cast("const blasint") int incY, FloatBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_cgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] X, @Cast("const blasint") int incX, @Const float[] Y, @Cast("const blasint") int incY, float[] A, @Cast("const blasint") int lda);
-public static native void cblas_zgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer Y, @Cast("const blasint") int incY, DoublePointer A, @Cast("const blasint") int lda);
-public static native void cblas_zgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_zgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] X, @Cast("const blasint") int incX, @Const double[] Y, @Cast("const blasint") int incY, double[] A, @Cast("const blasint") int lda);
-public static native void cblas_zgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer Y, @Cast("const blasint") int incY, DoublePointer A, @Cast("const blasint") int lda);
-public static native void cblas_zgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_zgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] X, @Cast("const blasint") int incX, @Const double[] Y, @Cast("const blasint") int incY, double[] A, @Cast("const blasint") int lda);
+public static native void cblas_cgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer Y, @Cast("const blasint") int incY, Pointer A, @Cast("const blasint") int lda);
+public static native void cblas_cgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer Y, @Cast("const blasint") int incY, Pointer A, @Cast("const blasint") int lda);
+public static native void cblas_zgeru(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer Y, @Cast("const blasint") int incY, Pointer A, @Cast("const blasint") int lda);
+public static native void cblas_zgerc(@Cast("const CBLAS_ORDER") int order, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer Y, @Cast("const blasint") int incY, Pointer A, @Cast("const blasint") int lda);
 
 public static native void cblas_strsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
 public static native void cblas_strsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer X, @Cast("const blasint") int incX);
@@ -380,12 +326,8 @@ public static native void cblas_strsv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dtrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer X, @Cast("const blasint") int incX);
 public static native void cblas_dtrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer X, @Cast("const blasint") int incX);
 public static native void cblas_dtrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
-public static native void cblas_ctrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_ctrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ctrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const float[] A, @Cast("const blasint") int lda, float[] X, @Cast("const blasint") int incX);
-public static native void cblas_ztrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_ztrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ztrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
+public static native void cblas_ctrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
+public static native void cblas_ztrsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_strmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
 public static native void cblas_strmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer X, @Cast("const blasint") int incX);
@@ -393,12 +335,8 @@ public static native void cblas_strmv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dtrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer X, @Cast("const blasint") int incX);
 public static native void cblas_dtrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer X, @Cast("const blasint") int incX);
 public static native void cblas_dtrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
-public static native void cblas_ctrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_ctrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ctrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const float[] A, @Cast("const blasint") int lda, float[] X, @Cast("const blasint") int incX);
-public static native void cblas_ztrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_ztrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ztrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
+public static native void cblas_ctrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
+public static native void cblas_ztrmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int N, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_ssyr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatPointer X, @Cast("const blasint") int incX, FloatPointer A, @Cast("const blasint") int lda);
 public static native void cblas_ssyr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, FloatBuffer A, @Cast("const blasint") int lda);
@@ -406,12 +344,8 @@ public static native void cblas_ssyr(@Cast("const CBLAS_ORDER") int order, @Cast
 public static native void cblas_dsyr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoublePointer X, @Cast("const blasint") int incX, DoublePointer A, @Cast("const blasint") int lda);
 public static native void cblas_dsyr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, DoubleBuffer A, @Cast("const blasint") int lda);
 public static native void cblas_dsyr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] X, @Cast("const blasint") int incX, double[] A, @Cast("const blasint") int lda);
-public static native void cblas_cher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatPointer X, @Cast("const blasint") int incX, FloatPointer A, @Cast("const blasint") int lda);
-public static native void cblas_cher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, FloatBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_cher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const float[] X, @Cast("const blasint") int incX, float[] A, @Cast("const blasint") int lda);
-public static native void cblas_zher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoublePointer X, @Cast("const blasint") int incX, DoublePointer A, @Cast("const blasint") int lda);
-public static native void cblas_zher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, DoubleBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_zher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] X, @Cast("const blasint") int incX, double[] A, @Cast("const blasint") int lda);
+public static native void cblas_cher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const Pointer X, @Cast("const blasint") int incX, Pointer A, @Cast("const blasint") int lda);
+public static native void cblas_zher(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const Pointer X, @Cast("const blasint") int incX, Pointer A, @Cast("const blasint") int lda);
 
 public static native void cblas_ssyr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo,@Cast("const blasint") int N, float alpha, @Const FloatPointer X,
                 @Cast("const blasint") int incX, @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer A, @Cast("const blasint") int lda);
@@ -425,18 +359,10 @@ public static native void cblas_dsyr2(@Cast("const CBLAS_ORDER") int order, @Cas
                 @Cast("const blasint") int incX, @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer A, @Cast("const blasint") int lda);
 public static native void cblas_dsyr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] X,
                 @Cast("const blasint") int incX, @Const double[] Y, @Cast("const blasint") int incY, double[] A, @Cast("const blasint") int lda);
-public static native void cblas_cher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer X, @Cast("const blasint") int incX,
-                @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer A, @Cast("const blasint") int lda);
-public static native void cblas_cher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer X, @Cast("const blasint") int incX,
-                @Const FloatBuffer Y, @Cast("const blasint") int incY, FloatBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_cher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] X, @Cast("const blasint") int incX,
-                @Const float[] Y, @Cast("const blasint") int incY, float[] A, @Cast("const blasint") int lda);
-public static native void cblas_zher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer X, @Cast("const blasint") int incX,
-                @Const DoublePointer Y, @Cast("const blasint") int incY, DoublePointer A, @Cast("const blasint") int lda);
-public static native void cblas_zher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX,
-                @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer A, @Cast("const blasint") int lda);
-public static native void cblas_zher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] X, @Cast("const blasint") int incX,
-                @Const double[] Y, @Cast("const blasint") int incY, double[] A, @Cast("const blasint") int lda);
+public static native void cblas_cher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX,
+                @Const Pointer Y, @Cast("const blasint") int incY, Pointer A, @Cast("const blasint") int lda);
+public static native void cblas_zher2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX,
+                @Const Pointer Y, @Cast("const blasint") int incY, Pointer A, @Cast("const blasint") int lda);
 
 public static native void cblas_sgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
                  @Cast("const blasint") int KL, @Cast("const blasint") int KU, float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer X, @Cast("const blasint") int incX, float beta, FloatPointer Y, @Cast("const blasint") int incY);
@@ -451,17 +377,9 @@ public static native void cblas_dgbmv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
                  @Cast("const blasint") int KL, @Cast("const blasint") int KU, double alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] X, @Cast("const blasint") int incX, double beta, double[] Y, @Cast("const blasint") int incY);
 public static native void cblas_cgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer beta, FloatPointer Y, @Cast("const blasint") int incY);
-public static native void cblas_cgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer beta, FloatBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_cgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] X, @Cast("const blasint") int incX, @Const float[] beta, float[] Y, @Cast("const blasint") int incY);
+                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 public static native void cblas_zgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer beta, DoublePointer Y, @Cast("const blasint") int incY);
-public static native void cblas_zgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer beta, DoubleBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_zgbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] X, @Cast("const blasint") int incX, @Const double[] beta, double[] Y, @Cast("const blasint") int incY);
+                 @Cast("const blasint") int KL, @Cast("const blasint") int KU, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 
 public static native void cblas_ssbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K, float alpha, @Const FloatPointer A,
                  @Cast("const blasint") int lda, @Const FloatPointer X, @Cast("const blasint") int incX, float beta, FloatPointer Y, @Cast("const blasint") int incY);
@@ -490,17 +408,9 @@ public static native void cblas_dtbmv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dtbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
 public static native void cblas_ctbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_ctbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ctbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const float[] A, @Cast("const blasint") int lda, float[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
 public static native void cblas_ztbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_ztbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ztbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_stbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
@@ -515,17 +425,9 @@ public static native void cblas_dtbsv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dtbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
 public static native void cblas_ctbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_ctbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ctbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const float[] A, @Cast("const blasint") int lda, float[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
 public static native void cblas_ztbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_ztbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ztbsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const double[] A, @Cast("const blasint") int lda, double[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer A, @Cast("const blasint") int lda, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_stpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Const FloatPointer Ap, FloatPointer X, @Cast("const blasint") int incX);
@@ -540,17 +442,9 @@ public static native void cblas_dtpmv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dtpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Const double[] Ap, double[] X, @Cast("const blasint") int incX);
 public static native void cblas_ctpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const FloatPointer Ap, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_ctpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const FloatBuffer Ap, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ctpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const float[] Ap, float[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Const Pointer Ap, Pointer X, @Cast("const blasint") int incX);
 public static native void cblas_ztpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const DoublePointer Ap, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_ztpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const DoubleBuffer Ap, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ztpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const double[] Ap, double[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Const Pointer Ap, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_stpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Const FloatPointer Ap, FloatPointer X, @Cast("const blasint") int incX);
@@ -565,17 +459,9 @@ public static native void cblas_dtpsv(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dtpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
                  @Cast("const blasint") int N, @Const double[] Ap, double[] X, @Cast("const blasint") int incX);
 public static native void cblas_ctpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const FloatPointer Ap, FloatPointer X, @Cast("const blasint") int incX);
-public static native void cblas_ctpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const FloatBuffer Ap, FloatBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ctpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const float[] Ap, float[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Const Pointer Ap, Pointer X, @Cast("const blasint") int incX);
 public static native void cblas_ztpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const DoublePointer Ap, DoublePointer X, @Cast("const blasint") int incX);
-public static native void cblas_ztpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const DoubleBuffer Ap, DoubleBuffer X, @Cast("const blasint") int incX);
-public static native void cblas_ztpsv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_DIAG") int Diag,
-                 @Cast("const blasint") int N, @Const double[] Ap, double[] X, @Cast("const blasint") int incX);
+                 @Cast("const blasint") int N, @Const Pointer Ap, Pointer X, @Cast("const blasint") int incX);
 
 public static native void cblas_ssymv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatPointer A,
                  @Cast("const blasint") int lda, @Const FloatPointer X, @Cast("const blasint") int incX, float beta, FloatPointer Y, @Cast("const blasint") int incY);
@@ -589,18 +475,10 @@ public static native void cblas_dsymv(@Cast("const CBLAS_ORDER") int order, @Cas
                  @Cast("const blasint") int lda, @Const DoubleBuffer X, @Cast("const blasint") int incX, double beta, DoubleBuffer Y, @Cast("const blasint") int incY);
 public static native void cblas_dsymv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] A,
                  @Cast("const blasint") int lda, @Const double[] X, @Cast("const blasint") int incX, double beta, double[] Y, @Cast("const blasint") int incY);
-public static native void cblas_chemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer A,
-                 @Cast("const blasint") int lda, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer beta, FloatPointer Y, @Cast("const blasint") int incY);
-public static native void cblas_chemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer A,
-                 @Cast("const blasint") int lda, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer beta, FloatBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_chemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] A,
-                 @Cast("const blasint") int lda, @Const float[] X, @Cast("const blasint") int incX, @Const float[] beta, float[] Y, @Cast("const blasint") int incY);
-public static native void cblas_zhemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer A,
-                 @Cast("const blasint") int lda, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer beta, DoublePointer Y, @Cast("const blasint") int incY);
-public static native void cblas_zhemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer A,
-                 @Cast("const blasint") int lda, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer beta, DoubleBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_zhemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] A,
-                 @Cast("const blasint") int lda, @Const double[] X, @Cast("const blasint") int incX, @Const double[] beta, double[] Y, @Cast("const blasint") int incY);
+public static native void cblas_chemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer A,
+                 @Cast("const blasint") int lda, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
+public static native void cblas_zhemv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer A,
+                 @Cast("const blasint") int lda, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 
 
 public static native void cblas_sspmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatPointer Ap,
@@ -623,12 +501,8 @@ public static native void cblas_dspr(@Cast("const CBLAS_ORDER") int order, @Cast
 public static native void cblas_dspr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, DoubleBuffer Ap);
 public static native void cblas_dspr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] X, @Cast("const blasint") int incX, double[] Ap);
 
-public static native void cblas_chpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatPointer X, @Cast("const blasint") int incX, FloatPointer A);
-public static native void cblas_chpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, FloatBuffer A);
-public static native void cblas_chpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const float[] X, @Cast("const blasint") int incX, float[] A);
-public static native void cblas_zhpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoublePointer X,@Cast("const blasint") int incX, DoublePointer A);
-public static native void cblas_zhpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoubleBuffer X,@Cast("const blasint") int incX, DoubleBuffer A);
-public static native void cblas_zhpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] X,@Cast("const blasint") int incX, double[] A);
+public static native void cblas_chpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const Pointer X, @Cast("const blasint") int incX, Pointer A);
+public static native void cblas_zhpr(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const Pointer X,@Cast("const blasint") int incX, Pointer A);
 
 public static native void cblas_sspr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer A);
 public static native void cblas_sspr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, float alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer Y, @Cast("const blasint") int incY, FloatBuffer A);
@@ -636,38 +510,18 @@ public static native void cblas_sspr2(@Cast("const CBLAS_ORDER") int order, @Cas
 public static native void cblas_dspr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer Y, @Cast("const blasint") int incY, DoublePointer A);
 public static native void cblas_dspr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer A);
 public static native void cblas_dspr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, double alpha, @Const double[] X, @Cast("const blasint") int incX, @Const double[] Y, @Cast("const blasint") int incY, double[] A);
-public static native void cblas_chpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer Y, @Cast("const blasint") int incY, FloatPointer Ap);
-public static native void cblas_chpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer Y, @Cast("const blasint") int incY, FloatBuffer Ap);
-public static native void cblas_chpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] X, @Cast("const blasint") int incX, @Const float[] Y, @Cast("const blasint") int incY, float[] Ap);
-public static native void cblas_zhpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer Y, @Cast("const blasint") int incY, DoublePointer Ap);
-public static native void cblas_zhpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer Y, @Cast("const blasint") int incY, DoubleBuffer Ap);
-public static native void cblas_zhpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] X, @Cast("const blasint") int incX, @Const double[] Y, @Cast("const blasint") int incY, double[] Ap);
+public static native void cblas_chpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer Y, @Cast("const blasint") int incY, Pointer Ap);
+public static native void cblas_zhpr2(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer Y, @Cast("const blasint") int incY, Pointer Ap);
 
 public static native void cblas_chbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer beta, FloatPointer Y, @Cast("const blasint") int incY);
-public static native void cblas_chbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer beta, FloatBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_chbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] X, @Cast("const blasint") int incX, @Const float[] beta, float[] Y, @Cast("const blasint") int incY);
+		 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 public static native void cblas_zhbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer beta, DoublePointer Y, @Cast("const blasint") int incY);
-public static native void cblas_zhbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer beta, DoubleBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_zhbmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] X, @Cast("const blasint") int incX, @Const double[] beta, double[] Y, @Cast("const blasint") int incY);
+		 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 
 public static native void cblas_chpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N,
-		 @Const FloatPointer alpha, @Const FloatPointer Ap, @Const FloatPointer X, @Cast("const blasint") int incX, @Const FloatPointer beta, FloatPointer Y, @Cast("const blasint") int incY);
-public static native void cblas_chpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N,
-		 @Const FloatBuffer alpha, @Const FloatBuffer Ap, @Const FloatBuffer X, @Cast("const blasint") int incX, @Const FloatBuffer beta, FloatBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_chpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N,
-		 @Const float[] alpha, @Const float[] Ap, @Const float[] X, @Cast("const blasint") int incX, @Const float[] beta, float[] Y, @Cast("const blasint") int incY);
+		 @Const Pointer alpha, @Const Pointer Ap, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 public static native void cblas_zhpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N,
-		 @Const DoublePointer alpha, @Const DoublePointer Ap, @Const DoublePointer X, @Cast("const blasint") int incX, @Const DoublePointer beta, DoublePointer Y, @Cast("const blasint") int incY);
-public static native void cblas_zhpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N,
-		 @Const DoubleBuffer alpha, @Const DoubleBuffer Ap, @Const DoubleBuffer X, @Cast("const blasint") int incX, @Const DoubleBuffer beta, DoubleBuffer Y, @Cast("const blasint") int incY);
-public static native void cblas_zhpmv(@Cast("const CBLAS_ORDER") int order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int N,
-		 @Const double[] alpha, @Const double[] Ap, @Const double[] X, @Cast("const blasint") int incX, @Const double[] beta, double[] Y, @Cast("const blasint") int incY);
+		 @Const Pointer alpha, @Const Pointer Ap, @Const Pointer X, @Cast("const blasint") int incX, @Const Pointer beta, Pointer Y, @Cast("const blasint") int incY);
 
 public static native void cblas_sgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
 		 float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, float beta, FloatPointer C, @Cast("const blasint") int ldc);
@@ -682,18 +536,10 @@ public static native void cblas_dgemm(@Cast("const CBLAS_ORDER") int Order, @Cas
 public static native void cblas_dgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
 		 double alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, double beta, double[] C, @Cast("const blasint") int ldc);
 public static native void cblas_cgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, @Const FloatPointer beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_cgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer B, @Cast("const blasint") int ldb, @Const FloatBuffer beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_cgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] B, @Cast("const blasint") int ldb, @Const float[] beta, float[] C, @Cast("const blasint") int ldc);
+		 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 
 public static native void cblas_zgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer B, @Cast("const blasint") int ldb, @Const DoublePointer beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer B, @Cast("const blasint") int ldb, @Const DoubleBuffer beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zgemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_TRANSPOSE") int TransA, @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const blasint") int M, @Cast("const blasint") int N, @Cast("const blasint") int K,
-		 @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, @Const double[] beta, double[] C, @Cast("const blasint") int ldc);
+		 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 
 
 
@@ -710,17 +556,9 @@ public static native void cblas_dsymm(@Cast("const CBLAS_ORDER") int Order, @Cas
 public static native void cblas_dsymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
                  double alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, double beta, double[] C, @Cast("const blasint") int ldc);
 public static native void cblas_csymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, @Const FloatPointer beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_csymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer B, @Cast("const blasint") int ldb, @Const FloatBuffer beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_csymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] B, @Cast("const blasint") int ldb, @Const float[] beta, float[] C, @Cast("const blasint") int ldc);
+                 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 public static native void cblas_zsymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer B, @Cast("const blasint") int ldb, @Const DoublePointer beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zsymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer B, @Cast("const blasint") int ldb, @Const DoubleBuffer beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zsymm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, @Const double[] beta, double[] C, @Cast("const blasint") int ldc);
+                 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 
 public static native void cblas_ssyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
 		 @Cast("const blasint") int N, @Cast("const blasint") int K, float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, float beta, FloatPointer C, @Cast("const blasint") int ldc);
@@ -735,17 +573,9 @@ public static native void cblas_dsyrk(@Cast("const CBLAS_ORDER") int Order, @Cas
 public static native void cblas_dsyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
 		 @Cast("const blasint") int N, @Cast("const blasint") int K, double alpha, @Const double[] A, @Cast("const blasint") int lda, double beta, double[] C, @Cast("const blasint") int ldc);
 public static native void cblas_csyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_csyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_csyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] beta, float[] C, @Cast("const blasint") int ldc);
+		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 public static native void cblas_zsyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zsyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zsyrk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] beta, double[] C, @Cast("const blasint") int ldc);
+		 @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 
 public static native void cblas_ssyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
 		  @Cast("const blasint") int N, @Cast("const blasint") int K, float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, float beta, FloatPointer C, @Cast("const blasint") int ldc);
@@ -760,17 +590,9 @@ public static native void cblas_dsyr2k(@Cast("const CBLAS_ORDER") int Order, @Ca
 public static native void cblas_dsyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
 		  @Cast("const blasint") int N, @Cast("const blasint") int K, double alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, double beta, double[] C, @Cast("const blasint") int ldc);
 public static native void cblas_csyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, @Const FloatPointer beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_csyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer B, @Cast("const blasint") int ldb, @Const FloatBuffer beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_csyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] B, @Cast("const blasint") int ldb, @Const float[] beta, float[] C, @Cast("const blasint") int ldc);
+		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 public static native void cblas_zsyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer B, @Cast("const blasint") int ldb, @Const DoublePointer beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zsyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer B, @Cast("const blasint") int ldb, @Const DoubleBuffer beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zsyr2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans,
-		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, @Const double[] beta, double[] C, @Cast("const blasint") int ldc);
+		  @Cast("const blasint") int N, @Cast("const blasint") int K, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 
 public static native void cblas_strmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
                  @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer B, @Cast("const blasint") int ldb);
@@ -785,17 +607,9 @@ public static native void cblas_dtrmm(@Cast("const CBLAS_ORDER") int Order, @Cas
 public static native void cblas_dtrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
                  @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, double alpha, @Const double[] A, @Cast("const blasint") int lda, double[] B, @Cast("const blasint") int ldb);
 public static native void cblas_ctrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer B, @Cast("const blasint") int ldb);
-public static native void cblas_ctrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer B, @Cast("const blasint") int ldb);
-public static native void cblas_ctrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, float[] B, @Cast("const blasint") int ldb);
+                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, Pointer B, @Cast("const blasint") int ldb);
 public static native void cblas_ztrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer B, @Cast("const blasint") int ldb);
-public static native void cblas_ztrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer B, @Cast("const blasint") int ldb);
-public static native void cblas_ztrmm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, double[] B, @Cast("const blasint") int ldb);
+                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, Pointer B, @Cast("const blasint") int ldb);
 
 public static native void cblas_strsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
                  @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer B, @Cast("const blasint") int ldb);
@@ -810,56 +624,24 @@ public static native void cblas_dtrsm(@Cast("const CBLAS_ORDER") int Order, @Cas
 public static native void cblas_dtrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
                  @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, double alpha, @Const double[] A, @Cast("const blasint") int lda, double[] B, @Cast("const blasint") int ldb);
 public static native void cblas_ctrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, FloatPointer B, @Cast("const blasint") int ldb);
-public static native void cblas_ctrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, FloatBuffer B, @Cast("const blasint") int ldb);
-public static native void cblas_ctrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, float[] B, @Cast("const blasint") int ldb);
+                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, Pointer B, @Cast("const blasint") int ldb);
 public static native void cblas_ztrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, DoublePointer B, @Cast("const blasint") int ldb);
-public static native void cblas_ztrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, DoubleBuffer B, @Cast("const blasint") int ldb);
-public static native void cblas_ztrsm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int TransA,
-                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, double[] B, @Cast("const blasint") int ldb);
+                 @Cast("const CBLAS_DIAG") int Diag, @Cast("const blasint") int M, @Cast("const blasint") int N, @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, Pointer B, @Cast("const blasint") int ldb);
 
 public static native void cblas_chemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, @Const FloatPointer beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_chemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer B, @Cast("const blasint") int ldb, @Const FloatBuffer beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_chemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] B, @Cast("const blasint") int ldb, @Const float[] beta, float[] C, @Cast("const blasint") int ldc);
+                 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 public static native void cblas_zhemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer B, @Cast("const blasint") int ldb, @Const DoublePointer beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zhemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer B, @Cast("const blasint") int ldb, @Const DoubleBuffer beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zhemm(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_SIDE") int Side, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const blasint") int M, @Cast("const blasint") int N,
-                 @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, @Const double[] beta, double[] C, @Cast("const blasint") int ldc);
+                 @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, @Const Pointer beta, Pointer C, @Cast("const blasint") int ldc);
 
 public static native void cblas_cherk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                 float alpha, @Const FloatPointer A, @Cast("const blasint") int lda, float beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_cherk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                 float alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, float beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_cherk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                 float alpha, @Const float[] A, @Cast("const blasint") int lda, float beta, float[] C, @Cast("const blasint") int ldc);
+                 float alpha, @Const Pointer A, @Cast("const blasint") int lda, float beta, Pointer C, @Cast("const blasint") int ldc);
 public static native void cblas_zherk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                 double alpha, @Const DoublePointer A, @Cast("const blasint") int lda, double beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zherk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                 double alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, double beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zherk(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                 double alpha, @Const double[] A, @Cast("const blasint") int lda, double beta, double[] C, @Cast("const blasint") int ldc);
+                 double alpha, @Const Pointer A, @Cast("const blasint") int lda, double beta, Pointer C, @Cast("const blasint") int ldc);
 
 public static native void cblas_cher2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                  @Const FloatPointer alpha, @Const FloatPointer A, @Cast("const blasint") int lda, @Const FloatPointer B, @Cast("const blasint") int ldb, float beta, FloatPointer C, @Cast("const blasint") int ldc);
-public static native void cblas_cher2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                  @Const FloatBuffer alpha, @Const FloatBuffer A, @Cast("const blasint") int lda, @Const FloatBuffer B, @Cast("const blasint") int ldb, float beta, FloatBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_cher2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                  @Const float[] alpha, @Const float[] A, @Cast("const blasint") int lda, @Const float[] B, @Cast("const blasint") int ldb, float beta, float[] C, @Cast("const blasint") int ldc);
+                  @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, float beta, Pointer C, @Cast("const blasint") int ldc);
 public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                  @Const DoublePointer alpha, @Const DoublePointer A, @Cast("const blasint") int lda, @Const DoublePointer B, @Cast("const blasint") int ldb, double beta, DoublePointer C, @Cast("const blasint") int ldc);
-public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                  @Const DoubleBuffer alpha, @Const DoubleBuffer A, @Cast("const blasint") int lda, @Const DoubleBuffer B, @Cast("const blasint") int ldb, double beta, DoubleBuffer C, @Cast("const blasint") int ldc);
-public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Cast("const CBLAS_UPLO") int Uplo, @Cast("const CBLAS_TRANSPOSE") int Trans, @Cast("const blasint") int N, @Cast("const blasint") int K,
-                  @Const double[] alpha, @Const double[] A, @Cast("const blasint") int lda, @Const double[] B, @Cast("const blasint") int ldb, double beta, double[] C, @Cast("const blasint") int ldc);
+                  @Const Pointer alpha, @Const Pointer A, @Cast("const blasint") int lda, @Const Pointer B, @Cast("const blasint") int ldb, double beta, Pointer C, @Cast("const blasint") int ldc);
 
 
 
@@ -6836,6 +6618,12 @@ public static native double LAPACKE_zlanhe( int matrix_layout, @Cast("char") byt
 public static native double LAPACKE_zlanhe( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo, int n,
                            @Cast("const lapack_complex_double*") double[] a, int lda );
 
+
+
+
+
+
+
 public static native float LAPACKE_slansy( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo, int n,
                            @Const FloatPointer a, int lda );
 public static native float LAPACKE_slansy( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo, int n,
@@ -7218,6 +7006,11 @@ public static native int LAPACKE_slasrt( @Cast("char") byte id, int n, float[] d
 public static native int LAPACKE_dlasrt( @Cast("char") byte id, int n, DoublePointer d );
 public static native int LAPACKE_dlasrt( @Cast("char") byte id, int n, DoubleBuffer d );
 public static native int LAPACKE_dlasrt( @Cast("char") byte id, int n, double[] d );
+
+
+
+
+
 
 public static native int LAPACKE_slaswp( int matrix_layout, int n, FloatPointer a,
                            int lda, int k1, int k2,
@@ -15570,95 +15363,95 @@ public static native int LAPACKE_zgesvd_work( int matrix_layout, @Cast("char") b
                                 int lwork, double[] rwork );
 
 public static native int LAPACKE_sgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, FloatPointer a,
-                          		int lda, float vl, float vu,
-                           		int il, int iu, IntPointer ns,
-                           		FloatPointer s, FloatPointer u, int ldu,
-                           		FloatPointer vt, int ldvt,
-                                FloatPointer work, int lwork, IntPointer iwork );
+                                 int m, int n, FloatPointer a,
+                                 int lda, float vl, float vu,
+                                 int il, int iu, IntPointer ns,
+                                 FloatPointer s, FloatPointer u, int ldu,
+                                 FloatPointer vt, int ldvt,
+                                 FloatPointer work, int lwork, IntPointer iwork );
 public static native int LAPACKE_sgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, FloatBuffer a,
-                          		int lda, float vl, float vu,
-                           		int il, int iu, IntBuffer ns,
-                           		FloatBuffer s, FloatBuffer u, int ldu,
-                           		FloatBuffer vt, int ldvt,
-                                FloatBuffer work, int lwork, IntBuffer iwork );
+                                 int m, int n, FloatBuffer a,
+                                 int lda, float vl, float vu,
+                                 int il, int iu, IntBuffer ns,
+                                 FloatBuffer s, FloatBuffer u, int ldu,
+                                 FloatBuffer vt, int ldvt,
+                                 FloatBuffer work, int lwork, IntBuffer iwork );
 public static native int LAPACKE_sgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, float[] a,
-                          		int lda, float vl, float vu,
-                           		int il, int iu, int[] ns,
-                           		float[] s, float[] u, int ldu,
-                           		float[] vt, int ldvt,
-                                float[] work, int lwork, int[] iwork );
+                                 int m, int n, float[] a,
+                                 int lda, float vl, float vu,
+                                 int il, int iu, int[] ns,
+                                 float[] s, float[] u, int ldu,
+                                 float[] vt, int ldvt,
+                                 float[] work, int lwork, int[] iwork );
 public static native int LAPACKE_dgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, DoublePointer a,
-                          		int lda, double vl, double vu,
-                           		int il, int iu, IntPointer ns,
-                           		DoublePointer s, DoublePointer u, int ldu,
-                           		DoublePointer vt, int ldvt,
-                                DoublePointer work, int lwork, IntPointer iwork );
+                                 int m, int n, DoublePointer a,
+                                 int lda, double vl, double vu,
+                                 int il, int iu, IntPointer ns,
+                                 DoublePointer s, DoublePointer u, int ldu,
+                                 DoublePointer vt, int ldvt,
+                                 DoublePointer work, int lwork, IntPointer iwork );
 public static native int LAPACKE_dgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, DoubleBuffer a,
-                          		int lda, double vl, double vu,
-                           		int il, int iu, IntBuffer ns,
-                           		DoubleBuffer s, DoubleBuffer u, int ldu,
-                           		DoubleBuffer vt, int ldvt,
-                                DoubleBuffer work, int lwork, IntBuffer iwork );
+                                 int m, int n, DoubleBuffer a,
+                                 int lda, double vl, double vu,
+                                 int il, int iu, IntBuffer ns,
+                                 DoubleBuffer s, DoubleBuffer u, int ldu,
+                                 DoubleBuffer vt, int ldvt,
+                                 DoubleBuffer work, int lwork, IntBuffer iwork );
 public static native int LAPACKE_dgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, double[] a,
-                          		int lda, double vl, double vu,
-                           		int il, int iu, int[] ns,
-                           		double[] s, double[] u, int ldu,
-                           		double[] vt, int ldvt,
-                                double[] work, int lwork, int[] iwork );
+                                 int m, int n, double[] a,
+                                 int lda, double vl, double vu,
+                                 int il, int iu, int[] ns,
+                                 double[] s, double[] u, int ldu,
+                                 double[] vt, int ldvt,
+                                 double[] work, int lwork, int[] iwork );
 public static native int LAPACKE_cgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, @Cast("lapack_complex_float*") FloatPointer a,
-                          		int lda, float vl, float vu,
-                           		int il, int iu, IntPointer ns,
-                           		FloatPointer s, @Cast("lapack_complex_float*") FloatPointer u, int ldu,
-                           		@Cast("lapack_complex_float*") FloatPointer vt, int ldvt,
-                                @Cast("lapack_complex_float*") FloatPointer work, int lwork,
-                                FloatPointer rwork, IntPointer iwork );
+                                 int m, int n, @Cast("lapack_complex_float*") FloatPointer a,
+                                 int lda, float vl, float vu,
+                                 int il, int iu, IntPointer ns,
+                                 FloatPointer s, @Cast("lapack_complex_float*") FloatPointer u, int ldu,
+                                 @Cast("lapack_complex_float*") FloatPointer vt, int ldvt,
+                                 @Cast("lapack_complex_float*") FloatPointer work, int lwork,
+                                 FloatPointer rwork, IntPointer iwork );
 public static native int LAPACKE_cgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, @Cast("lapack_complex_float*") FloatBuffer a,
-                          		int lda, float vl, float vu,
-                           		int il, int iu, IntBuffer ns,
-                           		FloatBuffer s, @Cast("lapack_complex_float*") FloatBuffer u, int ldu,
-                           		@Cast("lapack_complex_float*") FloatBuffer vt, int ldvt,
-                                @Cast("lapack_complex_float*") FloatBuffer work, int lwork,
-                                FloatBuffer rwork, IntBuffer iwork );
+                                 int m, int n, @Cast("lapack_complex_float*") FloatBuffer a,
+                                 int lda, float vl, float vu,
+                                 int il, int iu, IntBuffer ns,
+                                 FloatBuffer s, @Cast("lapack_complex_float*") FloatBuffer u, int ldu,
+                                 @Cast("lapack_complex_float*") FloatBuffer vt, int ldvt,
+                                 @Cast("lapack_complex_float*") FloatBuffer work, int lwork,
+                                 FloatBuffer rwork, IntBuffer iwork );
 public static native int LAPACKE_cgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, @Cast("lapack_complex_float*") float[] a,
-                          		int lda, float vl, float vu,
-                           		int il, int iu, int[] ns,
-                           		float[] s, @Cast("lapack_complex_float*") float[] u, int ldu,
-                           		@Cast("lapack_complex_float*") float[] vt, int ldvt,
-                                @Cast("lapack_complex_float*") float[] work, int lwork,
-                                float[] rwork, int[] iwork );
+                                 int m, int n, @Cast("lapack_complex_float*") float[] a,
+                                 int lda, float vl, float vu,
+                                 int il, int iu, int[] ns,
+                                 float[] s, @Cast("lapack_complex_float*") float[] u, int ldu,
+                                 @Cast("lapack_complex_float*") float[] vt, int ldvt,
+                                 @Cast("lapack_complex_float*") float[] work, int lwork,
+                                 float[] rwork, int[] iwork );
 public static native int LAPACKE_zgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, @Cast("lapack_complex_double*") DoublePointer a,
-                          		int lda, double vl, double vu,
-                           		int il, int iu, IntPointer ns,
-                           		DoublePointer s, @Cast("lapack_complex_double*") DoublePointer u, int ldu,
-                           		@Cast("lapack_complex_double*") DoublePointer vt, int ldvt,
-                                @Cast("lapack_complex_double*") DoublePointer work, int lwork,
-                                DoublePointer rwork, IntPointer iwork );
+                                 int m, int n, @Cast("lapack_complex_double*") DoublePointer a,
+                                 int lda, double vl, double vu,
+                                 int il, int iu, IntPointer ns,
+                                 DoublePointer s, @Cast("lapack_complex_double*") DoublePointer u, int ldu,
+                                 @Cast("lapack_complex_double*") DoublePointer vt, int ldvt,
+                                 @Cast("lapack_complex_double*") DoublePointer work, int lwork,
+                                 DoublePointer rwork, IntPointer iwork );
 public static native int LAPACKE_zgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, @Cast("lapack_complex_double*") DoubleBuffer a,
-                          		int lda, double vl, double vu,
-                           		int il, int iu, IntBuffer ns,
-                           		DoubleBuffer s, @Cast("lapack_complex_double*") DoubleBuffer u, int ldu,
-                           		@Cast("lapack_complex_double*") DoubleBuffer vt, int ldvt,
-                                @Cast("lapack_complex_double*") DoubleBuffer work, int lwork,
-                                DoubleBuffer rwork, IntBuffer iwork );
+                                 int m, int n, @Cast("lapack_complex_double*") DoubleBuffer a,
+                                 int lda, double vl, double vu,
+                                 int il, int iu, IntBuffer ns,
+                                 DoubleBuffer s, @Cast("lapack_complex_double*") DoubleBuffer u, int ldu,
+                                 @Cast("lapack_complex_double*") DoubleBuffer vt, int ldvt,
+                                 @Cast("lapack_complex_double*") DoubleBuffer work, int lwork,
+                                 DoubleBuffer rwork, IntBuffer iwork );
 public static native int LAPACKE_zgesvdx_work( int matrix_layout, @Cast("char") byte jobu, @Cast("char") byte jobvt, @Cast("char") byte range,
-                           		int m, int n, @Cast("lapack_complex_double*") double[] a,
-                          		int lda, double vl, double vu,
-                           		int il, int iu, int[] ns,
-                           		double[] s, @Cast("lapack_complex_double*") double[] u, int ldu,
-                           		@Cast("lapack_complex_double*") double[] vt, int ldvt,
-                                @Cast("lapack_complex_double*") double[] work, int lwork,
-                                double[] rwork, int[] iwork );
+                                 int m, int n, @Cast("lapack_complex_double*") double[] a,
+                                 int lda, double vl, double vu,
+                                 int il, int iu, int[] ns,
+                                 double[] s, @Cast("lapack_complex_double*") double[] u, int ldu,
+                                 @Cast("lapack_complex_double*") double[] vt, int ldvt,
+                                 @Cast("lapack_complex_double*") double[] work, int lwork,
+                                 double[] rwork, int[] iwork );
 
 public static native int LAPACKE_sgesvj_work( int matrix_layout, @Cast("char") byte joba, @Cast("char") byte jobu,
                                 @Cast("char") byte jobv, int m, int n, FloatPointer a,
@@ -15695,19 +15488,19 @@ public static native int LAPACKE_cgesvj_work( int matrix_layout, @Cast("char") b
                                 int lda, FloatPointer sva, int mv,
                                 @Cast("lapack_complex_float*") FloatPointer v, int ldv,
                                 @Cast("lapack_complex_float*") FloatPointer cwork, int lwork,
- 								FloatPointer rwork,int lrwork );
+                                FloatPointer rwork,int lrwork );
 public static native int LAPACKE_cgesvj_work( int matrix_layout, @Cast("char") byte joba, @Cast("char") byte jobu,
                                 @Cast("char") byte jobv, int m, int n, @Cast("lapack_complex_float*") FloatBuffer a,
                                 int lda, FloatBuffer sva, int mv,
                                 @Cast("lapack_complex_float*") FloatBuffer v, int ldv,
                                 @Cast("lapack_complex_float*") FloatBuffer cwork, int lwork,
- 								FloatBuffer rwork,int lrwork );
+                                FloatBuffer rwork,int lrwork );
 public static native int LAPACKE_cgesvj_work( int matrix_layout, @Cast("char") byte joba, @Cast("char") byte jobu,
                                 @Cast("char") byte jobv, int m, int n, @Cast("lapack_complex_float*") float[] a,
                                 int lda, float[] sva, int mv,
                                 @Cast("lapack_complex_float*") float[] v, int ldv,
                                 @Cast("lapack_complex_float*") float[] cwork, int lwork,
- 								float[] rwork,int lrwork );
+                                float[] rwork,int lrwork );
 public static native int LAPACKE_zgesvj_work( int matrix_layout, @Cast("char") byte joba, @Cast("char") byte jobu,
                                 @Cast("char") byte jobv, int m, int n,
                                 @Cast("lapack_complex_double*") DoublePointer a, int lda, DoublePointer sva,
@@ -20328,6 +20121,12 @@ public static native double LAPACKE_zlanhe_work( int matrix_layout, @Cast("char"
                                 int n, @Cast("const lapack_complex_double*") double[] a,
                                 int lda, double[] work );
 
+
+
+
+
+
+
 public static native float LAPACKE_slansy_work( int matrix_layout, @Cast("char") byte norm, @Cast("char") byte uplo,
                                 int n, @Const FloatPointer a, int lda,
                                 FloatPointer work );
@@ -20749,6 +20548,11 @@ public static native int LAPACKE_slasrt_work( @Cast("char") byte id, int n, floa
 public static native int LAPACKE_dlasrt_work( @Cast("char") byte id, int n, DoublePointer d );
 public static native int LAPACKE_dlasrt_work( @Cast("char") byte id, int n, DoubleBuffer d );
 public static native int LAPACKE_dlasrt_work( @Cast("char") byte id, int n, double[] d );
+
+
+
+
+
 
 public static native int LAPACKE_slaswp_work( int matrix_layout, int n, FloatPointer a,
                                 int lda, int k1, int k2,
@@ -30909,7 +30713,14 @@ public static native void LAPACKE_ilaver( int[] vers_major,
                      int[] vers_minor,
                      int[] vers_patch );
 // LAPACK 3.7.0
+// LAPACK 3.3.0
+// LAPACK 3.4.0
+// LAPACK 3.5.0
+// LAPACK 3.6.0
+// LAPACK 3.7.0
 
+
+// LAPACK 3.8.0
 
 
 public static native void LAPACK_sgetrf( IntPointer m, IntPointer n, FloatPointer a, IntPointer lda,
@@ -42602,6 +42413,10 @@ public static native double LAPACK_zlanhe( @Cast("char*") ByteBuffer norm, @Cast
                     @Cast("const lapack_complex_double*") DoubleBuffer a, IntBuffer lda, DoubleBuffer work );
 public static native double LAPACK_zlanhe( @Cast("char*") byte[] norm, @Cast("char*") byte[] uplo, int[] n,
                     @Cast("const lapack_complex_double*") double[] a, int[] lda, double[] work );
+
+
+
+
 public static native float LAPACK_slansy( @Cast("char*") BytePointer norm, @Cast("char*") BytePointer uplo, IntPointer n, @Const FloatPointer a,
                     IntPointer lda, FloatPointer work );
 public static native float LAPACK_slansy( @Cast("char*") ByteBuffer norm, @Cast("char*") ByteBuffer uplo, IntBuffer n, @Const FloatBuffer a,
@@ -42785,6 +42600,10 @@ public static native void LAPACK_zlarfg( IntBuffer n, @Cast("lapack_complex_doub
 public static native void LAPACK_zlarfg( int[] n, @Cast("lapack_complex_double*") double[] alpha,
                     @Cast("lapack_complex_double*") double[] x, int[] incx,
                     @Cast("lapack_complex_double*") double[] tau );
+
+
+
+
 public static native void LAPACK_slarft( @Cast("char*") BytePointer direct, @Cast("char*") BytePointer storev, IntPointer n, IntPointer k,
                     @Const FloatPointer v, IntPointer ldv, @Const FloatPointer tau, FloatPointer t,
                     IntPointer ldt );
@@ -44717,6 +44536,8 @@ public static native void LAPACK_ilaver( @Const int[] vers_major, @Const int[] v
                      @Const int[] vers_patch );
 
 // LAPACK 3.7.0
+
+// #ifdef __cplusplus
 // #endif /* __cplusplus */
 
 // #endif /* _LAPACKE_H_ */

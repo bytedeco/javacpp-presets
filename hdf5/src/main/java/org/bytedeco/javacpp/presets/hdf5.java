@@ -34,6 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target = "org.bytedeco.javacpp.hdf5", value = {
     @Platform(value = {"linux-x86", "linux-ppc64le", "macosx", "windows"},
+            define = {"GENERIC_EXCEPTION_CLASS H5::Exception", "GENERIC_EXCEPTION_TOSTRING getCDetailMsg()"},
             include = {"H5pubconf.h", /* "H5version.h", */ "H5public.h", "H5Cpublic.h", "H5Ipublic.h",
         "H5Tpublic.h", "H5Lpublic.h", "H5Opublic.h", "H5Zpublic.h",  "H5Apublic.h", "H5ACpublic.h", "H5Dpublic.h", "H5Epublic.h", "H5Fpublic.h",
         "H5FDpublic.h", "H5Gpublic.h", "H5MMpublic.h", "H5Ppublic.h", "H5PLpublic.h", "H5Rpublic.h", "H5Spublic.h", "H5FDcore.h", "H5FDdirect.h",
@@ -79,7 +80,7 @@ public class hdf5 implements InfoMapper {
                      + "    protected attr_operator_t() { allocate(); }\n"
                      + "    private native void allocate();\n"
                      + "    public native void call( @ByRef H5Object loc/*in*/,\n"
-                     + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter\") BytePointer attr_name/*in*/,\n"
+                     + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter<char>\") BytePointer attr_name/*in*/,\n"
                      + "            Pointer operator_data/*in,out*/);\n"
                      + "}\n"))
 

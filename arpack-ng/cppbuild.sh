@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ARPACK_NG_VERSION=1d912add4fabc6ceeeb8968bb3f67e94e8a5040f
+ARPACK_NG_VERSION=3.6.0
 download https://github.com/opencollab/arpack-ng/archive/$ARPACK_NG_VERSION.tar.gz arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -17,12 +17,13 @@ echo "Decompressing archives..."
 tar --totals -xzf ../arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 cd arpack-ng-$ARPACK_NG_VERSION
-patch -Np1 < ../../../arpack-ng.patch # https://github.com/opencollab/arpack-ng/pull/84
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
 patch -Np1 < ../../../arpack-ng-configure.patch || true # bash bootstrap
-chmod 755 configure
+chmod 755 configure build-aux/install-sh
+sedinplace 's/std::real(sigma) + std::imag(sigma) \* I/*reinterpret_cast<_Complex double*>(\&sigma)/g' arpack.hpp
+sedinplace 's/std::real(sigma) + _Complex_I \* std::imag(sigma)/*reinterpret_cast<_Complex double*>(\&sigma)/g' arpack.hpp
 
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 

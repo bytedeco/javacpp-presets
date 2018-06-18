@@ -32,9 +32,11 @@ import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.StdString;
+import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.javacpp.tools.Logger;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -180,10 +182,13 @@ import java.lang.annotation.Target;
                         "tensorflow/cc/ops/user_ops.h"},
                 link = "tensorflow_cc", preload = "tensorflow_framework"),
         @Platform(
+                value = {"linux-x86_64", "macosx-x86_64"},
+                extension = "-gpu"),
+        @Platform(
                 value = "windows",
-                link = {"Advapi32#", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng12_static", "nsync", "libprotobuf", "re2", "snappy",
-                        "sqlite", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
+                link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
+                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
                 preload = {"concrt140", "msvcp140", "vcruntime140",
                            "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
                            "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
@@ -197,8 +202,16 @@ import java.lang.annotation.Target;
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
         @Platform(
-                value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-                extension = "-gpu"),
+                value = "windows-x86_64",
+                extension = "-gpu",
+                link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
+                        "cudart", "cudart_static", "cuda", "cublas", "cublas_device", "cudnn",
+                        "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
+                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/extras/CUPTI/libx64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
@@ -225,6 +238,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/platform/file_system.h",
                         "tensorflow/core/platform/file_statistics.h",
                         "tensorflow/core/platform/env.h",
+//                        "tensorflow/core/graph/dot.h",
                         "tensorflow/core/example/feature.pb.h",
                         "tensorflow/core/example/example.pb.h",
                         "tensorflow/core/protobuf/debug.pb.h",
@@ -245,11 +259,13 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/tensor_description.pb.h",
                         "tensorflow/core/framework/tensor_types.h",
                         "tensorflow/core/framework/tensor_shape.h",
+                        //        "tensorflow/core/framework/tensor_slice.h",
                         "tensorflow/core/framework/tensor_util.h",
                         "tensorflow/core/framework/tensor_reference.h",
                         "tensorflow/core/framework/tensor.h",
                         "tensorflow/core/framework/attr_value.pb.h",
                         "tensorflow/core/framework/node_def.pb.h",
+                        "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/function.pb.h",
                         "tensorflow/core/framework/graph.pb.h",
                         "tensorflow/core/framework/session_state.h",
@@ -279,6 +295,7 @@ import java.lang.annotation.Target;
                         "tensorflow/core/framework/types.h",
                         "tensorflow/core/graph/edgeset.h",
                         "tensorflow/core/lib/gtl/iterator_range.h",
+                        //        "tensorflow/core/lib/gtl/inlined_vector.h",
                         "tensorflow/core/framework/function.h",
                         "tensorflow/core/util/device_name_utils.h",
                         "tensorflow/core/framework/device_attributes.pb.h",
@@ -290,10 +307,12 @@ import java.lang.annotation.Target;
                         "tensorflow/core/graph/tensor_id.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
+                        "tensorflow/core/framework/selective_registration.h",
                         "tensorflow/core/graph/node_builder.h",
                         "tensorflow/core/graph/graph_def_builder.h",
                         "tensorflow/core/graph/default_device.h",
                         "tensorflow/core/graph/graph_constructor.h",
+                        "tensorflow/core/graph/gradients.h",
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
@@ -301,7 +320,20 @@ import java.lang.annotation.Target;
         },
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
-public class tensorflow implements InfoMapper {
+public class tensorflow implements BuildEnabled, InfoMapper {
+    private Logger logger;
+    private java.util.Properties properties;
+    private String encoding;
+    private boolean android;
+
+    @Override
+    public void init(Logger logger, java.util.Properties properties, String encoding) {
+        this.logger = logger;
+        this.properties = properties;
+        this.encoding = encoding;
+        this.android = properties.getProperty("platform").startsWith("android-");
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
                .put(new Info("B16_DEVICE_FUNC", "EIGEN_ALWAYS_INLINE", "EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
@@ -339,11 +371,19 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
-               .put(new Info("google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
+               .put(new Info("google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip())
+               .put(new Info("google::protobuf::Map<std::string,std::string>").pointerTypes("StringStringMap").define())
+               .put(new Info("google::protobuf::Map<std::string,google::protobuf::int32>").pointerTypes("StringIntMap").define())
+               .put(new Info("google::protobuf::Map<google::protobuf::int32,std::string>").pointerTypes("IntStringMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::Feature>").pointerTypes("StringFeatureMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::FeatureList>").pointerTypes("StringFeatureListMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::CollectionDef>").pointerTypes("StringCollectionDefMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::SignatureDef>").pointerTypes("StringSignatureDefMap").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::TensorInfo>").pointerTypes("StringTensorInfoMap").define())
 
                .put(new Info("tensorflow::error::protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto::TableStruct",
                              "tensorflow::protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto::TableStruct",
@@ -402,7 +442,10 @@ public class tensorflow implements InfoMapper {
                              "tensorflow::NameAttrList_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::NodeDef_AttrEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::FunctionDef_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::FunctionDef_RetEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::MetaGraphDef_CollectionDefEntry_DoNotUseDefaultTypeInternal", "tensorflow::MetaGraphDef_SignatureDefEntry_DoNotUseDefaultTypeInternal",
-                             "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal").skip())
+                             "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::RewriterConfig_CustomGraphOptimizerDefaultTypeInternal", "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntryDefaultTypeInternal", "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal",
+                             "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -454,8 +497,11 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::Node*,int> >").pointerTypes("NodeIntPairVector").define())
 
-               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator", "AttrValueMap::const_iterator").skip())
+               .put(new Info("tensorflow::tensor::internal::TensorProtoHelper",
+                             "tensorflow::AttrValueMap::const_iterator",
+                             "google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator").skip())
                .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>",
+                             "google::protobuf::Map<std::string,::tensorflow::AttrValue>",
                              "tensorflow::protobuf::Map<tensorflow::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::FunctionDefHelper::AttrValueWrapper").pointerTypes("FunctionDefHelper.AttrValueWrapper"))
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >",
@@ -563,6 +609,12 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"StringPiece*\"}) BytePointer"))
                .put(new Info("tensorflow::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
                              "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
+
+        infoMap.put(new Info("TF_Buffer::data").javaText("public native @Const Pointer data(); public native TF_Buffer data(Pointer data);"));
+
+        if (!android) {
+            infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
+        }
 
         String[] consts = {"unsigned char", "short", "int", "long long", "float", "double", "bool", "std::string", "tensorflow::StringPiece"};
         for (int i = 0; i < consts.length; i++) {

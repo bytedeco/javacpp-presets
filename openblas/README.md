@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenBLAS 0.2.20  http://www.openblas.net/
+ * OpenBLAS 0.3.0  http://www.openblas.net/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -16,9 +16,9 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/openblas/apidocs/
 
-&lowast; The JNI bindings actually link with [Intel MKL](https://software.intel.com/intel-mkl) instead if found on the "java.library.path", unless the "org.bytedeco.javacpp.openblas.nomkl" system property is set to "true".
+&lowast; The JNI bindings can instead link with [Intel MKL](https://software.intel.com/intel-mkl), or any other arbitrary library found on the "java.library.path" or on the class path, by specifying it with the "org.bytedeco.javacpp.openblas.load" system property. For example, to use the BLAS library from the [Accelerate framework](https://developer.apple.com/documentation/accelerate) on Mac OS X, we can pass options such as `-Djava.library.path=/usr/lib/ -Dorg.bytedeco.javacpp.openblas.load=blas`, while for a default installation of MKL that would be `-Dorg.bytedeco.javacpp.openblas.load=mkl_rt`.
 
-It also possible to make the bindings use another arbitrary library in "java.library.path" by specifying it with the "org.bytedeco.javacpp.openblas.load" system property. For example, to use the BLAS library from the [Accelerate framework](https://developer.apple.com/documentation/accelerate) on Mac OS X, we can pass options such as `-Djava.library.path=/usr/lib/ -Dorg.bytedeco.javacpp.openblas.load=blas`.
+Intel also offers a stripped-down but free version of MKL named "MKLML" that is bundled with the [JavaCPP Presets for MKL-DNN](../mkl-dnn). After adding the JAR files for MKL-DNN to the class path, it can be accessed with an option like `-Dorg.bytedeco.javacpp.openblas.load=mklml`.
 
 
 Sample Usage
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.openblas</groupId>
     <artifactId>openblas</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleDGELSrowmajor</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.2.20-1.4.1</version>
+            <version>0.3.0-1.4.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

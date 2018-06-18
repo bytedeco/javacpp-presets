@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.8.0</tensorflow.version>
+    <tensorflow.version>1.9.0-rc0</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
@@ -81,30 +81,31 @@
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/protobuf_archive/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
-            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/</includePath>
-            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/zlib/src/zlib/</includePath>
-            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/nsync/src/nsync/public/</includePath>
-            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/protobuf/src/protobuf/src/</includePath>
-            <includePath>${tensorflow.path}/tensorflow/contrib/cmake/build/eigen/src/eigen/</includePath>
+            <includePath>${tensorflow.path}/../build/</includePath>
+            <includePath>${tensorflow.path}/../build/zlib/src/zlib/</includePath>
+            <includePath>${tensorflow.path}/../build/nsync/src/nsync/public/</includePath>
+            <includePath>${tensorflow.path}/../build/protobuf/src/protobuf/src/</includePath>
+            <includePath>${tensorflow.path}/../build/eigen/src/eigen/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/zlib/src/zlib/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/grpc/src/grpc/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/farmhash/src/farmhash/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/fft2d/src/fft2d/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/lmdb/src/lmdb-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/gif/src/gif-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/jpeg/src/jpeg-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/png/src/png-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/nsync/src/nsync/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/protobuf/src/protobuf/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/re2/src/re2/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/snappy/src/snappy/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/sqlite/src/sqlite-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/tensorflow/contrib/cmake/build/tf_cc_op_gen_main.dir/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/double-conversion/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/farmhash/src/farmhash/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/fft2d/src/fft2d/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/lmdb/src/lmdb-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/gif/src/gif-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/jpeg/src/jpeg-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/png/src/png-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/nsync/src/nsync/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/protobuf/src/protobuf/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/re2/src/re2/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/snappy/src/snappy/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/sqlite/src/sqlite-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
           </linkPaths>
           <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
         </configuration>

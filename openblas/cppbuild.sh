@@ -7,18 +7,23 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.2.20
+OPENBLAS_VERSION=0.3.0
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
+mkdir -p include lib bin OpenBLAS-$OPENBLAS_VERSION-nolapack
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz
+tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz --strip-components=1 -C OpenBLAS-$OPENBLAS_VERSION-nolapack/
 
 cd OpenBLAS-$OPENBLAS_VERSION
+# Work around clash with winnt.h https://github.com/xianyi/OpenBLAS/issues/1503
+sedinplace 's/-DCR/-DCR=CR/g' driver/level3/Makefile ../OpenBLAS-$OPENBLAS_VERSION-nolapack/driver/level3/Makefile
+cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export CROSS_SUFFIX=
@@ -29,6 +34,7 @@ export NO_AFFINITY=1
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -45,6 +51,7 @@ case $PLATFORM in
         ;;
     android-arm64)
         patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -59,6 +66,7 @@ case $PLATFORM in
         ;;
     android-x86)
         patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -73,6 +81,7 @@ case $PLATFORM in
         ;;
     android-x86_64)
         patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
         export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
@@ -91,14 +100,13 @@ case $PLATFORM in
         export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=32
-        export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK
+        export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK: use Accelerate to optimize
         export NO_SHARED=1
         ;;
     ios-arm64)
-        # https://gmplib.org/list-archives/gmp-bugs/2014-September/003538.html
-        sed -i="" 's/add.sp, sp, #-(11 \* 16)/sub sp, sp, #(11 \* 16)/g' kernel/arm64/sgemm_kernel_4x4.S
-        # but still results in a linking error, so disable the assembler entirely
-        sed -i="" 's/sgemm_kernel_4x4.S/..\/generic\/gemmkernel_2x2.c/g' kernel/arm64/KERNEL.ARMV8
+        # use generic kernels as Xcode assembler does not accept optimized ones: use Accelerate to optimize
+        cp kernel/arm/KERNEL.ARMV5 kernel/arm64/KERNEL.ARMV8
+        cp kernel/arm/KERNEL.ARMV5 ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/arm64/KERNEL.ARMV8
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64 -miphoneos-version-min=5.0"
         export FC=
         export NO_LAPACK=1
@@ -113,7 +121,7 @@ case $PLATFORM in
         export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=32
-        export TARGET=ATOM
+        export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
         export NO_SHARED=1
         ;;
     ios-x86_64)
@@ -122,7 +130,7 @@ case $PLATFORM in
         export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=64
-        export TARGET=ATOM
+        export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
         export NO_SHARED=1
         ;;
     linux-x86)
@@ -143,6 +151,7 @@ case $PLATFORM in
     linux-ppc64le)
         # patch to use less buggy generic kernels
         patch -Np1 < ../../../OpenBLAS-linux-ppc64le.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-linux-ppc64le.patch
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           export CC="$OLDCC -m64"
@@ -164,6 +173,7 @@ case $PLATFORM in
         ;;
     macosx-*)
         patch -Np1 < ../../../OpenBLAS-macosx.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
@@ -195,9 +205,16 @@ case $PLATFORM in
         ;;
 esac
 
-make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN USE_OPENMP=0
 make install "PREFIX=$INSTALL_PATH"
+
+unset DYNAMIC_ARCH
+cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN USE_OPENMP=0 NO_LAPACK=1 LIBNAMESUFFIX=nolapack
+make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=nolapack
+
 unset CC
+unset FC
 unset LDFLAGS
 
 cd ../..
