@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
 
 
 @Properties(target="org.bytedeco.javacpp.onnx", value={@Platform(compiler="cpp11",
+define={"ONNX_NAMESPACE onnx"},
 include={
 "onnx/proto_utils.h",
 "defs/schema.h",
@@ -49,7 +50,10 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
 	      .put(new Info("onnx::TensorProto_DataType").valueTypes("int"))
 //              .put(new Info("onnx::OpSchema::UseType").valueTypes("int"))
               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
-              .put(new Info("std::set<int>").pointerTypes("IntSet").define())
+              .put(new Info("std::vector<int64_t>").pointerTypes("LongVector").define())
+              .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
+              .put(new Info("onnx::AttributeProto::AttributeType").valueTypes("int"))
+	      .put(new Info("std::set<int>").pointerTypes("IntSet").define())
               .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
 //              .put(new Info("onnx::checker::ValidationError").cast().pointerTypes("ValidationError").define())
 //               .put(new Info("long long", "std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))

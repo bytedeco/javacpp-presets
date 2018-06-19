@@ -13,8 +13,9 @@ if [[ $PLATFORM == windows* ]]; then
 else
 
     export PROTO=3.3.2
+    export ONNX=1.1.2
     export INSTALL_PATH=`pwd`/$PLATFORM
-    wget https://github.com/onnx/onnx/archive/v1.0.1.tar.gz
+    wget https://github.com/onnx/onnx/archive/v$ONNX.tar.gz
 
     mkdir -p $PLATFORM
     cd $PLATFORM
@@ -35,8 +36,8 @@ else
     make install
 
     cd ..
-    tar -xzvf ../v1.0.1.tar.gz
-    cd onnx-1.0.1/third_party/pybind11
+    tar -xzvf ../v$ONNX.tar.gz
+    cd onnx-$ONNX/third_party/pybind11
     wget https://github.com/pybind/pybind11/archive/v2.2.1.tar.gz
     tar -xzvf v2.2.1.tar.gz
     mv pybind11-2.2.1/* .
@@ -48,7 +49,7 @@ else
     export BASEDIR=build/temp.linux-x86_64-?.?/`pwd`/onnx/
 
     python3 setup.py build
-    g++ -v -std=c++11 -shared -Wl,-soname,libonnx.so -fPIC -o libonnx.so $BASEDIR/onnx-operators.pb.o $BASEDIR/onnx.pb.o $BASEDIR/checker.o $BASEDIR/defs/schema.o $BASEDIR/defs/tensor/old.o $BASEDIR/defs/tensor/defs.o $BASEDIR/defs/generator/defs.o $BASEDIR/defs/math/defs.o $BASEDIR/defs/data_type_utils.o $BASEDIR/defs/traditionalml/defs.o $BASEDIR/defs/experiments/defs.o $BASEDIR/defs/nn/defs.o $BASEDIR/defs/nn/old.o $BASEDIR/defs/reduction/defs.o $BASEDIR/defs/logical/defs.o $BASEDIR/defs/rnn/defs.o -pthread
+    g++ -v -std=c++11 -shared -Wl,-soname,libonnx.so -fPIC -DONNX_NAMESPACE=onnx -o libonnx.so $BASEDIR/onnx-operators.pb.o $BASEDIR/onnx.pb.o $BASEDIR/checker.o $BASEDIR/defs/schema.o $BASEDIR/defs/tensor/old.o $BASEDIR/defs/tensor/defs.o $BASEDIR/defs/generator/defs.o $BASEDIR/defs/math/defs.o $BASEDIR/defs/data_type_utils.o $BASEDIR/defs/traditionalml/defs.o $BASEDIR/defs/experiments/defs.o $BASEDIR/defs/nn/defs.o $BASEDIR/defs/nn/old.o $BASEDIR/defs/reduction/defs.o $BASEDIR/defs/logical/defs.o $BASEDIR/defs/rnn/defs.o -pthread
     cd ..
 
     cd include
@@ -56,11 +57,11 @@ else
     mkdir onnx
     cd ..
 
-    cp onnx-1.0.1/onnx/*.h include/onnx/
-    cp onnx-1.0.1/onnx/defs/*.h include/defs/
+    cp onnx-$ONNX/onnx/*.h include/onnx/
+    cp onnx-$ONNX/onnx/defs/*.h include/defs/
     #TODO: Fix so the workaround isn't needed here
     #next line to workaround by commenting out parts of schema.h that cause failures
     patch include/defs/schema.h ../../schema.h.patch
-    cp onnx-1.0.1/libonnx.so lib
+    cp onnx-$ONNX/libonnx.so lib
 fi
 cd ..
