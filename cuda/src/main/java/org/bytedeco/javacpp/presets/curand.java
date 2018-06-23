@@ -34,7 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<curand.h>", link = "curand@.9.2")},
+    @Platform(include = "<curand.h>", link = "curand@.9.2"),
+    @Platform(value = "windows-x86_64", preload = "curand64_92")},
         target = "org.bytedeco.javacpp.curand")
 @NoException
 public class curand implements InfoMapper {

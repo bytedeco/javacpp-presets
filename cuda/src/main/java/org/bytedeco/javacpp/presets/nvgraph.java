@@ -34,7 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<nvgraph.h>", link = "nvgraph@.9.2")},
+    @Platform(include = "<nvgraph.h>", link = "nvgraph@.9.2"),
+    @Platform(value = "windows-x86_64", preload = "nvgraph64_92")},
         target = "org.bytedeco.javacpp.nvgraph")
 @NoException
 public class nvgraph implements InfoMapper {

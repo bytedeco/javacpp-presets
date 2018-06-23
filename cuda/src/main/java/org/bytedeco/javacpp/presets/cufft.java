@@ -34,7 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cufft.h>", link = "cufft@.9.2")},
+    @Platform(include = "<cufft.h>", link = "cufft@.9.2"),
+    @Platform(value = "windows-x86_64", preload = "cufft64_92")},
         target = "org.bytedeco.javacpp.cufft")
 @NoException
 public class cufft implements InfoMapper {

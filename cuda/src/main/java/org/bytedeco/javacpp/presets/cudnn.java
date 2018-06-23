@@ -34,7 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cudnn.h>", link = "cudnn@.7")},
+    @Platform(include = "<cudnn.h>", link = "cudnn@.7"),
+    @Platform(value = "windows-x86_64", preload = "cudnn64_7")},
         target = "org.bytedeco.javacpp.cudnn")
 @NoException
 public class cudnn implements InfoMapper {

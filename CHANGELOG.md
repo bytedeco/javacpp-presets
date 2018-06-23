@@ -1,4 +1,5 @@
 
+ * Bundle the libraries of CUDA and cuDNN, allowing OpenCV, Caffe, and TensorFlow to use GPUs with no CUDA installation
  * Make it possible to set the `TF_Buffer::data` field for C API of TensorFlow
  * Add `openblas_nolapack` class to make it easier to load BLAS libraries missing LAPACK such as MKLML
  * Map instances of `google::protobuf::Map` to access more of TensorFlow's configuration ([issue #533](https://github.com/bytedeco/javacpp-presets/issues/533))

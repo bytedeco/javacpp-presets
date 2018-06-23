@@ -58,6 +58,11 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>1.0-1.4.2-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda-platform</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 </project>

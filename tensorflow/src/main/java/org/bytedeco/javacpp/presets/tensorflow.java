@@ -23,7 +23,9 @@
 package org.bytedeco.javacpp.presets;
 
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Adapter;
@@ -43,6 +45,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 
 /**
  *
@@ -320,7 +323,7 @@ import java.lang.annotation.Target;
         },
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
-public class tensorflow implements BuildEnabled, InfoMapper {
+public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
     private Logger logger;
     private java.util.Properties properties;
     private String encoding;
@@ -332,6 +335,34 @@ public class tensorflow implements BuildEnabled, InfoMapper {
         this.properties = properties;
         this.encoding = encoding;
         this.android = properties.getProperty("platform").startsWith("android-");
+    }
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        String extension = properties.getProperty("platform.extension");
+        List<String> preloads = properties.get("platform.preload");
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || !extension.equals("-gpu")) {
+            return;
+        }
+        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn"};
+        for (String lib : libs) {
+            switch (platform) {
+                case "linux-x86_64":
+                case "macosx-x86_64":
+                    lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+                    break;
+                case "windows-x86_64":
+                    lib += lib.equals("cudnn") ? "64_7" : "64_92";
+                    break;
+                default:
+                    continue; // no CUDA
+            }
+            if (!preloads.contains(lib)) {
+                preloads.add(lib);
+            }
+        }
     }
 
     public void map(InfoMap infoMap) {

@@ -205,10 +205,20 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.64_mac -o $HOME/cuda_9.2.64_mac.dmg
+        curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.2.64.1_mac -o $HOME/cuda_9.2.64.1_mac.dmg
         curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-osx-x64-v7.1.tgz -o $HOME/cudnn-9.2-osx-x64-v7.1.tgz
 
         echo "Mount dmg"
         hdiutil mount $HOME/cuda_9.2.64_mac.dmg
+        sleep 5
+        ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
+        sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
+        echo "Brew status $BREW_STATUS"
+        if [ $BREW_STATUS -ne 0 ]; then
+          echo "Brew Failed"
+          exit $BREW_STATUS
+        fi
+        hdiutil mount $HOME/cuda_9.2.64.1_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
