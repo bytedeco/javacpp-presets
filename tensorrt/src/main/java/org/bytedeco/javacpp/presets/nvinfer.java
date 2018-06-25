@@ -46,7 +46,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nvinfer implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-               .put(new Info("NV_TENSORRT_FINAL").cppTypes().annotations())
+               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "TENSORRTAPI").cppTypes().annotations())
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::EnumMax").skip())

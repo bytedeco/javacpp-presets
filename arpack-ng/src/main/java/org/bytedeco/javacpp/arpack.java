@@ -12,6 +12,57 @@ import static org.bytedeco.javacpp.openblas.*;
 public class arpack extends org.bytedeco.javacpp.presets.arpack {
     static { Loader.load(); }
 
+// Parsed from arpack.h
+
+// #ifndef __ARPACK_H__
+// #define __ARPACK_H__
+
+// #ifdef __cplusplus
+// #endif
+
+public static native void cnaupd_c(IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, float tol, @Cast("float _Complex*") FloatPointer resid, int ncv, @Cast("float _Complex*") FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, @Cast("float _Complex*") FloatPointer workd, @Cast("float _Complex*") FloatPointer workl, int lworkl, FloatPointer rwork, IntPointer info);
+public static native void cnaupd_c(IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, float tol, @Cast("float _Complex*") FloatBuffer resid, int ncv, @Cast("float _Complex*") FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("float _Complex*") FloatBuffer workd, @Cast("float _Complex*") FloatBuffer workl, int lworkl, FloatBuffer rwork, IntBuffer info);
+public static native void cnaupd_c(int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, float tol, @Cast("float _Complex*") float[] resid, int ncv, @Cast("float _Complex*") float[] v, int ldv, int[] iparam, int[] ipntr, @Cast("float _Complex*") float[] workd, @Cast("float _Complex*") float[] workl, int lworkl, float[] rwork, int[] info);
+public static native void cneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, @Const IntPointer select, @Cast("float _Complex*") FloatPointer d, @Cast("float _Complex*") FloatPointer z, int ldz, @ByVal @Cast("float _Complex*") FloatPointer sigma, @Cast("float _Complex*") FloatPointer workev, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, float tol, @Cast("float _Complex*") FloatPointer resid, int ncv, @Cast("float _Complex*") FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, @Cast("float _Complex*") FloatPointer workd, @Cast("float _Complex*") FloatPointer workl, int lworkl, FloatPointer rwork, IntPointer info);
+public static native void cneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, @Const IntBuffer select, @Cast("float _Complex*") FloatBuffer d, @Cast("float _Complex*") FloatBuffer z, int ldz, @ByVal @Cast("float _Complex*") FloatBuffer sigma, @Cast("float _Complex*") FloatBuffer workev, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, float tol, @Cast("float _Complex*") FloatBuffer resid, int ncv, @Cast("float _Complex*") FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("float _Complex*") FloatBuffer workd, @Cast("float _Complex*") FloatBuffer workl, int lworkl, FloatBuffer rwork, IntBuffer info);
+public static native void cneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, @Const int[] select, @Cast("float _Complex*") float[] d, @Cast("float _Complex*") float[] z, int ldz, @ByVal @Cast("float _Complex*") float[] sigma, @Cast("float _Complex*") float[] workev, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, float tol, @Cast("float _Complex*") float[] resid, int ncv, @Cast("float _Complex*") float[] v, int ldv, int[] iparam, int[] ipntr, @Cast("float _Complex*") float[] workd, @Cast("float _Complex*") float[] workl, int lworkl, float[] rwork, int[] info);
+public static native void dnaupd_c(IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl, IntPointer info);
+public static native void dnaupd_c(IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl, IntBuffer info);
+public static native void dnaupd_c(int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol, double[] resid, int ncv, double[] v, int ldv, int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl, int[] info);
+public static native void dneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, @Const IntPointer select, DoublePointer dr, DoublePointer di, DoublePointer z, int ldz, double sigmar, double sigmai, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl, IntPointer info);
+public static native void dneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, @Const IntBuffer select, DoubleBuffer dr, DoubleBuffer di, DoubleBuffer z, int ldz, double sigmar, double sigmai, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl, IntBuffer info);
+public static native void dneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, @Const int[] select, double[] dr, double[] di, double[] z, int ldz, double sigmar, double sigmai, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol, double[] resid, int ncv, double[] v, int ldv, int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl, int[] info);
+public static native void dsaupd_c(IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl, IntPointer info);
+public static native void dsaupd_c(IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl, IntBuffer info);
+public static native void dsaupd_c(int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol, double[] resid, int ncv, double[] v, int ldv, int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl, int[] info);
+public static native void dseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, @Const IntPointer select, DoublePointer d, DoublePointer z, int ldz, double sigma, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl, IntPointer info);
+public static native void dseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, @Const IntBuffer select, DoubleBuffer d, DoubleBuffer z, int ldz, double sigma, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl, IntBuffer info);
+public static native void dseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, @Const int[] select, double[] d, double[] z, int ldz, double sigma, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol, double[] resid, int ncv, double[] v, int ldv, int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl, int[] info);
+public static native void snaupd_c(IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl, IntPointer info);
+public static native void snaupd_c(IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl, IntBuffer info);
+public static native void snaupd_c(int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, float tol, float[] resid, int ncv, float[] v, int ldv, int[] iparam, int[] ipntr, float[] workd, float[] workl, int lworkl, int[] info);
+public static native void sneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, @Const IntPointer select, FloatPointer dr, FloatPointer di, FloatPointer z, int ldz, float sigmar, float sigmai, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl, IntPointer info);
+public static native void sneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, @Const IntBuffer select, FloatBuffer dr, FloatBuffer di, FloatBuffer z, int ldz, float sigmar, float sigmai, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl, IntBuffer info);
+public static native void sneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, @Const int[] select, float[] dr, float[] di, float[] z, int ldz, float sigmar, float sigmai, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, float tol, float[] resid, int ncv, float[] v, int ldv, int[] iparam, int[] ipntr, float[] workd, float[] workl, int lworkl, int[] info);
+public static native void ssaupd_c(IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl, IntPointer info);
+public static native void ssaupd_c(IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl, IntBuffer info);
+public static native void ssaupd_c(int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, float tol, float[] resid, int ncv, float[] v, int ldv, int[] iparam, int[] ipntr, float[] workd, float[] workl, int lworkl, int[] info);
+public static native void sseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, @Const IntPointer select, FloatPointer d, FloatPointer z, int ldz, float sigma, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl, IntPointer info);
+public static native void sseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, @Const IntBuffer select, FloatBuffer d, FloatBuffer z, int ldz, float sigma, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl, IntBuffer info);
+public static native void sseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, @Const int[] select, float[] d, float[] z, int ldz, float sigma, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, float tol, float[] resid, int ncv, float[] v, int ldv, int[] iparam, int[] ipntr, float[] workd, float[] workl, int lworkl, int[] info);
+public static native void znaupd_c(IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol, @Cast("double _Complex*") DoublePointer resid, int ncv, @Cast("double _Complex*") DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr, @Cast("double _Complex*") DoublePointer workd, @Cast("double _Complex*") DoublePointer workl, int lworkl, DoublePointer rwork, IntPointer info);
+public static native void znaupd_c(IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol, @Cast("double _Complex*") DoubleBuffer resid, int ncv, @Cast("double _Complex*") DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("double _Complex*") DoubleBuffer workd, @Cast("double _Complex*") DoubleBuffer workl, int lworkl, DoubleBuffer rwork, IntBuffer info);
+public static native void znaupd_c(int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol, @Cast("double _Complex*") double[] resid, int ncv, @Cast("double _Complex*") double[] v, int ldv, int[] iparam, int[] ipntr, @Cast("double _Complex*") double[] workd, @Cast("double _Complex*") double[] workl, int lworkl, double[] rwork, int[] info);
+public static native void zneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, @Const IntPointer select, @Cast("double _Complex*") DoublePointer d, @Cast("double _Complex*") DoublePointer z, int ldz, @ByVal @Cast("double _Complex*") DoublePointer sigma, @Cast("double _Complex*") DoublePointer workev, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol, @Cast("double _Complex*") DoublePointer resid, int ncv, @Cast("double _Complex*") DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr, @Cast("double _Complex*") DoublePointer workd, @Cast("double _Complex*") DoublePointer workl, int lworkl, DoublePointer rwork, IntPointer info);
+public static native void zneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, @Const IntBuffer select, @Cast("double _Complex*") DoubleBuffer d, @Cast("double _Complex*") DoubleBuffer z, int ldz, @ByVal @Cast("double _Complex*") DoubleBuffer sigma, @Cast("double _Complex*") DoubleBuffer workev, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol, @Cast("double _Complex*") DoubleBuffer resid, int ncv, @Cast("double _Complex*") DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("double _Complex*") DoubleBuffer workd, @Cast("double _Complex*") DoubleBuffer workl, int lworkl, DoubleBuffer rwork, IntBuffer info);
+public static native void zneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, @Const int[] select, @Cast("double _Complex*") double[] d, @Cast("double _Complex*") double[] z, int ldz, @ByVal @Cast("double _Complex*") double[] sigma, @Cast("double _Complex*") double[] workev, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol, @Cast("double _Complex*") double[] resid, int ncv, @Cast("double _Complex*") double[] v, int ldv, int[] iparam, int[] ipntr, @Cast("double _Complex*") double[] workd, @Cast("double _Complex*") double[] workl, int lworkl, double[] rwork, int[] info);
+
+// #ifdef  __cplusplus
+// #endif
+
+// #endif
+
+
 // Parsed from arpack.hpp
 
 // #ifndef __ARPACK_HPP__
@@ -50,197 +101,7 @@ public static final int
   /** 'S' compute some of the Ritz vectors, specified by the logical array
    *  SELECT. */
   ritz_specified = 2;
-/*
- * From C++, arpack does not exist.
- * Arpack is Fortran. ISO_C_BINDING is a gateway from Fortran to C, not C++.
- * However C++ can interface to C which is why you find C types in the
- * arpack.hpp
- */
-@Namespace("arpack::internal") public static native void ssaupd_c(@ByRef IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev,
-              float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv, IntPointer iparam,
-              IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl, @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void ssaupd_c(@ByRef IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev,
-              float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv, IntBuffer iparam,
-              IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl, @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void ssaupd_c(@ByRef int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev,
-              float tol, float[] resid, int ncv, float[] v, int ldv, int[] iparam,
-              int[] ipntr, float[] workd, float[] workl, int lworkl, @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void sseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, IntPointer select, FloatPointer d, FloatPointer z,
-              int ldz, float sigma, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which,
-              int nev, float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv,
-              IntPointer iparam, IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl,
-              @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void sseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, IntBuffer select, FloatBuffer d, FloatBuffer z,
-              int ldz, float sigma, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which,
-              int nev, float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv,
-              IntBuffer iparam, IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl,
-              @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void sseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, int[] select, float[] d, float[] z,
-              int ldz, float sigma, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which,
-              int nev, float tol, float[] resid, int ncv, float[] v, int ldv,
-              int[] iparam, int[] ipntr, float[] workd, float[] workl, int lworkl,
-              @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void dsaupd_c(@ByRef IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev,
-              double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv,
-              IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl,
-              @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void dsaupd_c(@ByRef IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev,
-              double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv,
-              IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl,
-              @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void dsaupd_c(@ByRef int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev,
-              double tol, double[] resid, int ncv, double[] v, int ldv,
-              int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl,
-              @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void dseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, IntPointer select, DoublePointer d, DoublePointer z,
-              int ldz, double sigma, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which,
-              int nev, double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv,
-              IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl,
-              @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void dseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, IntBuffer select, DoubleBuffer d, DoubleBuffer z,
-              int ldz, double sigma, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which,
-              int nev, double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv,
-              IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl,
-              @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void dseupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, int[] select, double[] d, double[] z,
-              int ldz, double sigma, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which,
-              int nev, double tol, double[] resid, int ncv, double[] v, int ldv,
-              int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl,
-              @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void snaupd_c(@ByRef IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev,
-              float tol, FloatPointer resid, int ncv, FloatPointer v, int ldv, IntPointer iparam,
-              IntPointer ipntr, FloatPointer workd, FloatPointer workl, int lworkl, @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void snaupd_c(@ByRef IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev,
-              float tol, FloatBuffer resid, int ncv, FloatBuffer v, int ldv, IntBuffer iparam,
-              IntBuffer ipntr, FloatBuffer workd, FloatBuffer workl, int lworkl, @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void snaupd_c(@ByRef int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev,
-              float tol, float[] resid, int ncv, float[] v, int ldv, int[] iparam,
-              int[] ipntr, float[] workd, float[] workl, int lworkl, @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void sneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, IntPointer select, FloatPointer dr, FloatPointer di,
-              FloatPointer z, int ldz, float sigmar, float sigmai, @Cast("const char*") BytePointer bmat,
-              int n, @Cast("const char*") BytePointer which, int nev, float tol, FloatPointer resid,
-              int ncv, FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr, FloatPointer workd,
-              FloatPointer workl, int lworkl, @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void sneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, IntBuffer select, FloatBuffer dr, FloatBuffer di,
-              FloatBuffer z, int ldz, float sigmar, float sigmai, @Cast("const char*") ByteBuffer bmat,
-              int n, @Cast("const char*") ByteBuffer which, int nev, float tol, FloatBuffer resid,
-              int ncv, FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr, FloatBuffer workd,
-              FloatBuffer workl, int lworkl, @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void sneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, int[] select, float[] dr, float[] di,
-              float[] z, int ldz, float sigmar, float sigmai, @Cast("const char*") byte[] bmat,
-              int n, @Cast("const char*") byte[] which, int nev, float tol, float[] resid,
-              int ncv, float[] v, int ldv, int[] iparam, int[] ipntr, float[] workd,
-              float[] workl, int lworkl, @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void dnaupd_c(@ByRef IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev,
-              double tol, DoublePointer resid, int ncv, DoublePointer v, int ldv,
-              IntPointer iparam, IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl,
-              @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void dnaupd_c(@ByRef IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev,
-              double tol, DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv,
-              IntBuffer iparam, IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl,
-              @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void dnaupd_c(@ByRef int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev,
-              double tol, double[] resid, int ncv, double[] v, int ldv,
-              int[] iparam, int[] ipntr, double[] workd, double[] workl, int lworkl,
-              @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void dneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, IntPointer select, DoublePointer dr,
-              DoublePointer di, DoublePointer z, int ldz, double sigmar, double sigmai,
-              @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev, double tol,
-              DoublePointer resid, int ncv, DoublePointer v, int ldv, IntPointer iparam,
-              IntPointer ipntr, DoublePointer workd, DoublePointer workl, int lworkl, @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void dneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, IntBuffer select, DoubleBuffer dr,
-              DoubleBuffer di, DoubleBuffer z, int ldz, double sigmar, double sigmai,
-              @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev, double tol,
-              DoubleBuffer resid, int ncv, DoubleBuffer v, int ldv, IntBuffer iparam,
-              IntBuffer ipntr, DoubleBuffer workd, DoubleBuffer workl, int lworkl, @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void dneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, int[] select, double[] dr,
-              double[] di, double[] z, int ldz, double sigmar, double sigmai,
-              @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev, double tol,
-              double[] resid, int ncv, double[] v, int ldv, int[] iparam,
-              int[] ipntr, double[] workd, double[] workl, int lworkl, @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void cnaupd_c(@ByRef IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev,
-              float tol, @Cast("float _Complex*") FloatPointer resid, int ncv, @Cast("float _Complex*") FloatPointer v,
-              int ldv, IntPointer iparam, IntPointer ipntr, @Cast("float _Complex*") FloatPointer workd,
-              @Cast("float _Complex*") FloatPointer workl, int lworkl, @Cast("float _Complex*") FloatPointer rwork,
-              @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void cnaupd_c(@ByRef IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev,
-              float tol, @Cast("float _Complex*") FloatBuffer resid, int ncv, @Cast("float _Complex*") FloatBuffer v,
-              int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("float _Complex*") FloatBuffer workd,
-              @Cast("float _Complex*") FloatBuffer workl, int lworkl, @Cast("float _Complex*") FloatBuffer rwork,
-              @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void cnaupd_c(@ByRef int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev,
-              float tol, @Cast("float _Complex*") float[] resid, int ncv, @Cast("float _Complex*") float[] v,
-              int ldv, int[] iparam, int[] ipntr, @Cast("float _Complex*") float[] workd,
-              @Cast("float _Complex*") float[] workl, int lworkl, @Cast("float _Complex*") float[] rwork,
-              @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void cneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, IntPointer select, @Cast("float _Complex*") FloatPointer d,
-              @Cast("float _Complex*") FloatPointer z, int ldz, @ByVal @Cast("float _Complex*") FloatPointer sigma,
-              @Cast("float _Complex*") FloatPointer workev, @Cast("const char*") BytePointer bmat, int n,
-              @Cast("const char*") BytePointer which, int nev, float tol, @Cast("float _Complex*") FloatPointer resid,
-              int ncv, @Cast("float _Complex*") FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr,
-              @Cast("float _Complex*") FloatPointer workd, @Cast("float _Complex*") FloatPointer workl, int lworkl,
-              @Cast("float _Complex*") FloatPointer rwork, @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void cneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, IntBuffer select, @Cast("float _Complex*") FloatBuffer d,
-              @Cast("float _Complex*") FloatBuffer z, int ldz, @ByVal @Cast("float _Complex*") FloatBuffer sigma,
-              @Cast("float _Complex*") FloatBuffer workev, @Cast("const char*") ByteBuffer bmat, int n,
-              @Cast("const char*") ByteBuffer which, int nev, float tol, @Cast("float _Complex*") FloatBuffer resid,
-              int ncv, @Cast("float _Complex*") FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr,
-              @Cast("float _Complex*") FloatBuffer workd, @Cast("float _Complex*") FloatBuffer workl, int lworkl,
-              @Cast("float _Complex*") FloatBuffer rwork, @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void cneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, int[] select, @Cast("float _Complex*") float[] d,
-              @Cast("float _Complex*") float[] z, int ldz, @ByVal @Cast("float _Complex*") float[] sigma,
-              @Cast("float _Complex*") float[] workev, @Cast("const char*") byte[] bmat, int n,
-              @Cast("const char*") byte[] which, int nev, float tol, @Cast("float _Complex*") float[] resid,
-              int ncv, @Cast("float _Complex*") float[] v, int ldv, int[] iparam, int[] ipntr,
-              @Cast("float _Complex*") float[] workd, @Cast("float _Complex*") float[] workl, int lworkl,
-              @Cast("float _Complex*") float[] rwork, @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void znaupd_c(@ByRef IntPointer ido, @Cast("const char*") BytePointer bmat, int n, @Cast("const char*") BytePointer which, int nev,
-              double tol, @Cast("double _Complex*") DoublePointer resid, int ncv, @Cast("double _Complex*") DoublePointer v,
-              int ldv, IntPointer iparam, IntPointer ipntr, @Cast("double _Complex*") DoublePointer workd,
-              @Cast("double _Complex*") DoublePointer workl, int lworkl, @Cast("double _Complex*") DoublePointer rwork,
-              @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void znaupd_c(@ByRef IntBuffer ido, @Cast("const char*") ByteBuffer bmat, int n, @Cast("const char*") ByteBuffer which, int nev,
-              double tol, @Cast("double _Complex*") DoubleBuffer resid, int ncv, @Cast("double _Complex*") DoubleBuffer v,
-              int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("double _Complex*") DoubleBuffer workd,
-              @Cast("double _Complex*") DoubleBuffer workl, int lworkl, @Cast("double _Complex*") DoubleBuffer rwork,
-              @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void znaupd_c(@ByRef int[] ido, @Cast("const char*") byte[] bmat, int n, @Cast("const char*") byte[] which, int nev,
-              double tol, @Cast("double _Complex*") double[] resid, int ncv, @Cast("double _Complex*") double[] v,
-              int ldv, int[] iparam, int[] ipntr, @Cast("double _Complex*") double[] workd,
-              @Cast("double _Complex*") double[] workl, int lworkl, @Cast("double _Complex*") double[] rwork,
-              @ByRef int[] info);
-
-@Namespace("arpack::internal") public static native void zneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") BytePointer howmny, IntPointer select, @Cast("double _Complex*") DoublePointer d,
-              @Cast("double _Complex*") DoublePointer z, int ldz, @ByVal @Cast("double _Complex*") DoublePointer sigma,
-              @Cast("double _Complex*") DoublePointer workev, @Cast("const char*") BytePointer bmat, int n,
-              @Cast("const char*") BytePointer which, int nev, double tol, @Cast("double _Complex*") DoublePointer resid,
-              int ncv, @Cast("double _Complex*") DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr,
-              @Cast("double _Complex*") DoublePointer workd, @Cast("double _Complex*") DoublePointer workl, int lworkl,
-              @Cast("double _Complex*") DoublePointer rwork, @ByRef IntPointer info);
-@Namespace("arpack::internal") public static native void zneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") ByteBuffer howmny, IntBuffer select, @Cast("double _Complex*") DoubleBuffer d,
-              @Cast("double _Complex*") DoubleBuffer z, int ldz, @ByVal @Cast("double _Complex*") DoubleBuffer sigma,
-              @Cast("double _Complex*") DoubleBuffer workev, @Cast("const char*") ByteBuffer bmat, int n,
-              @Cast("const char*") ByteBuffer which, int nev, double tol, @Cast("double _Complex*") DoubleBuffer resid,
-              int ncv, @Cast("double _Complex*") DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr,
-              @Cast("double _Complex*") DoubleBuffer workd, @Cast("double _Complex*") DoubleBuffer workl, int lworkl,
-              @Cast("double _Complex*") DoubleBuffer rwork, @ByRef IntBuffer info);
-@Namespace("arpack::internal") public static native void zneupd_c(@Cast("bool") boolean rvec, @Cast("const char*") byte[] howmny, int[] select, @Cast("double _Complex*") double[] d,
-              @Cast("double _Complex*") double[] z, int ldz, @ByVal @Cast("double _Complex*") double[] sigma,
-              @Cast("double _Complex*") double[] workev, @Cast("const char*") byte[] bmat, int n,
-              @Cast("const char*") byte[] which, int nev, double tol, @Cast("double _Complex*") double[] resid,
-              int ncv, @Cast("double _Complex*") double[] v, int ldv, int[] iparam, int[] ipntr,
-              @Cast("double _Complex*") double[] workd, @Cast("double _Complex*") double[] workl, int lworkl,
-              @Cast("double _Complex*") double[] rwork, @ByRef int[] info);
+// #include "arpack.h"
 
 @Namespace("arpack::internal") public static native @Cast("const char*") BytePointer convert_to_char(@Cast("const arpack::which") int option);
   // namespace internal
@@ -375,19 +236,19 @@ public static final int
                   @Cast("std::complex<float>*") FloatPointer resid, int ncv, @Cast("std::complex<float>*") FloatPointer v,
                   int ldv, IntPointer iparam, IntPointer ipntr, @Cast("std::complex<float>*") FloatPointer workd,
                   @Cast("std::complex<float>*") FloatPointer workl, int lworkl,
-                  @Cast("std::complex<float>*") FloatPointer rwork, @ByRef IntPointer info);
+                  FloatPointer rwork, @ByRef IntPointer info);
 @Namespace("arpack") public static native void naupd(@ByRef IntBuffer ido, @Cast("const arpack::bmat") int bmat_option, int n,
                   @Cast("const arpack::which") int ritz_option, int nev, float tol,
                   @Cast("std::complex<float>*") FloatBuffer resid, int ncv, @Cast("std::complex<float>*") FloatBuffer v,
                   int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("std::complex<float>*") FloatBuffer workd,
                   @Cast("std::complex<float>*") FloatBuffer workl, int lworkl,
-                  @Cast("std::complex<float>*") FloatBuffer rwork, @ByRef IntBuffer info);
+                  FloatBuffer rwork, @ByRef IntBuffer info);
 @Namespace("arpack") public static native void naupd(@ByRef int[] ido, @Cast("const arpack::bmat") int bmat_option, int n,
                   @Cast("const arpack::which") int ritz_option, int nev, float tol,
                   @Cast("std::complex<float>*") float[] resid, int ncv, @Cast("std::complex<float>*") float[] v,
                   int ldv, int[] iparam, int[] ipntr, @Cast("std::complex<float>*") float[] workd,
                   @Cast("std::complex<float>*") float[] workl, int lworkl,
-                  @Cast("std::complex<float>*") float[] rwork, @ByRef int[] info);
+                  float[] rwork, @ByRef int[] info);
 
 @Namespace("arpack") public static native void neupd(@Cast("bool") boolean rvec, @Cast("const arpack::howmny") int howmny_option, IntPointer select,
                   @Cast("std::complex<float>*") FloatPointer d, @Cast("std::complex<float>*") FloatPointer z, int ldz,
@@ -396,7 +257,7 @@ public static final int
                   int nev, float tol, @Cast("std::complex<float>*") FloatPointer resid, int ncv,
                   @Cast("std::complex<float>*") FloatPointer v, int ldv, IntPointer iparam, IntPointer ipntr,
                   @Cast("std::complex<float>*") FloatPointer workd, @Cast("std::complex<float>*") FloatPointer workl,
-                  int lworkl, @Cast("std::complex<float>*") FloatPointer rwork, @ByRef IntPointer info);
+                  int lworkl, FloatPointer rwork, @ByRef IntPointer info);
 @Namespace("arpack") public static native void neupd(@Cast("bool") boolean rvec, @Cast("const arpack::howmny") int howmny_option, IntBuffer select,
                   @Cast("std::complex<float>*") FloatBuffer d, @Cast("std::complex<float>*") FloatBuffer z, int ldz,
                   @ByVal @Cast("std::complex<float>*") FloatBuffer sigma, @Cast("std::complex<float>*") FloatBuffer workev,
@@ -404,7 +265,7 @@ public static final int
                   int nev, float tol, @Cast("std::complex<float>*") FloatBuffer resid, int ncv,
                   @Cast("std::complex<float>*") FloatBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr,
                   @Cast("std::complex<float>*") FloatBuffer workd, @Cast("std::complex<float>*") FloatBuffer workl,
-                  int lworkl, @Cast("std::complex<float>*") FloatBuffer rwork, @ByRef IntBuffer info);
+                  int lworkl, FloatBuffer rwork, @ByRef IntBuffer info);
 @Namespace("arpack") public static native void neupd(@Cast("bool") boolean rvec, @Cast("const arpack::howmny") int howmny_option, int[] select,
                   @Cast("std::complex<float>*") float[] d, @Cast("std::complex<float>*") float[] z, int ldz,
                   @ByVal @Cast("std::complex<float>*") float[] sigma, @Cast("std::complex<float>*") float[] workev,
@@ -412,26 +273,26 @@ public static final int
                   int nev, float tol, @Cast("std::complex<float>*") float[] resid, int ncv,
                   @Cast("std::complex<float>*") float[] v, int ldv, int[] iparam, int[] ipntr,
                   @Cast("std::complex<float>*") float[] workd, @Cast("std::complex<float>*") float[] workl,
-                  int lworkl, @Cast("std::complex<float>*") float[] rwork, @ByRef int[] info);
+                  int lworkl, float[] rwork, @ByRef int[] info);
 
 @Namespace("arpack") public static native void naupd(@ByRef IntPointer ido, @Cast("const arpack::bmat") int bmat_option, int n,
                   @Cast("const arpack::which") int ritz_option, int nev, double tol,
                   @Cast("std::complex<double>*") DoublePointer resid, int ncv, @Cast("std::complex<double>*") DoublePointer v,
                   int ldv, IntPointer iparam, IntPointer ipntr, @Cast("std::complex<double>*") DoublePointer workd,
                   @Cast("std::complex<double>*") DoublePointer workl, int lworkl,
-                  @Cast("std::complex<double>*") DoublePointer rwork, @ByRef IntPointer info);
+                  DoublePointer rwork, @ByRef IntPointer info);
 @Namespace("arpack") public static native void naupd(@ByRef IntBuffer ido, @Cast("const arpack::bmat") int bmat_option, int n,
                   @Cast("const arpack::which") int ritz_option, int nev, double tol,
                   @Cast("std::complex<double>*") DoubleBuffer resid, int ncv, @Cast("std::complex<double>*") DoubleBuffer v,
                   int ldv, IntBuffer iparam, IntBuffer ipntr, @Cast("std::complex<double>*") DoubleBuffer workd,
                   @Cast("std::complex<double>*") DoubleBuffer workl, int lworkl,
-                  @Cast("std::complex<double>*") DoubleBuffer rwork, @ByRef IntBuffer info);
+                  DoubleBuffer rwork, @ByRef IntBuffer info);
 @Namespace("arpack") public static native void naupd(@ByRef int[] ido, @Cast("const arpack::bmat") int bmat_option, int n,
                   @Cast("const arpack::which") int ritz_option, int nev, double tol,
                   @Cast("std::complex<double>*") double[] resid, int ncv, @Cast("std::complex<double>*") double[] v,
                   int ldv, int[] iparam, int[] ipntr, @Cast("std::complex<double>*") double[] workd,
                   @Cast("std::complex<double>*") double[] workl, int lworkl,
-                  @Cast("std::complex<double>*") double[] rwork, @ByRef int[] info);
+                  double[] rwork, @ByRef int[] info);
 
 @Namespace("arpack") public static native void neupd(@Cast("bool") boolean rvec, @Cast("const arpack::howmny") int howmny_option, IntPointer select,
                   @Cast("std::complex<double>*") DoublePointer d, @Cast("std::complex<double>*") DoublePointer z, int ldz,
@@ -440,7 +301,7 @@ public static final int
                   int nev, double tol, @Cast("std::complex<double>*") DoublePointer resid, int ncv,
                   @Cast("std::complex<double>*") DoublePointer v, int ldv, IntPointer iparam, IntPointer ipntr,
                   @Cast("std::complex<double>*") DoublePointer workd, @Cast("std::complex<double>*") DoublePointer workl,
-                  int lworkl, @Cast("std::complex<double>*") DoublePointer rwork, @ByRef IntPointer info);
+                  int lworkl, DoublePointer rwork, @ByRef IntPointer info);
 @Namespace("arpack") public static native void neupd(@Cast("bool") boolean rvec, @Cast("const arpack::howmny") int howmny_option, IntBuffer select,
                   @Cast("std::complex<double>*") DoubleBuffer d, @Cast("std::complex<double>*") DoubleBuffer z, int ldz,
                   @ByVal @Cast("std::complex<double>*") DoubleBuffer sigma, @Cast("std::complex<double>*") DoubleBuffer workev,
@@ -448,7 +309,7 @@ public static final int
                   int nev, double tol, @Cast("std::complex<double>*") DoubleBuffer resid, int ncv,
                   @Cast("std::complex<double>*") DoubleBuffer v, int ldv, IntBuffer iparam, IntBuffer ipntr,
                   @Cast("std::complex<double>*") DoubleBuffer workd, @Cast("std::complex<double>*") DoubleBuffer workl,
-                  int lworkl, @Cast("std::complex<double>*") DoubleBuffer rwork, @ByRef IntBuffer info);
+                  int lworkl, DoubleBuffer rwork, @ByRef IntBuffer info);
 @Namespace("arpack") public static native void neupd(@Cast("bool") boolean rvec, @Cast("const arpack::howmny") int howmny_option, int[] select,
                   @Cast("std::complex<double>*") double[] d, @Cast("std::complex<double>*") double[] z, int ldz,
                   @ByVal @Cast("std::complex<double>*") double[] sigma, @Cast("std::complex<double>*") double[] workev,
@@ -456,7 +317,7 @@ public static final int
                   int nev, double tol, @Cast("std::complex<double>*") double[] resid, int ncv,
                   @Cast("std::complex<double>*") double[] v, int ldv, int[] iparam, int[] ipntr,
                   @Cast("std::complex<double>*") double[] workd, @Cast("std::complex<double>*") double[] workl,
-                  int lworkl, @Cast("std::complex<double>*") double[] rwork, @ByRef int[] info);
+                  int lworkl, double[] rwork, @ByRef int[] info);
   // namespace arpack
 
 // #endif

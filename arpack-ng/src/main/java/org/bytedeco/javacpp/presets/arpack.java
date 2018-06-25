@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = openblas.class,
     value = @Platform(
         compiler = "cpp11",
-        include = {"arpack.hpp", "debug_c.hpp", "stat_c.hpp"},
+        include = {"arpack.h", "arpack.hpp", "debug_c.hpp", "stat_c.hpp"},
         link = "arpack@.2",
         preload = "libarpack-2"),
     target = "org.bytedeco.javacpp.arpack")

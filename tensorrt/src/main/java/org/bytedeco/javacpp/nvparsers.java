@@ -15,7 +15,7 @@ public class nvparsers extends org.bytedeco.javacpp.presets.nvparsers {
 // Parsed from NvCaffeParser.h
 
 /*
- * Copyright 1993-2016 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -75,16 +75,37 @@ public class nvparsers extends org.bytedeco.javacpp.presets.nvparsers {
     }
 
 
-// owned by the parser: goes away when the parser does
+/**
+ *  \class IBlobNameToTensor
+ * 
+ *  \brief Object used to store and query Tensors after they have been extracted from a Caffe model using the ICaffeParser.
+ * 
+ *  \note The lifetime of IBlobNameToTensor is the same as the lifetime of its parent ICaffeParser.
+ * 
+ *  @see nvcaffeparser1::ICaffeParser
+ *  */
 @Namespace("nvcaffeparser1") public static class IBlobNameToTensor extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBlobNameToTensor(Pointer p) { super(p); }
 
+    /** \brief Given a blob name, returns a pointer to a ITensor object.
+     * 
+     *  @param name Caffe blob name for which the user wants the corresponding ITensor.
+     * 
+     *  @return ITensor* corresponding to the queried name. If no such ITensor exists, then nullptr is returned.
+     *  */
     public native ITensor find(String name);
     public native ITensor find(@Cast("const char*") BytePointer name);
 }
 
+/**
+ *  \class IBinaryProtoBlob
+ * 
+ *  \brief Object used to store and query data extracted from a binaryproto file using the ICaffeParser.
+ * 
+ *  @see nvcaffeparser1::ICaffeParser
+ *  */
 @Namespace("nvcaffeparser1") public static class IBinaryProtoBlob extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -96,32 +117,100 @@ public class nvparsers extends org.bytedeco.javacpp.presets.nvparsers {
     public native void destroy();
 }
 
+/**
+ *  \class IPluginFactory
+ * 
+ *  \brief Plugin factory used to configure plugins.
+ *  */
 @Namespace("nvcaffeparser1") public static class IPluginFactory extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IPluginFactory(Pointer p) { super(p); }
 
+    /**
+     *  \brief A user implemented function that determines if a layer configuration is provided by an IPlugin.
+     * 
+     *  @param layerName Name of the layer which the user wishes to validate.
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") boolean isPlugin(String layerName);
     public native @Cast("bool") boolean isPlugin(@Cast("const char*") BytePointer layerName);
+
+    /**
+     *  \brief Creates a plugin.
+     * 
+     *  @param layerName Name of layer associated with the plugin.
+     *  @param weights Weights used for the layer.
+     *  @param nbWeights Number of weights.
+     *  */
     public native IPlugin createPlugin(String layerName, @Const Weights weights, int nbWeights);
     public native IPlugin createPlugin(@Cast("const char*") BytePointer layerName, @Const Weights weights, int nbWeights);
 }
 
+/**
+ *  \class IPluginFactoryExt
+ * 
+ *  \brief Plugin factory used to configure plugins with added support for TRT versioning.
+ *  */
 @Namespace("nvcaffeparser1") public static class IPluginFactoryExt extends IPluginFactory {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IPluginFactoryExt(Pointer p) { super(p); }
 
+    
+    
+    //!
+    //!
+    //!
     public native int getVersion();
+
+    /**
+     *  \brief A user implemented function that determines if a layer configuration is provided by an IPluginExt.
+     * 
+     *  @param layerName Name of the layer which the user wishes to validate.
+     *  */
     public native @Cast("bool") boolean isPluginExt(String layerName);
     public native @Cast("bool") boolean isPluginExt(@Cast("const char*") BytePointer layerName);
 }
 
+/**
+ *  \class ICaffeParser
+ * 
+ *  \brief Class used for parsing Caffe models.
+ * 
+ *  Allows users to export models trained using Caffe to TRT.
+ *  */
 @Namespace("nvcaffeparser1") public static class ICaffeParser extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ICaffeParser(Pointer p) { super(p); }
 
+
+    /**
+     *  \brief Parse a prototxt file and a binaryproto Caffe model to extract
+     *    network configuration and weights associated with the network, respectively.
+     * 
+     *  @param deploy The plain text, prototxt file used to define the network configuration.
+     *  @param model The binaryproto Caffe model that contains the weights associated with the network.
+     *  @param network Network in which the CaffeParser will fill the layers.
+     *  @param weightType The type to which the weights will transformed.
+     * 
+     *  @return A pointer to an IBlobNameToTensor object that contains the extracted data.
+     * 
+     *  @see nvcaffeparser1::IBlobNameToTensor
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Const IBlobNameToTensor parse(String deploy,
                                                   String model,
                                                   @ByRef INetworkDefinition network,
@@ -131,15 +220,89 @@ public class nvparsers extends org.bytedeco.javacpp.presets.nvparsers {
                                                   @ByRef INetworkDefinition network,
                                                   @Cast("nvinfer1::DataType") int weightType);
 
-    public native void setProtobufBufferSize(@Cast("size_t") long size);
-    public native void setPluginFactory(IPluginFactory factory);
+    /**
+     *  \brief Parse and extract data stored in binaryproto file.
+     * 
+     *  The binaryproto file contains data stored in a binary blob. parseBinaryProto() converts it
+     *  to an IBinaryProtoBlob object which gives the user access to the data and meta-data about data.
+     * 
+     *  @param fileName Path to file containing binary proto.
+     * 
+     *  @return A pointer to an IBinaryProtoBlob object that contains the extracted data.
+     * 
+     *  @see nvcaffeparser1::IBinaryProtoBlob
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native IBinaryProtoBlob parseBinaryProto(String fileName);
     public native IBinaryProtoBlob parseBinaryProto(@Cast("const char*") BytePointer fileName);
-    public native void destroy();
+
+    /**
+     *  \brief Set buffer size for the parsing and storage of the learned model.
+     * 
+     *  @param size The size of the buffer specified as the number of bytes.
+     * 
+     *  \note  Default size is 2^30 bytes.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setProtobufBufferSize(@Cast("size_t") long size);
+
+    /**
+     *  \brief Set the IPluginFactory used to create the user defined plugins.
+     * 
+     *  @param factory Pointer to an instance of the user implmentation of IPluginFactory.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setPluginFactory(IPluginFactory factory);
+
+    /**
+     *  \brief Set the IPluginFactoryExt used to create the user defined pluginExts.
+     * 
+     *  @param factory Pointer to an instance of the user implmentation of IPluginFactoryExt.
+     *  */
+    
+    
+    //!
+    //!
     public native void setPluginFactoryExt(IPluginFactoryExt factory);
+
+    /**
+     *  \brief Destroy this ICaffeParser object.
+     *  */
+    public native void destroy();
 }
 
+/**
+ *  \brief Creates a ICaffeParser object.
+ * 
+ *  @return A pointer to the ICaffeParser object is returned.
+ * 
+ *  @see nvcaffeparser1::ICaffeParser
+ *  */
+
+
+//!
+//!
+//!
 @Namespace("nvcaffeparser1") public static native ICaffeParser createCaffeParser();
+
+/**
+ *  \brief Shuts down protocol buffers library.
+ * 
+ *  \note No part of the protocol buffers library can be used after this function is called.
+ *  */
 @Namespace("nvcaffeparser1") public static native void shutdownProtobufLibrary();
 
 
@@ -149,7 +312,7 @@ public class nvparsers extends org.bytedeco.javacpp.presets.nvparsers {
 // Parsed from NvUffParser.h
 
 /*
- * Copyright 1993-2017 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -208,15 +371,15 @@ public static final int UFF_REQUIRED_VERSION_MINOR = 3;
 public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 
 /**
-* \enum UffInputOrder
-* \brief The different possible supported input order
-*/
+ *  \enum UffInputOrder
+ *  \brief The different possible supported input order.
+ *  */
 @Namespace("nvuffparser") public enum UffInputOrder {
-    /** NCHW order */
+    /** NCHW order. */
     kNCHW(0),
-    /** NHWC order */
+    /** NHWC order. */
     kNHWC(1),
-    /** NC order */
+    /** NC order. */
     kNC(2);
 
     public final int value;
@@ -227,20 +390,20 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 }
 
 /**
-* \enum FieldType
-* \brief The possible field types for custom layer
-*/
+ *  \enum FieldType
+ *  \brief The possible field types for custom layer.
+ *  */
 
 @Namespace("nvuffparser") public enum FieldType {
-    /** FP32 field type */
+    /** FP32 field type. */
     kFLOAT(0),
-    /** INT32 field type */
+    /** INT32 field type. */
     kINT32(1),
-    /** char field type. String for length>1 */
+    /** char field type. String for length>1. */
     kCHAR(2),
-    /** nvinfer1::Dims field type */
+    /** nvinfer1::Dims field type. */
     kDIMS(4),
-    /** nvinfer1::DataType field type */
+    /** nvinfer1::DataType field type. */
     kDATATYPE(5),
     kUNKNOWN(6);
 
@@ -252,14 +415,14 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 }
 
 /**
- * \class FieldMap
- *
- * \brief an array of field params used as a layer parameter for plugin layers
- *
- * The node fields are passed by the parser to the API through the plugin
- * constructor. The implementation of the plugin should parse the contents of
- * the fieldMap as part of the plugin constructor
- */
+ *  \class FieldMap
+ * 
+ *  \brief An array of field params used as a layer parameter for plugin layers.
+ * 
+ *  The node fields are passed by the parser to the API through the plugin
+ *  constructor. The implementation of the plugin should parse the contents of
+ *  the fieldMap as part of the plugin constructor
+ *  */
 @Namespace("nvuffparser") @NoOffset public static class FieldMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -298,14 +461,40 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
     @MemberGetter public native @Const FieldMap fields();
 }
 
-
+/**
+ *  \class IPluginFactory
+ * 
+ *  \brief Plugin factory used to configure plugins.
+ *  */
 @Name("nvuffparser::IPluginFactory") public static class IUffPluginFactory extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IUffPluginFactory(Pointer p) { super(p); }
 
+    /**
+     *  \brief A user implemented function that determines if a layer configuration is provided by an IPlugin.
+     * 
+     *  @param layerName Name of the layer which the user wishes to validate.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native @Cast("bool") boolean isPlugin(String layerName);
     public native @Cast("bool") boolean isPlugin(@Cast("const char*") BytePointer layerName);
+
+    /**
+     *  \brief Creates a plugin.
+     * 
+     *  @param layerName Name of layer associated with the plugin.
+     *  @param weights Weights used for the layer.
+     *  @param nbWeights Number of weights.
+     *  @param fc A collection of FieldMaps used as layer parameters for different plugin layers.
+     * 
+     *  @see FieldCollection
+     *  */
     public native IPlugin createPlugin(String layerName, @Const Weights weights, int nbWeights,
                                                 @Const @ByVal FieldCollection fc);
     public native IPlugin createPlugin(@Cast("const char*") BytePointer layerName, @Const Weights weights, int nbWeights,
@@ -313,40 +502,83 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 
 }
 
+/**
+ *  \class IPluginFactoryExt
+ * 
+ *  \brief Plugin factory used to configure plugins with added support for TRT versioning.
+ *  */
+@Name("nvuffparser::IPluginFactoryExt") public static class IUffPluginFactoryExt extends IUffPluginFactory {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IUffPluginFactoryExt(Pointer p) { super(p); }
 
+    
+    
+    //!
+    //!
+    //!
+    public native int getVersion();
+
+    /**
+     *  \brief A user implemented function that determines if a layer configuration is provided by an IPluginExt.
+     * 
+     *  @param layerName Name of the layer which the user wishes to validate.
+     *  */
+    public native @Cast("bool") boolean isPluginExt(String layerName);
+    public native @Cast("bool") boolean isPluginExt(@Cast("const char*") BytePointer layerName);
+}
+
+/**
+ *  \class IUffParser
+ * 
+ *  \brief Class used for parsing models described using the UFF format.
+ *  */
 @Namespace("nvuffparser") public static class IUffParser extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IUffParser(Pointer p) { super(p); }
 
+    /**
+     *  \brief Register an input name of a UFF network with the associated Dimensions.
+     * 
+     *  @param inputName Input name.
+     *  @param inputDims Input Dimensions, always provide your dimensions in CHW even if your network
+     *                   input was in HWC in yout original framework.
+     *  @param inputOrder Input order on which the framework input was originally.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") boolean registerInput(String inputName, @ByVal Dims inputDims, UffInputOrder inputOrder);
+    public native @Cast("bool") boolean registerInput(@Cast("const char*") BytePointer inputName, @ByVal Dims inputDims, @Cast("nvuffparser::UffInputOrder") int inputOrder);
 
-    /** \brief register an input name of a UFF network with the associated Dimensions
-    *
-    * @param inputName: input name
-    * @param inputDims: input Dimensions, always provide your dimensions in CHW even if your network
-    *                   input was in HWC in yout original framework.
-    * @param inputOrder: input order on which the framework input was originally
-    */
-    public native @Cast("bool") boolean registerInput(String inputName, @ByVal DimsCHW inputDims,
-                                   UffInputOrder inputOrder/*=nvuffparser::UffInputOrder::kNCHW*/);
-    public native @Cast("bool") boolean registerInput(String inputName, @ByVal DimsCHW inputDims);
-    public native @Cast("bool") boolean registerInput(@Cast("const char*") BytePointer inputName, @ByVal DimsCHW inputDims,
-                                   @Cast("nvuffparser::UffInputOrder") int inputOrder/*=nvuffparser::UffInputOrder::kNCHW*/);
-    public native @Cast("bool") boolean registerInput(@Cast("const char*") BytePointer inputName, @ByVal DimsCHW inputDims);
-
-    /** \brief register an output name of a UFF network
-    *
-    * @param outputName output name
-    */
+    /**
+     *  \brief Register an output name of a UFF network.
+     * 
+     *  @param outputName Output name.
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") boolean registerOutput(String outputName);
     public native @Cast("bool") boolean registerOutput(@Cast("const char*") BytePointer outputName);
 
-    /** \brief parse a UFF file
-    *
-    * @param file: file name of the UFF file
-    * @param network: network in which the UFFParser will fill the layers
-    * @param weightsType: the type on which the weights will transformed in
-    */
+    /**
+     *  \brief Parse a UFF file.
+     * 
+     *  @param file File name of the UFF file.
+     *  @param network Network in which the UFFParser will fill the layers.
+     *  @param weightsType The type on which the weights will transformed in.
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") boolean parse(String file,
                            @ByRef INetworkDefinition network,
                            DataType weightsType/*=nvinfer1::DataType::kFLOAT*/);
@@ -358,13 +590,14 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
     public native @Cast("bool") boolean parse(@Cast("const char*") BytePointer file,
                            @ByRef INetworkDefinition network);
 
-    /** \brief parse a UFF buffer, useful if the file already live in memory
-    *
-    * @param buffer: buffer of the UFF file
-    * @param size: size of buffer of the UFF file
-    * @param network: network in which the UFFParser will fill the layers
-    * @param weightsType: the type on which the weights will transformed in
-    */
+    /**
+     *  \brief Parse a UFF buffer, useful if the file already live in memory.
+     * 
+     *  @param buffer Buffer of the UFF file.
+     *  @param size Size of buffer of the UFF file.
+     *  @param network Network in which the UFFParser will fill the layers.
+     *  @param weightsType The type on which the weights will transformed in.
+     *  */
     public native @Cast("bool") boolean parseBuffer(String buffer, @Cast("std::size_t") long size,
                                  @ByRef INetworkDefinition network,
                                  DataType weightsType/*=nvinfer1::DataType::kFLOAT*/);
@@ -376,25 +609,79 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
     public native @Cast("bool") boolean parseBuffer(@Cast("const char*") BytePointer buffer, @Cast("std::size_t") long size,
                                  @ByRef INetworkDefinition network);
 
+    
+    
+    //!
+    //!
     public native void destroy();
 
-    /** \brief Return Version Major of the UFF
-     */
+    /**
+     *  \brief Return Version Major of the UFF.
+     *  */
+    
+    
+    //!
+    //!
     public native int getUffRequiredVersionMajor();
 
-    /** \brief Return Version Minor of the UFF
-     */
+    /**
+     *  \brief Return Version Minor of the UFF.
+     *  */
+    
+    
+    //!
+    //!
     public native int getUffRequiredVersionMinor();
 
-    /** \brief Return Patch Version of the UFF
-     */
+    /**
+     *  \brief Return Patch Version of the UFF.
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native int getUffRequiredVersionPatch();
 
+    /**
+     *  \brief Set the IPluginFactory used to create the user defined plugins.
+     * 
+     *  @param factory Pointer to an instance of the user implmentation of IPluginFactory.
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native void setPluginFactory(IUffPluginFactory factory);
+
+    /**
+     *  \brief Set the IPluginFactoryExt used to create the user defined pluginExts.
+     * 
+     *  @param factory Pointer to an instance of the user implmentation of IPluginFactoryExt.
+     *  */
+    public native void setPluginFactoryExt(IUffPluginFactoryExt factory);
 }
 
+/**
+ *  \brief Creates a IUffParser object.
+ * 
+ *  @return A pointer to the IUffParser object is returned.
+ * 
+ *  @see nvuffparser::IUffParser
+ *  */
 
+
+//!
+//!
+//!
 @Namespace("nvuffparser") public static native IUffParser createUffParser();
+
+/**
+ *  \brief Shuts down protocol buffers library.
+ * 
+ *  \note No part of the protocol buffers library can be used after this function is called.
+ *  */
 
 
 

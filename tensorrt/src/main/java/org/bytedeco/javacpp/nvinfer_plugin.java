@@ -15,7 +15,7 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
 // Parsed from NvInferPlugin.h
 
 /*
- * Copyright 1993-2016 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -66,39 +66,46 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
 // #ifndef NV_INFER_PLUGIN_H
 // #define NV_INFER_PLUGIN_H
 
+
+
+//!
+//!
+//!
 // #include "NvInfer.h"
 
 /**
- * \file NvInferPlugin.h
- *
- * This is the API for the NVidia provided TensorRT plugins.
- */
+ *  \file NvInferPlugin.h
+ * 
+ *  This is the API for the Nvidia provided TensorRT plugins.
+ *  */
     /**
-     * \enum PluginType
-     *
-     * \brief the type values for the various plugins
-     *
-     * @see INvPlugin::getPluginType()
-     */
+     *  \enum PluginType
+     * 
+     *  \brief The type values for the various plugins.
+     * 
+     *  @see INvPlugin::getPluginType()
+     *  */
     @Namespace("nvinfer1") public enum PluginType {
-        /** FasterRCNN fused plugin (RPN + ROI pooling) */
+        /** FasterRCNN fused plugin (RPN + ROI pooling). */
         kFASTERRCNN(0),
-        /** Normalize plugin */
+        /** Normalize plugin. */
         kNORMALIZE(1),
-        /** Permute plugin */
+        /** Permute plugin. */
         kPERMUTE(2),
-        /** PriorBox plugin */
+        /** PriorBox plugin. */
         kPRIORBOX(3),
-        /** SSD DetectionOutput plugin */
+        /** SSD DetectionOutput plugin. */
         kSSDDETECTIONOUTPUT(4),
-        /** Concat plugin */
+        /** Concat plugin. */
         kCONCAT(5),
-        /** YOLO PReLU Plugin */
+        /** YOLO PReLU Plugin. */
         kPRELU(6),
-        /** YOLO Reorg Plugin */
+        /** YOLO Reorg Plugin. */
         kYOLOREORG(7),
-        /** YOLO Region Plugin */
-        kYOLOREGION(8);
+        /** YOLO Region Plugin. */
+        kYOLOREGION(8),
+        /** SSD Grid Anchor Generator. */
+        kANCHORGENERATOR(9);
 
         public final int value;
         private PluginType(int v) { this.value = v; }
@@ -107,84 +114,102 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
         @Override public String toString() { return intern().name(); }
     }
     
-        /**
-     * \class INvPlugin
-     *
-     * \brief Common interface for the NVidia created plugins.
-     *
-     * This class provides a common subset of functionality that is used
-     * to provide distinguish the NVidia created plugins. Each plugin provides a
-     * function to validate the parameter options and create the plugin
-     * object.
-     */
+    /**
+     *  \class INvPlugin
+     * 
+     *  \brief Common interface for the Nvidia created plugins.
+     * 
+     *  This class provides a common subset of functionality that is used
+     *  to provide distinguish the Nvidia created plugins. Each plugin provides a
+     *  function to validate the parameter options and create the plugin
+     *  object.
+     *  */
     @Namespace("nvinfer1::plugin") public static class INvPlugin extends IPlugin {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public INvPlugin(Pointer p) { super(p); }
     
             /**
-             * \brief get the parameter plugin ID.
-             *
-             * @return the ID of the plugin.
-             */
+             *  \brief Get the parameter plugin ID.
+             * 
+             *  @return The ID of the plugin.
+             *  */
+            
+            
+            //!
+            //!
+            //!
+            //!
             public native PluginType getPluginType();
 
             /**
-             * \brief get the name of the plugin from the ID
-             *
-             * @return the name of the plugin specified by \p id.
-             * @return nullptr if invalid ID is specified
-             *
-             * The valid \p id values are ranged [0, numPlugins()).
-             */
+             *  \brief Get the name of the plugin from the ID
+             * 
+             *  @return The name of the plugin specified by \p id. Return nullptr if invalid ID is specified.
+             * 
+             *  The valid \p id values are ranged [0, numPlugins()).
+             *  */
+            
+            
+            //!
+            //!
+            //!
             public native String getName();
 
             /**
-            * \brief destroy the plugin
-            *
-            * The valid \p id values are ranged [0, numPlugins()).
-            */
+             *  \brief Destroy the plugin.
+             * 
+             *  The valid \p id values are ranged [0, numPlugins()).
+             *  */
             public native void destroy();
     }  // INvPlugin
 
     /**
-     * @param featureStride <feature stride>
-     * @param preNmsTop <number of proposals to keep before applying NMS>
-     * @param nmsMaxOut <number of remaining proposals after applying NMS>
-     * @param iouThreshold <IoU threshold>
-     * @param minBoxSize <minimum allowed bounding box size before scaling>
-     * @param spatialScale <spatial scale between the input image and the last feature map>
-     * @param pooling <spatial dimensions of pooled ROIs>
-     * @param anchorRatios <aspect ratios for generating anchor windows>
-     * @param anchorScales <scales for generating anchor windows>
-     * \brief create a plugin layer that fuses the RPN and ROI pooling using user-defined parameters.
-     *
-     * @return returns nullptr on invalid inputs.
-     * @return returns a FasterRCNN fused RPN+ROI pooling plugin
-     *
-     * @see INvPlugin
-     */
+     *  @param featureStride Feature stride.
+     *  @param preNmsTop Number of proposals to keep before applying NMS.
+     *  @param nmsMaxOut Number of remaining proposals after applying NMS.
+     *  @param iouThreshold IoU threshold.
+     *  @param minBoxSize Minimum allowed bounding box size before scaling.
+     *  @param spatialScale Spatial scale between the input image and the last feature map.
+     *  @param pooling Spatial dimensions of pooled ROIs.
+     *  @param anchorRatios Aspect ratios for generating anchor windows.
+     *  @param anchorScales Scales for generating anchor windows.
+     *  \brief Create a plugin layer that fuses the RPN and ROI pooling using user-defined parameters.
+     * 
+     *  @return Returns a FasterRCNN fused RPN+ROI pooling plugin. Returns nullptr on invalid inputs.
+     * 
+     *  @see INvPlugin
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createFasterRCNNPlugin(int featureStride, int preNmsTop,
-                                           int nmsMaxOut, float iouThreshold, float minBoxSize,
-                                           float spatialScale, @ByVal DimsHW pooling,
-                                           @ByVal Weights anchorRatios, @ByVal Weights anchorScales);
+                                                        int nmsMaxOut, float iouThreshold, float minBoxSize,
+                                                        float spatialScale, @ByVal DimsHW pooling,
+                                                        @ByVal Weights anchorRatios, @ByVal Weights anchorScales);
+    
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createFasterRCNNPlugin(@Const Pointer data, @Cast("size_t") long length);
 
 
-    /*
-     * \brief The Normalize plugin layer normalizes the input to have L2 norm of 1 with scale learnable.
-     * \params scales scale weights that are applied to the output tensor
-     * \params acrossSpatial whether to compute the norm over adjacent channels (acrossSpatial is true) or nearby spatial locations (within channel in which case acrossSpatial is false)
-     * \params channelShared whether the scale weight(s) is shared across channels
-     * \params eps epsilon for not diviiding by zero
-     */
+    /**
+     *  \brief The Normalize plugin layer normalizes the input to have L2 norm of 1 with scale learnable.
+     *  @param scales Scale weights that are applied to the output tensor.
+     *  @param acrossSpatial Whether to compute the norm over adjacent channels (acrossSpatial is true) or nearby spatial locations (within channel in which case acrossSpatial is false).
+     *  @param channelShared Whether the scale weight(s) is shared across channels.
+     *  @param eps Epsilon for not diviiding by zero.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDNormalizePlugin(@Const Weights scales, @Cast("bool") boolean acrossSpatial, @Cast("bool") boolean channelShared, float eps);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDNormalizePlugin(@Const Pointer data, @Cast("size_t") long length);
 
-   /*
-    * \brief The Permute plugin layer permutes the input tensor by changing the memory order of the data.
-    * Quadruple defines a structure that contains an array of 4 integers. They can represent the permute orders or the strides in each dimension.
-    */
+    /**
+     *  \brief The Permute plugin layer permutes the input tensor by changing the memory order of the data.
+     *  Quadruple defines a structure that contains an array of 4 integers. They can represent the permute orders or the strides in each dimension.
+     *  */
     @Namespace("nvinfer1::plugin") public static class Quadruple extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -202,31 +227,36 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
         public native int data(int i); public native Quadruple data(int i, int data);
         @MemberGetter public native IntPointer data();
     }
-   /*
-    * \params permuteOrder <The new orders that are used to permute the data.>
-    */
+
+    /**
+     *  @param permuteOrder The new orders that are used to permute the data.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDPermutePlugin(@ByVal Quadruple permuteOrder);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDPermutePlugin(@Const Pointer data, @Cast("size_t") long length);
 
-   /*
-    * \brief The PriorBox plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions @f$ (H \times W) @f$.
-    * PriorBoxParameters defines a set of parameters for creating the PriorBox plugin layer.
-    * It contains:
-    * \params minSize minimum box size in pixels. Can not be nullptr
-    * \params maxSize maximum box size in pixels. Can be nullptr
-    * \params aspectRatios aspect ratios of the boxes. Can be nullptr
-    * \params numMinSize number of elements in minSize. Must be larger than 0
-    * \params numMaxSize number of elements in maxSize. Can be 0 or same as numMinSize
-    * \params numAspectRatios number of elements in aspectRatios. Can be 0
-    * \params flip If true, will flip each aspect ratio. For example, if there is aspect ratio "r", the aspect ratio "1.0/r" will be generated as well.
-    * \params clip If true, will clip the prior so that it is within [0,1]
-    * \params variance variance for adjusting the prior boxes.
-    * \params imgH image height. If 0, then the H dimension of the data tensor will be used
-    * \params imgW image width. If 0, then the W dimension of the data tensor will be used
-    * \params stepH step in H. If 0, then (float)imgH/h will be used where h is the H dimension of the 1st input tensor
-    * \params stepW step in W. If 0, then (float)imgW/w will be used where w is the W dimension of the 1st input tensor
-    * \params offset offset to the top left corner of each cell
-    */
+    /**
+     *  \brief The PriorBox plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions \f$ (H \times W) \f$.
+     *  PriorBoxParameters defines a set of parameters for creating the PriorBox plugin layer.
+     *  It contains:
+     *  @param minSize Minimum box size in pixels. Can not be nullptr.
+     *  @param maxSize Maximum box size in pixels. Can be nullptr.
+     *  @param aspectRatios Aspect ratios of the boxes. Can be nullptr.
+     *  @param numMinSize Number of elements in minSize. Must be larger than 0.
+     *  @param numMaxSize Number of elements in maxSize. Can be 0 or same as numMinSize.
+     *  @param numAspectRatios Number of elements in aspectRatios. Can be 0.
+     *  @param flip If true, will flip each aspect ratio. For example, if there is aspect ratio "r", the aspect ratio "1.0/r" will be generated as well.
+     *  @param clip If true, will clip the prior so that it is within [0,1].
+     *  @param variance Variance for adjusting the prior boxes.
+     *  @param imgH Image height. If 0, then the H dimension of the data tensor will be used.
+     *  @param imgW Image width. If 0, then the W dimension of the data tensor will be used.
+     *  @param stepH Step in H. If 0, then (float)imgH/h will be used where h is the H dimension of the 1st input tensor.
+     *  @param stepW Step in W. If 0, then (float)imgW/w will be used where w is the W dimension of the 1st input tensor.
+     *  @param offset Offset to the top left corner of each cell.
+     *  */
     @Namespace("nvinfer1::plugin") public static class PriorBoxParameters extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -258,40 +288,102 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
         public native float offset(); public native PriorBoxParameters offset(float offset);
     }
 
-   /*
-    * \params param set of parameters for creating the PriorBox plugin layer
-    */
+    /**
+     *  \brief The Anchor Generator plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions \f$ (H \times W) \f$.
+     *  GridAnchorParameters defines a set of parameters for creating the plugin layer for all feature maps.
+     *  It contains:
+     *  @param minScale Scale of anchors corresponding to finest resolution.
+     *  @param maxScale Scale of anchors corresponding to coarsest resolution.
+     *  @param aspectRatios List of aspect ratios to place on each grid point.
+     *  @param numAspectRatios Number of elements in aspectRatios.
+     *  @param H Height of feature map to generate anchors for.
+     *  @param W Width of feature map to generate anchors for.
+     *  @param variance Variance for adjusting the prior boxes.
+     *  */
+    @Namespace("nvinfer1::plugin") public static class GridAnchorParameters extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public GridAnchorParameters() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GridAnchorParameters(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public GridAnchorParameters(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public GridAnchorParameters position(long position) {
+            return (GridAnchorParameters)super.position(position);
+        }
+    
+        public native float minSize(); public native GridAnchorParameters minSize(float minSize);
+        public native float maxSize(); public native GridAnchorParameters maxSize(float maxSize);
+        public native FloatPointer aspectRatios(); public native GridAnchorParameters aspectRatios(FloatPointer aspectRatios);
+        public native int numAspectRatios(); public native GridAnchorParameters numAspectRatios(int numAspectRatios);
+        public native int H(); public native GridAnchorParameters H(int H);
+        public native int W(); public native GridAnchorParameters W(int W);
+        public native float variance(int i); public native GridAnchorParameters variance(int i, float variance);
+        @MemberGetter public native FloatPointer variance();
+    }
 
+    /**
+     *  @param param Set of parameters for creating the PriorBox plugin layer.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDPriorBoxPlugin(@ByVal PriorBoxParameters param);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDPriorBoxPlugin(@Const Pointer data, @Cast("size_t") long length);
 
+    /**
+     *  \brief The Grid Anchor Generator plugin layer generates the prior boxes of
+     *  designated sizes and aspect ratios across all dimensions \f$ (H \times W) \f$ for all feature maps.
+     *  GridAnchorParameters defines a set of parameters for creating the GridAnchorGenerator plugin layer.
+     *  */
+    @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDAnchorGeneratorPlugin(GridAnchorParameters param, int numLayers);
+    
+    
+    //!
+    //!
+    @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDAnchorGeneratorPlugin(@Const Pointer data, @Cast("size_t") long length);
 
-   /*
-    * \brief The DetectionOutput plugin layer generates the detection output based on location and confidence predictions by doing non maximum suppression.
-    * DetectionOutputParameters defines a set of parameters for creating the DetectionOutput plugin layer.
-    * It contains:
-    * \params shareLocation If true, bouding box are shared among different classes
-    * \params varianceEncodedInTarget If true, variance is encoded in target. Otherwise we need to adjust the predicted offset accordingly
-    * \params backgroundLabelId background label ID. If there is no background class, set it as -1
-    * \params numClasses number of classes to be predicted
-    * \params topK number of boxes per image with top confidence scores that are fed into the NMS algorithm
-    * \params keepTopK number of total bounding boxes to be kept per image after NMS step
-    * \params confidenceThreshold only consider detections whose confidences are larger than a threshold
-    * \params nmsThreshold threshold to be used in NMS
-    * \params codeType type of coding method for bbox
-    */
-    @Namespace("nvinfer1::plugin") public enum CodeType_t {
-        CORNER     (1),
-        CENTER_SIZE(2),
-        CORNER_SIZE(3);
+    /**
+     *  \enum CodeTypeSSD
+     *  \brief The type of encoding used for decoding the bounding boxes and loc_data.
+     *  */
+    @Namespace("nvinfer1::plugin") public enum CodeTypeSSD {
+        /** Use box corners. */
+        CORNER     (0),
+        /** Use box centers and size. */
+        CENTER_SIZE(1),
+        /** Use box centers and size. */
+        CORNER_SIZE(2),
+        /** Use box centers and size but flip x and y co-ordinates. */
+        TF_CENTER  (3);
 
         public final int value;
-        private CodeType_t(int v) { this.value = v; }
-        private CodeType_t(CodeType_t e) { this.value = e.value; }
-        public CodeType_t intern() { for (CodeType_t e : values()) if (e.value == value) return e; return this; }
+        private CodeTypeSSD(int v) { this.value = v; }
+        private CodeTypeSSD(CodeTypeSSD e) { this.value = e.value; }
+        public CodeTypeSSD intern() { for (CodeTypeSSD e : values()) if (e.value == value) return e; return this; }
         @Override public String toString() { return intern().name(); }
     }
 
+    /**
+     *  \brief The DetectionOutput plugin layer generates the detection output based on location and confidence predictions by doing non maximum suppression.
+     *  DetectionOutputParameters defines a set of parameters for creating the DetectionOutput plugin layer.
+     *  It contains:
+     *  @param shareLocation If true, bounding box are shared among different classes.
+     *  @param varianceEncodedInTarget If true, variance is encoded in target. Otherwise we need to adjust the predicted offset accordingly.
+     *  @param backgroundLabelId Background label ID. If there is no background class, set it as -1.
+     *  @param numClasses Number of classes to be predicted.
+     *  @param topK Number of boxes per image with top confidence scores that are fed into the NMS algorithm.
+     *  @param keepTopK Number of total bounding boxes to be kept per image after NMS step.
+     *  @param confidenceThreshold Only consider detections whose confidences are larger than a threshold.
+     *  @param nmsThreshold Threshold to be used in NMS.
+     *  @param codeType Type of coding method for bbox.
+     *  @param inputOrder Specifies the order of inputs {loc_data, conf_data, priorbox_data}.
+     *  @param confSigmoid Set to true to calculate sigmoid of confidence scores.
+     *  @param isNormalized Set to true if bounding box data is normalized by the network.
+     *  */
     @Namespace("nvinfer1::plugin") public static class DetectionOutputParameters extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -314,51 +406,65 @@ public class nvinfer_plugin extends org.bytedeco.javacpp.presets.nvinfer_plugin 
         public native int keepTopK(); public native DetectionOutputParameters keepTopK(int keepTopK);
         public native float confidenceThreshold(); public native DetectionOutputParameters confidenceThreshold(float confidenceThreshold);
         public native float nmsThreshold(); public native DetectionOutputParameters nmsThreshold(float nmsThreshold);
-        public native CodeType_t codeType(); public native DetectionOutputParameters codeType(CodeType_t codeType);
+        public native CodeTypeSSD codeType(); public native DetectionOutputParameters codeType(CodeTypeSSD codeType);
+        public native int inputOrder(int i); public native DetectionOutputParameters inputOrder(int i, int inputOrder);
+        @MemberGetter public native IntPointer inputOrder();
+        public native @Cast("bool") boolean confSigmoid(); public native DetectionOutputParameters confSigmoid(boolean confSigmoid);
+        public native @Cast("bool") boolean isNormalized(); public native DetectionOutputParameters isNormalized(boolean isNormalized);
     }
 
-   /*
-    * \params param set of parameters for creating the DetectionOutput plugin layer
-    */
-
+    /**
+     *  @param param Set of parameters for creating the DetectionOutput plugin layer.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDDetectionOutputPlugin(@ByVal DetectionOutputParameters param);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createSSDDetectionOutputPlugin(@Const Pointer data, @Cast("size_t") long length);
 
-   /*
-    * \brief The Concat plugin layer basically performs the concatention for 4D tensors. Unlike the Concatenation layer in early version of TensorRT, it allows the user to specify the axis along which to concatenate. The axis can be 1 (across channel), 2 (across H), or 3 (across W). More particularly, this Concat plugin layer also implements the "ignoring the batch dimension" switch. If turned on, all the input tensors will be treated as if their batch sizes were 1.
-    * \params concatAxis axis along which to concatenate. Can't be the "N" dimension
-    * \params ignoreBatch If true, all the input tensors will be treated as if their batch sizes were 1
-    */
-
+    /**
+     *  \brief The Concat plugin layer basically performs the concatention for 4D tensors. Unlike the Concatenation layer in early version of TensorRT, it allows the user to specify the axis along which to concatenate. The axis can be 1 (across channel), 2 (across H), or 3 (across W). More particularly, this Concat plugin layer also implements the "ignoring the batch dimension" switch. If turned on, all the input tensors will be treated as if their batch sizes were 1.
+     *  @param concatAxis Axis along which to concatenate. Can't be the "N" dimension.
+     *  @param ignoreBatch If true, all the input tensors will be treated as if their batch sizes were 1.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createConcatPlugin(int concatAxis, @Cast("bool") boolean ignoreBatch);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createConcatPlugin(@Const Pointer data, @Cast("size_t") long length);
 
-
-   /*
-    * \brief The PReLu plugin layer performs leaky ReLU for 4D tensors. Give an input value x, the PReLU layer computes the output as x if x > 0 and negative_slope * x if x <= 0.
-    * \params negSlope negative_slope value
-    */
-
+    /**
+     *  \brief The PReLu plugin layer performs leaky ReLU for 4D tensors. Give an input value x, the PReLU layer computes the output as x if x > 0 and negative_slope //! x if x <= 0.
+     *  @param negSlope Negative_slope value.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createPReLUPlugin(float negSlope);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createPReLUPlugin(@Const Pointer data, @Cast("size_t") long length);
 
-   /*
-    * \brief The Reorg plugin layer maps the 512x26x26 feature map onto a 2048x13x13 feature map, so that it can be concatenated with the feature maps at 13x13 resolution.
-    * \params stride strides in H and W
-    */
-
+    /**
+     *  \brief The Reorg plugin layer maps the 512x26x26 feature map onto a 2048x13x13 feature map, so that it can be concatenated with the feature maps at 13x13 resolution.
+     *  @param stride Strides in H and W.
+     *  */
     @Namespace("nvinfer1::plugin") public static native INvPlugin createYOLOReorgPlugin(int stride);
+    
+    
+    //!
+    //!
     @Namespace("nvinfer1::plugin") public static native INvPlugin createYOLOReorgPlugin(@Const Pointer data, @Cast("size_t") long length);
 
-   /*
-    * \brief The Region plugin layer performs region proposal calculation: generate 5 bounding boxes per cell (for yolo9000, generate 3 bounding boxes per cell). For each box, calculating its probablities of objects detections from 80 pre-defined classifications (yolo9000 has 9416 pre-defined classifications, and these 9416 items are organized as work-tree structure).
-    * RegionParameters defines a set of parameters for creating the Region plugin layer.
-    * \params num number of predicted bounding box for each grid cell
-    * \params coords number of coordinates for a bounding box
-    * \params classes number of classfications to be predicted
-    * \params softmaxTree when performing yolo9000, softmaxTree is helping to do softmax on confidence scores, for element to get the precise classfication through word-tree structured classfication definition.
-    */
-
+    /**
+     *  \brief The Region plugin layer performs region proposal calculation: generate 5 bounding boxes per cell (for yolo9000, generate 3 bounding boxes per cell). For each box, calculating its probablities of objects detections from 80 pre-defined classifications (yolo9000 has 9416 pre-defined classifications, and these 9416 items are organized as work-tree structure).
+     *  RegionParameters defines a set of parameters for creating the Region plugin layer.
+     *  @param num Number of predicted bounding box for each grid cell.
+     *  @param coords Number of coordinates for a bounding box.
+     *  @param classes Number of classfications to be predicted.
+     *  @param softmaxTree When performing yolo9000, softmaxTree is helping to do softmax on confidence scores, for element to get the precise classfication through word-tree structured classfication definition.
+     *  */
     @Namespace("nvinfer1::plugin") public static class softmaxTree extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */

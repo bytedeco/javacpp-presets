@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * GSL 2.4  http://www.gnu.org/software/gsl/
+ * GSL 2.5  http://www.gnu.org/software/gsl/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.gsl</groupId>
     <artifactId>example</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.4-1.4.1</version>
+            <version>2.5-1.4.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

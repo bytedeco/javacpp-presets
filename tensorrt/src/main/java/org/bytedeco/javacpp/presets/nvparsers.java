@@ -41,6 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.javacpp.nvparsers")
 public class nvparsers implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("nvuffparser::IPluginFactory").pointerTypes("IUffPluginFactory"));
+        infoMap.put(new Info("nvuffparser::IPluginFactory").pointerTypes("IUffPluginFactory"))
+               .put(new Info("nvuffparser::IPluginFactoryExt").pointerTypes("IUffPluginFactoryExt"));
     }
 }

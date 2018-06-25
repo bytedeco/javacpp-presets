@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -112,6 +112,8 @@ public class caffe implements LoadEnabled, InfoMapper {
                .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "MDB_env", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
+                             "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
+                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor",
                              "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip())
 
                .put(new Info("caffe::AccuracyParameterDefaultTypeInternal", "caffe::ArgMaxParameterDefaultTypeInternal", "caffe::BatchNormParameterDefaultTypeInternal",

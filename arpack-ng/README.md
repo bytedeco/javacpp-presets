@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ARPACK-NG 3.6.0  https://scilab.io/arpack-ng/
+ * ARPACK-NG 3.6.1  https://scilab.io/arpack-ng/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of ARPACK-NG ported to Java from this C source file:
 
- * https://github.com/opencollab/arpack-ng/blob/3.6.0/TESTS/icb_arpack_c.c
+ * https://github.com/opencollab/arpack-ng/blob/3.6.1/TESTS/icb_arpack_c.c
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/IcbArpackC.java` source files below, simply execute on the command line:
 ```bash
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>arpack-ng-platform</artifactId>
-            <version>3.6.0-1.4.2-SNAPSHOT</version>
+            <version>3.6.1-1.4.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -167,7 +167,7 @@ public class IcbArpackC {
       for (k=0; k < 2 * (3*(ncv*ncv) + 6*ncv); ++k )
         workl[k] = 0;
       int lworkl = 3*(ncv*ncv) + 6*ncv;
-      double[] rwork = new double[2 * ncv];
+      double[] rwork = new double[ncv];
       double[] workev = new double[2 * 2*ncv];
       int[] info = {0};
 
