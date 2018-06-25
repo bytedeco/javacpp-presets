@@ -73,6 +73,7 @@ public class caffe implements LoadEnabled, InfoMapper {
         if (!Loader.isLoadLibraries() || !extension.equals("-gpu")) {
             return;
         }
+        int i = 0;
         String[] libs = {"cudart", "cublas", "curand", "cudnn"};
         for (String lib : libs) {
             switch (platform) {
@@ -87,7 +88,7 @@ public class caffe implements LoadEnabled, InfoMapper {
                     continue; // no CUDA
             }
             if (!preloads.contains(lib)) {
-                preloads.add(lib);
+                preloads.add(i++, lib);
             }
         }
     }

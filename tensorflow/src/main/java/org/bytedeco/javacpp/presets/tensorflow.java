@@ -346,6 +346,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         if (!Loader.isLoadLibraries() || !extension.equals("-gpu")) {
             return;
         }
+        int i = 0;
         String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn"};
         for (String lib : libs) {
             switch (platform) {
@@ -360,7 +361,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                     continue; // no CUDA
             }
             if (!preloads.contains(lib)) {
-                preloads.add(lib);
+                preloads.add(i++, lib);
             }
         }
     }
