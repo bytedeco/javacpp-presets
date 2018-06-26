@@ -42,6 +42,7 @@ case $PLATFORM in
 #        ANDROID_ROOT=${ANDROID_ROOT//14/21}
 #        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
         patch -Np1 < ../../../tesseract-android.patch
+        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
         cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" src/api
         "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
         ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8 -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
@@ -52,6 +53,7 @@ case $PLATFORM in
         ;;
     android-arm64)
         patch -Np1 < ../../../tesseract-android.patch
+        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
         cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" src/api
         "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
         ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/arm64-v8a/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
@@ -64,6 +66,7 @@ case $PLATFORM in
 #        ANDROID_ROOT=${ANDROID_ROOT//14/21}
 #        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
         patch -Np1 < ../../../tesseract-android.patch
+        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
         cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" src/api
         "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
         ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
@@ -74,6 +77,7 @@ case $PLATFORM in
         ;;
     android-x86_64)
         patch -Np1 < ../../../tesseract-android.patch
+        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
         cp "$ANDROID_ROOT/usr/lib64/crtbegin_so.o" "$ANDROID_ROOT/usr/lib64/crtend_so.o" src/api
         "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib64/crtbegin_dynamic.o"
         ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib64/ -L$ANDROID_CPP/libs/x86_64/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
@@ -125,14 +129,14 @@ case $PLATFORM in
         ;;
     windows-x86)
         #patch -Np1 < ../../../tesseract-windows.patch
-        cp vs2010/port/* ccutil/
+        cp src/vs2010/port/* src/ccutil/
         ./configure --prefix=$INSTALL_PATH --host="i686-w64-mingw32" CC="gcc -m32" CXX="g++ -m32 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
         #patch -Np1 < ../../../tesseract-windows.patch
-        cp vs2010/port/* ccutil/
+        cp src/vs2010/port/* src/ccutil/
         ./configure --prefix=$INSTALL_PATH --host="x86_64-w64-mingw32" CC="gcc -m64" CXX="g++ -m64 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip

@@ -133,7 +133,7 @@ cd ..
 
 cd snappy-$SNAPPY
 sedinplace 's/#ifdef __SSE2__/#if 0/' snappy.cc
-cmake -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=OFF
+"$CMAKE" -DBUILD_SHARED_LIBS=OFF "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib"
 make -j $MAKEJ
 make install
 cd ..
