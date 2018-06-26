@@ -53,6 +53,10 @@ public class cuda implements InfoMapper {
                              "__inline__", "__specialization_static", "__host__", "__device__", "__global__", "__shared__", "__CUDA_HOSTDEVICE__",
                              "__constant__", "__managed__", "NV_CLANG_ATOMIC_NOEXCEPT", "cudaDevicePropDontCare", "__LDG_PTR", "__CUDA_ALIGN__",
                              "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__", "__CUDA_HOSTDEVICE_FP16_DECL__").cppTypes().annotations().cppText(""))
+
+               .put(new Info("__CUDA_DEPRECATED").cppText("#define __CUDA_DEPRECATED deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
+
                .put(new Info("defined(__CUDABE__) || !defined(__CUDACC__)").define())
                .put(new Info("defined(CUDA_FORCE_API_VERSION)", "defined(__CUDACC__)",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 3020",

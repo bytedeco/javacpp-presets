@@ -58,6 +58,33 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>cuda-platform</artifactId>
             <version>9.2-7.1-1.4.2-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>linux-ppc64le-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```
