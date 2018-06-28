@@ -58767,7 +58767,7 @@ diff -ruN arpack-ng-3.6.1/configure arpack-ng-3.6.1-configure/configure
 +ac_compiler_gnu=$ac_cv_c_compiler_gnu
 +
 +
-+    ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
++    ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=false
 +  ac_ext=cpp
 +ac_cpp='$CXXCPP $CPPFLAGS'
 +ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'

@@ -28,7 +28,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="rh-maven33 python27"
-  if [[ "librealsense chilitags mkl-dnn arpack-ng llvm tesseract caffe mxnet tensorflow tensorrt ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense chilitags mkl-dnn llvm tesseract caffe mxnet tensorflow tensorrt ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33 rh-python35"
   fi
