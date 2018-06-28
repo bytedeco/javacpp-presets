@@ -5238,29 +5238,6 @@ public static final int
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_caffe_2eproto") public static class TableStruct extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public TableStruct() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TableStruct(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TableStruct(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public TableStruct position(long position) {
-        return (TableStruct)super.position(position);
-    }
-
-  @MemberGetter public static native @Const @ByRef ParseTableField entries(int i);
-  @MemberGetter public static native @Const ParseTableField entries();
-  @MemberGetter public static native @Const @ByRef AuxillaryParseTableField aux(int i);
-  @MemberGetter public static native @Const AuxillaryParseTableField aux();
-  @MemberGetter public static native @Const @ByRef ParseTable schema(int i);
-  @MemberGetter public static native @Const ParseTable schema();
-  @MemberGetter public static native @Cast("const google::protobuf::uint32") int offsets(int i);
-  @MemberGetter public static native @Cast("const google::protobuf::uint32*") IntPointer offsets();
-}
 @Namespace("protobuf_caffe_2eproto") public static native void AddDescriptors();
 @Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobShapeImpl();
 @Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobShape();
