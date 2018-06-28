@@ -66,6 +66,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  *  Sample code for running an agent with the shared library interface. 
  **************************************************************************** */
 
+import java.lang.System;
 import java.util.Random;
 import org.bytedeco.javacpp.*;
 import static org.bytedeco.javacpp.ale.*;
