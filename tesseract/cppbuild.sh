@@ -20,6 +20,8 @@ if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
 sedinplace '/tiff/d' src/api/Makefile.am
+sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
+
 bash autogen.sh
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
