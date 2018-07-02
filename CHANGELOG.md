@@ -1,4 +1,5 @@
 
+ * Add factory methods for `TF_Status`, `TF_Buffer`, `TF_Tensor`, `TF_SessionOptions`, `TF_Graph`, `TF_ImportGraphDefOptions`, and `TF_Session` that register deallocators
  * Bundle the libraries of CUDA and cuDNN, allowing OpenCV, Caffe, and TensorFlow to use GPUs with no CUDA installation
  * Make it possible to set the `TF_Buffer::data` field for C API of TensorFlow
  * Add `openblas_nolapack` class to make it easier to load BLAS libraries missing LAPACK such as MKLML

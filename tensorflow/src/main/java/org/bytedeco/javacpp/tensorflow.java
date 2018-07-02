@@ -23476,7 +23476,7 @@ public static final int
 // --------------------------------------------------------------------------
 // TF_Status holds error information.  It either has an OK code, or
 // else an error code with an associated error message.
-@Opaque public static class TF_Status extends Pointer {
+@Opaque public static class TF_Status extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Status {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Status() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -23513,7 +23513,7 @@ public static native @Cast("const char*") BytePointer TF_Message(@Const TF_Statu
 // By default, TF_Buffer itself does not do any memory management of the
 // pointed-to block.  If need be, users of this struct should specify how to
 // deallocate the block by setting the `data_deallocator` function pointer.
-public static class TF_Buffer extends Pointer {
+public static class TF_Buffer extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Buffer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TF_Buffer() { super((Pointer)null); allocate(); }
@@ -23569,7 +23569,7 @@ public static native @ByVal TF_Buffer TF_GetBuffer(TF_Buffer buffer);
 //   is encoded at data[start_offset[i]]]. TF_StringEncode and TF_StringDecode
 //   facilitate this encoding.
 
-@Opaque public static class TF_Tensor extends Pointer {
+@Opaque public static class TF_Tensor extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Tensor {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Tensor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -23712,7 +23712,7 @@ public static native @Cast("size_t") long TF_StringEncodedSize(@Cast("size_t") l
 
 // --------------------------------------------------------------------------
 // TF_SessionOptions holds options that can be passed during session creation.
-@Opaque public static class TF_SessionOptions extends Pointer {
+@Opaque public static class TF_SessionOptions extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_SessionOptions {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_SessionOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -23752,7 +23752,7 @@ public static native void TF_DeleteSessionOptions(TF_SessionOptions arg0);
 
 // Represents a computation graph.  Graphs may be shared between sessions.
 // Graphs are thread-safe when used as directed below.
-@Opaque public static class TF_Graph extends Pointer {
+@Opaque public static class TF_Graph extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Graph {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Graph() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -24855,7 +24855,7 @@ public static native void TF_GraphVersions(TF_Graph graph,
 
 // TF_ImportGraphDefOptions holds options that can be passed to
 // TF_GraphImportGraphDef.
-@Opaque public static class TF_ImportGraphDefOptions extends Pointer {
+@Opaque public static class TF_ImportGraphDefOptions extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_ImportGraphDefOptions {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_ImportGraphDefOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -25355,7 +25355,7 @@ public static native @Cast("unsigned char") byte TF_TryEvaluateConstant(TF_Graph
 // --------------------------------------------------------------------------
 // API for driving Graph execution.
 
-@Opaque public static class TF_Session extends Pointer {
+@Opaque public static class TF_Session extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Session {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Session() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -642,7 +642,14 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
                              "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
 
-        infoMap.put(new Info("TF_Buffer::data").javaText("public native @Const Pointer data(); public native TF_Buffer data(Pointer data);"));
+        infoMap.put(new Info("TF_Buffer::data").javaText("public native @Const Pointer data(); public native TF_Buffer data(Pointer data);"))
+               .put(new Info("TF_Status").pointerTypes("TF_Status").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Status"))
+               .put(new Info("TF_Buffer").pointerTypes("TF_Buffer").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Buffer"))
+               .put(new Info("TF_Tensor").pointerTypes("TF_Tensor").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Tensor"))
+               .put(new Info("TF_SessionOptions").pointerTypes("TF_SessionOptions").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_SessionOptions"))
+               .put(new Info("TF_Graph").pointerTypes("TF_Graph").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Graph"))
+               .put(new Info("TF_ImportGraphDefOptions").pointerTypes("TF_ImportGraphDefOptions").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_ImportGraphDefOptions"))
+               .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Session"));
 
         if (!android) {
             infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
