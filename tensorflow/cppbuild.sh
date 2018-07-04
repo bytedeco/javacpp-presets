@@ -14,6 +14,7 @@ export TF_NEED_MKL=0
 export TF_NEED_VERBS=0
 export TF_NEED_JEMALLOC=0
 export TF_NEED_CUDA=0
+export TF_NEED_AWS=0
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_KAFKA=0
@@ -29,7 +30,7 @@ export TF_CUDA_VERSION=9.2
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=1.3
-export TF_TENSORRT_VERSION=4.1.0
+export TF_TENSORRT_VERSION=4.1.2
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
@@ -37,7 +38,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.9.0-rc1
+TENSORFLOW_VERSION=1.9.0-rc2
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -147,10 +148,12 @@ case $PLATFORM in
         mkdir -p ../build
         cd ../build
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
-        if [[ "$EXTENSION" == *gpu ]]; then
+        if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
+            MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
+        fi
+        if [[ "$EXTENSION" == *gpu ]] && [[ "${PARTIAL_CPPBUILD:-}" != "1" ]]; then
             MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tf_core_gpu_kernels.vcxproj
         fi
-        MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
         cd ../tensorflow-$TENSORFLOW_VERSION
         ;;
     *)

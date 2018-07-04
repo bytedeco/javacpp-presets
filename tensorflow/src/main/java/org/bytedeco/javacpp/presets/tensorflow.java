@@ -57,6 +57,7 @@ import java.util.List;
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
+                        "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
@@ -111,6 +112,7 @@ import java.util.List;
                         "tensorflow/core/framework/session_state.h",
                         "tensorflow/core/framework/types.h",
                         "tensorflow/core/framework/control_flow.h",
+                        "tensorflow/core/framework/kernel_def.pb.h",
                         "tensorflow/core/framework/kernel_def_builder.h",
                         "tensorflow/core/framework/tracking_allocator.h",
                         "tensorflow/core/framework/op_kernel.h",
@@ -220,6 +222,7 @@ import java.util.List;
                 compiler = {"cpp11"},
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
+                        "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
@@ -274,6 +277,7 @@ import java.util.List;
                         "tensorflow/core/framework/session_state.h",
                         "tensorflow/core/framework/types.h",
                         "tensorflow/core/framework/control_flow.h",
+                        "tensorflow/core/framework/kernel_def.pb.h",
                         "tensorflow/core/framework/kernel_def_builder.h",
                         "tensorflow/core/framework/tracking_allocator.h",
                         "tensorflow/core/framework/op_kernel.h",
@@ -371,10 +375,16 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("B16_DEVICE_FUNC", "EIGEN_ALWAYS_INLINE", "EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
                              "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "TF_ATTRIBUTE_UNUSED",
                              "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "GUARDED_BY", "SHOULD_REGISTER_OP_GRADIENT",
-                             "TF_EXPORT", "TF_ATTRIBUTE_ALWAYS_INLINE").cppTypes().annotations())
+                             "TF_EXPORT", "TF_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
-               .put(new Info("GOOGLE_PROTOBUF_DEPRECATED_ATTR", "PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
+
+               .put(new Info("EIGEN_DEPRECATED").cppText("#define EIGEN_DEPRECATED deprecated").cppTypes())
+               .put(new Info("PROTOBUF_DEPRECATED").cppText("#define PROTOBUF_DEPRECATED deprecated").cppTypes())
+               .put(new Info("PROTOBUF_RUNTIME_DEPRECATED").cppText("#define PROTOBUF_RUNTIME_DEPRECATED() deprecated").cppTypes())
+               .put(new Info("GOOGLE_PROTOBUF_DEPRECATED_ATTR").cppText("#define GOOGLE_PROTOBUF_DEPRECATED_ATTR deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
+
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define(true))
                .put(new Info("TENSORFLOW_USE_SYCL").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
@@ -401,12 +411,14 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("LongLongPair").define())
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
+                             "google::protobuf::arena_metrics::EnableArenaMetrics", "google::quality_webanswers::TempPrivateWorkAround",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip())
                .put(new Info("google::protobuf::Map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("google::protobuf::Map<std::string,google::protobuf::int32>").pointerTypes("StringIntMap").define())
@@ -469,6 +481,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::ApiDefsDefaultTypeInternal", "tensorflow::DebuggedSourceFileDefaultTypeInternal", "tensorflow::DebuggedSourceFilesDefaultTypeInternal",
                              "tensorflow::AllocationRecordDefaultTypeInternal","tensorflow::GPUOptions_ExperimentalDefaultTypeInternal", "tensorflow::GPUOptions_Experimental_VirtualDevicesDefaultTypeInternal",
                              "tensorflow::CallableOptionsDefaultTypeInternal", "tensorflow::TensorConnectionDefaultTypeInternal",
+                             "tensorflow::CallableOptions_FeedDevicesEntry_DoNotUseDefaultTypeInternal", "tensorflow::CallableOptions_FetchDevicesEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::InterconnectLinkDefaultTypeInternal", "tensorflow::LocalLinksDefaultTypeInternal",
                              "tensorflow::JobDef_TasksEntry_DoNotUseDefaultTypeInternal", "tensorflow::ConfigProto_DeviceCountEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::NameAttrList_AttrEntry_DoNotUseDefaultTypeInternal", "tensorflow::NodeDef_AttrEntry_DoNotUseDefaultTypeInternal",
@@ -477,7 +490,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::SignatureDef_InputsEntry_DoNotUseDefaultTypeInternal", "tensorflow::SignatureDef_OutputsEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::RewriterConfig_CustomGraphOptimizerDefaultTypeInternal", "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntryDefaultTypeInternal", "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal",
-                             "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal").skip())
+                             "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal",
+                             "tensorflow::KernelDefDefaultTypeInternal", "tensorflow::KernelListDefaultTypeInternal", "tensorflow::KernelDef_AttrConstraintDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -582,9 +596,11 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))
 
                .put(new Info("tensorflow::checkpoint::TensorSliceSet::SliceInfo").pointerTypes("TensorSliceSet.SliceInfo"))
+               .put(new Info("std::pair<tensorflow::string,int>").pointerTypes("StringIntPair").define())
                .put(new Info("std::pair<tensorflow::StringPiece,int>").pointerTypes("StringPieceIntPair").define())
                .put(new Info("std::pair<tensorflow::TensorSlice,tensorflow::string>").pointerTypes("TensorSlideStringPair").define())
                .put(new Info("std::map<tensorflow::TensorId,tensorflow::TensorId>").pointerTypes("TensorIdTensorIdMap").define())
+               .put(new Info("std::map<tensorflow::SafeTensorId,tensorflow::SafeTensorId>").pointerTypes("SafeTensorIdTensorIdMap").define())
                .put(new Info("std::unordered_map<std::string,tensorflow::TensorShape>").pointerTypes("VarToShapeMap").define())
                .put(new Info("std::unordered_map<std::string,tensorflow::DataType>").pointerTypes("VarToDataTypeMap").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet*>").pointerTypes("StringTensorSliceSetMap").define())
