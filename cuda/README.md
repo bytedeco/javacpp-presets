@@ -1,6 +1,17 @@
 JavaCPP Presets for CUDA
 ========================
 
+License Agreements
+------------------
+By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
+
+### CUDA Toolkit
+To view the license for the CUDA Toolkit included in these archives, click [here](http://docs.nvidia.com/cuda/eula/index.html)
+
+### CUDA Deep Neural Network library (cuDNN)
+To view the license for cuDNN included in these archives, click [here](https://developer.nvidia.com/cudnn/license_agreement)
+
+
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
@@ -19,6 +30,7 @@ Java API documentation is available here:
 
 &lowast; We can also [use Thrust with JavaCPP](https://github.com/bytedeco/javacpp/wiki/Interface-Thrust-and-CUDA).
 
+
 Sample Usage
 ------------
 Here is a simple example of cuDNN ported to Java from the `mnistCUDNN.cpp` sample file included in `cudnn-sample-v2.tgz` available at:
@@ -36,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>MNISTCUDNN</exec.mainClass>
     </properties>
@@ -44,8 +56,35 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>9.2-7.1-1.4.1</version>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>linux-ppc64le-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>9.2-7.1-1.4.2-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```

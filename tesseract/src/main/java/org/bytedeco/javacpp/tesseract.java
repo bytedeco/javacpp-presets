@@ -53,9 +53,6 @@ public class tesseract extends org.bytedeco.javacpp.presets.tesseract {
 // #if (_MSC_VER < 1900)
 // #define snprintf _snprintf
 // #endif
-// #if (_MSC_VER <= 1400)
-// #define vsnprintf _vsnprintf
-// #endif /* (_MSC_VER <= 1400) */
 // #endif /* defined(_MSC_VER) */
 // #else
 // #define __UNIX__
@@ -65,11 +62,6 @@ public static final int MAX_PATH = 4096;
 // #else
 // #endif
 // #define SIGNED signed
-// #endif
-
-// Fix to map between google use of string without std and everywhere else.
-// #ifdef USE_STD_NAMESPACE
-// #include <string>
 // #endif
 
 // #if defined(_WIN32) || defined(__CYGWIN__)
@@ -130,7 +122,6 @@ public static final double M_PI = 3.14159265358979323846;
 // #define TESSERACT_API_APITYPES_H_
 
 // #include "publictypes.h"
-// #include "version.h"
 
 // The types used by the API and Page/ResultIterator can be found in:
 //   ccstruct/publictypes.h
@@ -233,7 +224,7 @@ public static final int
   // Get the length of the UTF8 string.
   public native int utf8_len();
 
-  // Get a UTF8 string, but NOT NULL terminated.
+  // Get a UTF8 string, but NOT nullptr terminated.
   public native @Cast("const char*") BytePointer utf8();
 
   // Get a terminated UTF8 string: Must delete[] it after use.
@@ -264,7 +255,7 @@ public static final int
   
     // Step to the next UTF8 character.
     // If the current position is at an illegal UTF8 character, then print an
-    // error message and step by one byte. If the current position is at a NULL
+    // error message and step by one byte. If the current position is at a nullptr
     // value, don't step past it.
     public native @ByRef @Name("operator ++") const_iterator increment();
 
@@ -369,23 +360,9 @@ public static final String PRId64 = "I64d";
 
 // #endif /* _WIN32 */
 
-public static final int MAX_INT8 =  0x7f;
-public static final int MAX_INT16 = 0x7fff;
-public static final int MAX_INT32 = 0x7fffffff;
-public static final int MAX_UINT8 = 0xff;
-public static final int MAX_UINT16 =  0xffff;
-public static final int MAX_UINT32 =  0xffffffff;
 public static native @MemberGetter int MAX_FLOAT32();
 public static final int MAX_FLOAT32 = MAX_FLOAT32();
 
-public static native @MemberGetter int MIN_INT8();
-public static final int MIN_INT8 = MIN_INT8();
-public static native @MemberGetter int MIN_INT16();
-public static final int MIN_INT16 = MIN_INT16();
-public static final int MIN_INT32 = 0x80000000;
-public static final int MIN_UINT8 = 0x00;
-public static final int MIN_UINT16 =  0x0000;
-public static final int MIN_UINT32 =  0x00000000;
 // Minimum positive value ie 1e-37ish.
 public static native @MemberGetter int MIN_FLOAT32();
 public static final int MIN_FLOAT32 = MIN_FLOAT32();
@@ -425,7 +402,7 @@ public static final int MIN_FLOAT32 = MIN_FLOAT32();
 // #ifndef TESS_CALLBACK_SPECIALIZATIONS_H_
 // #define TESS_CALLBACK_SPECIALIZATIONS_H_
 
-// #include "host.h"  // For NULL.
+// #include "host.h"  // For nullptr.
 
 public static class TessCallbackUtils_ extends Pointer {
     static { Loader.load(); }
@@ -1612,7 +1589,7 @@ public static final int
   // to the extreme of a 1x1 pixel thresholds image.
   // Ideally the 8 bit threshold should be the exact threshold used to generate
   // the binary image in ThresholdToPix, but this is not a hard constraint.
-  // Returns NULL if the input is binary. PixDestroy after use.
+  // Returns nullptr if the input is binary. PixDestroy after use.
   public native PIX GetPixRectThresholds();
 
   /** Get a clone/copy of the source image rectangle.
@@ -1908,7 +1885,7 @@ public static final int
    * Returns the polygon outline of the current block. The returned Pta must
    * be ptaDestroy-ed after use. Note that the returned Pta lists the vertices
    * of the polygon, and the last edge is the line segment between the last
-   * point and the first point. NULL will be returned if the iterator is
+   * point and the first point. nullptr will be returned if the iterator is
    * at the end of the document or layout analysis was not used.
    */
   public native PTA BlockPolygon();
@@ -2026,7 +2003,7 @@ public static final int
                        @Cast("bool*") boolean[] is_crown,
                        int[] first_line_indent);
 
-  // If the current WERD_RES (it_->word()) is not NULL, sets the BlamerBundle
+  // If the current WERD_RES (it_->word()) is not nullptr, sets the BlamerBundle
   // of the current word to the given pointer (takes ownership of the pointer)
   // and returns true.
   // Can only be used when iterating on the word level.
@@ -2214,7 +2191,7 @@ public static final int
                                    int[] font_id);
 
   // Return the name of the language used to recognize this word.
-  // On error, NULL.  Do not delete this pointer.
+  // On error, nullptr.  Do not delete this pointer.
   public native @Cast("const char*") BytePointer WordRecognitionLanguage();
 
   // Return the overall directionality of this word.
@@ -2237,11 +2214,11 @@ public static final int
   public native @Const Pointer GetParamsTrainingBundle();
 
   // Returns a pointer to the string with blamer information for this word.
-  // Assumes that the word's blamer_bundle is not NULL.
+  // Assumes that the word's blamer_bundle is not nullptr.
   public native @Cast("const char*") BytePointer GetBlamerDebug();
 
   // Returns a pointer to the string with misadaption information for this word.
-  // Assumes that the word's blamer_bundle is not NULL.
+  // Assumes that the word's blamer_bundle is not nullptr.
   public native @Cast("const char*") BytePointer GetBlamerMisadaptionDebug();
 
   // Returns true if a truth string was recorded for the current word.
@@ -2475,9 +2452,9 @@ public static final int
 // #ifndef           STRNGS_H
 // #define           STRNGS_H
 
-// #include <assert.h>
-// #include <stdio.h>
-// #include <string.h>
+// #include <cassert>
+// #include <cstdio>
+// #include <cstring>
 // #include "memry.h"
 // #include "platform.h"
 @Namespace("tesseract") @Opaque public static class TFile extends Pointer {
@@ -2536,27 +2513,27 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     // As DeSerialize, but only seeks past the data - hence a static method.
     public static native @Cast("bool") boolean SkipDeSerialize(TFile fp);
 
-    public native @Cast("BOOL8") byte contains(byte c);
-    public native @Cast("inT32") int length();
-    public native @Cast("inT32") int size();
+    public native @Cast("bool") boolean contains(byte c);
+    public native int length();
+    public native int size();
     // Workaround to avoid g++ -Wsign-compare warnings.
-    public native @Cast("uinT32") int unsigned_size();
-    public native @StdString @Cast("const char*") BytePointer string();
+    public native @Cast("uint32_t") int unsigned_size();
+    public native @Cast("const char*") BytePointer string();
     public native @Cast("const char*") BytePointer c_str();
 
     public native @Cast("char*") BytePointer strdup();
 
 // #if STRING_IS_PROTECTED
 // #else
-    public native @Cast("char*") @ByRef @Name("operator []") BytePointer get(@Cast("inT32") int index);
+    public native @Cast("char*") @ByRef @Name("operator []") BytePointer get(int index);
 // #endif
     public native void split(byte c, StringGenericVector splited);
-    public native void truncate_at(@Cast("inT32") int index);
+    public native void truncate_at(int index);
 
-    public native @Cast("BOOL8") @Name("operator ==") byte equals(@Const @ByRef STRING string);
-    public native @Cast("BOOL8") @Name("operator !=") byte notEquals(@Const @ByRef STRING string);
-    public native @Cast("BOOL8") @Name("operator !=") byte notEquals(@Cast("const char*") BytePointer string);
-    public native @Cast("BOOL8") @Name("operator !=") byte notEquals(String string);
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef STRING string);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef STRING string);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const char*") BytePointer string);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(String string);
 
     public native @ByRef @Name("operator =") STRING put(@Cast("const char*") BytePointer string);
     public native @ByRef @Name("operator =") STRING put(String string);
@@ -2585,7 +2562,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     public native void add_str_double(String str, double number);
 
     // ensure capacity but keep pointer encapsulated
-    public native void ensure(@Cast("inT32") int min_capacity);
+    public native void ensure(int min_capacity);
 }
 // #endif
 
@@ -2614,9 +2591,10 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 // #ifndef TESSERACT_CCUTIL_GENERICVECTOR_H_
 // #define TESSERACT_CCUTIL_GENERICVECTOR_H_
 
-// #include <assert.h>
-// #include <stdio.h>
-// #include <stdlib.h>
+// #include <algorithm>
+// #include <cassert>
+// #include <cstdio>
+// #include <cstdlib>
 
 // #include "tesscallback.h"
 // #include "errcode.h"
@@ -2725,7 +2703,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Clear the array, calling the clear callback function if any.
   // All the owned callbacks are also deleted.
   // If you don't want the callbacks to be deleted, before calling clear, set
-  // the callback to NULL.
+  // the callback to nullptr.
   public native void clear();
 
   // Delete objects pointed to by data_[i]
@@ -2739,7 +2717,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Read/Write the array to a file. This does _NOT_ read/write the callbacks.
   // The callback given must be permanent since they will be called more than
   // once. The given callback will be deleted at the end.
-  // If the callbacks are NULL, then the data is simply read/written using
+  // If the callbacks are nullptr, then the data is simply read/written using
   // fread (and swapping)/fwrite.
   // Returns false on error or if the callback returns false.
   // DEPRECATED. Use [De]Serialize[Classes] instead.
@@ -2939,7 +2917,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Clear the array, calling the clear callback function if any.
   // All the owned callbacks are also deleted.
   // If you don't want the callbacks to be deleted, before calling clear, set
-  // the callback to NULL.
+  // the callback to nullptr.
   public native void clear();
 
   // Delete objects pointed to by data_[i]
@@ -2953,7 +2931,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Read/Write the array to a file. This does _NOT_ read/write the callbacks.
   // The callback given must be permanent since they will be called more than
   // once. The given callback will be deleted at the end.
-  // If the callbacks are NULL, then the data is simply read/written using
+  // If the callbacks are nullptr, then the data is simply read/written using
   // fread (and swapping)/fwrite.
   // Returns false on error or if the callback returns false.
   // DEPRECATED. Use [De]Serialize[Classes] instead.
@@ -3143,7 +3121,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Clear the array, calling the clear callback function if any.
   // All the owned callbacks are also deleted.
   // If you don't want the callbacks to be deleted, before calling clear, set
-  // the callback to NULL.
+  // the callback to nullptr.
   public native void clear();
 
   // Delete objects pointed to by data_[i]
@@ -3157,7 +3135,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Read/Write the array to a file. This does _NOT_ read/write the callbacks.
   // The callback given must be permanent since they will be called more than
   // once. The given callback will be deleted at the end.
-  // If the callbacks are NULL, then the data is simply read/written using
+  // If the callbacks are nullptr, then the data is simply read/written using
   // fread (and swapping)/fwrite.
   // Returns false on error or if the callback returns false.
   // DEPRECATED. Use [De]Serialize[Classes] instead.
@@ -3484,10 +3462,11 @@ public static class FileWriter extends FunctionPointer {
 // #ifndef TESSERACT_API_BASEAPI_H_
 // #define TESSERACT_API_BASEAPI_H_
 
-// #include <stdio.h>
+// #include <cstdio>
 // To avoid collision with other typenames include the ABSOLUTE MINIMUM
 // complexity of includes here. Use forward declarations wherever possible
 // and hide includes of complex types in baseapi.cpp.
+// #include "tess_version.h"
 // #include "apitypes.h"
 // #include "pageiterator.h"
 // #include "platform.h"
@@ -3680,7 +3659,7 @@ public static class FileWriter extends FunctionPointer {
    * device is deemed faster than serial code, then
    * "device" is populated with the cl_device_id
    * and returns sizeof(cl_device_id)
-   * otherwise *device=NULL and returns 0.
+   * otherwise *device=nullptr and returns 0.
    */
   public static native @Cast("size_t") long getOpenCLDevice(@Cast("void**") PointerPointer device);
   public static native @Cast("size_t") long getOpenCLDevice(@Cast("void**") @ByPtrPtr Pointer device);
@@ -3783,7 +3762,7 @@ public static class FileWriter extends FunctionPointer {
    *
    * The datapath must be the name of the parent directory of tessdata and
    * must end in / . Any name after the last / will be stripped.
-   * The language is (usually) an ISO 639-3 string or NULL will default to eng.
+   * The language is (usually) an ISO 639-3 string or nullptr will default to eng.
    * It is entirely safe (and eventually will be efficient too) to call
    * Init multiple times on the same instance to change language, or just
    * to reset the classifier.
@@ -4052,9 +4031,9 @@ public static class FileWriter extends FunctionPointer {
    * Can be called before or after Recognize.
    * If raw_image is true, then extract from the original image instead of the
    * thresholded image and pad by raw_padding pixels.
-   * If blockids is not NULL, the block-id of each line is also returned as an
+   * If blockids is not nullptr, the block-id of each line is also returned as an
    * array of one element per line. delete [] after use.
-   * If paraids is not NULL, the paragraph-id of each line within its block is
+   * If paraids is not nullptr, the paragraph-id of each line within its block is
    * also returned as an array of one element per line. delete [] after use.
    */
   public native BOXA GetTextlines(@Cast("const bool") boolean raw_image, int raw_padding,
@@ -4078,7 +4057,7 @@ public static class FileWriter extends FunctionPointer {
    * pair, in reading order. Enables downstream handling of non-rectangular
    * regions.
    * Can be called before or after Recognize.
-   * If blockids is not NULL, the block-id of each line is also returned as an
+   * If blockids is not nullptr, the block-id of each line is also returned as an
    * array of one element per line. delete [] after use.
    */
   public native BOXA GetStrips(@Cast("Pixa**") PointerPointer pixa, @Cast("int**") PointerPointer blockids);
@@ -4109,9 +4088,9 @@ public static class FileWriter extends FunctionPointer {
    * Get the given level kind of components (block, textline, word etc.) as a
    * leptonica-style Boxa, Pixa pair, in reading order.
    * Can be called before or after Recognize.
-   * If blockids is not NULL, the block-id of each component is also returned
+   * If blockids is not nullptr, the block-id of each component is also returned
    * as an array of one element per component. delete [] after use.
-   * If blockids is not NULL, the paragraph-id of each component with its block
+   * If blockids is not nullptr, the paragraph-id of each component with its block
    * is also returned as an array of one element per component. delete [] after
    * use.
    * If raw_image is true, then portions of the original image are extracted
@@ -4157,14 +4136,6 @@ public static class FileWriter extends FunctionPointer {
   public native int GetThresholdedImageScaleFactor();
 
   /**
-   * Dump the internal binary image to a PGM file.
-   * @deprecated Use GetThresholdedImage and write the image using pixWrite
-   * instead if possible.
-   */
-  public native void DumpPGM(@Cast("const char*") BytePointer filename);
-  public native void DumpPGM(String filename);
-
-  /**
    * Runs page layout analysis in the mode set by SetPageSegMode.
    * May optionally be called prior to Recognize to get access to just
    * the page layout results. Returns an iterator to the results.
@@ -4172,7 +4143,7 @@ public static class FileWriter extends FunctionPointer {
    * with a line recognizer. Use if you want to use AnalyseLayout to find the
    * textlines, and then want to process textline fragments with an external
    * line recognizer.
-   * Returns NULL on error or an empty page.
+   * Returns nullptr on error or an empty page.
    * The returned iterator must be deleted after use.
    * WARNING! This class points to data held within the TessBaseAPI class, and
    * therefore can only be used while the TessBaseAPI class still exists and
@@ -4204,7 +4175,7 @@ public static class FileWriter extends FunctionPointer {
    * filename can point to a single image, a multi-page TIFF,
    * or a plain text list of image filenames.
    *
-   * retry_config is useful for debugging. If not NULL, you can fall
+   * retry_config is useful for debugging. If not nullptr, you can fall
    * back to an alternate configuration if a page fails for some
    * reason.
    *
@@ -4431,7 +4402,7 @@ public static class FileWriter extends FunctionPointer {
 
   /**
    * This method returns the row to which a box of specified dimensions would
-   * belong. If no good match is found, it returns NULL.
+   * belong. If no good match is found, it returns nullptr.
    */
   public static native ROW FindRowForBox(BLOCK_LIST blocks, int left, int top,
                               int right, int bottom);
@@ -4547,8 +4518,13 @@ public static class FileWriter extends FunctionPointer {
 // #ifndef API_CAPI_H_
 // #define API_CAPI_H_
 
+// #if defined(TESSERACT_API_BASEAPI_H_) && !defined(TESS_CAPI_INCLUDE_BASEAPI)
+// # define TESS_CAPI_INCLUDE_BASEAPI
+// #endif
+
 // #ifdef TESS_CAPI_INCLUDE_BASEAPI
 // #   include "baseapi.h"
+// #   include "ocrclass.h"
 // #   include "pageiterator.h"
 // #   include "resultiterator.h"
 // #   include "renderer.h"
@@ -4573,6 +4549,24 @@ public static class FileWriter extends FunctionPointer {
 // typedef tesseract::ParamsModelClassifyFunc TessParamsModelClassifyFunc;
 // #else
 // #endif
+
+public static class TessCancelFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    TessCancelFunc(Pointer p) { super(p); }
+    protected TessCancelFunc() { allocate(); }
+    private native void allocate();
+    public native @Cast("bool") boolean call(Pointer cancel_this, int words);
+}
+public static class TessProgressFunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    TessProgressFunc(Pointer p) { super(p); }
+    protected TessProgressFunc() { allocate(); }
+    private native void allocate();
+    public native @Cast("bool") boolean call(ETEXT_DESC ths, int left, int right, int top,
+                                 int bottom);
+}
 
 /* General free functions */
 
@@ -4811,9 +4805,6 @@ public static native BOXA TessBaseAPIGetComponentImages1(   TessBaseAPI handle, 
 
 public static native int TessBaseAPIGetThresholdedImageScaleFactor(@Const TessBaseAPI handle);
 
-public static native void TessBaseAPIDumpPGM(TessBaseAPI handle, @Cast("const char*") BytePointer filename);
-public static native void TessBaseAPIDumpPGM(TessBaseAPI handle, String filename);
-
 public static native @Cast("TessPageIterator*") PageIterator TessBaseAPIAnalyseLayout(TessBaseAPI handle);
 
 public static native int TessBaseAPIRecognize(TessBaseAPI handle, ETEXT_DESC monitor);
@@ -4987,6 +4978,17 @@ public static native void TessChoiceIteratorDelete(@Cast("TessChoiceIterator*") 
 public static native @Cast("BOOL") boolean TessChoiceIteratorNext(@Cast("TessChoiceIterator*") ChoiceIterator handle);
 public static native @Cast("const char*") BytePointer TessChoiceIteratorGetUTF8Text(@Cast("const TessChoiceIterator*") ChoiceIterator handle);
 public static native float TessChoiceIteratorConfidence(@Cast("const TessChoiceIterator*") ChoiceIterator handle);
+
+/* Progress monitor */
+
+public static native ETEXT_DESC TessMonitorCreate();
+public static native void TessMonitorDelete( ETEXT_DESC monitor );
+public static native void TessMonitorSetCancelFunc( ETEXT_DESC monitor, TessCancelFunc cancelFunc );
+public static native void TessMonitorSetCancelThis( ETEXT_DESC monitor, Pointer cancelThis );
+public static native Pointer TessMonitorGetCancelThis( ETEXT_DESC monitor );
+public static native void TessMonitorSetProgressFunc( ETEXT_DESC monitor, TessProgressFunc progressFunc );
+public static native int TessMonitorGetProgress( ETEXT_DESC monitor );
+public static native void TessMonitorSetDeadlineMSecs( ETEXT_DESC monitor, int deadline );
 
 // #ifdef __cplusplus
 // #endif

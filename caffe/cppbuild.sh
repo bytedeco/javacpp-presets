@@ -49,19 +49,19 @@ case $PLATFORM in
 esac
 
 GLOG=0.3.5
-GFLAGS=2.2.0
-PROTO=3.3.0
+GFLAGS=2.2.1
+PROTO=3.5.1
 LEVELDB=1.20
-SNAPPY=1.1.4
-LMDB=0.9.21
-BOOST=1_65_1
+SNAPPY=1.1.7
+LMDB=0.9.22
+BOOST=1_67_0
 CAFFE_VERSION=1.0
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
 download https://github.com/gflags/gflags/archive/v$GFLAGS.tar.gz gflags-$GFLAGS.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
 download https://github.com/google/leveldb/archive/v$LEVELDB.tar.gz leveldb-$LEVELDB.tar.gz
-download https://github.com/google/snappy/releases/download/$SNAPPY/snappy-$SNAPPY.tar.gz snappy-$SNAPPY.tar.gz
+download https://github.com/google/snappy/archive/$SNAPPY.tar.gz snappy-$SNAPPY.tar.gz
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
@@ -132,8 +132,8 @@ cp -a include/leveldb "$INSTALL_PATH/include/"
 cd ..
 
 cd snappy-$SNAPPY
-sed -i="" 's/#ifdef __SSE2__/#if 0/' snappy.cc
-./configure "--prefix=$INSTALL_PATH" --disable-shared
+sedinplace 's/#ifdef __SSE2__/#if 0/' snappy.cc
+"$CMAKE" -DBUILD_SHARED_LIBS=OFF "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib"
 make -j $MAKEJ
 make install
 cd ..

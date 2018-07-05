@@ -111,7 +111,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 3.4.1  https://opencv.org/releases.html
- * FFmpeg 4.0  http://ffmpeg.org/download.html
+ * FFmpeg 4.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.11.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
@@ -125,19 +125,19 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2018.3  https://software.intel.com/intel-mkl
  * MKL-DNN 0.14  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.0  http://www.openblas.net/
- * ARPACK-NG 3.6.0  https://github.com/opencollab/arpack-ng
+ * ARPACK-NG 3.6.1  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
- * GSL 2.4  http://www.gnu.org/software/gsl/#downloading
+ * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
  * LLVM 6.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.76.0  http://www.leptonica.org/download.html
- * Tesseract 4.0.0-beta.1  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.0.0-beta.3  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.1  https://developer.nvidia.com/cudnn
  * MXNet 1.2.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.9.0-rc0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.9.0-rc2  https://github.com/tensorflow/tensorflow
  * TensorRT 4.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * LiquidFun  http://google.github.io/liquidfun/

@@ -416,6 +416,33 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::map<tensorflow::SafeTensorId,tensorflow::SafeTensorId>") public static class SafeTensorIdTensorIdMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SafeTensorIdTensorIdMap(Pointer p) { super(p); }
+    public SafeTensorIdTensorIdMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef SafeTensorIdTensorIdMap put(@ByRef SafeTensorIdTensorIdMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index(function = "at") public native @ByRef SafeTensorId get(@ByRef SafeTensorId i);
+    public native SafeTensorIdTensorIdMap put(@ByRef SafeTensorId i, SafeTensorId value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @ByRef @Const SafeTensorId first();
+        public native @Name("operator*().second") @MemberGetter @ByRef @Const SafeTensorId second();
+    }
+}
+
 @Name("std::vector<tensorflow::StringPiece>") public static class StringPieceVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1457,6 +1484,26 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@NoOffset @Name("std::pair<google::protobuf::uint64,google::protobuf::uint64>") public static class LongLongPair extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LongLongPair(Pointer p) { super(p); }
+    public LongLongPair(long firstValue, long secondValue) { this(); put(firstValue, secondValue); }
+    public LongLongPair()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef LongLongPair put(@ByRef LongLongPair x);
+
+
+    @MemberGetter public native long first(); public native LongLongPair first(long first);
+    @MemberGetter public native @Cast("google::protobuf::uint64") long second();  public native LongLongPair second(long second);
+
+    public LongLongPair put(long firstValue, long secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+}
+
 @NoOffset @Name("std::pair<tensorflow::Allocator*,tensorflow::TrackingAllocator*>") public static class WrappedAllocator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1531,6 +1578,34 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @MemberGetter public native @Cast("bool") boolean second();  public native EdgeSetBoolPair second(boolean second);
 
     public EdgeSetBoolPair put(EdgeSetIterator firstValue, boolean secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+}
+
+@NoOffset @Name("std::pair<tensorflow::string,int>") public static class StringIntPair extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringIntPair(Pointer p) { super(p); }
+    public StringIntPair(BytePointer firstValue, int secondValue) { this(); put(firstValue, secondValue); }
+    public StringIntPair(String firstValue, int secondValue) { this(); put(firstValue, secondValue); }
+    public StringIntPair()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringIntPair put(@ByRef StringIntPair x);
+
+
+    @MemberGetter public native @StdString BytePointer first(); public native StringIntPair first(BytePointer first);
+    @MemberGetter public native int second();  public native StringIntPair second(int second);
+    @MemberSetter @Index(function = "at") public native StringIntPair first(@StdString String first);
+
+    public StringIntPair put(BytePointer firstValue, int secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
+
+    public StringIntPair put(String firstValue, int secondValue) {
         first(firstValue);
         second(secondValue);
         return this;
@@ -1743,6 +1818,349 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+// Parsed from google/protobuf/arena.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// This file defines an Arena allocator for better allocation performance.
+
+// #ifndef GOOGLE_PROTOBUF_ARENA_H__
+// #define GOOGLE_PROTOBUF_ARENA_H__
+
+// #include <limits>
+// #ifdef max
+// #undef max  // Visual Studio defines this macro
+// #endif
+// #if defined(_MSC_VER) && !defined(_LIBCPP_STD_VER) && !_HAS_EXCEPTIONS
+// Work around bugs in MSVC <typeinfo> header when _HAS_EXCEPTIONS=0.
+// #include <exception>
+// #include <typeinfo>
+
+// #else
+// #include <typeinfo>
+// #endif
+
+// #include <google/protobuf/arena_impl.h>
+// #include <google/protobuf/stubs/port.h>
+// #include <type_traits>  // defined below
+
+  // namespace protobuf
+
+
+
+  // namespace quality_webanswers          // defined below        // defined in message.h
+
+
+
+  // namespace arena_metrics
+
+@Namespace("google::protobuf::internal") @Opaque public static class ArenaStringPtr extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ArenaStringPtr() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ArenaStringPtr(Pointer p) { super(p); }
+}     // defined in arenastring.h
+@Namespace("google::protobuf::internal") @Opaque public static class LazyField extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LazyField() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LazyField(Pointer p) { super(p); }
+}           // defined in lazy_field.h  // defined in repeated_field.h
+
+// Templated cleanup methods.
+@Namespace("google::protobuf::internal") public static native void arena_free(Pointer object, @Cast("size_t") long size);
+
+  // namespace internal
+
+// ArenaOptions provides optional additional parameters to arena construction
+// that control its block-allocation behavior.
+@Namespace("google::protobuf") @NoOffset public static class ArenaOptions extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ArenaOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ArenaOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ArenaOptions position(long position) {
+        return (ArenaOptions)super.position(position);
+    }
+
+  // This defines the size of the first block requested from the system malloc.
+  // Subsequent block sizes will increase in a geometric series up to a maximum.
+  public native @Cast("size_t") long start_block_size(); public native ArenaOptions start_block_size(long start_block_size);
+
+  // This defines the maximum block size requested from system malloc (unless an
+  // individual arena allocation request occurs with a size larger than this
+  // maximum). Requested block sizes increase up to this value, then remain
+  // here.
+  public native @Cast("size_t") long max_block_size(); public native ArenaOptions max_block_size(long max_block_size);
+
+  // An initial block of memory for the arena to use, or NULL for none. If
+  // provided, the block must live at least as long as the arena itself. The
+  // creator of the Arena retains ownership of the block after the Arena is
+  // destroyed.
+  public native @Cast("char*") BytePointer initial_block(); public native ArenaOptions initial_block(BytePointer initial_block);
+
+  // The size of the initial block, if provided.
+  public native @Cast("size_t") long initial_block_size(); public native ArenaOptions initial_block_size(long initial_block_size);
+
+  // A function pointer to an alloc method that returns memory blocks of size
+  // requested. By default, it contains a ptr to the malloc function.
+  //
+  // NOTE: block_alloc and dealloc functions are expected to behave like
+  // malloc and free, including Asan poisoning.
+  public static class Block_alloc_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Block_alloc_long(Pointer p) { super(p); }
+      protected Block_alloc_long() { allocate(); }
+      private native void allocate();
+      public native Pointer call(@Cast("size_t") long arg0);
+  }
+  public native Block_alloc_long block_alloc(); public native ArenaOptions block_alloc(Block_alloc_long block_alloc);
+  // A function pointer to a dealloc method that takes ownership of the blocks
+  // from the arena. By default, it contains a ptr to a wrapper function that
+  // calls free.
+  public static class Block_dealloc_Pointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Block_dealloc_Pointer_long(Pointer p) { super(p); }
+      protected Block_dealloc_Pointer_long() { allocate(); }
+      private native void allocate();
+      public native void call(Pointer arg0, @Cast("size_t") long arg1);
+  }
+  public native Block_dealloc_Pointer_long block_dealloc(); public native ArenaOptions block_dealloc(Block_dealloc_Pointer_long block_dealloc);
+
+  public ArenaOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+}
+
+// Support for non-RTTI environments. (The metrics hooks API uses type
+// information.)
+// #ifndef GOOGLE_PROTOBUF_NO_RTTI
+// #define RTTI_TYPE_ID(type) (&typeid(type))
+// #else
+// #define RTTI_TYPE_ID(type) (NULL)
+// #endif
+
+// Arena allocator. Arena allocation replaces ordinary (heap-based) allocation
+// with new/delete, and improves performance by aggregating allocations into
+// larger blocks and freeing allocations all at once. Protocol messages are
+// allocated on an arena by using Arena::CreateMessage<T>(Arena*), below, and
+// are automatically freed when the arena is destroyed.
+//
+// This is a thread-safe implementation: multiple threads may allocate from the
+// arena concurrently. Destruction is not thread-safe and the destructing
+// thread must synchronize with users of the arena first.
+//
+// An arena provides two allocation interfaces: CreateMessage<T>, which works
+// for arena-enabled proto2 message types as well as other types that satisfy
+// the appropriate protocol (described below), and Create<T>, which works for
+// any arbitrary type T. CreateMessage<T> is better when the type T supports it,
+// because this interface (i) passes the arena pointer to the created object so
+// that its sub-objects and internal allocations can use the arena too, and (ii)
+// elides the object's destructor call when possible. Create<T> does not place
+// any special requirements on the type T, and will invoke the object's
+// destructor when the arena is destroyed.
+//
+// The arena message allocation protocol, required by CreateMessage<T>, is as
+// follows:
+//
+// - The type T must have (at least) two constructors: a constructor with no
+//   arguments, called when a T is allocated on the heap; and a constructor with
+//   a google::protobuf::Arena* argument, called when a T is allocated on an arena. If the
+//   second constructor is called with a NULL arena pointer, it must be
+//   equivalent to invoking the first (no-argument) constructor.
+//
+// - The type T must have a particular type trait: a nested type
+//   |InternalArenaConstructable_|. This is usually a typedef to |void|. If no
+//   such type trait exists, then the instantiation CreateMessage<T> will fail
+//   to compile.
+//
+// - The type T *may* have the type trait |DestructorSkippable_|. If this type
+//   trait is present in the type, then its destructor will not be called if and
+//   only if it was passed a non-NULL arena pointer. If this type trait is not
+//   present on the type, then its destructor is always called when the
+//   containing arena is destroyed.
+//
+// - One- and two-user-argument forms of CreateMessage<T>() also exist that
+//   forward these constructor arguments to T's constructor: for example,
+//   CreateMessage<T>(Arena*, arg1, arg2) forwards to a constructor T(Arena*,
+//   arg1, arg2).
+//
+// This protocol is implemented by all arena-enabled proto2 message classes as
+// well as RepeatedPtrField.
+//
+// Do NOT subclass Arena. This class will be marked as final when C++11 is
+// enabled.
+@Namespace("google::protobuf") @NoOffset public static class Arena extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Arena(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Arena(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Arena position(long position) {
+        return (Arena)super.position(position);
+    }
+
+  // Arena constructor taking custom options. See ArenaOptions below for
+  // descriptions of the options available.
+  public Arena(@Const @ByRef ArenaOptions options) { super((Pointer)null); allocate(options); }
+  private native void allocate(@Const @ByRef ArenaOptions options);
+
+  // Block overhead.  Use this as a guide for how much to over-allocate the
+  // initial block if you want an allocation of size N to fit inside it.
+  //
+  // WARNING: if you allocate multiple objects, it is difficult to guarantee
+  // that a series of allocations will fit in the initial block, especially if
+  // Arena changes its alignment guarantees in the future!
+  @MemberGetter public static native @Cast("const size_t") long kBlockOverhead();
+  public static final long kBlockOverhead = kBlockOverhead();
+
+  // Default constructor with sensible default options, tuned for average
+  // use-cases.
+  public Arena() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native void Init(@Const @ByRef ArenaOptions options);
+
+  // API to create proto2 message objects on the arena. If the arena passed in
+  // is NULL, then a heap allocated object is returned. Type T must be a message
+  // defined in a .proto file with cc_enable_arenas set to true, otherwise a
+  // compilation error will occur.
+  //
+  // RepeatedField and RepeatedPtrField may also be instantiated directly on an
+  // arena with this method.
+  //
+  // This function also accepts any type T that satisfies the arena message
+  // allocation protocol, documented above.
+
+  // API to create any objects on the arena. Note that only the object will
+  // be created on the arena; the underlying ptrs (in case of a proto2 message)
+  // will be still heap allocated. Proto messages should usually be allocated
+  // with CreateMessage<T>() instead.
+  //
+  // Note that even if T satisfies the arena message construction protocol
+  // (InternalArenaConstructable_ trait and optional DestructorSkippable_
+  // trait), as described above, this function does not follow the protocol;
+  // instead, it treats T as a black-box type, just as if it did not have these
+  // traits. Specifically, T's constructor arguments will always be only those
+  // passed to Create<T>() -- no additional arena pointer is implicitly added.
+  // Furthermore, the destructor will always be called at arena destruction time
+  // (unless the destructor is trivial). Hence, from T's point of view, it is as
+  // if the object were allocated on the heap (except that the underlying memory
+  // is obtained from the arena).
+
+  // Create an array of object type T on the arena *without* invoking the
+  // constructor of T. If `arena` is null, then the return value should be freed
+  // with `delete[] x;` (or `::operator delete[](x);`).
+  // To ensure safe uses, this function checks at compile time
+  // (when compiled as C++11) that T is trivially default-constructible and
+  // trivially destructible.
+
+  // Returns the total space allocated by the arena, which is the sum of the
+  // sizes of the underlying blocks. This method is relatively fast; a counter
+  // is kept as blocks are allocated.
+  public native @Cast("google::protobuf::uint64") long SpaceAllocated();
+  // Returns the total space used by the arena. Similar to SpaceAllocated but
+  // does not include free space and block overhead. The total space returned
+  // may not include space used by other threads executing concurrently with
+  // the call to this method.
+  public native @Cast("google::protobuf::uint64") long SpaceUsed();
+  // DEPRECATED. Please use SpaceAllocated() and SpaceUsed().
+  //
+  // Combines SpaceAllocated and SpaceUsed. Returns a pair of
+  // <space_allocated, space_used>.
+  public native @Deprecated @ByVal LongLongPair SpaceAllocatedAndUsed();
+
+  // Frees all storage allocated by this arena after calling destructors
+  // registered with OwnDestructor() and freeing objects registered with Own().
+  // Any objects allocated on this arena are unusable after this call. It also
+  // returns the total space used by the arena which is the sums of the sizes
+  // of the allocated blocks. This method is not thread-safe.
+  public native @Cast("google::protobuf::uint64") long Reset();
+
+  // Adds |object| to a list of heap-allocated objects to be freed with |delete|
+  // when the arena is destroyed or reset.
+
+  // Adds |object| to a list of objects whose destructors will be manually
+  // called when the arena is destroyed or reset. This differs from Own() in
+  // that it does not free the underlying memory with |delete|; hence, it is
+  // normally only used for objects that are placement-newed into
+  // arena-allocated memory.
+
+  // Adds a custom member function on an object to the list of destructors that
+  // will be manually called when the arena is destroyed or reset. This differs
+  // from OwnDestructor() in that any member function may be specified, not only
+  // the class destructor.
+  public static class Destruct_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Destruct_Pointer(Pointer p) { super(p); }
+      protected Destruct_Pointer() { allocate(); }
+      private native void allocate();
+      public native void call(Pointer arg0);
+  }
+  public native void OwnCustomDestructor(
+        Pointer object, Destruct_Pointer destruct);
+
+  // Retrieves the arena associated with |value| if |value| is an arena-capable
+  // message, or NULL otherwise. This differs from value->GetArena() in that the
+  // latter is a virtual call, while this method is a templated call that
+  // resolves at compile-time.
+
+  // Helper typetraits that indicates support for arenas in a type T at compile
+  // time. This is public only to allow construction of higher-level templated
+  // utilities.
+  //
+  // is_arena_constructable<T>::value is true if the message type T has arena
+  // support enabled, and false otherwise.
+  //
+  // is_destructor_skippable<T>::value is true if the message type T has told
+  // the arena that it is safe to skip the destructor, and false otherwise.
+  //
+  // This is inside Arena because only Arena has the friend relationships
+  // necessary to see the underlying generated code traits.
+}
+
+// Defined above for supporting environments without RTTI.
+// #undef RTTI_TYPE_ID
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_ARENA_H__
+
+
 // Parsed from google/protobuf/message_lite.h
 
 // Protocol Buffers - Google's data interchange format
@@ -1790,13 +2208,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 // #include <google/protobuf/stubs/common.h>
 // #include <google/protobuf/stubs/logging.h>
 // #include <google/protobuf/stubs/once.h>
+// #include <google/protobuf/arena.h>
 // #include <google/protobuf/stubs/port.h>
-@Namespace("google::protobuf") @Opaque public static class Arena extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public Arena() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Arena(Pointer p) { super(p); }
-}
 @Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public CodedInputStream() { super((Pointer)null); }
@@ -1834,6 +2247,12 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public WireFormatLite() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WireFormatLite(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::internal") @Opaque public static class WeakFieldMap extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WeakFieldMap() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WeakFieldMap(Pointer p) { super(p); }
 }
 
 // #ifndef SWIG
@@ -1966,7 +2385,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
 
   // Reads a protocol buffer from the stream and merges it into this
-  // Message.  Singular fields read from the input overwrite what is
+  // Message.  Singular fields read from the what is
   // already in the Message and repeated fields are appended to those
   // already present.
   //
@@ -2036,7 +2455,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
   public native @Cast("size_t") long ByteSizeLong();
 
   // Legacy ByteSize() API.
-  public native int ByteSize();
+  public native @Deprecated int ByteSize();
 
   // Serializes the message without recomputing the size.  The message must not
   // have changed since the last call to ByteSize(), and the value returned by
@@ -2255,6 +2674,10 @@ limitations under the License.
   public static native @ByVal bfloat16 round_to_bfloat16(float v);
 
   public static native @ByVal bfloat16 epsilon();
+
+  public static native @ByVal bfloat16 highest();
+
+  public static native @ByVal bfloat16 lowest();
 
   public native @Cast("uint16_t") short value(); public native bfloat16 value(short value);
 
@@ -2747,19 +3170,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/lib/core/error_codes.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -2770,11 +3193,13 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/generated_enum_reflection.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
 // Internal implementation detail -- do not use these members.
 @Namespace("protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto") public static class TableStruct extends Pointer {
     static { Loader.load(); }
@@ -2794,7 +3219,6 @@ limitations under the License.
   @MemberGetter public static native @Cast("const google::protobuf::uint32*") IntPointer offsets();
 }
 @Namespace("protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto") public static native void AddDescriptors();
-@Namespace("protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto") public static native void InitDefaults();
   // namespace protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
   // namespace error
   // namespace tensorflow
@@ -2867,7 +3291,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
 
 
 // Parsed from tensorflow/core/platform/logging.h
@@ -4618,19 +5042,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/example/feature.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fexample_2ffeature_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fexample_2ffeature_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2ffeature_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2ffeature_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -4641,6 +5065,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -4650,25 +5075,8 @@ limitations under the License.
 // #include <google/protobuf/map_field_inl.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsBytesListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsBytesList();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFloatListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFloatList();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsInt64ListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsInt64List();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeature();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatures_FeatureEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatures_FeatureEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeaturesImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatures();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureList();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureLists_FeatureListEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureLists_FeatureListEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureListsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto") public static native void InitDefaultsFeatureLists();
   // namespace protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto
 @Namespace("tensorflow") @Opaque public static class FeatureLists_FeatureListEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -5046,6 +5454,7 @@ limitations under the License.
         Int64List int64_list);
   public native Int64List unsafe_arena_release_int64_list();
 
+  public native void clear_kind();
   public native @Cast("tensorflow::Feature::KindCase") int kind_case();
 }
 // -------------------------------------------------------------------
@@ -5352,6 +5761,7 @@ limitations under the License.
 
 
 
+
 // .tensorflow.FloatList float_list = 2;
 
 
@@ -5362,7 +5772,9 @@ limitations under the License.
 
 
 
+
 // .tensorflow.Int64List int64_list = 3;
+
 
 
 
@@ -5438,7 +5850,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fexample_2ffeature_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2ffeature_2eproto
 
 
 // Parsed from tensorflow/core/example/example.pb.h
@@ -5446,19 +5858,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/example/example.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fexample_2fexample_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fexample_2fexample_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2fexample_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2fexample_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -5469,6 +5881,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -5476,11 +5889,8 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/example/feature.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsExampleImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsExample();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsSequenceExampleImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto") public static native void InitDefaultsSequenceExample();
   // namespace protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto
   // namespace tensorflow
 
@@ -5680,6 +6090,7 @@ limitations under the License.
 
 
 
+
 // -------------------------------------------------------------------
 
 // SequenceExample
@@ -5692,7 +6103,9 @@ limitations under the License.
 
 
 
+
 // .tensorflow.FeatureLists feature_lists = 2;
+
 
 
 
@@ -5712,7 +6125,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fexample_2fexample_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2fexample_2eproto
 
 
 // Parsed from tensorflow/core/protobuf/debug.pb.h
@@ -5720,19 +6133,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/protobuf/debug.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -5743,21 +6156,15 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebugTensorWatchImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebugTensorWatch();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebugOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebugOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebuggedSourceFileImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebuggedSourceFile();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebuggedSourceFilesImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto") public static native void InitDefaultsDebuggedSourceFiles();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
   // namespace tensorflow
 
@@ -5890,8 +6297,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_node_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_node_name();
   public native void set_allocated_node_name(@StdString @Cast({"char*", "std::string*"}) BytePointer node_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_node_name();
-  public native void unsafe_arena_set_allocated_node_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_node_name();
+  public native @Deprecated void unsafe_arena_set_allocated_node_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer node_name);
 
   // int32 output_slot = 2;
@@ -6093,8 +6500,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_host();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_host();
   public native void set_allocated_host(@StdString @Cast({"char*", "std::string*"}) BytePointer host);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_host();
-  public native void unsafe_arena_set_allocated_host(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_host();
+  public native @Deprecated void unsafe_arena_set_allocated_host(
         @StdString @Cast({"char*", "std::string*"}) BytePointer host);
 
   // string file_path = 2;
@@ -6111,8 +6518,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_file_path();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_file_path();
   public native void set_allocated_file_path(@StdString @Cast({"char*", "std::string*"}) BytePointer file_path);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_file_path();
-  public native void unsafe_arena_set_allocated_file_path(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_file_path();
+  public native @Deprecated void unsafe_arena_set_allocated_file_path(
         @StdString @Cast({"char*", "std::string*"}) BytePointer file_path);
 
   // int64 last_modified = 3;
@@ -6395,7 +6802,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
 
 
 // Parsed from tensorflow/core/protobuf/cluster.pb.h
@@ -6403,19 +6810,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/protobuf/cluster.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -6426,6 +6833,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -6435,13 +6843,8 @@ limitations under the License.
 // #include <google/protobuf/map_field_inl.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto") public static native void InitDefaultsJobDef_TasksEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto") public static native void InitDefaultsJobDef_TasksEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto") public static native void InitDefaultsJobDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto") public static native void InitDefaultsJobDef();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto") public static native void InitDefaultsClusterDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto") public static native void InitDefaultsClusterDef();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
 @Namespace("tensorflow") @Opaque public static class JobDef_TasksEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -6548,8 +6951,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 }
 // -------------------------------------------------------------------
@@ -6689,7 +7092,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
 
 
 // Parsed from tensorflow/core/protobuf/rewriter_config.pb.h
@@ -6697,19 +7100,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/protobuf/rewriter_config.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -6720,6 +7123,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -6731,17 +7135,8 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsAutoParallelOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsAutoParallelOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsScopedAllocatorOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsScopedAllocatorOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsRewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsRewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsRewriterConfig_CustomGraphOptimizerImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsRewriterConfig_CustomGraphOptimizer();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsRewriterConfigImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto") public static native void InitDefaultsRewriterConfig();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 @Namespace("tensorflow") @Opaque public static class RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -7102,8 +7497,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 }
 // -------------------------------------------------------------------
@@ -7308,8 +7703,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_memory_optimizer_target_node_name_scope();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_memory_optimizer_target_node_name_scope();
   public native void set_allocated_memory_optimizer_target_node_name_scope(@StdString @Cast({"char*", "std::string*"}) BytePointer memory_optimizer_target_node_name_scope);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_memory_optimizer_target_node_name_scope();
-  public native void unsafe_arena_set_allocated_memory_optimizer_target_node_name_scope(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_memory_optimizer_target_node_name_scope();
+  public native @Deprecated void unsafe_arena_set_allocated_memory_optimizer_target_node_name_scope(
         @StdString @Cast({"char*", "std::string*"}) BytePointer memory_optimizer_target_node_name_scope);
 
   // .tensorflow.AutoParallelOptions auto_parallel = 5;
@@ -7428,6 +7823,13 @@ public static final int
   public static final int kScopedAllocatorOptimizationFieldNumber = kScopedAllocatorOptimizationFieldNumber();
   public native @Cast("tensorflow::RewriterConfig_Toggle") int scoped_allocator_optimization();
   public native void set_scoped_allocator_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
+
+  // int32 min_graph_nodes = 17;
+  public native void clear_min_graph_nodes();
+  @MemberGetter public static native int kMinGraphNodesFieldNumber();
+  public static final int kMinGraphNodesFieldNumber = kMinGraphNodesFieldNumber();
+  public native @Cast("google::protobuf::int32") int min_graph_nodes();
+  public native void set_min_graph_nodes(@Cast("google::protobuf::int32") int value);
 }
 // ===================================================================
 
@@ -7565,6 +7967,11 @@ public static final int
 
 
 
+// int32 min_graph_nodes = 17;
+
+
+
+
 // .tensorflow.RewriterConfig.MemOptType memory_optimization = 4;
 
 
@@ -7594,7 +8001,9 @@ public static final int
 
 
 
+
 // .tensorflow.ScopedAllocatorOptions scoped_allocator_opts = 16;
+
 
 
 
@@ -7657,7 +8066,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 
 
 // Parsed from tensorflow/core/protobuf/config.pb.h
@@ -7665,19 +8074,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/protobuf/config.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -7688,6 +8097,7 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -7704,38 +8114,21 @@ public static final int
 // #include "tensorflow/core/protobuf/cluster.pb.h"
 // #include "tensorflow/core/protobuf/rewriter_config.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGPUOptions_Experimental_VirtualDevicesImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGPUOptions_Experimental_VirtualDevices();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGPUOptions_ExperimentalImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGPUOptions_Experimental();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGPUOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGPUOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsOptimizerOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsOptimizerOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGraphOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsGraphOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsThreadPoolOptionProtoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsThreadPoolOptionProto();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRPCOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRPCOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsConfigProto_DeviceCountEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsConfigProto_DeviceCountEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsConfigProto_ExperimentalImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsConfigProto_Experimental();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsConfigProtoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsConfigProto();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunOptions_ExperimentalImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunOptions_Experimental();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunOptions();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunMetadataImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsRunMetadata();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsTensorConnectionImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsTensorConnection();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsCallableOptionsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto") public static native void InitDefaultsCallableOptions();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
+@Namespace("tensorflow") @Opaque public static class CallableOptions_FeedDevicesEntry_DoNotUse extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CallableOptions_FeedDevicesEntry_DoNotUse() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CallableOptions_FeedDevicesEntry_DoNotUse(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") @Opaque public static class CallableOptions_FetchDevicesEntry_DoNotUse extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CallableOptions_FetchDevicesEntry_DoNotUse() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CallableOptions_FetchDevicesEntry_DoNotUse(Pointer p) { super(p); }
+}
 @Namespace("tensorflow") @Opaque public static class ConfigProto_DeviceCountEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public ConfigProto_DeviceCountEntry_DoNotUse() { super((Pointer)null); }
@@ -7743,6 +8136,8 @@ public static final int
     public ConfigProto_DeviceCountEntry_DoNotUse(Pointer p) { super(p); }
 }
   // namespace tensorflow
+
+
 
 
 
@@ -7998,6 +8393,13 @@ public static final int
   public static final int kUseUnifiedMemoryFieldNumber = kUseUnifiedMemoryFieldNumber();
   public native @Cast("bool") boolean use_unified_memory();
   public native void set_use_unified_memory(@Cast("bool") boolean value);
+
+  // int32 num_dev_to_dev_copy_streams = 3;
+  public native void clear_num_dev_to_dev_copy_streams();
+  @MemberGetter public static native int kNumDevToDevCopyStreamsFieldNumber();
+  public static final int kNumDevToDevCopyStreamsFieldNumber = kNumDevToDevCopyStreamsFieldNumber();
+  public native @Cast("google::protobuf::int32") int num_dev_to_dev_copy_streams();
+  public native void set_num_dev_to_dev_copy_streams(@Cast("google::protobuf::int32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -8080,8 +8482,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_allocator_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_allocator_type();
   public native void set_allocated_allocator_type(@StdString @Cast({"char*", "std::string*"}) BytePointer allocator_type);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_allocator_type();
-  public native void unsafe_arena_set_allocated_allocator_type(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_allocator_type();
+  public native @Deprecated void unsafe_arena_set_allocated_allocator_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer allocator_type);
 
   // string visible_device_list = 5;
@@ -8098,8 +8500,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_visible_device_list();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_visible_device_list();
   public native void set_allocated_visible_device_list(@StdString @Cast({"char*", "std::string*"}) BytePointer visible_device_list);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_visible_device_list();
-  public native void unsafe_arena_set_allocated_visible_device_list(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_visible_device_list();
+  public native @Deprecated void unsafe_arena_set_allocated_visible_device_list(
         @StdString @Cast({"char*", "std::string*"}) BytePointer visible_device_list);
 
   // .tensorflow.GPUOptions.Experimental experimental = 9;
@@ -8543,8 +8945,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_global_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_global_name();
   public native void set_allocated_global_name(@StdString @Cast({"char*", "std::string*"}) BytePointer global_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_global_name();
-  public native void unsafe_arena_set_allocated_global_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_global_name();
+  public native @Deprecated void unsafe_arena_set_allocated_global_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer global_name);
 
   // int32 num_threads = 1;
@@ -8711,8 +9113,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_collective_group_leader();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_collective_group_leader();
   public native void set_allocated_collective_group_leader(@StdString @Cast({"char*", "std::string*"}) BytePointer collective_group_leader);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_group_leader();
-  public native void unsafe_arena_set_allocated_collective_group_leader(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_group_leader();
+  public native @Deprecated void unsafe_arena_set_allocated_collective_group_leader(
         @StdString @Cast({"char*", "std::string*"}) BytePointer collective_group_leader);
 }
 // -------------------------------------------------------------------
@@ -9355,8 +9757,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_from_tensor();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_from_tensor();
   public native void set_allocated_from_tensor(@StdString @Cast({"char*", "std::string*"}) BytePointer from_tensor);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_from_tensor();
-  public native void unsafe_arena_set_allocated_from_tensor(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_from_tensor();
+  public native @Deprecated void unsafe_arena_set_allocated_from_tensor(
         @StdString @Cast({"char*", "std::string*"}) BytePointer from_tensor);
 
   // string to_tensor = 2;
@@ -9373,10 +9775,14 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_to_tensor();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_to_tensor();
   public native void set_allocated_to_tensor(@StdString @Cast({"char*", "std::string*"}) BytePointer to_tensor);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_to_tensor();
-  public native void unsafe_arena_set_allocated_to_tensor(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_to_tensor();
+  public native @Deprecated void unsafe_arena_set_allocated_to_tensor(
         @StdString @Cast({"char*", "std::string*"}) BytePointer to_tensor);
 }
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 @Namespace("tensorflow") @NoOffset public static class CallableOptions extends MessageLite {
@@ -9441,6 +9847,7 @@ public static final int
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
+
 
   // accessors -------------------------------------------------------
 
@@ -9516,6 +9923,22 @@ public static final int
   public native @Const @ByRef TensorConnection tensor_connection(int index);
   public native TensorConnection add_tensor_connection();
 
+  // map<string, string> feed_devices = 6;
+  public native int feed_devices_size();
+  public native void clear_feed_devices();
+  @MemberGetter public static native int kFeedDevicesFieldNumber();
+  public static final int kFeedDevicesFieldNumber = kFeedDevicesFieldNumber();
+  public native @Const @ByRef StringStringMap feed_devices();
+  public native StringStringMap mutable_feed_devices();
+
+  // map<string, string> fetch_devices = 7;
+  public native int fetch_devices_size();
+  public native void clear_fetch_devices();
+  @MemberGetter public static native int kFetchDevicesFieldNumber();
+  public static final int kFetchDevicesFieldNumber = kFetchDevicesFieldNumber();
+  public native @Const @ByRef StringStringMap fetch_devices();
+  public native StringStringMap mutable_fetch_devices();
+
   // .tensorflow.RunOptions run_options = 4;
   public native @Cast("bool") boolean has_run_options();
   public native void clear_run_options();
@@ -9528,6 +9951,13 @@ public static final int
   public native void unsafe_arena_set_allocated_run_options(
         RunOptions run_options);
   public native RunOptions unsafe_arena_release_run_options();
+
+  // bool fetch_skip_sync = 8;
+  public native void clear_fetch_skip_sync();
+  @MemberGetter public static native int kFetchSkipSyncFieldNumber();
+  public static final int kFetchSkipSyncFieldNumber = kFetchSkipSyncFieldNumber();
+  public native @Cast("bool") boolean fetch_skip_sync();
+  public native void set_fetch_skip_sync(@Cast("bool") boolean value);
 }
 // ===================================================================
 
@@ -9563,6 +9993,11 @@ public static final int
 
 
 // bool use_unified_memory = 2;
+
+
+
+
+// int32 num_dev_to_dev_copy_streams = 3;
 
 
 
@@ -9640,6 +10075,7 @@ public static final int
 
 
 
+
 // -------------------------------------------------------------------
 
 // OptimizerOptions
@@ -9692,6 +10128,7 @@ public static final int
 
 
 
+
 // int64 build_cost_model = 4;
 
 
@@ -9723,6 +10160,7 @@ public static final int
 
 
 // .tensorflow.RewriterConfig rewrite_options = 10;
+
 
 
 
@@ -9853,6 +10291,7 @@ public static final int
 
 
 
+
 // bool allow_soft_placement = 7;
 
 
@@ -9864,6 +10303,7 @@ public static final int
 
 
 // .tensorflow.GraphOptions graph_options = 10;
+
 
 
 
@@ -9886,7 +10326,9 @@ public static final int
 
 
 
+
 // .tensorflow.ClusterDef cluster_def = 14;
+
 
 
 
@@ -9900,6 +10342,7 @@ public static final int
 
 
 // .tensorflow.ConfigProto.Experimental experimental = 16;
+
 
 
 
@@ -9949,12 +10392,14 @@ public static final int
 
 
 
+
 // bool report_tensor_allocations_upon_oom = 7;
 
 
 
 
 // .tensorflow.RunOptions.Experimental experimental = 8;
+
 
 
 
@@ -9975,7 +10420,9 @@ public static final int
 
 
 
+
 // .tensorflow.CostGraphDef cost_graph = 2;
+
 
 
 
@@ -10024,6 +10471,10 @@ public static final int
 
 
 
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
 
@@ -10101,6 +10552,7 @@ public static final int
 
 
 
+
 // repeated .tensorflow.TensorConnection tensor_connection = 5;
 
 
@@ -10110,9 +10562,30 @@ public static final int
 
 
 
+// map<string, string> feed_devices = 6;
+
+
+
+
+
+// map<string, string> fetch_devices = 7;
+
+
+
+
+
+// bool fetch_skip_sync = 8;
+
+
+
+
 // #ifdef __GNUC__
 //   #pragma GCC diagnostic pop
 // #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -10154,7 +10627,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 
 
 // Parsed from tensorflow/core/framework/cost_graph.pb.h
@@ -10162,19 +10635,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/cost_graph.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -10185,6 +10658,7 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -10193,15 +10667,8 @@ public static final int
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef_Node_InputInfoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef_Node_InputInfo();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef_Node_OutputInfoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef_Node_OutputInfo();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef_NodeImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef_Node();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto") public static native void InitDefaultsCostGraphDef();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
   // namespace tensorflow
 
@@ -10501,8 +10968,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string device = 2;
@@ -10519,9 +10986,23 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device();
   public native void set_allocated_device(@StdString @Cast({"char*", "std::string*"}) BytePointer device);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
-  public native void unsafe_arena_set_allocated_device(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
+  public native @Deprecated void unsafe_arena_set_allocated_device(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device);
+
+  // int64 temporary_memory_size = 6;
+  public native void clear_temporary_memory_size();
+  @MemberGetter public static native int kTemporaryMemorySizeFieldNumber();
+  public static final int kTemporaryMemorySizeFieldNumber = kTemporaryMemorySizeFieldNumber();
+  public native @Cast("google::protobuf::int64") long temporary_memory_size();
+  public native void set_temporary_memory_size(@Cast("google::protobuf::int64") long value);
+
+  // int64 compute_cost = 9;
+  public native void clear_compute_cost();
+  @MemberGetter public static native int kComputeCostFieldNumber();
+  public static final int kComputeCostFieldNumber = kComputeCostFieldNumber();
+  public native @Cast("google::protobuf::int64") long compute_cost();
+  public native void set_compute_cost(@Cast("google::protobuf::int64") long value);
 
   // int32 id = 3;
   public native void clear_id();
@@ -10537,19 +11018,12 @@ public static final int
   public native @Cast("bool") boolean is_final();
   public native void set_is_final(@Cast("bool") boolean value);
 
-  // int64 temporary_memory_size = 6;
-  public native void clear_temporary_memory_size();
-  @MemberGetter public static native int kTemporaryMemorySizeFieldNumber();
-  public static final int kTemporaryMemorySizeFieldNumber = kTemporaryMemorySizeFieldNumber();
-  public native @Cast("google::protobuf::int64") long temporary_memory_size();
-  public native void set_temporary_memory_size(@Cast("google::protobuf::int64") long value);
-
-  // int64 compute_cost = 9;
-  public native void clear_compute_cost();
-  @MemberGetter public static native int kComputeCostFieldNumber();
-  public static final int kComputeCostFieldNumber = kComputeCostFieldNumber();
-  public native @Cast("google::protobuf::int64") long compute_cost();
-  public native void set_compute_cost(@Cast("google::protobuf::int64") long value);
+  // bool inaccurate = 17;
+  public native void clear_inaccurate();
+  @MemberGetter public static native int kInaccurateFieldNumber();
+  public static final int kInaccurateFieldNumber = kInaccurateFieldNumber();
+  public native @Cast("bool") boolean inaccurate();
+  public native void set_inaccurate(@Cast("bool") boolean value);
 
   // int64 host_temp_memory_size = 10 [deprecated = true];
   public native @Deprecated void clear_host_temp_memory_size();
@@ -10712,6 +11186,7 @@ public static final int
 
 
 
+
 // .tensorflow.DataType dtype = 4;
 
 
@@ -10828,6 +11303,11 @@ public static final int
 
 
 
+// bool inaccurate = 17;
+
+
+
+
 // -------------------------------------------------------------------
 
 // CostGraphDef
@@ -10857,7 +11337,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
 
 
 // Parsed from tensorflow/core/framework/step_stats.pb.h
@@ -10865,19 +11345,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/step_stats.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -10888,6 +11368,7 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -10896,21 +11377,8 @@ public static final int
 // #include "tensorflow/core/framework/allocation_description.pb.h"
 // #include "tensorflow/core/framework/tensor_description.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsAllocationRecordImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsAllocationRecord();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsAllocatorMemoryUsedImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsAllocatorMemoryUsed();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsNodeOutputImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsNodeOutput();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsMemoryStatsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsMemoryStats();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsNodeExecStatsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsNodeExecStats();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsDeviceStepStatsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsDeviceStepStats();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsStepStatsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto") public static native void InitDefaultsStepStats();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
   // namespace tensorflow
 
@@ -11094,8 +11562,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_allocator_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_allocator_name();
   public native void set_allocated_allocator_name(@StdString @Cast({"char*", "std::string*"}) BytePointer allocator_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_allocator_name();
-  public native void unsafe_arena_set_allocated_allocator_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_allocator_name();
+  public native @Deprecated void unsafe_arena_set_allocated_allocator_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer allocator_name);
 
   // int64 total_bytes = 2;
@@ -11434,8 +11902,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_node_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_node_name();
   public native void set_allocated_node_name(@StdString @Cast({"char*", "std::string*"}) BytePointer node_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_node_name();
-  public native void unsafe_arena_set_allocated_node_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_node_name();
+  public native @Deprecated void unsafe_arena_set_allocated_node_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer node_name);
 
   // string timeline_label = 8;
@@ -11452,8 +11920,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_timeline_label();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_timeline_label();
   public native void set_allocated_timeline_label(@StdString @Cast({"char*", "std::string*"}) BytePointer timeline_label);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_timeline_label();
-  public native void unsafe_arena_set_allocated_timeline_label(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_timeline_label();
+  public native @Deprecated void unsafe_arena_set_allocated_timeline_label(
         @StdString @Cast({"char*", "std::string*"}) BytePointer timeline_label);
 
   // .tensorflow.MemoryStats memory_stats = 12;
@@ -11601,8 +12069,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device();
   public native void set_allocated_device(@StdString @Cast({"char*", "std::string*"}) BytePointer device);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
-  public native void unsafe_arena_set_allocated_device(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
+  public native @Deprecated void unsafe_arena_set_allocated_device(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device);
 }
 // -------------------------------------------------------------------
@@ -11767,6 +12235,7 @@ public static final int
 
 
 
+
 // -------------------------------------------------------------------
 
 // MemoryStats
@@ -11908,6 +12377,7 @@ public static final int
 
 
 
+
 // -------------------------------------------------------------------
 
 // DeviceStepStats
@@ -11971,7 +12441,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
 
 
 // Parsed from tensorflow/core/framework/versions.pb.h
@@ -11979,19 +12449,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/versions.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fversions_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fversions_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fversions_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fversions_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -12002,15 +12472,15 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto") public static native void InitDefaultsVersionDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto") public static native void InitDefaultsVersionDef();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto
   // namespace tensorflow
 
@@ -12147,7 +12617,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fversions_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fversions_2eproto
 
 
 // Parsed from tensorflow/core/public/session_options.h
@@ -12367,19 +12837,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/allocation_description.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -12390,15 +12860,15 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto") public static native void InitDefaultsAllocationDescriptionImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto") public static native void InitDefaultsAllocationDescription();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
   // namespace tensorflow
 
@@ -12486,8 +12956,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_allocator_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_allocator_name();
   public native void set_allocated_allocator_name(@StdString @Cast({"char*", "std::string*"}) BytePointer allocator_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_allocator_name();
-  public native void unsafe_arena_set_allocated_allocator_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_allocator_name();
+  public native @Deprecated void unsafe_arena_set_allocated_allocator_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer allocator_name);
 
   // int64 requested_bytes = 1;
@@ -12586,7 +13056,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
 
 
 // Parsed from tensorflow/core/framework/allocator.h
@@ -12912,19 +13382,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/tensor_shape.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -12935,17 +13405,15 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto") public static native void InitDefaultsTensorShapeProto_DimImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto") public static native void InitDefaultsTensorShapeProto_Dim();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto") public static native void InitDefaultsTensorShapeProtoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto") public static native void InitDefaultsTensorShapeProto();
   // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
   // namespace tensorflow
 
@@ -13034,8 +13502,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // int64 size = 1;
@@ -13189,7 +13657,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
 
 
 // Parsed from tensorflow/core/framework/types.pb.h
@@ -13197,19 +13665,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/types.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ftypes_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2ftypes_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftypes_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftypes_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -13220,11 +13688,13 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/generated_enum_reflection.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftypes_2eproto
 // Internal implementation detail -- do not use these members.
   // namespace protobuf_tensorflow_2fcore_2fframework_2ftypes_2eproto
   // namespace tensorflow
@@ -13317,7 +13787,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ftypes_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftypes_2eproto
 
 
 // Parsed from tensorflow/core/framework/resource_handle.pb.h
@@ -13325,19 +13795,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/resource_handle.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -13348,15 +13818,15 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto") public static native void InitDefaultsResourceHandleProtoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto") public static native void InitDefaultsResourceHandleProto();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
   // namespace tensorflow
 
@@ -13444,8 +13914,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device();
   public native void set_allocated_device(@StdString @Cast({"char*", "std::string*"}) BytePointer device);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
-  public native void unsafe_arena_set_allocated_device(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
+  public native @Deprecated void unsafe_arena_set_allocated_device(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device);
 
   // string container = 2;
@@ -13462,8 +13932,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_container();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_container();
   public native void set_allocated_container(@StdString @Cast({"char*", "std::string*"}) BytePointer container);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_container();
-  public native void unsafe_arena_set_allocated_container(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_container();
+  public native @Deprecated void unsafe_arena_set_allocated_container(
         @StdString @Cast({"char*", "std::string*"}) BytePointer container);
 
   // string name = 3;
@@ -13480,8 +13950,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string maybe_type_name = 5;
@@ -13498,8 +13968,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_maybe_type_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_maybe_type_name();
   public native void set_allocated_maybe_type_name(@StdString @Cast({"char*", "std::string*"}) BytePointer maybe_type_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_maybe_type_name();
-  public native void unsafe_arena_set_allocated_maybe_type_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_maybe_type_name();
+  public native @Deprecated void unsafe_arena_set_allocated_maybe_type_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer maybe_type_name);
 
   // uint64 hash_code = 4;
@@ -13595,7 +14065,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
 
 
 // Parsed from tensorflow/core/framework/tensor.pb.h
@@ -13603,19 +14073,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/tensor.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -13626,6 +14096,7 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -13635,9 +14106,8 @@ public static final int
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto") public static native void InitDefaultsTensorProtoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto") public static native void InitDefaultsTensorProto();
   // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto
   // namespace tensorflow
 
@@ -13852,8 +14322,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tensor_content();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_tensor_content();
   public native void set_allocated_tensor_content(@StdString @Cast({"char*", "std::string*"}) BytePointer tensor_content);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_tensor_content();
-  public native void unsafe_arena_set_allocated_tensor_content(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_tensor_content();
+  public native @Deprecated void unsafe_arena_set_allocated_tensor_content(
         @StdString @Cast({"char*", "std::string*"}) BytePointer tensor_content);
 
   // .tensorflow.TensorShapeProto tensor_shape = 2;
@@ -13973,8 +14443,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type_name();
   public native void set_allocated_type_name(@StdString @Cast({"char*", "std::string*"}) BytePointer type_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type_name();
-  public native void unsafe_arena_set_allocated_type_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type_name();
+  public native @Deprecated void unsafe_arena_set_allocated_type_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer type_name);
 
   // bytes metadata = 2;
@@ -13990,8 +14460,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_metadata();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_metadata();
   public native void set_allocated_metadata(@StdString @Cast({"char*", "std::string*"}) BytePointer metadata);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_metadata();
-  public native void unsafe_arena_set_allocated_metadata(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_metadata();
+  public native @Deprecated void unsafe_arena_set_allocated_metadata(
         @StdString @Cast({"char*", "std::string*"}) BytePointer metadata);
 }
 // ===================================================================
@@ -14011,6 +14481,7 @@ public static final int
 
 
 // .tensorflow.TensorShapeProto tensor_shape = 2;
+
 
 
 
@@ -14221,7 +14692,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_2eproto
 
 
 // Parsed from tensorflow/core/framework/tensor_description.pb.h
@@ -14229,19 +14700,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/tensor_description.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -14252,6 +14723,7 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -14261,9 +14733,8 @@ public static final int
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/allocation_description.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto") public static native void InitDefaultsTensorDescriptionImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto") public static native void InitDefaultsTensorDescription();
   // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
   // namespace tensorflow
 
@@ -14394,7 +14865,9 @@ public static final int
 
 
 
+
 // .tensorflow.AllocationDescription allocation_description = 4;
+
 
 
 
@@ -14412,7 +14885,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
 
 
 // Parsed from tensorflow/core/framework/tensor_types.h
@@ -15169,6 +15642,21 @@ limitations under the License.
    *  and can be assigned to, but other calls on it (e.g. shape manipulation)
    *  are not valid. */
 
+  // Creates a tensor with the input datatype, shape and buf.
+  //
+  // Acquires a ref on buf that belongs to this Tensor.
+  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }
+  private native void allocate(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape, TensorBuffer buf);
+  private TensorBuffer buffer; // a reference to prevent deallocation
+  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, final Pointer data) {
+      this(type, shape, new TensorBuffer() {
+          @Override public Pointer data() { return data; }
+          @Override public long size() { return data.limit(); }
+          @Override public TensorBuffer root_buffer() { return this; }
+          @Override public void FillAllocationDescription(AllocationDescription proto) { }
+      });
+  }
+
   /** Returns the data type. */
   public native @Cast("tensorflow::DataType") int dtype();
 
@@ -15427,24 +15915,33 @@ limitations under the License.
 // Interface to access the raw ref-counted data buffer.
 @Namespace("tensorflow") public static class TensorBuffer extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public TensorBuffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorBuffer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorBuffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public TensorBuffer position(long position) {
+        return (TensorBuffer)super.position(position);
+    }
 
 
   // data() points to a memory region of size() bytes.
-  public native Pointer data();
-  public native @Cast("size_t") long size();
+  @Virtual(true) public native @Const({false, false, true}) Pointer data();
+  @Virtual(true) public native @Cast("size_t") @Const({false, false, true}) long size();
 
   // If this TensorBuffer is sub-buffer of another TensorBuffer,
   // returns that TensorBuffer. Otherwise, returns this.
-  public native TensorBuffer root_buffer();
+  @Virtual(true) public native TensorBuffer root_buffer();
 
   // Fill metadata about the allocation into the proto.
-  public native void FillAllocationDescription(
+  @Virtual(true) public native @Const({false, false, true}) void FillAllocationDescription(
         AllocationDescription proto);
 
   // Whether this TensorBuffer owns the underlying memory.
-  public native @Cast("bool") boolean OwnsMemory();
+  @Virtual public native @Cast("bool") @Const({false, false, true}) boolean OwnsMemory();
 }
 
 
@@ -15511,19 +16008,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/attr_value.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -15534,6 +16031,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -15546,9 +16044,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto") public static native void InitDefaultsAttrValueImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto") public static native void InitDefaultsAttrValue();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 @Namespace("tensorflow") @Opaque public static class NameAttrList_AttrEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -15803,8 +16300,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_s();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_s();
   public native void set_allocated_s(@StdString @Cast({"char*", "std::string*"}) BytePointer s);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_s();
-  public native void unsafe_arena_set_allocated_s(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_s();
+  public native @Deprecated void unsafe_arena_set_allocated_s(
         @StdString @Cast({"char*", "std::string*"}) BytePointer s);
   public native void clear_i();
   @MemberGetter public static native int kIFieldNumber();
@@ -15891,10 +16388,11 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_placeholder();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_placeholder();
   public native void set_allocated_placeholder(@StdString @Cast({"char*", "std::string*"}) BytePointer placeholder);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_placeholder();
-  public native void unsafe_arena_set_allocated_placeholder(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_placeholder();
+  public native @Deprecated void unsafe_arena_set_allocated_placeholder(
         @StdString @Cast({"char*", "std::string*"}) BytePointer placeholder);
 
+  public native void clear_value();
   public native @Cast("tensorflow::AttrValue::ValueCase") int value_case();
 }
 // -------------------------------------------------------------------
@@ -15989,8 +16487,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 }
 // ===================================================================
@@ -16144,7 +16642,9 @@ limitations under the License.
 
 
 
+
 // .tensorflow.TensorProto tensor = 8;
+
 
 
 
@@ -16163,7 +16663,9 @@ limitations under the License.
 
 
 
+
 // .tensorflow.NameAttrList func = 10;
+
 
 
 
@@ -16236,7 +16738,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 
 
 // Parsed from tensorflow/core/framework/node_def.pb.h
@@ -16244,19 +16746,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/node_def.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -16267,6 +16769,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -16277,11 +16780,8 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto") public static native void InitDefaultsNodeDef_AttrEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto") public static native void InitDefaultsNodeDef_AttrEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto") public static native void InitDefaultsNodeDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto") public static native void InitDefaultsNodeDef();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 @Namespace("tensorflow") @Opaque public static class NodeDef_AttrEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -16408,8 +16908,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string op = 2;
@@ -16426,8 +16926,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_op();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_op();
   public native void set_allocated_op(@StdString @Cast({"char*", "std::string*"}) BytePointer op);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_op();
-  public native void unsafe_arena_set_allocated_op(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_op();
+  public native @Deprecated void unsafe_arena_set_allocated_op(
         @StdString @Cast({"char*", "std::string*"}) BytePointer op);
 
   // string device = 4;
@@ -16444,8 +16944,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device();
   public native void set_allocated_device(@StdString @Cast({"char*", "std::string*"}) BytePointer device);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
-  public native void unsafe_arena_set_allocated_device(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
+  public native @Deprecated void unsafe_arena_set_allocated_device(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device);
 }
 // ===================================================================
@@ -16544,7 +17044,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 
 
 // Parsed from tensorflow/core/framework/op_def.pb.h
@@ -16552,19 +17052,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/op_def.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -16575,6 +17075,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -16583,17 +17084,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDef_ArgDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDef_ArgDef();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDef_AttrDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDef_AttrDef();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDef();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDeprecationImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpDeprecation();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto") public static native void InitDefaultsOpList();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
   // namespace tensorflow
 
@@ -16685,8 +17177,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string description = 2;
@@ -16703,8 +17195,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
   public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native void unsafe_arena_set_allocated_description(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description);
 
   // string type_attr = 4;
@@ -16721,8 +17213,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type_attr();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type_attr();
   public native void set_allocated_type_attr(@StdString @Cast({"char*", "std::string*"}) BytePointer type_attr);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type_attr();
-  public native void unsafe_arena_set_allocated_type_attr(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type_attr();
+  public native @Deprecated void unsafe_arena_set_allocated_type_attr(
         @StdString @Cast({"char*", "std::string*"}) BytePointer type_attr);
 
   // string number_attr = 5;
@@ -16739,8 +17231,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_number_attr();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_number_attr();
   public native void set_allocated_number_attr(@StdString @Cast({"char*", "std::string*"}) BytePointer number_attr);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_number_attr();
-  public native void unsafe_arena_set_allocated_number_attr(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_number_attr();
+  public native @Deprecated void unsafe_arena_set_allocated_number_attr(
         @StdString @Cast({"char*", "std::string*"}) BytePointer number_attr);
 
   // string type_list_attr = 6;
@@ -16757,8 +17249,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type_list_attr();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type_list_attr();
   public native void set_allocated_type_list_attr(@StdString @Cast({"char*", "std::string*"}) BytePointer type_list_attr);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type_list_attr();
-  public native void unsafe_arena_set_allocated_type_list_attr(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type_list_attr();
+  public native @Deprecated void unsafe_arena_set_allocated_type_list_attr(
         @StdString @Cast({"char*", "std::string*"}) BytePointer type_list_attr);
 
   // .tensorflow.DataType type = 3;
@@ -16856,8 +17348,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string type = 2;
@@ -16874,8 +17366,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
   public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type();
-  public native void unsafe_arena_set_allocated_type(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type();
+  public native @Deprecated void unsafe_arena_set_allocated_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer type);
 
   // string description = 4;
@@ -16892,8 +17384,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
   public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native void unsafe_arena_set_allocated_description(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description);
 
   // .tensorflow.AttrValue default_value = 3;
@@ -17044,8 +17536,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string summary = 5;
@@ -17062,8 +17554,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_summary();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_summary();
   public native void set_allocated_summary(@StdString @Cast({"char*", "std::string*"}) BytePointer summary);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_summary();
-  public native void unsafe_arena_set_allocated_summary(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_summary();
+  public native @Deprecated void unsafe_arena_set_allocated_summary(
         @StdString @Cast({"char*", "std::string*"}) BytePointer summary);
 
   // string description = 6;
@@ -17080,8 +17572,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
   public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native void unsafe_arena_set_allocated_description(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description);
 
   // .tensorflow.OpDeprecation deprecation = 8;
@@ -17206,8 +17698,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_explanation();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_explanation();
   public native void set_allocated_explanation(@StdString @Cast({"char*", "std::string*"}) BytePointer explanation);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_explanation();
-  public native void unsafe_arena_set_allocated_explanation(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_explanation();
+  public native @Deprecated void unsafe_arena_set_allocated_explanation(
         @StdString @Cast({"char*", "std::string*"}) BytePointer explanation);
 
   // int32 version = 1;
@@ -17431,6 +17923,7 @@ limitations under the License.
 
 
 
+
 // string description = 4;
 
 
@@ -17457,6 +17950,7 @@ limitations under the License.
 
 
 // .tensorflow.AttrValue allowed_values = 7;
+
 
 
 
@@ -17511,6 +18005,7 @@ limitations under the License.
 
 
 // .tensorflow.OpDeprecation deprecation = 8;
+
 
 
 
@@ -17624,7 +18119,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
 
 
 // Parsed from tensorflow/core/framework/function.pb.h
@@ -17632,19 +18127,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/function.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ffunction_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2ffunction_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ffunction_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ffunction_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -17655,6 +18150,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -17667,17 +18163,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/node_def.pb.h"
 // #include "tensorflow/core/framework/op_def.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDefLibraryImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDefLibrary();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDef_AttrEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDef_AttrEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDef_RetEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDef_RetEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsFunctionDef();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsGradientDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto") public static native void InitDefaultsGradientDef();
   // namespace protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto
 @Namespace("tensorflow") @Opaque public static class FunctionDef_AttrEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -17976,8 +18463,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_function_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_function_name();
   public native void set_allocated_function_name(@StdString @Cast({"char*", "std::string*"}) BytePointer function_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_function_name();
-  public native void unsafe_arena_set_allocated_function_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_function_name();
+  public native @Deprecated void unsafe_arena_set_allocated_function_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer function_name);
 
   // string gradient_func = 2;
@@ -17994,8 +18481,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_gradient_func();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_gradient_func();
   public native void set_allocated_gradient_func(@StdString @Cast({"char*", "std::string*"}) BytePointer gradient_func);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_gradient_func();
-  public native void unsafe_arena_set_allocated_gradient_func(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_gradient_func();
+  public native @Deprecated void unsafe_arena_set_allocated_gradient_func(
         @StdString @Cast({"char*", "std::string*"}) BytePointer gradient_func);
 }
 // ===================================================================
@@ -18036,6 +18523,7 @@ limitations under the License.
 // FunctionDef
 
 // .tensorflow.OpDef signature = 1;
+
 
 
 
@@ -18114,7 +18602,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ffunction_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ffunction_2eproto
 
 
 // Parsed from tensorflow/core/framework/graph.pb.h
@@ -18122,19 +18610,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/graph.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fgraph_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fgraph_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fgraph_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fgraph_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -18145,6 +18633,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -18154,9 +18643,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/function.pb.h"
 // #include "tensorflow/core/framework/versions.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto") public static native void InitDefaultsGraphDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto") public static native void InitDefaultsGraphDef();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto
   // namespace tensorflow
 
@@ -18299,12 +18787,14 @@ limitations under the License.
 
 
 
+
 // int32 version = 3 [deprecated = true];
 
 
 
 
 // .tensorflow.FunctionDefLibrary library = 2;
+
 
 
 
@@ -18322,7 +18812,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fgraph_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fgraph_2eproto
 
 
 // Parsed from tensorflow/core/framework/session_state.h
@@ -18842,6 +19332,521 @@ limitations under the License.
 // #endif  // TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
 
 
+// Parsed from tensorflow/core/framework/kernel_def.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/framework/kernel_def.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+
+// #include <string>
+
+// #include <google/protobuf/stubs/common.h>
+
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please update
+// #error your headers.
+// #endif
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/framework/attr_value.pb.h"
+// @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+// Internal implementation detail -- do not use these members.
+  // namespace protobuf_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+  // namespace tensorflow
+
+
+
+  // namespace protobuf
+  // namespace google
+
+// ===================================================================
+
+@Namespace("tensorflow") @NoOffset public static class KernelDef_AttrConstraint extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelDef_AttrConstraint(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KernelDef_AttrConstraint(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KernelDef_AttrConstraint position(long position) {
+        return (KernelDef_AttrConstraint)super.position(position);
+    }
+
+  public KernelDef_AttrConstraint() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public KernelDef_AttrConstraint(@Const @ByRef KernelDef_AttrConstraint from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef KernelDef_AttrConstraint from);
+
+  public native @ByRef @Name("operator =") KernelDef_AttrConstraint put(@Const @ByRef KernelDef_AttrConstraint from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef KernelDef_AttrConstraint default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const KernelDef_AttrConstraint internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(KernelDef_AttrConstraint other);
+  public native void Swap(KernelDef_AttrConstraint other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native KernelDef_AttrConstraint New();
+
+  public native KernelDef_AttrConstraint New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef KernelDef_AttrConstraint from);
+  public native void MergeFrom(@Const @ByRef KernelDef_AttrConstraint from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  public native void clear_name();
+  @MemberGetter public static native int kNameFieldNumber();
+  public static final int kNameFieldNumber = kNameFieldNumber();
+  public native @StdString BytePointer name();
+  public native void set_name(@StdString BytePointer value);
+  public native void set_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
+
+  // .tensorflow.AttrValue allowed_values = 2;
+  public native @Cast("bool") boolean has_allowed_values();
+  public native void clear_allowed_values();
+  @MemberGetter public static native int kAllowedValuesFieldNumber();
+  public static final int kAllowedValuesFieldNumber = kAllowedValuesFieldNumber();
+  public native @Const @ByRef AttrValue allowed_values();
+  public native AttrValue release_allowed_values();
+  public native AttrValue mutable_allowed_values();
+  public native void set_allocated_allowed_values(AttrValue allowed_values);
+  public native void unsafe_arena_set_allocated_allowed_values(
+        AttrValue allowed_values);
+  public native AttrValue unsafe_arena_release_allowed_values();
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class KernelDef extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelDef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KernelDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KernelDef position(long position) {
+        return (KernelDef)super.position(position);
+    }
+
+  public KernelDef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public KernelDef(@Const @ByRef KernelDef from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef KernelDef from);
+
+  public native @ByRef @Name("operator =") KernelDef put(@Const @ByRef KernelDef from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef KernelDef default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const KernelDef internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(KernelDef other);
+  public native void Swap(KernelDef other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native KernelDef New();
+
+  public native KernelDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef KernelDef from);
+  public native void MergeFrom(@Const @ByRef KernelDef from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.KernelDef.AttrConstraint constraint = 3;
+  public native int constraint_size();
+  public native void clear_constraint();
+  @MemberGetter public static native int kConstraintFieldNumber();
+  public static final int kConstraintFieldNumber = kConstraintFieldNumber();
+  public native KernelDef_AttrConstraint mutable_constraint(int index);
+  public native @Const @ByRef KernelDef_AttrConstraint constraint(int index);
+  public native KernelDef_AttrConstraint add_constraint();
+
+  // repeated string host_memory_arg = 4;
+  public native int host_memory_arg_size();
+  public native void clear_host_memory_arg();
+  @MemberGetter public static native int kHostMemoryArgFieldNumber();
+  public static final int kHostMemoryArgFieldNumber = kHostMemoryArgFieldNumber();
+  public native @StdString BytePointer host_memory_arg(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_host_memory_arg(int index);
+  public native void set_host_memory_arg(int index, @StdString BytePointer value);
+  public native void set_host_memory_arg(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_host_memory_arg(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_host_memory_arg(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_host_memory_arg();
+  public native void add_host_memory_arg(@StdString BytePointer value);
+  public native void add_host_memory_arg(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_host_memory_arg(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_host_memory_arg(String value, @Cast("size_t") long size);
+
+  // string op = 1;
+  public native void clear_op();
+  @MemberGetter public static native int kOpFieldNumber();
+  public static final int kOpFieldNumber = kOpFieldNumber();
+  public native @StdString BytePointer op();
+  public native void set_op(@StdString BytePointer value);
+  public native void set_op(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_op(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_op(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_op();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_op();
+  public native void set_allocated_op(@StdString @Cast({"char*", "std::string*"}) BytePointer op);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_op();
+  public native @Deprecated void unsafe_arena_set_allocated_op(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer op);
+
+  // string device_type = 2;
+  public native void clear_device_type();
+  @MemberGetter public static native int kDeviceTypeFieldNumber();
+  public static final int kDeviceTypeFieldNumber = kDeviceTypeFieldNumber();
+  public native @StdString BytePointer device_type();
+  public native void set_device_type(@StdString BytePointer value);
+  public native void set_device_type(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_device_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_device_type(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device_type();
+  public native void set_allocated_device_type(@StdString @Cast({"char*", "std::string*"}) BytePointer device_type);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device_type();
+  public native @Deprecated void unsafe_arena_set_allocated_device_type(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer device_type);
+
+  // string label = 5;
+  public native void clear_label();
+  @MemberGetter public static native int kLabelFieldNumber();
+  public static final int kLabelFieldNumber = kLabelFieldNumber();
+  public native @StdString BytePointer label();
+  public native void set_label(@StdString BytePointer value);
+  public native void set_label(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_label(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_label(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_label();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_label();
+  public native void set_allocated_label(@StdString @Cast({"char*", "std::string*"}) BytePointer label);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_label();
+  public native @Deprecated void unsafe_arena_set_allocated_label(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer label);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class KernelList extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KernelList(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KernelList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KernelList position(long position) {
+        return (KernelList)super.position(position);
+    }
+
+  public KernelList() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public KernelList(@Const @ByRef KernelList from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef KernelList from);
+
+  public native @ByRef @Name("operator =") KernelList put(@Const @ByRef KernelList from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef KernelList default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const KernelList internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(KernelList other);
+  public native void Swap(KernelList other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native KernelList New();
+
+  public native KernelList New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef KernelList from);
+  public native void MergeFrom(@Const @ByRef KernelList from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.KernelDef kernel = 1;
+  public native int kernel_size();
+  public native void clear_kernel();
+  @MemberGetter public static native int kKernelFieldNumber();
+  public static final int kKernelFieldNumber = kKernelFieldNumber();
+  public native KernelDef mutable_kernel(int index);
+  public native @Const @ByRef KernelDef kernel(int index);
+  public native KernelDef add_kernel();
+}
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// KernelDef_AttrConstraint
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.AttrValue allowed_values = 2;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// KernelDef
+
+// string op = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string device_type = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated .tensorflow.KernelDef.AttrConstraint constraint = 3;
+
+
+
+
+
+
+
+
+// repeated string host_memory_arg = 4;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// string label = 5;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// KernelList
+
+// repeated .tensorflow.KernelDef kernel = 1;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+
+
 // Parsed from tensorflow/core/framework/kernel_def_builder.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -18868,12 +19873,6 @@ limitations under the License.
 // #include "tensorflow/core/platform/types.h"
 
 // Forward declare proto so that kernels don't need to depend on it
-@Namespace("tensorflow") @Opaque public static class KernelDef extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public KernelDef() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public KernelDef(Pointer p) { super(p); }
-}
 
 // Builder class passed to the REGISTER_KERNEL_BUILDER() macro.
 @Namespace("tensorflow") @NoOffset public static class KernelDefBuilder extends Pointer {
@@ -19061,8 +20060,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_OP_KERNEL_H_
-// #define TENSORFLOW_FRAMEWORK_OP_KERNEL_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_OP_KERNEL_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_OP_KERNEL_H_
 
 // #include <functional>
 
@@ -19072,6 +20071,7 @@ limitations under the License.
 // #include "tensorflow/core/framework/cancellation.h"
 // #include "tensorflow/core/framework/control_flow.h"
 // #include "tensorflow/core/framework/device_base.h"
+// #include "tensorflow/core/framework/kernel_def.pb.h"
 // #include "tensorflow/core/framework/kernel_def_builder.h"
 // #include "tensorflow/core/framework/node_def_util.h"
 // #include "tensorflow/core/framework/op.h"  // TODO(b/62899350): Remove
@@ -20369,6 +21369,9 @@ limitations under the License.
 // missing kernel errors.
 @Namespace("tensorflow") public static native void LogAllRegisteredKernels();
 
+// Gets a list of all registered kernels.
+@Namespace("tensorflow") public static native @ByVal KernelList GetAllRegisteredKernels();
+
 @Namespace("tensorflow::kernel_factory") public static class OpKernelRegistrar extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -20504,7 +21507,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_OP_KERNEL_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_OP_KERNEL_H_
 
 
 // Parsed from tensorflow/core/framework/op_segment.h
@@ -20906,6 +21909,7 @@ limitations under the License.
 
   public native @StdString BytePointer DebugString(@ByVal ShapeHandle s);
   public native @StdString BytePointer DebugString(@ByVal DimensionHandle d);
+  public native @StdString BytePointer DebugString(@Const @ByRef ShapeAndType shape_and_type);
 
   // Describes the whole context, for debugging purposes.
   public native @StdString BytePointer DebugString();
@@ -21203,19 +22207,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/device_attributes.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -21226,21 +22230,15 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsInterconnectLinkImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsInterconnectLink();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsLocalLinksImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsLocalLinks();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceLocalityImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceLocality();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceAttributesImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto") public static native void InitDefaultsDeviceAttributes();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
   // namespace tensorflow
 
@@ -21331,8 +22329,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
   public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type();
-  public native void unsafe_arena_set_allocated_type(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_type();
+  public native @Deprecated void unsafe_arena_set_allocated_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer type);
 
   // int32 device_id = 1;
@@ -21600,8 +22598,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string device_type = 2;
@@ -21618,8 +22616,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device_type();
   public native void set_allocated_device_type(@StdString @Cast({"char*", "std::string*"}) BytePointer device_type);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device_type();
-  public native void unsafe_arena_set_allocated_device_type(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device_type();
+  public native @Deprecated void unsafe_arena_set_allocated_device_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device_type);
 
   // string physical_device_desc = 7;
@@ -21636,8 +22634,8 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_physical_device_desc();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_physical_device_desc();
   public native void set_allocated_physical_device_desc(@StdString @Cast({"char*", "std::string*"}) BytePointer physical_device_desc);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_physical_device_desc();
-  public native void unsafe_arena_set_allocated_physical_device_desc(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_physical_device_desc();
+  public native @Deprecated void unsafe_arena_set_allocated_physical_device_desc(
         @StdString @Cast({"char*", "std::string*"}) BytePointer physical_device_desc);
 
   // .tensorflow.DeviceLocality locality = 5;
@@ -21739,6 +22737,7 @@ limitations under the License.
 
 
 
+
 // -------------------------------------------------------------------
 
 // DeviceAttributes
@@ -21787,6 +22786,7 @@ limitations under the License.
 
 
 
+
 // fixed64 incarnation = 6;
 
 
@@ -21823,7 +22823,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
 
 
 // Parsed from tensorflow/core/public/session.h
@@ -22126,19 +23126,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/tensor_slice.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -22149,17 +23149,15 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto") public static native void InitDefaultsTensorSliceProto_ExtentImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto") public static native void InitDefaultsTensorSliceProto_Extent();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto") public static native void InitDefaultsTensorSliceProtoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto") public static native void InitDefaultsTensorSliceProto();
   // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
   // namespace tensorflow
 
@@ -22251,6 +23249,7 @@ limitations under the License.
   public native @Cast("google::protobuf::int64") long length();
   public native void set_length(@Cast("google::protobuf::int64") long value);
 
+  public native void clear_has_length();
   public native @Cast("tensorflow::TensorSliceProto_Extent::HasLengthCase") int has_length_case();
 }
 // -------------------------------------------------------------------
@@ -22380,7 +23379,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
 
 
 // Parsed from tensorflow/core/framework/tensor_slice.h
@@ -23476,7 +24475,7 @@ public static final int
 // --------------------------------------------------------------------------
 // TF_Status holds error information.  It either has an OK code, or
 // else an error code with an associated error message.
-@Opaque public static class TF_Status extends Pointer {
+@Opaque public static class TF_Status extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Status {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Status() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -23513,7 +24512,7 @@ public static native @Cast("const char*") BytePointer TF_Message(@Const TF_Statu
 // By default, TF_Buffer itself does not do any memory management of the
 // pointed-to block.  If need be, users of this struct should specify how to
 // deallocate the block by setting the `data_deallocator` function pointer.
-public static class TF_Buffer extends Pointer {
+public static class TF_Buffer extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Buffer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TF_Buffer() { super((Pointer)null); allocate(); }
@@ -23569,7 +24568,7 @@ public static native @ByVal TF_Buffer TF_GetBuffer(TF_Buffer buffer);
 //   is encoded at data[start_offset[i]]]. TF_StringEncode and TF_StringDecode
 //   facilitate this encoding.
 
-@Opaque public static class TF_Tensor extends Pointer {
+@Opaque public static class TF_Tensor extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Tensor {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Tensor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -23712,7 +24711,7 @@ public static native @Cast("size_t") long TF_StringEncodedSize(@Cast("size_t") l
 
 // --------------------------------------------------------------------------
 // TF_SessionOptions holds options that can be passed during session creation.
-@Opaque public static class TF_SessionOptions extends Pointer {
+@Opaque public static class TF_SessionOptions extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_SessionOptions {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_SessionOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -23752,7 +24751,7 @@ public static native void TF_DeleteSessionOptions(TF_SessionOptions arg0);
 
 // Represents a computation graph.  Graphs may be shared between sessions.
 // Graphs are thread-safe when used as directed below.
-@Opaque public static class TF_Graph extends Pointer {
+@Opaque public static class TF_Graph extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Graph {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Graph() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -24855,7 +25854,7 @@ public static native void TF_GraphVersions(TF_Graph graph,
 
 // TF_ImportGraphDefOptions holds options that can be passed to
 // TF_GraphImportGraphDef.
-@Opaque public static class TF_ImportGraphDefOptions extends Pointer {
+@Opaque public static class TF_ImportGraphDefOptions extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_ImportGraphDefOptions {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_ImportGraphDefOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -24867,7 +25866,8 @@ public static native void TF_DeleteImportGraphDefOptions(
     TF_ImportGraphDefOptions opts);
 
 // Set the prefix to be prepended to the names of nodes in `graph_def` that will
-// be imported into `graph`.
+// be imported into `graph`. `prefix` is copied and has no lifetime
+// requirements.
 public static native void TF_ImportGraphDefOptionsSetPrefix(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer prefix);
 public static native void TF_ImportGraphDefOptionsSetPrefix(
@@ -24890,6 +25890,7 @@ public static native void TF_ImportGraphDefOptionsSetUniquifyPrefix(
 // Set any imported nodes with input `src_name:src_index` to have that input
 // replaced with `dst`. `src_name` refers to a node in the graph to be imported,
 // `dst` references a node already existing in the graph being imported into.
+// `src_name` is copied and has no lifetime requirements.
 public static native void TF_ImportGraphDefOptionsAddInputMapping(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer src_name, int src_index,
     @ByVal TF_Output dst);
@@ -24900,7 +25901,7 @@ public static native void TF_ImportGraphDefOptionsAddInputMapping(
 // Set any imported nodes with control input `src_name` to have that input
 // replaced with `dst`. `src_name` refers to a node in the graph to be imported,
 // `dst` references an operation already existing in the graph being imported
-// into.
+// into. `src_name` is copied and has no lifetime requirements.
 public static native void TF_ImportGraphDefOptionsRemapControlDependency(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer src_name, TF_Operation dst);
 public static native void TF_ImportGraphDefOptionsRemapControlDependency(
@@ -24914,6 +25915,7 @@ public static native void TF_ImportGraphDefOptionsAddControlDependency(
 // Add an output in `graph_def` to be returned via the `return_outputs` output
 // parameter of TF_GraphImportGraphDef(). If the output is remapped via an input
 // mapping, the corresponding existing tensor in `graph` will be returned.
+// `oper_name` is copied and has no lifetime requirements.
 public static native void TF_ImportGraphDefOptionsAddReturnOutput(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer oper_name, int index);
 public static native void TF_ImportGraphDefOptionsAddReturnOutput(
@@ -24925,7 +25927,8 @@ public static native int TF_ImportGraphDefOptionsNumReturnOutputs(
     @Const TF_ImportGraphDefOptions opts);
 
 // Add an operation in `graph_def` to be returned via the `return_opers` output
-// parameter of TF_GraphImportGraphDef().
+// parameter of TF_GraphImportGraphDef(). `oper_name` is copied and has no
+// lifetime requirements.
 public static native void TF_ImportGraphDefOptionsAddReturnOperation(
     TF_ImportGraphDefOptions opts, @Cast("const char*") BytePointer oper_name);
 public static native void TF_ImportGraphDefOptionsAddReturnOperation(
@@ -25355,7 +26358,7 @@ public static native @Cast("unsigned char") byte TF_TryEvaluateConstant(TF_Graph
 // --------------------------------------------------------------------------
 // API for driving Graph execution.
 
-@Opaque public static class TF_Session extends Pointer {
+@Opaque public static class TF_Session extends org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Session {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TF_Session() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -27083,6 +28086,12 @@ limitations under the License.
     // state (in stateful kernels); and two functions with different
     // values for `state_handle` will have independent state.
     public native @StdString BytePointer state_handle(); public native InstantiateOptions state_handle(BytePointer state_handle);
+
+    // This interface is EXPERIMENTAL and subject to change.
+    //
+    // Instatiates the function using an executor of the given type. If empty,
+    // the default TensorFlow executor will be used.
+    public native @StdString BytePointer executor_type(); public native InstantiateOptions executor_type(BytePointer executor_type);
   }
   public native @ByVal Status Instantiate(@StdString BytePointer function_name, @ByVal AttrSlice attrs,
                                @Const @ByRef InstantiateOptions options,
@@ -27486,11 +28495,17 @@ limitations under the License.
   public static native @Cast("bool") boolean ParseFullName(@StringPiece BytePointer fullname, ParsedName parsed);
   public static native @Cast("bool") boolean ParseFullName(@StringPiece String fullname, ParsedName parsed);
 
-  // Canonicalizes "fullname". Accepts both legacy, newer and local versions of
-  // the device spec. Returns the newer version of the device spec. If we were
-  // unable to interpret / parse "fullname" returns "".
-  public static native @StdString BytePointer CanonicalizeDeviceName(@StringPiece BytePointer fullname);
-  public static native @StdString String CanonicalizeDeviceName(@StringPiece String fullname);
+  // Canonicalizes "fullname" into "*canonical_name". Uses a fully specified
+  // basename to fill in fields that are missing. Accepts both legacy, newer
+  // and local versions of the device spec. Returns the newer version of the
+  // device spec. If we were unable to interpret / parse "fullname" returns
+  // an error and *canonical_name is set to "".
+  public static native @ByVal Status CanonicalizeDeviceName(@StringPiece BytePointer fullname,
+                                         @StringPiece BytePointer basename,
+                                         @StdString @Cast({"char*", "std::string*"}) BytePointer canonical_name);
+  public static native @ByVal Status CanonicalizeDeviceName(@StringPiece String fullname,
+                                         @StringPiece String basename,
+                                         @StdString @Cast({"char*", "std::string*"}) BytePointer canonical_name);
 
   // Returns true if "name" specifies any non-trivial constraint on the device.
   public static native @Cast("bool") boolean HasSomeDetails(@Const @ByRef ParsedName name);
@@ -27591,7 +28606,7 @@ limitations under the License.
 
 // #include <memory>
 // #include <string>
-// #include <unordered_map>
+// #include <vector>
 
 // #include "tensorflow/core/framework/tensor.h"
 // #include "tensorflow/core/lib/core/errors.h"
@@ -27772,6 +28787,8 @@ limitations under the License.
                                           @Cast("tensorflow::int64") long step_id);
 
   public native ScopedAllocatorMgr GetScopedAllocatorMgr();
+
+  public native @Cast("const bool") boolean has_eigen_cpu_device();
 
   public native @Const ThreadPoolDevice eigen_cpu_device();
 
@@ -28445,6 +29462,29 @@ limitations under the License.
   private native void allocate(@Const Node n, int i);
   public InputTensor() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  // Returns true if this InputTensor is identical to 'other'. Nodes are
+  // compared using pointer equality.
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef InputTensor other);
+
+  // A hash function for InputTensors. Nodes are hashed based on their pointer
+  // value.
+  public static class Hash extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Hash() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Hash(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Hash(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Hash position(long position) {
+          return (Hash)super.position(position);
+      }
+  
+    public native @Cast("tensorflow::uint64") @Name("operator ()") long apply(@Const @ByRef InputTensor s);
+  }
 }
 
 // Represents an output of a node, i.e., the `index`-th output of `node`. Note
@@ -28468,6 +29508,29 @@ limitations under the License.
   private native void allocate(@Const Node n, int i);
   public OutputTensor() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  // Returns true if this OutputTensor is identical to 'other'. Nodes are
+  // compared using pointer equality.
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef OutputTensor other);
+
+  // A hash function for OutputTensors. Nodes are hashed based on their pointer
+  // value.
+  public static class Hash extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Hash() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Hash(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Hash(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Hash position(long position) {
+          return (Hash)super.position(position);
+      }
+  
+    public native @Cast("tensorflow::uint64") @Name("operator ()") long apply(@Const @ByRef OutputTensor s);
+  }
 }
 
 @Namespace("tensorflow") @NoOffset public static class Edge extends Pointer {
@@ -28876,13 +29939,10 @@ limitations under the License.
 // Note: does not own backing storage for name.
 @Namespace("tensorflow") public static class TensorId extends StringPieceIntPair {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public TensorId() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TensorId(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorId(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorId(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public TensorId position(long position) {
         return (TensorId)super.position(position);
@@ -28890,6 +29950,13 @@ limitations under the License.
 
 
   // Inherit the set of constructors.
+
+  // NOTE(skyewm): this is required on some platforms. I'm not sure why the
+  // using statement above isn't always sufficient.
+  public TensorId() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public TensorId(@Const @ByRef SafeTensorId id) { super((Pointer)null); allocate(id); }
+  private native void allocate(@Const @ByRef SafeTensorId id);
 
   public native @StdString BytePointer ToString();
 
@@ -28913,6 +29980,53 @@ limitations under the License.
 
 @Namespace("tensorflow") public static native @ByVal TensorId ParseTensorName(@StdString BytePointer name);
 @Namespace("tensorflow") public static native @ByVal TensorId ParseTensorName(@StdString String name);
+
+// Same as TensorId, except owns the backing storage for the op name. This makes
+// the memory management simpler at the expense of a copy.
+@Namespace("tensorflow") public static class SafeTensorId extends StringIntPair {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SafeTensorId(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SafeTensorId(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SafeTensorId position(long position) {
+        return (SafeTensorId)super.position(position);
+    }
+
+
+  // Inherit the set of constructors.
+
+  // NOTE(skyewm): this is required on some platforms. I'm not sure why the
+  // using statement above isn't always sufficient.
+  public SafeTensorId() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public SafeTensorId(@StringPiece BytePointer str, int idx) { super((Pointer)null); allocate(str, idx); }
+  private native void allocate(@StringPiece BytePointer str, int idx);
+  public SafeTensorId(@StringPiece String str, int idx) { super((Pointer)null); allocate(str, idx); }
+  private native void allocate(@StringPiece String str, int idx);
+  public SafeTensorId(@Const @ByRef TensorId id) { super((Pointer)null); allocate(id); }
+  private native void allocate(@Const @ByRef TensorId id);
+
+  public native @StdString BytePointer ToString();
+
+  public static class Hasher extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Hasher() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Hasher(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Hasher(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Hasher position(long position) {
+          return (Hasher)super.position(position);
+      }
+  
+    public native @Cast("std::size_t") @Name("operator ()") long apply(@Const @ByRef TensorId x);
+  }
+}
 
   // namespace tensorflow
 
@@ -29522,6 +30636,13 @@ limitations under the License.
 @Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef NodeDef node_def);
 @Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef Node node);
 
+// Appends the given prefix and suffix to the original node name in order to
+// make the name unique. If it's an "Enter" node, use the same way to reset
+// attribute "frame_name".
+@Namespace("tensorflow") public static native @ByVal Status AddPrefixAndSuffixToNode(@StringPiece BytePointer prefix, @StringPiece BytePointer suffix,
+                                NodeDef node_def);
+@Namespace("tensorflow") public static native @ByVal Status AddPrefixAndSuffixToNode(@StringPiece String prefix, @StringPiece String suffix,
+                                NodeDef node_def);
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
@@ -30141,14 +31262,14 @@ limitations under the License.
   // corresponding to `input_map` keys will be remapped to the nodes in `g`
   // corresponding to the values.
   //
-  // Keys should not include `prefix`, i.e., a key TensorId's name should be the
-  // name as it originally appears in `gdef`.
+  // Keys should not include `prefix`, i.e., a key ID's name should be the name
+  // as it originally appears in `gdef`.
   //
   // If this is non-empty, ImportGraphDef must be called with the shape refiner
   // used to create the existing nodes referenced in `input_map`.
   // TODO(skyewm): can we remove this requirement? How do we access the original
   // shape refiner?
-  public native @ByRef TensorIdTensorIdMap input_map(); public native ImportGraphDefOptions input_map(TensorIdTensorIdMap input_map);
+  public native @ByRef SafeTensorIdTensorIdMap input_map(); public native ImportGraphDefOptions input_map(SafeTensorIdTensorIdMap input_map);
 
   // If true, nodes that will have all output edges removed because of
   // overrides in `input_map` will not be imported.
@@ -30167,12 +31288,12 @@ limitations under the License.
   // caller must pass a results object to `ImportGraphDef()`. The
   // `return_tensors` field will be populated with the imported nodes in `g`.
   //
-  // Entries should not include `prefix`, i.e., each TensorId's name should be
-  // the name as it originally appears in `gdef`.
+  // Entries should not include `prefix`, i.e., each ID's name should be the
+  // name as it originally appears in `gdef`.
   //
   // If this contains a tensor that's also being remapped via `input_map`, the
   // corresponding existing tensor in `g` will be returned.
-  public native @StdVector TensorId return_tensors(); public native ImportGraphDefOptions return_tensors(TensorId return_tensors);
+  public native @StdVector SafeTensorId return_tensors(); public native ImportGraphDefOptions return_tensors(SafeTensorId return_tensors);
 
   // The names of nodes in `gdef` that will be returned via the
   // ImportGraphDefResults output parameter of `ImportGraphDef()`. If this list
@@ -30227,7 +31348,7 @@ limitations under the License.
   // Keys in ImportGraphDefOptions::input_map that don't appear in `gdef` and
   // weren't used as an input to any node in `gdef`. These keys are likely due
   // to typos, and callers may wish to treat their existence as an error.
-  public native @StdVector TensorId missing_unused_input_map_keys(); public native ImportGraphDefResults missing_unused_input_map_keys(TensorId missing_unused_input_map_keys);
+  public native @StdVector SafeTensorId missing_unused_input_map_keys(); public native ImportGraphDefResults missing_unused_input_map_keys(SafeTensorId missing_unused_input_map_keys);
 }
 
 // Adds the graph in GraphDef `gdef` into an existing Graph `*g`.
@@ -30813,19 +31934,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/framework/api_def.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -30836,6 +31957,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -30844,17 +31966,8 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef_EndpointImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef_Endpoint();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef_ArgImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef_Arg();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef_AttrImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef_Attr();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDef();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDefsImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto") public static native void InitDefaultsApiDefs();
   // namespace protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
   // namespace tensorflow
 
@@ -30973,8 +32086,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string deprecation_message = 2;
@@ -30991,8 +32104,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_deprecation_message();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_deprecation_message();
   public native void set_allocated_deprecation_message(@StdString @Cast({"char*", "std::string*"}) BytePointer deprecation_message);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_deprecation_message();
-  public native void unsafe_arena_set_allocated_deprecation_message(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_deprecation_message();
+  public native @Deprecated void unsafe_arena_set_allocated_deprecation_message(
         @StdString @Cast({"char*", "std::string*"}) BytePointer deprecation_message);
 }
 // -------------------------------------------------------------------
@@ -31076,8 +32189,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string rename_to = 2;
@@ -31094,8 +32207,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_rename_to();
   public native void set_allocated_rename_to(@StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
-  public native void unsafe_arena_set_allocated_rename_to(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
+  public native @Deprecated void unsafe_arena_set_allocated_rename_to(
         @StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
 
   // string description = 3;
@@ -31112,8 +32225,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
   public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native void unsafe_arena_set_allocated_description(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description);
 }
 // -------------------------------------------------------------------
@@ -31197,8 +32310,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // string rename_to = 2;
@@ -31215,8 +32328,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_rename_to();
   public native void set_allocated_rename_to(@StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
-  public native void unsafe_arena_set_allocated_rename_to(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
+  public native @Deprecated void unsafe_arena_set_allocated_rename_to(
         @StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
 
   // string description = 4;
@@ -31233,8 +32346,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
   public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native void unsafe_arena_set_allocated_description(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description);
 
   // .tensorflow.AttrValue default_value = 3;
@@ -31417,8 +32530,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_graph_op_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_graph_op_name();
   public native void set_allocated_graph_op_name(@StdString @Cast({"char*", "std::string*"}) BytePointer graph_op_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_graph_op_name();
-  public native void unsafe_arena_set_allocated_graph_op_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_graph_op_name();
+  public native @Deprecated void unsafe_arena_set_allocated_graph_op_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer graph_op_name);
 
   // string summary = 7;
@@ -31435,8 +32548,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_summary();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_summary();
   public native void set_allocated_summary(@StdString @Cast({"char*", "std::string*"}) BytePointer summary);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_summary();
-  public native void unsafe_arena_set_allocated_summary(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_summary();
+  public native @Deprecated void unsafe_arena_set_allocated_summary(
         @StdString @Cast({"char*", "std::string*"}) BytePointer summary);
 
   // string description = 8;
@@ -31453,8 +32566,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
   public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native void unsafe_arena_set_allocated_description(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description);
 
   // string description_prefix = 9;
@@ -31471,8 +32584,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_prefix();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description_prefix();
   public native void set_allocated_description_prefix(@StdString @Cast({"char*", "std::string*"}) BytePointer description_prefix);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_prefix();
-  public native void unsafe_arena_set_allocated_description_prefix(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_prefix();
+  public native @Deprecated void unsafe_arena_set_allocated_description_prefix(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description_prefix);
 
   // string description_suffix = 10;
@@ -31489,8 +32602,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_suffix();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description_suffix();
   public native void set_allocated_description_suffix(@StdString @Cast({"char*", "std::string*"}) BytePointer description_suffix);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_suffix();
-  public native void unsafe_arena_set_allocated_description_suffix(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_suffix();
+  public native @Deprecated void unsafe_arena_set_allocated_description_suffix(
         @StdString @Cast({"char*", "std::string*"}) BytePointer description_suffix);
 
   // .tensorflow.ApiDef.Visibility visibility = 2;
@@ -31708,6 +32821,7 @@ public static final int
 
 
 
+
 // string description = 4;
 
 
@@ -31899,7 +33013,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 
 
 // Parsed from tensorflow/core/framework/op_gen_lib.h
@@ -32104,19 +33218,19 @@ limitations under the License.
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/protobuf/saver.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -32127,6 +33241,7 @@ limitations under the License.
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -32134,9 +33249,8 @@ limitations under the License.
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto") public static native void InitDefaultsSaverDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto") public static native void InitDefaultsSaverDef();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
   // namespace tensorflow
 
@@ -32277,8 +33391,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_filename_tensor_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_filename_tensor_name();
   public native void set_allocated_filename_tensor_name(@StdString @Cast({"char*", "std::string*"}) BytePointer filename_tensor_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_filename_tensor_name();
-  public native void unsafe_arena_set_allocated_filename_tensor_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_filename_tensor_name();
+  public native @Deprecated void unsafe_arena_set_allocated_filename_tensor_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer filename_tensor_name);
 
   // string save_tensor_name = 2;
@@ -32295,8 +33409,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_save_tensor_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_save_tensor_name();
   public native void set_allocated_save_tensor_name(@StdString @Cast({"char*", "std::string*"}) BytePointer save_tensor_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_save_tensor_name();
-  public native void unsafe_arena_set_allocated_save_tensor_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_save_tensor_name();
+  public native @Deprecated void unsafe_arena_set_allocated_save_tensor_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer save_tensor_name);
 
   // string restore_op_name = 3;
@@ -32313,8 +33427,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_restore_op_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_restore_op_name();
   public native void set_allocated_restore_op_name(@StdString @Cast({"char*", "std::string*"}) BytePointer restore_op_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_restore_op_name();
-  public native void unsafe_arena_set_allocated_restore_op_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_restore_op_name();
+  public native @Deprecated void unsafe_arena_set_allocated_restore_op_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer restore_op_name);
 
   // int32 max_to_keep = 4;
@@ -32435,7 +33549,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
 
 
 // Parsed from tensorflow/core/protobuf/meta_graph.pb.h
@@ -32443,19 +33557,19 @@ public static final int
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
 // source: tensorflow/core/protobuf/meta_graph.proto
 
-// #ifndef PROTOBUF_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto_INCLUDED
-// #define PROTOBUF_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto_INCLUDED
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 
 // #include <string>
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3005000
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3005000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -32466,6 +33580,7 @@ public static final int
 // #include <google/protobuf/arenastring.h>
 // #include <google/protobuf/generated_message_table_driven.h>
 // #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
 // #include <google/protobuf/metadata.h>
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
@@ -32481,39 +33596,8 @@ public static final int
 // #include "tensorflow/core/framework/types.pb.h"
 // #include "tensorflow/core/protobuf/saver.pb.h"
 // @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef_MetaInfoDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef_MetaInfoDef();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef_CollectionDefEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef_CollectionDefEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef_SignatureDefEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef_SignatureDefEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsMetaGraphDef();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_NodeListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_NodeList();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_BytesListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_BytesList();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_Int64ListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_Int64List();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_FloatListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_FloatList();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_AnyListImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef_AnyList();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsCollectionDef();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsTensorInfo_CooSparseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsTensorInfo_CooSparse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsTensorInfoImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsTensorInfo();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsSignatureDef_InputsEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsSignatureDef_InputsEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsSignatureDef_OutputsEntry_DoNotUseImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsSignatureDef_OutputsEntry_DoNotUse();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsSignatureDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsSignatureDef();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsAssetFileDefImpl();
-@Namespace("protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto") public static native void InitDefaultsAssetFileDef();
   // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 @Namespace("tensorflow") @Opaque public static class MetaGraphDef_CollectionDefEntry_DoNotUse extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -32661,8 +33745,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_meta_graph_version();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_meta_graph_version();
   public native void set_allocated_meta_graph_version(@StdString @Cast({"char*", "std::string*"}) BytePointer meta_graph_version);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_meta_graph_version();
-  public native void unsafe_arena_set_allocated_meta_graph_version(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_meta_graph_version();
+  public native @Deprecated void unsafe_arena_set_allocated_meta_graph_version(
         @StdString @Cast({"char*", "std::string*"}) BytePointer meta_graph_version);
 
   // string tensorflow_version = 5;
@@ -32679,8 +33763,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tensorflow_version();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_tensorflow_version();
   public native void set_allocated_tensorflow_version(@StdString @Cast({"char*", "std::string*"}) BytePointer tensorflow_version);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_tensorflow_version();
-  public native void unsafe_arena_set_allocated_tensorflow_version(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_tensorflow_version();
+  public native @Deprecated void unsafe_arena_set_allocated_tensorflow_version(
         @StdString @Cast({"char*", "std::string*"}) BytePointer tensorflow_version);
 
   // string tensorflow_git_version = 6;
@@ -32697,8 +33781,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tensorflow_git_version();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_tensorflow_git_version();
   public native void set_allocated_tensorflow_git_version(@StdString @Cast({"char*", "std::string*"}) BytePointer tensorflow_git_version);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_tensorflow_git_version();
-  public native void unsafe_arena_set_allocated_tensorflow_git_version(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_tensorflow_git_version();
+  public native @Deprecated void unsafe_arena_set_allocated_tensorflow_git_version(
         @StdString @Cast({"char*", "std::string*"}) BytePointer tensorflow_git_version);
 
   // .tensorflow.OpList stripped_op_list = 2;
@@ -33412,6 +34496,7 @@ public static final int
         CollectionDef_AnyList any_list);
   public native CollectionDef_AnyList unsafe_arena_release_any_list();
 
+  public native void clear_kind();
   public native @Cast("tensorflow::CollectionDef::KindCase") int kind_case();
 }
 // -------------------------------------------------------------------
@@ -33495,8 +34580,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_values_tensor_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_values_tensor_name();
   public native void set_allocated_values_tensor_name(@StdString @Cast({"char*", "std::string*"}) BytePointer values_tensor_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_values_tensor_name();
-  public native void unsafe_arena_set_allocated_values_tensor_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_values_tensor_name();
+  public native @Deprecated void unsafe_arena_set_allocated_values_tensor_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer values_tensor_name);
 
   // string indices_tensor_name = 2;
@@ -33513,8 +34598,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_indices_tensor_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_indices_tensor_name();
   public native void set_allocated_indices_tensor_name(@StdString @Cast({"char*", "std::string*"}) BytePointer indices_tensor_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_indices_tensor_name();
-  public native void unsafe_arena_set_allocated_indices_tensor_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_indices_tensor_name();
+  public native @Deprecated void unsafe_arena_set_allocated_indices_tensor_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer indices_tensor_name);
 
   // string dense_shape_tensor_name = 3;
@@ -33531,8 +34616,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_dense_shape_tensor_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_dense_shape_tensor_name();
   public native void set_allocated_dense_shape_tensor_name(@StdString @Cast({"char*", "std::string*"}) BytePointer dense_shape_tensor_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_dense_shape_tensor_name();
-  public native void unsafe_arena_set_allocated_dense_shape_tensor_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_dense_shape_tensor_name();
+  public native @Deprecated void unsafe_arena_set_allocated_dense_shape_tensor_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer dense_shape_tensor_name);
 }
 // -------------------------------------------------------------------
@@ -33640,8 +34725,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
   public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native void unsafe_arena_set_allocated_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // .tensorflow.TensorInfo.CooSparse coo_sparse = 4;
@@ -33657,6 +34742,7 @@ public static final int
         TensorInfo_CooSparse coo_sparse);
   public native TensorInfo_CooSparse unsafe_arena_release_coo_sparse();
 
+  public native void clear_encoding();
   public native @Cast("tensorflow::TensorInfo::EncodingCase") int encoding_case();
 }
 // -------------------------------------------------------------------
@@ -33761,8 +34847,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_method_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_method_name();
   public native void set_allocated_method_name(@StdString @Cast({"char*", "std::string*"}) BytePointer method_name);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_method_name();
-  public native void unsafe_arena_set_allocated_method_name(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_method_name();
+  public native @Deprecated void unsafe_arena_set_allocated_method_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer method_name);
 }
 // -------------------------------------------------------------------
@@ -33846,8 +34932,8 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_filename();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_filename();
   public native void set_allocated_filename(@StdString @Cast({"char*", "std::string*"}) BytePointer filename);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_filename();
-  public native void unsafe_arena_set_allocated_filename(
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_filename();
+  public native @Deprecated void unsafe_arena_set_allocated_filename(
         @StdString @Cast({"char*", "std::string*"}) BytePointer filename);
 
   // .tensorflow.TensorInfo tensor_info = 1;
@@ -33897,7 +34983,9 @@ public static final int
 
 
 
+
 // .google.protobuf.Any any_info = 3;
+
 
 
 
@@ -33978,6 +35066,7 @@ public static final int
 
 
 
+
 // .tensorflow.GraphDef graph_def = 2;
 
 
@@ -33986,7 +35075,9 @@ public static final int
 
 
 
+
 // .tensorflow.SaverDef saver_def = 3;
+
 
 
 
@@ -34117,7 +35208,9 @@ public static final int
 
 
 
+
 // .tensorflow.CollectionDef.BytesList bytes_list = 2;
+
 
 
 
@@ -34137,6 +35230,7 @@ public static final int
 
 
 
+
 // .tensorflow.CollectionDef.FloatList float_list = 4;
 
 
@@ -34147,7 +35241,9 @@ public static final int
 
 
 
+
 // .tensorflow.CollectionDef.AnyList any_list = 5;
+
 
 
 
@@ -34240,12 +35336,14 @@ public static final int
 
 
 
+
 // .tensorflow.DataType dtype = 2;
 
 
 
 
 // .tensorflow.TensorShapeProto tensor_shape = 3;
+
 
 
 
@@ -34296,6 +35394,7 @@ public static final int
 // AssetFileDef
 
 // .tensorflow.TensorInfo tensor_info = 1;
+
 
 
 
@@ -34359,7 +35458,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto_INCLUDED
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 
 
 // Parsed from tensorflow/cc/saved_model/loader.h
@@ -36254,7 +37353,7 @@ limitations under the License.
  *  (K-1)-dimensional tensor of indices into {@code params}, where each element defines a
  *  slice of {@code params}:
  * 
- *      output[i_0, ..., i_{K-2}] = params[indices[i0, ..., i_{K-2}]]
+ *      output[\\(i_0, ..., i_{K-2}\\)] = params[indices[\\(i_0, ..., i_{K-2}\\)]]
  * 
  *  Whereas in \{tf.gather} {@code indices} defines slices into the first
  *  dimension of {@code params}, in {@code tf.gather_nd}, {@code indices} defines slices into the
@@ -37543,6 +38642,7 @@ limitations under the License.
 /** Quantizes then dequantizes a tensor.
  * 
  *  This op simulates the precision loss from the quantized forward pass by:
+ * 
  *  1. Quantizing the tensor to fixed point numbers, which should match the target
  *     quantization method when it is used in inference.
  *  2. Dequantizing it back to floating point numbers for the following ops, most
@@ -37584,9 +38684,9 @@ limitations under the License.
  *      10.0]: it would use a scale_factor of 127 / 10.0 = 12.7 In this case, it
  *      would update input_min to be 128.0 / 12.7 = -10.07874
  *  *   if the output is unsigned, input_min is forced to be 0, and only the
- *      specifide input_max is used.
+ *      specified input_max is used.
  * 
- *  After determining the scale_factor and updating the input tange, it applies the
+ *  After determining the scale_factor and updating the input range, it applies the
  *  following to each value in the 'input' tensor.
  * 
  *  output = round(clamp(value, input_min, input_max) * scale_factor) / scale_factor.
@@ -38553,7 +39653,7 @@ limitations under the License.
  *  {@code input} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
  * 
  *  {@code indices} must be integer tensor, containing indices into {@code input}.
- *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ *  It must be shape \\([d_0, ..., d_{Q-2}, K]\\) where {@code 0 < K <= P}.
  * 
  *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
  *  indices into elements (if {@code K = P}) or {@code (P-K)}-dimensional slices
@@ -38561,9 +39661,7 @@ limitations under the License.
  * 
  *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
  * 
- *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, input.shape[K], ..., input.shape[P-1]].
- *  }</pre>
+ *  $$[d_0, ..., d_{Q-2}, input.shape[K], ..., input.shape[P-1]].$$
  * 
  *  For example, say we want to add 4 scattered elements to a rank-1 tensor to 8
  *  elements. In Python, that addition would look like this:
@@ -44855,6 +45953,44 @@ limitations under the License.
   public native @ByRef Output flow_out(); public native TensorArrayGrad flow_out(Output flow_out);
 }
 
+/** Creates a TensorArray for storing multiple gradients of values in the given handle.
+ * 
+ *  Similar to TensorArrayGradV3. However it creates an accumulator with an
+ *  expanded shape compared to the input TensorArray whose gradient is being
+ *  computed. This enables multiple gradients for the same TensorArray to be
+ *  calculated using the same accumulator.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * handle: The handle to the forward TensorArray.
+ *  * flow_in: A float scalar that enforces proper chaining of operations.
+ *  * shape_to_prepend: An int32 vector representing a shape. Elements in the gradient accumulator will
+ *  have shape which is this shape_to_prepend value concatenated with shape of the
+ *  elements in the TensorArray corresponding to the input handle.
+ *  * source: The gradient source string, used to decide which gradient TensorArray
+ *  to return.
+ * 
+ *  Returns:
+ *  * {@code Output} grad_handle
+ *  * {@code Output} flow_out */
+@Namespace("tensorflow::ops") @NoOffset public static class TensorArrayGradWithShape extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorArrayGradWithShape(Pointer p) { super(p); }
+
+  public TensorArrayGradWithShape(@Const @ByRef Scope scope, @ByVal Input handle, @ByVal Input flow_in,
+                           @ByVal Input shape_to_prepend, @StringPiece BytePointer source) { super((Pointer)null); allocate(scope, handle, flow_in, shape_to_prepend, source); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input handle, @ByVal Input flow_in,
+                           @ByVal Input shape_to_prepend, @StringPiece BytePointer source);
+  public TensorArrayGradWithShape(@Const @ByRef Scope scope, @ByVal Input handle, @ByVal Input flow_in,
+                           @ByVal Input shape_to_prepend, @StringPiece String source) { super((Pointer)null); allocate(scope, handle, flow_in, shape_to_prepend, source); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input handle, @ByVal Input flow_in,
+                           @ByVal Input shape_to_prepend, @StringPiece String source);
+
+  public native @ByRef Output grad_handle(); public native TensorArrayGradWithShape grad_handle(Output grad_handle);
+  public native @ByRef Output flow_out(); public native TensorArrayGradWithShape flow_out(Output flow_out);
+}
+
 /** Read an element from the TensorArray into output {@code value}.
  * 
  *  Arguments:
@@ -47040,7 +48176,7 @@ limitations under the License.
  *  * aspect_ratio_range: The cropped area of the image must have an aspect ratio =
  *  width / height within this range.
  *  * area_range: The cropped area of the image must contain a fraction of the
- *  supplied image within in this range.
+ *  supplied image within this range.
  *  * max_attempts: Number of attempts at generating a cropped region of the image
  *  of the specified constraints. After {@code max_attempts} failures, return the entire
  *  image.
@@ -47112,7 +48248,7 @@ limitations under the License.
     public native @ByVal Attrs AspectRatioRange(@ArraySlice float... x);
 
     /** The cropped area of the image must contain a fraction of the
-     *  supplied image within in this range.
+     *  supplied image within this range.
      * 
      *  Defaults to [0.05, 1] */
     
@@ -47230,7 +48366,7 @@ limitations under the License.
  *  * aspect_ratio_range: The cropped area of the image must have an aspect ratio =
  *  width / height within this range.
  *  * area_range: The cropped area of the image must contain a fraction of the
- *  supplied image within in this range.
+ *  supplied image within this range.
  *  * max_attempts: Number of attempts at generating a cropped region of the image
  *  of the specified constraints. After {@code max_attempts} failures, return the entire
  *  image.
@@ -47292,7 +48428,7 @@ limitations under the License.
     public native @ByVal Attrs AspectRatioRange(@ArraySlice float... x);
 
     /** The cropped area of the image must contain a fraction of the
-     *  supplied image within in this range.
+     *  supplied image within this range.
      * 
      *  Defaults to [0.05, 1] */
     
@@ -48677,7 +49813,7 @@ limitations under the License.
 
 /** Computes the matrix exponential of one or more square matrices:
  * 
- *  exp(A) = \sum_{n=0}^\infty A^n/n!
+ *  \\(exp(A) = \sum_{n=0}^\infty A^n/n!\\)
  * 
  *  The exponential is computed using a combination of the scaling and squaring
  *  method and the Pade approximation. Details can be founds in:
@@ -50564,6 +51700,58 @@ limitations under the License.
   public native @ByRef Output output(); public native BatchMatMul output(Output output);
 }
 
+/** Computes the Bessel i0e function of {@code x} element-wise.
+ * 
+ *  Exponentially scaled modified Bessel function of order 0 defined as
+ *  {@code bessel_i0e(x) = exp(-abs(x)) bessel_i0(x)}.
+ * 
+ *  This function is faster and numerically stabler than {@code bessel_i0(x)}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ * 
+ *  Returns:
+ *  * {@code Output}: The y tensor. */
+@Namespace("tensorflow::ops") @NoOffset public static class BesselI0e extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BesselI0e(Pointer p) { super(p); }
+
+  public BesselI0e(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native BesselI0e y(Output y);
+}
+
+/** Computes the Bessel i1e function of {@code x} element-wise.
+ * 
+ *  Exponentially scaled modified Bessel function of order 0 defined as
+ *  {@code bessel_i1e(x) = exp(-abs(x)) bessel_i1(x)}.
+ * 
+ *  This function is faster and numerically stabler than {@code bessel_i1(x)}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ * 
+ *  Returns:
+ *  * {@code Output}: The y tensor. */
+@Namespace("tensorflow::ops") @NoOffset public static class BesselI1e extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BesselI1e(Pointer p) { super(p); }
+
+  public BesselI1e(@Const @ByRef Scope scope, @ByVal Input x) { super((Pointer)null); allocate(scope, x); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output y(); public native BesselI1e y(Output y);
+}
+
 /** Compute the regularized incomplete beta integral \\(I_x(a, b)\\).
  * 
  *  The regularized incomplete beta integral is defined as:
@@ -51894,9 +53082,9 @@ limitations under the License.
  * 
  *  Arguments:
  *  * scope: A Scope object
- *  * start: First entry in the range.
- *  * stop: Last entry in the range.
- *  * num: Number of values to generate.
+ *  * start: 0-D tensor. First entry in the range.
+ *  * stop: 0-D tensor. Last entry in the range.
+ *  * num: 0-D tensor. Number of values to generate.
  * 
  *  Returns:
  *  * {@code Output}: 1-D. The generated values. */
@@ -53547,9 +54735,11 @@ limitations under the License.
 /** Multiply matrix "a" by matrix "b".
  * 
  *  The inputs must be two-dimensional matrices and the inner dimension of "a" must
- *  match the outer dimension of "b". This op is optimized for the case where at
- *  least one of "a" or "b" is sparse. The breakeven for using this versus a dense
- *  matrix multiply on one platform was 30% zero values in the sparse matrix.
+ *  match the outer dimension of "b". Both "a" and "b" must be {@code Tensor}s not
+ *  {@code SparseTensor}s.  This op is optimized for the case where at least one of "a" or
+ *  "b" is sparse, in the sense that they have a large proportion of zero values.
+ *  The breakeven for using this versus a dense matrix multiply on one platform was
+ *  30% zero values in the sparse matrix.
  * 
  *  The gradient computation of this operation will only take advantage of sparsity
  *  in the input gradient when that gradient comes from a Relu.
@@ -54324,7 +55514,7 @@ limitations under the License.
  *  segments.
  * 
  *  Computes a tensor such that
- *  {@code (output[i] = sum_{j...} data[j...]} where the sum is over tuples {@code j...} such
+ *  \\(output[i] = sum_{j...} data[j...]\\) where the sum is over tuples {@code j...} such
  *  that {@code segment_ids[j...] == i}.  Unlike {@code SegmentSum}, {@code segment_ids}
  *  need not be sorted and need not cover all values in the full
  *  range of valid values.
@@ -59570,6 +60760,10 @@ limitations under the License.
  * 
  *  if < 0, {@code scale * features} otherwise.
  * 
+ *  To be used together with
+ *  {@code initializer = tf.variance_scaling_initializer(factor=1.0, mode='FAN_IN')}.
+ *  For correct dropout, use {@code tf.contrib.nn.alpha_dropout}.
+ * 
  *  See [Self-Normalizing Neural Networks](https://arxiv.org/abs/1706.02515)
  * 
  *  Arguments:
@@ -59595,7 +60789,7 @@ limitations under the License.
  * 
  *  For each batch {@code i} and class {@code j} we have
  * 
- *      softmax[i, j] = exp(logits[i, j]) / sum_j(exp(logits[i, j]))
+ *      $$softmax[i, j] = exp(logits[i, j]) / sum_j(exp(logits[i, j]))$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -62579,6 +63773,38 @@ limitations under the License.
   public native @ByRef Output output_shape(); public native SparseSlice output_shape(Output output_shape);
 }
 
+/** The gradient operator for the SparseSlice op.
+ * 
+ *  This op takes in the upstream gradient w.r.t. non-empty values of
+ *  the sliced {@code SparseTensor}, and outputs the gradients w.r.t.
+ *  the non-empty values of input {@code SparseTensor}.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * backprop_val_grad: 1-D. The gradient with respect to
+ *  the non-empty values of the sliced {@code SparseTensor}.
+ *  * input_indices: 2-D.  The {@code indices} of the input {@code SparseTensor}.
+ *  * input_start: 1-D. tensor represents the start of the slice.
+ *  * output_indices: 2-D.  The {@code indices} of the sliced {@code SparseTensor}.
+ * 
+ *  Returns:
+ *  * {@code Output}: 1-D. The gradient with respect to the non-empty values of input {@code SparseTensor}. */
+@Namespace("tensorflow::ops") @NoOffset public static class SparseSliceGrad extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SparseSliceGrad(Pointer p) { super(p); }
+
+  public SparseSliceGrad(@Const @ByRef Scope scope, @ByVal Input backprop_val_grad, @ByVal Input input_indices,
+                  @ByVal Input input_start, @ByVal Input output_indices) { super((Pointer)null); allocate(scope, backprop_val_grad, input_indices, input_start, output_indices); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input backprop_val_grad, @ByVal Input input_indices,
+                  @ByVal Input input_start, @ByVal Input output_indices);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output val_grad(); public native SparseSliceGrad val_grad(Output val_grad);
+}
+
 /** Applies softmax to a batched N-D {@code SparseTensor}.
  * 
  *  The inputs represent an N-D SparseTensor  with logical shape {@code [..., B, C]}
@@ -63399,6 +64625,105 @@ limitations under the License.
   public native @ByRef Output output(); public native ResourceCountUpTo output(Output output);
 }
 
+/** Adds sparse {@code updates} to individual values or slices within a given
+ * 
+ *  variable according to {@code indices}.
+ * 
+ *  {@code ref} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
+ * 
+ *  {@code indices} must be integer tensor, containing indices into {@code ref}.
+ *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ * 
+ *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
+ *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
+ *  dimension of {@code ref}.
+ * 
+ *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
+ * 
+ *  <pre>{@code
+ *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].
+ *  }</pre>
+ * 
+ *  For example, say we want to update 4 scattered elements to a rank-1 tensor to
+ *  8 elements. In Python, that update would look like this:
+ * 
+ *  <pre>{@code python
+ *      ref = tfe.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+ *      indices = tf.constant([[4], [3], [1] ,[7]])
+ *      updates = tf.constant([9, 10, 11, 12])
+ *      update = tf.scatter_nd_add(ref, indices, updates)
+ *      with tf.Session() as sess:
+ *        print sess.run(update)
+ *  }</pre>
+ * 
+ *  The resulting update to ref would look like this:
+ * 
+ *      [1, 12, 3, 14, 14, 6, 7, 20]
+ * 
+ *  See \{tf.scatter_nd} for more details about how to make updates to
+ *  slices.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * ref: A resource handle. Must be from a VarHandleOp.
+ *  * indices: A Tensor. Must be one of the following types: int32, int64.
+ *  A tensor of indices into ref.
+ *  * updates: A Tensor. Must have the same type as ref. A tensor of
+ *  values to add to ref.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * use_locking: An optional bool. Defaults to True. If True, the assignment will
+ *  be protected by a lock; otherwise the behavior is undefined,
+ *  but may exhibit less contention.
+ * 
+ *  Returns:
+ *  * the created {@code Operation} */
+@Namespace("tensorflow::ops") @NoOffset public static class ResourceScatterNdAdd extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ResourceScatterNdAdd(Pointer p) { super(p); }
+
+  /** Optional attribute setters for ResourceScatterNdAdd */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** An optional bool. Defaults to True. If True, the assignment will
+     *  be protected by a lock; otherwise the behavior is undefined,
+     *  but may exhibit less contention.
+     * 
+     *  Defaults to true */
+    public native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean use_locking_(); public native Attrs use_locking_(boolean use_locking_);
+  }
+  public ResourceScatterNdAdd(@Const @ByRef Scope scope, @ByVal Input ref,
+                       @ByVal Input indices, @ByVal Input updates) { super((Pointer)null); allocate(scope, ref, indices, updates); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input ref,
+                       @ByVal Input indices, @ByVal Input updates);
+  public ResourceScatterNdAdd(@Const @ByRef Scope scope, @ByVal Input ref,
+                       @ByVal Input indices, @ByVal Input updates,
+                       @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, ref, indices, updates, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input ref,
+                       @ByVal Input indices, @ByVal Input updates,
+                       @Const @ByRef Attrs attrs);
+  public native @ByVal @Name("operator tensorflow::Operation") Operation asOperation();
+
+  public static native @ByVal Attrs UseLocking(@Cast("bool") boolean x);
+
+  public native @ByRef Operation operation(); public native ResourceScatterNdAdd operation(Operation operation);
+}
+
 /** Applies sparse {@code updates} to individual values or slices within a given
  * 
  *  variable according to {@code indices}.
@@ -63910,7 +65235,7 @@ limitations under the License.
  *  {@code ref} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
  * 
  *  {@code indices} must be integer tensor, containing indices into {@code ref}.
- *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ *  It must be shape {@code \\([d_0, ..., d_{Q-2}, K]\\)} where {@code 0 < K <= P}.
  * 
  *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
  *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
@@ -63918,9 +65243,7 @@ limitations under the License.
  * 
  *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
  * 
- *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].
- *  }</pre>
+ *  $$[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].$$
  * 
  *  For example, say we want to add 4 scattered elements to a rank-1 tensor to 8
  *  elements. In Python, that addition would look like this:
@@ -64008,7 +65331,7 @@ limitations under the License.
  *  {@code ref} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
  * 
  *  {@code indices} must be integer tensor, containing indices into {@code ref}.
- *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ *  It must be shape \\([d_0, ..., d_{Q-2}, K]\\) where {@code 0 < K <= P}.
  * 
  *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
  *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
@@ -64016,9 +65339,7 @@ limitations under the License.
  * 
  *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
  * 
- *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].
- *  }</pre>
+ *  $$[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].$$
  * 
  *  For example, say we want to subtract 4 scattered elements from a rank-1 tensor
  *  with 8 elements. In Python, that subtraction would look like this:
@@ -64106,7 +65427,7 @@ limitations under the License.
  *  {@code ref} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
  * 
  *  {@code indices} must be integer tensor, containing indices into {@code ref}.
- *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
+ *  It must be shape \\([d_0, ..., d_{Q-2}, K]\\) where {@code 0 < K <= P}.
  * 
  *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
  *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
@@ -64114,9 +65435,7 @@ limitations under the License.
  * 
  *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
  * 
- *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].
- *  }</pre>
+ *  $$[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].$$
  * 
  *  For example, say we want to update 4 scattered elements to a rank-1 tensor to
  *  8 elements. In Python, that update would look like this:
@@ -64734,7 +66053,7 @@ limitations under the License.
 /** Joins a string Tensor across the given dimensions.
  * 
  *  Computes the string join across dimensions in the given string Tensor of shape
- *  {@code [d_0, d_1, ..., d_n-1]}.  Returns a new Tensor created by joining the input
+ *  {@code [\\(d_0, d_1, ..., d_{n-1}\\)]}.  Returns a new Tensor created by joining the input
  *  strings with the given separator (default: empty string).  Negative indices are
  *  counted backwards from the end, with {@code -1} being equivalent to {@code n - 1}.  If
  *  indices are not specified, joins across all dimensions beginning from {@code n - 1}
@@ -65056,6 +66375,88 @@ limitations under the License.
   public native @ByRef Output indices(); public native StringSplit indices(Output indices);
   public native @ByRef Output values(); public native StringSplit values(Output values);
   public native @ByRef Output shape(); public native StringSplit shape(Output shape);
+}
+
+/** Split elements of {@code source} based on {@code sep} into a {@code SparseTensor}.
+ * 
+ *  Let N be the size of source (typically N will be the batch size). Split each
+ *  element of {@code source} based on {@code sep} and return a {@code SparseTensor}
+ *  containing the split tokens. Empty tokens are ignored.
+ * 
+ *  For example, N = 2, source[0] is 'hello world' and source[1] is 'a b c',
+ *  then the output will be
+ *  <pre>{@code
+ *  st.indices = [0, 0;
+ *                0, 1;
+ *                1, 0;
+ *                1, 1;
+ *                1, 2]
+ *  st.shape = [2, 3]
+ *  st.values = ['hello', 'world', 'a', 'b', 'c']
+ *  }</pre>
+ * 
+ *  If {@code sep} is given, consecutive delimiters are not grouped together and are
+ *  deemed to delimit empty strings. For example, source of {@code "1<>2<><>3"} and
+ *  sep of {@code "<>"} returns {@code ["1", "2", "", "3"]}. If {@code sep} is None or an empty
+ *  string, consecutive whitespace are regarded as a single separator, and the
+ *  result will contain no empty strings at the startor end if the string has
+ *  leading or trailing whitespace.
+ * 
+ *  Note that the above mentioned behavior matches python's str.split.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * input: {@code 1-D} string {@code Tensor}, the strings to split.
+ *  * sep: {@code 0-D} string {@code Tensor}, the delimiter character.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * maxsplit: An {@code int}. If {@code maxsplit > 0}, limit of the split of the result.
+ * 
+ *  Returns:
+ *  * {@code Output} indices
+ *  * {@code Output} values
+ *  * {@code Output} shape */
+@Namespace("tensorflow::ops") @NoOffset public static class StringSplitV2 extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringSplitV2(Pointer p) { super(p); }
+
+  /** Optional attribute setters for StringSplitV2 */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** An {@code int}. If {@code maxsplit > 0}, limit of the split of the result.
+     * 
+     *  Defaults to -1 */
+    public native @ByVal Attrs Maxsplit(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long maxsplit_(); public native Attrs maxsplit_(long maxsplit_);
+  }
+  public StringSplitV2(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input sep) { super((Pointer)null); allocate(scope, input, sep); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input sep);
+  public StringSplitV2(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input sep, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, input, sep, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+                @ByVal Input sep, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs Maxsplit(@Cast("tensorflow::int64") long x);
+
+  public native @ByRef Output indices(); public native StringSplitV2 indices(Output indices);
+  public native @ByRef Output values(); public native StringSplitV2 values(Output values);
+  public native @ByRef Output shape(); public native StringSplitV2 shape(Output shape);
 }
 
 /** Strip leading and trailing whitespaces from the Tensor.
@@ -68335,8 +69736,8 @@ limitations under the License.
 /** Update relevant entries in '*var' and '*accum' according to the adagrad scheme.
  * 
  *  That is for rows we have grad for, we update var and accum as follows:
- *  accum += grad * grad
- *  var -= lr * grad * (1 / sqrt(accum))
+ *  $$accum += grad * grad$$
+ *  $$var -= lr * grad * (1 / sqrt(accum))$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -68506,9 +69907,9 @@ limitations under the License.
  *  mean_grad = decay * mean_grad + (1-decay) * gradient
  *  Delta = learning_rate * gradient / sqrt(mean_square + epsilon - mean_grad ** 2)
  * 
- *  ms <- rho * ms_{t-1} + (1-rho) * grad * grad
- *  mom <- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
- *  var <- var - mom
+ *  $$ms <- rho * ms_{t-1} + (1-rho) * grad * grad$$
+ *  $$mom <- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)$$
+ *  $$var <- var - mom$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -68594,11 +69995,11 @@ limitations under the License.
 /** Update relevant entries in '*var' according to the Ftrl-proximal scheme.
  * 
  *  That is for rows we have grad for, we update var, accum and linear as follows:
- *  accum_new = accum + grad * grad
- *  linear += grad + (accum_new^(-lr_power) - accum^(-lr_power)) / lr * var
- *  quadratic = 1.0 / (accum_new^(lr_power) * lr) + 2 * l2
- *  var = (sign(linear) * l1 - linear) / quadratic if |linear| > l1 else 0.0
- *  accum = accum_new
+ *  $$accum_new = accum + grad * grad$$
+ *  $$linear += grad + (accum_{new}^{-lr_{power}} - accum^{-lr_{power}} / lr * var$$
+ *  $$quadratic = 1.0 / (accum_{new}^{lr_{power}} * lr) + 2 * l2$$
+ *  $$var = (sign(linear) * l1 - linear) / quadratic\ if\ |linear| > l1\ else\ 0.0$$
+ *  $$accum = accum_{new}$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -68775,8 +70176,8 @@ limitations under the License.
  * 
  *  That is for rows we have grad for, we update var and accum as follows:
  * 
- *  accum = accum * momentum + grad
- *  var -= lr * accum
+ *  $$accum = accum * momentum + grad$$
+ *  $$var -= lr * accum$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -68865,10 +70266,10 @@ limitations under the License.
 /** Sparse update entries in '*var' and '*accum' according to FOBOS algorithm.
  * 
  *  That is for rows we have grad for, we update var and accum as follows:
- *  accum += grad * grad
- *  prox_v = var
- *  prox_v -= lr * grad * (1 / sqrt(accum))
- *  var = sign(prox_v)/(1+lr*l2) * max{|prox_v|-lr*l1,0}
+ *  $$accum += grad * grad$$
+ *  $$prox_v = var$$
+ *  $$prox_v -= lr * grad * (1 / sqrt(accum))$$
+ *  $$var = sign(prox_v)/(1+lr*l2) * max{|prox_v|-lr*l1,0}$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -68946,8 +70347,8 @@ limitations under the License.
 /** Sparse update '*var' as FOBOS algorithm with fixed learning rate.
  * 
  *  That is for rows we have grad for, we update var as follows:
- *  prox_v = var - alpha * grad
- *  var = sign(prox_v)/(1+alpha*l2) * max{|prox_v|-alpha*l1,0}
+ *  $$prox_v = var - alpha * grad$$
+ *  $$var = sign(prox_v)/(1+alpha*l2) * max{|prox_v|-alpha*l1,0}$$
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -69022,9 +70423,9 @@ limitations under the License.
  *  mean_square = decay * mean_square + (1-decay) * gradient ** 2
  *  Delta = learning_rate * gradient / sqrt(mean_square + epsilon)
  * 
- *  ms <- rho * ms_{t-1} + (1-rho) * grad * grad
- *  mom <- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
- *  var <- var - mom
+ *  $$ms <- rho * ms_{t-1} + (1-rho) * grad * grad$$
+ *  $$mom <- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)$$
+ *  $$var <- var - mom$$
  * 
  *  Arguments:
  *  * scope: A Scope object

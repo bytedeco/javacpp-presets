@@ -44,10 +44,16 @@ if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    cd $HOME/
    curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el -o $HOME/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el.deb
+   curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el -o $HOME/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el.deb
    curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-linux-ppc64le-v7.1.tgz -o $HOME/cudnn-9.2-linux-ppc64le-v7.1.tgz
    ar vx $HOME/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS
+   cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done
+   cd ..
+   rm -Rf var
+   ar vx $HOME/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el.deb
+   tar xvf data.tar.xz
    cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd /; cp -R $HOME/cudaFS/* ."
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.2 /usr/local/cuda"

@@ -30,7 +30,7 @@ if "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" if "%APPVEYOR_REPO_BRANCH%" == "releas
 
 rem C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
 rem C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
-C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip p7zip autoconf autoconf-archive automake libtool make patch gnupg"
+C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL"
 
 C:\msys64\usr\bin\bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
@@ -43,6 +43,17 @@ SET "PATH=C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;
 
 echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
+
+IF "%PARTIAL_CPPBUILD%"=="1" (
+   C:\msys64\usr\bin\bash -c "bash cppbuild.sh install %PROJ% -platform=%OS% -extension=%EXT%"
+   C:\msys64\usr\bin\bash -c "zip -r %PROJ%-cppbuild.zip %PROJ%/cppbuild"
+   IF ERRORLEVEL 1 (
+     echo Quitting with error  
+     exit /b 1
+   )
+   exit /b 0
+)
+
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn clean deploy -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%

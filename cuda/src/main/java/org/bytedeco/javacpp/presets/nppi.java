@@ -41,7 +41,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<nppi_linear_transforms.h>", "<nppi_geometry_transforms.h>",
             "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"},
             link = {"nppial@.9.2", "nppicc@.9.2", "nppicom@.9.2", "nppidei@.9.2", "nppif@.9.2",
-                    "nppig@.9.2", "nppim@.9.2", "nppist@.9.2", "nppisu@.9.2", "nppitc@.9.2"} )},
+                    "nppig@.9.2", "nppim@.9.2", "nppist@.9.2", "nppisu@.9.2", "nppitc@.9.2"}),
+    @Platform(value = "windows-x86_64",
+            preload = {"nppial64_92", "nppicc64_92", "nppicom64_92", "nppidei64_92", "nppif64_92",
+                       "nppig64_92", "nppim64_92", "nppist64_92", "nppisu64_92", "nppitc64_92"})},
         target = "org.bytedeco.javacpp.nppi")
 @NoException
 public class nppi implements InfoMapper {

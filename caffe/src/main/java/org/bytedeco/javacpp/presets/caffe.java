@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,7 +22,10 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
@@ -59,7 +62,37 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link = "caffe@.1.0.0", /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
     @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}, extension = "-gpu") })
-public class caffe implements InfoMapper {
+public class caffe implements LoadEnabled, InfoMapper {
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        String extension = properties.getProperty("platform.extension");
+        List<String> preloads = properties.get("platform.preload");
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || !extension.equals("-gpu")) {
+            return;
+        }
+        int i = 0;
+        String[] libs = {"cudart", "cublas", "curand", "cudnn"};
+        for (String lib : libs) {
+            switch (platform) {
+                case "linux-x86_64":
+                case "macosx-x86_64":
+                    lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+                    break;
+                case "windows-x86_64":
+                    lib += lib.equals("cudnn") ? "64_7" : "64_92";
+                    break;
+                default:
+                    continue; // no CUDA
+            }
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPROTOBUF_EXPORT", "LIBPROTOC_EXPORT", "GOOGLE_PROTOBUF_VERIFY_VERSION", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_DEPRECATED",
                              "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR").cppTypes().annotations())
@@ -80,6 +113,8 @@ public class caffe implements InfoMapper {
                .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "MDB_env", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
+                             "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
+                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "protobuf_caffe_2eproto::TableStruct",
                              "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip())
 
                .put(new Info("caffe::AccuracyParameterDefaultTypeInternal", "caffe::ArgMaxParameterDefaultTypeInternal", "caffe::BatchNormParameterDefaultTypeInternal",

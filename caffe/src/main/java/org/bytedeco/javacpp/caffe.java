@@ -1345,7 +1345,12 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // #ifndef GOOGLE_PROTOBUF_COMMON_H__
 // #define GOOGLE_PROTOBUF_COMMON_H__
 
+// #include <algorithm>
+// #include <iostream>
+// #include <map>
+// #include <set>
 // #include <string>
+// #include <vector>
 
 // #include <google/protobuf/stubs/port.h>
 // #include <google/protobuf/stubs/macros.h>
@@ -1386,14 +1391,14 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 // The current version, represented as a single integer to make comparison
 // easier:  major * 10^6 + minor * 10^3 + micro
-public static final int GOOGLE_PROTOBUF_VERSION = 3003000;
+public static final int GOOGLE_PROTOBUF_VERSION = 3005001;
 
 // A suffix string for alpha, beta or rc releases. Empty for stable releases.
 public static final String GOOGLE_PROTOBUF_VERSION_SUFFIX = "";
 
 // The minimum library version which works with the current version of the
 // headers.
-public static final int GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION = 3003000;
+public static final int GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION = 3005000;
 
 // The minimum header version which works with the current version of
 // the library.  This constant should only be used by protoc's C++ code
@@ -1403,7 +1408,7 @@ public static final int kMinHeaderVersionForLibrary = kMinHeaderVersionForLibrar
 
 // The minimum protoc version which works with the current version of the
 // headers.
-public static final int GOOGLE_PROTOBUF_MIN_PROTOC_VERSION = 3003000;
+public static final int GOOGLE_PROTOBUF_MIN_PROTOC_VERSION = 3005000;
 
 // The minimum header version which works with the current version of
 // protoc.  This constant should only be used in VerifyVersion().
@@ -1503,6 +1508,10 @@ public static class Func extends FunctionPointer {
     public native void call();
 }
 @Namespace("google::protobuf::internal") public static native void OnShutdown(Func func);
+// Destroy the string (call string destructor)
+@Namespace("google::protobuf::internal") public static native void OnShutdownDestroyString(@StdString @Cast({"char*", "std::string*"}) BytePointer ptr);
+// Destroy (not delete) the message
+@Namespace("google::protobuf::internal") public static native void OnShutdownDestroyMessage(@Const Pointer ptr);
 
   // namespace internal
 
@@ -1526,7 +1535,8 @@ public static class Func extends FunctionPointer {
 // #endif
 
 // This is at the end of the file instead of the beginning to work around a bug
-// in some versions of MSVC.  // Don't do this at home, kids.
+// in some versions of MSVC.
+// TODO(acozzette): remove these using statements
 
   // namespace protobuf
   // namespace google
@@ -1694,6 +1704,12 @@ public static class Func extends FunctionPointer {
     public EnumValueOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EnumValueOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class ExtensionRangeOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ExtensionRangeOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ExtensionRangeOptions(Pointer p) { super(p); }
 }
 @Namespace("google::protobuf") @Opaque public static class ServiceOptions extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -2032,8 +2048,11 @@ public static class Func extends FunctionPointer {
           return (ExtensionRange)super.position(position);
       }
   
+
     public native int start(); public native ExtensionRange start(int start);  // inclusive
     public native int end(); public native ExtensionRange end(int end);    // exclusive
+
+    @MemberGetter public native @Const ExtensionRangeOptions options_();
   }
 
   // The number of extension ranges in this message type.
@@ -2122,6 +2141,7 @@ public static class Func extends FunctionPointer {
   // |*out_location| unchanged iff location information was not available.
   public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
 }
+
 
 // Describes a single field of a message.  To get the descriptor for a given
 // field, first get the Descriptor for the message in which it is defined,
@@ -2359,6 +2379,7 @@ public static class Func extends FunctionPointer {
   public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
 }
 
+
 // Describes a oneof defined in a message type.
 @Namespace("google::protobuf") @NoOffset public static class OneofDescriptor extends Pointer {
     static { Loader.load(); }
@@ -2371,6 +2392,8 @@ public static class Func extends FunctionPointer {
   // Index of this oneof within the message's oneof array.
   public native int index();
 
+  // The .proto file in which this oneof was defined.  Never NULL.
+  public native @Const FileDescriptor file();
   // The Descriptor for the message containing this oneof.
   public native @Const Descriptor containing_type();
 
@@ -2452,11 +2475,54 @@ public static class Func extends FunctionPointer {
   // See Descriptor::DebugStringWithOptions().
   public native @StdString BytePointer DebugStringWithOptions(@Const @ByRef DebugStringOptions options);
 
-
   // Returns true if this is a placeholder for an unknown enum. This will
   // only be the case if this descriptor comes from a DescriptorPool
   // with AllowUnknownDependencies() set.
   public native @Cast("bool") boolean is_placeholder();
+
+  // Reserved fields -------------------------------------------------
+
+  // A range of reserved field numbers.
+  public static class ReservedRange extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public ReservedRange() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public ReservedRange(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ReservedRange(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public ReservedRange position(long position) {
+          return (ReservedRange)super.position(position);
+      }
+  
+    public native int start(); public native ReservedRange start(int start);  // inclusive
+    public native int end(); public native ReservedRange end(int end);    // inclusive
+  }
+
+  // The number of reserved ranges in this message type.
+  public native int reserved_range_count();
+  // Gets an reserved range by index, where 0 <= index <
+  // reserved_range_count(). These are returned in the order they were defined
+  // in the .proto file.
+  public native @Const ReservedRange reserved_range(int index);
+
+  // Returns true if the number is in one of the reserved ranges.
+  public native @Cast("bool") boolean IsReservedNumber(int number);
+
+  // Returns NULL if no reserved range contains the given number.
+  public native @Const ReservedRange FindReservedRangeContainingNumber(int number);
+
+  // The number of reserved field names in this message type.
+  public native int reserved_name_count();
+
+  // Gets a reserved name by index, where 0 <= index < reserved_name_count().
+  public native @StdString BytePointer reserved_name(int index);
+
+  // Returns true if the field name is reserved.
+  public native @Cast("bool") boolean IsReservedName(@StdString BytePointer name);
+  public native @Cast("bool") boolean IsReservedName(@StdString String name);
 
   // Source Location ---------------------------------------------------
 
@@ -2487,6 +2553,8 @@ public static class Func extends FunctionPointer {
   // with C++ scoping rules for enums.
   public native @StdString BytePointer full_name();
 
+  // The .proto file in which this value was defined.  Never NULL.
+  public native @Const FileDescriptor file();
   // The type of this value.  Never NULL.
   public native @Const EnumDescriptor type();
 
@@ -2568,6 +2636,7 @@ public static class Func extends FunctionPointer {
   public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
 }
 
+
 // Describes an individual service method.  To obtain a MethodDescriptor given
 // a service, first get its ServiceDescriptor, then call
 // ServiceDescriptor::FindMethodByName().  Use DescriptorPool to construct your
@@ -2584,6 +2653,8 @@ public static class Func extends FunctionPointer {
   // Index within the service's Descriptor.
   public native int index();
 
+  // The .proto file in which this method was defined.  Never NULL.
+  public native @Const FileDescriptor file();
   // Gets the service to which this method belongs.  Never NULL.
   public native @Const ServiceDescriptor service();
 
@@ -2771,6 +2842,7 @@ public static class Func extends FunctionPointer {
   public native @Cast("bool") boolean GetSourceLocation(@StdVector int[] path,
                            SourceLocation out_location);
 }
+
 
 // ===================================================================
 
@@ -3071,6 +3143,7 @@ public static class Func extends FunctionPointer {
   public native void ClearUnusedImportTrackFiles();
 }
 
+
 // inline methods ====================================================
 
 // These macros makes this repetitive code more readable.
@@ -3087,6 +3160,9 @@ public static class Func extends FunctionPointer {
 
 // #define PROTOBUF_DEFINE_OPTIONS_ACCESSOR(CLASS, TYPE)
 //   inline const TYPE& CLASS::options() const { return *options_; }
+
+
+
 
 
 
@@ -3213,12 +3289,30 @@ public static class Func extends FunctionPointer {
 
 
 
+// Can't use PROTOBUF_DEFINE_ARRAY_ACCESSOR because reserved_names_ is actually
+// an array of pointers rather than the usual array of objects.
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 // To save space, index() is computed by looking at the descriptor's position
 // in the parent's array of children.
+
+
+
+
+
+
 
 
 
@@ -3309,45 +3403,50 @@ public static class Func extends FunctionPointer {
 // #include <climits>
 // #include <google/protobuf/stubs/common.h>
 // #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/generated_message_util.h>
-  @Namespace("google::protobuf") @Opaque public static class Arena extends Pointer {
-      /** Empty constructor. Calls {@code super((Pointer)null)}. */
-      public Arena() { super((Pointer)null); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public Arena(Pointer p) { super(p); }
-  }
-  @Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
-      /** Empty constructor. Calls {@code super((Pointer)null)}. */
-      public CodedInputStream() { super((Pointer)null); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public CodedInputStream(Pointer p) { super(p); }
-  }
-  @Namespace("google::protobuf::io") @Opaque public static class CodedOutputStream extends Pointer {
-      /** Empty constructor. Calls {@code super((Pointer)null)}. */
-      public CodedOutputStream() { super((Pointer)null); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public CodedOutputStream(Pointer p) { super(p); }
-  }
-  @Namespace("google::protobuf::io") @Opaque public static class ZeroCopyInputStream extends Pointer {
-      /** Empty constructor. Calls {@code super((Pointer)null)}. */
-      public ZeroCopyInputStream() { super((Pointer)null); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public ZeroCopyInputStream(Pointer p) { super(p); }
-  }
-  @Namespace("google::protobuf::io") @Opaque public static class ZeroCopyOutputStream extends Pointer {
-      /** Empty constructor. Calls {@code super((Pointer)null)}. */
-      public ZeroCopyOutputStream() { super((Pointer)null); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public ZeroCopyOutputStream(Pointer p) { super(p); }
-  }
+// #include <google/protobuf/stubs/once.h>
+// #include <google/protobuf/stubs/port.h>
+@Namespace("google::protobuf") @Opaque public static class Arena extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Arena() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Arena(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CodedInputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CodedInputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class CodedOutputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CodedOutputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CodedOutputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyInputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZeroCopyInputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZeroCopyInputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyOutputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZeroCopyOutputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZeroCopyOutputStream(Pointer p) { super(p); }
+}
 
-  @Namespace("google::protobuf::internal") @Opaque public static class WireFormatLite extends Pointer {
-      /** Empty constructor. Calls {@code super((Pointer)null)}. */
-      public WireFormatLite() { super((Pointer)null); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public WireFormatLite(Pointer p) { super(p); }
-  }
 
+@Namespace("google::protobuf::internal") @Opaque public static class WireFormatLite extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WireFormatLite() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WireFormatLite(Pointer p) { super(p); }
+}
+
+// #ifndef SWIG
+// #endif  // SWIG
+  // namespace internal
 
 // Interface to light weight protocol messages.
 //
@@ -3394,18 +3493,19 @@ public static class Func extends FunctionPointer {
   // Get the arena, if any, associated with this message. Virtual method
   // required for generic operations but most arena-related operations should
   // use the GetArenaNoVirtual() generated-code method. Default implementation
-  // to reduce code size by avoiding the need for per-type implementations when
-  // types do not implement arena support.
+  // to reduce code size by avoiding the need for per-type implementations
+  // when types do not implement arena support.
   public native Arena GetArena();
 
-  // Get a pointer that may be equal to this message's arena, or may not be. If
-  // the value returned by this method is equal to some arena pointer, then this
-  // message is on that arena; however, if this message is on some arena, this
-  // method may or may not return that arena's pointer. As a tradeoff, this
-  // method may be more efficient than GetArena(). The intent is to allow
-  // underlying representations that use e.g. tagged pointers to sometimes store
-  // the arena pointer directly, and sometimes in a more indirect way, and allow
-  // a fastpath comparison against the arena pointer when it's easy to obtain.
+  // Get a pointer that may be equal to this message's arena, or may not be.
+  // If the value returned by this method is equal to some arena pointer, then
+  // this message is on that arena; however, if this message is on some arena,
+  // this method may or may not return that arena's pointer. As a tradeoff,
+  // this method may be more efficient than GetArena(). The intent is to allow
+  // underlying representations that use e.g. tagged pointers to sometimes
+  // store the arena pointer directly, and sometimes in a more indirect way,
+  // and allow a fastpath comparison against the arena pointer when it's easy
+  // to obtain.
   public native Pointer GetMaybeArenaPointer();
 
   // Clear all fields of the message and set them to their default values.
@@ -3423,19 +3523,20 @@ public static class Func extends FunctionPointer {
   // for full messages.  See message.h.
   public native @StdString BytePointer InitializationErrorString();
 
-  // If |other| is the exact same class as this, calls MergeFrom().  Otherwise,
+  // If |other| is the exact same class as this, calls MergeFrom(). Otherwise,
   // results are undefined (probably crash).
   public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
 
   // Parsing ---------------------------------------------------------
   // Methods for parsing in protocol buffer format.  Most of these are
-  // just simple wrappers around MergeFromCodedStream().  Clear() will be called
-  // before merging the input.
+  // just simple wrappers around MergeFromCodedStream().  Clear() will be
+  // called before merging the input.
 
-  // Fill the message with a protocol buffer parsed from the given input stream.
-  // Returns false on a read error or if the input is in the wrong format.  A
-  // successful return does not indicate the entire input is consumed, ensure
-  // you call ConsumedEntireMessage() to check that if applicable.
+  // Fill the message with a protocol buffer parsed from the given input
+  // stream. Returns false on a read error or if the input is in the wrong
+  // format.  A successful return does not indicate the entire input is
+  // consumed, ensure you call ConsumedEntireMessage() to check that if
+  // applicable.
   public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
   // Like ParseFromCodedStream(), but accepts messages that are missing
   // required fields.
@@ -3585,6 +3686,18 @@ public static class Func extends FunctionPointer {
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
                                                            @Cast("google::protobuf::uint8*") byte[] target);
 }
+
+
+
+// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
+// preserve unknowns.
+@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean GetProto3PreserveUnknownsDefault();
+
+// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
+// preserve unknowns.
+@Namespace("google::protobuf::internal") public static native void SetProto3PreserveUnknownsDefault(@Cast("bool") boolean preserve);
+  // namespace internal
+
 
   // namespace protobuf
 
@@ -3949,14 +4062,15 @@ public static class Func extends FunctionPointer {
 
   // Typedef for backwards-compatibility.
 
-  // Get a Descriptor for this message's type.  This describes what
-  // fields the message contains, the types of those fields, etc.
+  // Get a non-owning pointer to a Descriptor for this message's type.  This
+  // describes what fields the message contains, the types of those fields, etc.
+  // This object remains property of the Message.
   public native @Const Descriptor GetDescriptor();
 
-  // Get the Reflection interface for this Message, which can be used to
-  // read and modify the fields of the Message dynamically (in other words,
-  // without knowing the message type at compile time).  This object remains
-  // property of the Message.
+  // Get a non-owning pointer to the Reflection interface for this Message,
+  // which can be used to read and modify the fields of the Message dynamically
+  // (in other words, without knowing the message type at compile time).  This
+  // object remains property of the Message.
   //
   // This method remains virtual in case a subclass does not implement
   // reflection and wants to override the default behavior.
@@ -4097,11 +4211,14 @@ public static class Func extends FunctionPointer {
                               int index1,
                               int index2);
 
-  // List all fields of the message which are currently set.  This includes
-  // extensions.  Singular fields will only be listed if HasField(field) would
-  // return true and repeated fields will only be listed if FieldSize(field)
-  // would return non-zero.  Fields (both normal fields and extension fields)
-  // will be listed ordered by field number.
+  // List all fields of the message which are currently set, except for unknown
+  // fields, but including extension known to the parser (i.e. compiled in).
+  // Singular fields will only be listed if HasField(field) would return true
+  // and repeated fields will only be listed if FieldSize(field) would return
+  // non-zero.  Fields (both normal fields and extension fields) will be listed
+  // ordered by field number.
+  // Use Reflection::GetUnknownFields() or message.unknown_fields() to also get
+  // access to fields/extensions unknown to the parser.
   public native void ListFields(
         @Const @ByRef Message message,
         FieldDescriptorVector output);
@@ -4372,9 +4489,9 @@ public static class Func extends FunctionPointer {
   // specifyed by 'field' passing ownership to the message.
   // TODO(tmarek): Make virtual after all subclasses have been
   // updated.
-  public native void AddAllocatedMessage(Message arg0,
-                                     @Const FieldDescriptor arg1,
-                                     Message arg2);
+  public native void AddAllocatedMessage(Message message,
+                                     @Const FieldDescriptor field,
+                                     Message new_entry);
 
 
   // Get a RepeatedFieldRef object that can be used to read the underlying
@@ -4817,7 +4934,12 @@ public static class Func extends FunctionPointer {
 // #ifndef GOOGLE_PROTOBUF_GENERATED_MESSAGE_TABLE_DRIVEN_H__
 // #define GOOGLE_PROTOBUF_GENERATED_MESSAGE_TABLE_DRIVEN_H__
 
+// #include <google/protobuf/map.h>
+// #include <google/protobuf/map_entry_lite.h>
+// #include <google/protobuf/map_field_lite.h>
 // #include <google/protobuf/message_lite.h>
+// #include <google/protobuf/wire_format_lite.h>
+// #include <google/protobuf/wire_format_lite_inl.h>
 
 // #if LANG_CXX11
 
@@ -4826,12 +4948,17 @@ public static class Func extends FunctionPointer {
 // #define PROTOBUF_CONSTEXPR_VAR
 // #endif
 
+// Processing-type masks.
 @Namespace("google::protobuf::internal") @MemberGetter public static native @Cast("const unsigned char") byte kOneofMask();
 public static final byte kOneofMask = kOneofMask();
 @Namespace("google::protobuf::internal") @MemberGetter public static native @Cast("const unsigned char") byte kRepeatedMask();
 public static final byte kRepeatedMask = kRepeatedMask();
-// Check this against types.
+// Mask for the raw type: either a WireFormatLite::FieldType or one of the
+// ProcessingTypes below, without the oneof or repeated flag.
+@Namespace("google::protobuf::internal") @MemberGetter public static native @Cast("const unsigned char") byte kTypeMask();
+public static final byte kTypeMask = kTypeMask();
 
+// Wire type masks.
 @Namespace("google::protobuf::internal") @MemberGetter public static native @Cast("const unsigned char") byte kNotPackedMask();
 public static final byte kNotPackedMask = kNotPackedMask();
 @Namespace("google::protobuf::internal") @MemberGetter public static native @Cast("const unsigned char") byte kInvalidMask();
@@ -4842,7 +4969,8 @@ public static final int
   TYPE_STRING_CORD = 19,
   TYPE_STRING_STRING_PIECE = 20,
   TYPE_BYTES_CORD = 21,
-  TYPE_BYTES_STRING_PIECE = 22;
+  TYPE_BYTES_STRING_PIECE = 22,
+  TYPE_MAP = 23;
 
 // #if LANG_CXX11
 // #endif
@@ -4869,7 +4997,9 @@ public static final int
     }
 
   public native @Cast("google::protobuf::uint32") int offset(); public native ParseTableField offset(int offset);
-  public native @Cast("google::protobuf::uint32") int has_bit_index(); public native ParseTableField has_bit_index(int has_bit_index);
+  // The presence_index ordinarily represents a has_bit index, but for fields
+  // inside a oneof it represents the index in _oneof_case_.
+  public native @Cast("google::protobuf::uint32") int presence_index(); public native ParseTableField presence_index(int presence_index);
   public native @Cast("unsigned char") byte normal_wiretype(); public native ParseTableField normal_wiretype(byte normal_wiretype);
   public native @Cast("unsigned char") byte packed_wiretype(); public native ParseTableField packed_wiretype(byte packed_wiretype);
 
@@ -4916,7 +5046,6 @@ public static final int
       }
   
     public native EnumValidator validator(); public native enum_aux validator(EnumValidator validator);
-    @MemberGetter public native @Cast("const char*") BytePointer name();
   }
   public native @ByRef enum_aux enums(); public native AuxillaryParseTableField enums(enum_aux enums);
   // Group, messages
@@ -4959,10 +5088,34 @@ public static final int
   
     @MemberGetter public native @Const Pointer default_ptr();
     @MemberGetter public native @Cast("const char*") BytePointer field_name();
-    public native @Cast("bool") boolean strict_utf8(); public native string_aux strict_utf8(boolean strict_utf8);
-    @MemberGetter public native @Cast("const char*") BytePointer name();
   }
   public native @ByRef string_aux strings(); public native AuxillaryParseTableField strings(string_aux strings);
+
+  public static class map_aux extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public map_aux() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public map_aux(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public map_aux(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public map_aux position(long position) {
+          return (map_aux)super.position(position);
+      }
+  
+    public static class Parse_map_CodedInputStream_Pointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Parse_map_CodedInputStream_Pointer(Pointer p) { super(p); }
+        protected Parse_map_CodedInputStream_Pointer() { allocate(); }
+        private native void allocate();
+        public native @Cast("bool") boolean call(CodedInputStream arg0, Pointer arg1);
+    }
+    public native Parse_map_CodedInputStream_Pointer parse_map(); public native map_aux parse_map(Parse_map_CodedInputStream_Pointer parse_map);
+  }
+  public native @ByRef map_aux maps(); public native AuxillaryParseTableField maps(map_aux maps);
 
 // #if LANG_CXX11
 // #else
@@ -4981,6 +5134,10 @@ public static final int
         @ByVal string_aux s) { super((Pointer)null); allocate(s); }
   private native void allocate(
         @ByVal string_aux s);
+  public AuxillaryParseTableField(
+        @ByVal map_aux m) { super((Pointer)null); allocate(m); }
+  private native void allocate(
+        @ByVal map_aux m);
 }
 
 @Namespace("google::protobuf::internal") public static class ParseTable extends Pointer {
@@ -5004,8 +5161,17 @@ public static final int
 
   // TODO(ckennelly): Vet these for sign extension.
   public native @Cast("google::protobuf::int64") long has_bits_offset(); public native ParseTable has_bits_offset(long has_bits_offset);
+  public native @Cast("google::protobuf::int64") long oneof_case_offset(); public native ParseTable oneof_case_offset(long oneof_case_offset);
+  public native @Cast("google::protobuf::int64") long extension_offset(); public native ParseTable extension_offset(long extension_offset);
   public native @Cast("google::protobuf::int64") long arena_offset(); public native ParseTable arena_offset(long arena_offset);
-  public native int unknown_field_set(); public native ParseTable unknown_field_set(int unknown_field_set);
+
+  // ExplicitlyInitialized<T> -> T requires a reinterpret_cast, which prevents
+  // the tables from being constructed as a constexpr.  We use void to avoid
+  // the cast.
+  @MemberGetter public native @Const Pointer default_instance_void();
+  public native @Const MessageLite default_instance();
+
+  public native @Cast("bool") boolean unknown_field_set(); public native ParseTable unknown_field_set(boolean unknown_field_set);
 }
 
 // TODO(jhen): Remove the __NVCC__ check when we get a version of nvcc that
@@ -5022,7 +5188,11 @@ public static final int
 
 // #endif
 
+// TODO(ckennelly): Consolidate these implementations into a single one, using
+// dynamic dispatch to the appropriate unknown field handler.
 @Namespace("google::protobuf::internal") public static native @Cast("bool") boolean MergePartialFromCodedStream(MessageLite msg, @Const @ByRef ParseTable table,
+                                 CodedInputStream input);
+@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean MergePartialFromCodedStreamLite(MessageLite msg, @Const @ByRef ParseTable table,
                                  CodedInputStream input);
 
   // namespace internal
@@ -5044,12 +5214,12 @@ public static final int
 
 // #include <google/protobuf/stubs/common.h>
 
-// #if GOOGLE_PROTOBUF_VERSION < 3003000
+// #if GOOGLE_PROTOBUF_VERSION < 3005000
 // #error This file was generated by a newer version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please update
 // #error your headers.
 // #endif
-// #if 3003000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3005001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
 // #error incompatible with your Protocol Buffer headers.  Please
 // #error regenerate this file with a newer version of protoc.
@@ -5067,36 +5237,133 @@ public static final int
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-  // namespace caffe
-// Internal implementation detail -- do not call these.
-@Namespace("caffe::protobuf_caffe_2eproto") public static class TableStruct extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public TableStruct() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TableStruct(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TableStruct(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public TableStruct position(long position) {
-        return (TableStruct)super.position(position);
-    }
-
-  @MemberGetter public static native @Const @ByRef ParseTableField entries(int i);
-  @MemberGetter public static native @Const ParseTableField entries();
-  @MemberGetter public static native @Const @ByRef AuxillaryParseTableField aux(int i);
-  @MemberGetter public static native @Const AuxillaryParseTableField aux();
-  @MemberGetter public static native @Const @ByRef ParseTable schema(int i);
-  @MemberGetter public static native @Const ParseTable schema();
-  @MemberGetter public static native @Cast("const google::protobuf::uint32") int offsets(int i);
-  @MemberGetter public static native @Cast("const google::protobuf::uint32*") IntPointer offsets();
-  public static native void InitDefaultsImpl();
-  public static native void Shutdown();
-}
-@Namespace("caffe::protobuf_caffe_2eproto") public static native void AddDescriptors();
-@Namespace("caffe::protobuf_caffe_2eproto") public static native void InitDefaults();
+// Internal implementation detail -- do not use these members.
+@Namespace("protobuf_caffe_2eproto") public static native void AddDescriptors();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobShapeImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobShape();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobProtoImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobProto();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobProtoVectorImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBlobProtoVector();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDatumImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDatum();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsFillerParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsFillerParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsNetParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsNetParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSolverParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSolverParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSolverStateImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSolverState();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsNetStateImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsNetState();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsNetStateRuleImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsNetStateRule();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsParamSpecImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsParamSpec();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLayerParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLayerParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsTransformationParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsTransformationParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLossParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLossParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsAccuracyParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsAccuracyParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsArgMaxParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsArgMaxParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsConcatParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsConcatParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBatchNormParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBatchNormParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBiasParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsBiasParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsContrastiveLossParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsContrastiveLossParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsConvolutionParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsConvolutionParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsCropParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsCropParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDataParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDataParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDropoutParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDropoutParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDummyDataParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsDummyDataParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsEltwiseParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsEltwiseParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsELUParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsELUParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsEmbedParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsEmbedParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsExpParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsExpParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsFlattenParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsFlattenParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsHDF5DataParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsHDF5DataParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsHDF5OutputParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsHDF5OutputParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsHingeLossParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsHingeLossParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsImageDataParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsImageDataParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsInfogainLossParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsInfogainLossParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsInnerProductParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsInnerProductParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsInputParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsInputParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLogParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLogParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLRNParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsLRNParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsMemoryDataParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsMemoryDataParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsMVNParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsMVNParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsParameterParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsParameterParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPoolingParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPoolingParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPowerParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPowerParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPythonParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPythonParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsRecurrentParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsRecurrentParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsReductionParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsReductionParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsReLUParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsReLUParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsReshapeParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsReshapeParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsScaleParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsScaleParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSigmoidParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSigmoidParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSliceParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSliceParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSoftmaxParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSoftmaxParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsTanHParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsTanHParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsTileParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsTileParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsThresholdParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsThresholdParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsWindowDataParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsWindowDataParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSPPParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsSPPParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsV1LayerParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsV1LayerParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsV0LayerParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsV0LayerParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPReLUParameterImpl();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaultsPReLUParameter();
+@Namespace("protobuf_caffe_2eproto") public static native void InitDefaults();
   // namespace protobuf_caffe_2eproto
+  // namespace caffe
 
 /** enum caffe::FillerParameter_VarianceNorm */
 public static final int
@@ -5752,19 +6019,21 @@ public static final int
   private native void allocate(@Const @ByRef BlobShape from);
 
   public native @ByRef @Name("operator =") BlobShape put(@Const @ByRef BlobShape from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BlobShape default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const BlobShape internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(BlobShape other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -5826,19 +6095,21 @@ public static final int
   private native void allocate(@Const @ByRef BlobProto from);
 
   public native @ByRef @Name("operator =") BlobProto put(@Const @ByRef BlobProto from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BlobProto default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const BlobProto internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(BlobProto other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -5913,8 +6184,8 @@ public static final int
   @MemberGetter public static native int kShapeFieldNumber();
   public static final int kShapeFieldNumber = kShapeFieldNumber();
   public native @Const @ByRef BlobShape shape();
-  public native BlobShape mutable_shape();
   public native BlobShape release_shape();
+  public native BlobShape mutable_shape();
   public native void set_allocated_shape(BlobShape shape);
 
   // optional int32 num = 1 [default = 0];
@@ -5969,19 +6240,21 @@ public static final int
   private native void allocate(@Const @ByRef BlobProtoVector from);
 
   public native @ByRef @Name("operator =") BlobProtoVector put(@Const @ByRef BlobProtoVector from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BlobProtoVector default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const BlobProtoVector internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(BlobProtoVector other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -6043,19 +6316,21 @@ public static final int
   private native void allocate(@Const @ByRef Datum from);
 
   public native @ByRef @Name("operator =") Datum put(@Const @ByRef Datum from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef Datum default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const Datum internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(Datum other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -6172,19 +6447,21 @@ public static final int
   private native void allocate(@Const @ByRef FillerParameter from);
 
   public native @ByRef @Name("operator =") FillerParameter put(@Const @ByRef FillerParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef FillerParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const FillerParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(FillerParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -6336,19 +6613,21 @@ public static final int
   private native void allocate(@Const @ByRef NetParameter from);
 
   public native @ByRef @Name("operator =") NetParameter put(@Const @ByRef NetParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef NetParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const NetParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(NetParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -6460,8 +6739,8 @@ public static final int
   @MemberGetter public static native int kStateFieldNumber();
   public static final int kStateFieldNumber = kStateFieldNumber();
   public native @Const @ByRef NetState state();
-  public native NetState mutable_state();
   public native NetState release_state();
+  public native NetState mutable_state();
   public native void set_allocated_state(NetState state);
 
   // optional bool force_backward = 5 [default = false];
@@ -6500,19 +6779,21 @@ public static final int
   private native void allocate(@Const @ByRef SolverParameter from);
 
   public native @ByRef @Name("operator =") SolverParameter put(@Const @ByRef SolverParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SolverParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const SolverParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(SolverParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -6787,8 +7068,8 @@ public static final int
   @MemberGetter public static native int kTrainNetParamFieldNumber();
   public static final int kTrainNetParamFieldNumber = kTrainNetParamFieldNumber();
   public native @Const @ByRef NetParameter train_net_param();
-  public native NetParameter mutable_train_net_param();
   public native NetParameter release_train_net_param();
+  public native NetParameter mutable_train_net_param();
   public native void set_allocated_train_net_param(NetParameter train_net_param);
 
   // optional .caffe.NetParameter net_param = 25;
@@ -6797,8 +7078,8 @@ public static final int
   @MemberGetter public static native int kNetParamFieldNumber();
   public static final int kNetParamFieldNumber = kNetParamFieldNumber();
   public native @Const @ByRef NetParameter net_param();
-  public native NetParameter mutable_net_param();
   public native NetParameter release_net_param();
+  public native NetParameter mutable_net_param();
   public native void set_allocated_net_param(NetParameter net_param);
 
   // optional .caffe.NetState train_state = 26;
@@ -6807,8 +7088,8 @@ public static final int
   @MemberGetter public static native int kTrainStateFieldNumber();
   public static final int kTrainStateFieldNumber = kTrainStateFieldNumber();
   public native @Const @ByRef NetState train_state();
-  public native NetState mutable_train_state();
   public native NetState release_train_state();
+  public native NetState mutable_train_state();
   public native void set_allocated_train_state(NetState train_state);
 
   // optional int32 test_interval = 4 [default = 0];
@@ -7047,19 +7328,21 @@ public static final int
   private native void allocate(@Const @ByRef SolverState from);
 
   public native @ByRef @Name("operator =") SolverState put(@Const @ByRef SolverState from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SolverState default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const SolverState internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(SolverState other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -7153,19 +7436,21 @@ public static final int
   private native void allocate(@Const @ByRef NetState from);
 
   public native @ByRef @Name("operator =") NetState put(@Const @ByRef NetState from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef NetState default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const NetState internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(NetState other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -7255,19 +7540,21 @@ public static final int
   private native void allocate(@Const @ByRef NetStateRule from);
 
   public native @ByRef @Name("operator =") NetStateRule put(@Const @ByRef NetStateRule from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef NetStateRule default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const NetStateRule internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(NetStateRule other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -7386,19 +7673,21 @@ public static final int
   private native void allocate(@Const @ByRef ParamSpec from);
 
   public native @ByRef @Name("operator =") ParamSpec put(@Const @ByRef ParamSpec from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ParamSpec default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ParamSpec internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ParamSpec other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -7516,19 +7805,21 @@ public static final int
   private native void allocate(@Const @ByRef LayerParameter from);
 
   public native @ByRef @Name("operator =") LayerParameter put(@Const @ByRef LayerParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LayerParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const LayerParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(LayerParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -7695,8 +7986,8 @@ public static final int
   @MemberGetter public static native int kTransformParamFieldNumber();
   public static final int kTransformParamFieldNumber = kTransformParamFieldNumber();
   public native @Const @ByRef TransformationParameter transform_param();
-  public native TransformationParameter mutable_transform_param();
   public native TransformationParameter release_transform_param();
+  public native TransformationParameter mutable_transform_param();
   public native void set_allocated_transform_param(TransformationParameter transform_param);
 
   // optional .caffe.LossParameter loss_param = 101;
@@ -7705,8 +7996,8 @@ public static final int
   @MemberGetter public static native int kLossParamFieldNumber();
   public static final int kLossParamFieldNumber = kLossParamFieldNumber();
   public native @Const @ByRef LossParameter loss_param();
-  public native LossParameter mutable_loss_param();
   public native LossParameter release_loss_param();
+  public native LossParameter mutable_loss_param();
   public native void set_allocated_loss_param(LossParameter loss_param);
 
   // optional .caffe.AccuracyParameter accuracy_param = 102;
@@ -7715,8 +8006,8 @@ public static final int
   @MemberGetter public static native int kAccuracyParamFieldNumber();
   public static final int kAccuracyParamFieldNumber = kAccuracyParamFieldNumber();
   public native @Const @ByRef AccuracyParameter accuracy_param();
-  public native AccuracyParameter mutable_accuracy_param();
   public native AccuracyParameter release_accuracy_param();
+  public native AccuracyParameter mutable_accuracy_param();
   public native void set_allocated_accuracy_param(AccuracyParameter accuracy_param);
 
   // optional .caffe.ArgMaxParameter argmax_param = 103;
@@ -7725,8 +8016,8 @@ public static final int
   @MemberGetter public static native int kArgmaxParamFieldNumber();
   public static final int kArgmaxParamFieldNumber = kArgmaxParamFieldNumber();
   public native @Const @ByRef ArgMaxParameter argmax_param();
-  public native ArgMaxParameter mutable_argmax_param();
   public native ArgMaxParameter release_argmax_param();
+  public native ArgMaxParameter mutable_argmax_param();
   public native void set_allocated_argmax_param(ArgMaxParameter argmax_param);
 
   // optional .caffe.ConcatParameter concat_param = 104;
@@ -7735,8 +8026,8 @@ public static final int
   @MemberGetter public static native int kConcatParamFieldNumber();
   public static final int kConcatParamFieldNumber = kConcatParamFieldNumber();
   public native @Const @ByRef ConcatParameter concat_param();
-  public native ConcatParameter mutable_concat_param();
   public native ConcatParameter release_concat_param();
+  public native ConcatParameter mutable_concat_param();
   public native void set_allocated_concat_param(ConcatParameter concat_param);
 
   // optional .caffe.ContrastiveLossParameter contrastive_loss_param = 105;
@@ -7745,8 +8036,8 @@ public static final int
   @MemberGetter public static native int kContrastiveLossParamFieldNumber();
   public static final int kContrastiveLossParamFieldNumber = kContrastiveLossParamFieldNumber();
   public native @Const @ByRef ContrastiveLossParameter contrastive_loss_param();
-  public native ContrastiveLossParameter mutable_contrastive_loss_param();
   public native ContrastiveLossParameter release_contrastive_loss_param();
+  public native ContrastiveLossParameter mutable_contrastive_loss_param();
   public native void set_allocated_contrastive_loss_param(ContrastiveLossParameter contrastive_loss_param);
 
   // optional .caffe.ConvolutionParameter convolution_param = 106;
@@ -7755,8 +8046,8 @@ public static final int
   @MemberGetter public static native int kConvolutionParamFieldNumber();
   public static final int kConvolutionParamFieldNumber = kConvolutionParamFieldNumber();
   public native @Const @ByRef ConvolutionParameter convolution_param();
-  public native ConvolutionParameter mutable_convolution_param();
   public native ConvolutionParameter release_convolution_param();
+  public native ConvolutionParameter mutable_convolution_param();
   public native void set_allocated_convolution_param(ConvolutionParameter convolution_param);
 
   // optional .caffe.DataParameter data_param = 107;
@@ -7765,8 +8056,8 @@ public static final int
   @MemberGetter public static native int kDataParamFieldNumber();
   public static final int kDataParamFieldNumber = kDataParamFieldNumber();
   public native @Const @ByRef DataParameter data_param();
-  public native DataParameter mutable_data_param();
   public native DataParameter release_data_param();
+  public native DataParameter mutable_data_param();
   public native void set_allocated_data_param(DataParameter data_param);
 
   // optional .caffe.DropoutParameter dropout_param = 108;
@@ -7775,8 +8066,8 @@ public static final int
   @MemberGetter public static native int kDropoutParamFieldNumber();
   public static final int kDropoutParamFieldNumber = kDropoutParamFieldNumber();
   public native @Const @ByRef DropoutParameter dropout_param();
-  public native DropoutParameter mutable_dropout_param();
   public native DropoutParameter release_dropout_param();
+  public native DropoutParameter mutable_dropout_param();
   public native void set_allocated_dropout_param(DropoutParameter dropout_param);
 
   // optional .caffe.DummyDataParameter dummy_data_param = 109;
@@ -7785,8 +8076,8 @@ public static final int
   @MemberGetter public static native int kDummyDataParamFieldNumber();
   public static final int kDummyDataParamFieldNumber = kDummyDataParamFieldNumber();
   public native @Const @ByRef DummyDataParameter dummy_data_param();
-  public native DummyDataParameter mutable_dummy_data_param();
   public native DummyDataParameter release_dummy_data_param();
+  public native DummyDataParameter mutable_dummy_data_param();
   public native void set_allocated_dummy_data_param(DummyDataParameter dummy_data_param);
 
   // optional .caffe.EltwiseParameter eltwise_param = 110;
@@ -7795,8 +8086,8 @@ public static final int
   @MemberGetter public static native int kEltwiseParamFieldNumber();
   public static final int kEltwiseParamFieldNumber = kEltwiseParamFieldNumber();
   public native @Const @ByRef EltwiseParameter eltwise_param();
-  public native EltwiseParameter mutable_eltwise_param();
   public native EltwiseParameter release_eltwise_param();
+  public native EltwiseParameter mutable_eltwise_param();
   public native void set_allocated_eltwise_param(EltwiseParameter eltwise_param);
 
   // optional .caffe.ExpParameter exp_param = 111;
@@ -7805,8 +8096,8 @@ public static final int
   @MemberGetter public static native int kExpParamFieldNumber();
   public static final int kExpParamFieldNumber = kExpParamFieldNumber();
   public native @Const @ByRef ExpParameter exp_param();
-  public native ExpParameter mutable_exp_param();
   public native ExpParameter release_exp_param();
+  public native ExpParameter mutable_exp_param();
   public native void set_allocated_exp_param(ExpParameter exp_param);
 
   // optional .caffe.HDF5DataParameter hdf5_data_param = 112;
@@ -7815,8 +8106,8 @@ public static final int
   @MemberGetter public static native int kHdf5DataParamFieldNumber();
   public static final int kHdf5DataParamFieldNumber = kHdf5DataParamFieldNumber();
   public native @Const @ByRef HDF5DataParameter hdf5_data_param();
-  public native HDF5DataParameter mutable_hdf5_data_param();
   public native HDF5DataParameter release_hdf5_data_param();
+  public native HDF5DataParameter mutable_hdf5_data_param();
   public native void set_allocated_hdf5_data_param(HDF5DataParameter hdf5_data_param);
 
   // optional .caffe.HDF5OutputParameter hdf5_output_param = 113;
@@ -7825,8 +8116,8 @@ public static final int
   @MemberGetter public static native int kHdf5OutputParamFieldNumber();
   public static final int kHdf5OutputParamFieldNumber = kHdf5OutputParamFieldNumber();
   public native @Const @ByRef HDF5OutputParameter hdf5_output_param();
-  public native HDF5OutputParameter mutable_hdf5_output_param();
   public native HDF5OutputParameter release_hdf5_output_param();
+  public native HDF5OutputParameter mutable_hdf5_output_param();
   public native void set_allocated_hdf5_output_param(HDF5OutputParameter hdf5_output_param);
 
   // optional .caffe.HingeLossParameter hinge_loss_param = 114;
@@ -7835,8 +8126,8 @@ public static final int
   @MemberGetter public static native int kHingeLossParamFieldNumber();
   public static final int kHingeLossParamFieldNumber = kHingeLossParamFieldNumber();
   public native @Const @ByRef HingeLossParameter hinge_loss_param();
-  public native HingeLossParameter mutable_hinge_loss_param();
   public native HingeLossParameter release_hinge_loss_param();
+  public native HingeLossParameter mutable_hinge_loss_param();
   public native void set_allocated_hinge_loss_param(HingeLossParameter hinge_loss_param);
 
   // optional .caffe.ImageDataParameter image_data_param = 115;
@@ -7845,8 +8136,8 @@ public static final int
   @MemberGetter public static native int kImageDataParamFieldNumber();
   public static final int kImageDataParamFieldNumber = kImageDataParamFieldNumber();
   public native @Const @ByRef ImageDataParameter image_data_param();
-  public native ImageDataParameter mutable_image_data_param();
   public native ImageDataParameter release_image_data_param();
+  public native ImageDataParameter mutable_image_data_param();
   public native void set_allocated_image_data_param(ImageDataParameter image_data_param);
 
   // optional .caffe.InfogainLossParameter infogain_loss_param = 116;
@@ -7855,8 +8146,8 @@ public static final int
   @MemberGetter public static native int kInfogainLossParamFieldNumber();
   public static final int kInfogainLossParamFieldNumber = kInfogainLossParamFieldNumber();
   public native @Const @ByRef InfogainLossParameter infogain_loss_param();
-  public native InfogainLossParameter mutable_infogain_loss_param();
   public native InfogainLossParameter release_infogain_loss_param();
+  public native InfogainLossParameter mutable_infogain_loss_param();
   public native void set_allocated_infogain_loss_param(InfogainLossParameter infogain_loss_param);
 
   // optional .caffe.InnerProductParameter inner_product_param = 117;
@@ -7865,8 +8156,8 @@ public static final int
   @MemberGetter public static native int kInnerProductParamFieldNumber();
   public static final int kInnerProductParamFieldNumber = kInnerProductParamFieldNumber();
   public native @Const @ByRef InnerProductParameter inner_product_param();
-  public native InnerProductParameter mutable_inner_product_param();
   public native InnerProductParameter release_inner_product_param();
+  public native InnerProductParameter mutable_inner_product_param();
   public native void set_allocated_inner_product_param(InnerProductParameter inner_product_param);
 
   // optional .caffe.LRNParameter lrn_param = 118;
@@ -7875,8 +8166,8 @@ public static final int
   @MemberGetter public static native int kLrnParamFieldNumber();
   public static final int kLrnParamFieldNumber = kLrnParamFieldNumber();
   public native @Const @ByRef LRNParameter lrn_param();
-  public native LRNParameter mutable_lrn_param();
   public native LRNParameter release_lrn_param();
+  public native LRNParameter mutable_lrn_param();
   public native void set_allocated_lrn_param(LRNParameter lrn_param);
 
   // optional .caffe.MemoryDataParameter memory_data_param = 119;
@@ -7885,8 +8176,8 @@ public static final int
   @MemberGetter public static native int kMemoryDataParamFieldNumber();
   public static final int kMemoryDataParamFieldNumber = kMemoryDataParamFieldNumber();
   public native @Const @ByRef MemoryDataParameter memory_data_param();
-  public native MemoryDataParameter mutable_memory_data_param();
   public native MemoryDataParameter release_memory_data_param();
+  public native MemoryDataParameter mutable_memory_data_param();
   public native void set_allocated_memory_data_param(MemoryDataParameter memory_data_param);
 
   // optional .caffe.MVNParameter mvn_param = 120;
@@ -7895,8 +8186,8 @@ public static final int
   @MemberGetter public static native int kMvnParamFieldNumber();
   public static final int kMvnParamFieldNumber = kMvnParamFieldNumber();
   public native @Const @ByRef MVNParameter mvn_param();
-  public native MVNParameter mutable_mvn_param();
   public native MVNParameter release_mvn_param();
+  public native MVNParameter mutable_mvn_param();
   public native void set_allocated_mvn_param(MVNParameter mvn_param);
 
   // optional .caffe.PoolingParameter pooling_param = 121;
@@ -7905,8 +8196,8 @@ public static final int
   @MemberGetter public static native int kPoolingParamFieldNumber();
   public static final int kPoolingParamFieldNumber = kPoolingParamFieldNumber();
   public native @Const @ByRef PoolingParameter pooling_param();
-  public native PoolingParameter mutable_pooling_param();
   public native PoolingParameter release_pooling_param();
+  public native PoolingParameter mutable_pooling_param();
   public native void set_allocated_pooling_param(PoolingParameter pooling_param);
 
   // optional .caffe.PowerParameter power_param = 122;
@@ -7915,8 +8206,8 @@ public static final int
   @MemberGetter public static native int kPowerParamFieldNumber();
   public static final int kPowerParamFieldNumber = kPowerParamFieldNumber();
   public native @Const @ByRef PowerParameter power_param();
-  public native PowerParameter mutable_power_param();
   public native PowerParameter release_power_param();
+  public native PowerParameter mutable_power_param();
   public native void set_allocated_power_param(PowerParameter power_param);
 
   // optional .caffe.ReLUParameter relu_param = 123;
@@ -7925,8 +8216,8 @@ public static final int
   @MemberGetter public static native int kReluParamFieldNumber();
   public static final int kReluParamFieldNumber = kReluParamFieldNumber();
   public native @Const @ByRef ReLUParameter relu_param();
-  public native ReLUParameter mutable_relu_param();
   public native ReLUParameter release_relu_param();
+  public native ReLUParameter mutable_relu_param();
   public native void set_allocated_relu_param(ReLUParameter relu_param);
 
   // optional .caffe.SigmoidParameter sigmoid_param = 124;
@@ -7935,8 +8226,8 @@ public static final int
   @MemberGetter public static native int kSigmoidParamFieldNumber();
   public static final int kSigmoidParamFieldNumber = kSigmoidParamFieldNumber();
   public native @Const @ByRef SigmoidParameter sigmoid_param();
-  public native SigmoidParameter mutable_sigmoid_param();
   public native SigmoidParameter release_sigmoid_param();
+  public native SigmoidParameter mutable_sigmoid_param();
   public native void set_allocated_sigmoid_param(SigmoidParameter sigmoid_param);
 
   // optional .caffe.SoftmaxParameter softmax_param = 125;
@@ -7945,8 +8236,8 @@ public static final int
   @MemberGetter public static native int kSoftmaxParamFieldNumber();
   public static final int kSoftmaxParamFieldNumber = kSoftmaxParamFieldNumber();
   public native @Const @ByRef SoftmaxParameter softmax_param();
-  public native SoftmaxParameter mutable_softmax_param();
   public native SoftmaxParameter release_softmax_param();
+  public native SoftmaxParameter mutable_softmax_param();
   public native void set_allocated_softmax_param(SoftmaxParameter softmax_param);
 
   // optional .caffe.SliceParameter slice_param = 126;
@@ -7955,8 +8246,8 @@ public static final int
   @MemberGetter public static native int kSliceParamFieldNumber();
   public static final int kSliceParamFieldNumber = kSliceParamFieldNumber();
   public native @Const @ByRef SliceParameter slice_param();
-  public native SliceParameter mutable_slice_param();
   public native SliceParameter release_slice_param();
+  public native SliceParameter mutable_slice_param();
   public native void set_allocated_slice_param(SliceParameter slice_param);
 
   // optional .caffe.TanHParameter tanh_param = 127;
@@ -7965,8 +8256,8 @@ public static final int
   @MemberGetter public static native int kTanhParamFieldNumber();
   public static final int kTanhParamFieldNumber = kTanhParamFieldNumber();
   public native @Const @ByRef TanHParameter tanh_param();
-  public native TanHParameter mutable_tanh_param();
   public native TanHParameter release_tanh_param();
+  public native TanHParameter mutable_tanh_param();
   public native void set_allocated_tanh_param(TanHParameter tanh_param);
 
   // optional .caffe.ThresholdParameter threshold_param = 128;
@@ -7975,8 +8266,8 @@ public static final int
   @MemberGetter public static native int kThresholdParamFieldNumber();
   public static final int kThresholdParamFieldNumber = kThresholdParamFieldNumber();
   public native @Const @ByRef ThresholdParameter threshold_param();
-  public native ThresholdParameter mutable_threshold_param();
   public native ThresholdParameter release_threshold_param();
+  public native ThresholdParameter mutable_threshold_param();
   public native void set_allocated_threshold_param(ThresholdParameter threshold_param);
 
   // optional .caffe.WindowDataParameter window_data_param = 129;
@@ -7985,8 +8276,8 @@ public static final int
   @MemberGetter public static native int kWindowDataParamFieldNumber();
   public static final int kWindowDataParamFieldNumber = kWindowDataParamFieldNumber();
   public native @Const @ByRef WindowDataParameter window_data_param();
-  public native WindowDataParameter mutable_window_data_param();
   public native WindowDataParameter release_window_data_param();
+  public native WindowDataParameter mutable_window_data_param();
   public native void set_allocated_window_data_param(WindowDataParameter window_data_param);
 
   // optional .caffe.PythonParameter python_param = 130;
@@ -7995,8 +8286,8 @@ public static final int
   @MemberGetter public static native int kPythonParamFieldNumber();
   public static final int kPythonParamFieldNumber = kPythonParamFieldNumber();
   public native @Const @ByRef PythonParameter python_param();
-  public native PythonParameter mutable_python_param();
   public native PythonParameter release_python_param();
+  public native PythonParameter mutable_python_param();
   public native void set_allocated_python_param(PythonParameter python_param);
 
   // optional .caffe.PReLUParameter prelu_param = 131;
@@ -8005,8 +8296,8 @@ public static final int
   @MemberGetter public static native int kPreluParamFieldNumber();
   public static final int kPreluParamFieldNumber = kPreluParamFieldNumber();
   public native @Const @ByRef PReLUParameter prelu_param();
-  public native PReLUParameter mutable_prelu_param();
   public native PReLUParameter release_prelu_param();
+  public native PReLUParameter mutable_prelu_param();
   public native void set_allocated_prelu_param(PReLUParameter prelu_param);
 
   // optional .caffe.SPPParameter spp_param = 132;
@@ -8015,8 +8306,8 @@ public static final int
   @MemberGetter public static native int kSppParamFieldNumber();
   public static final int kSppParamFieldNumber = kSppParamFieldNumber();
   public native @Const @ByRef SPPParameter spp_param();
-  public native SPPParameter mutable_spp_param();
   public native SPPParameter release_spp_param();
+  public native SPPParameter mutable_spp_param();
   public native void set_allocated_spp_param(SPPParameter spp_param);
 
   // optional .caffe.ReshapeParameter reshape_param = 133;
@@ -8025,8 +8316,8 @@ public static final int
   @MemberGetter public static native int kReshapeParamFieldNumber();
   public static final int kReshapeParamFieldNumber = kReshapeParamFieldNumber();
   public native @Const @ByRef ReshapeParameter reshape_param();
-  public native ReshapeParameter mutable_reshape_param();
   public native ReshapeParameter release_reshape_param();
+  public native ReshapeParameter mutable_reshape_param();
   public native void set_allocated_reshape_param(ReshapeParameter reshape_param);
 
   // optional .caffe.LogParameter log_param = 134;
@@ -8035,8 +8326,8 @@ public static final int
   @MemberGetter public static native int kLogParamFieldNumber();
   public static final int kLogParamFieldNumber = kLogParamFieldNumber();
   public native @Const @ByRef LogParameter log_param();
-  public native LogParameter mutable_log_param();
   public native LogParameter release_log_param();
+  public native LogParameter mutable_log_param();
   public native void set_allocated_log_param(LogParameter log_param);
 
   // optional .caffe.FlattenParameter flatten_param = 135;
@@ -8045,8 +8336,8 @@ public static final int
   @MemberGetter public static native int kFlattenParamFieldNumber();
   public static final int kFlattenParamFieldNumber = kFlattenParamFieldNumber();
   public native @Const @ByRef FlattenParameter flatten_param();
-  public native FlattenParameter mutable_flatten_param();
   public native FlattenParameter release_flatten_param();
+  public native FlattenParameter mutable_flatten_param();
   public native void set_allocated_flatten_param(FlattenParameter flatten_param);
 
   // optional .caffe.ReductionParameter reduction_param = 136;
@@ -8055,8 +8346,8 @@ public static final int
   @MemberGetter public static native int kReductionParamFieldNumber();
   public static final int kReductionParamFieldNumber = kReductionParamFieldNumber();
   public native @Const @ByRef ReductionParameter reduction_param();
-  public native ReductionParameter mutable_reduction_param();
   public native ReductionParameter release_reduction_param();
+  public native ReductionParameter mutable_reduction_param();
   public native void set_allocated_reduction_param(ReductionParameter reduction_param);
 
   // optional .caffe.EmbedParameter embed_param = 137;
@@ -8065,8 +8356,8 @@ public static final int
   @MemberGetter public static native int kEmbedParamFieldNumber();
   public static final int kEmbedParamFieldNumber = kEmbedParamFieldNumber();
   public native @Const @ByRef EmbedParameter embed_param();
-  public native EmbedParameter mutable_embed_param();
   public native EmbedParameter release_embed_param();
+  public native EmbedParameter mutable_embed_param();
   public native void set_allocated_embed_param(EmbedParameter embed_param);
 
   // optional .caffe.TileParameter tile_param = 138;
@@ -8075,8 +8366,8 @@ public static final int
   @MemberGetter public static native int kTileParamFieldNumber();
   public static final int kTileParamFieldNumber = kTileParamFieldNumber();
   public native @Const @ByRef TileParameter tile_param();
-  public native TileParameter mutable_tile_param();
   public native TileParameter release_tile_param();
+  public native TileParameter mutable_tile_param();
   public native void set_allocated_tile_param(TileParameter tile_param);
 
   // optional .caffe.BatchNormParameter batch_norm_param = 139;
@@ -8085,8 +8376,8 @@ public static final int
   @MemberGetter public static native int kBatchNormParamFieldNumber();
   public static final int kBatchNormParamFieldNumber = kBatchNormParamFieldNumber();
   public native @Const @ByRef BatchNormParameter batch_norm_param();
-  public native BatchNormParameter mutable_batch_norm_param();
   public native BatchNormParameter release_batch_norm_param();
+  public native BatchNormParameter mutable_batch_norm_param();
   public native void set_allocated_batch_norm_param(BatchNormParameter batch_norm_param);
 
   // optional .caffe.ELUParameter elu_param = 140;
@@ -8095,8 +8386,8 @@ public static final int
   @MemberGetter public static native int kEluParamFieldNumber();
   public static final int kEluParamFieldNumber = kEluParamFieldNumber();
   public native @Const @ByRef ELUParameter elu_param();
-  public native ELUParameter mutable_elu_param();
   public native ELUParameter release_elu_param();
+  public native ELUParameter mutable_elu_param();
   public native void set_allocated_elu_param(ELUParameter elu_param);
 
   // optional .caffe.BiasParameter bias_param = 141;
@@ -8105,8 +8396,8 @@ public static final int
   @MemberGetter public static native int kBiasParamFieldNumber();
   public static final int kBiasParamFieldNumber = kBiasParamFieldNumber();
   public native @Const @ByRef BiasParameter bias_param();
-  public native BiasParameter mutable_bias_param();
   public native BiasParameter release_bias_param();
+  public native BiasParameter mutable_bias_param();
   public native void set_allocated_bias_param(BiasParameter bias_param);
 
   // optional .caffe.ScaleParameter scale_param = 142;
@@ -8115,8 +8406,8 @@ public static final int
   @MemberGetter public static native int kScaleParamFieldNumber();
   public static final int kScaleParamFieldNumber = kScaleParamFieldNumber();
   public native @Const @ByRef ScaleParameter scale_param();
-  public native ScaleParameter mutable_scale_param();
   public native ScaleParameter release_scale_param();
+  public native ScaleParameter mutable_scale_param();
   public native void set_allocated_scale_param(ScaleParameter scale_param);
 
   // optional .caffe.InputParameter input_param = 143;
@@ -8125,8 +8416,8 @@ public static final int
   @MemberGetter public static native int kInputParamFieldNumber();
   public static final int kInputParamFieldNumber = kInputParamFieldNumber();
   public native @Const @ByRef InputParameter input_param();
-  public native InputParameter mutable_input_param();
   public native InputParameter release_input_param();
+  public native InputParameter mutable_input_param();
   public native void set_allocated_input_param(InputParameter input_param);
 
   // optional .caffe.CropParameter crop_param = 144;
@@ -8135,8 +8426,8 @@ public static final int
   @MemberGetter public static native int kCropParamFieldNumber();
   public static final int kCropParamFieldNumber = kCropParamFieldNumber();
   public native @Const @ByRef CropParameter crop_param();
-  public native CropParameter mutable_crop_param();
   public native CropParameter release_crop_param();
+  public native CropParameter mutable_crop_param();
   public native void set_allocated_crop_param(CropParameter crop_param);
 
   // optional .caffe.ParameterParameter parameter_param = 145;
@@ -8145,8 +8436,8 @@ public static final int
   @MemberGetter public static native int kParameterParamFieldNumber();
   public static final int kParameterParamFieldNumber = kParameterParamFieldNumber();
   public native @Const @ByRef ParameterParameter parameter_param();
-  public native ParameterParameter mutable_parameter_param();
   public native ParameterParameter release_parameter_param();
+  public native ParameterParameter mutable_parameter_param();
   public native void set_allocated_parameter_param(ParameterParameter parameter_param);
 
   // optional .caffe.RecurrentParameter recurrent_param = 146;
@@ -8155,8 +8446,8 @@ public static final int
   @MemberGetter public static native int kRecurrentParamFieldNumber();
   public static final int kRecurrentParamFieldNumber = kRecurrentParamFieldNumber();
   public native @Const @ByRef RecurrentParameter recurrent_param();
-  public native RecurrentParameter mutable_recurrent_param();
   public native RecurrentParameter release_recurrent_param();
+  public native RecurrentParameter mutable_recurrent_param();
   public native void set_allocated_recurrent_param(RecurrentParameter recurrent_param);
 
   // optional .caffe.Phase phase = 10;
@@ -8187,19 +8478,21 @@ public static final int
   private native void allocate(@Const @ByRef TransformationParameter from);
 
   public native @ByRef @Name("operator =") TransformationParameter put(@Const @ByRef TransformationParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef TransformationParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const TransformationParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(TransformationParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8317,19 +8610,21 @@ public static final int
   private native void allocate(@Const @ByRef LossParameter from);
 
   public native @ByRef @Name("operator =") LossParameter put(@Const @ByRef LossParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LossParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const LossParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(LossParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8435,19 +8730,21 @@ public static final int
   private native void allocate(@Const @ByRef AccuracyParameter from);
 
   public native @ByRef @Name("operator =") AccuracyParameter put(@Const @ByRef AccuracyParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef AccuracyParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const AccuracyParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(AccuracyParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8524,19 +8821,21 @@ public static final int
   private native void allocate(@Const @ByRef ArgMaxParameter from);
 
   public native @ByRef @Name("operator =") ArgMaxParameter put(@Const @ByRef ArgMaxParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ArgMaxParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ArgMaxParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ArgMaxParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8613,19 +8912,21 @@ public static final int
   private native void allocate(@Const @ByRef ConcatParameter from);
 
   public native @ByRef @Name("operator =") ConcatParameter put(@Const @ByRef ConcatParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ConcatParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ConcatParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ConcatParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8694,19 +8995,21 @@ public static final int
   private native void allocate(@Const @ByRef BatchNormParameter from);
 
   public native @ByRef @Name("operator =") BatchNormParameter put(@Const @ByRef BatchNormParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BatchNormParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const BatchNormParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(BatchNormParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8783,19 +9086,21 @@ public static final int
   private native void allocate(@Const @ByRef BiasParameter from);
 
   public native @ByRef @Name("operator =") BiasParameter put(@Const @ByRef BiasParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BiasParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const BiasParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(BiasParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8834,8 +9139,8 @@ public static final int
   @MemberGetter public static native int kFillerFieldNumber();
   public static final int kFillerFieldNumber = kFillerFieldNumber();
   public native @Const @ByRef FillerParameter filler();
-  public native FillerParameter mutable_filler();
   public native FillerParameter release_filler();
+  public native FillerParameter mutable_filler();
   public native void set_allocated_filler(FillerParameter filler);
 
   // optional int32 axis = 1 [default = 1];
@@ -8874,19 +9179,21 @@ public static final int
   private native void allocate(@Const @ByRef ContrastiveLossParameter from);
 
   public native @ByRef @Name("operator =") ContrastiveLossParameter put(@Const @ByRef ContrastiveLossParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ContrastiveLossParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ContrastiveLossParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ContrastiveLossParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -8955,19 +9262,21 @@ public static final int
   private native void allocate(@Const @ByRef ConvolutionParameter from);
 
   public native @ByRef @Name("operator =") ConvolutionParameter put(@Const @ByRef ConvolutionParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ConvolutionParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ConvolutionParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ConvolutionParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9069,8 +9378,8 @@ public static final int
   @MemberGetter public static native int kWeightFillerFieldNumber();
   public static final int kWeightFillerFieldNumber = kWeightFillerFieldNumber();
   public native @Const @ByRef FillerParameter weight_filler();
-  public native FillerParameter mutable_weight_filler();
   public native FillerParameter release_weight_filler();
+  public native FillerParameter mutable_weight_filler();
   public native void set_allocated_weight_filler(FillerParameter weight_filler);
 
   // optional .caffe.FillerParameter bias_filler = 8;
@@ -9079,8 +9388,8 @@ public static final int
   @MemberGetter public static native int kBiasFillerFieldNumber();
   public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
   public native @Const @ByRef FillerParameter bias_filler();
-  public native FillerParameter mutable_bias_filler();
   public native FillerParameter release_bias_filler();
+  public native FillerParameter mutable_bias_filler();
   public native void set_allocated_bias_filler(FillerParameter bias_filler);
 
   // optional uint32 num_output = 1;
@@ -9199,19 +9508,21 @@ public static final int
   private native void allocate(@Const @ByRef CropParameter from);
 
   public native @ByRef @Name("operator =") CropParameter put(@Const @ByRef CropParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef CropParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const CropParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(CropParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9281,19 +9592,21 @@ public static final int
   private native void allocate(@Const @ByRef DataParameter from);
 
   public native @ByRef @Name("operator =") DataParameter put(@Const @ByRef DataParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef DataParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const DataParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(DataParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9467,19 +9780,21 @@ public static final int
   private native void allocate(@Const @ByRef DropoutParameter from);
 
   public native @ByRef @Name("operator =") DropoutParameter put(@Const @ByRef DropoutParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef DropoutParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const DropoutParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(DropoutParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9540,19 +9855,21 @@ public static final int
   private native void allocate(@Const @ByRef DummyDataParameter from);
 
   public native @ByRef @Name("operator =") DummyDataParameter put(@Const @ByRef DummyDataParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef DummyDataParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const DummyDataParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(DummyDataParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9659,19 +9976,21 @@ public static final int
   private native void allocate(@Const @ByRef EltwiseParameter from);
 
   public native @ByRef @Name("operator =") EltwiseParameter put(@Const @ByRef EltwiseParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef EltwiseParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const EltwiseParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(EltwiseParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9776,19 +10095,21 @@ public static final int
   private native void allocate(@Const @ByRef ELUParameter from);
 
   public native @ByRef @Name("operator =") ELUParameter put(@Const @ByRef ELUParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ELUParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ELUParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ELUParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9849,19 +10170,21 @@ public static final int
   private native void allocate(@Const @ByRef EmbedParameter from);
 
   public native @ByRef @Name("operator =") EmbedParameter put(@Const @ByRef EmbedParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef EmbedParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const EmbedParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(EmbedParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -9900,8 +10223,8 @@ public static final int
   @MemberGetter public static native int kWeightFillerFieldNumber();
   public static final int kWeightFillerFieldNumber = kWeightFillerFieldNumber();
   public native @Const @ByRef FillerParameter weight_filler();
-  public native FillerParameter mutable_weight_filler();
   public native FillerParameter release_weight_filler();
+  public native FillerParameter mutable_weight_filler();
   public native void set_allocated_weight_filler(FillerParameter weight_filler);
 
   // optional .caffe.FillerParameter bias_filler = 5;
@@ -9910,8 +10233,8 @@ public static final int
   @MemberGetter public static native int kBiasFillerFieldNumber();
   public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
   public native @Const @ByRef FillerParameter bias_filler();
-  public native FillerParameter mutable_bias_filler();
   public native FillerParameter release_bias_filler();
+  public native FillerParameter mutable_bias_filler();
   public native void set_allocated_bias_filler(FillerParameter bias_filler);
 
   // optional uint32 num_output = 1;
@@ -9958,19 +10281,21 @@ public static final int
   private native void allocate(@Const @ByRef ExpParameter from);
 
   public native @ByRef @Name("operator =") ExpParameter put(@Const @ByRef ExpParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ExpParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ExpParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ExpParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10047,19 +10372,21 @@ public static final int
   private native void allocate(@Const @ByRef FlattenParameter from);
 
   public native @ByRef @Name("operator =") FlattenParameter put(@Const @ByRef FlattenParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef FlattenParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const FlattenParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(FlattenParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10128,19 +10455,21 @@ public static final int
   private native void allocate(@Const @ByRef HDF5DataParameter from);
 
   public native @ByRef @Name("operator =") HDF5DataParameter put(@Const @ByRef HDF5DataParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef HDF5DataParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const HDF5DataParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(HDF5DataParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10225,19 +10554,21 @@ public static final int
   private native void allocate(@Const @ByRef HDF5OutputParameter from);
 
   public native @ByRef @Name("operator =") HDF5OutputParameter put(@Const @ByRef HDF5OutputParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef HDF5OutputParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const HDF5OutputParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(HDF5OutputParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10306,19 +10637,21 @@ public static final int
   private native void allocate(@Const @ByRef HingeLossParameter from);
 
   public native @ByRef @Name("operator =") HingeLossParameter put(@Const @ByRef HingeLossParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef HingeLossParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const HingeLossParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(HingeLossParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10404,19 +10737,21 @@ public static final int
   private native void allocate(@Const @ByRef ImageDataParameter from);
 
   public native @ByRef @Name("operator =") ImageDataParameter put(@Const @ByRef ImageDataParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ImageDataParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ImageDataParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ImageDataParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10589,19 +10924,21 @@ public static final int
   private native void allocate(@Const @ByRef InfogainLossParameter from);
 
   public native @ByRef @Name("operator =") InfogainLossParameter put(@Const @ByRef InfogainLossParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef InfogainLossParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const InfogainLossParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(InfogainLossParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10678,19 +11015,21 @@ public static final int
   private native void allocate(@Const @ByRef InnerProductParameter from);
 
   public native @ByRef @Name("operator =") InnerProductParameter put(@Const @ByRef InnerProductParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef InnerProductParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const InnerProductParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(InnerProductParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10729,8 +11068,8 @@ public static final int
   @MemberGetter public static native int kWeightFillerFieldNumber();
   public static final int kWeightFillerFieldNumber = kWeightFillerFieldNumber();
   public native @Const @ByRef FillerParameter weight_filler();
-  public native FillerParameter mutable_weight_filler();
   public native FillerParameter release_weight_filler();
+  public native FillerParameter mutable_weight_filler();
   public native void set_allocated_weight_filler(FillerParameter weight_filler);
 
   // optional .caffe.FillerParameter bias_filler = 4;
@@ -10739,8 +11078,8 @@ public static final int
   @MemberGetter public static native int kBiasFillerFieldNumber();
   public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
   public native @Const @ByRef FillerParameter bias_filler();
-  public native FillerParameter mutable_bias_filler();
   public native FillerParameter release_bias_filler();
+  public native FillerParameter mutable_bias_filler();
   public native void set_allocated_bias_filler(FillerParameter bias_filler);
 
   // optional uint32 num_output = 1;
@@ -10795,19 +11134,21 @@ public static final int
   private native void allocate(@Const @ByRef InputParameter from);
 
   public native @ByRef @Name("operator =") InputParameter put(@Const @ByRef InputParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef InputParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const InputParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(InputParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10869,19 +11210,21 @@ public static final int
   private native void allocate(@Const @ByRef LogParameter from);
 
   public native @ByRef @Name("operator =") LogParameter put(@Const @ByRef LogParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LogParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const LogParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(LogParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -10958,19 +11301,21 @@ public static final int
   private native void allocate(@Const @ByRef LRNParameter from);
 
   public native @ByRef @Name("operator =") LRNParameter put(@Const @ByRef LRNParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LRNParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const LRNParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(LRNParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11123,19 +11468,21 @@ public static final int
   private native void allocate(@Const @ByRef MemoryDataParameter from);
 
   public native @ByRef @Name("operator =") MemoryDataParameter put(@Const @ByRef MemoryDataParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef MemoryDataParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const MemoryDataParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(MemoryDataParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11220,19 +11567,21 @@ public static final int
   private native void allocate(@Const @ByRef MVNParameter from);
 
   public native @ByRef @Name("operator =") MVNParameter put(@Const @ByRef MVNParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef MVNParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const MVNParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(MVNParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11309,19 +11658,21 @@ public static final int
   private native void allocate(@Const @ByRef ParameterParameter from);
 
   public native @ByRef @Name("operator =") ParameterParameter put(@Const @ByRef ParameterParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ParameterParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ParameterParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ParameterParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11360,8 +11711,8 @@ public static final int
   @MemberGetter public static native int kShapeFieldNumber();
   public static final int kShapeFieldNumber = kShapeFieldNumber();
   public native @Const @ByRef BlobShape shape();
-  public native BlobShape mutable_shape();
   public native BlobShape release_shape();
+  public native BlobShape mutable_shape();
   public native void set_allocated_shape(BlobShape shape);
 }
 // -------------------------------------------------------------------
@@ -11384,19 +11735,21 @@ public static final int
   private native void allocate(@Const @ByRef PoolingParameter from);
 
   public native @ByRef @Name("operator =") PoolingParameter put(@Const @ByRef PoolingParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PoolingParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const PoolingParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(PoolingParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11599,19 +11952,21 @@ public static final int
   private native void allocate(@Const @ByRef PowerParameter from);
 
   public native @ByRef @Name("operator =") PowerParameter put(@Const @ByRef PowerParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PowerParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const PowerParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(PowerParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11688,19 +12043,21 @@ public static final int
   private native void allocate(@Const @ByRef PythonParameter from);
 
   public native @ByRef @Name("operator =") PythonParameter put(@Const @ByRef PythonParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PythonParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const PythonParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(PythonParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11809,19 +12166,21 @@ public static final int
   private native void allocate(@Const @ByRef RecurrentParameter from);
 
   public native @ByRef @Name("operator =") RecurrentParameter put(@Const @ByRef RecurrentParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef RecurrentParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const RecurrentParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(RecurrentParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -11860,8 +12219,8 @@ public static final int
   @MemberGetter public static native int kWeightFillerFieldNumber();
   public static final int kWeightFillerFieldNumber = kWeightFillerFieldNumber();
   public native @Const @ByRef FillerParameter weight_filler();
-  public native FillerParameter mutable_weight_filler();
   public native FillerParameter release_weight_filler();
+  public native FillerParameter mutable_weight_filler();
   public native void set_allocated_weight_filler(FillerParameter weight_filler);
 
   // optional .caffe.FillerParameter bias_filler = 3;
@@ -11870,8 +12229,8 @@ public static final int
   @MemberGetter public static native int kBiasFillerFieldNumber();
   public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
   public native @Const @ByRef FillerParameter bias_filler();
-  public native FillerParameter mutable_bias_filler();
   public native FillerParameter release_bias_filler();
+  public native FillerParameter mutable_bias_filler();
   public native void set_allocated_bias_filler(FillerParameter bias_filler);
 
   // optional uint32 num_output = 1 [default = 0];
@@ -11918,19 +12277,21 @@ public static final int
   private native void allocate(@Const @ByRef ReductionParameter from);
 
   public native @ByRef @Name("operator =") ReductionParameter put(@Const @ByRef ReductionParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ReductionParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ReductionParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ReductionParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12036,19 +12397,21 @@ public static final int
   private native void allocate(@Const @ByRef ReLUParameter from);
 
   public native @ByRef @Name("operator =") ReLUParameter put(@Const @ByRef ReLUParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ReLUParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ReLUParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ReLUParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12144,19 +12507,21 @@ public static final int
   private native void allocate(@Const @ByRef ReshapeParameter from);
 
   public native @ByRef @Name("operator =") ReshapeParameter put(@Const @ByRef ReshapeParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ReshapeParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ReshapeParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ReshapeParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12195,8 +12560,8 @@ public static final int
   @MemberGetter public static native int kShapeFieldNumber();
   public static final int kShapeFieldNumber = kShapeFieldNumber();
   public native @Const @ByRef BlobShape shape();
-  public native BlobShape mutable_shape();
   public native BlobShape release_shape();
+  public native BlobShape mutable_shape();
   public native void set_allocated_shape(BlobShape shape);
 
   // optional int32 axis = 2 [default = 0];
@@ -12235,19 +12600,21 @@ public static final int
   private native void allocate(@Const @ByRef ScaleParameter from);
 
   public native @ByRef @Name("operator =") ScaleParameter put(@Const @ByRef ScaleParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ScaleParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ScaleParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ScaleParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12286,8 +12653,8 @@ public static final int
   @MemberGetter public static native int kFillerFieldNumber();
   public static final int kFillerFieldNumber = kFillerFieldNumber();
   public native @Const @ByRef FillerParameter filler();
-  public native FillerParameter mutable_filler();
   public native FillerParameter release_filler();
+  public native FillerParameter mutable_filler();
   public native void set_allocated_filler(FillerParameter filler);
 
   // optional .caffe.FillerParameter bias_filler = 5;
@@ -12296,8 +12663,8 @@ public static final int
   @MemberGetter public static native int kBiasFillerFieldNumber();
   public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
   public native @Const @ByRef FillerParameter bias_filler();
-  public native FillerParameter mutable_bias_filler();
   public native FillerParameter release_bias_filler();
+  public native FillerParameter mutable_bias_filler();
   public native void set_allocated_bias_filler(FillerParameter bias_filler);
 
   // optional bool bias_term = 4 [default = false];
@@ -12344,19 +12711,21 @@ public static final int
   private native void allocate(@Const @ByRef SigmoidParameter from);
 
   public native @ByRef @Name("operator =") SigmoidParameter put(@Const @ByRef SigmoidParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SigmoidParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const SigmoidParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(SigmoidParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12444,19 +12813,21 @@ public static final int
   private native void allocate(@Const @ByRef SliceParameter from);
 
   public native @ByRef @Name("operator =") SliceParameter put(@Const @ByRef SliceParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SliceParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const SliceParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(SliceParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12534,19 +12905,21 @@ public static final int
   private native void allocate(@Const @ByRef SoftmaxParameter from);
 
   public native @ByRef @Name("operator =") SoftmaxParameter put(@Const @ByRef SoftmaxParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SoftmaxParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const SoftmaxParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(SoftmaxParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12642,19 +13015,21 @@ public static final int
   private native void allocate(@Const @ByRef TanHParameter from);
 
   public native @ByRef @Name("operator =") TanHParameter put(@Const @ByRef TanHParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef TanHParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const TanHParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(TanHParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12742,19 +13117,21 @@ public static final int
   private native void allocate(@Const @ByRef TileParameter from);
 
   public native @ByRef @Name("operator =") TileParameter put(@Const @ByRef TileParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef TileParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const TileParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(TileParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12823,19 +13200,21 @@ public static final int
   private native void allocate(@Const @ByRef ThresholdParameter from);
 
   public native @ByRef @Name("operator =") ThresholdParameter put(@Const @ByRef ThresholdParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ThresholdParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const ThresholdParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(ThresholdParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -12896,19 +13275,21 @@ public static final int
   private native void allocate(@Const @ByRef WindowDataParameter from);
 
   public native @ByRef @Name("operator =") WindowDataParameter put(@Const @ByRef WindowDataParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef WindowDataParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const WindowDataParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(WindowDataParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -13097,19 +13478,21 @@ public static final int
   private native void allocate(@Const @ByRef SPPParameter from);
 
   public native @ByRef @Name("operator =") SPPParameter put(@Const @ByRef SPPParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SPPParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const SPPParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(SPPParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -13240,19 +13623,21 @@ public static final int
   private native void allocate(@Const @ByRef V1LayerParameter from);
 
   public native @ByRef @Name("operator =") V1LayerParameter put(@Const @ByRef V1LayerParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef V1LayerParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const V1LayerParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(V1LayerParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -13559,8 +13944,8 @@ public static final int
   @MemberGetter public static native int kLayerFieldNumber();
   public static final int kLayerFieldNumber = kLayerFieldNumber();
   public native @Const @ByRef V0LayerParameter layer();
-  public native V0LayerParameter mutable_layer();
   public native V0LayerParameter release_layer();
+  public native V0LayerParameter mutable_layer();
   public native void set_allocated_layer(V0LayerParameter layer);
 
   // optional .caffe.ConcatParameter concat_param = 9;
@@ -13569,8 +13954,8 @@ public static final int
   @MemberGetter public static native int kConcatParamFieldNumber();
   public static final int kConcatParamFieldNumber = kConcatParamFieldNumber();
   public native @Const @ByRef ConcatParameter concat_param();
-  public native ConcatParameter mutable_concat_param();
   public native ConcatParameter release_concat_param();
+  public native ConcatParameter mutable_concat_param();
   public native void set_allocated_concat_param(ConcatParameter concat_param);
 
   // optional .caffe.ConvolutionParameter convolution_param = 10;
@@ -13579,8 +13964,8 @@ public static final int
   @MemberGetter public static native int kConvolutionParamFieldNumber();
   public static final int kConvolutionParamFieldNumber = kConvolutionParamFieldNumber();
   public native @Const @ByRef ConvolutionParameter convolution_param();
-  public native ConvolutionParameter mutable_convolution_param();
   public native ConvolutionParameter release_convolution_param();
+  public native ConvolutionParameter mutable_convolution_param();
   public native void set_allocated_convolution_param(ConvolutionParameter convolution_param);
 
   // optional .caffe.DataParameter data_param = 11;
@@ -13589,8 +13974,8 @@ public static final int
   @MemberGetter public static native int kDataParamFieldNumber();
   public static final int kDataParamFieldNumber = kDataParamFieldNumber();
   public native @Const @ByRef DataParameter data_param();
-  public native DataParameter mutable_data_param();
   public native DataParameter release_data_param();
+  public native DataParameter mutable_data_param();
   public native void set_allocated_data_param(DataParameter data_param);
 
   // optional .caffe.DropoutParameter dropout_param = 12;
@@ -13599,8 +13984,8 @@ public static final int
   @MemberGetter public static native int kDropoutParamFieldNumber();
   public static final int kDropoutParamFieldNumber = kDropoutParamFieldNumber();
   public native @Const @ByRef DropoutParameter dropout_param();
-  public native DropoutParameter mutable_dropout_param();
   public native DropoutParameter release_dropout_param();
+  public native DropoutParameter mutable_dropout_param();
   public native void set_allocated_dropout_param(DropoutParameter dropout_param);
 
   // optional .caffe.HDF5DataParameter hdf5_data_param = 13;
@@ -13609,8 +13994,8 @@ public static final int
   @MemberGetter public static native int kHdf5DataParamFieldNumber();
   public static final int kHdf5DataParamFieldNumber = kHdf5DataParamFieldNumber();
   public native @Const @ByRef HDF5DataParameter hdf5_data_param();
-  public native HDF5DataParameter mutable_hdf5_data_param();
   public native HDF5DataParameter release_hdf5_data_param();
+  public native HDF5DataParameter mutable_hdf5_data_param();
   public native void set_allocated_hdf5_data_param(HDF5DataParameter hdf5_data_param);
 
   // optional .caffe.HDF5OutputParameter hdf5_output_param = 14;
@@ -13619,8 +14004,8 @@ public static final int
   @MemberGetter public static native int kHdf5OutputParamFieldNumber();
   public static final int kHdf5OutputParamFieldNumber = kHdf5OutputParamFieldNumber();
   public native @Const @ByRef HDF5OutputParameter hdf5_output_param();
-  public native HDF5OutputParameter mutable_hdf5_output_param();
   public native HDF5OutputParameter release_hdf5_output_param();
+  public native HDF5OutputParameter mutable_hdf5_output_param();
   public native void set_allocated_hdf5_output_param(HDF5OutputParameter hdf5_output_param);
 
   // optional .caffe.ImageDataParameter image_data_param = 15;
@@ -13629,8 +14014,8 @@ public static final int
   @MemberGetter public static native int kImageDataParamFieldNumber();
   public static final int kImageDataParamFieldNumber = kImageDataParamFieldNumber();
   public native @Const @ByRef ImageDataParameter image_data_param();
-  public native ImageDataParameter mutable_image_data_param();
   public native ImageDataParameter release_image_data_param();
+  public native ImageDataParameter mutable_image_data_param();
   public native void set_allocated_image_data_param(ImageDataParameter image_data_param);
 
   // optional .caffe.InfogainLossParameter infogain_loss_param = 16;
@@ -13639,8 +14024,8 @@ public static final int
   @MemberGetter public static native int kInfogainLossParamFieldNumber();
   public static final int kInfogainLossParamFieldNumber = kInfogainLossParamFieldNumber();
   public native @Const @ByRef InfogainLossParameter infogain_loss_param();
-  public native InfogainLossParameter mutable_infogain_loss_param();
   public native InfogainLossParameter release_infogain_loss_param();
+  public native InfogainLossParameter mutable_infogain_loss_param();
   public native void set_allocated_infogain_loss_param(InfogainLossParameter infogain_loss_param);
 
   // optional .caffe.InnerProductParameter inner_product_param = 17;
@@ -13649,8 +14034,8 @@ public static final int
   @MemberGetter public static native int kInnerProductParamFieldNumber();
   public static final int kInnerProductParamFieldNumber = kInnerProductParamFieldNumber();
   public native @Const @ByRef InnerProductParameter inner_product_param();
-  public native InnerProductParameter mutable_inner_product_param();
   public native InnerProductParameter release_inner_product_param();
+  public native InnerProductParameter mutable_inner_product_param();
   public native void set_allocated_inner_product_param(InnerProductParameter inner_product_param);
 
   // optional .caffe.LRNParameter lrn_param = 18;
@@ -13659,8 +14044,8 @@ public static final int
   @MemberGetter public static native int kLrnParamFieldNumber();
   public static final int kLrnParamFieldNumber = kLrnParamFieldNumber();
   public native @Const @ByRef LRNParameter lrn_param();
-  public native LRNParameter mutable_lrn_param();
   public native LRNParameter release_lrn_param();
+  public native LRNParameter mutable_lrn_param();
   public native void set_allocated_lrn_param(LRNParameter lrn_param);
 
   // optional .caffe.PoolingParameter pooling_param = 19;
@@ -13669,8 +14054,8 @@ public static final int
   @MemberGetter public static native int kPoolingParamFieldNumber();
   public static final int kPoolingParamFieldNumber = kPoolingParamFieldNumber();
   public native @Const @ByRef PoolingParameter pooling_param();
-  public native PoolingParameter mutable_pooling_param();
   public native PoolingParameter release_pooling_param();
+  public native PoolingParameter mutable_pooling_param();
   public native void set_allocated_pooling_param(PoolingParameter pooling_param);
 
   // optional .caffe.WindowDataParameter window_data_param = 20;
@@ -13679,8 +14064,8 @@ public static final int
   @MemberGetter public static native int kWindowDataParamFieldNumber();
   public static final int kWindowDataParamFieldNumber = kWindowDataParamFieldNumber();
   public native @Const @ByRef WindowDataParameter window_data_param();
-  public native WindowDataParameter mutable_window_data_param();
   public native WindowDataParameter release_window_data_param();
+  public native WindowDataParameter mutable_window_data_param();
   public native void set_allocated_window_data_param(WindowDataParameter window_data_param);
 
   // optional .caffe.PowerParameter power_param = 21;
@@ -13689,8 +14074,8 @@ public static final int
   @MemberGetter public static native int kPowerParamFieldNumber();
   public static final int kPowerParamFieldNumber = kPowerParamFieldNumber();
   public native @Const @ByRef PowerParameter power_param();
-  public native PowerParameter mutable_power_param();
   public native PowerParameter release_power_param();
+  public native PowerParameter mutable_power_param();
   public native void set_allocated_power_param(PowerParameter power_param);
 
   // optional .caffe.MemoryDataParameter memory_data_param = 22;
@@ -13699,8 +14084,8 @@ public static final int
   @MemberGetter public static native int kMemoryDataParamFieldNumber();
   public static final int kMemoryDataParamFieldNumber = kMemoryDataParamFieldNumber();
   public native @Const @ByRef MemoryDataParameter memory_data_param();
-  public native MemoryDataParameter mutable_memory_data_param();
   public native MemoryDataParameter release_memory_data_param();
+  public native MemoryDataParameter mutable_memory_data_param();
   public native void set_allocated_memory_data_param(MemoryDataParameter memory_data_param);
 
   // optional .caffe.ArgMaxParameter argmax_param = 23;
@@ -13709,8 +14094,8 @@ public static final int
   @MemberGetter public static native int kArgmaxParamFieldNumber();
   public static final int kArgmaxParamFieldNumber = kArgmaxParamFieldNumber();
   public native @Const @ByRef ArgMaxParameter argmax_param();
-  public native ArgMaxParameter mutable_argmax_param();
   public native ArgMaxParameter release_argmax_param();
+  public native ArgMaxParameter mutable_argmax_param();
   public native void set_allocated_argmax_param(ArgMaxParameter argmax_param);
 
   // optional .caffe.EltwiseParameter eltwise_param = 24;
@@ -13719,8 +14104,8 @@ public static final int
   @MemberGetter public static native int kEltwiseParamFieldNumber();
   public static final int kEltwiseParamFieldNumber = kEltwiseParamFieldNumber();
   public native @Const @ByRef EltwiseParameter eltwise_param();
-  public native EltwiseParameter mutable_eltwise_param();
   public native EltwiseParameter release_eltwise_param();
+  public native EltwiseParameter mutable_eltwise_param();
   public native void set_allocated_eltwise_param(EltwiseParameter eltwise_param);
 
   // optional .caffe.ThresholdParameter threshold_param = 25;
@@ -13729,8 +14114,8 @@ public static final int
   @MemberGetter public static native int kThresholdParamFieldNumber();
   public static final int kThresholdParamFieldNumber = kThresholdParamFieldNumber();
   public native @Const @ByRef ThresholdParameter threshold_param();
-  public native ThresholdParameter mutable_threshold_param();
   public native ThresholdParameter release_threshold_param();
+  public native ThresholdParameter mutable_threshold_param();
   public native void set_allocated_threshold_param(ThresholdParameter threshold_param);
 
   // optional .caffe.DummyDataParameter dummy_data_param = 26;
@@ -13739,8 +14124,8 @@ public static final int
   @MemberGetter public static native int kDummyDataParamFieldNumber();
   public static final int kDummyDataParamFieldNumber = kDummyDataParamFieldNumber();
   public native @Const @ByRef DummyDataParameter dummy_data_param();
-  public native DummyDataParameter mutable_dummy_data_param();
   public native DummyDataParameter release_dummy_data_param();
+  public native DummyDataParameter mutable_dummy_data_param();
   public native void set_allocated_dummy_data_param(DummyDataParameter dummy_data_param);
 
   // optional .caffe.AccuracyParameter accuracy_param = 27;
@@ -13749,8 +14134,8 @@ public static final int
   @MemberGetter public static native int kAccuracyParamFieldNumber();
   public static final int kAccuracyParamFieldNumber = kAccuracyParamFieldNumber();
   public native @Const @ByRef AccuracyParameter accuracy_param();
-  public native AccuracyParameter mutable_accuracy_param();
   public native AccuracyParameter release_accuracy_param();
+  public native AccuracyParameter mutable_accuracy_param();
   public native void set_allocated_accuracy_param(AccuracyParameter accuracy_param);
 
   // optional .caffe.HingeLossParameter hinge_loss_param = 29;
@@ -13759,8 +14144,8 @@ public static final int
   @MemberGetter public static native int kHingeLossParamFieldNumber();
   public static final int kHingeLossParamFieldNumber = kHingeLossParamFieldNumber();
   public native @Const @ByRef HingeLossParameter hinge_loss_param();
-  public native HingeLossParameter mutable_hinge_loss_param();
   public native HingeLossParameter release_hinge_loss_param();
+  public native HingeLossParameter mutable_hinge_loss_param();
   public native void set_allocated_hinge_loss_param(HingeLossParameter hinge_loss_param);
 
   // optional .caffe.ReLUParameter relu_param = 30;
@@ -13769,8 +14154,8 @@ public static final int
   @MemberGetter public static native int kReluParamFieldNumber();
   public static final int kReluParamFieldNumber = kReluParamFieldNumber();
   public native @Const @ByRef ReLUParameter relu_param();
-  public native ReLUParameter mutable_relu_param();
   public native ReLUParameter release_relu_param();
+  public native ReLUParameter mutable_relu_param();
   public native void set_allocated_relu_param(ReLUParameter relu_param);
 
   // optional .caffe.SliceParameter slice_param = 31;
@@ -13779,8 +14164,8 @@ public static final int
   @MemberGetter public static native int kSliceParamFieldNumber();
   public static final int kSliceParamFieldNumber = kSliceParamFieldNumber();
   public native @Const @ByRef SliceParameter slice_param();
-  public native SliceParameter mutable_slice_param();
   public native SliceParameter release_slice_param();
+  public native SliceParameter mutable_slice_param();
   public native void set_allocated_slice_param(SliceParameter slice_param);
 
   // optional .caffe.MVNParameter mvn_param = 34;
@@ -13789,8 +14174,8 @@ public static final int
   @MemberGetter public static native int kMvnParamFieldNumber();
   public static final int kMvnParamFieldNumber = kMvnParamFieldNumber();
   public native @Const @ByRef MVNParameter mvn_param();
-  public native MVNParameter mutable_mvn_param();
   public native MVNParameter release_mvn_param();
+  public native MVNParameter mutable_mvn_param();
   public native void set_allocated_mvn_param(MVNParameter mvn_param);
 
   // optional .caffe.TransformationParameter transform_param = 36;
@@ -13799,8 +14184,8 @@ public static final int
   @MemberGetter public static native int kTransformParamFieldNumber();
   public static final int kTransformParamFieldNumber = kTransformParamFieldNumber();
   public native @Const @ByRef TransformationParameter transform_param();
-  public native TransformationParameter mutable_transform_param();
   public native TransformationParameter release_transform_param();
+  public native TransformationParameter mutable_transform_param();
   public native void set_allocated_transform_param(TransformationParameter transform_param);
 
   // optional .caffe.TanHParameter tanh_param = 37;
@@ -13809,8 +14194,8 @@ public static final int
   @MemberGetter public static native int kTanhParamFieldNumber();
   public static final int kTanhParamFieldNumber = kTanhParamFieldNumber();
   public native @Const @ByRef TanHParameter tanh_param();
-  public native TanHParameter mutable_tanh_param();
   public native TanHParameter release_tanh_param();
+  public native TanHParameter mutable_tanh_param();
   public native void set_allocated_tanh_param(TanHParameter tanh_param);
 
   // optional .caffe.SigmoidParameter sigmoid_param = 38;
@@ -13819,8 +14204,8 @@ public static final int
   @MemberGetter public static native int kSigmoidParamFieldNumber();
   public static final int kSigmoidParamFieldNumber = kSigmoidParamFieldNumber();
   public native @Const @ByRef SigmoidParameter sigmoid_param();
-  public native SigmoidParameter mutable_sigmoid_param();
   public native SigmoidParameter release_sigmoid_param();
+  public native SigmoidParameter mutable_sigmoid_param();
   public native void set_allocated_sigmoid_param(SigmoidParameter sigmoid_param);
 
   // optional .caffe.SoftmaxParameter softmax_param = 39;
@@ -13829,8 +14214,8 @@ public static final int
   @MemberGetter public static native int kSoftmaxParamFieldNumber();
   public static final int kSoftmaxParamFieldNumber = kSoftmaxParamFieldNumber();
   public native @Const @ByRef SoftmaxParameter softmax_param();
-  public native SoftmaxParameter mutable_softmax_param();
   public native SoftmaxParameter release_softmax_param();
+  public native SoftmaxParameter mutable_softmax_param();
   public native void set_allocated_softmax_param(SoftmaxParameter softmax_param);
 
   // optional .caffe.ContrastiveLossParameter contrastive_loss_param = 40;
@@ -13839,8 +14224,8 @@ public static final int
   @MemberGetter public static native int kContrastiveLossParamFieldNumber();
   public static final int kContrastiveLossParamFieldNumber = kContrastiveLossParamFieldNumber();
   public native @Const @ByRef ContrastiveLossParameter contrastive_loss_param();
-  public native ContrastiveLossParameter mutable_contrastive_loss_param();
   public native ContrastiveLossParameter release_contrastive_loss_param();
+  public native ContrastiveLossParameter mutable_contrastive_loss_param();
   public native void set_allocated_contrastive_loss_param(ContrastiveLossParameter contrastive_loss_param);
 
   // optional .caffe.ExpParameter exp_param = 41;
@@ -13849,8 +14234,8 @@ public static final int
   @MemberGetter public static native int kExpParamFieldNumber();
   public static final int kExpParamFieldNumber = kExpParamFieldNumber();
   public native @Const @ByRef ExpParameter exp_param();
-  public native ExpParameter mutable_exp_param();
   public native ExpParameter release_exp_param();
+  public native ExpParameter mutable_exp_param();
   public native void set_allocated_exp_param(ExpParameter exp_param);
 
   // optional .caffe.LossParameter loss_param = 42;
@@ -13859,8 +14244,8 @@ public static final int
   @MemberGetter public static native int kLossParamFieldNumber();
   public static final int kLossParamFieldNumber = kLossParamFieldNumber();
   public native @Const @ByRef LossParameter loss_param();
-  public native LossParameter mutable_loss_param();
   public native LossParameter release_loss_param();
+  public native LossParameter mutable_loss_param();
   public native void set_allocated_loss_param(LossParameter loss_param);
 
   // optional .caffe.V1LayerParameter.LayerType type = 5;
@@ -13891,19 +14276,21 @@ public static final int
   private native void allocate(@Const @ByRef V0LayerParameter from);
 
   public native @ByRef @Name("operator =") V0LayerParameter put(@Const @ByRef V0LayerParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef V0LayerParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const V0LayerParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(V0LayerParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -14076,8 +14463,8 @@ public static final int
   @MemberGetter public static native int kWeightFillerFieldNumber();
   public static final int kWeightFillerFieldNumber = kWeightFillerFieldNumber();
   public native @Const @ByRef FillerParameter weight_filler();
-  public native FillerParameter mutable_weight_filler();
   public native FillerParameter release_weight_filler();
+  public native FillerParameter mutable_weight_filler();
   public native void set_allocated_weight_filler(FillerParameter weight_filler);
 
   // optional .caffe.FillerParameter bias_filler = 6;
@@ -14086,8 +14473,8 @@ public static final int
   @MemberGetter public static native int kBiasFillerFieldNumber();
   public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
   public native @Const @ByRef FillerParameter bias_filler();
-  public native FillerParameter mutable_bias_filler();
   public native FillerParameter release_bias_filler();
+  public native FillerParameter mutable_bias_filler();
   public native void set_allocated_bias_filler(FillerParameter bias_filler);
 
   // optional .caffe.HDF5OutputParameter hdf5_output_param = 1001;
@@ -14096,8 +14483,8 @@ public static final int
   @MemberGetter public static native int kHdf5OutputParamFieldNumber();
   public static final int kHdf5OutputParamFieldNumber = kHdf5OutputParamFieldNumber();
   public native @Const @ByRef HDF5OutputParameter hdf5_output_param();
-  public native HDF5OutputParameter mutable_hdf5_output_param();
   public native HDF5OutputParameter release_hdf5_output_param();
+  public native HDF5OutputParameter mutable_hdf5_output_param();
   public native void set_allocated_hdf5_output_param(HDF5OutputParameter hdf5_output_param);
 
   // optional uint32 num_output = 3;
@@ -14336,19 +14723,21 @@ public static final int
   private native void allocate(@Const @ByRef PReLUParameter from);
 
   public native @ByRef @Name("operator =") PReLUParameter put(@Const @ByRef PReLUParameter from);
-
+//   #if LANG_CXX11
+//   #endif
   public native @Const @ByRef UnknownFieldSet unknown_fields();
-
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PReLUParameter default_instance();
 
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   public static native @Const PReLUParameter internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
   public native void Swap(PReLUParameter other);
+  
 
   // implements Message ----------------------------------------------
 
@@ -14387,8 +14776,8 @@ public static final int
   @MemberGetter public static native int kFillerFieldNumber();
   public static final int kFillerFieldNumber = kFillerFieldNumber();
   public native @Const @ByRef FillerParameter filler();
-  public native FillerParameter mutable_filler();
   public native FillerParameter release_filler();
+  public native FillerParameter mutable_filler();
   public native void set_allocated_filler(FillerParameter filler);
 
   // optional bool channel_shared = 2 [default = false];
@@ -14404,7 +14793,10 @@ public static final int
 
 // ===================================================================
 
-// #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
 // BlobShape
 
 // repeated int64 dim = 1 [packed = true];
@@ -18577,7 +18969,9 @@ public static final int
 
 
 
-// #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -18701,11 +19095,35 @@ public static final int
 
 // @@protoc_insertion_point(namespace_scope)
 
-
   // namespace caffe
 
-// #ifndef SWIG
-// #endif  // SWIG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

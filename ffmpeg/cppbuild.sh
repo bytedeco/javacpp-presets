@@ -23,13 +23,13 @@ OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.0h
 OPENH264_VERSION=1.7.0
-X265=2.7
+X265=2.8
 VPX_VERSION=1.7.0
 ALSA_VERSION=1.1.6
-FREETYPE_VERSION=2.9
+FREETYPE_VERSION=2.9.1
 MFX_VERSION=1.23
-NVCODEC_VERSION=8.1.24.1
-FFMPEG_VERSION=4.0
+NVCODEC_VERSION=8.1.24.2
+FFMPEG_VERSION=4.0.1
 download http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -45,7 +45,7 @@ download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libv
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
 download http://download.savannah.gnu.org/releases/freetype/freetype-$FREETYPE_VERSION.tar.bz2 freetype-$FREETYPE_VERSION.tar.bz2
 download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx_dispatch-$MFX_VERSION.tar.gz
-download https://github.com/FFmpeg/nv-codec-headers/archive/n8.1.24.1.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
+download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
@@ -79,6 +79,7 @@ cd ..
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
+sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 
 case $PLATFORM in
     android-arm)

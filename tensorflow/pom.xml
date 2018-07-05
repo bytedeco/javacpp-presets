@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.9.0-rc0</tensorflow.version>
+    <tensorflow.version>1.9.0-rc2</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
@@ -46,6 +46,18 @@
       <groupId>org.checkerframework</groupId>
       <artifactId>checker</artifactId>
       <version>2.5.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>25.1-jre</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup</groupId>
+      <artifactId>javapoet</artifactId>
+      <version>1.11.1</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -91,7 +103,7 @@
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
              <linkPath>${tensorflow.path}/../build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/double-conversion/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/farmhash/src/farmhash/Release/</linkPath>
@@ -162,6 +174,7 @@
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/session_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/tensorflow_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/tensor_jni.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/utils_jni.cc</compilerOption>
                 <compilerOption>/link</compilerOption>
                 <compilerOption>/WHOLEARCHIVE:tensorflow_static.lib</compilerOption>
               </compilerOptions>

@@ -1,4 +1,7 @@
 
+ * Virtualize `TensorBuffer` and make constructor with helper method in `Tensor` public to allow zero-copy
+ * Add factory methods for `TF_Status`, `TF_Buffer`, `TF_Tensor`, `TF_SessionOptions`, `TF_Graph`, `TF_ImportGraphDefOptions`, and `TF_Session` that register deallocators
+ * Bundle the libraries of CUDA and cuDNN, allowing OpenCV, Caffe, and TensorFlow to use GPUs with no CUDA installation
  * Make it possible to set the `TF_Buffer::data` field for C API of TensorFlow
  * Add `openblas_nolapack` class to make it easier to load BLAS libraries missing LAPACK such as MKLML
  * Map instances of `google::protobuf::Map` to access more of TensorFlow's configuration ([issue #533](https://github.com/bytedeco/javacpp-presets/issues/533))
@@ -21,9 +24,9 @@
  * Add support for Windows to presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
  * Add Android utility classes from the official Java API of OpenCV and TensorFlow ([issue #549](https://github.com/bytedeco/javacpp-presets/issues/549))
  * Update build for FFmpeg on Raspbian Stretch ([pull #548](https://github.com/bytedeco/javacpp-presets/pull/548))
- * Add presets for MKL-DNN and TensorRT
+ * Add presets for MKL-DNN 0.14 and TensorRT 4.0
  * Fix build for FFmpeg on `android-x86` and `android-x86_64` platforms ([issue bytedeco/javacv#945](https://github.com/bytedeco/javacv/issues/945))
- * Upgrade presets for FFmpeg 4.0, HDF5 1.10.2, MKL 2018.3, OpenBLAS 0.3.0, ARPACK-NG 3.6.0, FFTW 3.3.8, LLVM 6.0.0, Leptonica 1.76.0, Tesseract 4.0.0-beta.1 ([issue #385](https://github.com/bytedeco/javacpp-presets/issues/385)), CUDA 9.2, MXNet 1.2.0, TensorFlow 1.9.0-rc0, and their dependencies
+ * Upgrade presets for FFmpeg 4.0.1, HDF5 1.10.2, MKL 2018.3, OpenBLAS 0.3.0, ARPACK-NG 3.6.1, FFTW 3.3.8, GSL 2.5, LLVM 6.0.0, Leptonica 1.76.0, Tesseract 4.0.0-beta.3 ([issue #385](https://github.com/bytedeco/javacpp-presets/issues/385)), Caffe 1.0, CUDA 9.2, MXNet 1.2.0, TensorFlow 1.9.0-rc2, and their dependencies
 
 ### March 29, 2018 version 1.4.1
  * Disable unneeded error messages from LibTIFF in presets for Leptonica ([issue deeplearning4j/DataVec#518](https://github.com/deeplearning4j/DataVec/pull/518))

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ARPACK_NG_VERSION=3.6.0
+ARPACK_NG_VERSION=3.6.1
 download https://github.com/opencollab/arpack-ng/archive/$ARPACK_NG_VERSION.tar.gz arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -24,6 +24,10 @@ patch -Np1 < ../../../arpack-ng-configure.patch || true # bash bootstrap
 chmod 755 configure build-aux/install-sh
 sedinplace 's/std::real(sigma) + std::imag(sigma) \* I/*reinterpret_cast<_Complex double*>(\&sigma)/g' arpack.hpp
 sedinplace 's/std::real(sigma) + _Complex_I \* std::imag(sigma)/*reinterpret_cast<_Complex double*>(\&sigma)/g' arpack.hpp
+sedinplace 's/internal::s/s/g' arpack.hpp
+sedinplace 's/internal::d/d/g' arpack.hpp
+sedinplace 's/internal::cn/cn/g' arpack.hpp
+sedinplace 's/internal::z/z/g' arpack.hpp
 
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 

@@ -109,6 +109,18 @@ environment:
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu
+      PARTIAL_CPPBUILD: "1"
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+      EXT: -gpu
+
+for:
+-
+  matrix:
+    only:
+      - PARTIAL_CPPBUILD: "1"
+  after_build:
+    - appveyor PushArtifact "%APPVEYOR_BUILD_FOLDER%\%PROJ%-cppbuild.zip"
 
 init:
 # uncomment this if you need to enable RDP for this build run

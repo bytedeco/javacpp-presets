@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(value = {"linux-x86_64", "linux-ppc64le", "windows-x86_64"}, include = "<nvml.h>", link = "nvidia-ml@.1"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le", "windows-x86_64"}, include = "<nvml.h>", link = "nvidia-ml@.1#"),
     @Platform(value = "windows-x86_64", link = "nvml", preloadpath = "C:/Program Files/NVIDIA Corporation/NVSMI/")},
         target = "org.bytedeco.javacpp.nvml")
 @NoException

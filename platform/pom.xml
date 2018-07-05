@@ -64,7 +64,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>4.0-${project.version}</version>
+      <version>4.0.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -134,7 +134,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>arpack-ng-platform</artifactId>
-      <version>3.6.0-${project.version}</version>
+      <version>3.6.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -149,7 +149,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>gsl-platform</artifactId>
-      <version>2.4-${project.version}</version>
+      <version>2.5-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -169,7 +169,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>4.0.0-beta.1-${project.version}</version>
+      <version>4.0.0-beta.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -189,7 +189,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.9.0-rc0-${project.version}</version>
+      <version>1.9.0-rc2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

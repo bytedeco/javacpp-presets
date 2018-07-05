@@ -1,25 +1,25 @@
-diff -ruN tensorflow-1.8.0-rc0/tensorflow/workspace.bzl tensorflow-1.8.0-rc0-macosx/tensorflow/workspace.bzl
---- tensorflow-1.8.0-rc0/tensorflow/workspace.bzl	2018-04-13 03:07:34.000000000 +0900
-+++ tensorflow-1.8.0-rc0-macosx/tensorflow/workspace.bzl	2018-04-20 12:08:31.820386667 +0900
-@@ -330,11 +330,11 @@
+diff -ruN tensorflow-1.9.0-rc2/tensorflow/workspace.bzl tensorflow-1.9.0-rc2-macosx/tensorflow/workspace.bzl
+--- tensorflow-1.9.0-rc2/tensorflow/workspace.bzl	2018-07-03 07:07:51.000000000 +0900
++++ tensorflow-1.9.0-rc2-macosx/tensorflow/workspace.bzl	2018-07-04 15:19:22.058972792 +0900
+@@ -352,11 +352,11 @@
    tf_http_archive(
        name = "protobuf_archive",
        urls = [
--          "https://mirror.bazel.build/github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz",
--          "https://github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz",
+-          "https://mirror.bazel.build/github.com/google/protobuf/archive/v3.6.0.tar.gz",
+-          "https://github.com/google/protobuf/archive/v3.6.0.tar.gz",
 +          "https://mirror.bazel.build/github.com/dtrebbien/protobuf/archive/50f552646ba1de79e07562b41f3999fe036b4fd0.tar.gz",
 +          "https://github.com/dtrebbien/protobuf/archive/50f552646ba1de79e07562b41f3999fe036b4fd0.tar.gz",
        ],
--      sha256 = "846d907acf472ae233ec0882ef3a2d24edbbe834b80c305e867ac65a1f2c59e3",
--      strip_prefix = "protobuf-396336eb961b75f03b25824fe86cf6490fb75e3a",
+-      sha256 = "50a5753995b3142627ac55cfd496cebc418a2e575ca0236e29033c67bd5665f4",
+-      strip_prefix = "protobuf-3.6.0",
 +      sha256 = "eb16b33431b91fe8cee479575cee8de202f3626aaf00d9bf1783c6e62b4ffbc7",
 +      strip_prefix = "protobuf-50f552646ba1de79e07562b41f3999fe036b4fd0",
    )
  
    # We need to import the protobuf library under the names com_google_protobuf
-diff -ruN tensorflow-1.8.0-rc0/third_party/gpus/cuda/BUILD.tpl tensorflow-1.8.0-rc0-macosx/third_party/gpus/cuda/BUILD.tpl
---- tensorflow-1.8.0-rc0/third_party/gpus/cuda/BUILD.tpl	2018-04-13 03:07:34.000000000 +0900
-+++ tensorflow-1.8.0-rc0-macosx/third_party/gpus/cuda/BUILD.tpl	2018-04-20 12:08:00.548389268 +0900
+diff -ruN tensorflow-1.9.0-rc2/third_party/gpus/cuda/BUILD.tpl tensorflow-1.9.0-rc2-macosx/third_party/gpus/cuda/BUILD.tpl
+--- tensorflow-1.9.0-rc2/third_party/gpus/cuda/BUILD.tpl	2018-07-03 07:07:51.000000000 +0900
++++ tensorflow-1.9.0-rc2-macosx/third_party/gpus/cuda/BUILD.tpl	2018-07-04 15:14:17.325720180 +0900
 @@ -62,7 +62,6 @@
          ":freebsd": [],
          "//conditions:default": ["-ldl"],

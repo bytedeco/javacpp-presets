@@ -28,7 +28,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="rh-maven33 python27"
-  if [[ "librealsense chilitags mkl-dnn arpack-ng llvm tesseract caffe mxnet tensorflow tensorrt onnx ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense chilitags mkl-dnn llvm tesseract caffe mxnet tensorflow tensorrt onnx ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33 rh-python35"
   fi
@@ -83,7 +83,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
   fi
   if [ "$PROJ" == "tensorrt" ]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 166ZMg_kQcOu3A57Y7L3mZ3lvhSxof-C2 $HOME/downloads/tensorrt.tar.gz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1tznGJWMlq-Q9jJuHDGpYGAe2IbJfpYHs $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -s /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi
@@ -205,10 +205,20 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.64_mac -o $HOME/cuda_9.2.64_mac.dmg
+        curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.2.64.1_mac -o $HOME/cuda_9.2.64.1_mac.dmg
         curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-osx-x64-v7.1.tgz -o $HOME/cudnn-9.2-osx-x64-v7.1.tgz
 
         echo "Mount dmg"
         hdiutil mount $HOME/cuda_9.2.64_mac.dmg
+        sleep 5
+        ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
+        sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
+        echo "Brew status $BREW_STATUS"
+        if [ $BREW_STATUS -ne 0 ]; then
+          echo "Brew Failed"
+          exit $BREW_STATUS
+        fi
+        hdiutil mount $HOME/cuda_9.2.64.1_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 

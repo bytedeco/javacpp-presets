@@ -3066,7 +3066,7 @@ public static native @Cast("CUresult") int cuDeviceGetAttribute(int[] pi, @Cast(
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem
  */
-public static native @Cast("CUresult") int cuDeviceGetProperties(CUdevprop prop, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") @Deprecated int cuDeviceGetProperties(CUdevprop prop, @Cast("CUdevice") int dev);
 
 /**
  * \brief Returns the compute capability of the device
@@ -3100,9 +3100,9 @@ public static native @Cast("CUresult") int cuDeviceGetProperties(CUdevprop prop,
  * ::cuDeviceGet,
  * ::cuDeviceTotalMem
  */
-public static native @Cast("CUresult") int cuDeviceComputeCapability(IntPointer major, IntPointer minor, @Cast("CUdevice") int dev);
-public static native @Cast("CUresult") int cuDeviceComputeCapability(IntBuffer major, IntBuffer minor, @Cast("CUdevice") int dev);
-public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major, int[] minor, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") @Deprecated int cuDeviceComputeCapability(IntPointer major, IntPointer minor, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") @Deprecated int cuDeviceComputeCapability(IntBuffer major, IntBuffer minor, @Cast("CUdevice") int dev);
+public static native @Cast("CUresult") @Deprecated int cuDeviceComputeCapability(int[] major, int[] minor, @Cast("CUdevice") int dev);
 
 /** \} */ /* END CUDA_DEVICE_DEPRECATED */
 
@@ -4155,7 +4155,7 @@ public static native @Cast("CUresult") int cuCtxGetStreamPriorityRange(int[] lea
  * ::cuCtxSetLimit,
  * ::cuCtxSynchronize
  */
-public static native @Cast("CUresult") int cuCtxAttach(@ByPtrPtr CUctx_st pctx, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") @Deprecated int cuCtxAttach(@ByPtrPtr CUctx_st pctx, @Cast("unsigned int") int flags);
 
 /**
  * \brief Decrement a context's usage-count
@@ -4191,7 +4191,7 @@ public static native @Cast("CUresult") int cuCtxAttach(@ByPtrPtr CUctx_st pctx, 
  * ::cuCtxSetLimit,
  * ::cuCtxSynchronize
  */
-public static native @Cast("CUresult") int cuCtxDetach(CUctx_st ctx);
+public static native @Cast("CUresult") @Deprecated int cuCtxDetach(CUctx_st ctx);
 
 /** \} */ /* END CUDA_CTX_DEPRECATED */
 
@@ -10493,7 +10493,7 @@ public static native @Cast("CUresult") int cuLaunchCooperativeKernelMultiDevice(
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuFuncSetBlockShape(CUfunc_st hfunc, int x, int y, int z);
+public static native @Cast("CUresult") @Deprecated int cuFuncSetBlockShape(CUfunc_st hfunc, int x, int y, int z);
 
 /**
  * \brief Sets the dynamic shared-memory size for the function
@@ -10527,7 +10527,7 @@ public static native @Cast("CUresult") int cuFuncSetBlockShape(CUfunc_st hfunc, 
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuFuncSetSharedSize(CUfunc_st hfunc, @Cast("unsigned int") int bytes);
+public static native @Cast("CUresult") @Deprecated int cuFuncSetSharedSize(CUfunc_st hfunc, @Cast("unsigned int") int bytes);
 
 /**
  * \brief Sets the parameter size for the function
@@ -10559,7 +10559,7 @@ public static native @Cast("CUresult") int cuFuncSetSharedSize(CUfunc_st hfunc, 
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuParamSetSize(CUfunc_st hfunc, @Cast("unsigned int") int numbytes);
+public static native @Cast("CUresult") @Deprecated int cuParamSetSize(CUfunc_st hfunc, @Cast("unsigned int") int numbytes);
 
 /**
  * \brief Adds an integer parameter to the function's argument list
@@ -10592,7 +10592,7 @@ public static native @Cast("CUresult") int cuParamSetSize(CUfunc_st hfunc, @Cast
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuParamSeti(CUfunc_st hfunc, int offset, @Cast("unsigned int") int value);
+public static native @Cast("CUresult") @Deprecated int cuParamSeti(CUfunc_st hfunc, int offset, @Cast("unsigned int") int value);
 
 /**
  * \brief Adds a floating-point parameter to the function's argument list
@@ -10625,7 +10625,7 @@ public static native @Cast("CUresult") int cuParamSeti(CUfunc_st hfunc, int offs
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuParamSetf(CUfunc_st hfunc, int offset, float value);
+public static native @Cast("CUresult") @Deprecated int cuParamSetf(CUfunc_st hfunc, int offset, float value);
 
 /**
  * \brief Adds arbitrary data to the function's argument list
@@ -10660,7 +10660,7 @@ public static native @Cast("CUresult") int cuParamSetf(CUfunc_st hfunc, int offs
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuParamSetv(CUfunc_st hfunc, int offset, Pointer ptr, @Cast("unsigned int") int numbytes);
+public static native @Cast("CUresult") @Deprecated int cuParamSetv(CUfunc_st hfunc, int offset, Pointer ptr, @Cast("unsigned int") int numbytes);
 
 /**
  * \brief Launches a CUDA function
@@ -10697,7 +10697,7 @@ public static native @Cast("CUresult") int cuParamSetv(CUfunc_st hfunc, int offs
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuLaunch(CUfunc_st f);
+public static native @Cast("CUresult") @Deprecated int cuLaunch(CUfunc_st f);
 
 /**
  * \brief Launches a CUDA function
@@ -10736,7 +10736,7 @@ public static native @Cast("CUresult") int cuLaunch(CUfunc_st f);
  * ::cuLaunchGridAsync,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuLaunchGrid(CUfunc_st f, int grid_width, int grid_height);
+public static native @Cast("CUresult") @Deprecated int cuLaunchGrid(CUfunc_st f, int grid_width, int grid_height);
 
 /**
  * \brief Launches a CUDA function
@@ -10783,7 +10783,7 @@ public static native @Cast("CUresult") int cuLaunchGrid(CUfunc_st f, int grid_wi
  * ::cuLaunchGrid,
  * ::cuLaunchKernel
  */
-public static native @Cast("CUresult") int cuLaunchGridAsync(CUfunc_st f, int grid_width, int grid_height, CUstream_st hStream);
+public static native @Cast("CUresult") @Deprecated int cuLaunchGridAsync(CUfunc_st f, int grid_width, int grid_height, CUstream_st hStream);
 
 
 /**
@@ -10808,7 +10808,7 @@ public static native @Cast("CUresult") int cuLaunchGridAsync(CUfunc_st f, int gr
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
  */
-public static native @Cast("CUresult") int cuParamSetTexRef(CUfunc_st hfunc, int texunit, CUtexref_st hTexRef);
+public static native @Cast("CUresult") @Deprecated int cuParamSetTexRef(CUfunc_st hfunc, int texunit, CUtexref_st hTexRef);
 /** \} */ /* END CUDA_EXEC_DEPRECATED */
 
 
@@ -11830,7 +11830,7 @@ public static native @Cast("CUresult") int cuTexRefGetFlags(@Cast("unsigned int*
  *
  * \sa ::cuTexRefDestroy
  */
-public static native @Cast("CUresult") int cuTexRefCreate(@ByPtrPtr CUtexref_st pTexRef);
+public static native @Cast("CUresult") @Deprecated int cuTexRefCreate(@ByPtrPtr CUtexref_st pTexRef);
 
 /**
  * \brief Destroys a texture reference
@@ -11850,7 +11850,7 @@ public static native @Cast("CUresult") int cuTexRefCreate(@ByPtrPtr CUtexref_st 
  *
  * \sa ::cuTexRefCreate
  */
-public static native @Cast("CUresult") int cuTexRefDestroy(CUtexref_st hTexRef);
+public static native @Cast("CUresult") @Deprecated int cuTexRefDestroy(CUtexref_st hTexRef);
 
 /** \} */ /* END CUDA_TEXREF_DEPRECATED */
 
