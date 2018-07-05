@@ -145,6 +145,7 @@ case $PLATFORM in
     windows-x86_64)
         # help cmake's findCuda-method to find the right cuda version
         export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
+        patch -Np1 < ../../../tensorflow-java.patch
         mkdir -p ../build
         cd ../build
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
@@ -167,7 +168,7 @@ if [[ ! "$PLATFORM" == windows* ]]; then
     bazel build -c opt //tensorflow:libtensorflow_cc.so --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
 fi
 
-# copy Java source files and work around loader bug in NativeLibrary.java
+# copy/adjust Java source files and work around loader bug in NativeLibrary.java
 mkdir -p ../java
 cp -r tensorflow/java/src/gen/java/* ../java
 cp -r tensorflow/java/src/main/java/* ../java

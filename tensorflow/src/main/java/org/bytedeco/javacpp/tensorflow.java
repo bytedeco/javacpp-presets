@@ -15642,6 +15642,21 @@ limitations under the License.
    *  and can be assigned to, but other calls on it (e.g. shape manipulation)
    *  are not valid. */
 
+  // Creates a tensor with the input datatype, shape and buf.
+  //
+  // Acquires a ref on buf that belongs to this Tensor.
+  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }
+  private native void allocate(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape, TensorBuffer buf);
+  private TensorBuffer buffer; // a reference to prevent deallocation
+  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, final Pointer data) {
+      this(type, shape, new TensorBuffer() {
+          @Override public Pointer data() { return data; }
+          @Override public long size() { return data.limit(); }
+          @Override public TensorBuffer root_buffer() { return this; }
+          @Override public void FillAllocationDescription(AllocationDescription proto) { }
+      });
+  }
+
   /** Returns the data type. */
   public native @Cast("tensorflow::DataType") int dtype();
 
@@ -15900,24 +15915,33 @@ limitations under the License.
 // Interface to access the raw ref-counted data buffer.
 @Namespace("tensorflow") public static class TensorBuffer extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public TensorBuffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorBuffer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorBuffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public TensorBuffer position(long position) {
+        return (TensorBuffer)super.position(position);
+    }
 
 
   // data() points to a memory region of size() bytes.
-  public native Pointer data();
-  public native @Cast("size_t") long size();
+  @Virtual(true) public native @Const({false, false, true}) Pointer data();
+  @Virtual(true) public native @Cast("size_t") @Const({false, false, true}) long size();
 
   // If this TensorBuffer is sub-buffer of another TensorBuffer,
   // returns that TensorBuffer. Otherwise, returns this.
-  public native TensorBuffer root_buffer();
+  @Virtual(true) public native TensorBuffer root_buffer();
 
   // Fill metadata about the allocation into the proto.
-  public native void FillAllocationDescription(
+  @Virtual(true) public native @Const({false, false, true}) void FillAllocationDescription(
         AllocationDescription proto);
 
   // Whether this TensorBuffer owns the underlying memory.
-  public native @Cast("bool") boolean OwnsMemory();
+  @Virtual public native @Cast("bool") @Const({false, false, true}) boolean OwnsMemory();
 }
 
 

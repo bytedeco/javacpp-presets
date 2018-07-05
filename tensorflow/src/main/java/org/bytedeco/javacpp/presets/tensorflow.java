@@ -525,6 +525,19 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>::operator *()").skip())
 
                .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
+               .put(new Info("tensorflow::TensorBuffer").virtualize())
+               .put(new Info("tensorflow::Tensor(tensorflow::DataType, tensorflow::TensorShape&, tensorflow::TensorBuffer*)").javaText(
+                       "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }\n"
+                     + "private native void allocate(@Cast(\"tensorflow::DataType\") int type, @Const @ByRef TensorShape shape, TensorBuffer buf);\n"
+                     + "private TensorBuffer buffer; // a reference to prevent deallocation\n"
+                     + "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, final Pointer data) {\n"
+                     + "    this(type, shape, new TensorBuffer() {\n"
+                     + "        @Override public Pointer data() { return data; }\n"
+                     + "        @Override public long size() { return data.limit(); }\n"
+                     + "        @Override public TensorBuffer root_buffer() { return this; }\n"
+                     + "        @Override public void FillAllocationDescription(AllocationDescription proto) { }\n"
+                     + "    });\n"
+                     + "}\n"))
                .put(new Info("tensorflow::Session").base("AbstractSession"))
                .put(new Info("tensorflow::Session::~Session()").javaText("/** Calls {@link tensorflow#NewSession(SessionOptions)} and registers a deallocator. */\n"
                                                                        + "public Session(SessionOptions options) { super(options); }"))
