@@ -26,12 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-@Properties(target="org.bytedeco.javacpp.onnx", value={@Platform(compiler="cpp11",
-define={"ONNX_NAMESPACE onnx"},
+@Properties(target="org.bytedeco.javacpp.onnx", value={@Platform(value = {"linux-x86_64"}, compiler="cpp11",
+//define={"ONNX_NAMESPACE onnx"},
 include={
-"onnx/proto_utils.h",
 "defs/schema.h",
 "defs/data_type_utils.h",
+"defs/shape_inference.h",
 "onnx/onnx-operators.pb.h",
 "onnx/onnx.pb.h",
 "google/protobuf/message_lite.h",
@@ -46,21 +46,20 @@ public class onnx implements InfoMapper {
 infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
               .put(new Info("int", "int32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
               .put(new Info("onnx::TensorProto::DataType").valueTypes("int"))
-              .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL").cppTypes().annotations())
+              .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "ONNX_NAMESPACE").cppTypes().annotations())
 	      .put(new Info("onnx::TensorProto_DataType").valueTypes("int"))
-//              .put(new Info("onnx::OpSchema::UseType").valueTypes("int"))
+              .put(new Info("TensorProto_DataType").valueTypes("int"))
+              .put(new Info("onnx::TensorShapeProto_Dimension").pointerTypes("Dimension"))
+	      .put(new Info("onnx::TensorShapeProto::Dimension").pointerTypes("Dimension"))
+	      .put(new Info("TensorShapeProto_Dimension").pointerTypes("Dimension"))
               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
               .put(new Info("std::vector<int64_t>").pointerTypes("LongVector").define())
               .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
-              .put(new Info("onnx::AttributeProto::AttributeType").valueTypes("int"))
+              .put(new Info("std::initializer_list").skip())
+	      .put(new Info("onnx::AttributeProto::AttributeType").valueTypes("int"))
 	      .put(new Info("std::set<int>").pointerTypes("IntSet").define())
               .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
-//              .put(new Info("onnx::checker::ValidationError").cast().pointerTypes("ValidationError").define())
-//               .put(new Info("long long", "std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
-//               .put(new Info("float").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float..."))
-//               .put(new Info("double").valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double..."))
-//               .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
-//               .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
+
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
@@ -75,7 +74,7 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "onnx::_TypeProto_default_instance_",  
 			     "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
 			     "onnx::_TensorShapeProto_default_instance_", "onnx::_TensorProto_Segment_default_instance_","onnx::_TensorProto_default_instance_",
-			     "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_",
+			     "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_", "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_",
 			     "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
 			     "onnx::_AttributeProto_default_instance_", "google::protobuf::UnknownField::LengthDelimited").skip()) 
           
@@ -86,18 +85,13 @@ infoMap.put(new Info("string", "std::string").annotations("@StdString").valueTyp
        
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
                .put(new Info("const std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
-//               .put(new Info("std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
 
                .put(new Info("std::function<bool(int)>").pointerTypes("BoolIntFn"))
                .put(new Info("std::function<bool(int,int)>").pointerTypes("BoolIntIntFn"))
                .put(new Info("std::function<int(int)>").pointerTypes("IntIntFn"))
                .put(new Info("std::function<void(OpSchema&)>").pointerTypes("VoidOpSchemaFn"))
                .put(new Info("onnx::OpSchema::UseType").valueTypes("int")) 
-//               .put(new Info("onnx::OpSchema::UseType::DEFAULT").pointerTypes("DEFAULTUseType").define())
-//               .put(new Info("onnx::OpSchema::UseType::CONSUME_ALLOWED").pointerTypes("CONSUME_ALLOWEDUseType").define())
-//               .put(new Info("onnx::OpSchema::UseType::CONSUME_ENFORCED").pointerTypes("CONSUME_ENFORCEDUseType").define())
                .put(new Info("std::pair<int,int>", "std::pair<onnx::OpSchema::UseType,int>").pointerTypes("UseTypeIntPair").define())
-//               .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())   
                .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
                .put(new Info("std::function<std::pair<bool,int>(int)>").pointerTypes("PairBoolIntIntFn"))

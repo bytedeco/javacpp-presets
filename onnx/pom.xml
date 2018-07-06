@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>onnx</artifactId>
-  <version>1.0.1-1.4.2-SNAPSHOT</version>
+  <version>1.2.2-1.4.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for onnx</name>
 

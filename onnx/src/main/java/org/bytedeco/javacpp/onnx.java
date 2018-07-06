@@ -558,15 +558,6 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
-// Parsed from onnx/proto_utils.h
-
-// #pragma once
-
-// #include <google/protobuf/io/coded_stream.h>
-// #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
- // namespace ONNX_NAMESPACE
-
-
 // Parsed from defs/schema.h
 
 // Copyright (c) Facebook Inc. and Microsoft Corporation.
@@ -589,9 +580,28 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 // #include <vector>
 
 // #include "data_type_utils.h"
+// #include "onnx/common/constants.h"
+// #include "onnx/defs/shape_inference.h"
 
-@Namespace("onnx") @MemberGetter public static native @Cast("const char*") BytePointer ONNX_DOMAIN();
-@Namespace("onnx") @MemberGetter public static native @Cast("const bool") boolean OPTIONAL();
+@Namespace("onnx") @NoOffset public static class SchemaError extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SchemaError(Pointer p) { super(p); }
+
+
+  public SchemaError(@StdString BytePointer message) { super((Pointer)null); allocate(message); }
+  private native void allocate(@StdString BytePointer message);
+  public SchemaError(@StdString String message) { super((Pointer)null); allocate(message); }
+  private native void allocate(@StdString String message);
+
+  public native @Cast("const char*") BytePointer what();
+
+  public native void AppendContext(@StdString BytePointer context);
+  public native void AppendContext(@StdString String context);
+}
+
+// #define fail_schema(...)
+//   throw onnx::SchemaError(onnx::MakeString(__VA_ARGS__));
 
 // Type constraint map. Key is type string. Value is data type set and
 // description.
@@ -608,6 +618,12 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
  *
  *     ONNX_OPERATOR_SCHEMA(name)
  *         .NumInputs(2).NumOutputs(1).AllowConsumed({{0, 0}});
+ *
+ * To manufacture methods that may be used to register an OpSchema
+ * non-statically, the following may be used:
+ *
+ *     ONNX_OPERATOR_SET_SCHEMA(name, version, OpSchema()
+ *         .NumInputs(2).NumOutputs(1).AllowConsumed({{0, 0}}));
  */
 @Namespace("onnx") @NoOffset public static class OpSchema extends Pointer {
     static { Loader.load(); }
@@ -622,7 +638,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
   // Formal parameter options.
   /** enum onnx::OpSchema::FormalParameterOption */
-  public static final int
+  public static final byte
     // The input formal parameter is single and not optional.
     // Number of this input is 1.
     Single = 0,
@@ -652,46 +668,46 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
     public FormalParameter(
             @StdString BytePointer name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString BytePointer type_str,
             @StdString BytePointer description,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, type_set, type_str, description, param_option); }
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, type_set, type_str, description, param_option); }
     private native void allocate(
             @StdString BytePointer name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString BytePointer type_str,
             @StdString BytePointer description,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
     public FormalParameter(
             @StdString BytePointer name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString BytePointer type_str,
             @StdString BytePointer description) { super((Pointer)null); allocate(name, type_set, type_str, description); }
     private native void allocate(
             @StdString BytePointer name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString BytePointer type_str,
             @StdString BytePointer description);
     public FormalParameter(
             @StdString String name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString String type_str,
             @StdString String description,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, type_set, type_str, description, param_option); }
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, type_set, type_str, description, param_option); }
     private native void allocate(
             @StdString String name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString String type_str,
             @StdString String description,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
     public FormalParameter(
             @StdString String name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString String type_str,
             @StdString String description) { super((Pointer)null); allocate(name, type_set, type_str, description); }
     private native void allocate(
             @StdString String name,
-            @Const @ByRef DataTypeSet type_set,
+            @ByVal DataTypeSet type_set,
             @StdString String type_str,
             @StdString String description);
 
@@ -699,12 +715,12 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
             @StdString BytePointer name,
             @StdString BytePointer description,
             @StdString BytePointer type_str,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, description, type_str, param_option); }
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, description, type_str, param_option); }
     private native void allocate(
             @StdString BytePointer name,
             @StdString BytePointer description,
             @StdString BytePointer type_str,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
     public FormalParameter(
             @StdString BytePointer name,
             @StdString BytePointer description,
@@ -717,12 +733,12 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
             @StdString String name,
             @StdString String description,
             @StdString String type_str,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, description, type_str, param_option); }
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/) { super((Pointer)null); allocate(name, description, type_str, param_option); }
     private native void allocate(
             @StdString String name,
             @StdString String description,
             @StdString String type_str,
-            @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+            @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
     public FormalParameter(
             @StdString String name,
             @StdString String description,
@@ -745,11 +761,11 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public native @StdString BytePointer GetDescription();
 
     // Get the parameter option, it could be Single, Optional or Variadic.
-    public native @Cast("onnx::OpSchema::FormalParameterOption") int GetOption();
+    public native @Cast("onnx::OpSchema::FormalParameterOption") byte GetOption();
   }
 
   /** enum class onnx::OpSchema::SupportType */
-  public static final int
+  public static final byte
     COMMON = 0, // Supported by all frameworks that support this IR.
     EXPERIMENTAL = 1; // This OP is experimental and can be changed or removed in
                   // the future.
@@ -774,7 +790,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   /**
    * \brief Returns the support level of the op schema.
    */
-  public native @Cast("onnx::OpSchema::SupportType") int support_level();
+  public native @Cast("onnx::OpSchema::SupportType") byte support_level();
 
   /**
    * \brief Returns the docstring of the op schema.
@@ -804,43 +820,47 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
    * with SinceVersion(6).
    */
   public native @ByRef OpSchema SinceVersion(@Cast("onnx::OperatorSetVersion") int n); // aka int
+
   /**
    * \brief Input could be one of the values specified in allowed_input_nums.
    */
   public native @ByRef OpSchema NumInputs(@ByVal IntSet allowed_input_nums);
+
   /**
    * \brief Output could be one of the values specified in allowed_output_nums.
    */
   public native @ByRef OpSchema NumOutputs(@ByVal IntSet allowed_output_nums);
 
-  // Sets the rule to allow optional in-place operation.
-  public native @ByRef OpSchema AllowConsumed(@ByVal PairBoolIntIntFn inplace);
-  public native @ByRef OpSchema AllowConsumed(@ByVal IntIntMap inplace);
-  public native @ByRef OpSchema AllowOneToOneConsumed();
-  // Sets the rule to enforce in-place opeartion.
-  public native @ByRef OpSchema EnforceConsumed(@ByVal PairBoolIntIntFn inplace);
-  public native @ByRef OpSchema EnforceConsumed(@ByVal IntIntMap inplace);
-  public native @ByRef OpSchema EnforceOneToOneConsumed();
+  // Shape Inference
+  //
+  // Note that signatures are defined to allow for forward-declaring
+  // any structs used from ir.h
+//  OpSchema& TypeAndShapeInferenceFunction(InferenceFunction inferenceFunction);
+//  InferenceFunction GetTypeAndShapeInferenceFunction() const {
+//    return tensor_inference_function_ ? tensor_inference_function_
+//                                      : dummyInferenceFunction;
+//  }
 
   // Set the support level for the op schema.
-  public native @ByRef OpSchema SetSupportLevel(@Cast("onnx::OpSchema::SupportType") int supportType);
+  public native @ByRef OpSchema SetSupportLevel(@Cast("onnx::OpSchema::SupportType") byte supportType);
 
   // Functions to do documentation for the operator schema.
-  public native @ByRef OpSchema SetDoc(@StdString BytePointer doc);
-  public native @ByRef OpSchema SetDoc(@StdString String doc);
+  // This may be disabled to save memory.
+  public native @ByRef OpSchema SetDoc(@Cast("const char*") BytePointer doc);
+  public native @ByRef OpSchema SetDoc(String doc);
+
+  // Functions to specify name for the operator schema.
+  public native @ByRef OpSchema SetName(@Cast("const char*") BytePointer name);
+  public native @ByRef OpSchema SetName(String name);
+
+  // Functions to specify code location for the operator schema.
+  public native @ByRef OpSchema SetLocation(@Cast("const char*") BytePointer file, int line);
+  public native @ByRef OpSchema SetLocation(String file, int line);
 
   // Functions to specify domain for the operator schema.
   // Default domain value (ONNX_DOMAIN) means it's ONNX domain.
-  public native @ByRef OpSchema SetDomain(@StdString BytePointer domain);
-  public native @ByRef OpSchema SetDomain(@StdString String domain);
-
-  /** enum class onnx::OpSchema::UseType */
-  public static final int
-    DEFAULT = 0, // read only use of an input
-    CONSUME_ALLOWED = 1, // allowed to be marked consumed by a "consumed_inputs"
-                     // attribute.
-    CONSUME_ENFORCED = 2; // must be marked consumed by a "consumed_inputs"
-                      // attribute.
+  public native @ByRef OpSchema SetDomain(@Cast("const char*") BytePointer domain);
+  public native @ByRef OpSchema SetDomain(String domain);
 
   @NoOffset public static class Attribute extends Pointer {
       static { Loader.load(); }
@@ -890,19 +910,26 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public native int type(); public native Attribute type(int type);
     public native @Cast("bool") boolean required(); public native Attribute required(boolean required);
     public native @ByRef AttributeProto default_value(); public native Attribute default_value(AttributeProto default_value);
-}
+  }
 
-  public native @ByRef OpSchema Attr(@Const @ByRef Attribute attr);
+  public native @ByRef OpSchema Attr(@ByVal Attribute attr);
+
 // Register "optional" attribute with default value.
 // #define ATTR_SETTER_WITH_DEFAULT_VALUE(TypeName)
 //   OpSchema& Attr(
-//       const std::string& name,
-//       const std::string& description,
+//       std::string name,
+//       std::string description,
+//       AttributeProto::AttributeType type,
+//       const TypeName& defaultValue);
+//   /* non-STL wrapper to reduce binary size */
+//   OpSchema& Attr(
+//       const char* name,
+//       const char* description,
 //       AttributeProto::AttributeType type,
 //       const TypeName& defaultValue);
 //   OpSchema& Attr(
-//       const std::string& name,
-//       const std::string& description,
+//       std::string name,
+//       std::string description,
 //       AttributeProto::AttributeType type,
 //       const std::vector<TypeName>& defaultValue);
 
@@ -916,6 +943,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String description,
         int type,
         @Cast("const int64_t") long defaultValue);
+  /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
         @StdString BytePointer description,
@@ -936,6 +964,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String description,
         int type,
         float defaultValue);
+  /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
         @StdString BytePointer description,
@@ -956,6 +985,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String description,
         int type,
         @StdString String defaultValue);
+  /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
         @StdString BytePointer description,
@@ -976,6 +1006,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String description,
         int type,
         @Const @ByRef TensorProto defaultValue);
+  /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
         @StdString BytePointer description,
@@ -986,6 +1017,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String description,
         int type,
         @Const @ByRef GraphProto defaultValue);
+  /* non-STL wrapper to reduce binary size */
 
   // Register "required" attribute without default value.
   public native @ByRef OpSchema Attr(
@@ -1006,6 +1038,9 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String name,
         @StdString String description,
         int type);
+
+  // Non-STL wrapper to reduce binary size
+
   public native @ByRef OpSchema AllowUncheckedAttributes();
 
   // Type constraint.
@@ -1024,19 +1059,19 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     private native void allocate();
     public TypeConstraintParam(
             @StdString BytePointer type_param_str_,
-            @Const @ByRef StringVector allowed_type_strs_,
+            @ByVal StringVector allowed_type_strs_,
             @StdString BytePointer description_) { super((Pointer)null); allocate(type_param_str_, allowed_type_strs_, description_); }
     private native void allocate(
             @StdString BytePointer type_param_str_,
-            @Const @ByRef StringVector allowed_type_strs_,
+            @ByVal StringVector allowed_type_strs_,
             @StdString BytePointer description_);
     public TypeConstraintParam(
             @StdString String type_param_str_,
-            @Const @ByRef StringVector allowed_type_strs_,
+            @ByVal StringVector allowed_type_strs_,
             @StdString String description_) { super((Pointer)null); allocate(type_param_str_, allowed_type_strs_, description_); }
     private native void allocate(
             @StdString String type_param_str_,
-            @Const @ByRef StringVector allowed_type_strs_,
+            @ByVal StringVector allowed_type_strs_,
             @StdString String description_);
 
     // Type parameter string, for example, "T", "T1", etc.
@@ -1063,12 +1098,12 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   //       2) <type> ::= <data_type> means the data is scalar (zero dimension).
   //
   // Example:
-  // ONNX_OPERATOR_SCHEMA(Sum)
+  // ONNX_OPERATOR_SET_SCHEMA(Sum, 1, OpSchema()
   // .Input(0, "input_a", "the first input", "T")
   // .Input(1, "input_b", "the second input", "T")
   // .Output(0, "sum", "the sum of two numbers", "T")
   // .TypeConstraint("T", {"float", "double", "int32"}, "allowed data types for
-  // sum.")
+  // sum."))
   //
   // Optional = true means that the input might have empty input value
   // (represented as "") in the graph even though the later inputs have values.
@@ -1079,7 +1114,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString BytePointer name,
         @StdString BytePointer description,
         @StdString BytePointer type_str,
-        @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+        @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
   public native @ByRef OpSchema Input(
         int n,
         @StdString BytePointer name,
@@ -1090,18 +1125,20 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String name,
         @StdString String description,
         @StdString String type_str,
-        @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+        @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
   public native @ByRef OpSchema Input(
         int n,
         @StdString String name,
         @StdString String description,
         @StdString String type_str);
+
+  // Non-STL wrapper to reduce binary size
   public native @ByRef OpSchema Output(
         int n,
         @StdString BytePointer name,
         @StdString BytePointer description,
         @StdString BytePointer type_str,
-        @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+        @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
   public native @ByRef OpSchema Output(
         int n,
         @StdString BytePointer name,
@@ -1112,29 +1149,37 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         @StdString String name,
         @StdString String description,
         @StdString String type_str,
-        @Cast("onnx::OpSchema::FormalParameterOption") int param_option/*=onnx::OpSchema::Single*/);
+        @Cast("onnx::OpSchema::FormalParameterOption") byte param_option/*=onnx::OpSchema::Single*/);
   public native @ByRef OpSchema Output(
         int n,
         @StdString String name,
         @StdString String description,
         @StdString String type_str);
+
+  // Non-STL wrapper to reduce binary size
   public native @ByRef OpSchema TypeConstraint(
         @StdString BytePointer type_str,
-        @Const @ByRef StringVector constraints,
+        @ByVal StringVector constraints,
         @StdString BytePointer description);
   public native @ByRef OpSchema TypeConstraint(
         @StdString String type_str,
-        @Const @ByRef StringVector constraints,
+        @ByVal StringVector constraints,
         @StdString String description);
 
+  // Non-STL wrapper to reduce binary size
+
   // Convenience members for types
-  public static native @Const @ByRef StringVector all_integral_types();
+
+  // All high-precision numeric types.
+  public static native @Const @ByRef StringVector numeric_types_for_math_reduction();
+
+  public static native @Const @ByRef StringVector all_numeric_types();
 
   public static native @Const @ByRef StringVector all_tensor_types();
 
   // Calls the passed function with `this` as an argument. Useful for
   // adding docs for temlated/macro ops.
-  public native @ByRef OpSchema FillUsing(@ByVal VoidOpSchemaFn populator);
+  public native @ByRef OpSchema FillUsing(@Const @ByRef VoidOpSchemaFn populator);
 
   
 
@@ -1159,28 +1204,50 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   public native int max_input();
   public native int min_output();
   public native int max_output();
+
+  public native @Cast("bool") boolean has_type_and_shape_inference_function();
+
+  // Verifies that the schema is valid and all specifications are compatible.
+  // It will also parse all type strings specified for inputs/outputs into valid
+  // TypeProto and create global unique string pointer as the DataType for
+  // efficiency.
+  public native void Finalize();
 }
 
 // Map type to store operator schemas. The format is,
 // <OpName, <Domain, <OperatorSetVersion, OpSchema>>>.
 
+@Namespace("onnx") public static class ISchemaRegistry extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ISchemaRegistry(Pointer p) { super(p); }
+
+
+  public native @Const OpSchema GetSchema(
+        @StdString BytePointer key,
+        int maxInclusiveVersion,
+        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
+  public native @Const OpSchema GetSchema(
+        @StdString BytePointer key,
+        int maxInclusiveVersion);
+  public native @Const OpSchema GetSchema(
+        @StdString String key,
+        int maxInclusiveVersion,
+        @StdString String domain/*=ONNX_DOMAIN*/);
+  public native @Const OpSchema GetSchema(
+        @StdString String key,
+        int maxInclusiveVersion);
+}
+
 /**
  * \brief A registry to hold all the operator schemas.
  */
-@Namespace("onnx") public static class OpSchemaRegistry extends Pointer {
+@Namespace("onnx") public static class OpSchemaRegistry extends ISchemaRegistry {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public OpSchemaRegistry() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public OpSchemaRegistry(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpSchemaRegistry(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public OpSchemaRegistry position(long position) {
-        return (OpSchemaRegistry)super.position(position);
-    }
 
+  // A singleton class to store domain to min/max op_set version map.
   @NoOffset public static class DomainToVersionRange extends Pointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1196,6 +1263,18 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     private native void allocate();
 
     public native @Const @ByRef StringIntIntPairMap Map();
+
+    // Add customized domain to min/max version.
+    // Onnx partners are able to use onnx operator schema api to
+    // register customized op in their own domain.
+    public native void AddDomainToVersion(
+            @StdString BytePointer domain,
+            int min_version,
+            int max_version);
+    public native void AddDomainToVersion(
+            @StdString String domain,
+            int min_version,
+            int max_version);
 
     public static native @ByRef DomainToVersionRange Instance();
   }
@@ -1213,12 +1292,12 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   // Domain with default value ONNX_DOMAIN means ONNX.
   public static native @Const OpSchema Schema(
         @StdString BytePointer key,
-        @StdString BytePointer domain/*=onnx::ONNX_DOMAIN*/);
+        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
   public static native @Const OpSchema Schema(
         @StdString BytePointer key);
   public static native @Const OpSchema Schema(
         @StdString String key,
-        @StdString String domain/*=onnx::ONNX_DOMAIN*/);
+        @StdString String domain/*=ONNX_DOMAIN*/);
   public static native @Const OpSchema Schema(
         @StdString String key);
 
@@ -1228,40 +1307,114 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   public static native @Const OpSchema Schema(
         @StdString BytePointer key,
         int maxInclusiveVersion,
-        @StdString BytePointer domain/*=onnx::ONNX_DOMAIN*/);
+        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
   public static native @Const OpSchema Schema(
         @StdString BytePointer key,
         int maxInclusiveVersion);
   public static native @Const OpSchema Schema(
         @StdString String key,
         int maxInclusiveVersion,
-        @StdString String domain/*=onnx::ONNX_DOMAIN*/);
+        @StdString String domain/*=ONNX_DOMAIN*/);
   public static native @Const OpSchema Schema(
         @StdString String key,
         int maxInclusiveVersion);
 
-// private:
-  // OpSchemaRegistry should not need to be instantiated.
-//  OpSchemaRegistry() = delete;
+  public static native OpSchemaRegistry Instance();
 
-  /**
-   * \brief Returns the underlying string to OpSchema map.
-   *
-   * You should not manually manipulate the map object returned. Instead, use
-   * the macros defined such as ONNX_OPERATOR_SCHEMA to register your operator
-   * schema.
-   *
-   * We wrap it inside a function to avoid the statia initialization order
-   * fiasco.
-   */
-  public static native @Cast("onnx::OpName_Domain_Version_Schema_Map*") @ByRef StringIntIntPairMap map();
+  public native @Const OpSchema GetSchema(
+        @StdString BytePointer key,
+        int maxInclusiveVersion,
+        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
+  public native @Const OpSchema GetSchema(
+        @StdString BytePointer key,
+        int maxInclusiveVersion);
+  public native @Const OpSchema GetSchema(
+        @StdString String key,
+        int maxInclusiveVersion,
+        @StdString String domain/*=ONNX_DOMAIN*/);
+  public native @Const OpSchema GetSchema(
+        @StdString String key,
+        int maxInclusiveVersion);
   public static native @Const @ByVal OpSchemaVector get_all_schemas_with_history();
 
   public static native @Const @ByVal OpSchemaVector get_all_schemas();
 }
 
+@Namespace("onnx") public static native void RegisterSchema(@ByVal OpSchema schema);
 
-// #define ONNX_OPERATOR_SCHEMA(name) ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
+// Registers all schema of a given operator set
+
+// Forward declaration for the non-specialized GetOpSchema method.  This
+// enforces a consistent signature on functions that query individual schema,
+// which are defined as specializations of this function.
+
+// #define ONNX_OPERATOR_SET_SCHEMA(name, ver, impl)
+//   ONNX_OPERATOR_SET_SCHEMA_EX(name, Onnx, ONNX_DOMAIN, ver, true, impl)
+
+// #define ONNX_ML_OPERATOR_SET_SCHEMA(name, ver, impl)
+//   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxML, AI_ONNX_ML_DOMAIN, ver, true, impl)
+
+// Defines specialization of GetOpSchema for a class whose name is determined
+// based on a convention using name, domain, and version.  Operator schema are
+// normally included in operator sets and registered in OpSchemaRegistry::map().
+// In this case, callers should set dbg_included_in_static_opset to true.  This
+// assists with runtime validation in in DEBUG builds ensuring the intended set
+// of operator schema is registered.
+// #define ONNX_OPERATOR_SET_SCHEMA_EX(
+//     name, domain, domain_str, ver, dbg_included_in_static_opset, impl)
+//   class ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name);
+//   template <>
+//   OpSchema
+//   GetOpSchema<ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)>() {
+//     return impl.SetName(#name)
+//         .SetDomain(domain_str)
+//         .SinceVersion(ver)
+//         .SetLocation(__FILE__, __LINE__);
+//   }
+//   size_t dbg_count_check_##name##_##domain##_ver##ver =
+//       (dbg_included_in_static_opset) ? ONNX_DBG_INCREMENT_COUNT_IN_OPSETS()
+//                                      : 0;
+
+// #ifdef NDEBUG
+// #define ONNX_DBG_INCREMENT_COUNT_IN_OPSETS() 0
+// #else
+// #define ONNX_DBG_INCREMENT_COUNT_IN_OPSETS()
+//   DbgOperatorSetTracker::Instance().IncrementCount()
+// #define ONNX_DBG_GET_COUNT_IN_OPSETS()
+//   DbgOperatorSetTracker::Instance().GetCount()
+
+@Namespace("onnx") public static class DbgOperatorSetTracker extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public DbgOperatorSetTracker() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DbgOperatorSetTracker(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DbgOperatorSetTracker(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public DbgOperatorSetTracker position(long position) {
+        return (DbgOperatorSetTracker)super.position(position);
+    }
+
+  public static native @ByRef DbgOperatorSetTracker Instance();
+
+  public native @Cast("size_t") long IncrementCount();
+
+  public native @Cast("size_t") long GetCount();
+}
+// #endif
+
+// Naming convention for operator schema classes
+// #define ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)
+//   name##_##domain##_ver##ver
+
+// Helper function
+//size_t ReplaceAll(std::string& s, const char* from, const char* to);
+
+// Legacy macros to register schema at static initialization
+// #define ONNX_OPERATOR_SCHEMA(name)
+//   ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
 // #define ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(Counter, name)
 //   ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
 // #define ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
@@ -1271,6 +1424,18 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
 // Helper function
 //size_t ReplaceAll(std::string& s, const char* from, const char* to);
+
+@Namespace("onnx") public static native @StdString BytePointer GenerateOptionalArgumentsDoc();
+
+@Namespace("onnx") public static native @StdString BytePointer GenerateBroadcastingDocMul();
+
+@Namespace("onnx") public static native @StdString BytePointer GenerateBroadcastingDocUni(
+    @Cast("const char*") BytePointer from,
+    @Cast("const char*") BytePointer to);
+@Namespace("onnx") public static native @StdString String GenerateBroadcastingDocUni(
+    String from,
+    String to);
+
  // namespace onnx
 
 
@@ -1305,7 +1470,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 //
 // Example: float, tensor(float), etc.
 //
-@Namespace("ONNX_NAMESPACE::Utils") public static class DataTypeUtils extends Pointer {
+@Namespace("onnx::Utils") public static class DataTypeUtils extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public DataTypeUtils() { super((Pointer)null); allocate(); }
@@ -1319,17 +1484,172 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         return (DataTypeUtils)super.position(position);
     }
 
-  public static native @StdString @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString BytePointer type_str);
-  public static native @StdString @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString String type_str);
+  public static native @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString BytePointer type_str);
+  public static native @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString String type_str);
 
-  public static native @StdString @Cast({"char*", "std::string*"}) BytePointer ToType(@Const @ByRef TypeProto type_proto);
+  public static native @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@Const @ByRef TypeProto type_proto);
 
-  public static native @Const @ByRef TypeProto ToTypeProto(@StdString @ByPtrRef @Cast({"char*", "std::string*"}) BytePointer data_type);
+  public static native @Const @ByRef TypeProto ToTypeProto(@ByRef @Cast({"char*", "std::string*"}) BytePointer data_type);
 }
  // namespace Utils
- // namespace ONNX_NAMESPACE
+ // namespace onnx
 
 // #endif // ! ONNX_DATA_TYPE_UTILS_H
+
+
+// Parsed from defs/shape_inference.h
+
+// #pragma once
+
+// #include "onnx/defs/data_type_utils.h"
+// #include "onnx/proto_utils.h"
+// #include "onnx/string_utils.h"
+
+// Exception class used for handling errors in type and shape inference
+
+@Namespace("onnx") @NoOffset public static class InferenceError extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InferenceError(Pointer p) { super(p); }
+
+
+	public InferenceError(@StdString BytePointer message) { super((Pointer)null); allocate(message); }
+	private native void allocate(@StdString BytePointer message);
+	public InferenceError(@StdString String message) { super((Pointer)null); allocate(message); }
+	private native void allocate(@StdString String message);
+
+	public native @Cast("const char*") BytePointer what();
+
+	public native void AppendContext(@StdString BytePointer context);
+	public native void AppendContext(@StdString String context);
+}
+
+// #define fail_type_inference(...)
+//   throw onnx::InferenceError(
+//       onnx::MakeString("[TypeInferenceError] ", __VA_ARGS__));
+
+// #define fail_shape_inference(...)
+//   throw onnx::InferenceError(
+//       onnx::MakeString("[ShapeInferenceError] ", __VA_ARGS__));
+
+@Namespace("onnx") public static class InferenceContext extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InferenceContext(Pointer p) { super(p); }
+
+  public native @Const AttributeProto getAttribute(@StdString BytePointer name);
+  public native @Const AttributeProto getAttribute(@StdString String name);
+  public native @Cast("size_t") long getNumInputs();
+  public native @Const TypeProto getInputType(@Cast("size_t") long index);
+  public native @Cast("size_t") long getNumOutputs();
+  public native TypeProto getOutputType(@Cast("size_t") long index);
+}
+
+// This no-op inference function is used for operators without an
+// inference implementation.
+@Namespace("onnx") public static native void dummyInferenceFunction(@ByRef InferenceContext arg0);
+
+@Namespace("onnx") public static native @Cast("int64_t") long getAttribute(@ByRef InferenceContext ctx, @StdString BytePointer attributeName, @Cast("int64_t") long defaultValue);
+@Namespace("onnx") public static native @Cast("int64_t") long getAttribute(@ByRef InferenceContext ctx, @StdString String attributeName, @Cast("int64_t") long defaultValue);
+
+@Namespace("onnx") public static native @StdString BytePointer getAttribute(@ByRef InferenceContext ctx, @StdString BytePointer attributeName, @StdString BytePointer defaultValue);
+@Namespace("onnx") public static native @StdString String getAttribute(@ByRef InferenceContext ctx, @StdString String attributeName, @StdString String defaultValue);
+
+@Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(@ByVal Dimension dim1, @ByVal Dimension dim2);
+
+@Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(@ByVal Dimension dim1, @Cast("int64_t") long dim2);
+
+@Namespace("onnx") public static native @ByVal @Name("operator /") Dimension divide(@ByVal Dimension dim1, @Cast("int64_t") long dim2);
+
+//if from >= upto_exclusive, return 1.
+//Caller must make sure upto_exclusive is less than or equal to shape.size()
+//Caller must make sure from>=0
+@Namespace("onnx") public static native @ByVal Dimension multiplyDims(@Const @ByRef TensorShapeProto shape, int from, int upto_exclusive);
+
+// Note: for all methods below for propagating type or shape, callers are responsible
+// to handle optional inputs/outputs and ensure that the specified index value
+// is less than NumInputs/NumOutputs.
+
+@Namespace("onnx") public static native void propagateElemTypeFromInputToOutput(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long inputIndex,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native @Cast("bool") boolean hasInputShape(@ByRef InferenceContext ctx, int n);
+
+@Namespace("onnx") public static native @Cast("bool") boolean hasNInputShapes(@ByRef InferenceContext ctx, int n);
+
+@Namespace("onnx") public static native @Const @ByRef TensorShapeProto getInputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
+
+//Caller must make sure fromDimIndex is strictly less than shape.dim_size()
+@Namespace("onnx") public static native void appendSingleDimCopiedFromInputTypeToOutputType(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long inputIndex,
+    @Cast("size_t") long outputIndex,
+    @Cast("size_t") long fromDimIndex);
+
+@Namespace("onnx") public static native void propagateShapeFromInputToOutput(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long inputIndex,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native void propagateShapeAndTypeFromFirstInput(@ByRef InferenceContext ctx);
+
+@Namespace("onnx") public static native void updateOutputElemType(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long outputIndex,
+    int elemType);
+
+// Infer type of an output from the value of a specified attribute, which is expected
+// to have a valid value representing a TensorProto_DataType.
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("size_t") long outputIndex,
+    int default_value/*=TensorProto::UNDEFINED*/);
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("size_t") long outputIndex);
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("size_t") long outputIndex,
+    int default_value/*=TensorProto::UNDEFINED*/);
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native TensorShapeProto getOutputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
+
+@Namespace("onnx") public static native void updateOutputShape(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long outputIndex,
+    @Const @ByRef TensorShapeProto shape);
+
+@Namespace("onnx") public static native void updateOutputShape(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long outputIndex,
+    @Const @ByRef TensorProto tensorProto);
+
+// Infer shape of an output from the value of a specified attribute, which is expected
+// to be a list of integers specifying a valid shape.
+@Namespace("onnx") public static native void propagateShapeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("size_t") long outputIndex);
+@Namespace("onnx") public static native void propagateShapeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native void bidirectionalBroadcastShapeInference(
+    @Const @ByRef TensorShapeProto shapeL,
+    @Const @ByRef TensorShapeProto shapeR,
+    @ByRef TensorShapeProto resultShape);
+
+ // namespace onnx
 
 
 // Parsed from onnx/onnx-operators.pb.h
@@ -1373,6 +1693,13 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public AttributeProtoDefaultTypeInternal() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AttributeProtoDefaultTypeInternal(Pointer p) { super(p); }
+}
+
+@Namespace("onnx") @Opaque public static class FunctionProtoDefaultTypeInternal extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FunctionProtoDefaultTypeInternal() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FunctionProtoDefaultTypeInternal(Pointer p) { super(p); }
 }
 
 @Namespace("onnx") @Opaque public static class GraphProtoDefaultTypeInternal extends Pointer {
@@ -1498,30 +1825,215 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 @Namespace("onnx::protobuf_onnx_2doperators_2eproto") public static native void InitDefaults();
   // namespace protobuf_onnx_2doperators_2eproto
 
-/** enum onnx::OperatorProto_OperatorStatus */
+/** enum onnx::OperatorStatus */
 public static final int
-  OperatorProto_OperatorStatus_EXPERIMENTAL = 0,
-  OperatorProto_OperatorStatus_STABLE = 1;
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_IsValid(int value);
-@Namespace("onnx") @MemberGetter public static native @Cast("const onnx::OperatorProto_OperatorStatus") int OperatorProto_OperatorStatus_OperatorStatus_MIN();
-@Namespace("onnx") @MemberGetter public static native @Cast("const onnx::OperatorProto_OperatorStatus") int OperatorProto_OperatorStatus_OperatorStatus_MAX();
-@Namespace("onnx") @MemberGetter public static native int OperatorProto_OperatorStatus_OperatorStatus_ARRAYSIZE();
+  EXPERIMENTAL = 0,
+  STABLE = 1;
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_IsValid(int value);
+@Namespace("onnx") @MemberGetter public static native @Cast("const onnx::OperatorStatus") int OperatorStatus_MIN();
+@Namespace("onnx") @MemberGetter public static native @Cast("const onnx::OperatorStatus") int OperatorStatus_MAX();
+@Namespace("onnx") @MemberGetter public static native int OperatorStatus_ARRAYSIZE();
 
-@Namespace("onnx") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer OperatorProto_OperatorStatus_descriptor();
-@Namespace("onnx") public static native @StdString BytePointer OperatorProto_OperatorStatus_Name(@Cast("onnx::OperatorProto_OperatorStatus") int value);
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_Parse(
-    @StdString BytePointer name, @Cast("onnx::OperatorProto_OperatorStatus*") IntPointer value);
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_Parse(
-    @StdString String name, @Cast("onnx::OperatorProto_OperatorStatus*") IntBuffer value);
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_Parse(
-    @StdString BytePointer name, @Cast("onnx::OperatorProto_OperatorStatus*") int... value);
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_Parse(
-    @StdString String name, @Cast("onnx::OperatorProto_OperatorStatus*") IntPointer value);
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_Parse(
-    @StdString BytePointer name, @Cast("onnx::OperatorProto_OperatorStatus*") IntBuffer value);
-@Namespace("onnx") public static native @Cast("bool") boolean OperatorProto_OperatorStatus_Parse(
-    @StdString String name, @Cast("onnx::OperatorProto_OperatorStatus*") int... value);
+@Namespace("onnx") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer OperatorStatus_descriptor();
+@Namespace("onnx") public static native @StdString BytePointer OperatorStatus_Name(@Cast("onnx::OperatorStatus") int value);
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_Parse(
+    @StdString BytePointer name, @Cast("onnx::OperatorStatus*") IntPointer value);
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_Parse(
+    @StdString String name, @Cast("onnx::OperatorStatus*") IntBuffer value);
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_Parse(
+    @StdString BytePointer name, @Cast("onnx::OperatorStatus*") int... value);
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_Parse(
+    @StdString String name, @Cast("onnx::OperatorStatus*") IntPointer value);
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_Parse(
+    @StdString BytePointer name, @Cast("onnx::OperatorStatus*") IntBuffer value);
+@Namespace("onnx") public static native @Cast("bool") boolean OperatorStatus_Parse(
+    @StdString String name, @Cast("onnx::OperatorStatus*") int... value);
 // ===================================================================
+
+@Namespace("onnx") @NoOffset public static class FunctionProto extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FunctionProto(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FunctionProto(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FunctionProto position(long position) {
+        return (FunctionProto)super.position(position);
+    }
+
+  public FunctionProto() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public FunctionProto(@Const @ByRef FunctionProto from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef FunctionProto from);
+
+  public native @ByRef @Name("operator =") FunctionProto put(@Const @ByRef FunctionProto from);
+
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
+
+  public native UnknownFieldSet mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef FunctionProto default_instance();
+
+  public static native @Const FunctionProto internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void Swap(FunctionProto other);
+
+  // implements Message ----------------------------------------------
+
+  public native FunctionProto New();
+
+  public native FunctionProto New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef FunctionProto from);
+  public native void MergeFrom(@Const @ByRef FunctionProto from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated string input = 4;
+  public native int input_size();
+  public native void clear_input();
+  @MemberGetter public static native int kInputFieldNumber();
+  public static final int kInputFieldNumber = kInputFieldNumber();
+  public native @StdString BytePointer input(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_input(int index);
+  public native void set_input(int index, @StdString BytePointer value);
+  public native void set_input(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_input(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_input(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_input();
+  public native void add_input(@StdString BytePointer value);
+  public native void add_input(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_input(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_input(String value, @Cast("size_t") long size);
+
+  // repeated string output = 5;
+  public native int output_size();
+  public native void clear_output();
+  @MemberGetter public static native int kOutputFieldNumber();
+  public static final int kOutputFieldNumber = kOutputFieldNumber();
+  public native @StdString BytePointer output(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_output(int index);
+  public native void set_output(int index, @StdString BytePointer value);
+  public native void set_output(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_output(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_output(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_output();
+  public native void add_output(@StdString BytePointer value);
+  public native void add_output(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_output(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_output(String value, @Cast("size_t") long size);
+
+  // repeated string attribute = 6;
+  public native int attribute_size();
+  public native void clear_attribute();
+  @MemberGetter public static native int kAttributeFieldNumber();
+  public static final int kAttributeFieldNumber = kAttributeFieldNumber();
+  public native @StdString BytePointer attribute(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_attribute(int index);
+  public native void set_attribute(int index, @StdString BytePointer value);
+  public native void set_attribute(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_attribute(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_attribute(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_attribute();
+  public native void add_attribute(@StdString BytePointer value);
+  public native void add_attribute(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_attribute(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_attribute(String value, @Cast("size_t") long size);
+
+  // repeated .onnx.NodeProto node = 7;
+  public native int node_size();
+  public native void clear_node();
+  @MemberGetter public static native int kNodeFieldNumber();
+  public static final int kNodeFieldNumber = kNodeFieldNumber();
+  public native @Const @ByRef NodeProto node(int index);
+  public native NodeProto mutable_node(int index);
+  public native NodeProto add_node();
+
+  // optional string name = 1;
+  public native @Cast("bool") boolean has_name();
+  public native void clear_name();
+  @MemberGetter public static native int kNameFieldNumber();
+  public static final int kNameFieldNumber = kNameFieldNumber();
+  public native @StdString BytePointer name();
+  public native void set_name(@StdString BytePointer value);
+  public native void set_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
+
+  // optional string doc_string = 8;
+  public native @Cast("bool") boolean has_doc_string();
+  public native void clear_doc_string();
+  @MemberGetter public static native int kDocStringFieldNumber();
+  public static final int kDocStringFieldNumber = kDocStringFieldNumber();
+  public native @StdString BytePointer doc_string();
+  public native void set_doc_string(@StdString BytePointer value);
+  public native void set_doc_string(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_doc_string(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_doc_string(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_doc_string();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_doc_string();
+  public native void set_allocated_doc_string(@StdString @Cast({"char*", "std::string*"}) BytePointer doc_string);
+
+  // optional int64 since_version = 2;
+  public native @Cast("bool") boolean has_since_version();
+  public native void clear_since_version();
+  @MemberGetter public static native int kSinceVersionFieldNumber();
+  public static final int kSinceVersionFieldNumber = kSinceVersionFieldNumber();
+  public native @Cast("google::protobuf::int64") long since_version();
+  public native void set_since_version(@Cast("google::protobuf::int64") long value);
+
+  // optional .onnx.OperatorStatus status = 3;
+  public native @Cast("bool") boolean has_status();
+  public native void clear_status();
+  @MemberGetter public static native int kStatusFieldNumber();
+  public static final int kStatusFieldNumber = kStatusFieldNumber();
+  public native @Cast("onnx::OperatorStatus") int status();
+  public native void set_status(@Cast("onnx::OperatorStatus") int value);
+}
+// -------------------------------------------------------------------
 
 @Namespace("onnx") @NoOffset public static class OperatorProto extends MessageLite {
     static { Loader.load(); }
@@ -1583,31 +2095,6 @@ public static final int
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
-  @MemberGetter public static native @Cast("const onnx::OperatorProto::OperatorStatus") int EXPERIMENTAL();
-  public static final int EXPERIMENTAL = EXPERIMENTAL();
-  @MemberGetter public static native @Cast("const onnx::OperatorProto::OperatorStatus") int STABLE();
-  public static final int STABLE = STABLE();
-  public static native @Cast("bool") boolean OperatorStatus_IsValid(int value);
-  @MemberGetter public static native @Cast("const onnx::OperatorProto::OperatorStatus") int OperatorStatus_MIN();
-  public static final int OperatorStatus_MIN = OperatorStatus_MIN();
-  @MemberGetter public static native @Cast("const onnx::OperatorProto::OperatorStatus") int OperatorStatus_MAX();
-  public static final int OperatorStatus_MAX = OperatorStatus_MAX();
-  @MemberGetter public static native int OperatorStatus_ARRAYSIZE();
-  public static final int OperatorStatus_ARRAYSIZE = OperatorStatus_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer OperatorStatus_descriptor();
-  public static native @StdString BytePointer OperatorStatus_Name(@Cast("onnx::OperatorProto::OperatorStatus") int value);
-  public static native @Cast("bool") boolean OperatorStatus_Parse(@StdString BytePointer name,
-        @Cast("onnx::OperatorProto::OperatorStatus*") IntPointer value);
-  public static native @Cast("bool") boolean OperatorStatus_Parse(@StdString String name,
-        @Cast("onnx::OperatorProto::OperatorStatus*") IntBuffer value);
-  public static native @Cast("bool") boolean OperatorStatus_Parse(@StdString BytePointer name,
-        @Cast("onnx::OperatorProto::OperatorStatus*") int... value);
-  public static native @Cast("bool") boolean OperatorStatus_Parse(@StdString String name,
-        @Cast("onnx::OperatorProto::OperatorStatus*") IntPointer value);
-  public static native @Cast("bool") boolean OperatorStatus_Parse(@StdString BytePointer name,
-        @Cast("onnx::OperatorProto::OperatorStatus*") IntBuffer value);
-  public static native @Cast("bool") boolean OperatorStatus_Parse(@StdString String name,
-        @Cast("onnx::OperatorProto::OperatorStatus*") int... value);
 
   // accessors -------------------------------------------------------
 
@@ -1651,13 +2138,13 @@ public static final int
   public native @Cast("google::protobuf::int64") long since_version();
   public native void set_since_version(@Cast("google::protobuf::int64") long value);
 
-  // optional .onnx.OperatorProto.OperatorStatus status = 3;
+  // optional .onnx.OperatorStatus status = 3;
   public native @Cast("bool") boolean has_status();
   public native void clear_status();
   @MemberGetter public static native int kStatusFieldNumber();
   public static final int kStatusFieldNumber = kStatusFieldNumber();
-  public native @Cast("onnx::OperatorProto_OperatorStatus") int status();
-  public native void set_status(@Cast("onnx::OperatorProto_OperatorStatus") int value);
+  public native @Cast("onnx::OperatorStatus") int status();
+  public native void set_status(@Cast("onnx::OperatorStatus") int value);
 }
 // -------------------------------------------------------------------
 
@@ -1732,6 +2219,15 @@ public static final int
   public native @Const @ByRef OperatorProto operator_(int index);
   public native OperatorProto mutable_operator_(int index);
   public native OperatorProto add_operator_();
+
+  // repeated .onnx.FunctionProto functions = 9;
+  public native int functions_size();
+  public native void clear_functions();
+  @MemberGetter public static native int kFunctionsFieldNumber();
+  public static final int kFunctionsFieldNumber = kFunctionsFieldNumber();
+  public native @Const @ByRef FunctionProto functions(int index);
+  public native FunctionProto mutable_functions(int index);
+  public native FunctionProto add_functions();
 
   // optional string magic = 1;
   public native @Cast("bool") boolean has_magic();
@@ -1835,6 +2331,130 @@ public static final int
 // ===================================================================
 
 // #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// FunctionProto
+
+// optional string name = 1;
+
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// optional int64 since_version = 2;
+
+
+
+
+
+
+
+// optional .onnx.OperatorStatus status = 3;
+
+
+
+
+
+
+
+// repeated string input = 4;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string output = 5;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string attribute = 6;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated .onnx.NodeProto node = 7;
+
+
+
+
+
+
+
+
+// optional string doc_string = 8;
+
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
 // OperatorProto
 
 // optional string op_type = 1;
@@ -1861,7 +2481,7 @@ public static final int
 
 
 
-// optional .onnx.OperatorProto.OperatorStatus status = 3;
+// optional .onnx.OperatorStatus status = 3;
 
 
 
@@ -1994,7 +2614,18 @@ public static final int
 
 
 
+// repeated .onnx.FunctionProto functions = 9;
+
+
+
+
+
+
+
+
 // #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
@@ -2354,6 +2985,22 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_doc_string();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_doc_string();
   public native void set_allocated_doc_string(@StdString @Cast({"char*", "std::string*"}) BytePointer doc_string);
+
+  // optional string ref_attr_name = 21;
+  public native @Cast("bool") boolean has_ref_attr_name();
+  public native void clear_ref_attr_name();
+  @MemberGetter public static native int kRefAttrNameFieldNumber();
+  public static final int kRefAttrNameFieldNumber = kRefAttrNameFieldNumber();
+  public native @StdString BytePointer ref_attr_name();
+  public native void set_ref_attr_name(@StdString BytePointer value);
+  public native void set_ref_attr_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_ref_attr_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_ref_attr_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_ref_attr_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_ref_attr_name();
+  public native void set_allocated_ref_attr_name(@StdString @Cast({"char*", "std::string*"}) BytePointer ref_attr_name);
 
   // optional .onnx.TensorProto t = 5;
   public native @Cast("bool") boolean has_t();
@@ -3429,31 +4076,31 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("onnx") @NoOffset public static class TensorShapeProto_Dimension extends MessageLite {
+@Name("onnx::TensorShapeProto_Dimension") @NoOffset public static class Dimension extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TensorShapeProto_Dimension(Pointer p) { super(p); }
+    public Dimension(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TensorShapeProto_Dimension(long size) { super((Pointer)null); allocateArray(size); }
+    public Dimension(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public TensorShapeProto_Dimension position(long position) {
-        return (TensorShapeProto_Dimension)super.position(position);
+    @Override public Dimension position(long position) {
+        return (Dimension)super.position(position);
     }
 
-  public TensorShapeProto_Dimension() { super((Pointer)null); allocate(); }
+  public Dimension() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public TensorShapeProto_Dimension(@Const @ByRef TensorShapeProto_Dimension from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef TensorShapeProto_Dimension from);
+  public Dimension(@Const @ByRef Dimension from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef Dimension from);
 
-  public native @ByRef @Name("operator =") TensorShapeProto_Dimension put(@Const @ByRef TensorShapeProto_Dimension from);
+  public native @ByRef @Name("operator =") Dimension put(@Const @ByRef Dimension from);
 
   public native @Const @ByRef UnknownFieldSet unknown_fields();
 
   public native UnknownFieldSet mutable_unknown_fields();
 
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef TensorShapeProto_Dimension default_instance();
+  public static native @Const @ByRef Dimension default_instance();
 
   /** enum onnx::TensorShapeProto_Dimension::ValueCase */
   public static final int
@@ -3461,21 +4108,21 @@ public static final int
     kDimParam = 2,
     VALUE_NOT_SET = 0;
 
-  public static native @Const TensorShapeProto_Dimension internal_default_instance();
+  public static native @Const Dimension internal_default_instance();
   @MemberGetter public static native int kIndexInFileMessages();
   public static final int kIndexInFileMessages = kIndexInFileMessages();
 
-  public native void Swap(TensorShapeProto_Dimension other);
+  public native void Swap(Dimension other);
 
   // implements Message ----------------------------------------------
 
-  public native TensorShapeProto_Dimension New();
+  public native Dimension New();
 
-  public native TensorShapeProto_Dimension New(Arena arena);
+  public native Dimension New(Arena arena);
   public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
   public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef TensorShapeProto_Dimension from);
-  public native void MergeFrom(@Const @ByRef TensorShapeProto_Dimension from);
+  public native void CopyFrom(@Const @ByRef Dimension from);
+  public native void MergeFrom(@Const @ByRef Dimension from);
   public native void Clear();
   public native @Cast("bool") boolean IsInitialized();
 
@@ -3497,6 +4144,22 @@ public static final int
   // nested types ----------------------------------------------------
 
   // accessors -------------------------------------------------------
+
+  // optional string denotation = 3;
+  public native @Cast("bool") boolean has_denotation();
+  public native void clear_denotation();
+  @MemberGetter public static native int kDenotationFieldNumber();
+  public static final int kDenotationFieldNumber = kDenotationFieldNumber();
+  public native @StdString BytePointer denotation();
+  public native void set_denotation(@StdString BytePointer value);
+  public native void set_denotation(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_denotation(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_denotation(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_denotation();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_denotation();
+  public native void set_allocated_denotation(@StdString @Cast({"char*", "std::string*"}) BytePointer denotation);
 
   // optional int64 dim_value = 1;
   public native @Cast("bool") boolean has_dim_value();
@@ -3594,9 +4257,9 @@ public static final int
   public native void clear_dim();
   @MemberGetter public static native int kDimFieldNumber();
   public static final int kDimFieldNumber = kDimFieldNumber();
-  public native @Const @ByRef TensorShapeProto_Dimension dim(int index);
-  public native TensorShapeProto_Dimension mutable_dim(int index);
-  public native TensorShapeProto_Dimension add_dim();
+  public native @Const @ByRef Dimension dim(int index);
+  public native Dimension mutable_dim(int index);
+  public native Dimension add_dim();
 }
 // -------------------------------------------------------------------
 
@@ -3751,6 +4414,22 @@ public static final int
 
   // accessors -------------------------------------------------------
 
+  // optional string denotation = 6;
+  public native @Cast("bool") boolean has_denotation();
+  public native void clear_denotation();
+  @MemberGetter public static native int kDenotationFieldNumber();
+  public static final int kDenotationFieldNumber = kDenotationFieldNumber();
+  public native @StdString BytePointer denotation();
+  public native void set_denotation(@StdString BytePointer value);
+  public native void set_denotation(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_denotation(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_denotation(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_denotation();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_denotation();
+  public native void set_allocated_denotation(@StdString @Cast({"char*", "std::string*"}) BytePointer denotation);
+
   // optional .onnx.TypeProto.Tensor tensor_type = 1;
   public native @Cast("bool") boolean has_tensor_type();
   public native void clear_tensor_type();
@@ -3861,6 +4540,22 @@ public static final int
 // AttributeProto
 
 // optional string name = 1;
+
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// optional string ref_attr_name = 21;
 
 
 
@@ -4594,6 +5289,22 @@ public static final int
 
 
 
+// optional string denotation = 3;
+
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
 
 
 
@@ -4639,6 +5350,22 @@ public static final int
 // optional .onnx.TypeProto.Tensor tensor_type = 1;
 
 
+
+
+
+
+
+
+// optional string denotation = 6;
+
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
 
 
 
