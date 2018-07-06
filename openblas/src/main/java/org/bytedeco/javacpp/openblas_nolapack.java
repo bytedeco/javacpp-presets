@@ -20,31 +20,22 @@ public static final int OPENBLAS___64BIT__ = 1;
 // #define OPENBLAS_PTHREAD_CREATE_FUNC pthread_create
 // #define OPENBLAS_BUNDERSCORE _
 public static final int OPENBLAS_NEEDBUNDERSCORE = 1;
-// #define OPENBLAS_HASWELL 
+// #define OPENBLAS_GENERIC 
 public static final int OPENBLAS_L1_DATA_SIZE = 32768;
-public static final int OPENBLAS_L1_DATA_LINESIZE = 64;
-public static final int OPENBLAS_L2_SIZE = 262144;
-public static final int OPENBLAS_L2_LINESIZE = 64;
-public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
+public static final int OPENBLAS_L1_DATA_LINESIZE = 128;
+public static final int OPENBLAS_L2_SIZE = 512488;
+public static final int OPENBLAS_L2_LINESIZE = 128;
+public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 128;
 public static final int OPENBLAS_DTB_SIZE = 4096;
-// #define OPENBLAS_HAVE_CMOV 
-// #define OPENBLAS_HAVE_MMX 
-// #define OPENBLAS_HAVE_SSE 
-// #define OPENBLAS_HAVE_SSE2 
-// #define OPENBLAS_HAVE_SSE3 
-// #define OPENBLAS_HAVE_SSSE3 
-// #define OPENBLAS_HAVE_SSE4_1 
-// #define OPENBLAS_HAVE_SSE4_2 
-// #define OPENBLAS_HAVE_AVX 
-// #define OPENBLAS_FMA3 
-// #define OPENBLAS_CORE_HASWELL 
-public static final String OPENBLAS_CHAR_CORENAME = "HASWELL";
-public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 24576;
-public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
-public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 12288;
+public static final int OPENBLAS_L2_ASSOCIATIVE = 8;
+// #define OPENBLAS_CORE_generic 
+public static final String OPENBLAS_CHAR_CORENAME = "generic";
+public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 4096;
+public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 4096;
+public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.0.dev ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.1 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -223,6 +214,15 @@ public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") in
 public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
+
+public static native @Cast("size_t") long cblas_isamin(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_isamin(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_isamin(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_idamin(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_idamin(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_idamin(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_icamin(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
+public static native @Cast("size_t") long cblas_izamin(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 
 public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha, @Const FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
 public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha, @Const FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);

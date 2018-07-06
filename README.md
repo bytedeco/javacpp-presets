@@ -124,12 +124,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.2  https://support.hdfgroup.org/HDF5/
  * MKL 2018.3  https://software.intel.com/intel-mkl
  * MKL-DNN 0.14  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.0  http://www.openblas.net/
+ * OpenBLAS 0.3.1  http://www.openblas.net/
  * ARPACK-NG 3.6.1  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
- * LLVM 6.0.0  http://llvm.org/releases/download.html
+ * LLVM 6.0.1  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.76.0  http://www.leptonica.org/download.html
  * Tesseract 4.0.0-beta.3  https://github.com/tesseract-ocr/tesseract
