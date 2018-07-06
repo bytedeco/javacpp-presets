@@ -117,6 +117,7 @@ case $PLATFORM in
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
+        patch -Np1 < ../../../tensorflow-unsecure.patch
         sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --linkopt=-s"
         ;;
