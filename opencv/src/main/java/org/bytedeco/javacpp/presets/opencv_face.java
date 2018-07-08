@@ -46,6 +46,33 @@ public class opencv_face implements InfoMapper {
                              "cv::face::FisherFaceRecognizer", "cv::face::LBPHFaceRecognizer",
                              "cv::face::FacemarkLBF", "cv::face::FacemarkAAM").purify())
                .put(new Info("cv::face::FN_FaceDetector").cast().valueTypes("Pointer"))
-               .put(new Info("bool (*)(cv::InputArray, cv::OutputArray, void*)").cast().pointerTypes("Pointer"));
+               .put(new Info("bool (*)(cv::InputArray, cv::OutputArray, void*)").cast().pointerTypes("Pointer"))
+               .put(new Info("cv::face::getFaces").javaText("@Namespace(\"cv::face\") public static native @Cast(\"bool\") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces, CParams params);"))
+               .put(new Info("cv::face::getFacesHAAR").javaText("@Namespace(\"cv::face\") public static native @Cast(\"bool\") boolean getFacesHAAR(@ByVal Mat image, @ByRef RectVector faces, @Str String face_cascade_name);"))
+               .put(new Info("cv::face::loadTrainingData(cv::String, std::vector<cv::String>&, cv::OutputArray, char, float)").javaText(
+                       "@Namespace(\"cv::face\") public static native @Cast(\"bool\") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,\n"
+                     + "                                    @ByRef Point2fVectorVector facePoints,\n"
+                     + "                                    @Cast(\"char\") byte delim/*=' '*/, float offset/*=0.0f*/);"))
+               .put(new Info("cv::face::loadTrainingData(cv::String, cv::String, std::vector<cv::String>&, cv::OutputArray, float)").javaText(
+                       "@Namespace(\"cv::face\") public static native @Cast(\"bool\") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,\n"
+                     + "                                    @ByRef StringVector images,\n"
+                     + "                                    @ByRef Point2fVectorVector facePoints,\n"
+                     + "                                    float offset/*=0.0f*/);"))
+               .put(new Info("cv::face::loadFacePoints(cv::String, cv::OutputArray, float)").javaText(
+                       "@Namespace(\"cv::face\") public static native @Cast(\"bool\") boolean loadFacePoints( @Str String filename, @ByRef Point2fVectorVector points,\n"
+                     + "                                  float offset/*=0.0f*/);"))
+               .put(new Info("cv::face::drawFacemarks(cv::InputOutputArray, cv::InputArray, cv::Scalar)").javaText(
+                       "@Namespace(\"cv::face\") public static native void drawFacemarks( @ByVal Mat image, @ByRef Point2fVector points,\n"
+                     + "                                 @ByVal(nullValue = \"cv::Scalar(255,0,0)\") Scalar color);"))
+               .put(new Info("cv::face::Facemark::addTrainingSample").javaText("public native @Cast(\"bool\") boolean addTrainingSample(@ByVal Mat image, @ByRef Point2fVector landmarks);"))
+               .put(new Info("cv::face::Facemark::fit").javaText(
+                       "public native @Cast(\"bool\") boolean fit( @ByVal Mat image,\n"
+                     + "                      @ByRef RectVector faces,\n"
+                     + "                      @ByRef Point2fVectorVector landmarks,\n"
+                     + "                      Pointer config/*=0*/);"))
+               .put(new Info("cv::face::Facemark::getFaces").javaText("public native @Cast(\"bool\") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);"))
+               .put(new Info("cv::face::FacemarkKazemi::fit").javaText("public native @Cast(\"bool\") boolean fit( @ByVal Mat image, @ByRef RectVector faces, @ByRef Point2fVectorVector landmarks );"))
+               .put(new Info("cv::face::FacemarkKazemi::getFaces").javaText("public native @Cast(\"bool\") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);"))
+        ;
     }
 }

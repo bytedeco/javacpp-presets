@@ -885,16 +885,9 @@ for(int j=0;j<faces.size();j++){
 cv::imshow("detection", frame);
 }</pre>
 */
-@Namespace("cv::face") public static native @Cast("bool") boolean getFaces(@ByVal Mat image, @ByVal Mat faces, CParams params);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFaces(@ByVal UMat image, @ByVal UMat faces, CParams params);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFaces(@ByVal GpuMat image, @ByVal GpuMat faces, CParams params);
+@Namespace("cv::face") public static native @Cast("bool") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces, CParams params);
 
-@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal Mat image, @ByVal Mat faces, @Str BytePointer face_cascade_name);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal Mat image, @ByVal Mat faces, @Str String face_cascade_name);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal UMat image, @ByVal UMat faces, @Str String face_cascade_name);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal UMat image, @ByVal UMat faces, @Str BytePointer face_cascade_name);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal GpuMat image, @ByVal GpuMat faces, @Str BytePointer face_cascade_name);
-@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal GpuMat image, @ByVal GpuMat faces, @Str String face_cascade_name);
+@Namespace("cv::face") public static native @Cast("bool") boolean getFacesHAAR(@ByVal Mat image, @ByRef RectVector faces, @Str String face_cascade_name);
 
 /** \brief A utility to load list of paths to training image and annotation file.
 @param imageList The specified file contains paths to the training images.
@@ -945,36 +938,9 @@ std::vector<std::vector<Point2f> > facePoints;
 loadTrainingData(imageFiles, ptsFiles, images, facePoints, 0.0f);
 }</pre>
 */
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer filename, @ByRef StringVector images,
-                                    @ByVal Mat facePoints,
-                                    @Cast("char") byte delim/*=' '*/, float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer filename, @ByRef StringVector images,
-                                    @ByVal Mat facePoints);
 @Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,
-                                    @ByVal Mat facePoints,
+                                    @ByRef Point2fVectorVector facePoints,
                                     @Cast("char") byte delim/*=' '*/, float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,
-                                    @ByVal Mat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,
-                                    @ByVal UMat facePoints,
-                                    @Cast("char") byte delim/*=' '*/, float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,
-                                    @ByVal UMat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer filename, @ByRef StringVector images,
-                                    @ByVal UMat facePoints,
-                                    @Cast("char") byte delim/*=' '*/, float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer filename, @ByRef StringVector images,
-                                    @ByVal UMat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer filename, @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints,
-                                    @Cast("char") byte delim/*=' '*/, float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer filename, @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints,
-                                    @Cast("char") byte delim/*=' '*/, float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String filename, @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints);
 
 /** \brief A utility to load facial landmark information from the dataset.
 <p>
@@ -1012,48 +978,10 @@ example of content in the points_train.txt
 /home/user/ibug/image_006.pts
 }</pre>
 */
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer imageList, @Str BytePointer groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal Mat facePoints,
-                                    float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer imageList, @Str BytePointer groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal Mat facePoints);
 @Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,
                                     @ByRef StringVector images,
-                                    @ByVal Mat facePoints,
+                                    @ByRef Point2fVectorVector facePoints,
                                     float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal Mat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal UMat facePoints,
-                                    float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal UMat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer imageList, @Str BytePointer groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal UMat facePoints,
-                                    float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer imageList, @Str BytePointer groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal UMat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer imageList, @Str BytePointer groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints,
-                                    float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str BytePointer imageList, @Str BytePointer groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints,
-                                    float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadTrainingData( @Str String imageList, @Str String groundTruth,
-                                    @ByRef StringVector images,
-                                    @ByVal GpuMat facePoints);
 
 /** \brief This function extracts the data for training from .txt files which contains the corresponding image name and landmarks.
 *The first file in each file should give the path of the image whose
@@ -1098,24 +1026,8 @@ n_points:  68
 where n_points is the number of points considered
 and each point is represented as its position in x and y.
 */
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str BytePointer filename, @ByVal Mat points,
+@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByRef Point2fVectorVector points,
                                   float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str BytePointer filename, @ByVal Mat points);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByVal Mat points,
-                                  float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByVal Mat points);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByVal UMat points,
-                                  float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByVal UMat points);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str BytePointer filename, @ByVal UMat points,
-                                  float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str BytePointer filename, @ByVal UMat points);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str BytePointer filename, @ByVal GpuMat points,
-                                  float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str BytePointer filename, @ByVal GpuMat points);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByVal GpuMat points,
-                                  float offset/*=0.0f*/);
-@Namespace("cv::face") public static native @Cast("bool") boolean loadFacePoints( @Str String filename, @ByVal GpuMat points);
 
 /** \brief Utility to draw the detected facial landmark points
 <p>
@@ -1134,15 +1046,8 @@ for(int j=0;j<rects.size();j++){
 }
 }</pre>
 */
-@Namespace("cv::face") public static native void drawFacemarks( @ByVal Mat image, @ByVal Mat points,
+@Namespace("cv::face") public static native void drawFacemarks( @ByVal Mat image, @ByRef Point2fVector points,
                                  @ByVal(nullValue = "cv::Scalar(255,0,0)") Scalar color);
-@Namespace("cv::face") public static native void drawFacemarks( @ByVal Mat image, @ByVal Mat points);
-@Namespace("cv::face") public static native void drawFacemarks( @ByVal UMat image, @ByVal UMat points,
-                                 @ByVal(nullValue = "cv::Scalar(255,0,0)") Scalar color);
-@Namespace("cv::face") public static native void drawFacemarks( @ByVal UMat image, @ByVal UMat points);
-@Namespace("cv::face") public static native void drawFacemarks( @ByVal GpuMat image, @ByVal GpuMat points,
-                                 @ByVal(nullValue = "cv::Scalar(255,0,0)") Scalar color);
-@Namespace("cv::face") public static native void drawFacemarks( @ByVal GpuMat image, @ByVal GpuMat points);
 
 /** \brief Abstract base class for all facemark models
 <p>
@@ -1225,9 +1130,7 @@ The typical pipeline for facemark detection is listed as follows:
     }</pre>
     <p>
     */
-    public native @Cast("bool") boolean addTrainingSample(@ByVal Mat image, @ByVal Mat landmarks);
-    public native @Cast("bool") boolean addTrainingSample(@ByVal UMat image, @ByVal UMat landmarks);
-    public native @Cast("bool") boolean addTrainingSample(@ByVal GpuMat image, @ByVal GpuMat landmarks);
+    public native @Cast("bool") boolean addTrainingSample(@ByVal Mat image, @ByRef Point2fVector landmarks);
 
     /** \brief Trains a Facemark algorithm using the given dataset.
     Before the training process, training samples should be added to the trainer
@@ -1282,26 +1185,9 @@ The typical pipeline for facemark detection is listed as follows:
     TODO remove "config" from here
     */
     public native @Cast("bool") boolean fit( @ByVal Mat image,
-                          @ByVal Mat faces,
-                          @ByVal Mat landmarks,
+                          @ByRef RectVector faces,
+                          @ByRef Point2fVectorVector landmarks,
                           Pointer config/*=0*/);
-    public native @Cast("bool") boolean fit( @ByVal Mat image,
-                          @ByVal Mat faces,
-                          @ByVal Mat landmarks);
-    public native @Cast("bool") boolean fit( @ByVal UMat image,
-                          @ByVal UMat faces,
-                          @ByVal UMat landmarks,
-                          Pointer config/*=0*/);
-    public native @Cast("bool") boolean fit( @ByVal UMat image,
-                          @ByVal UMat faces,
-                          @ByVal UMat landmarks);
-    public native @Cast("bool") boolean fit( @ByVal GpuMat image,
-                          @ByVal GpuMat faces,
-                          @ByVal GpuMat landmarks,
-                          Pointer config/*=0*/);
-    public native @Cast("bool") boolean fit( @ByVal GpuMat image,
-                          @ByVal GpuMat faces,
-                          @ByVal GpuMat landmarks);
 
     /** \brief Set a user defined face detector for the Facemark algorithm.
     @param detector The user defined face detector function
@@ -1342,9 +1228,7 @@ The typical pipeline for facemark detection is listed as follows:
     }
     }</pre>
     */
-    public native @Cast("bool") boolean getFaces(@ByVal Mat image, @ByVal Mat faces);
-    public native @Cast("bool") boolean getFaces(@ByVal UMat image, @ByVal UMat faces);
-    public native @Cast("bool") boolean getFaces(@ByVal GpuMat image, @ByVal GpuMat faces);
+    public native @Cast("bool") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);
 
     /** \brief Get data from an algorithm
     <p>
@@ -1859,15 +1743,11 @@ Mentor: Delia Passalacqua
     *@param landmarks A variable of type cv::InputOutputArray which stores the landmarks of all the faces found in the image
     */
     /** from many ROIs */
-    public native @Cast("bool") boolean fit( @ByVal Mat image, @ByVal Mat faces, @ByVal Mat landmarks );
-    public native @Cast("bool") boolean fit( @ByVal UMat image, @ByVal UMat faces, @ByVal UMat landmarks );
-    public native @Cast("bool") boolean fit( @ByVal GpuMat image, @ByVal GpuMat faces, @ByVal GpuMat landmarks );
+    public native @Cast("bool") boolean fit( @ByVal Mat image, @ByRef RectVector faces, @ByRef Point2fVectorVector landmarks );
     /** set the custom face detector */
     public native @Cast("bool") boolean setFaceDetector(@Cast("bool (*)(cv::InputArray, cv::OutputArray, void*)") Pointer f, Pointer userData);
     /** get faces using the custom detector */
-    public native @Cast("bool") boolean getFaces(@ByVal Mat image, @ByVal Mat faces);
-    public native @Cast("bool") boolean getFaces(@ByVal UMat image, @ByVal UMat faces);
-    public native @Cast("bool") boolean getFaces(@ByVal GpuMat image, @ByVal GpuMat faces);
+    public native @Cast("bool") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);
 }
 
  // namespace
