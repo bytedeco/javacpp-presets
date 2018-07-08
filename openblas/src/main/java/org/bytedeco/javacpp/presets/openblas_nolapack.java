@@ -128,7 +128,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             // not available in Accelerate
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
             // not exported by OpenBLAS
-            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla",
+            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
             // not implemented by MKL
             "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
             "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu", "cblas_cgeadd",

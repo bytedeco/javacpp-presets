@@ -217,14 +217,10 @@ public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") in
 public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 
-public static native @Cast("size_t") long cblas_isamin(@Cast("const blasint") int n, @Const FloatPointer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_isamin(@Cast("const blasint") int n, @Const FloatBuffer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_isamin(@Cast("const blasint") int n, @Const float[] x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_idamin(@Cast("const blasint") int n, @Const DoublePointer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_idamin(@Cast("const blasint") int n, @Const DoubleBuffer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_idamin(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_icamin(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
-public static native @Cast("size_t") long cblas_izamin(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
+
+
+
+
 
 public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha, @Const FloatPointer x, @Cast("const blasint") int incx, FloatPointer y, @Cast("const blasint") int incy);
 public static native void cblas_saxpy(@Cast("const blasint") int n, float alpha, @Const FloatBuffer x, @Cast("const blasint") int incx, FloatBuffer y, @Cast("const blasint") int incy);
